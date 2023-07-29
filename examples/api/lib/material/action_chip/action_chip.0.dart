@@ -37,7 +37,7 @@ class _ActionChipExampleState extends State<ActionChipExample> {
         title: const Text('ActionChip Sample'),
       ),
       body: Center(
-        // todo-luminecs
+        // todo-luminecs ActionChip
         child: ActionChip(
           avatar: Icon(favorite ? Icons.favorite : Icons.favorite_border),
           label: const Text('Save to favorites'),
