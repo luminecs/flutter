@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 /// Flutter code sample for [AppBar].
 
+// todo-luminecs List.generate()
 final List<int> _items = List<int>.generate(51, (int index) => index);
 
 void main() => runApp(const AppBarApp());
@@ -39,15 +40,18 @@ class _AppBarExampleState extends State<AppBarExample> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    // todo-luminecs colorScheme.primary.withOpacity()
     final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
     final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
 
     return Scaffold(
+      // todo-luminecs AppBar scrolledUnderElevation shadowColor
       appBar: AppBar(
         title: const Text('AppBar Demo'),
         scrolledUnderElevation: scrolledUnderElevation,
         shadowColor: shadowColor ? Theme.of(context).colorScheme.shadow : null,
       ),
+      // todo-luminecs GridView.builder SliverGridDelegateWithFixedCrossAxisCount
       body: GridView.builder(
         itemCount: _items.length,
         padding: const EdgeInsets.all(8.0),
@@ -63,11 +67,13 @@ class _AppBarExampleState extends State<AppBarExample> {
               child: Text(
                 'Scroll to see the Appbar in effect.',
                 style: Theme.of(context).textTheme.labelLarge,
+                // todo-luminecs Text textAlign center
                 textAlign: TextAlign.center,
               ),
             );
           }
           return Container(
+            // todo-luminecs Container alignment center
             alignment: Alignment.center,
             // tileColor: _items[index].isOdd ? oddItemColor : evenItemColor,
             decoration: BoxDecoration(
@@ -78,14 +84,17 @@ class _AppBarExampleState extends State<AppBarExample> {
           );
         },
       ),
+      // todo-luminecs Scaffold bottomNavigationBar BottomAppBar
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.all(8),
+          // todo-luminecs BottomAppBar OverflowBar
           child: OverflowBar(
             overflowAlignment: OverflowBarAlignment.center,
             alignment: MainAxisAlignment.center,
             overflowSpacing: 5.0,
             children: <Widget>[
+              // todo-luminecs ElevatedButton.icon
               ElevatedButton.icon(
                 onPressed: () {
                   setState(() {
