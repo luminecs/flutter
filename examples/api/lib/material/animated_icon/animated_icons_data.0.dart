@@ -51,6 +51,7 @@ class AnimatedIconExample extends StatefulWidget {
   State<AnimatedIconExample> createState() => _AnimatedIconExampleState();
 }
 
+// todo-luminecs AnimationController Animation Tween AnimatedIcon SingleTickerProviderStateMixin
 class _AnimatedIconExampleState extends State<AnimatedIconExample> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> animation;
@@ -76,10 +77,12 @@ class _AnimatedIconExampleState extends State<AnimatedIconExample> with SingleTi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // todo-luminecs GridView SliverGridDelegateWithFixedCrossAxisCount
       body: GridView(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
         ),
+        // todo-luminecs map.entries.map()
         children: iconsList.entries.map((MapEntry<String, AnimatedIconData> entry) {
           return Card(
             child: Center(
