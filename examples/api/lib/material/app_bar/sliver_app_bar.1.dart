@@ -30,7 +30,7 @@ class _SliverAppBarExampleState extends State<SliverAppBarExample> {
   bool _pinned = true;
   bool _snap = false;
   bool _floating = false;
-
+// todo-luminecs SliverAppBar description
 // [SliverAppBar]s are typically used in [CustomScrollView.slivers], which in
 // turn can be placed in a [Scaffold.body].
   @override
@@ -43,11 +43,13 @@ class _SliverAppBarExampleState extends State<SliverAppBarExample> {
             snap: _snap,
             floating: _floating,
             expandedHeight: 160.0,
+            // todo-luminecs SliverAppBar FlexibleSpaceBar
             flexibleSpace: const FlexibleSpaceBar(
               title: Text('SliverAppBar'),
               background: FlutterLogo(),
             ),
           ),
+          // todo-luminecs SliverToBoxAdapter
           const SliverToBoxAdapter(
             child: SizedBox(
               height: 20,
@@ -56,6 +58,7 @@ class _SliverAppBarExampleState extends State<SliverAppBarExample> {
               ),
             ),
           ),
+          // todo-luminecs SliverList SliverChildBuilderDelegate childCount
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
@@ -63,6 +66,7 @@ class _SliverAppBarExampleState extends State<SliverAppBarExample> {
                   color: index.isOdd ? Colors.white : Colors.black12,
                   height: 100.0,
                   child: Center(
+                    // todo-luminecs Text textScaler linear
                     child: Text('$index', textScaler: const TextScaler.linear(5)),
                   ),
                 );
@@ -72,16 +76,19 @@ class _SliverAppBarExampleState extends State<SliverAppBarExample> {
           ),
         ],
       ),
+      // todo-luminecs BottomAppBar OverflowBar Switch
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: OverflowBar(
             overflowAlignment: OverflowBarAlignment.center,
             children: <Widget>[
+              // todo-luminecs Row MainAxisSize.min 三个row合成一个row
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Text('pinned'),
+                  // todo-luminecs Switch
                   Switch(
                     onChanged: (bool val) {
                       setState(() {
