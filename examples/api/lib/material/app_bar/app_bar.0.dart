@@ -32,6 +32,7 @@ class AppBarExample extends StatelessWidget {
             icon: const Icon(Icons.add_alert),
             tooltip: 'Show Snackbar',
             onPressed: () {
+              // todo-luminecs ScaffoldMessenger showSnackBar SnackBar
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('This is a snackbar')));
             },
           ),
