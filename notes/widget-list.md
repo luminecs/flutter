@@ -18,6 +18,8 @@
 - Text
 - Center
 - ElevatedButton
+- Column
+- TextButton
 
 ## Function
 
@@ -25,14 +27,33 @@
 
 - ThemeData
 - TextStyle
+- ActionIconThemeData
 
 ## 问题
 
-### 提示使用本地化的文字
+### ToolTip 使用本地化的文字
 
-```dart
+```
 Icon(
   Icons.segment,
   semanticLabel: MaterialLocalizations.of(context).openAppDrawerTooltip,
 );
+```
+
+### 设置 ActionButton theme 图标
+
+```
+ThemeData(
+    actionIconTheme: ActionIconThemeData(
+      backButtonIconBuilder: (BuildContext context) {
+        return const Icon(Icons.arrow_back_ios_new_rounded);
+      },
+      drawerButtonIconBuilder: (BuildContext context) {
+        return const _CustomDrawerIcon();
+      },
+      endDrawerButtonIconBuilder: (BuildContext context) {
+        return const _CustomEndDrawerIcon();
+      },
+    ),
+  ),
 ```
