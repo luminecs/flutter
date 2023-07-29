@@ -24,11 +24,13 @@ class AppBarExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // todo-luminecs TextButton.styleFrom() ButtonStyle
     final ButtonStyle style = TextButton.styleFrom(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
     );
     return Scaffold(
       appBar: AppBar(
+        // todo-luminecs AppBar actions
         actions: <Widget>[
           TextButton(
             style: style,
