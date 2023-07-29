@@ -35,7 +35,7 @@ class AppBarExample extends StatelessWidget {
     final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
     final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
     const int tabsCount = 3;
-
+    // todo-luminecs DefaultTabController ScrollNotification TabBar
     return DefaultTabController(
       initialIndex: 1,
       length: tabsCount,
@@ -58,6 +58,7 @@ class AppBarExample extends StatelessWidget {
           // scrolled underneath the app bar.
           scrolledUnderElevation: 4.0,
           shadowColor: Theme.of(context).shadowColor,
+          // todo-luminecs Scaffold bottom | TabBar Tab
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
@@ -75,6 +76,7 @@ class AppBarExample extends StatelessWidget {
             ],
           ),
         ),
+        // todo-luminecs TabBarView ListView.builder ListTile
         body: TabBarView(
           children: <Widget>[
             ListView.builder(
