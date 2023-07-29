@@ -34,7 +34,7 @@ class AnimatedIconExample extends StatefulWidget {
   State<AnimatedIconExample> createState() => _AnimatedIconExampleState();
 }
 
-// todo-luminecs animated icon
+// todo-luminecs AnimationController Animation Tween AnimatedIcon SingleTickerProviderStateMixin
 class _AnimatedIconExampleState extends State<AnimatedIconExample> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> animation;
