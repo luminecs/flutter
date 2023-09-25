@@ -616,8 +616,6 @@ class _ScreenshotPaintingContext extends PaintingContext {
 class _DiagnosticsPathNode {
   /// Creates a full description of a step in a path through a tree of
   /// [DiagnosticsNode] objects.
-  ///
-  /// The [node] and [child] arguments must not be null.
   _DiagnosticsPathNode({
     required this.node,
     required this.children,
@@ -970,7 +968,7 @@ mixin WidgetInspectorService {
   Future<void> forceRebuild() {
     final WidgetsBinding binding = WidgetsBinding.instance;
     if (binding.rootElement != null) {
-      binding.buildOwner!.reassemble(binding.rootElement!, null);
+      binding.buildOwner!.reassemble(binding.rootElement!);
       return binding.endOfFrame;
     }
     return Future<void>.value();
@@ -2109,24 +2107,35 @@ mixin WidgetInspectorService {
         summaryTree: true,
         subtreeDepth: subtreeDepth,
         service: this,
-        addAdditionalPropertiesCallback: (DiagnosticsNode node, InspectorSerializationDelegate delegate) {
+        addAdditionalPropertiesCallback:
+            (DiagnosticsNode node, InspectorSerializationDelegate delegate) {
           final Object? value = node.value;
-          final RenderObject? renderObject = value is Element ? value.renderObject : null;
+          final RenderObject? renderObject =
+              value is Element ? value.renderObject : null;
           if (renderObject == null) {
             return const <String, Object>{};
           }
 
-          final DiagnosticsSerializationDelegate renderObjectSerializationDelegate = delegate.copyWith(
+          final DiagnosticsSerializationDelegate
+              renderObjectSerializationDelegate = delegate.copyWith(
             subtreeDepth: 0,
             includeProperties: true,
             expandPropertyValues: false,
           );
           final Map<String, Object> additionalJson = <String, Object>{
-            'renderObject': renderObject.toDiagnosticsNode().toJsonMap(renderObjectSerializationDelegate),
+            // Only include renderObject properties separately if this value is not already the renderObject.
+            // Only include if we are expanding property values to mitigate the risk of infinite loops if
+            // RenderObjects have properties that are Element objects.
+            if (value is! RenderObject && delegate.expandPropertyValues)
+              'renderObject': renderObject
+                  .toDiagnosticsNode()
+                  .toJsonMap(renderObjectSerializationDelegate),
           };
 
           final RenderObject? renderParent = renderObject.parent;
-          if (renderParent is RenderObject && subtreeDepth > 0) {
+          if (renderParent != null &&
+              delegate.subtreeDepth > 0 &&
+              delegate.expandPropertyValues) {
             final Object? parentCreator = renderParent.debugCreator;
             if (parentCreator is DebugCreator) {
               additionalJson['parentRenderElement'] =
@@ -2147,7 +2156,7 @@ mixin WidgetInspectorService {
             if (!renderObject.debugNeedsLayout) {
               // ignore: invalid_use_of_protected_member
               final Constraints constraints = renderObject.constraints;
-              final Map<String, Object>constraintsProperty = <String, Object>{
+              final Map<String, Object> constraintsProperty = <String, Object>{
                 'type': constraints.runtimeType.toString(),
                 'description': constraints.toString(),
               };
@@ -2657,8 +2666,6 @@ class _WidgetForTypeTests extends Widget {
 /// bottom left corner of the application switches back to select mode.
 class WidgetInspector extends StatefulWidget {
   /// Creates a widget that enables inspection for the child.
-  ///
-  /// The [child] argument must not be null.
   const WidgetInspector({
     super.key,
     required this.child,
@@ -2884,6 +2891,13 @@ class _WidgetInspectorState extends State<WidgetInspector>
 
 /// Mutable selection state of the inspector.
 class InspectorSelection with ChangeNotifier {
+  /// Creates an instance of [InspectorSelection].
+  InspectorSelection() {
+    if (kFlutterMemoryAllocationsEnabled) {
+      ChangeNotifier.maybeDispatchObjectCreation(this);
+    }
+  }
+
   /// Render objects that are candidates to be selected.
   ///
   /// Tools may wish to iterate through the list of candidates.
@@ -2986,7 +3000,6 @@ class _InspectorOverlay extends LeafRenderObjectWidget {
 }
 
 class _RenderInspectorOverlay extends RenderBox {
-  /// The arguments must not be null.
   _RenderInspectorOverlay({ required InspectorSelection selection })
     : _selection = selection;
 
@@ -3528,16 +3541,12 @@ Iterable<DiagnosticsNode> _describeRelevantUserCode(
 ///
 /// The [value] for this property is a string representation of the Flutter
 /// DevTools url.
-///
-/// Properties `description` and `url` must not be null.
 class DevToolsDeepLinkProperty extends DiagnosticsProperty<String> {
   /// Creates a diagnostics property that displays a deep link to Flutter DevTools.
   ///
   /// The [value] of this property will return a map of data for the Flutter
   /// DevTools deep link, including the full `url`, the Flutter DevTools `screenId`,
   /// and the `objectId` in Flutter DevTools that this diagnostic references.
-  ///
-  /// The `description` and `url` arguments must not be null.
   DevToolsDeepLinkProperty(String description, String url)
     : super('', url, description: description, level: DiagnosticLevel.info);
 }

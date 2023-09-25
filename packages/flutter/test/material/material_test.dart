@@ -10,9 +10,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../foundation/leak_tracking.dart';
-import '../rendering/mock_canvas.dart';
+import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import '../widgets/test_border.dart' show TestBorder;
 
 class NotifyMaterial extends StatelessWidget {
@@ -921,7 +919,7 @@ void main() {
       expect(box, isNot(paints..circle()));
     });
 
-    testWidgetsWithLeakTracking('border is painted above child by default', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('Material2 - border is painted above child by default', (WidgetTester tester) async {
       final Key painterKey = UniqueKey();
 
       await tester.pumpWidget(MaterialApp(
@@ -956,11 +954,50 @@ void main() {
 
       await expectLater(
         find.byKey(painterKey),
-        matchesGoldenFile('material.border_paint_above.png'),
+        matchesGoldenFile('m2_material.border_paint_above.png'),
       );
     });
 
-    testWidgetsWithLeakTracking('border is painted below child when specified', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('Material3 - border is painted above child by default', (WidgetTester tester) async {
+      final Key painterKey = UniqueKey();
+
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(useMaterial3: true),
+        home: Scaffold(
+          body: RepaintBoundary(
+            key: painterKey,
+            child: Card(
+              child: SizedBox(
+                width: 200,
+                height: 300,
+                child: Material(
+                  clipBehavior: Clip.hardEdge,
+                  shape: const RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey, width: 6),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        color: Colors.green,
+                        height: 150,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ));
+
+      await expectLater(
+        find.byKey(painterKey),
+        matchesGoldenFile('m3_material.border_paint_above.png'),
+      );
+    });
+
+    testWidgetsWithLeakTracking('Material2 - border is painted below child when specified', (WidgetTester tester) async {
       final Key painterKey = UniqueKey();
 
       await tester.pumpWidget(MaterialApp(
@@ -996,12 +1033,52 @@ void main() {
 
       await expectLater(
         find.byKey(painterKey),
-        matchesGoldenFile('material.border_paint_below.png'),
+        matchesGoldenFile('m2_material.border_paint_below.png'),
+      );
+    });
+
+    testWidgetsWithLeakTracking('Material3 - border is painted below child when specified', (WidgetTester tester) async {
+      final Key painterKey = UniqueKey();
+
+      await tester.pumpWidget(MaterialApp(
+        theme: ThemeData(useMaterial3: true),
+        home: Scaffold(
+          body: RepaintBoundary(
+            key: painterKey,
+            child: Card(
+              child: SizedBox(
+                width: 200,
+                height: 300,
+                child: Material(
+                  clipBehavior: Clip.hardEdge,
+                  shape: const RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey, width: 6),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  borderOnForeground: false,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        color: Colors.green,
+                        height: 150,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ));
+
+      await expectLater(
+        find.byKey(painterKey),
+        matchesGoldenFile('m3_material.border_paint_below.png'),
       );
     });
   });
 
-  testWidgets('InkFeature skips painting if intermediate node skips', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('InkFeature skips painting if intermediate node skips', (WidgetTester tester) async {
     final GlobalKey sizedBoxKey = GlobalKey();
     final GlobalKey materialKey = GlobalKey();
     await tester.pumpWidget(Material(
@@ -1019,8 +1096,11 @@ void main() {
     controller.addInkFeature(tracker);
     expect(tracker.paintCount, 0);
 
+    final ContainerLayer layer1 = ContainerLayer();
+    addTearDown(layer1.dispose);
+
     // Force a repaint. Since it's offstage, the ink feature should not get painted.
-    materialKey.currentContext!.findRenderObject()!.paint(PaintingContext(ContainerLayer(), Rect.largest), Offset.zero);
+    materialKey.currentContext!.findRenderObject()!.paint(PaintingContext(layer1, Rect.largest), Offset.zero);
     expect(tracker.paintCount, 0);
 
     await tester.pumpWidget(Material(
@@ -1034,8 +1114,11 @@ void main() {
     // now onstage.
     expect(tracker.paintCount, 1);
 
+    final ContainerLayer layer2 = ContainerLayer();
+    addTearDown(layer2.dispose);
+
     // Force a repaint again. This time, it gets repainted because it is onstage.
-    materialKey.currentContext!.findRenderObject()!.paint(PaintingContext(ContainerLayer(), Rect.largest), Offset.zero);
+    materialKey.currentContext!.findRenderObject()!.paint(PaintingContext(layer2, Rect.largest), Offset.zero);
     expect(tracker.paintCount, 2);
   });
 

@@ -126,6 +126,7 @@ class SearchAnchor extends StatefulWidget {
     this.headerHintStyle,
     this.dividerColor,
     this.viewConstraints,
+    this.textCapitalization,
     required this.builder,
     required this.suggestionsBuilder,
   });
@@ -141,8 +142,6 @@ class SearchAnchor extends StatefulWidget {
   ///
   /// ** See code in examples/api/lib/material/search_anchor/search_anchor.0.dart **
   /// {@end-tool}
-  ///
-  /// The [suggestionsBuilder] argument must not be null.
   factory SearchAnchor.bar({
     Widget? barLeading,
     Iterable<Widget>? barTrailing,
@@ -170,6 +169,7 @@ class SearchAnchor extends StatefulWidget {
     BoxConstraints? viewConstraints,
     bool? isFullScreen,
     SearchController searchController,
+    TextCapitalization textCapitalization,
     required SuggestionsBuilder suggestionsBuilder
   }) = _SearchAnchorWithSearchBar;
 
@@ -286,12 +286,13 @@ class SearchAnchor extends StatefulWidget {
   /// ```
   final BoxConstraints? viewConstraints;
 
+  /// {@macro flutter.widgets.editableText.textCapitalization}
+  final TextCapitalization? textCapitalization;
+
   /// Called to create a widget which can open a search view route when it is tapped.
   ///
   /// The widget returned by this builder is faded out when it is tapped.
   /// At the same time a search view route is faded in.
-  ///
-  /// This must not be null.
   final SearchAnchorChildBuilder builder;
 
   /// Called to get the suggestion list for the search view.
@@ -361,6 +362,7 @@ class _SearchAnchorState extends State<SearchAnchor> {
       anchorKey: _anchorKey,
       searchController: _searchController,
       suggestionsBuilder: widget.suggestionsBuilder,
+      textCapitalization: widget.textCapitalization,
     ));
   }
 
@@ -426,6 +428,7 @@ class _SearchViewRoute extends PopupRoute<_SearchViewRoute> {
     this.viewHeaderHintStyle,
     this.dividerColor,
     this.viewConstraints,
+    this.textCapitalization,
     required this.showFullScreenView,
     required this.anchorKey,
     required this.searchController,
@@ -447,6 +450,7 @@ class _SearchViewRoute extends PopupRoute<_SearchViewRoute> {
   final TextStyle? viewHeaderHintStyle;
   final Color? dividerColor;
   final BoxConstraints? viewConstraints;
+  final TextCapitalization? textCapitalization;
   final bool showFullScreenView;
   final GlobalKey anchorKey;
   final SearchController searchController;
@@ -595,6 +599,7 @@ class _SearchViewRoute extends PopupRoute<_SearchViewRoute> {
               viewBuilder: viewBuilder,
               searchController: searchController,
               suggestionsBuilder: suggestionsBuilder,
+              textCapitalization: textCapitalization,
             ),
           );
         }
@@ -620,6 +625,7 @@ class _ViewContent extends StatefulWidget {
     this.viewHeaderTextStyle,
     this.viewHeaderHintStyle,
     this.dividerColor,
+    this.textCapitalization,
     required this.showFullScreenView,
     required this.topPadding,
     required this.animation,
@@ -644,6 +650,7 @@ class _ViewContent extends StatefulWidget {
   final TextStyle? viewHeaderTextStyle;
   final TextStyle? viewHeaderHintStyle;
   final Color? dividerColor;
+  final TextCapitalization? textCapitalization;
   final bool showFullScreenView;
   final double topPadding;
   final Animation<double> animation;
@@ -824,6 +831,7 @@ class _ViewContentState extends State<_ViewContent> {
                             onChanged: (_) {
                               updateSuggestions();
                             },
+                            textCapitalization: widget.textCapitalization,
                           ),
                         ),
                       ),
@@ -884,6 +892,7 @@ class _SearchAnchorWithSearchBar extends SearchAnchor {
     super.viewConstraints,
     super.isFullScreen,
     super.searchController,
+    super.textCapitalization,
     required super.suggestionsBuilder
   }) : super(
     viewHintText: viewHintText ?? barHintText,
@@ -911,6 +920,7 @@ class _SearchAnchorWithSearchBar extends SearchAnchor {
         padding: barPadding ?? const MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
         leading: barLeading ?? const Icon(Icons.search),
         trailing: barTrailing,
+        textCapitalization: textCapitalization,
       );
     }
   );
@@ -1022,6 +1032,7 @@ class SearchBar extends StatefulWidget {
     this.padding,
     this.textStyle,
     this.hintStyle,
+    this.textCapitalization,
   });
 
   /// Controls the text being edited in the search bar's text field.
@@ -1140,6 +1151,9 @@ class SearchBar extends StatefulWidget {
   /// The default text color is [ColorScheme.onSurfaceVariant].
   final MaterialStateProperty<TextStyle?>? hintStyle;
 
+  /// {@macro flutter.widgets.editableText.textCapitalization}
+  final TextCapitalization? textCapitalization;
+
   @override
   State<SearchBar> createState() => _SearchBarState();
 }
@@ -1161,6 +1175,9 @@ class _SearchBarState extends State<SearchBar> {
   @override
   void dispose() {
     _internalStatesController.dispose();
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
@@ -1190,6 +1207,7 @@ class _SearchBarState extends State<SearchBar> {
     final BorderSide? effectiveSide = resolve<BorderSide?>(widget.side, searchBarTheme.side, defaults.side);
     final EdgeInsetsGeometry? effectivePadding = resolve<EdgeInsetsGeometry?>(widget.padding, searchBarTheme.padding, defaults.padding);
     final MaterialStateProperty<Color?>? effectiveOverlayColor = widget.overlayColor ?? searchBarTheme.overlayColor ?? defaults.overlayColor;
+    final TextCapitalization effectiveTextCapitalization = widget.textCapitalization ?? searchBarTheme.textCapitalization ?? defaults.textCapitalization!;
 
     final Set<MaterialState> states = _internalStatesController.value;
     final TextStyle? effectiveHintStyle = widget.hintStyle?.resolve(states)
@@ -1273,6 +1291,7 @@ class _SearchBarState extends State<SearchBar> {
                           // smaller than 48.0
                           isDense: true,
                         )),
+                        textCapitalization: effectiveTextCapitalization,
                       ),
                     ),
                   )
@@ -1353,6 +1372,9 @@ class _SearchBarDefaultsM3 extends SearchBarThemeData {
   @override
   BoxConstraints get constraints =>
     const BoxConstraints(minWidth: 360.0, maxWidth: 800.0, minHeight: 56.0);
+
+  @override
+  TextCapitalization get textCapitalization => TextCapitalization.none;
 }
 
 // END GENERATED TOKEN PROPERTIES - SearchBar

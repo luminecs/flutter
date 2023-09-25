@@ -115,6 +115,15 @@ abstract class MaterialLocalizations {
   /// Label for "select all" edit buttons and menu items.
   String get selectAllButtonLabel;
 
+  /// Label for "look up" edit buttons and menu items.
+  String get lookUpButtonLabel;
+
+  /// Label for "search web" edit buttons and menu items.
+  String get searchWebButtonLabel;
+
+  /// Label for "share" edit buttons and menu items.
+  String get shareButtonLabel;
+
   /// Label for the [AboutDialog] button that shows the [LicensePage].
   String get viewLicensesButtonLabel;
 
@@ -170,10 +179,11 @@ abstract class MaterialLocalizations {
   /// Label indicating that a given date is the current date.
   String get currentDateLabel;
 
-  /// Label for the scrim rendered underneath the content of a modal route.
+  /// Label for the scrim rendered underneath a [BottomSheet].
   String get scrimLabel;
 
-  /// Label for a BottomSheet.
+  /// Label for a [BottomSheet], used as the `modalRouteContentName` of the
+  /// [scrimOnTapHint].
   String get bottomSheetLabel;
 
   /// Hint text announced when tapping on the scrim underneath the content of
@@ -1177,6 +1187,15 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
 
   @override
   String get selectAllButtonLabel => 'Select all';
+
+  @override
+  String get lookUpButtonLabel => 'Look Up';
+
+  @override
+  String get searchWebButtonLabel => 'Search Web';
+
+  @override
+  String get shareButtonLabel => 'Share...';
 
   @override
   String get viewLicensesButtonLabel => 'View licenses';

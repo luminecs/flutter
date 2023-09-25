@@ -17,9 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../foundation/leak_tracking.dart';
-import '../rendering/mock_canvas.dart';
+import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
   final ThemeData theme = ThemeData();
@@ -720,8 +718,9 @@ void main() {
     expect(tester.hasRunningAnimations, isTrue);
   });
 
-  testWidgets('RefreshProgressIndicator uses expected animation', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material2 - RefreshProgressIndicator uses expected animation', (WidgetTester tester) async {
     final AnimationSheetBuilder animationSheet = AnimationSheetBuilder(frameSize: const Size(50, 50));
+    addTearDown(animationSheet.dispose);
 
     await tester.pumpFrames(animationSheet.record(
       Theme(
@@ -731,8 +730,25 @@ void main() {
     ), const Duration(seconds: 3));
 
     await expectLater(
-      await animationSheet.collate(20),
-      matchesGoldenFile('material.refresh_progress_indicator.png'),
+      animationSheet.collate(20),
+      matchesGoldenFile('m2_material.refresh_progress_indicator.png'),
+    );
+  }, skip: isBrowser); // https://github.com/flutter/flutter/issues/56001
+
+  testWidgetsWithLeakTracking('Material3 - RefreshProgressIndicator uses expected animation', (WidgetTester tester) async {
+    final AnimationSheetBuilder animationSheet = AnimationSheetBuilder(frameSize: const Size(50, 50));
+    addTearDown(animationSheet.dispose);
+
+    await tester.pumpFrames(animationSheet.record(
+      Theme(
+          data: ThemeData(useMaterial3: true),
+          child: const _RefreshProgressIndicatorGolden()
+      ),
+    ), const Duration(seconds: 3));
+
+    await expectLater(
+      animationSheet.collate(20),
+      matchesGoldenFile('m3_material.refresh_progress_indicator.png'),
     );
   }, skip: isBrowser); // https://github.com/flutter/flutter/issues/56001
 
@@ -1001,8 +1017,9 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('Indeterminate CircularProgressIndicator uses expected animation', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material2 - Indeterminate CircularProgressIndicator uses expected animation', (WidgetTester tester) async {
     final AnimationSheetBuilder animationSheet = AnimationSheetBuilder(frameSize: const Size(40, 40));
+    addTearDown(animationSheet.dispose);
 
     await tester.pumpFrames(animationSheet.record(
       Theme(
@@ -1018,8 +1035,31 @@ void main() {
     ), const Duration(seconds: 2));
 
     await expectLater(
-      await animationSheet.collate(20),
-      matchesGoldenFile('material.circular_progress_indicator.indeterminate.png'),
+      animationSheet.collate(20),
+      matchesGoldenFile('m2_material.circular_progress_indicator.indeterminate.png'),
+    );
+  }, skip: isBrowser); // https://github.com/flutter/flutter/issues/56001
+
+  testWidgetsWithLeakTracking('Material3 - Indeterminate CircularProgressIndicator uses expected animation', (WidgetTester tester) async {
+    final AnimationSheetBuilder animationSheet = AnimationSheetBuilder(frameSize: const Size(40, 40));
+    addTearDown(animationSheet.dispose);
+
+    await tester.pumpFrames(animationSheet.record(
+      Theme(
+        data: ThemeData(useMaterial3: true),
+        child: const Directionality(
+          textDirection: TextDirection.ltr,
+          child: Padding(
+            padding: EdgeInsets.all(4),
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    ), const Duration(seconds: 2));
+
+    await expectLater(
+      animationSheet.collate(20),
+      matchesGoldenFile('m3_material.circular_progress_indicator.indeterminate.png'),
     );
   }, skip: isBrowser); // https://github.com/flutter/flutter/issues/56001
 

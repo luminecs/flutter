@@ -27,6 +27,7 @@ import 'menu_style.dart';
 import 'menu_theme.dart';
 import 'radio.dart';
 import 'text_button.dart';
+import 'text_theme.dart';
 import 'theme.dart';
 import 'theme_data.dart';
 
@@ -303,6 +304,7 @@ class _MenuAnchorState extends State<MenuAnchor> {
     _anchorChildren.clear();
     _menuController._detach(this);
     _internalMenuController = null;
+    _menuScopeNode.dispose();
     super.dispose();
   }
 
@@ -551,6 +553,7 @@ class _MenuAnchorState extends State<MenuAnchor> {
     }
     _closeChildren(inDispose: inDispose);
     _overlayEntry?.remove();
+    _overlayEntry?.dispose();
     _overlayEntry = null;
     if (!inDispose) {
       // Notify that _childIsOpen changed state, but only if not
@@ -1079,7 +1082,7 @@ class _MenuItemButtonState extends State<MenuItemButton> {
       );
     }
 
-    return child;
+    return MergeSemantics(child: child);
   }
 
   void _handleFocusChange() {
@@ -1186,7 +1189,7 @@ class CheckboxMenuButton extends StatelessWidget {
   /// The checkbox will have different default container color and check color when
   /// this is true. This is only used when [ThemeData.useMaterial3] is set to true.
   ///
-  /// Must not be null. Defaults to false.
+  /// Defaults to false.
   final bool isError;
 
   /// Called when the value of the checkbox should change.
@@ -1904,19 +1907,23 @@ class _SubmenuButtonState extends State<SubmenuButton> {
             controller._anchor!._focusButton();
           }
         }
-
-        child = TextButton(
-          style: mergedStyle,
-          focusNode: _buttonFocusNode,
-          onHover: _enabled ? (bool hovering) => handleHover(hovering, context) : null,
-          onPressed: _enabled ? () => toggleShowMenu(context) : null,
-          isSemanticButton: null,
-          child: _MenuItemLabel(
-            leadingIcon: widget.leadingIcon,
-            trailingIcon: widget.trailingIcon,
-            hasSubmenu: true,
-            showDecoration: (controller._anchor!._parent?._orientation ?? Axis.horizontal) == Axis.vertical,
-            child: child ?? const SizedBox(),
+        child = MergeSemantics(
+          child: Semantics(
+            expanded: controller.isOpen,
+            child: TextButton(
+              style: mergedStyle,
+              focusNode: _buttonFocusNode,
+              onHover: _enabled ? (bool hovering) => handleHover(hovering, context) : null,
+              onPressed: _enabled ? () => toggleShowMenu(context) : null,
+              isSemanticButton: null,
+              child: _MenuItemLabel(
+                leadingIcon: widget.leadingIcon,
+                trailingIcon: widget.trailingIcon,
+                hasSubmenu: true,
+                showDecoration: (controller._anchor!._parent?._orientation ?? Axis.horizontal) == Axis.vertical,
+                child: child ?? const SizedBox(),
+              ),
+            ),
           ),
         );
 
@@ -3207,7 +3214,7 @@ class _MenuLayout extends SingleChildLayoutDelegate {
       } else if (offBottom(y)) {
         final double newY = anchorRect.top - childSize.height;
         if (!offTop(newY)) {
-          // Only move the menu up if its parent is horizontal (MenuAchor/MenuBar).
+          // Only move the menu up if its parent is horizontal (MenuAnchor/MenuBar).
           if (parentOrientation == Axis.horizontal) {
             y = newY - alignmentOffset.dy;
           } else {
@@ -3670,6 +3677,7 @@ class _MenuButtonDefaultsM3 extends ButtonStyle {
   final BuildContext context;
 
   late final ColorScheme _colors = Theme.of(context).colorScheme;
+  late final TextTheme _textTheme = Theme.of(context).textTheme;
 
   @override
   MaterialStateProperty<Color?>? get backgroundColor {
@@ -3785,7 +3793,9 @@ class _MenuButtonDefaultsM3 extends ButtonStyle {
 
   @override
   MaterialStateProperty<TextStyle?> get textStyle {
-    return MaterialStatePropertyAll<TextStyle?>(Theme.of(context).textTheme.bodyLarge);
+    // TODO(tahatesser): This is taken from https://m3.material.io/components/menus/specs
+    // Update this when the token is available.
+    return MaterialStatePropertyAll<TextStyle?>(_textTheme.labelLarge);
   }
 
   @override

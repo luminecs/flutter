@@ -69,10 +69,10 @@ const double _kEngineDefaultFontSize = 14.0;
 class WidgetSpan extends PlaceholderSpan {
   /// Creates a [WidgetSpan] with the given values.
   ///
-  /// The [child] property must be non-null. [WidgetSpan] is a leaf node in
-  /// the [InlineSpan] tree. Child widgets are constrained by the width of the
-  /// paragraph they occupy. Child widget heights are unconstrained, and may
-  /// cause the text to overflow and be ellipsized/truncated.
+  /// [WidgetSpan] is a leaf node in the [InlineSpan] tree. Child widgets are
+  /// constrained by the width of the paragraph they occupy. Child widget
+  /// heights are unconstrained, and may cause the text to overflow and be
+  /// ellipsized/truncated.
   ///
   /// A [TextStyle] may be provided with the [style] property, but only the
   /// decoration, foreground, background, and spacing options will be used.
@@ -385,7 +385,7 @@ class _RenderScaledInlineWidget extends RenderBox with RenderObjectWithChildMixi
   Size computeDryLayout(BoxConstraints constraints) {
     assert(!constraints.hasBoundedHeight);
     final Size unscaledSize = child?.computeDryLayout(BoxConstraints(maxWidth: constraints.maxWidth / scale)) ?? Size.zero;
-    return unscaledSize * scale;
+    return constraints.constrain(unscaledSize * scale);
   }
 
   @override
