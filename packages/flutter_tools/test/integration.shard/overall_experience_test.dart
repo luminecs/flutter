@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // The purpose of this test is to verify the end-to-end behavior of
 // "flutter run" and other such commands, as closely as possible to

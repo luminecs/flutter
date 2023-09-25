@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // This test clones the framework and downloads pre-built binaries; it sometimes
 // times out with the default 5 minutes: https://github.com/flutter/flutter/issues/100937

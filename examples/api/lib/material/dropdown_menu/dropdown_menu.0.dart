@@ -1,10 +1,6 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 
-// Flutter code sample for [DropdownMenu]s. The first dropdown menu
 // has the default outlined border and demos using the
 // [DropdownMenuEntry] style parameter to customize its appearance.
 // The second dropdown menu customizes the appearance of the dropdown

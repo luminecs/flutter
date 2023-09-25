@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // This test builds an integration test from the list of samples in the
 // examples/api/lib directory, and then runs it. The tests are just smoke tests,

@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // TODO(goderbauer): Clean up the part-of hack currently used for testing the private implementation.
 part of material_animated_icons; // ignore: use_string_in_part_of_directives

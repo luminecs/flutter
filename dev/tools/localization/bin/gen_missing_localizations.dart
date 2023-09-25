@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // This program updates the language locale arb files with any missing resource
 // entries that are included in the English arb files. This is useful when

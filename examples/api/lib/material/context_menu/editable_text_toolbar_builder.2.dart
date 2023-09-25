@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // This example demonstrates how to create a custom toolbar that retains the
 // look of the default buttons for the current platform.

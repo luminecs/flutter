@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 // Hide the original utf8 [Codec] so that we can export our own implementation
 // which adds additional error handling.
