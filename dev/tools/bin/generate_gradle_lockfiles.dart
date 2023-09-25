@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This script generates `android/build.gradle` for each directory specify in the stdin.
 // Then it generate the lockfiles for each Gradle project.
 // To regenerate these files, run `find . -type d -name 'android' | dart dev/tools/bin/generate_gradle_lockfiles.dart`
@@ -131,10 +127,6 @@ void exec(
 }
 
 const String rootGradleFileContent = r'''
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This file is auto generated.
 // To update all the build.gradle files in the Flutter repo,
 // See dev/tools/bin/generate_gradle_lockfiles.dart.
@@ -185,10 +177,6 @@ tasks.register("clean", Delete) {
 ''';
 
 const String settingGradleFile = r'''
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This file is auto generated.
 // To update all the settings.gradle files in the Flutter repo,
 // See dev/tools/bin/generate_gradle_lockfiles.dart.

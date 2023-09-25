@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // we ignore these so that the format of the strings below matches what package:test prints, to make maintenance easier
 // ignore_for_file: avoid_escaping_inner_quotes
 // ignore_for_file: use_raw_strings

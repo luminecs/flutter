@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // The widget in this file is an empty mock for non-web platforms. See
 // `_platform_selectable_region_context_menu_web.dart` for the web
 // implementation.

@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This test runs `flutter test` on the `trivial_widget_test.dart` four times.
 //
 // The first time, the result is ignored, on the basis that it's warming the

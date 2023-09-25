@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'localizations_utils.dart';
 
 // See http://en.wikipedia.org/wiki/Right-to-left
@@ -15,10 +11,6 @@ const List<String> _rtlLanguages = <String>[
 
 String generateWidgetsHeader(String regenerateInstructions) {
   return '''
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This file has been automatically generated. Please do not edit it manually.
 // To regenerate the file, use:
 // $regenerateInstructions

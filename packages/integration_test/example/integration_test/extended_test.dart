@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This is a Flutter widget test can take a screenshot.
 //
 // For Web, this needs to be executed with the `test_driver/integration_test_extended_driver.dart`.

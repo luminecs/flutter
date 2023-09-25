@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This sample demonstrates allowing a context menu to be shown in a widget
 // subtree in response to user gestures.
 

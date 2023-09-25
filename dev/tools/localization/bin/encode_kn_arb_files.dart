@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // The utility function `encodeKnArbFiles` replaces the material_kn.arb
 // and cupertino_kn.arb files in flutter_localizations/packages/lib/src/l10n
 // with versions where the contents of the localized strings have been

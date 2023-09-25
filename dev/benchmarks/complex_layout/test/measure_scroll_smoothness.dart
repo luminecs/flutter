@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This test is a use case of flutter/flutter#60796
 // the test should be run as:
 // flutter drive -t test/using_array.dart --driver test_driver/scrolling_test_e2e_test.dart

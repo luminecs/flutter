@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // Based on https://material.uplabs.com/posts/google-newsstand-navigation-pattern
 // See also: https://material-motion.github.io/material-motion/documentation/
 

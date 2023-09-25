@@ -1,7 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 // This test exercises the embedding of the native assets mapping in dill files.
 // An initial dill file is created by `flutter assemble` and used for running
 // the application. This dill must contain the mapping.
