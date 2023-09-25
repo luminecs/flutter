@@ -14,55 +14,7 @@ import 'package:path/path.dart' as path;
 import 'goldens.dart';
 import 'test_async_utils.dart';
 
-/// The default [GoldenFileComparator] implementation for `flutter test`.
-///
-/// The term __golden file__ refers to a master image that is considered the
-/// true rendering of a given widget, state, application, or other visual
-/// representation you have chosen to capture. This comparator loads golden
-/// files from the local file system, treating the golden key as a relative
-/// path from the test file's directory.
-///
-/// This comparator performs a pixel-for-pixel comparison of the decoded PNGs,
-/// returning true only if there's an exact match. In cases where the captured
-/// test image does not match the golden file, this comparator will provide
-/// output to illustrate the difference, described in further detail below.
-///
-/// When using `flutter test --update-goldens`, [LocalFileComparator]
-/// updates the golden files on disk to match the rendering.
-///
-/// ## Local Output from Golden File Testing
-///
-/// The [LocalFileComparator] will output test feedback when a golden file test
-/// fails. This output takes the form of differential images contained within a
-/// `failures` directory that will be generated in the same location specified
-/// by the golden key. The differential images include the master and test
-/// images that were compared, as well as an isolated diff of detected pixels,
-/// and a masked diff that overlays these detected pixels over the master image.
-///
-/// The following images are examples of a test failure output:
-///
-/// |  File Name                 |  Image Output |
-/// |----------------------------|---------------|
-/// |  testName_masterImage.png  | ![A golden master image](https://flutter.github.io/assets-for-api-docs/assets/flutter-test/goldens/widget_masterImage.png)  |
-/// |  testName_testImage.png    | ![Test image](https://flutter.github.io/assets-for-api-docs/assets/flutter-test/goldens/widget_testImage.png)  |
-/// |  testName_isolatedDiff.png | ![An isolated pixel difference.](https://flutter.github.io/assets-for-api-docs/assets/flutter-test/goldens/widget_isolatedDiff.png) |
-/// |  testName_maskedDiff.png   | ![A masked pixel difference](https://flutter.github.io/assets-for-api-docs/assets/flutter-test/goldens/widget_maskedDiff.png) |
-///
-/// {@macro flutter.flutter_test.matchesGoldenFile.custom_fonts}
-///
-/// See also:
-///
-///   * [GoldenFileComparator], the abstract class that [LocalFileComparator]
-///   implements.
-///   * [matchesGoldenFile], the function from [flutter_test] that invokes the
-///    comparator.
 class LocalFileComparator extends GoldenFileComparator with LocalComparisonOutput {
-  /// Creates a new [LocalFileComparator] for the specified [testFile].
-  ///
-  /// Golden file keys will be interpreted as file paths relative to the
-  /// directory in which [testFile] resides.
-  ///
-  /// The [testFile] URL must represent a file.
   LocalFileComparator(Uri testFile, {path.Style? pathStyle})
     : basedir = _getBasedir(testFile, pathStyle),
       _path = _getPath(pathStyle);
@@ -78,15 +30,8 @@ class LocalFileComparator extends GoldenFileComparator with LocalComparisonOutpu
     return context.toUri(testDirectoryPath + context.separator);
   }
 
-  /// The directory in which the test was loaded.
-  ///
-  /// Golden file keys will be interpreted as file paths relative to this
-  /// directory.
   final Uri basedir;
 
-  /// Path context exists as an instance variable rather than just using the
-  /// system path context in order to support testing, where we can spoof the
-  /// platform to test behaviors with arbitrary path styles.
   final path.Context _path;
 
   @override
@@ -110,9 +55,6 @@ class LocalFileComparator extends GoldenFileComparator with LocalComparisonOutpu
     await goldenFile.writeAsBytes(imageBytes, flush: true);
   }
 
-  /// Returns the bytes of the given [golden] file.
-  ///
-  /// If the file cannot be found, an error will be thrown.
   @protected
   Future<List<int>> getGoldenBytes(Uri golden) async {
     final File goldenFile = _getGoldenFile(golden);
@@ -128,12 +70,7 @@ class LocalFileComparator extends GoldenFileComparator with LocalComparisonOutpu
   File _getGoldenFile(Uri golden) => File(_path.join(_path.fromUri(basedir), _path.fromUri(golden.path)));
 }
 
-/// A mixin for use in golden file comparators that run locally and provide
-/// output.
 mixin LocalComparisonOutput {
-  /// Writes out diffs from the [ComparisonResult] of a golden file test.
-  ///
-  /// Will throw an error if a null result is provided.
   Future<String> generateFailureOutput(
     ComparisonResult result,
     Uri golden,
@@ -158,7 +95,6 @@ mixin LocalComparisonOutput {
     return 'Golden "$golden": ${result.error}$additionalFeedback';
   });
 
-  /// Returns the appropriate file for a given diff from a [ComparisonResult].
   File getFailureFile(String failure, Uri golden, Uri basedir) {
     final String fileName = golden.pathSegments.last;
     final String testName = '${fileName.split(path.extension(fileName))[0]}_$failure.png';
@@ -169,8 +105,6 @@ mixin LocalComparisonOutput {
   }
 }
 
-/// Returns a [ComparisonResult] to describe the pixel differential of the
-/// [test] and [master] image bytes provided.
 Future<ComparisonResult> compareLists(List<int>? test, List<int>? master) async {
   if (identical(test, master)) {
     return ComparisonResult(
@@ -272,7 +206,6 @@ Future<ComparisonResult> compareLists(List<int>? test, List<int>? master) async 
   return ComparisonResult(passed: true, diffPercent: 0.0);
 }
 
-/// Inverts [imageBytes], returning a new [ByteData] object.
 ByteData _invert(ByteData imageBytes) {
   final ByteData bytes = ByteData(imageBytes.lengthInBytes);
   // Invert the RGB data (but not A).
@@ -285,7 +218,6 @@ ByteData _invert(ByteData imageBytes) {
   return bytes;
 }
 
-/// An unsupported [WebGoldenComparator] that exists for API compatibility.
 class DefaultWebGoldenComparator extends WebGoldenComparator {
   @override
   Future<bool> compare(double width, double height, Uri golden) {
@@ -298,19 +230,14 @@ class DefaultWebGoldenComparator extends WebGoldenComparator {
   }
 }
 
-/// Reads the red value out of a 32 bit rgba pixel.
 int _readRed(int pixel) => (pixel >> 24) & 0xff;
 
-/// Reads the green value out of a 32 bit rgba pixel.
 int _readGreen(int pixel) => (pixel >> 16) & 0xff;
 
-/// Reads the blue value out of a 32 bit rgba pixel.
 int _readBlue(int pixel) => (pixel >> 8) & 0xff;
 
-/// Reads the alpha value out of a 32 bit rgba pixel.
 int _readAlpha(int pixel) => pixel & 0xff;
 
-/// Convenience wrapper around [decodeImageFromPixels].
 Future<Image> _createImage(ByteData bytes, int width, int height) {
   final Completer<Image> completer = Completer<Image>();
   decodeImageFromPixels(

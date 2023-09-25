@@ -17,14 +17,12 @@ void main() {
 
     expect(find.text('Label behavior: alwaysShow'), findsOneWidget);
 
-    /// Test alwaysShow label behavior button.
     await tester.tap(find.widgetWithText(ElevatedButton, 'alwaysShow'));
     await tester.pumpAndSettle();
 
     expect(find.text('Label behavior: alwaysShow'), findsOneWidget);
     expect(navigationBarWidget.labelBehavior, NavigationDestinationLabelBehavior.alwaysShow);
 
-    /// Test onlyShowSelected label behavior button.
     await tester.tap(find.widgetWithText(ElevatedButton, 'onlyShowSelected'));
     await tester.pumpAndSettle();
 
@@ -32,7 +30,6 @@ void main() {
     navigationBarWidget = tester.firstWidget(find.byType(NavigationBar));
     expect(navigationBarWidget.labelBehavior, NavigationDestinationLabelBehavior.onlyShowSelected);
 
-    /// Test alwaysHide label behavior button.
     await tester.tap(find.widgetWithText(ElevatedButton, 'alwaysHide'));
     await tester.pumpAndSettle();
 

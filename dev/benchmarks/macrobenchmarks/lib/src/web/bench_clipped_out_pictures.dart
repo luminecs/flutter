@@ -7,26 +7,6 @@ import 'dart:ui';
 
 import 'recorder.dart';
 
-/// Draws many pictures in a grid with only the middle picture visible on the
-/// screen, all others are clipped out, for example:
-///
-///     +-------------+-------------+-------------+---...
-///     |             |             |             |
-///     |  invisible  |  invisible  |  invisible  |
-///     |             |             |             |
-///     +-----------------------------------------+---...
-///     |             |             |             |
-///     |  invisible  |  invisible  |  invisible  |
-///     |             |             |             |
-///     +-----------------------------------------+---...
-///     |             |             |             |
-///     |  invisible  |  invisible  |   VISIBLE   |
-///     |             |             |             |
-///     +-------------+-------------+-------------+---...
-///     |             |             |             |
-///     :             :             :             :
-///
-/// We used to unnecessarily allocate DOM nodes, consuming memory and CPU time.
 class BenchClippedOutPictures extends SceneBuilderRecorder {
   BenchClippedOutPictures() : super(name: benchmarkName);
 

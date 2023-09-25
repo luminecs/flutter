@@ -4,7 +4,6 @@
 
 final RegExp _whitespace = RegExp(r'\s+');
 
-/// Convert adb device names into more human readable descriptions.
 String cleanAdbDeviceName(String name) {
   // Some emulators use `___` in the name as separators.
   name = name.replaceAll('___', ', ');

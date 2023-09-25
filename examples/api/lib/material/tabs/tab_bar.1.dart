@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [TabBar].
 
 void main() => runApp(const TabBarApp());
 
@@ -27,8 +26,6 @@ class TabBarExample extends StatefulWidget {
   State<TabBarExample> createState() => _TabBarExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _TabBarExampleState extends State<TabBarExample> with TickerProviderStateMixin {
   late final TabController _tabController;
 

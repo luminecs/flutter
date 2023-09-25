@@ -1206,7 +1206,6 @@ class SimpleGenericWidget<T> extends StatelessWidget {
   }
 }
 
-/// Wraps [child] in [depth] layers of [SizedBox]
 Widget _deepWidgetTree({required int depth, required Widget child}) {
   Widget tree = child;
   for (int i = 0; i < depth; i += 1) {

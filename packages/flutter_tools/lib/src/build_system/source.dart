@@ -8,29 +8,17 @@ import '../build_info.dart';
 import 'build_system.dart';
 import 'exceptions.dart';
 
-/// A set of source files.
 abstract class ResolvedFiles {
-  /// Whether any of the sources we evaluated contained a missing depfile.
-  ///
-  /// If so, the build system needs to rerun the visitor after executing the
-  /// build to ensure all hashes are up to date.
   bool get containsNewDepfile;
 
-  /// The resolved source files.
   List<File> get sources;
 }
 
-/// Collects sources for a [Target] into a single list of [FileSystemEntities].
 class SourceVisitor implements ResolvedFiles {
-  /// Create a new [SourceVisitor] from an [Environment].
   SourceVisitor(this.environment, [ this.inputs = true ]);
 
-  /// The current environment.
   final Environment environment;
 
-  /// Whether we are visiting inputs or outputs.
-  ///
-  /// Defaults to `true`.
   final bool inputs;
 
   @override
@@ -40,11 +28,6 @@ class SourceVisitor implements ResolvedFiles {
   bool get containsNewDepfile => _containsNewDepfile;
   bool _containsNewDepfile = false;
 
-  /// Visit a depfile which contains both input and output files.
-  ///
-  /// If the file is missing, this visitor is marked as [containsNewDepfile].
-  /// This is used by the [Node] class to tell the [BuildSystem] to
-  /// defer hash computation until after executing the target.
   // depfile logic adopted from https://github.com/flutter/flutter/blob/7065e4330624a5a216c8ffbace0a462617dc1bf5/dev/devicelab/lib/framework/apk_utils.dart#L390
   void visitDepfile(String name) {
     final File depfile = environment.buildDir.childFile(name);
@@ -80,11 +63,6 @@ class SourceVisitor implements ResolvedFiles {
         .map(environment.fileSystem.file);
   }
 
-  /// Visit a [Source] which contains a file URL.
-  ///
-  /// The URL may include constants defined in an [Environment]. If
-  /// [optional] is true, the file is not required to exist. In this case, it
-  /// is never resolved as an input.
   void visitPattern(String pattern, bool optional) {
     // perform substitution of the environmental values and then
     // of the local values.
@@ -158,12 +136,6 @@ class SourceVisitor implements ResolvedFiles {
     }
   }
 
-  /// Visit a [Source] which is defined by an [Artifact] from the flutter cache.
-  ///
-  /// If the [Artifact] points to a directory then all child files are included.
-  /// To increase the performance of builds that use a known revision of Flutter,
-  /// these are updated to point towards the engine.version file instead of
-  /// the artifact itself.
   void visitArtifact(Artifact artifact, TargetPlatform? platform, BuildMode? mode) {
     // This is not a local engine.
     if (environment.engineVersion != null) {
@@ -187,12 +159,6 @@ class SourceVisitor implements ResolvedFiles {
     sources.add(environment.fileSystem.file(path));
   }
 
-  /// Visit a [Source] which is defined by an [HostArtifact] from the flutter cache.
-  ///
-  /// If the [Artifact] points to a directory then all child files are included.
-  /// To increase the performance of builds that use a known revision of Flutter,
-  /// these are updated to point towards the engine.version file instead of
-  /// the artifact itself.
   void visitHostArtifact(HostArtifact artifact) {
     // This is not a local engine.
     if (environment.engineVersion != null) {
@@ -216,32 +182,15 @@ class SourceVisitor implements ResolvedFiles {
   }
 }
 
-/// A description of an input or output of a [Target].
 abstract class Source {
-  /// This source is a file URL which contains some references to magic
-  /// environment variables.
   const factory Source.pattern(String pattern, { bool optional }) = _PatternSource;
 
-  /// The source is provided by an [Artifact].
-  ///
-  /// If [artifact] points to a directory then all child files are included.
   const factory Source.artifact(Artifact artifact, {TargetPlatform? platform, BuildMode? mode}) = _ArtifactSource;
 
-  /// The source is provided by an [HostArtifact].
-  ///
-  /// If [artifact] points to a directory then all child files are included.
   const factory Source.hostArtifact(HostArtifact artifact) = _HostArtifactSource;
 
-  /// Visit the particular source type.
   void accept(SourceVisitor visitor);
 
-  /// Whether the output source provided can be known before executing the rule.
-  ///
-  /// This does not apply to inputs, which are always explicit and must be
-  /// evaluated before the build.
-  ///
-  /// For example, [Source.pattern] and [Source.version] are not implicit
-  /// provided they do not use any wildcards.
   bool get implicit;
 }
 

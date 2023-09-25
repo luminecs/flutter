@@ -16,42 +16,23 @@ import '../base/os.dart';
 import '../base/platform.dart';
 import '../convert.dart';
 
-/// An environment variable used to override the location of Google Chrome.
 const String kChromeEnvironment = 'CHROME_EXECUTABLE';
 
-/// An environment variable used to override the location of Microsoft Edge.
 const String kEdgeEnvironment = 'EDGE_ENVIRONMENT';
 
-/// The expected executable name on linux.
 const String kLinuxExecutable = 'google-chrome';
 
-/// The expected executable name on macOS.
 const String kMacOSExecutable =
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-/// The expected Chrome executable name on Windows.
 const String kWindowsExecutable = r'Google\Chrome\Application\chrome.exe';
 
-/// The expected Edge executable name on Windows.
 const String kWindowsEdgeExecutable = r'Microsoft\Edge\Application\msedge.exe';
 
-/// Used by [ChromiumLauncher] to detect a glibc bug and retry launching the
-/// browser.
-///
-/// Once every few thousands of launches we hit this glibc bug:
-///
-/// https://sourceware.org/bugzilla/show_bug.cgi?id=19329.
-///
-/// When this happens Chrome spits out something like the following then exits with code 127:
-///
-///     Inconsistency detected by ld.so: ../elf/dl-tls.c: 493: _dl_allocate_tls_init: Assertion `listp->slotinfo[cnt].gen <= GL(dl_tls_generation)' failed!
 const String _kGlibcError = 'Inconsistency detected by ld.so';
 
 typedef BrowserFinder = String Function(Platform, FileSystem);
 
-/// Find the chrome executable on the current platform.
-///
-/// Does not verify whether the executable exists.
 String findChromeExecutable(Platform platform, FileSystem fileSystem) {
   if (platform.environment.containsKey(kChromeEnvironment)) {
     return platform.environment[kChromeEnvironment]!;
@@ -63,7 +44,6 @@ String findChromeExecutable(Platform platform, FileSystem fileSystem) {
     return kMacOSExecutable;
   }
   if (platform.isWindows) {
-    /// The possible locations where the chrome executable can be located on windows.
     final List<String> kWindowsPrefixes = <String>[
       if (platform.environment.containsKey('LOCALAPPDATA'))
         platform.environment['LOCALAPPDATA']!,
@@ -81,15 +61,11 @@ String findChromeExecutable(Platform platform, FileSystem fileSystem) {
   throwToolExit('Platform ${platform.operatingSystem} is not supported.');
 }
 
-/// Find the Microsoft Edge executable on the current platform.
-///
-/// Does not verify whether the executable exists.
 String findEdgeExecutable(Platform platform, FileSystem fileSystem) {
   if (platform.environment.containsKey(kEdgeEnvironment)) {
     return platform.environment[kEdgeEnvironment]!;
   }
   if (platform.isWindows) {
-    /// The possible locations where the Edge executable can be located on windows.
     final List<String> kWindowsPrefixes = <String>[
       if (platform.environment.containsKey('LOCALAPPDATA'))
         platform.environment['LOCALAPPDATA']!,
@@ -108,7 +84,6 @@ String findEdgeExecutable(Platform platform, FileSystem fileSystem) {
   return '';
 }
 
-/// A launcher for Chromium browsers with devtools configured.
 class ChromiumLauncher {
   ChromiumLauncher({
     required FileSystem fileSystem,
@@ -136,7 +111,6 @@ class ChromiumLauncher {
   @visibleForTesting
   Completer<Chromium> currentCompleter = Completer<Chromium>();
 
-  /// Whether we can locate the chrome executable.
   bool canFindExecutable() {
     final String chrome = _browserFinder(_platform, _fileSystem);
     try {
@@ -146,20 +120,8 @@ class ChromiumLauncher {
     }
   }
 
-  /// The executable this launcher will use.
   String findExecutable() =>  _browserFinder(_platform, _fileSystem);
 
-  /// Launch a Chromium browser to a particular `host` page.
-  ///
-  /// [headless] defaults to false, and controls whether we open a headless or
-  /// a "headful" browser.
-  ///
-  /// [debugPort] is Chrome's debugging protocol port. If null, a random free
-  /// port is picked automatically.
-  ///
-  /// [skipCheck] does not attempt to make a devtools connection before returning.
-  ///
-  /// [webBrowserFlags] add arbitrary browser flags.
   Future<Chromium> launch(String url, {
     bool headless = false,
     int? debugPort,
@@ -338,18 +300,6 @@ class ChromiumLauncher {
   // such as window position. It is located under the Chrome data-dir folder.
   String get _preferencesPath => _fileSystem.path.join('Default', 'preferences');
 
-  /// Copy Chrome user information from a Chrome session into a per-project
-  /// cache.
-  ///
-  /// More detailed docs of the Chrome user preferences store exists here:
-  /// https://www.chromium.org/developers/design-documents/preferences.
-  ///
-  /// This intentionally skips the Cache, Code Cache, and GPUCache directories.
-  /// While we're not sure exactly what is in them, this constitutes nearly 1 GB
-  /// of data for a fresh flutter run and adds significant overhead to all startups.
-  /// For workflows that may require this data, using the start-paused flag and
-  /// dart debug extension with a user controlled browser profile will lead to a
-  /// better experience.
   void _cacheUserSessionInformation(Directory userDataDir, Directory cacheDir) {
     final Directory targetChromeDefault = _fileSystem.directory(_fileSystem.path.join(cacheDir.path, _chromeDefaultPath));
     final Directory sourceChromeDefault = _fileSystem.directory(_fileSystem.path.join(userDataDir.path, _chromeDefaultPath));
@@ -380,8 +330,6 @@ class ChromiumLauncher {
     }
   }
 
-  /// Restore Chrome user information from a per-project cache into Chrome's
-  /// user data directory.
   void _restoreUserSessionInformation(Directory cacheDir, Directory userDataDir) {
     final Directory sourceChromeDefault = _fileSystem.directory(_fileSystem.path.join(cacheDir.path, _chromeDefaultPath));
     final Directory targetChromeDefault = _fileSystem.directory(_fileSystem.path.join(userDataDir.path, _chromeDefaultPath));
@@ -406,8 +354,6 @@ class ChromiumLauncher {
            !directory.path.endsWith('GPUCache');
   }
 
-  /// Connect to the [chrome] instance, testing the connection if
-  /// [skipCheck] is set to false.
   @visibleForTesting
   Future<Chromium> connect(Chromium chrome, bool skipCheck) async {
     // The connection is lazy. Try a simple call to make sure the provided
@@ -426,11 +372,6 @@ class ChromiumLauncher {
     return chrome;
   }
 
-  /// Gets the first [chrome] tab.
-  ///
-  /// Retries getting tabs from Chrome for a few seconds and retries finding
-  /// the tab a few times. This reduces flakes caused by Chrome not returning
-  /// correct output if the call was too close to the start.
   //
   // TODO(ianh): remove the timeouts here, they violate our style guide.
   // (We should just keep waiting forever, and print a warning when it's
@@ -463,7 +404,6 @@ class ChromiumLauncher {
   Future<Chromium> get connectedInstance => currentCompleter.future;
 }
 
-/// A class for managing an instance of a Chromium browser.
 class Chromium {
   Chromium(
     this.debugPort,

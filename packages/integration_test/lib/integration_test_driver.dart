@@ -14,22 +14,11 @@ import 'package:path/path.dart' as path;
 
 import 'common.dart';
 
-/// Flutter Driver test output directory.
-///
-/// Tests should write any output files to this directory. Defaults to the path
-/// set in the FLUTTER_TEST_OUTPUTS_DIR environment variable, or `build` if
-/// unset.
 String testOutputsDirectory =
     Platform.environment['FLUTTER_TEST_OUTPUTS_DIR'] ?? 'build';
 
-/// The callback type to handle [Response.data] after the test
-/// succeeds.
 typedef ResponseDataCallback = FutureOr<void> Function(Map<String, dynamic>?);
 
-/// Writes a json-serializable data to
-/// [testOutputsDirectory]/`testOutputFilename.json`.
-///
-/// This is the default `responseDataCallback` in [integrationDriver].
 Future<void> writeResponseData(
   Map<String, dynamic>? data, {
   String testOutputFilename = 'integration_response_data',
@@ -45,28 +34,6 @@ Future<void> writeResponseData(
   await file.writeAsString(resultString);
 }
 
-/// Adaptor to run an integration test using `flutter drive`.
-///
-/// To run an integration test `<test_name>.dart` using `flutter drive`, put a file named
-/// `<test_name>_test.dart` in the app's `test_driver` directory:
-///
-/// ```dart
-/// import 'dart:async';
-///
-/// import 'package:integration_test/integration_test_driver.dart';
-///
-/// Future<void> main() async => integrationDriver();
-///
-/// ```
-///
-/// ## Parameters:
-///
-/// `timeout` controls the longest time waited before the test ends.
-/// It is not necessarily the execution time for the test app: the test may
-/// finish sooner than the `timeout`.
-///
-/// `responseDataCallback` is the handler for processing [Response.data].
-/// The default value is `writeResponseData`.
 Future<void> integrationDriver({
   Duration timeout = const Duration(minutes: 20),
   ResponseDataCallback? responseDataCallback = writeResponseData,

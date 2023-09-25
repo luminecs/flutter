@@ -12,13 +12,7 @@ import 'object.dart';
 
 const double _kQuarterTurnsInRadians = math.pi / 2.0;
 
-/// Rotates its child by a integral number of quarter turns.
-///
-/// Unlike [RenderTransform], which applies a transform just prior to painting,
-/// this object applies its rotation prior to layout, which means the entire
-/// rotated box consumes only as much space as required by the rotated child.
 class RenderRotatedBox extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
-  /// Creates a rotated render box.
   RenderRotatedBox({
     required int quarterTurns,
     RenderBox? child,
@@ -26,7 +20,6 @@ class RenderRotatedBox extends RenderBox with RenderObjectWithChildMixin<RenderB
     this.child = child;
   }
 
-  /// The number of clockwise quarter turns the child should be rotated.
   int get quarterTurns => _quarterTurns;
   int _quarterTurns;
   set quarterTurns(int value) {

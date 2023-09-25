@@ -9,7 +9,6 @@ import 'package:path/path.dart' as path;
 import '../framework/task_result.dart';
 import '../framework/utils.dart';
 
-/// Run each benchmark this many times and compute average, min, max.
 const int _kRunsPerBenchmark = 10;
 
 Future<TaskResult> flutterToolStartupBenchmarkTask() async {
@@ -155,7 +154,6 @@ class _Benchmark {
     return stopwatch.elapsedMilliseconds;
   }
 
-  /// Runs `benchmark` several times and reports the results.
   Future<_BenchmarkResult> run() async {
     final List<int> results = <int>[];
     int sum = 0;

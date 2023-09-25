@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FutureBuilder].
 
 void main() => runApp(const FutureBuilderExampleApp());
 

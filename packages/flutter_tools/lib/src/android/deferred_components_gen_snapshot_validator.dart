@@ -11,57 +11,18 @@ import '../base/file_system.dart';
 import '../build_system/build_system.dart';
 import 'deferred_components_validator.dart';
 
-/// A class to configure and run deferred component setup verification checks
-/// and tasks.
-///
-/// Once constructed, checks and tasks can be executed by calling the respective
-/// methods. The results of the checks are stored internally and can be
-/// displayed to the user by calling [displayResults].
 class DeferredComponentsGenSnapshotValidator extends DeferredComponentsValidator {
-  /// Constructs a validator instance.
-  ///
-  /// The [env] property is used to locate the project files that are checked.
-  ///
-  /// The [templatesDir] parameter is optional. If null, the tool's default
-  /// templates directory will be used.
-  ///
-  /// When [exitOnFail] is set to true, the [handleResults] and [attemptToolExit]
-  /// methods will exit the tool when this validator detects a recommended
-  /// change. This defaults to true.
   DeferredComponentsGenSnapshotValidator(this.env, {
     bool exitOnFail = true,
     String? title,
   }) : super(env.projectDir, env.logger, env.platform, exitOnFail: exitOnFail, title: title);
 
-  /// The build environment that should be used to find the input files to run
-  /// checks against.
-  ///
-  /// The checks in this class are meant to be used as part of a build process,
-  /// so an environment should be available.
   final Environment env;
 
   // The key used to identify the metadata element as the loading unit id to
   // deferred component mapping.
   static const String _mappingKey = 'io.flutter.embedding.engine.deferredcomponents.DeferredComponentManager.loadingUnitMapping';
 
-  /// Checks if the base module `app`'s `AndroidManifest.xml` contains the
-  /// required meta-data that maps loading units to deferred components.
-  ///
-  /// Returns true if the check passed with no recommended changes, and false
-  /// otherwise.
-  ///
-  /// Flutter engine uses a manifest meta-data mapping to determine which
-  /// deferred component includes a particular loading unit id. This method
-  /// checks if `app`'s `AndroidManifest.xml` contains this metadata. If not, it
-  /// will generate a modified AndroidManifest.xml with the correct metadata
-  /// entry.
-  ///
-  /// An example mapping:
-  ///
-  ///   2:componentA,3:componentB,4:componentC
-  ///
-  /// Where loading unit 2 is included in componentA, loading unit 3 is included
-  /// in componentB, and loading unit 4 is included in componentC.
   bool checkAppAndroidManifestComponentLoadingUnitMapping(List<DeferredComponent> components, List<LoadingUnit> generatedLoadingUnits) {
     final Directory androidDir = projectDir.childDirectory('android');
     inputs.add(projectDir.childFile('pubspec.yaml'));
@@ -170,17 +131,6 @@ class DeferredComponentsGenSnapshotValidator extends DeferredComponentsValidator
     return true;
   }
 
-  /// Compares the provided loading units against the contents of the
-  /// `deferred_components_loading_units.yaml` file.
-  ///
-  /// Returns true if a loading unit cache file exists and all loading units
-  /// match, and false otherwise.
-  ///
-  /// This method will parse the cached loading units file if it exists and
-  /// compare it to the provided generatedLoadingUnits. It will distinguish
-  /// between newly added loading units and no longer existing loading units. If
-  /// the cache file does not exist, then all generatedLoadingUnits will be
-  /// considered new.
   bool checkAgainstLoadingUnitsCache(
       List<LoadingUnit> generatedLoadingUnits) {
     final List<LoadingUnit> cachedLoadingUnits = _parseLoadingUnitsCache(projectDir.childFile(DeferredComponentsValidator.kLoadingUnitsCacheFileName));
@@ -281,13 +231,6 @@ class DeferredComponentsGenSnapshotValidator extends DeferredComponentsValidator
     return loadingUnits;
   }
 
-  /// Writes the provided generatedLoadingUnits as `deferred_components_loading_units.yaml`
-  ///
-  /// This cache file is used to detect any changes in the loading units
-  /// produced by gen_snapshot. Running [checkAgainstLoadingUnitCache] with a
-  /// mismatching or missing cache will result in a failed validation. This
-  /// prevents unexpected changes in loading units causing misconfigured
-  /// deferred components.
   void writeLoadingUnitsCache(List<LoadingUnit>? generatedLoadingUnits) {
     generatedLoadingUnits ??= <LoadingUnit>[];
     final File cacheFile = projectDir.childFile(DeferredComponentsValidator.kLoadingUnitsCacheFileName);

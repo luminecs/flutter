@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Flutter widgets implementing Material Design animated icons.
 library material_animated_icons;
 
 import 'dart:math' as math show pi;

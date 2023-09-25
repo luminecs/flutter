@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SliverAppBar.medium].
 
 void main() {
   runApp(const AppBarMediumApp());

@@ -56,8 +56,6 @@ endif()
 # === Flutter Library ===
 ''';
 
-/// Migrates Windows build to target specific architecture.
-/// In more, it deletes old runner folder
 class BuildArchitectureMigration extends ProjectMigrator {
   BuildArchitectureMigration(
     WindowsProject project,

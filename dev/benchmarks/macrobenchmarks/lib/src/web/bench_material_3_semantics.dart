@@ -12,8 +12,6 @@ import 'package:flutter/semantics.dart';
 import 'material3.dart';
 import 'recorder.dart';
 
-/// Measures the cost of semantics when constructing screens containing
-/// Material 3 widgets.
 class BenchMaterial3Semantics extends WidgetBuildRecorder {
   BenchMaterial3Semantics() : super(name: benchmarkName);
 
@@ -55,18 +53,6 @@ class BenchMaterial3Semantics extends WidgetBuildRecorder {
   }
 }
 
-/// Measures the cost of semantics when scrolling screens containing Material 3
-/// widgets.
-///
-/// The implementation uses a ListView that jumps the scroll position between
-/// 0 and 1 every frame. Such a small delta is not enough for lazy rendering to
-/// add/remove widgets, but its enough to trigger the framework to recompute
-/// some of the semantics.
-///
-/// The expected output numbers of this benchmarks should be very small as
-/// scrolling a list view should be a matter of shifting some widgets and
-/// updating the projected clip imposed by the viewport. As of June 2023, the
-/// numbers are not great. Semantics consumes >50% of frame time.
 class BenchMaterial3ScrollSemantics extends WidgetRecorder {
   BenchMaterial3ScrollSemantics() : super(name: benchmarkName);
 

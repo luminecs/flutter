@@ -3242,7 +3242,6 @@ void main() {
                                 label: 'V',
                                 textDirection: TextDirection.ltr,
                               ),
-                              /// N is moved offscreen.
                             ],
                           ),
                         ],

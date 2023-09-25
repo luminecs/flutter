@@ -7,10 +7,8 @@ import 'package:file/local.dart';
 import 'package:meta/meta.dart';
 import 'package:platform/platform.dart';
 
-/// The current host machine running the tests.
 HostAgent get hostAgent => HostAgent(platform: const LocalPlatform(), fileSystem: const LocalFileSystem());
 
-/// Host machine running the tests.
 class HostAgent {
   HostAgent({required Platform platform, required FileSystem fileSystem})
       : _platform = platform,
@@ -19,7 +17,6 @@ class HostAgent {
   final Platform _platform;
   final FileSystem _fileSystem;
 
-  /// Creates a directory to dump file artifacts.
   Directory? get dumpDirectory {
     if (_dumpDirectory == null) {
       // Set in LUCI recipe.

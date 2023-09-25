@@ -313,7 +313,6 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
   }
 }
 
-/// Format incoming numeric text to fit the format of (###) ###-#### ##...
 class _UsNumberTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

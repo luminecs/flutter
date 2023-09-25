@@ -10,8 +10,6 @@ import 'simulation.dart';
 
 export 'tolerance.dart' show Tolerance;
 
-/// Numerically determine the input value which produces output value [target]
-/// for a function [f], given its first-derivative [df].
 double _newtonsMethod({
   required double initialGuess,
   required double target,
@@ -26,17 +24,7 @@ double _newtonsMethod({
   return guess;
 }
 
-/// A simulation that applies a drag to slow a particle down.
-///
-/// Models a particle affected by fluid drag, e.g. air resistance.
-///
-/// The simulation ends when the velocity of the particle drops to zero (within
-/// the current velocity [tolerance]).
 class FrictionSimulation extends Simulation {
-  /// Creates a [FrictionSimulation] with the given arguments, namely: the fluid
-  /// drag coefficient _cₓ_, a unitless value; the initial position _x₀_, in the same
-  /// length units as used for [x]; and the initial velocity _dx₀_, in the same
-  /// velocity units as used for [dx].
   FrictionSimulation(
     double drag,
     double position,
@@ -57,17 +45,6 @@ class FrictionSimulation extends Simulation {
       );
     }
 
-  /// Creates a new friction simulation with its fluid drag coefficient (_cₓ_) set so
-  /// as to ensure that the simulation starts and ends at the specified
-  /// positions and velocities.
-  ///
-  /// The positions must use the same units as expected from [x], and the
-  /// velocities must use the same units as expected from [dx].
-  ///
-  /// The sign of the start and end velocities must be the same, the magnitude
-  /// of the start velocity must be greater than the magnitude of the end
-  /// velocity, and the velocities must be in the direction appropriate for the
-  /// particle to start from the start position and reach the end position.
   factory FrictionSimulation.through(double startPosition, double endPosition, double startVelocity, double endVelocity) {
     assert(startVelocity == 0.0 || endVelocity == 0.0 || startVelocity.sign == endVelocity.sign);
     assert(startVelocity.abs() >= endVelocity.abs());
@@ -118,7 +95,6 @@ class FrictionSimulation extends Simulation {
     return _v * math.pow(_drag, time) - _constantDeceleration * time;
   }
 
-  /// The value of [x] at `double.infinity`.
   double get finalX {
     if (_constantDeceleration == 0) {
       return _x - _v / _dragLog;
@@ -126,9 +102,6 @@ class FrictionSimulation extends Simulation {
     return x(_finalTime);
   }
 
-  /// The time at which the value of `x(time)` will equal [x].
-  ///
-  /// Returns `double.infinity` if the simulation will never reach [x].
   double timeAtX(double x) {
     if (x == _x) {
       return 0.0;
@@ -154,19 +127,7 @@ class FrictionSimulation extends Simulation {
   String toString() => '${objectRuntimeType(this, 'FrictionSimulation')}(cₓ: ${_drag.toStringAsFixed(1)}, x₀: ${_x.toStringAsFixed(1)}, dx₀: ${_v.toStringAsFixed(1)})';
 }
 
-/// A [FrictionSimulation] that clamps the modeled particle to a specific range
-/// of values.
-///
-/// Only the position is clamped. The velocity [dx] will continue to report
-/// unbounded simulated velocities once the particle has reached the bounds.
 class BoundedFrictionSimulation extends FrictionSimulation {
-  /// Creates a [BoundedFrictionSimulation] with the given arguments, namely:
-  /// the fluid drag coefficient _cₓ_, a unitless value; the initial position _x₀_, in the
-  /// same length units as used for [x]; the initial velocity _dx₀_, in the same
-  /// velocity units as used for [dx], the minimum value for the position, and
-  /// the maximum value for the position. The minimum and maximum values must be
-  /// in the same units as the initial position, and the initial position must
-  /// be within the given range.
   BoundedFrictionSimulation(
     super.drag,
     super.position,

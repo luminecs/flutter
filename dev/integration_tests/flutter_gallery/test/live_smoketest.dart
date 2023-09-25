@@ -108,11 +108,8 @@ final Finder backFinder = find.byElementPredicate(
 class _LiveWidgetController extends LiveWidgetController {
   _LiveWidgetController(super.binding);
 
-  /// With [frameSync] enabled, Flutter Driver will wait to perform an action
-  /// until there are no pending frames in the app under test.
   bool frameSync = true;
 
-  /// Waits until at the end of a frame the provided [condition] is [true].
   Future<void> _waitUntilFrame(bool Function() condition, [Completer<void>? completer]) {
     completer ??= Completer<void>();
     if (!condition()) {
@@ -125,7 +122,6 @@ class _LiveWidgetController extends LiveWidgetController {
     return completer.future;
   }
 
-  /// Runs `finder` repeatedly until it finds one or more [Element]s.
   Future<FinderBase<Element>> _waitForElement(FinderBase<Element> finder) async {
     if (frameSync) {
       await _waitUntilFrame(() => binding.transientCallbackCount == 0);

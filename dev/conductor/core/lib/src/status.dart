@@ -14,7 +14,6 @@ import './stdio.dart';
 const String kVerboseFlag = 'verbose';
 const String kStateOption = 'state-file';
 
-/// Command to print the status of the current Flutter release.
 class StatusCommand extends Command<void> {
   StatusCommand({
     required this.checkouts,

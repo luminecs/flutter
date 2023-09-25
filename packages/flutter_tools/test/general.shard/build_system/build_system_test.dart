@@ -35,7 +35,6 @@ void main() {
     barInvocations = 0;
     shared = 0;
 
-    /// Create various test targets.
     fooTarget = TestTarget((Environment environment) async {
       environment
         .buildDir

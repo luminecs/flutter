@@ -113,17 +113,6 @@ File makeAbsolute(File file, {Directory? workingDirectory}) {
   return File(path.join(workingDirectory.absolute.path, file.path));
 }
 
-/// A test case representing a private test file that should be run.
-///
-/// It is loaded from a JSON manifest file that contains a list of dependencies
-/// to copy, a list of test files themselves, and a pubspec file.
-///
-/// The dependencies are copied into the test area with the same relative path.
-///
-/// The test files are copied to the root of the test area.
-///
-/// The pubspec file is copied to the root of the test area too, but renamed to
-/// "pubspec.yaml".
 class TestCase {
   TestCase.fromManifest(this.manifest, this.tmpdir) {
     _json = jsonDecode(manifest.readAsStringSync()) as Map<String, dynamic>;

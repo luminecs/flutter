@@ -8,68 +8,19 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/widgets.dart';
 
-/// Defines the appearance of an [InputDecorator]'s border.
-///
-/// An input decorator's border is specified by [InputDecoration.border].
-///
-/// The border is drawn relative to the input decorator's "container" which
-/// is the optionally filled area above the decorator's helper, error,
-/// and counter.
-///
-/// Input border's are decorated with a line whose weight and color are defined
-/// by [borderSide]. The input decorator's renderer animates the input border's
-/// appearance in response to state changes, like gaining or losing the focus,
-/// by creating new copies of its input border with [copyWith].
-///
-/// See also:
-///
-///  * [UnderlineInputBorder], the default [InputDecorator] border which
-///    draws a horizontal line at the bottom of the input decorator's container.
-///  * [OutlineInputBorder], an [InputDecorator] border which draws a
-///    rounded rectangle around the input decorator's container.
-///  * [InputDecoration], which is used to configure an [InputDecorator].
 abstract class InputBorder extends ShapeBorder {
-  /// Creates a border for an [InputDecorator].
-  ///
-  /// Applications typically do not specify a [borderSide] parameter because the
-  /// [InputDecorator] substitutes its own, using [copyWith], based on the
-  /// current theme and [InputDecorator.isFocused].
   const InputBorder({
     this.borderSide = BorderSide.none,
   });
 
-  /// No input border.
-  ///
-  /// Use this value with [InputDecoration.border] to specify that no border
-  /// should be drawn. The [InputDecoration.collapsed] constructor sets
-  /// its border to this value.
   static const InputBorder none = _NoInputBorder();
 
-  /// Defines the border line's color and weight.
-  ///
-  /// The [InputDecorator] creates copies of its input border, using [copyWith],
-  /// based on the current theme and [InputDecorator.isFocused].
   final BorderSide borderSide;
 
-  /// Creates a copy of this input border with the specified `borderSide`.
   InputBorder copyWith({ BorderSide? borderSide });
 
-  /// True if this border will enclose the [InputDecorator]'s container.
-  ///
-  /// This property affects the alignment of container's contents. For example
-  /// when an input decorator is configured with an [OutlineInputBorder] its
-  /// label is centered with its container.
   bool get isOutline;
 
-  /// Paint this input border on [canvas].
-  ///
-  /// The [rect] parameter bounds the [InputDecorator]'s container.
-  ///
-  /// The additional `gap` parameters reflect the state of the [InputDecorator]'s
-  /// floating label. When an input decorator gains the focus, its label
-  /// animates upwards, to make room for the input child. The [gapStart] and
-  /// [gapExtent] parameters define a floating label width interval, and
-  /// [gapPercentage] defines the animation's progress (0.0 to 1.0).
   @override
   void paint(
     Canvas canvas,
@@ -128,27 +79,7 @@ class _NoInputBorder extends InputBorder {
   }
 }
 
-/// Draws a horizontal line at the bottom of an [InputDecorator]'s container and
-/// defines the container's shape.
-///
-/// The input decorator's "container" is the optionally filled area above the
-/// decorator's helper, error, and counter.
-///
-/// See also:
-///
-///  * [OutlineInputBorder], an [InputDecorator] border which draws a
-///    rounded rectangle around the input decorator's container.
-///  * [InputDecoration], which is used to configure an [InputDecorator].
 class UnderlineInputBorder extends InputBorder {
-  /// Creates an underline border for an [InputDecorator].
-  ///
-  /// The [borderSide] parameter defaults to [BorderSide.none] (it must not be
-  /// null). Applications typically do not specify a [borderSide] parameter
-  /// because the input decorator substitutes its own, using [copyWith], based
-  /// on the current theme and [InputDecorator.isFocused].
-  ///
-  /// The [borderRadius] parameter defaults to a value where the top left
-  /// and right corners have a circular radius of 4.0.
   const UnderlineInputBorder({
     super.borderSide = const BorderSide(),
     this.borderRadius = const BorderRadius.only(
@@ -157,15 +88,6 @@ class UnderlineInputBorder extends InputBorder {
     ),
   });
 
-  /// The radii of the border's rounded rectangle corners.
-  ///
-  /// When this border is used with a filled input decorator, see
-  /// [InputDecoration.filled], the border radius defines the shape
-  /// of the background fill as well as the bottom left and right
-  /// edges of the underline itself.
-  ///
-  /// By default the top right and top left corners have a circular radius
-  /// of 4.0.
   final BorderRadius borderRadius;
 
   @override
@@ -230,10 +152,6 @@ class UnderlineInputBorder extends InputBorder {
     return super.lerpTo(b, t);
   }
 
-  /// Draw a horizontal line at the bottom of [rect].
-  ///
-  /// The [borderSide] defines the line's color and weight. The `textDirection`
-  /// `gap` and `textDirection` parameters are ignored.
   @override
   void paint(
     Canvas canvas,
@@ -266,41 +184,7 @@ class UnderlineInputBorder extends InputBorder {
   int get hashCode => Object.hash(borderSide, borderRadius);
 }
 
-/// Draws a rounded rectangle around an [InputDecorator]'s container.
-///
-/// When the input decorator's label is floating, for example because its
-/// input child has the focus, the label appears in a gap in the border outline.
-///
-/// The input decorator's "container" is the optionally filled area above the
-/// decorator's helper, error, and counter.
-///
-/// See also:
-///
-///  * [UnderlineInputBorder], the default [InputDecorator] border which
-///    draws a horizontal line at the bottom of the input decorator's container.
-///  * [InputDecoration], which is used to configure an [InputDecorator].
 class OutlineInputBorder extends InputBorder {
-  /// Creates a rounded rectangle outline border for an [InputDecorator].
-  ///
-  /// If the [borderSide] parameter is [BorderSide.none], it will not draw a
-  /// border. However, it will still define a shape (which you can see if
-  /// [InputDecoration.filled] is true).
-  ///
-  /// If an application does not specify a [borderSide] parameter of
-  /// value [BorderSide.none], the input decorator substitutes its own, using
-  /// [copyWith], based on the current theme and [InputDecorator.isFocused].
-  ///
-  /// The [borderRadius] parameter defaults to a value where all four corners
-  /// have a circular radius of 4.0. The corner radii must be circular, i.e.
-  /// their [Radius.x] and [Radius.y] values must be the same.
-  ///
-  /// See also:
-  ///
-  ///  * [InputDecoration.floatingLabelBehavior], which should be set to
-  ///    [FloatingLabelBehavior.never] when the [borderSide] is
-  ///    [BorderSide.none]. If let as [FloatingLabelBehavior.auto], the label
-  ///    will extend beyond the container as if the border were still being
-  ///    drawn.
   const OutlineInputBorder({
     super.borderSide = const BorderSide(),
     this.borderRadius = const BorderRadius.all(Radius.circular(4.0)),
@@ -320,16 +204,8 @@ class OutlineInputBorder extends InputBorder {
         && borderRadius.bottomRight.x == borderRadius.bottomRight.y;
   }
 
-  /// Horizontal padding on either side of the border's
-  /// [InputDecoration.labelText] width gap.
-  ///
-  /// This value is used by the [paint] method to compute the actual gap width.
   final double gapPadding;
 
-  /// The radii of the border's rounded rectangle corners.
-  ///
-  /// The corner radii must be circular, i.e. their [Radius.x] and [Radius.y]
-  /// values must be the same.
   final BorderRadius borderRadius;
 
   @override
@@ -495,14 +371,6 @@ class OutlineInputBorder extends InputBorder {
     return path;
   }
 
-  /// Draw a rounded rectangle around [rect] using [borderRadius].
-  ///
-  /// The [borderSide] defines the line's color and weight.
-  ///
-  /// The top side of the rounded rectangle may be interrupted by a single gap
-  /// if [gapExtent] is non-null. In that case the gap begins at
-  /// `gapStart - gapPadding` (assuming that the [textDirection] is [TextDirection.ltr]).
-  /// The gap's width is `(gapPadding + gapExtent + gapPadding) * gapPercentage`.
   @override
   void paint(
     Canvas canvas,

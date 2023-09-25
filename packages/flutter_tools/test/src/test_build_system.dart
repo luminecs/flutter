@@ -7,19 +7,14 @@ import 'dart:async';
 import 'package:flutter_tools/src/build_system/build_system.dart';
 
 class TestBuildSystem implements BuildSystem {
-  /// Create a [BuildSystem] instance that returns the provided results in order.
   TestBuildSystem.list(this._results, [this._onRun])
     : _exception = null,
       _singleResult = null;
 
-  /// Create a [BuildSystem] instance that returns the provided result for every build
-  /// and buildIncremental request.
   TestBuildSystem.all(this._singleResult, [this._onRun])
     : _exception = null,
       _results = <BuildResult>[];
 
-  /// Create a [BuildSystem] instance that always throws the provided error for every build
-  /// and buildIncremental request.
   TestBuildSystem.error(this._exception)
     : _singleResult = null,
       _results = <BuildResult>[],

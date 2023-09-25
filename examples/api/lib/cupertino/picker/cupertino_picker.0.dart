@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoPicker].
 
 const double _kItemExtent = 32.0;
 const List<String> _fruitNames = <String>[

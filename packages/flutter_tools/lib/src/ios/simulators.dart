@@ -102,7 +102,6 @@ class IOSSimulatorUtils {
   }
 }
 
-/// A wrapper around the `simctl` command line tool.
 class SimControl {
   SimControl({
     required Logger logger,
@@ -116,8 +115,6 @@ class SimControl {
   final ProcessUtils _processUtils;
   final Xcode _xcode;
 
-  /// Runs `simctl list --json` and returns the JSON of the corresponding
-  /// [section].
   Future<Map<String, Object?>> _listBootedDevices() async {
     // Sample output from `simctl list available booted --json`:
     //
@@ -180,7 +177,6 @@ class SimControl {
     }
   }
 
-  /// Returns all the connected simulator devices.
   Future<List<BootedSimDevice>> getConnectedDevices() async {
     final List<BootedSimDevice> devices = <BootedSimDevice>[];
 
@@ -303,7 +299,6 @@ class SimControl {
     }
   }
 
-  /// Runs `simctl list runtimes available iOS --json` and returns all available iOS simulator runtimes.
   Future<List<IOSSimulatorRuntime>> listAvailableIOSRuntimes() async {
     final List<IOSSimulatorRuntime> runtimes = <IOSSimulatorRuntime>[];
     final RunResult results = await _processUtils.run(
@@ -731,13 +726,11 @@ class IOSSimulatorRuntime {
   final String? name;
 }
 
-/// Launches the device log reader process on the host and parses the syslog.
 @visibleForTesting
 Future<Process> launchDeviceSystemLogTool(IOSSimulator device) async {
   return globals.processUtils.start(<String>['tail', '-n', '0', '-F', device.logFilePath]);
 }
 
-/// Launches the device log reader process on the host and parses unified logging.
 @visibleForTesting
 Future<Process> launchDeviceUnifiedLogging (IOSSimulator device, String? appName) async {
   // Make NSPredicate concatenation easier to read.

@@ -31,7 +31,6 @@ import 'fuchsia_sdk.dart';
 //                     https://fuchsia.dev/fuchsia-src/concepts/session/introduction
 //                     for details.
 
-/// A simple wrapper for the Fuchsia SDK's 'ffx' tool.
 class FuchsiaFfx {
   FuchsiaFfx({
     FuchsiaArtifacts? fuchsiaArtifacts,
@@ -47,10 +46,6 @@ class FuchsiaFfx {
   final Logger _logger;
   final ProcessUtils _processUtils;
 
-  /// Returns a list of attached devices as a list of strings with entries
-  /// formatted as follows:
-  ///
-  /// abcd::abcd:abc:abcd:abcd%qemu scare-cable-skip-joy
   Future<List<String>?> list({Duration? timeout}) async {
     final File? ffx = _fuchsiaArtifacts?.ffx;
     if (ffx == null || !ffx.existsSync()) {
@@ -77,10 +72,6 @@ class FuchsiaFfx {
     return result.stdout.split('\n');
   }
 
-  /// Returns the address of the named device.
-  ///
-  /// The string [deviceName] should be the name of the device from the
-  /// 'list' command, e.g. 'scare-cable-skip-joy'.
   Future<String?> resolve(String deviceName) async {
     final File? ffx = _fuchsiaArtifacts?.ffx;
     if (ffx == null || !ffx.existsSync()) {
@@ -102,10 +93,6 @@ class FuchsiaFfx {
     return result.stdout.trim();
   }
 
-  /// Show information about the current session
-  ///
-  /// Returns `null` if the command failed, which can be interpreted as there is
-  /// no usable session.
   Future<String?> sessionShow() async {
     final File? ffx = _fuchsiaArtifacts?.ffx;
     if (ffx == null || !ffx.existsSync()) {
@@ -124,11 +111,6 @@ class FuchsiaFfx {
     return result.stdout;
   }
 
-  /// Add an element to the current session
-  ///
-  /// [url] should be formatted as a Fuchsia-style package URL, e.g.:
-  ///     fuchsia-pkg://fuchsia.com/flutter_gallery#meta/flutter_gallery.cmx
-  /// Returns true on success and false on failure.
   Future<bool> sessionAdd(String url) async {
     final File? ffx = _fuchsiaArtifacts?.ffx;
     if (ffx == null || !ffx.existsSync()) {

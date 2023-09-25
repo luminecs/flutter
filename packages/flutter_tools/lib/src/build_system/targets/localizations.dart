@@ -11,8 +11,6 @@ import '../depfile.dart';
 
 const String _kDependenciesFileName = 'gen_l10n_inputs_and_outputs.json';
 
-/// A build step that runs the generate localizations script from
-/// dev/tool/localizations.
 class GenerateLocalizationsTarget extends Target {
   const GenerateLocalizationsTarget();
 

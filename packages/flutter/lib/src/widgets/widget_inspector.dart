@@ -34,24 +34,13 @@ import 'gesture_detector.dart';
 import 'service_extensions.dart';
 import 'view.dart';
 
-/// Signature for the builder callback used by
-/// [WidgetInspector.selectButtonBuilder].
 typedef InspectorSelectButtonBuilder = Widget Function(BuildContext context, VoidCallback onPressed);
 
-/// Signature for a method that registers the service extension `callback` with
-/// the given `name`.
-///
-/// Used as argument to [WidgetInspectorService.initServiceExtensions]. The
-/// [BindingBase.registerServiceExtension] implements this signature.
 typedef RegisterServiceExtensionCallback = void Function({
   required String name,
   required ServiceExtensionCallback callback,
 });
 
-/// A layer that mimics the behavior of another layer.
-///
-/// A proxy layer is used for cases where a layer needs to be placed into
-/// multiple trees of layers.
 class _ProxyLayer extends Layer {
   _ProxyLayer(this._layer);
 
@@ -73,9 +62,6 @@ class _ProxyLayer extends Layer {
   }
 }
 
-/// A [Canvas] that multicasts all method calls to a main canvas and a
-/// secondary screenshot canvas so that a screenshot can be recorded at the same
-/// time as performing a normal paint.
 class _MulticastCanvas implements Canvas {
   _MulticastCanvas({
     required Canvas main,
@@ -317,13 +303,10 @@ Rect _calculateSubtreeBoundsHelper(RenderObject object, Matrix4 transform) {
   return bounds;
 }
 
-/// Calculate bounds for a render object and all of its descendants.
 Rect _calculateSubtreeBounds(RenderObject object) {
   return _calculateSubtreeBoundsHelper(object, Matrix4.identity());
 }
 
-/// A layer that omits its own offset when adding children to the scene so that
-/// screenshots render to the scene in the local coordinate system of the layer.
 class _ScreenshotContainerLayer extends OffsetLayer {
   @override
   void addToScene(ui.SceneBuilder builder) {
@@ -331,40 +314,21 @@ class _ScreenshotContainerLayer extends OffsetLayer {
   }
 }
 
-/// Data shared between nested [_ScreenshotPaintingContext] objects recording
-/// a screenshot.
 class _ScreenshotData {
   _ScreenshotData({
     required this.target,
   }) : containerLayer = _ScreenshotContainerLayer();
 
-  /// Target to take a screenshot of.
   final RenderObject target;
 
-  /// Root of the layer tree containing the screenshot.
   final OffsetLayer containerLayer;
 
-  /// Whether the screenshot target has already been found in the render tree.
   bool foundTarget = false;
 
-  /// Whether paint operations should record to the screenshot.
-  ///
-  /// At least one of [includeInScreenshot] and [includeInRegularContext] must
-  /// be true.
   bool includeInScreenshot = false;
 
-  /// Whether paint operations should record to the regular context.
-  ///
-  /// This should only be set to false before paint operations that should only
-  /// apply to the screenshot such rendering debug information about the
-  /// [target].
-  ///
-  /// At least one of [includeInScreenshot] and [includeInRegularContext] must
-  /// be true.
   bool includeInRegularContext = true;
 
-  /// Offset of the screenshot corresponding to the offset [target] was given as
-  /// part of the regular paint.
   Offset get screenshotOffset {
     assert(foundTarget);
     return containerLayer.offset;
@@ -374,16 +338,6 @@ class _ScreenshotData {
   }
 }
 
-/// A place to paint to build screenshots of [RenderObject]s.
-///
-/// Requires that the render objects have already painted successfully as part
-/// of the regular rendering pipeline.
-/// This painting context behaves the same as standard [PaintingContext] with
-/// instrumentation added to compute a screenshot of a specified [RenderObject]
-/// added. To correctly mimic the behavior of the regular rendering pipeline, the
-/// full subtree of the first [RepaintBoundary] ancestor of the specified
-/// [RenderObject] will also be rendered rather than just the subtree of the
-/// render object.
 class _ScreenshotPaintingContext extends PaintingContext {
   _ScreenshotPaintingContext({
     required ContainerLayer containerLayer,
@@ -518,33 +472,6 @@ class _ScreenshotPaintingContext extends PaintingContext {
     }
   }
 
-  /// Captures an image of the current state of [renderObject] and its children.
-  ///
-  /// The returned [ui.Image] has uncompressed raw RGBA bytes, will be offset
-  /// by the top-left corner of [renderBounds], and have dimensions equal to the
-  /// size of [renderBounds] multiplied by [pixelRatio].
-  ///
-  /// To use [toImage], the render object must have gone through the paint phase
-  /// (i.e. [debugNeedsPaint] must be false).
-  ///
-  /// The [pixelRatio] describes the scale between the logical pixels and the
-  /// size of the output image. It is independent of the
-  /// [window.devicePixelRatio] for the device, so specifying 1.0 (the default)
-  /// will give you a 1:1 mapping between logical pixels and the output pixels
-  /// in the image.
-  ///
-  /// The [debugPaint] argument specifies whether the image should include the
-  /// output of [RenderObject.debugPaint] for [renderObject] with
-  /// [debugPaintSizeEnabled] set to true. Debug paint information is not
-  /// included for the children of [renderObject] so that it is clear precisely
-  /// which object the debug paint information references.
-  ///
-  /// See also:
-  ///
-  ///  * [RenderRepaintBoundary.toImage] for a similar API for [RenderObject]s
-  ///    that are repaint boundaries that can be used outside of the inspector.
-  ///  * [OffsetLayer.toImage] for a similar API at the layer level.
-  ///  * [dart:ui.Scene.toImage] for more information about the image returned.
   static Future<ui.Image> toImage(
     RenderObject renderObject,
     Rect renderBounds, {
@@ -608,34 +535,17 @@ class _ScreenshotPaintingContext extends PaintingContext {
   }
 }
 
-/// A class describing a step along a path through a tree of [DiagnosticsNode]
-/// objects.
-///
-/// This class is used to bundle all data required to display the tree with just
-/// the nodes along a path expanded into a single JSON payload.
 class _DiagnosticsPathNode {
-  /// Creates a full description of a step in a path through a tree of
-  /// [DiagnosticsNode] objects.
   _DiagnosticsPathNode({
     required this.node,
     required this.children,
     this.childIndex,
   });
 
-  /// Node at the point in the path this [_DiagnosticsPathNode] is describing.
   final DiagnosticsNode node;
 
-  /// Children of the [node] being described.
-  ///
-  /// This value is cached instead of relying on `node.getChildren()` as that
-  /// method call might create new [DiagnosticsNode] objects for each child
-  /// and we would prefer to use the identical [DiagnosticsNode] for each time
-  /// a node exists in the path.
   final List<DiagnosticsNode> children;
 
-  /// Index of the child that the path continues on.
-  ///
-  /// Equal to null if the path does not continue.
   final int? childIndex;
 }
 
@@ -672,17 +582,10 @@ List<_DiagnosticsPathNode>? _followDiagnosticableChain(
   return path;
 }
 
-/// Signature for the selection change callback used by
-/// [WidgetInspectorService.selectionChangedCallback].
 typedef InspectorSelectionChangedCallback = void Function();
 
-/// Structure to help reference count Dart objects referenced by a GUI tool
-/// using [WidgetInspectorService].
-///
-/// Does not hold the object from garbage collection.
 @visibleForTesting
 class InspectorReferenceData {
-  /// Creates an instance of [InspectorReferenceData].
   InspectorReferenceData(Object object, this.id) {
     // These types are not supported by [WeakReference].
     // See https://api.dart.dev/stable/3.0.2/dart-core/WeakReference-class.html
@@ -698,13 +601,10 @@ class InspectorReferenceData {
 
   Object? _value;
 
-  /// The id of the object in the widget inspector records.
   final String id;
 
-  /// The number of times the object has been referenced.
   int count = 1;
 
-  /// The value.
   Object? get value {
     if (_ref != null) {
       return _ref!.target;
@@ -724,41 +624,13 @@ class _WidgetInspectorService with WidgetInspectorService {
   }
 }
 
-/// Service used by GUI tools to interact with the [WidgetInspector].
-///
-/// Calls to this object are typically made from GUI tools such as the [Flutter
-/// IntelliJ Plugin](https://github.com/flutter/flutter-intellij/blob/master/README.md)
-/// using the [Dart VM Service](https://github.com/dart-lang/sdk/blob/main/runtime/vm/service/service.md).
-/// This class uses its own object id and manages object lifecycles itself
-/// instead of depending on the [object ids](https://github.com/dart-lang/sdk/blob/main/runtime/vm/service/service.md#getobject)
-/// specified by the VM Service Protocol because the VM Service Protocol ids
-/// expire unpredictably. Object references are tracked in groups so that tools
-/// that clients can use dereference all objects in a group with a single
-/// operation making it easier to avoid memory leaks.
-///
-/// All methods in this class are appropriate to invoke from debugging tools
-/// using the VM service protocol to evaluate Dart expressions of the
-/// form `WidgetInspectorService.instance.methodName(arg1, arg2, ...)`. If you
-/// make changes to any instance method of this class you need to verify that
-/// the [Flutter IntelliJ Plugin](https://github.com/flutter/flutter-intellij/blob/master/README.md)
-/// widget inspector support still works with the changes.
-///
-/// All methods returning String values return JSON.
 mixin WidgetInspectorService {
-  /// Ring of cached JSON values to prevent JSON from being garbage
-  /// collected before it can be requested over the VM service protocol.
   final List<String?> _serializeRing = List<String?>.filled(20, null);
   int _serializeRingIndex = 0;
 
-  /// The current [WidgetInspectorService].
   static WidgetInspectorService get instance => _instance;
   static WidgetInspectorService _instance = _WidgetInspectorService();
 
-  /// Whether the inspector is in select mode.
-  ///
-  /// In select mode, pointer interactions trigger widget selection instead of
-  /// normal interactions. Otherwise the previously selected widget is
-  /// highlighted but the application can be interacted with normally.
   @visibleForTesting
   final ValueNotifier<bool> isSelectMode = ValueNotifier<bool>(true);
 
@@ -769,44 +641,22 @@ mixin WidgetInspectorService {
 
   static bool _debugServiceExtensionsRegistered = false;
 
-  /// Ground truth tracking what object(s) are currently selected used by both
-  /// GUI tools such as the Flutter IntelliJ Plugin and the [WidgetInspector]
-  /// displayed on the device.
   final InspectorSelection selection = InspectorSelection();
 
-  /// Callback typically registered by the [WidgetInspector] to receive
-  /// notifications when [selection] changes.
-  ///
-  /// The Flutter IntelliJ Plugin does not need to listen for this event as it
-  /// instead listens for `dart:developer` `inspect` events which also trigger
-  /// when the inspection target changes on device.
   InspectorSelectionChangedCallback? selectionChangedCallback;
 
-  /// The VM service protocol does not keep alive object references so this
-  /// class needs to manually manage groups of objects that should be kept
-  /// alive.
   final Map<String, Set<InspectorReferenceData>> _groups = <String, Set<InspectorReferenceData>>{};
   final Map<String, InspectorReferenceData> _idToReferenceData = <String, InspectorReferenceData>{};
   final WeakMap<Object, String> _objectToId = WeakMap<Object, String>();
   int _nextId = 0;
 
-  /// The pubRootDirectories that are currently configured for the widget inspector.
   List<String>? _pubRootDirectories;
 
-  /// Memoization for [_isLocalCreationLocation].
   final HashMap<String, bool> _isLocalCreationCache = HashMap<String, bool>();
 
   bool _trackRebuildDirtyWidgets = false;
   bool _trackRepaintWidgets = false;
 
-  /// Registers a service extension method with the given name (full
-  /// name "ext.flutter.inspector.name").
-  ///
-  /// The given callback is called when the extension method is called. The
-  /// callback must return a value that can be converted to JSON using
-  /// `json.encode()` (see [JsonEncoder]). The return value is stored as a
-  /// property named `result` in the JSON. In case of failure, the failure is
-  /// reported to the remote caller and is dumped to the logs.
   @protected
   void registerServiceExtension({
     required String name,
@@ -819,8 +669,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Registers a service extension method with the given name (full
-  /// name "ext.flutter.inspector.name"), which takes no arguments.
   void _registerSignalServiceExtension({
     required String name,
     required FutureOr<Object?> Function() callback,
@@ -835,12 +683,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Registers a service extension method with the given name (full
-  /// name "ext.flutter.inspector.name"), which takes a single optional argument
-  /// "objectGroup" specifying what group is used to manage lifetimes of
-  /// object references in the returned JSON (see [disposeGroup]).
-  /// If "objectGroup" is omitted, the returned JSON will not include any object
-  /// references to avoid leaking memory.
   void _registerObjectGroupServiceExtension({
     required String name,
     required FutureOr<Object?> Function(String objectGroup) callback,
@@ -855,18 +697,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Registers a service extension method with the given name (full
-  /// name "ext.flutter.inspector.name"), which takes a single argument
-  /// "enabled" which can have the value "true" or the value "false"
-  /// or can be omitted to read the current value. (Any value other
-  /// than "true" is considered equivalent to "false". Other arguments
-  /// are ignored.)
-  ///
-  /// Calls the `getter` callback to obtain the value when
-  /// responding to the service extension method being called.
-  ///
-  /// Calls the `setter` callback with the new value when the
-  /// service extension method is called with a new value.
   void _registerBoolServiceExtension({
     required String name,
     required AsyncValueGetter<bool> getter,
@@ -887,16 +717,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Sends an event when a service extension's state is changed.
-  ///
-  /// Clients should listen for this event to stay aware of the current service
-  /// extension state. Any service extension that manages a state should call
-  /// this method on state change.
-  ///
-  /// `value` reflects the newly updated service extension value.
-  ///
-  /// This will be called automatically for service extensions registered via
-  /// [registerBoolServiceExtension].
   void _postExtensionStateChangedEvent(String name, Object? value) {
     postEvent(
       'Flutter.ServiceExtensionStateChanged',
@@ -907,10 +727,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Registers a service extension method with the given name (full
-  /// name "ext.flutter.inspector.name") which takes an optional parameter named
-  /// "arg" and a required parameter named "objectGroup" used to control the
-  /// lifetimes of object references in the returned JSON (see [disposeGroup]).
   void _registerServiceExtensionWithArg({
     required String name,
     required FutureOr<Object?> Function(String? objectId, String objectGroup) callback,
@@ -928,9 +744,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Registers a service extension method with the given name (full
-  /// name "ext.flutter.inspector.name"), that takes arguments
-  /// "arg0", "arg1", "arg2", ..., "argn".
   void _registerServiceExtensionVarArgs({
     required String name,
     required FutureOr<Object?> Function(List<String> args) callback,
@@ -959,11 +772,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Cause the entire tree to be rebuilt. This is used by development tools
-  /// when the application code has changed and is being hot-reloaded, to cause
-  /// the widget tree to pick up any changed implementations.
-  ///
-  /// This is expensive and should not be called except during development.
   @protected
   Future<void> forceRebuild() {
     final WidgetsBinding binding = WidgetsBinding.instance;
@@ -1004,19 +812,10 @@ mixin WidgetInspectorService {
     postEvent('Flutter.Error', errorJson);
   }
 
-  /// Resets the count of errors since the last hot reload.
-  ///
-  /// This data is sent to clients as part of the 'Flutter.Error' service
-  /// protocol event. Clients may choose to display errors received after the
-  /// first error differently.
   void _resetErrorCount() {
     _errorsSinceReload = 0;
   }
 
-  /// Whether structured errors are enabled.
-  ///
-  /// Structured errors provide semantic information that can be used by IDEs
-  /// to enhance the display of errors with rich formatting.
   bool isStructuredErrorsEnabled() {
     // This is a debug mode only feature and will default to false for
     // profile mode.
@@ -1029,13 +828,6 @@ mixin WidgetInspectorService {
     return enabled;
   }
 
-  /// Called to register service extensions.
-  ///
-  /// See also:
-  ///
-  ///  * <https://github.com/dart-lang/sdk/blob/main/runtime/vm/service/service.md#rpcs-requests-and-responses>
-  ///  * [BindingBase.initServiceExtensions], which explains when service
-  ///    extensions can be used.
   void initServiceExtensions(RegisterServiceExtensionCallback registerExtension) {
     final FlutterExceptionHandler defaultExceptionHandler = FlutterError.presentError;
 
@@ -1319,10 +1111,6 @@ mixin WidgetInspectorService {
     _repaintStats.resetCounts();
   }
 
-  /// Clear all InspectorService object references.
-  ///
-  /// Use this method only for testing to ensure that object references from one
-  /// test case do not impact other test cases.
   @visibleForTesting
   @protected
   void disposeAllGroups() {
@@ -1332,10 +1120,6 @@ mixin WidgetInspectorService {
     _nextId = 0;
   }
 
-  /// Reset all InspectorService state.
-  ///
-  /// Use this method only for testing to write hermetic tests for
-  /// WidgetInspectorService.
   @visibleForTesting
   @protected
   @mustCallSuper
@@ -1345,10 +1129,6 @@ mixin WidgetInspectorService {
     resetPubRootDirectories();
   }
 
-  /// Free all references to objects in a group.
-  ///
-  /// Objects and their associated ids in the group may be kept alive by
-  /// references from a different group.
   @protected
   void disposeGroup(String name) {
     final Set<InspectorReferenceData>? references = _groups.remove(name);
@@ -1370,8 +1150,6 @@ mixin WidgetInspectorService {
     }
   }
 
-  /// Returns a unique id for [object] that will remain live at least until
-  /// [disposeGroup] is called on [groupName].
   @protected
   String? toId(Object? object, String groupName) {
     if (object == null) {
@@ -1399,18 +1177,11 @@ mixin WidgetInspectorService {
     return id;
   }
 
-  /// Returns whether the application has rendered its first frame and it is
-  /// appropriate to display the Widget tree in the inspector.
   @protected
   bool isWidgetTreeReady([ String? groupName ]) {
     return WidgetsBinding.instance.debugDidSendFirstFrameEvent;
   }
 
-  /// Returns the Dart object associated with a reference id.
-  ///
-  /// The `groupName` parameter is not required by is added to regularize the
-  /// API surface of the methods in this class called from the Flutter IntelliJ
-  /// Plugin.
   @protected
   Object? toObject(String? id, [ String? groupName ]) {
     if (id == null) {
@@ -1424,15 +1195,6 @@ mixin WidgetInspectorService {
     return data.value;
   }
 
-  /// Returns the object to introspect to determine the source location of an
-  /// object's class.
-  ///
-  /// The Dart object for the id is returned for all cases but [Element] objects
-  /// where the [Widget] configuring the [Element] is returned instead as the
-  /// class of the [Widget] is more relevant than the class of the [Element].
-  ///
-  /// The `groupName` parameter is not required by is added to regularize the
-  /// API surface of methods called from the Flutter IntelliJ Plugin.
   @protected
   Object? toObjectForSourceLocation(String id, [ String? groupName ]) {
     final Object? object = toObject(id);
@@ -1442,11 +1204,6 @@ mixin WidgetInspectorService {
     return object;
   }
 
-  /// Remove the object with the specified `id` from the specified object
-  /// group.
-  ///
-  /// If the object exists in other groups it will remain alive and the object
-  /// id will remain valid.
   @protected
   void disposeId(String? id, String groupName) {
     if (id == null) {
@@ -1463,12 +1220,6 @@ mixin WidgetInspectorService {
     _decrementReferenceCount(referenceData);
   }
 
-  /// Set the list of directories that should be considered part of the local
-  /// project.
-  ///
-  /// The local project directories are used to distinguish widgets created by
-  /// the local project from widgets created from inside the framework
-  /// or other packages.
   @protected
   @Deprecated(
     'Use addPubRootDirectories instead. '
@@ -1478,12 +1229,6 @@ mixin WidgetInspectorService {
     addPubRootDirectories(pubRootDirectories);
   }
 
-  /// Resets the list of directories, that should be considered part of the
-  /// local project, to the value passed in [pubRootDirectories].
-  ///
-  /// The local project directories are used to distinguish widgets created by
-  /// the local project from widgets created from inside the framework
-  /// or other packages.
   @visibleForTesting
   @protected
   void resetPubRootDirectories() {
@@ -1491,12 +1236,6 @@ mixin WidgetInspectorService {
     _isLocalCreationCache.clear();
   }
 
-  /// Add a list of directories that should be considered part of the local
-  /// project.
-  ///
-  /// The local project directories are used to distinguish widgets created by
-  /// the local project from widgets created from inside the framework
-  /// or other packages.
   @protected
   void addPubRootDirectories(List<String> pubRootDirectories) {
     pubRootDirectories = pubRootDirectories.map<String>((String directory) => Uri.parse(directory).path).toList();
@@ -1510,12 +1249,6 @@ mixin WidgetInspectorService {
     _isLocalCreationCache.clear();
   }
 
-  /// Remove a list of directories that should no longer be considered part
-  /// of the local project.
-  ///
-  /// The local project directories are used to distinguish widgets created by
-  /// the local project from widgets created from inside the framework
-  /// or other packages.
   @protected
   void removePubRootDirectories(List<String> pubRootDirectories) {
     if (_pubRootDirectories == null) {
@@ -1530,8 +1263,6 @@ mixin WidgetInspectorService {
     _isLocalCreationCache.clear();
   }
 
-  /// Returns the list of directories that should be considered part of the
-  /// local project.
   @protected
   @visibleForTesting
   Future<Map<String, dynamic>> pubRootDirectories(
@@ -1542,25 +1273,11 @@ mixin WidgetInspectorService {
     });
   }
 
-  /// Set the [WidgetInspector] selection to the object matching the specified
-  /// id if the object is valid object to set as the inspector selection.
-  ///
-  /// Returns true if the selection was changed.
-  ///
-  /// The `groupName` parameter is not required by is added to regularize the
-  /// API surface of methods called from the Flutter IntelliJ Plugin.
   @protected
   bool setSelectionById(String? id, [ String? groupName ]) {
     return setSelection(toObject(id), groupName);
   }
 
-  /// Set the [WidgetInspector] selection to the specified `object` if it is
-  /// a valid object to set as the inspector selection.
-  ///
-  /// Returns true if the selection was changed.
-  ///
-  /// The `groupName` parameter is not needed but is specified to regularize the
-  /// API surface of methods called from the Flutter IntelliJ Plugin.
   @protected
   bool setSelection(Object? object, [ String? groupName ]) {
     if (object is Element || object is RenderObject) {
@@ -1583,7 +1300,6 @@ mixin WidgetInspectorService {
     return false;
   }
 
-  /// Notify attached tools to navigate to an object's source location.
   void _sendInspectEvent(Object? object){
     inspect(object);
 
@@ -1602,7 +1318,6 @@ mixin WidgetInspectorService {
     }
   }
 
-  /// Returns a DevTools uri linking to a specific element on the inspector page.
   String? _devToolsInspectorUriForElement(Element element) {
     if (activeDevToolsServerAddress != null && connectedVmServiceUri != null) {
       final String? inspectorRef = toId(element, _consoleObjectGroup);
@@ -1613,8 +1328,6 @@ mixin WidgetInspectorService {
     return null;
   }
 
-  /// Returns the DevTools inspector uri for the given vm service connection and
-  /// inspector reference.
   @visibleForTesting
   String devToolsInspectorUri(String inspectorRef) {
     assert(activeDevToolsServerAddress != null);
@@ -1642,11 +1355,6 @@ mixin WidgetInspectorService {
         '${devToolsInspectorUri.substring(startQueryParamIndex)}';
   }
 
-  /// Returns JSON representing the chain of [DiagnosticsNode] instances from
-  /// root of the tree to the [Element] or [RenderObject] matching `id`.
-  ///
-  /// The JSON contains all information required to display a tree view with
-  /// all nodes other than nodes along the path collapsed.
   @protected
   String getParentChain(String id, String groupName) {
     return _safeJsonEncode(_getParentChain(id, groupName));
@@ -1743,7 +1451,6 @@ mixin WidgetInspectorService {
     return false;
   }
 
-  /// Memoized version of [_isLocalCreationLocationImpl].
   bool _isLocalCreationLocation(String locationUri) {
     final bool? cachedValue = _isLocalCreationCache[locationUri];
     if (cachedValue != null) {
@@ -1754,11 +1461,6 @@ mixin WidgetInspectorService {
     return result;
   }
 
-  /// Wrapper around `json.encode` that uses a ring of cached values to prevent
-  /// the Dart garbage collector from collecting objects between when
-  /// the value is returned over the VM service protocol and when the
-  /// separate observatory protocol command has to be used to retrieve its full
-  /// contents.
   //
   // TODO(jacobr): Replace this with a better solution once
   // https://github.com/dart-lang/sdk/issues/32919 is fixed.
@@ -1789,8 +1491,6 @@ mixin WidgetInspectorService {
     return DiagnosticsNode.toJsonList(nodes, parent, delegate);
   }
 
-  /// Returns a JSON representation of the properties of the [DiagnosticsNode]
-  /// object that `diagnosticsNodeId` references.
   @protected
   String getProperties(String diagnosticsNodeId, String groupName) {
     return _safeJsonEncode(_getProperties(diagnosticsNodeId, groupName));
@@ -1804,8 +1504,6 @@ mixin WidgetInspectorService {
     return _nodesToJson(node.getProperties(), InspectorSerializationDelegate(groupName: groupName, service: this), parent: node);
   }
 
-  /// Returns a JSON representation of the children of the [DiagnosticsNode]
-  /// object that `diagnosticsNodeId` references.
   String getChildren(String diagnosticsNodeId, String groupName) {
     return _safeJsonEncode(_getChildren(diagnosticsNodeId, groupName));
   }
@@ -1816,20 +1514,6 @@ mixin WidgetInspectorService {
     return _nodesToJson(node == null ? const <DiagnosticsNode>[] : _getChildrenFiltered(node, delegate), delegate, parent: node);
   }
 
-  /// Returns a JSON representation of the children of the [DiagnosticsNode]
-  /// object that `diagnosticsNodeId` references only including children that
-  /// were created directly by user code.
-  ///
-  /// {@template flutter.widgets.WidgetInspectorService.getChildrenSummaryTree}
-  /// Requires [Widget] creation locations which are only available for debug
-  /// mode builds when the `--track-widget-creation` flag is enabled on the call
-  /// to the `flutter` tool. This flag is enabled by default in debug builds.
-  /// {@endtemplate}
-  ///
-  /// See also:
-  ///
-  ///  * [isWidgetCreationTracked] which indicates whether this method can be
-  ///    used.
   String getChildrenSummaryTree(String diagnosticsNodeId, String groupName) {
     return _safeJsonEncode(_getChildrenSummaryTree(diagnosticsNodeId, groupName));
   }
@@ -1839,7 +1523,6 @@ mixin WidgetInspectorService {
     return objectToDiagnosticsNode(object);
   }
 
-  /// If possible, returns [DiagnosticsNode] for the object.
   @visibleForTesting
   static DiagnosticsNode? objectToDiagnosticsNode(Object? object) {
     if (object is Diagnosticable) {
@@ -1858,12 +1541,6 @@ mixin WidgetInspectorService {
     return _nodesToJson(_getChildrenFiltered(node, delegate), delegate, parent: node);
   }
 
-  /// Returns a JSON representation of the children of the [DiagnosticsNode]
-  /// object that [diagnosticableId] references providing information needed
-  /// for the details subtree view.
-  ///
-  /// The details subtree shows properties inline and includes all children
-  /// rather than a filtered set of important children.
   String getChildrenDetailsSubtree(String diagnosticableId, String groupName) {
     return _safeJsonEncode(_getChildrenDetailsSubtree(diagnosticableId, groupName));
   }
@@ -1912,8 +1589,6 @@ mixin WidgetInspectorService {
     return children;
   }
 
-  /// Returns a JSON representation of the [DiagnosticsNode] for the root
-  /// [Element].
   String getRootWidget(String groupName) {
     return _safeJsonEncode(_getRootWidget(groupName));
   }
@@ -1922,8 +1597,6 @@ mixin WidgetInspectorService {
     return _nodeToJson(WidgetsBinding.instance.rootElement?.toDiagnosticsNode(), InspectorSerializationDelegate(groupName: groupName, service: this));
   }
 
-  /// Returns a JSON representation of the [DiagnosticsNode] for the root
-  /// [Element] showing only nodes that should be included in a summary tree.
   String getRootWidgetSummaryTree(String groupName) {
     return _safeJsonEncode(_getRootWidgetSummaryTree(groupName));
   }
@@ -1968,18 +1641,6 @@ mixin WidgetInspectorService {
     });
   }
 
-  /// Returns a JSON representation of the subtree rooted at the
-  /// [DiagnosticsNode] object that `diagnosticsNodeId` references providing
-  /// information needed for the details subtree view.
-  ///
-  /// The number of levels of the subtree that should be returned is specified
-  /// by the [subtreeDepth] parameter. This value defaults to 2 for backwards
-  /// compatibility.
-  ///
-  /// See also:
-  ///
-  ///  * [getChildrenDetailsSubtree], a method to get children of a node
-  ///    in the details subtree.
   String getDetailsSubtree(
     String diagnosticableId,
     String groupName, {
@@ -2008,7 +1669,6 @@ mixin WidgetInspectorService {
     );
   }
 
-  /// Returns a [DiagnosticsNode] representing the currently selected [Element].
   @protected
   String getSelectedWidget(String? previousSelectionId, String groupName) {
     if (previousSelectionId != null) {
@@ -2017,18 +1677,6 @@ mixin WidgetInspectorService {
     return _safeJsonEncode(_getSelectedWidget(null, groupName));
   }
 
-  /// Captures an image of the current state of an [object] that is a
-  /// [RenderObject] or [Element].
-  ///
-  /// The returned [ui.Image] has uncompressed raw RGBA bytes and will be scaled
-  /// to be at most [width] pixels wide and [height] pixels tall. The returned
-  /// image will never have a scale between logical pixels and the
-  /// size of the output image larger than maxPixelRatio.
-  /// [margin] indicates the number of pixels relative to the un-scaled size of
-  /// the [object] to include as a margin to include around the bounds of the
-  /// [object] in the screenshot. Including a margin can be useful to capture
-  /// areas that are slightly outside of the normal bounds of an object such as
-  /// some debug paint information.
   @protected
   Future<ui.Image?> screenshot(
     Object? object, {
@@ -2305,10 +1953,6 @@ mixin WidgetInspectorService {
     return current == previousSelection?.value ? previousSelection : current?.toDiagnosticsNode();
   }
 
-  /// Returns a [DiagnosticsNode] representing the currently selected [Element]
-  /// if the selected [Element] should be shown in the summary tree otherwise
-  /// returns the first ancestor of the selected [Element] shown in the summary
-  /// tree.
   String getSelectedSummaryWidget(String? previousSelectionId, String groupName) {
     if (previousSelectionId != null) {
       debugPrint('previousSelectionId is deprecated in API');
@@ -2343,9 +1987,6 @@ mixin WidgetInspectorService {
     return _nodeToJson(_getSelectedSummaryDiagnosticsNode(previousSelectionId), InspectorSerializationDelegate(groupName: groupName, service: this));
   }
 
-  /// Returns whether [Widget] creation locations are available.
-  ///
-  /// {@macro flutter.widgets.WidgetInspectorService.getChildrenSummaryTree}
   bool isWidgetCreationTracked() {
     _widgetCreationTracked ??= const _WidgetForTypeTests() is _HasCreationLocation;
     return _widgetCreationTracked!;
@@ -2373,11 +2014,6 @@ mixin WidgetInspectorService {
     postEvent(eventName, stats.exportToJson(_frameStart));
   }
 
-  /// All events dispatched by a [WidgetInspectorService] use this method
-  /// instead of calling [developer.postEvent] directly.
-  ///
-  /// This allows tests for [WidgetInspectorService] to track which events were
-  /// dispatched by overriding this method.
   @protected
   void postEvent(
     String eventKind,
@@ -2387,11 +2023,6 @@ mixin WidgetInspectorService {
     developer.postEvent(eventKind, eventData, stream: stream);
   }
 
-  /// All events dispatched by a [WidgetInspectorService] use this method
-  /// instead of calling [developer.inspect].
-  ///
-  /// This allows tests for [WidgetInspectorService] to track which events were
-  /// dispatched by overriding this method.
   @protected
   void inspect(Object? object) {
     developer.inspect(object);
@@ -2440,21 +2071,12 @@ mixin WidgetInspectorService {
     }
   }
 
-  /// This method is called by [WidgetsBinding.performReassemble] to flush caches
-  /// of obsolete values after a hot reload.
-  ///
-  /// Do not call this method directly. Instead, use
-  /// [BindingBase.reassembleApplication].
   void performReassemble() {
     _clearStats();
     _resetErrorCount();
   }
 }
 
-/// Accumulator for a count associated with a specific source location.
-///
-/// The accumulator stores whether the source location is [local] and what its
-/// [id] for efficiency encoding terse JSON payloads describing counts.
 class _LocationCount {
   _LocationCount({
     required this.location,
@@ -2462,10 +2084,8 @@ class _LocationCount {
     required this.local,
   });
 
-  /// Location id.
   final int id;
 
-  /// Whether the location is local to the current project.
   final bool local;
 
   final _Location location;
@@ -2473,29 +2093,15 @@ class _LocationCount {
   int get count => _count;
   int _count = 0;
 
-  /// Reset the count.
   void reset() {
     _count = 0;
   }
 
-  /// Increment the count.
   void increment() {
     _count++;
   }
 }
 
-/// A stat tracker that aggregates a performance metric for [Element] objects at
-/// the granularity of creation locations in source code.
-///
-/// This class is optimized to minimize the size of the JSON payloads describing
-/// the aggregate statistics, for stable memory usage, and low CPU usage at the
-/// expense of somewhat higher overall memory usage. Stable memory usage is more
-/// important than peak memory usage to avoid the false impression that the
-/// user's app is leaking memory each frame.
-///
-/// The number of unique widget creation locations tends to be at most in the
-/// low thousands for regular flutter apps so the peak memory usage for this
-/// class is not an issue.
 class _ElementLocationStatsTracker {
   // All known creation location tracked.
   //
@@ -2507,17 +2113,10 @@ class _ElementLocationStatsTracker {
   // `_stats[i].id` equals `i`.
   final List<_LocationCount?> _stats = <_LocationCount?>[];
 
-  /// Locations with a non-zero count.
   final List<_LocationCount> active = <_LocationCount>[];
 
-  /// Locations that were added since stats were last exported.
-  ///
-  /// Only locations local to the current project are included as a performance
-  /// optimization.
   final List<_LocationCount> newLocations = <_LocationCount>[];
 
-  /// Increments the count associated with the creation location of [element] if
-  /// the creation location is local to the current project.
   void add(Element element) {
     final Object widget = element.widget;
     if (widget is! _HasCreationLocation) {
@@ -2563,7 +2162,6 @@ class _ElementLocationStatsTracker {
     }
   }
 
-  /// Clear all aggregated statistics.
   void resetCounts() {
     // We chose to only reset the active counts instead of clearing all data
     // to reduce the number memory allocations performed after the first frame.
@@ -2577,8 +2175,6 @@ class _ElementLocationStatsTracker {
     active.clear();
   }
 
-  /// Exports the current counts and then resets the stats to prepare to track
-  /// the next frame of data.
   Map<String, dynamic> exportToJson(Duration startTime) {
     final List<int> events = List<int>.filled(active.length * 2, 0);
     int j = 0;
@@ -2642,43 +2238,15 @@ class _WidgetForTypeTests extends Widget {
   Element createElement() => throw UnimplementedError();
 }
 
-/// A widget that enables inspecting the child widget's structure.
-///
-/// Select a location on your device or emulator and view what widgets and
-/// render object that best matches the location. An outline of the selected
-/// widget and terse summary information is shown on device with detailed
-/// information is shown in the observatory or in IntelliJ when using the
-/// Flutter Plugin.
-///
-/// The inspector has a select mode and a view mode.
-///
-/// In the select mode, tapping the device selects the widget that best matches
-/// the location of the touch and switches to view mode. Dragging a finger on
-/// the device selects the widget under the drag location but does not switch
-/// modes. Touching the very edge of the bounding box of a widget triggers
-/// selecting the widget even if another widget that also overlaps that
-/// location would otherwise have priority.
-///
-/// In the view mode, the previously selected widget is outlined, however,
-/// touching the device has the same effect it would have if the inspector
-/// wasn't present. This allows interacting with the application and viewing how
-/// the selected widget changes position. Clicking on the select icon in the
-/// bottom left corner of the application switches back to select mode.
 class WidgetInspector extends StatefulWidget {
-  /// Creates a widget that enables inspection for the child.
   const WidgetInspector({
     super.key,
     required this.child,
     required this.selectButtonBuilder,
   });
 
-  /// The widget that is being inspected.
   final Widget child;
 
-  /// A builder that is called to create the select button.
-  ///
-  /// The `onPressed` callback passed as an argument to the builder should be
-  /// hooked up to the returned widget.
   final InspectorSelectButtonBuilder? selectButtonBuilder;
 
   @override
@@ -2698,8 +2266,6 @@ class _WidgetInspectorState extends State<WidgetInspector>
 
   final GlobalKey _ignorePointerKey = GlobalKey();
 
-  /// Distance from the edge of the bounding box for an element to consider
-  /// as selecting the edge of the bounding box.
   static const double _edgeHitMargin = 2.0;
 
   @override
@@ -2780,13 +2346,6 @@ class _WidgetInspectorState extends State<WidgetInspector>
     return hit;
   }
 
-  /// Returns the list of render objects located at the given position ordered
-  /// by priority.
-  ///
-  /// All render objects that are not offstage that match the location are
-  /// included in the list of matches. Priority is given to matches that occur
-  /// on the edge of a render object's bounding box and to matches found by
-  /// [RenderBox.hitTest].
   List<RenderObject> hitTest(Offset position, RenderObject root) {
     final List<RenderObject> regularHits = <RenderObject>[];
     final List<RenderObject> edgeHits = <RenderObject>[];
@@ -2889,18 +2448,13 @@ class _WidgetInspectorState extends State<WidgetInspector>
   }
 }
 
-/// Mutable selection state of the inspector.
 class InspectorSelection with ChangeNotifier {
-  /// Creates an instance of [InspectorSelection].
   InspectorSelection() {
     if (kFlutterMemoryAllocationsEnabled) {
       ChangeNotifier.maybeDispatchObjectCreation(this);
     }
   }
 
-  /// Render objects that are candidates to be selected.
-  ///
-  /// Tools may wish to iterate through the list of candidates.
   List<RenderObject> get candidates => _candidates;
   List<RenderObject> _candidates = <RenderObject>[];
   set candidates(List<RenderObject> value) {
@@ -2909,7 +2463,6 @@ class InspectorSelection with ChangeNotifier {
     _computeCurrent();
   }
 
-  /// Index within the list of candidates that is currently selected.
   int get index => _index;
   int _index = 0;
   set index(int value) {
@@ -2917,18 +2470,12 @@ class InspectorSelection with ChangeNotifier {
     _computeCurrent();
   }
 
-  /// Set the selection to empty.
   void clear() {
     _candidates = <RenderObject>[];
     _index = 0;
     _computeCurrent();
   }
 
-  /// Selected render object typically from the [candidates] list.
-  ///
-  /// Setting [candidates] or calling [clear] resets the selection.
-  ///
-  /// Returns null if the selection is invalid.
   RenderObject? get current => active ? _current : null;
 
   RenderObject? _current;
@@ -2940,11 +2487,6 @@ class InspectorSelection with ChangeNotifier {
     }
   }
 
-  /// Selected [Element] consistent with the [current] selected [RenderObject].
-  ///
-  /// Setting [candidates] or calling [clear] resets the selection.
-  ///
-  /// Returns null if the selection is invalid.
   Element? get currentElement {
     return _currentElement?.debugIsDefunct ?? true ? null : _currentElement;
   }
@@ -2976,8 +2518,6 @@ class InspectorSelection with ChangeNotifier {
     }
   }
 
-  /// Whether the selected render object is attached to the tree or has gone
-  /// out of scope.
   bool get active => _current != null && _current!.attached;
 }
 
@@ -3057,10 +2597,6 @@ class _TransformedRect {
   int get hashCode => Object.hash(rect, transform);
 }
 
-/// State describing how the inspector overlay should be rendered.
-///
-/// The equality operator can be used to determine whether the overlay needs to
-/// be rendered again.
 @immutable
 class _InspectorOverlayRenderState {
   const _InspectorOverlayRenderState({
@@ -3098,13 +2634,7 @@ const Color _kTooltipBackgroundColor = Color.fromARGB(230, 60, 60, 60);
 const Color _kHighlightedRenderObjectFillColor = Color.fromARGB(128, 128, 128, 255);
 const Color _kHighlightedRenderObjectBorderColor = Color.fromARGB(128, 64, 64, 128);
 
-/// A layer that outlines the selected [RenderObject] and candidate render
-/// objects that also match the last pointer location.
-///
-/// This approach is horrific for performance and is only used here because this
-/// is limited to debug mode. Do not duplicate the logic in production code.
 class _InspectorOverlayLayer extends Layer {
-  /// Creates a layer that displays the inspector overlay.
   _InspectorOverlayLayer({
     required this.overlayRect,
     required this.selection,
@@ -3127,20 +2657,12 @@ class _InspectorOverlayLayer extends Layer {
 
   InspectorSelection selection;
 
-  /// The rectangle in this layer's coordinate system that the overlay should
-  /// occupy.
-  ///
-  /// The scene must be explicitly recomposited after this property is changed
-  /// (as described at [Layer]).
   final Rect overlayRect;
 
-  /// Widget inspector root render object. The selection overlay will be painted
-  /// with transforms relative to this render object.
   final RenderObject? rootRenderObject;
 
   _InspectorOverlayRenderState? _lastState;
 
-  /// Picture generated from _lastState.
   late ui.Picture _picture;
 
   TextPainter? _textPainter;
@@ -3315,11 +2837,6 @@ class _InspectorOverlayLayer extends Layer {
     return false;
   }
 
-  /// Return whether or not a render object belongs to this inspector widget
-  /// tree.
-  /// The inspector selection is static, so if there are multiple inspector
-  /// overlays in the same app (i.e. an storyboard), a selected or candidate
-  /// render object may not belong to this tree.
   bool _isInInspectorRenderObjectTree(RenderObject child) {
     RenderObject? current = child.parent;
     while (current != null) {
@@ -3338,8 +2855,6 @@ const double _kScreenEdgeMargin = 10.0;
 const double _kTooltipPadding = 5.0;
 const double _kInspectButtonMargin = 10.0;
 
-/// Interpret pointer up events within with this margin as indicating the
-/// pointer is moving off the device.
 const double _kOffScreenMargin = 1.0;
 
 const TextStyle _messageStyle = TextStyle(
@@ -3348,17 +2863,11 @@ const TextStyle _messageStyle = TextStyle(
   height: 1.2,
 );
 
-/// Interface for classes that track the source code location the their
-/// constructor was called from.
-///
-/// {@macro flutter.widgets.WidgetInspectorService.getChildrenSummaryTree}
 // ignore: unused_element
 abstract class _HasCreationLocation {
   _Location? get _location;
 }
 
-/// A tuple with file, line, and column number, for displaying human-readable
-/// file locations.
 class _Location {
   const _Location({
     required this.file,
@@ -3368,16 +2877,12 @@ class _Location {
     this.name,
   });
 
-  /// File path of the location.
   final String file;
 
-  /// 1-based line number.
   final int line;
 
-  /// 1-based column number.
   final int column;
 
-  /// Optional name of the parameter or function at this location.
   final String? name;
 
   Map<String, Object?> toJsonMap() {
@@ -3406,12 +2911,6 @@ class _Location {
 
 bool _isDebugCreator(DiagnosticsNode node) => node is DiagnosticsDebugCreator;
 
-/// Transformer to parse and gather information about [DiagnosticsDebugCreator].
-///
-/// This function will be registered to [FlutterErrorDetails.propertiesTransformers]
-/// in [WidgetsBinding.initInstances].
-///
-/// This is meant to be called only in debug mode. In other modes, it yields an empty list.
 Iterable<DiagnosticsNode> debugTransformDebugCreator(Iterable<DiagnosticsNode> properties) {
   if (!kDebugMode) {
     return <DiagnosticsNode>[];
@@ -3444,9 +2943,6 @@ Iterable<DiagnosticsNode> debugTransformDebugCreator(Iterable<DiagnosticsNode> p
   return result;
 }
 
-/// Transform the input [DiagnosticsNode].
-///
-/// Return null if input [DiagnosticsNode] is not applicable.
 Iterable<DiagnosticsNode> _parseDiagnosticsNode(
   DiagnosticsNode node,
   ErrorSummary? errorSummary,
@@ -3537,28 +3033,11 @@ Iterable<DiagnosticsNode> _describeRelevantUserCode(
   return nodes;
 }
 
-/// Debugging message for DevTools deep links.
-///
-/// The [value] for this property is a string representation of the Flutter
-/// DevTools url.
 class DevToolsDeepLinkProperty extends DiagnosticsProperty<String> {
-  /// Creates a diagnostics property that displays a deep link to Flutter DevTools.
-  ///
-  /// The [value] of this property will return a map of data for the Flutter
-  /// DevTools deep link, including the full `url`, the Flutter DevTools `screenId`,
-  /// and the `objectId` in Flutter DevTools that this diagnostic references.
   DevToolsDeepLinkProperty(String description, String url)
     : super('', url, description: description, level: DiagnosticLevel.info);
 }
 
-/// Returns if an object is user created.
-///
-/// This always returns false if it is not called in debug mode.
-///
-/// {@macro flutter.widgets.WidgetInspectorService.getChildrenSummaryTree}
-///
-/// Currently is local creation locations are only available for
-/// [Widget] and [Element].
 bool debugIsLocalCreationLocation(Object object) {
   bool isLocal = false;
   assert(() {
@@ -3571,23 +3050,12 @@ bool debugIsLocalCreationLocation(Object object) {
   return isLocal;
 }
 
-/// Returns true if a [Widget] is user created.
-///
-/// This is a faster variant of `debugIsLocalCreationLocation` that is available
-/// in debug and profile builds but only works for [Widget].
 bool debugIsWidgetLocalCreation(Widget widget) {
   final _Location? location = _getObjectCreationLocation(widget);
   return location != null &&
       WidgetInspectorService.instance._isLocalCreationLocation(location.file);
 }
 
-/// Returns the creation location of an object in String format if one is available.
-///
-/// ex: "file:///path/to/main.dart:4:3"
-///
-/// {@macro flutter.widgets.WidgetInspectorService.getChildrenSummaryTree}
-///
-/// Currently creation locations are only available for [Widget] and [Element].
 String? _describeCreationLocation(Object object) {
   final _Location? location = _getCreationLocation(object);
   return location?.toString();
@@ -3597,11 +3065,6 @@ _Location? _getObjectCreationLocation(Object object) {
   return object is _HasCreationLocation ? object._location : null;
 }
 
-/// Returns the creation location of an object if one is available.
-///
-/// {@macro flutter.widgets.WidgetInspectorService.getChildrenSummaryTree}
-///
-/// Currently creation locations are only available for [Widget] and [Element].
 _Location? _getCreationLocation(Object? object) {
   final Object? candidate = object is Element && !object.debugIsDefunct ? object.widget : object;
   return candidate == null ? null : _getObjectCreationLocation(candidate);
@@ -3624,12 +3087,8 @@ int _toLocationId(_Location location) {
   return id;
 }
 
-/// A delegate that configures how a hierarchy of [DiagnosticsNode]s are
-/// serialized by the Flutter Inspector.
 @visibleForTesting
 class InspectorSerializationDelegate implements DiagnosticsSerializationDelegate {
-  /// Creates an [InspectorSerializationDelegate] that serialize [DiagnosticsNode]
-  /// for Flutter Inspector service.
   InspectorSerializationDelegate({
     this.groupName,
     this.summaryTree = false,
@@ -3641,20 +3100,12 @@ class InspectorSerializationDelegate implements DiagnosticsSerializationDelegate
     this.addAdditionalPropertiesCallback,
   });
 
-  /// Service used by GUI tools to interact with the [WidgetInspector].
   final WidgetInspectorService service;
 
-  /// Optional [groupName] parameter which indicates that the json should
-  /// contain live object ids.
-  ///
-  /// Object ids returned as part of the json will remain live at least until
-  /// [WidgetInspectorService.disposeGroup()] is called on [groupName].
   final String? groupName;
 
-  /// Whether the tree should only include nodes created by the local project.
   final bool summaryTree;
 
-  /// Maximum descendants of [DiagnosticsNode] before truncating.
   final int maxDescendantsTruncatableNode;
 
   @override
@@ -3666,11 +3117,6 @@ class InspectorSerializationDelegate implements DiagnosticsSerializationDelegate
   @override
   final bool expandPropertyValues;
 
-  /// Callback to add additional experimental serialization properties.
-  ///
-  /// This callback can be used to customize the serialization of DiagnosticsNode
-  /// objects for experimental features in widget inspector clients such as
-  /// [Dart DevTools](https://github.com/flutter/devtools).
   final Map<String, Object>? Function(DiagnosticsNode, InspectorSerializationDelegate)? addAdditionalPropertiesCallback;
 
   final List<DiagnosticsNode> _nodesCreatedByLocalProject = <DiagnosticsNode>[];
@@ -3757,82 +3203,22 @@ class _WidgetFactory {
   const _WidgetFactory();
 }
 
-/// Annotation which marks a function as a widget factory for the purpose of
-/// widget creation tracking.
-///
-/// When widget creation tracking is enabled, the framework tracks the source
-/// code location of the constructor call for each widget instance. This
-/// information is used by the DevTools to provide an improved developer
-/// experience. For example, it allows the Flutter inspector to present the
-/// widget tree in a manner similar to how the UI was defined in your source
-/// code.
-///
-/// [Widget] constructors are automatically instrumented to track the source
-/// code location of constructor calls. However, there are cases where
-/// a function acts as a sort of a constructor for a widget and a call to such
-/// a function should be considered as the creation location for the returned
-/// widget instance.
-///
-/// Annotating a function with this annotation marks the function as a widget
-/// factory. The framework will then instrument that function in the same way
-/// as it does for [Widget] constructors.
-///
-/// Tracking will not work correctly if the function has optional positional
-/// parameters.
-///
-/// Currently this annotation is only supported on extension methods.
-///
-/// {@tool snippet}
-///
-/// This example shows how to use the [widgetFactory] annotation to mark an
-/// extension method as a widget factory:
-///
-/// ```dart
-/// extension PaddingModifier on Widget {
-///   @widgetFactory
-///   Widget padding(EdgeInsetsGeometry padding) {
-///     return Padding(padding: padding, child: this);
-///   }
-/// }
-/// ```
-///
-/// When using the above extension method, the framework will track the
-/// creation location of the [Padding] widget instance as the source code
-/// location where the `padding` extension method was called:
-///
-/// ```dart
-/// // continuing from previous example...
-/// const Text('Hello World!')
-///     .padding(const EdgeInsets.all(8));
-/// ```
-///
-/// {@end-tool}
-///
-/// See also:
-///
-/// * the documentation for [Track widget creation](https://docs.flutter.dev/development/tools/devtools/inspector#track-widget-creation).
 // The below ignore is needed because the static type of the annotation is used
 // by the CFE kernel transformer that implements the instrumentation to
 // recognize the annotation.
 // ignore: library_private_types_in_public_api
 const _WidgetFactory widgetFactory = _WidgetFactory();
 
-/// Does not hold keys from garbage collection.
 @visibleForTesting
 class WeakMap<K, V> {
   Expando<Object> _objects = Expando<Object>();
 
-  /// Strings, numbers, booleans.
   final Map<K, V> _primitives = <K, V>{};
 
   bool _isPrimitive(Object? key) {
     return key == null || key is String || key is num || key is bool;
   }
 
-  /// Returns the value for the given [key] or null if [key] is not in the map
-  /// or garbage collected.
-  ///
-  /// Does not support records to act as keys.
   V? operator [](K key){
     if (_isPrimitive(key)) {
       return _primitives[key];
@@ -3841,7 +3227,6 @@ class WeakMap<K, V> {
     }
   }
 
-  /// Associates the [key] with the given [value].
   void operator []=(K key, V value){
     if (_isPrimitive(key)) {
       _primitives[key] = value;
@@ -3850,7 +3235,6 @@ class WeakMap<K, V> {
     }
   }
 
-  /// Removes the value for the given [key] from the map.
   V? remove(K key) {
     if (_isPrimitive(key)) {
       return _primitives.remove(key);
@@ -3861,7 +3245,6 @@ class WeakMap<K, V> {
     }
   }
 
-  /// Removes all pairs from the map.
   void clear() {
     _objects = Expando<Object>();
     _primitives.clear();

@@ -22,39 +22,6 @@ class Plugin {
     this.implementsPackage,
   });
 
-  /// Parses [Plugin] specification from the provided pluginYaml.
-  ///
-  /// This currently supports two formats. Legacy and Multi-platform.
-  ///
-  /// Example of the deprecated Legacy format.
-  ///
-  ///     flutter:
-  ///      plugin:
-  ///        androidPackage: io.flutter.plugins.sample
-  ///        iosPrefix: FLT
-  ///        pluginClass: SamplePlugin
-  ///
-  /// Example Multi-platform format.
-  ///
-  ///     flutter:
-  ///      plugin:
-  ///        platforms:
-  ///          android:
-  ///            package: io.flutter.plugins.sample
-  ///            pluginClass: SamplePlugin
-  ///          ios:
-  ///            # A plugin implemented through method channels.
-  ///            pluginClass: SamplePlugin
-  ///          linux:
-  ///            # A plugin implemented purely in Dart code.
-  ///            dartPluginClass: SamplePlugin
-  ///          macos:
-  ///            # A plugin implemented with `dart:ffi`.
-  ///            ffiPlugin: true
-  ///          windows:
-  ///            # A plugin using platform-specific Dart and method channels.
-  ///            dartPluginClass: SamplePlugin
-  ///            pluginClass: SamplePlugin
   factory Plugin.fromYaml(
     String name,
     String path,
@@ -220,15 +187,6 @@ class Plugin {
     );
   }
 
-  /// Create a YamlMap that represents the supported platforms.
-  ///
-  /// For example, if the `platforms` contains 'ios' and 'android', the return map looks like:
-  ///
-  ///     android:
-  ///       package: io.flutter.plugins.sample
-  ///       pluginClass: SamplePlugin
-  ///     ios:
-  ///       pluginClass: SamplePlugin
   static YamlMap createPlatformsYamlMap(List<String> platforms, String pluginClass, String androidPackage) {
     final Map<String, dynamic> map = <String, dynamic>{};
     for (final String platform in platforms) {
@@ -375,38 +333,27 @@ class Plugin {
   final String name;
   final String path;
 
-  /// The name of the interface package that this plugin implements.
-  /// If [null], this plugin doesn't implement an interface.
   final String? implementsPackage;
 
-  /// The required version of Flutter, if specified.
   final VersionConstraint? flutterConstraint;
 
-  /// The name of the packages this plugin depends on.
   final List<String> dependencies;
 
-  /// This is a mapping from platform config key to the plugin platform spec.
   final Map<String, PluginPlatform> platforms;
 
-  /// This is a mapping from platform config key to the default package implementation.
   final Map<String, String> defaultPackagePlatforms;
 
-  /// This is a mapping from platform config key to the plugin class for the given platform.
   final Map<String, String> pluginDartClassPlatforms;
 
-  /// Whether this plugin is a direct dependency of the app.
-  /// If [false], the plugin is a dependency of another plugin.
   final bool isDirectDependency;
 }
 
-/// Metadata associated with the resolution of a platform interface of a plugin.
 class PluginInterfaceResolution {
   PluginInterfaceResolution({
     required this.plugin,
     required this.platform,
   });
 
-  /// The plugin.
   final Plugin plugin;
   // The name of the platform that this plugin implements.
   final String platform;

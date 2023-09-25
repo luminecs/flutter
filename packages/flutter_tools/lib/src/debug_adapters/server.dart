@@ -12,13 +12,6 @@ import '../debug_adapters/flutter_adapter.dart';
 import '../debug_adapters/flutter_adapter_args.dart';
 import 'flutter_test_adapter.dart';
 
-/// A DAP server that communicates over a [ByteStreamServerChannel], usually constructed from the processes stdin/stdout streams.
-///
-/// The server is intended to be single-use. It should live only for the
-/// duration of a single debug session in the editor, and terminate when the
-/// user stops debugging. If a user starts multiple debug sessions
-/// simultaneously it is expected that the editor will start multiple debug
-/// adapters.
 class DapServer {
   DapServer(
     Stream<List<int>> input,

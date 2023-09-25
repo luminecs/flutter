@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [StandardFabLocation].
 
 void main() => runApp(const StandardFabLocationExampleApp());
 

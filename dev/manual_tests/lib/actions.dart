@@ -16,11 +16,6 @@ void main() {
   ));
 }
 
-/// A class that can hold invocation information that an [UndoableAction] can
-/// use to undo/redo itself.
-///
-/// Instances of this class are returned from [UndoableAction]s and placed on
-/// the undo stack when they are invoked.
 class Memento extends Object with Diagnosticable {
   const Memento({
     required this.name,
@@ -28,16 +23,8 @@ class Memento extends Object with Diagnosticable {
     required this.redo,
   });
 
-  /// Returns true if this Memento can be used to undo.
-  ///
-  /// Subclasses could override to provide their own conditions when a command is
-  /// undoable.
   bool get canUndo => true;
 
-  /// Returns true if this Memento can be used to redo.
-  ///
-  /// Subclasses could override to provide their own conditions when a command is
-  /// redoable.
   bool get canRedo => true;
 
   final String name;
@@ -51,10 +38,7 @@ class Memento extends Object with Diagnosticable {
   }
 }
 
-/// Undoable Actions
 
-/// An [ActionDispatcher] subclass that manages the invocation of undoable
-/// actions.
 class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
   // A stack of actions that have been performed. The most recent action
   // performed is at the end of the list.
@@ -63,11 +47,6 @@ class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
   // at the end of the list.
   final List<Memento> _undoneActions = <Memento>[];
 
-  /// The maximum number of undo levels allowed.
-  ///
-  /// If this value is set to a value smaller than the number of completed
-  /// actions, then the stack of completed actions is truncated to only include
-  /// the last [maxUndoLevels] actions.
   int get maxUndoLevels => 1000;
 
   final Set<VoidCallback> _listeners = <VoidCallback>{};
@@ -82,9 +61,6 @@ class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
     _listeners.remove(listener);
   }
 
-  /// Notifies listeners that the [ActionDispatcher] has changed state.
-  ///
-  /// May only be called by subclasses.
   @protected
   void notifyListeners() {
     for (final VoidCallback callback in _listeners) {
@@ -112,7 +88,6 @@ class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
     }
   }
 
-  /// Returns true if there is an action on the stack that can be undone.
   bool get canUndo {
     if (_completedActions.isNotEmpty) {
       return _completedActions.first.canUndo;
@@ -120,7 +95,6 @@ class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
     return false;
   }
 
-  /// Returns true if an action that has been undone can be re-invoked.
   bool get canRedo {
     if (_undoneActions.isNotEmpty) {
       return _undoneActions.first.canRedo;
@@ -128,9 +102,6 @@ class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
     return false;
   }
 
-  /// Undoes the last action executed if possible.
-  ///
-  /// Returns true if the action was successfully undone.
   bool undo() {
     print('Undoing. $this');
     if (!canUndo) {
@@ -143,9 +114,6 @@ class UndoableActionDispatcher extends ActionDispatcher implements Listenable {
     return true;
   }
 
-  /// Re-invokes a previously undone action, if possible.
-  ///
-  /// Returns true if the action was successfully invoked.
   bool redo() {
     print('Redoing. $this');
     if (!canRedo) {
@@ -222,7 +190,6 @@ class RedoAction extends Action<RedoIntent> {
   }
 }
 
-/// An action that can be undone.
 abstract class UndoableAction<T extends Intent> extends Action<T> { }
 
 class UndoableFocusActionBase<T extends Intent> extends UndoableAction<T> {
@@ -247,7 +214,6 @@ class UndoableRequestFocusAction extends UndoableFocusActionBase<RequestFocusInt
   }
 }
 
-/// Actions for manipulating focus.
 class UndoableNextFocusAction extends UndoableFocusActionBase<NextFocusIntent> {
   @override
   Memento invoke(NextFocusIntent intent) {
@@ -275,7 +241,6 @@ class UndoableDirectionalFocusAction extends UndoableFocusActionBase<Directional
   }
 }
 
-/// A button class that takes focus when clicked.
 class DemoButton extends StatefulWidget {
   const DemoButton({super.key, required this.name});
 

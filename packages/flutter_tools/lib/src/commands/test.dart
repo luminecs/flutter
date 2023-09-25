@@ -22,41 +22,8 @@ import '../test/test_time_recorder.dart';
 import '../test/test_wrapper.dart';
 import '../test/watcher.dart';
 
-/// The name of the directory where Integration Tests are placed.
-///
-/// When there are test files specified for the test command that are part of
-/// this directory, *relative to the package root*, the files will be executed
-/// as Integration Tests.
 const String _kIntegrationTestDirectory = 'integration_test';
 
-/// A command to run tests.
-///
-/// This command has two modes of execution:
-///
-/// ## Unit / Widget Tests
-///
-/// These tests run in the Flutter Tester, which is a desktop-based Flutter
-/// embedder. In this mode, tests are quick to compile and run.
-///
-/// By default, if no flags are passed to the `flutter test` command, the Tool
-/// will recursively find all files within the `test/` directory that end with
-/// the `*_test.dart` suffix, and run them in a single invocation.
-///
-/// See:
-/// - https://flutter.dev/docs/cookbook/testing/unit/introduction
-/// - https://flutter.dev/docs/cookbook/testing/widget/introduction
-///
-/// ## Integration Tests
-///
-/// These tests run in a connected Flutter Device, similar to `flutter run`. As
-/// a result, iteration is slower because device-based artifacts have to be
-/// built.
-///
-/// Integration tests should be placed in the `integration_test/` directory of
-/// your package. To run these tests, use `flutter test integration_test`.
-///
-/// See:
-/// - https://flutter.dev/docs/testing/integration-tests
 class TestCommand extends FlutterCommand with DeviceBasedDevelopmentArtifacts {
   TestCommand({
     bool verboseHelp = false,
@@ -230,10 +197,8 @@ class TestCommand extends FlutterCommand with DeviceBasedDevelopmentArtifacts {
     usesFatalWarningsOption(verboseHelp: verboseHelp);
   }
 
-  /// The interface for starting and configuring the tester.
   final TestWrapper testWrapper;
 
-  /// Interface for running the tester process.
   final FlutterTestRunner testRunner;
 
   final bool verbose;
@@ -545,8 +510,6 @@ class TestCommand extends FlutterCommand with DeviceBasedDevelopmentArtifacts {
     return packagesToInclude;
   }
 
-  /// Parses a test file/directory target passed as an argument and returns it
-  /// as an absolute file:/// [URI] with optional querystring for name/line/col.
   Uri _parseTestArgument(String arg) {
     // We can't parse Windows paths as URIs if they have query strings, so
     // parse the file and query parts separately.
@@ -603,8 +566,6 @@ class TestCommand extends FlutterCommand with DeviceBasedDevelopmentArtifacts {
   }
 }
 
-/// Searches [directory] and returns files that end with `_test.dart` as
-/// absolute paths.
 Iterable<String> _findTests(Directory directory) {
   return directory.listSync(recursive: true, followLinks: false)
       .where((FileSystemEntity entity) => entity.path.endsWith('_test.dart') &&
@@ -612,13 +573,6 @@ Iterable<String> _findTests(Directory directory) {
       .map((FileSystemEntity entity) => globals.fs.path.absolute(entity.path));
 }
 
-/// Returns true if there are files that are Integration Tests.
-///
-/// The [currentDirectory] and [testFiles] parameters here must be provided as
-/// absolute paths.
-///
-/// Throws an exception if there are both Integration Tests and Widget Tests
-/// found in [testFiles].
 bool _shouldRunAsIntegrationTests(String currentDirectory, List<String> testFiles) {
   final String integrationTestDirectory = globals.fs.path.join(currentDirectory, _kIntegrationTestDirectory);
 

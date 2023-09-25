@@ -6,10 +6,6 @@ import '../base/user_messages.dart';
 import '../doctor_validator.dart';
 import 'cocoapods.dart';
 
-/// A validator that confirms cocoapods is in a valid state.
-///
-/// See also:
-///   * [CocoaPods], for the interface to the cocoapods command line tool.
 class CocoaPodsValidator extends DoctorValidator {
   CocoaPodsValidator(
     CocoaPods cocoaPods,

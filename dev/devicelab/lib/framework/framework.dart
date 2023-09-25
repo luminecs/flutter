@@ -19,32 +19,16 @@ import 'running_processes.dart';
 import 'task_result.dart';
 import 'utils.dart';
 
-/// Identifiers for devices that should never be rebooted.
 final Set<String> noRebootForbidList = <String>{
   '822ef7958bba573829d85eef4df6cbdd86593730', // 32bit iPhone requires manual intervention on reboot.
 };
 
-/// The maximum number of test runs before a device must be rebooted.
-///
-/// This number was chosen arbitrarily.
 const int maximumRuns = 30;
 
-/// Represents a unit of work performed in the CI environment that can
-/// succeed, fail and be retried independently of others.
 typedef TaskFunction = Future<TaskResult> Function();
 
 bool _isTaskRegistered = false;
 
-/// Registers a [task] to run, returns the result when it is complete.
-///
-/// The task does not run immediately but waits for the request via the
-/// VM service protocol to run it.
-///
-/// It is OK for a [task] to perform many things. However, only one task can be
-/// registered per Dart VM.
-///
-/// If no `processManager` is provided, a default [LocalProcessManager] is created
-/// for the task.
 Future<TaskResult> task(TaskFunction task, { ProcessManager? processManager }) async {
   if (_isTaskRegistered) {
     throw StateError('A task is already registered');
@@ -110,7 +94,6 @@ class _TaskRunner {
 
   static final Logger logger = Logger('TaskRunner');
 
-  /// Signals that this task runner finished running the task.
   Future<TaskResult> get whenDone => _completer.future;
 
   Future<TaskResult> run(Duration? taskTimeout, {
@@ -244,8 +227,6 @@ class _TaskRunner {
     }
   }
 
-  /// Causes the Dart VM to stay alive until a request to run the task is
-  /// received via the VM service protocol.
   void keepVmAliveUntilTaskRunRequested() {
     if (_taskStarted) {
       throw StateError('Task already started.');
@@ -266,7 +247,6 @@ class _TaskRunner {
     });
   }
 
-  /// Disables the keepalive port, allowing the VM to exit.
   void _closeKeepAlivePort() {
     _startTaskTimeout?.cancel();
     _keepAlivePort?.close();

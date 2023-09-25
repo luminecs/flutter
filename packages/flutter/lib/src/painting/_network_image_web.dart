@@ -13,33 +13,25 @@ import 'package:web/web.dart' as web;
 import 'image_provider.dart' as image_provider;
 import 'image_stream.dart';
 
-/// Creates a type for an overridable factory function for testing purposes.
 typedef HttpRequestFactory = web.XMLHttpRequest Function();
 
 // Method signature for _loadAsync decode callbacks.
 typedef _SimpleDecoderCallback = Future<ui.Codec> Function(ui.ImmutableBuffer buffer);
 
-/// Default HTTP client.
 web.XMLHttpRequest _httpClient() {
   return web.XMLHttpRequest();
 }
 
-/// Creates an overridable factory function.
 HttpRequestFactory httpRequestFactory = _httpClient;
 
-/// Restores to the default HTTP request factory.
 void debugRestoreHttpRequestFactory() {
   httpRequestFactory = _httpClient;
 }
 
-/// The web implementation of [image_provider.NetworkImage].
-///
-/// NetworkImage on the web does not support decoding to a specified size.
 @immutable
 class NetworkImage
     extends image_provider.ImageProvider<image_provider.NetworkImage>
     implements image_provider.NetworkImage {
-  /// Creates an object that fetches the image at the given URL.
   const NetworkImage(this.url, {this.scale = 1.0, this.headers});
 
   @override

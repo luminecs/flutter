@@ -2,29 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// This file serves as the single point of entry into the `dart:io` APIs
-/// within Flutter tools.
-///
-/// In order to make Flutter tools more testable, we use the `FileSystem` APIs
-/// in `package:file` rather than using the `dart:io` file APIs directly (see
-/// `file_system.dart`). Doing so allows us to swap out local file system
-/// access with mockable (or in-memory) file systems, making our tests hermetic
-/// vis-a-vis file system access.
-///
-/// We also use `package:platform` to provide an abstraction away from the
-/// static methods in the `dart:io` `Platform` class (see `platform.dart`). As
-/// such, do not export Platform from this file!
-///
-/// To ensure that all file system and platform API access within Flutter tools
-/// goes through the proper APIs, we forbid direct imports of `dart:io` (via a
-/// test), forcing all callers to instead import this file, which exports the
-/// blessed subset of `dart:io` that is legal to use in Flutter tools.
-///
-/// Because of the nature of this file, it is important that **platform and file
-/// APIs not be exported from `dart:io` in this file**! Moreover, be careful
-/// about any additional exports that you add to this file, as doing so will
-/// increase the API surface that we have to test in Flutter tools, and the APIs
-/// in `dart:io` can sometimes be hard to use in tests.
 library;
 
 // We allow `print()` in this file as a fallback for writing to the terminal via
@@ -112,24 +89,12 @@ export 'dart:io'
         // stdout,           NO! Use `io.dart`
         systemEncoding;
 
-/// Exits the process with the given [exitCode].
 typedef ExitFunction = void Function(int exitCode);
 
 const ExitFunction _defaultExitFunction = io.exit;
 
 ExitFunction _exitFunction = _defaultExitFunction;
 
-/// Exits the process.
-///
-/// Throws [AssertionError] if assertions are enabled and the dart:io exit
-/// is still active when called. This may indicate exit was called in
-/// a test without being configured correctly.
-///
-/// This is analogous to the `exit` function in `dart:io`, except that this
-/// function may be set to a testing-friendly value by calling
-/// [setExitFunctionForTests] (and then restored to its default implementation
-/// with [restoreExitFunction]). The default implementation delegates to
-/// `dart:io`.
 ExitFunction get exit {
   assert(
     _exitFunction != io.exit || !_inUnitTest(),
@@ -143,8 +108,6 @@ bool _inUnitTest() {
   return Zone.current[#test.declarer] != null;
 }
 
-/// Sets the [exit] function to a function that throws an exception rather
-/// than exiting the process; this is intended for testing purposes.
 @visibleForTesting
 void setExitFunctionForTests([ ExitFunction? exitFunction ]) {
   _exitFunction = exitFunction ?? (int exitCode) {
@@ -152,22 +115,11 @@ void setExitFunctionForTests([ ExitFunction? exitFunction ]) {
   };
 }
 
-/// Restores the [exit] function to the `dart:io` implementation.
 @visibleForTesting
 void restoreExitFunction() {
   _exitFunction = _defaultExitFunction;
 }
 
-/// A portable version of [io.ProcessSignal].
-///
-/// Listening on signals that don't exist on the current platform is just a
-/// no-op. This is in contrast to [io.ProcessSignal], where listening to
-/// non-existent signals throws an exception.
-///
-/// This class does NOT implement io.ProcessSignal, because that class uses
-/// private fields. This means it cannot be used with, e.g., [Process.killPid].
-/// Alternative implementations of the relevant methods that take
-/// [ProcessSignal] instances are available on this class (e.g. "send").
 class ProcessSignal {
   @visibleForTesting
   const ProcessSignal(this._delegate, {@visibleForTesting Platform platform = const LocalPlatform()})
@@ -187,14 +139,6 @@ class ProcessSignal {
     return _delegate.watch().map<ProcessSignal>((io.ProcessSignal signal) => this);
   }
 
-  /// Sends the signal to the given process (identified by pid).
-  ///
-  /// Returns true if the signal was delivered, false otherwise.
-  ///
-  /// On Windows, this can only be used with [ProcessSignal.sigterm], which
-  /// terminates the process.
-  ///
-  /// This is implemented by sending the signal using [Process.killPid].
   bool send(int pid) {
     assert(!_platform.isWindows || this == ProcessSignal.sigterm);
     return io.Process.killPid(pid, _delegate);
@@ -204,9 +148,6 @@ class ProcessSignal {
   String toString() => _delegate.toString();
 }
 
-/// A [ProcessSignal] that is only available on Posix platforms.
-///
-/// Listening to a [_PosixProcessSignal] is a no-op on Windows.
 @visibleForTesting
 class PosixProcessSignal extends ProcessSignal {
 
@@ -222,22 +163,9 @@ class PosixProcessSignal extends ProcessSignal {
   }
 }
 
-/// A class that wraps stdout, stderr, and stdin, and exposes the allowed
-/// operations.
-///
-/// In particular, there are three ways that writing to stdout and stderr
-/// can fail. A call to stdout.write() can fail:
-///   * by throwing a regular synchronous exception,
-///   * by throwing an exception asynchronously, and
-///   * by completing the Future stdout.done with an error.
-///
-/// This class encapsulates all three so that we don't have to worry about it
-/// anywhere else.
 class Stdio {
   Stdio();
 
-  /// Tests can provide overrides to use instead of the stdout and stderr from
-  /// dart:io.
   @visibleForTesting
   Stdio.test({
     required io.Stdout stdout,
@@ -285,12 +213,6 @@ class Stdio {
 
   static bool? _stdinHasTerminal;
 
-  /// Determines whether there is a terminal attached.
-  ///
-  /// [io.Stdin.hasTerminal] only covers a subset of cases. In this check the
-  /// echoMode is toggled on and off to catch cases where the tool running in
-  /// a docker container thinks there is an attached terminal. This can cause
-  /// runtime errors such as "inappropriate ioctl for device" if not handled.
   bool get stdinHasTerminal {
     if (_stdinHasTerminal != null) {
       return _stdinHasTerminal!;
@@ -316,8 +238,6 @@ class Stdio {
   int? get terminalLines => hasTerminal ? stdout.terminalLines : null;
   bool get supportsAnsiEscapes => hasTerminal && stdout.supportsAnsiEscapes;
 
-  /// Writes [message] to [stderr], falling back on [fallback] if the write
-  /// throws any exception. The default fallback calls [print] on [message].
   void stderrWrite(
     String message, {
     void Function(String, dynamic, StackTrace)? fallback,
@@ -333,8 +253,6 @@ class Stdio {
     );
   }
 
-  /// Writes [message] to [stdout], falling back on [fallback] if the write
-  /// throws any exception. The default fallback calls [print] on [message].
   void stdoutWrite(
     String message, {
     void Function(String, dynamic, StackTrace)? fallback,
@@ -365,14 +283,11 @@ class Stdio {
     });
   }
 
-  /// Adds [stream] to [stdout].
   Future<void> addStdoutStream(Stream<List<int>> stream) => stdout.addStream(stream);
 
-  /// Adds [stream] to [stderr].
   Future<void> addStderrStream(Stream<List<int>> stream) => stderr.addStream(stream);
 }
 
-/// An overridable version of io.ProcessInfo.
 abstract class ProcessInfo {
   factory ProcessInfo(FileSystem fs) => _DefaultProcessInfo(fs);
 
@@ -385,7 +300,6 @@ abstract class ProcessInfo {
   File writePidFile(String pidFile);
 }
 
-/// The default implementation of [ProcessInfo], which uses [io.ProcessInfo].
 class _DefaultProcessInfo implements ProcessInfo {
   _DefaultProcessInfo(this._fileSystem);
 
@@ -404,7 +318,6 @@ class _DefaultProcessInfo implements ProcessInfo {
   }
 }
 
-/// The test version of [ProcessInfo].
 class _TestProcessInfo implements ProcessInfo {
   _TestProcessInfo(this._fileSystem);
 
@@ -423,7 +336,6 @@ class _TestProcessInfo implements ProcessInfo {
   }
 }
 
-/// The return type for [listNetworkInterfaces].
 class NetworkInterface implements io.NetworkInterface {
   NetworkInterface(this._delegate);
 
@@ -461,9 +373,6 @@ void resetNetworkInterfaceLister() {
   _networkInterfaceListerOverride = null;
 }
 
-/// This calls [NetworkInterface.list] from `dart:io` unless it is overridden by
-/// [setNetworkInterfaceLister] for a test. If it is overridden for a test,
-/// it should be reset with [resetNetworkInterfaceLister].
 Future<List<NetworkInterface>> listNetworkInterfaces({
   bool includeLoopback = false,
   bool includeLinkLocal = false,

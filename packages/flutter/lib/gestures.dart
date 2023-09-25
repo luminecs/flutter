@@ -2,9 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// The Flutter gesture recognizers.
-///
-/// To use, import `package:flutter/gestures.dart`.
 library gestures;
 
 export 'src/gestures/arena.dart';

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [CustomMultiChildLayout].
 
 void main() => runApp(const CustomMultiChildLayoutApp());
 
@@ -26,10 +25,6 @@ class CustomMultiChildLayoutApp extends StatelessWidget {
   }
 }
 
-/// Lays out the children in a cascade, where the top corner of the next child
-/// is a little above (`overlap`) the lower end corner of the previous child.
-///
-/// Will relayout if the text direction changes.
 class _CascadeLayoutDelegate extends MultiChildLayoutDelegate {
   _CascadeLayoutDelegate({
     required this.colors,

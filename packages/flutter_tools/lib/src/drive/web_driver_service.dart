@@ -24,7 +24,6 @@ import '../resident_runner.dart';
 import '../web/web_runner.dart';
 import 'drive_service.dart';
 
-/// An implementation of the driver service for web debug and release applications.
 class WebDriverService extends DriverService {
   WebDriverService({
     required ProcessUtils processUtils,
@@ -44,11 +43,6 @@ class WebDriverService extends DriverService {
   @visibleForTesting
   Uri? get webUri => _webUri;
 
-  /// The result of [ResidentRunner.run].
-  ///
-  /// This is expected to stay `null` throughout the test, as the application
-  /// must be running until [stop] is called. If it becomes non-null, it likely
-  /// indicates a bug.
   int? _runResult;
 
   @override
@@ -232,24 +226,17 @@ class WebDriverService extends DriverService {
   }
 }
 
-/// A list of supported browsers.
 enum Browser implements CliEnum {
-  /// Chrome on Android: https://developer.chrome.com/docs/multidevice/android/
   androidChrome,
 
-  /// Chrome: https://www.google.com/chrome/
   chrome,
 
-  /// Edge: https://www.microsoft.com/edge
   edge,
 
-  /// Firefox: https://www.mozilla.org/en-US/firefox/
   firefox,
 
-  /// Safari in iOS: https://www.apple.com/safari/
   iosSafari,
 
-  /// Safari in macOS: https://www.apple.com/safari/
   safari;
 
   @override
@@ -271,8 +258,6 @@ enum Browser implements CliEnum {
   );
 }
 
-/// Returns desired capabilities for given [browser], [headless], [chromeBinary]
-/// and [webBrowserFlags].
 @visibleForTesting
 Map<String, dynamic> getDesiredCapabilities(
   Browser browser,

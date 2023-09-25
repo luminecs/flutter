@@ -22,7 +22,6 @@ import 'tester/flutter_tester.dart';
 import 'web/web_device.dart';
 import 'windows/application_package.dart';
 
-/// A package factory that supports all Flutter target platforms.
 class FlutterApplicationPackageFactory extends ApplicationPackageFactory {
   FlutterApplicationPackageFactory({
     required AndroidSdk? androidSdk,

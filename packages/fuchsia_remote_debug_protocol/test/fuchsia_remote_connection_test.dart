@@ -76,8 +76,6 @@ void main() {
     });
 
     tearDown(() {
-      /// Most tests will fake out the port forwarding and connection
-      /// functions.
       restoreFuchsiaPortForwardingFunction();
       restoreVmServiceConnectionFunction();
     });

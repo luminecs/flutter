@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [Shortcuts].
 
 void main() => runApp(const ShortcutsExampleApp());
 

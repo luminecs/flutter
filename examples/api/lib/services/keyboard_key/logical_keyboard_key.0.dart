@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [LogicalKeyboardKey].
 
 void main() => runApp(const KeyExampleApp());
 

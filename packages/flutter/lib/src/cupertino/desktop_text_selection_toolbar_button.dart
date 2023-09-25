@@ -28,9 +28,7 @@ const EdgeInsets _kToolbarButtonPadding = EdgeInsets.fromLTRB(
   5.0,
 );
 
-/// A button in the style of the Mac context menu buttons.
 class CupertinoDesktopTextSelectionToolbarButton extends StatefulWidget {
-  /// Creates an instance of CupertinoDesktopTextSelectionToolbarButton.
   const CupertinoDesktopTextSelectionToolbarButton({
     super.key,
     required this.onPressed,
@@ -38,8 +36,6 @@ class CupertinoDesktopTextSelectionToolbarButton extends StatefulWidget {
   })  : buttonItem = null,
         text = null;
 
-  /// Create an instance of [CupertinoDesktopTextSelectionToolbarButton] whose child is
-  /// a [Text] widget styled like the default Mac context menu button.
   const CupertinoDesktopTextSelectionToolbarButton.text({
     super.key,
     required this.onPressed,
@@ -47,8 +43,6 @@ class CupertinoDesktopTextSelectionToolbarButton extends StatefulWidget {
   })  : buttonItem = null,
         child = null;
 
-  /// Create an instance of [CupertinoDesktopTextSelectionToolbarButton] from
-  /// the given [ContextMenuButtonItem].
   CupertinoDesktopTextSelectionToolbarButton.buttonItem({
     super.key,
     required ContextMenuButtonItem this.buttonItem,
@@ -56,16 +50,12 @@ class CupertinoDesktopTextSelectionToolbarButton extends StatefulWidget {
         text = null,
         child = null;
 
-  /// {@macro flutter.cupertino.CupertinoTextSelectionToolbarButton.onPressed}
   final VoidCallback? onPressed;
 
-  /// {@macro flutter.cupertino.CupertinoTextSelectionToolbarButton.child}
   final Widget? child;
 
-  /// {@macro flutter.cupertino.CupertinoTextSelectionToolbarButton.onPressed}
   final ContextMenuButtonItem? buttonItem;
 
-  /// {@macro flutter.cupertino.CupertinoTextSelectionToolbarButton.text}
   final String? text;
 
   @override

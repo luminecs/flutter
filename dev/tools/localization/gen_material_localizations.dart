@@ -29,14 +29,9 @@ import '../material_localizations.dart';
 // method defined in `flutter_localizations/lib/src/material_localizations.dart`.''';
 }
 
-/// Returns the source of the constructor for a GlobalMaterialLocalizations
-/// subclass.
 String generateMaterialConstructor(LocaleInfo locale) {
   final String localeName = locale.originalString;
   return '''
-  /// Create an instance of the translation bundle for ${describeLocale(localeName)}.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalization${locale.camelCase()}({
     super.localeName = '$localeName',
     required super.fullYearFormat,

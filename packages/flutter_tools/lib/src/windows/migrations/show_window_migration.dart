@@ -27,11 +27,6 @@ const String _after = r'''
   return true;
 ''';
 
-/// Migrates Windows apps to ensure the window is shown.
-///
-/// This prevents a race condition between Flutter rendering the first frame
-/// and the app registering the callback to show the window on the first frame.
-/// See https://github.com/flutter/flutter/issues/119415.
 class ShowWindowMigration extends ProjectMigrator {
   ShowWindowMigration(WindowsProject project, super.logger)
     : _file = project.runnerFlutterWindowFile;

@@ -91,8 +91,6 @@ Future<TaskResult> _runWithTempDir(Directory tempDir) async {
   }
 }
 
-/// Asserts that the custom entrypoint works in the presence of the dart plugin
-/// registrant.
 TaskFunction entrypointDartRegistrant() {
   return () async {
     final Directory tempDir =

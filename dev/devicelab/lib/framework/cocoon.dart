@@ -26,10 +26,6 @@ typedef ProcessRunSync = ProcessResult Function(
   String? workingDirectory,
 });
 
-/// Class for test runner to interact with Flutter's infrastructure service, Cocoon.
-///
-/// Cocoon assigns bots to run these devicelab tasks on real devices.
-/// To retrieve these results, the test runner needs to send results back so the database can be updated.
 class Cocoon {
   Cocoon({
     String? serviceAccountTokenPath,
@@ -40,18 +36,14 @@ class Cocoon {
     @visibleForTesting this.requestTimeoutLimit = 30,
   }) : _httpClient = AuthenticatedCocoonClient(serviceAccountTokenPath, httpClient: httpClient, filesystem: fs);
 
-  /// Client to make http requests to Cocoon.
   final AuthenticatedCocoonClient _httpClient;
 
   final ProcessRunSync processRunSync;
 
-  /// Url used to send results to.
   static const String baseCocoonApiUrl = 'https://flutter-dashboard.appspot.com/api';
 
-  /// Threshold to auto retry a failed test.
   static const int retryNumber = 2;
 
-  /// Underlying [FileSystem] to use.
   final FileSystem fs;
 
   static final Logger logger = Logger('CocoonClient');
@@ -65,7 +57,6 @@ class Cocoon {
   String get commitSha => _commitSha ?? _readCommitSha();
   String? _commitSha;
 
-  /// Parse the local repo for the current running commit.
   String _readCommitSha() {
     final ProcessResult result = processRunSync('git', <String>['rev-parse', 'HEAD']);
     if (result.exitCode != 0) {
@@ -75,15 +66,6 @@ class Cocoon {
     return _commitSha = result.stdout as String;
   }
 
-  /// Update test status to Cocoon.
-  ///
-  /// Flutter infrastructure's workflow is:
-  /// 1. Run DeviceLab test
-  /// 2. Request service account token from luci auth (valid for at least 3 minutes)
-  /// 3. Update test status from (1) to Cocoon
-  ///
-  /// The `resultsPath` is not available for all tests. When it doesn't show up, we
-  /// need to append `CommitBranch`, `CommitSha`, and `BuilderName`.
   Future<void> sendTaskStatus({
     String? resultsPath,
     bool? isTestFlaky,
@@ -112,13 +94,11 @@ class Cocoon {
     }
   }
 
-  /// Only post-submit tests on `master` are allowed to update in cocoon.
   bool _shouldUpdateCocoon(Map<String, dynamic> resultJson, String builderBucket) {
     const List<String> supportedBranches = <String>['master'];
     return supportedBranches.contains(resultJson['CommitBranch']) && builderBucket == 'prod';
   }
 
-  /// Write the given parameters into an update task request and store the JSON in [resultsPath].
   Future<void> writeTaskResultToFile({
     String? builderName,
     String? gitBranch,
@@ -183,12 +163,9 @@ class Cocoon {
     }
   }
 
-  /// Make an API request to Cocoon.
   Future<Map<String, dynamic>> _sendCocoonRequest(String apiPath, [dynamic jsonData]) async {
     final Uri url = Uri.parse('$baseCocoonApiUrl/$apiPath');
 
-    /// Retry requests to Cocoon as sometimes there are issues with the servers, such
-    /// as version changes to the backend, datastore issues, or latency issues.
     final Response response = await retry(
       () => _httpClient.post(url, body: json.encode(jsonData)),
       retryIf: (Exception e) => e is SocketException || e is TimeoutException || e is ClientException,
@@ -198,7 +175,6 @@ class Cocoon {
   }
 }
 
-/// [HttpClient] for sending authenticated requests to Cocoon.
 class AuthenticatedCocoonClient extends BaseClient {
   AuthenticatedCocoonClient(
     this._serviceAccountTokenPath, {
@@ -207,22 +183,15 @@ class AuthenticatedCocoonClient extends BaseClient {
   })  : _delegate = httpClient ?? Client(),
         _fs = filesystem ?? const LocalFileSystem();
 
-  /// Authentication token to have the ability to upload and record test results.
-  ///
-  /// This is intended to only be passed on automated runs on LUCI post-submit.
   final String? _serviceAccountTokenPath;
 
-  /// Underlying [HttpClient] to send requests to.
   final Client _delegate;
 
-  /// Underlying [FileSystem] to use.
   final FileSystem _fs;
 
-  /// Value contained in the service account token file that can be used in http requests.
   String get serviceAccountToken => _serviceAccountToken ?? _readServiceAccountTokenFile();
   String? _serviceAccountToken;
 
-  /// Get [serviceAccountToken] from the given service account file.
   String _readServiceAccountTokenFile() {
     return _serviceAccountToken = _fs.file(_serviceAccountTokenPath).readAsStringSync().trim();
   }
@@ -248,7 +217,6 @@ class AuthenticatedCocoonClient extends BaseClient {
 class CocoonException implements Exception {
   CocoonException(this.message);
 
-  /// The message to show to the issuer to explain the error.
   final String message;
 
   @override

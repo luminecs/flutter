@@ -17,7 +17,6 @@ import 'signals.dart';
 // the tool is killed by a signal.
 export 'package:file/file.dart';
 
-/// Exception indicating that a file that was expected to exist was not found.
 class FileNotFoundException implements IOException {
   const FileNotFoundException(this.path);
 
@@ -27,7 +26,6 @@ class FileNotFoundException implements IOException {
   String toString() => 'File not found: $path';
 }
 
-/// Various convenience file system methods.
 class FileSystemUtils {
   FileSystemUtils({
     required FileSystem fileSystem,
@@ -39,14 +37,10 @@ class FileSystemUtils {
 
   final Platform _platform;
 
-  /// Appends a number to a filename in order to make it unique under a
-  /// directory.
   File getUniqueFile(Directory dir, String baseName, String ext) {
     return _getUniqueFile(dir, baseName, ext);
   }
 
-  /// Appends a number to a directory name in order to make it unique under a
-  /// directory.
   Directory getUniqueDirectory(Directory dir, String baseName) {
     final FileSystem fs = dir.fileSystem;
     int i = 1;
@@ -61,18 +55,8 @@ class FileSystemUtils {
     }
   }
 
-  /// Escapes [path].
-  ///
-  /// On Windows it replaces all '\' with '\\'. On other platforms, it returns the
-  /// path unchanged.
   String escapePath(String path) => _platform.isWindows ? path.replaceAll(r'\', r'\\') : path;
 
-  /// Returns true if the file system [entity] has not been modified since the
-  /// latest modification to [referenceFile].
-  ///
-  /// Returns true, if [entity] does not exist.
-  ///
-  /// Returns false, if [entity] exists, but [referenceFile] does not.
   bool isOlderThanReference({
     required FileSystemEntity entity,
     required File referenceFile,
@@ -84,7 +68,6 @@ class FileSystemUtils {
         && referenceFile.statSync().modified.isAfter(entity.statSync().modified);
   }
 
-  /// Return the absolute path of the user's home directory.
   String? get homeDirPath {
     String? path = _platform.isWindows
       ? _platform.environment['USERPROFILE']
@@ -96,19 +79,11 @@ class FileSystemUtils {
   }
 }
 
-/// Return a relative path if [fullPath] is contained by the cwd, else return an
-/// absolute path.
 String getDisplayPath(String fullPath, FileSystem fileSystem) {
   final String cwd = fileSystem.currentDirectory.path + fileSystem.path.separator;
   return fullPath.startsWith(cwd) ? fullPath.substring(cwd.length) : fullPath;
 }
 
-/// Creates `destDir` if needed, then recursively copies `srcDir` to
-/// `destDir`, invoking [onFileCopied], if specified, for each
-/// source/destination file pair.
-///
-/// Skips files if [shouldCopyFile] returns `false`.
-/// Does not recurse over directories if [shouldCopyDirectory] returns `false`.
 void copyDirectory(
   Directory srcDir,
   Directory destDir, {
@@ -167,15 +142,10 @@ File _getUniqueFile(Directory dir, String baseName, String ext) {
   }
 }
 
-/// Appends a number to a filename in order to make it unique under a
-/// directory.
 File getUniqueFile(Directory dir, String baseName, String ext) {
   return _getUniqueFile(dir, baseName, ext);
 }
 
-/// This class extends [local_fs.LocalFileSystem] in order to clean up
-/// directories and files that the tool creates under the system temporary
-/// directory when the tool exits either normally or when killed by a signal.
 class LocalFileSystem extends local_fs.LocalFileSystem {
   LocalFileSystem(this._signals, this._fatalSignals, this.shutdownHooks);
 

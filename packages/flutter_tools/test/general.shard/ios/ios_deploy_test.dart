@@ -650,9 +650,6 @@ class IOSDeployDebuggerWaitForExit extends IOSDeployDebugger {
     required super.iosDeployEnv
   });
 
-  /// Create a [IOSDeployDebugger] for testing.
-  ///
-  /// Sets the command to "ios-deploy" and environment to an empty map.
   factory IOSDeployDebuggerWaitForExit.test({
     required ProcessManager processManager,
     Logger? logger,

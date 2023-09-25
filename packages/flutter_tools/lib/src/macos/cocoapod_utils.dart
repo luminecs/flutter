@@ -9,8 +9,6 @@ import '../flutter_plugins.dart';
 import '../globals.dart' as globals;
 import '../project.dart';
 
-/// For a given build, determines whether dependencies have changed since the
-/// last call to processPods, then calls processPods with that information.
 Future<void> processPodsIfNeeded(
   XcodeBasedProject xcodeProject,
   String buildDirectory,

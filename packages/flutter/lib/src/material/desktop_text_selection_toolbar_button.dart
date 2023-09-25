@@ -24,17 +24,13 @@ const EdgeInsets _kToolbarButtonPadding = EdgeInsets.fromLTRB(
   3.0,
 );
 
-/// A [TextButton] for the Material desktop text selection toolbar.
 class DesktopTextSelectionToolbarButton extends StatelessWidget {
-  /// Creates an instance of DesktopTextSelectionToolbarButton.
   const DesktopTextSelectionToolbarButton({
     super.key,
     required this.onPressed,
     required this.child,
   });
 
-  /// Create an instance of [DesktopTextSelectionToolbarButton] whose child is
-  /// a [Text] widget in the style of the Material text selection toolbar.
   DesktopTextSelectionToolbarButton.text({
     super.key,
     required BuildContext context,
@@ -50,10 +46,8 @@ class DesktopTextSelectionToolbarButton extends StatelessWidget {
          ),
        );
 
-  /// {@macro flutter.material.TextSelectionToolbarTextButton.onPressed}
   final VoidCallback? onPressed;
 
-  /// {@macro flutter.material.TextSelectionToolbarTextButton.child}
   final Widget child;
 
   @override

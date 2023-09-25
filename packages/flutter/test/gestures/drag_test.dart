@@ -569,10 +569,6 @@ void main() {
     expect(primaryVelocity, velocity.pixelsPerSecond.dx);
   });
 
-  /// Drag the pointer at the given velocity, and return the details
-  /// the recognizer passes to onEnd.
-  ///
-  /// This method will mutate `recognizer.onEnd`.
   DragEndDetails performDragToEnd(GestureTester tester, DragGestureRecognizer recognizer, Offset pointerVelocity) {
     late DragEndDetails actual;
     recognizer.onEnd = (DragEndDetails details) {
@@ -680,8 +676,6 @@ void main() {
     expect(velocity.pixelsPerSecond.dy, moreOrLessEquals(0.0));
   });
 
-  /// Checks that quick flick gestures with 1 down, 2 move and 1 up pointer
-  /// events still have a velocity
   testGesture('Quick flicks have velocity', (GestureTester tester) {
     final HorizontalDragGestureRecognizer drag = HorizontalDragGestureRecognizer() ..dragStartBehavior = DragStartBehavior.down;
     addTearDown(drag.dispose);

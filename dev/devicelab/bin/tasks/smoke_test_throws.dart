@@ -4,7 +4,6 @@
 
 import 'package:flutter_devicelab/framework/framework.dart';
 
-/// Smoke test of a task that fails with an exception.
 Future<void> main() async {
   await task(() async {
     throw 'failed';

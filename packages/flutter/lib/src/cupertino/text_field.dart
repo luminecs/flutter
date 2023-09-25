@@ -70,27 +70,13 @@ const CupertinoDynamicColor _kClearButtonColor = CupertinoDynamicColor.withBrigh
 // throughout the codebase.
 const int _iOSHorizontalCursorOffsetPixels = -2;
 
-/// Visibility of text field overlays based on the state of the current text entry.
-///
-/// Used to toggle the visibility behavior of the optional decorating widgets
-/// surrounding the [EditableText] such as the clear text button.
 enum OverlayVisibilityMode {
-  /// Overlay will never appear regardless of the text entry state.
   never,
 
-  /// Overlay will only appear when the current text entry is not empty.
-  ///
-  /// This includes prefilled text that the user did not type in manually. But
-  /// does not include text in placeholders.
   editing,
 
-  /// Overlay will only appear when the current text entry is empty.
-  ///
-  /// This also includes not having prefilled text that the user did not type
-  /// in manually. Texts in placeholders are ignored.
   notEditing,
 
-  /// Always show the overlay regardless of the text entry state.
   always,
 }
 
@@ -127,90 +113,7 @@ class _CupertinoTextFieldSelectionGestureDetectorBuilder extends TextSelectionGe
   }
 }
 
-/// An iOS-style text field.
-///
-/// A text field lets the user enter text, either with a hardware keyboard or with
-/// an onscreen keyboard.
-///
-/// This widget corresponds to both a `UITextField` and an editable `UITextView`
-/// on iOS.
-///
-/// The text field calls the [onChanged] callback whenever the user changes the
-/// text in the field. If the user indicates that they are done typing in the
-/// field (e.g., by pressing a button on the soft keyboard), the text field
-/// calls the [onSubmitted] callback.
-///
-/// {@macro flutter.widgets.EditableText.onChanged}
-///
-/// {@tool dartpad}
-/// This example shows how to set the initial value of the [CupertinoTextField] using
-/// a [controller] that already contains some text.
-///
-/// ** See code in examples/api/lib/cupertino/text_field/cupertino_text_field.0.dart **
-/// {@end-tool}
-///
-/// The [controller] can also control the selection and composing region (and to
-/// observe changes to the text, selection, and composing region).
-///
-/// The text field has an overridable [decoration] that, by default, draws a
-/// rounded rectangle border around the text field. If you set the [decoration]
-/// property to null, the decoration will be removed entirely.
-///
-/// {@macro flutter.material.textfield.wantKeepAlive}
-///
-/// Remember to call [TextEditingController.dispose] when it is no longer
-/// needed. This will ensure we discard any resources used by the object.
-///
-/// {@macro flutter.widgets.editableText.showCaretOnScreen}
-///
-/// See also:
-///
-///  * <https://developer.apple.com/documentation/uikit/uitextfield>
-///  * [TextField], an alternative text field widget that follows the Material
-///    Design UI conventions.
-///  * [EditableText], which is the raw text editing control at the heart of a
-///    [TextField].
-///  * Learn how to use a [TextEditingController] in one of our [cookbook recipes](https://flutter.dev/docs/cookbook/forms/text-field-changes#2-use-a-texteditingcontroller).
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/controls/text-fields/>
 class CupertinoTextField extends StatefulWidget {
-  /// Creates an iOS-style text field.
-  ///
-  /// To provide a prefilled text entry, pass in a [TextEditingController] with
-  /// an initial value to the [controller] parameter.
-  ///
-  /// To provide a hint placeholder text that appears when the text entry is
-  /// empty, pass a [String] to the [placeholder] parameter.
-  ///
-  /// The [maxLines] property can be set to null to remove the restriction on
-  /// the number of lines. In this mode, the intrinsic height of the widget will
-  /// grow as the number of lines of text grows. By default, it is `1`, meaning
-  /// this is a single-line text field and will scroll horizontally when
-  /// it overflows. [maxLines] must not be zero.
-  ///
-  /// The text cursor is not shown if [showCursor] is false or if [showCursor]
-  /// is null (the default) and [readOnly] is true.
-  ///
-  /// If specified, the [maxLength] property must be greater than zero.
-  ///
-  /// The [selectionHeightStyle] and [selectionWidthStyle] properties allow
-  /// changing the shape of the selection highlighting. These properties default
-  /// to [ui.BoxHeightStyle.tight] and [ui.BoxWidthStyle.tight], respectively.
-  ///
-  /// The [autocorrect], [autofocus], [clearButtonMode], [dragStartBehavior],
-  /// [expands], [obscureText], [prefixMode], [readOnly], [scrollPadding],
-  /// [suffixMode], [textAlign], [selectionHeightStyle], [selectionWidthStyle],
-  /// [enableSuggestions], and [enableIMEPersonalizedLearning] properties must
-  /// not be null.
-  ///
-  /// {@macro flutter.widgets.editableText.accessibility}
-  ///
-  /// See also:
-  ///
-  ///  * [minLines], which is the minimum number of lines to occupy when the
-  ///    content spans fewer lines.
-  ///  * [expands], to allow the widget to size itself to its parent's height.
-  ///  * [maxLength], which discusses the precise meaning of "number of
-  ///    characters" and how it may differ from the intuitive meaning.
   const CupertinoTextField({
     super.key,
     this.controller,
@@ -310,36 +213,6 @@ class CupertinoTextField extends StatefulWidget {
        keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
        enableInteractiveSelection = enableInteractiveSelection ?? (!readOnly || !obscureText);
 
-  /// Creates a borderless iOS-style text field.
-  ///
-  /// To provide a prefilled text entry, pass in a [TextEditingController] with
-  /// an initial value to the [controller] parameter.
-  ///
-  /// To provide a hint placeholder text that appears when the text entry is
-  /// empty, pass a [String] to the [placeholder] parameter.
-  ///
-  /// The [maxLines] property can be set to null to remove the restriction on
-  /// the number of lines. In this mode, the intrinsic height of the widget will
-  /// grow as the number of lines of text grows. By default, it is `1`, meaning
-  /// this is a single-line text field and will scroll horizontally when
-  /// it overflows. [maxLines] must not be zero.
-  ///
-  /// The text cursor is not shown if [showCursor] is false or if [showCursor]
-  /// is null (the default) and [readOnly] is true.
-  ///
-  /// If specified, the [maxLength] property must be greater than zero.
-  ///
-  /// The [selectionHeightStyle] and [selectionWidthStyle] properties allow
-  /// changing the shape of the selection highlighting. These properties default
-  /// to [ui.BoxHeightStyle.tight] and [ui.BoxWidthStyle.tight] respectively.
-  ///
-  /// See also:
-  ///
-  ///  * [minLines], which is the minimum number of lines to occupy when the
-  ///    content spans fewer lines.
-  ///  * [expands], to allow the widget to size itself to its parent's height.
-  ///  * [maxLength], which discusses the precise meaning of "number of
-  ///    characters" and how it may differ from the intuitive meaning.
   const CupertinoTextField.borderless({
     super.key,
     this.controller,
@@ -436,309 +309,134 @@ class CupertinoTextField extends StatefulWidget {
        keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
        enableInteractiveSelection = enableInteractiveSelection ?? (!readOnly || !obscureText);
 
-  /// Controls the text being edited.
-  ///
-  /// If null, this widget will create its own [TextEditingController].
   final TextEditingController? controller;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// Controls the [BoxDecoration] of the box behind the text input.
-  ///
-  /// Defaults to having a rounded rectangle grey border and can be null to have
-  /// no box decoration.
   final BoxDecoration? decoration;
 
-  /// Padding around the text entry area between the [prefix] and [suffix]
-  /// or the clear button when [clearButtonMode] is not never.
-  ///
-  /// Defaults to a padding of 6 pixels on all sides and can be null.
   final EdgeInsetsGeometry padding;
 
-  /// A lighter colored placeholder hint that appears on the first line of the
-  /// text field when the text entry is empty.
-  ///
-  /// Defaults to having no placeholder text.
-  ///
-  /// The text style of the placeholder text matches that of the text field's
-  /// main text entry except a lighter font weight and a grey font color.
   final String? placeholder;
 
-  /// The style to use for the placeholder text.
-  ///
-  /// The [placeholderStyle] is merged with the [style] [TextStyle] when applied
-  /// to the [placeholder] text. To avoid merging with [style], specify
-  /// [TextStyle.inherit] as false.
-  ///
-  /// Defaults to the [style] property with w300 font weight and grey color.
-  ///
-  /// If specifically set to null, placeholder's style will be the same as [style].
   final TextStyle? placeholderStyle;
 
-  /// An optional [Widget] to display before the text.
   final Widget? prefix;
 
-  /// Controls the visibility of the [prefix] widget based on the state of
-  /// text entry when the [prefix] argument is not null.
-  ///
-  /// Defaults to [OverlayVisibilityMode.always].
-  ///
-  /// Has no effect when [prefix] is null.
   final OverlayVisibilityMode prefixMode;
 
-  /// An optional [Widget] to display after the text.
   final Widget? suffix;
 
-  /// Controls the visibility of the [suffix] widget based on the state of
-  /// text entry when the [suffix] argument is not null.
-  ///
-  /// Defaults to [OverlayVisibilityMode.always].
-  ///
-  /// Has no effect when [suffix] is null.
   final OverlayVisibilityMode suffixMode;
 
-  /// Show an iOS-style clear button to clear the current text entry.
-  ///
-  /// Can be made to appear depending on various text states of the
-  /// [TextEditingController].
-  ///
-  /// Will only appear if no [suffix] widget is appearing.
-  ///
-  /// Defaults to [OverlayVisibilityMode.never].
   final OverlayVisibilityMode clearButtonMode;
 
-  /// {@macro flutter.widgets.editableText.keyboardType}
   final TextInputType keyboardType;
 
-  /// The type of action button to use for the keyboard.
-  ///
-  /// Defaults to [TextInputAction.newline] if [keyboardType] is
-  /// [TextInputType.multiline] and [TextInputAction.done] otherwise.
   final TextInputAction? textInputAction;
 
-  /// {@macro flutter.widgets.editableText.textCapitalization}
   final TextCapitalization textCapitalization;
 
-  /// The style to use for the text being edited.
-  ///
-  /// Also serves as a base for the [placeholder] text's style.
-  ///
-  /// Defaults to the standard iOS font style from [CupertinoTheme] if null.
   final TextStyle? style;
 
-  /// {@macro flutter.widgets.editableText.strutStyle}
   final StrutStyle? strutStyle;
 
-  /// {@macro flutter.widgets.editableText.textAlign}
   final TextAlign textAlign;
 
-  /// Configuration of toolbar options.
-  ///
-  /// If not set, select all and paste will default to be enabled. Copy and cut
-  /// will be disabled if [obscureText] is true. If [readOnly] is true,
-  /// paste and cut will be disabled regardless.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
   )
   final ToolbarOptions? toolbarOptions;
 
-  /// {@macro flutter.material.InputDecorator.textAlignVertical}
   final TextAlignVertical? textAlignVertical;
 
-  /// {@macro flutter.widgets.editableText.textDirection}
   final TextDirection? textDirection;
 
-  /// {@macro flutter.widgets.editableText.readOnly}
   final bool readOnly;
 
-  /// {@macro flutter.widgets.editableText.showCursor}
   final bool? showCursor;
 
-  /// {@macro flutter.widgets.editableText.autofocus}
   final bool autofocus;
 
-  /// {@macro flutter.widgets.editableText.obscuringCharacter}
   final String obscuringCharacter;
 
-  /// {@macro flutter.widgets.editableText.obscureText}
   final bool obscureText;
 
-  /// {@macro flutter.widgets.editableText.autocorrect}
   final bool autocorrect;
 
-  /// {@macro flutter.services.TextInputConfiguration.smartDashesType}
   final SmartDashesType smartDashesType;
 
-  /// {@macro flutter.services.TextInputConfiguration.smartQuotesType}
   final SmartQuotesType smartQuotesType;
 
-  /// {@macro flutter.services.TextInputConfiguration.enableSuggestions}
   final bool enableSuggestions;
 
-  /// {@macro flutter.widgets.editableText.maxLines}
-  ///  * [expands], which determines whether the field should fill the height of
-  ///    its parent.
   final int? maxLines;
 
-  /// {@macro flutter.widgets.editableText.minLines}
-  ///  * [expands], which determines whether the field should fill the height of
-  ///    its parent.
   final int? minLines;
 
-  /// {@macro flutter.widgets.editableText.expands}
   final bool expands;
 
-  /// The maximum number of characters (Unicode grapheme clusters) to allow in
-  /// the text field.
-  ///
-  /// After [maxLength] characters have been input, additional input
-  /// is ignored, unless [maxLengthEnforcement] is set to
-  /// [MaxLengthEnforcement.none].
-  ///
-  /// The TextField enforces the length with a
-  /// [LengthLimitingTextInputFormatter], which is evaluated after the supplied
-  /// [inputFormatters], if any.
-  ///
-  /// This value must be either null or greater than zero. If set to null
-  /// (the default), there is no limit to the number of characters allowed.
-  ///
-  /// Whitespace characters (e.g. newline, space, tab) are included in the
-  /// character count.
-  ///
-  /// {@macro flutter.services.lengthLimitingTextInputFormatter.maxLength}
   final int? maxLength;
 
-  /// Determines how the [maxLength] limit should be enforced.
-  ///
-  /// If [MaxLengthEnforcement.none] is set, additional input beyond [maxLength]
-  /// will not be enforced by the limit.
-  ///
-  /// {@macro flutter.services.textFormatter.effectiveMaxLengthEnforcement}
-  ///
-  /// {@macro flutter.services.textFormatter.maxLengthEnforcement}
   final MaxLengthEnforcement? maxLengthEnforcement;
 
-  /// {@macro flutter.widgets.editableText.onChanged}
   final ValueChanged<String>? onChanged;
 
-  /// {@macro flutter.widgets.editableText.onEditingComplete}
   final VoidCallback? onEditingComplete;
 
-  /// {@macro flutter.widgets.editableText.onSubmitted}
-  ///
-  /// See also:
-  ///
-  ///  * [TextInputAction.next] and [TextInputAction.previous], which
-  ///    automatically shift the focus to the next/previous focusable item when
-  ///    the user is done editing.
   final ValueChanged<String>? onSubmitted;
 
-  /// {@macro flutter.widgets.editableText.onTapOutside}
   final TapRegionCallback? onTapOutside;
 
-  /// {@macro flutter.widgets.editableText.inputFormatters}
   final List<TextInputFormatter>? inputFormatters;
 
-  /// Disables the text field when false.
-  ///
-  /// Text fields in disabled states have a light grey background and don't
-  /// respond to touch events including the [prefix], [suffix] and the clear
-  /// button.
-  ///
-  /// Defaults to true.
   final bool enabled;
 
-  /// {@macro flutter.widgets.editableText.cursorWidth}
   final double cursorWidth;
 
-  /// {@macro flutter.widgets.editableText.cursorHeight}
   final double? cursorHeight;
 
-  /// {@macro flutter.widgets.editableText.cursorRadius}
   final Radius cursorRadius;
 
-  /// {@macro flutter.widgets.editableText.cursorOpacityAnimates}
   final bool cursorOpacityAnimates;
 
-  /// The color to use when painting the cursor.
-  ///
-  /// Defaults to the [DefaultSelectionStyle.cursorColor]. If that color is
-  /// null, it uses the [CupertinoThemeData.primaryColor] of the ambient theme,
-  /// which itself defaults to [CupertinoColors.activeBlue] in the light theme
-  /// and [CupertinoColors.activeOrange] in the dark theme.
   final Color? cursorColor;
 
-  /// Controls how tall the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxHeightStyle] for details on available styles.
   final ui.BoxHeightStyle selectionHeightStyle;
 
-  /// Controls how wide the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxWidthStyle] for details on available styles.
   final ui.BoxWidthStyle selectionWidthStyle;
 
-  /// The appearance of the keyboard.
-  ///
-  /// This setting is only honored on iOS devices.
-  ///
-  /// If null, defaults to [Brightness.light].
   final Brightness? keyboardAppearance;
 
-  /// {@macro flutter.widgets.editableText.scrollPadding}
   final EdgeInsets scrollPadding;
 
-  /// {@macro flutter.widgets.editableText.enableInteractiveSelection}
   final bool enableInteractiveSelection;
 
-  /// {@macro flutter.widgets.editableText.selectionControls}
   final TextSelectionControls? selectionControls;
 
-  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
 
-  /// {@macro flutter.widgets.editableText.scrollController}
   final ScrollController? scrollController;
 
-  /// {@macro flutter.widgets.editableText.scrollPhysics}
   final ScrollPhysics? scrollPhysics;
 
-  /// {@macro flutter.widgets.editableText.selectionEnabled}
   bool get selectionEnabled => enableInteractiveSelection;
 
-  /// {@macro flutter.material.textfield.onTap}
   final GestureTapCallback? onTap;
 
-  /// {@macro flutter.widgets.editableText.autofillHints}
-  /// {@macro flutter.services.AutofillConfiguration.autofillHints}
   final Iterable<String>? autofillHints;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.hardEdge].
   final Clip clipBehavior;
 
-  /// {@macro flutter.material.textfield.restorationId}
   final String? restorationId;
 
-  /// {@macro flutter.widgets.editableText.scribbleEnabled}
   final bool scribbleEnabled;
 
-  /// {@macro flutter.services.TextInputConfiguration.enableIMEPersonalizedLearning}
   final bool enableIMEPersonalizedLearning;
 
-  /// {@macro flutter.widgets.editableText.contentInsertionConfiguration}
   final ContentInsertionConfiguration? contentInsertionConfiguration;
 
-  /// {@macro flutter.widgets.EditableText.contextMenuBuilder}
-  ///
-  /// If not provided, will build a default menu based on the platform.
-  ///
-  /// See also:
-  ///
-  ///  * [CupertinoAdaptiveTextSelectionToolbar], which is built by default.
   final EditableTextContextMenuBuilder? contextMenuBuilder;
 
   static Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
@@ -747,36 +445,10 @@ class CupertinoTextField extends StatefulWidget {
     );
   }
 
-  /// {@macro flutter.widgets.magnifier.TextMagnifierConfiguration.intro}
-  ///
-  /// {@macro flutter.widgets.magnifier.intro}
-  ///
-  /// {@macro flutter.widgets.magnifier.TextMagnifierConfiguration.details}
-  ///
-  /// By default, builds a [CupertinoTextMagnifier] on iOS and Android nothing on all other
-  /// platforms. If it is desired to suppress the magnifier, consider passing
-  /// [TextMagnifierConfiguration.disabled].
-  ///
-  /// {@tool dartpad}
-  /// This sample demonstrates how to customize the magnifier that this text field uses.
-  ///
-  /// ** See code in examples/api/lib/widgets/text_magnifier/text_magnifier.0.dart **
-  /// {@end-tool}
   final TextMagnifierConfiguration? magnifierConfiguration;
 
-  /// {@macro flutter.widgets.EditableText.spellCheckConfiguration}
-  ///
-  /// If [SpellCheckConfiguration.misspelledTextStyle] is not specified in this
-  /// configuration, then [cupertinoMisspelledTextStyle] is used by default.
   final SpellCheckConfiguration? spellCheckConfiguration;
 
-  /// The [TextStyle] used to indicate misspelled words in the Cupertino style.
-  ///
-  /// See also:
-  ///  * [SpellCheckConfiguration.misspelledTextStyle], the style configured to
-  ///    mark misspelled words with.
-  ///  * [TextField.materialMisspelledTextStyle], the style configured
-  ///    to mark misspelled words with in the Material style.
   static const TextStyle cupertinoMisspelledTextStyle =
     TextStyle(
       decoration: TextDecoration.underline,
@@ -784,22 +456,9 @@ class CupertinoTextField extends StatefulWidget {
       decorationStyle: TextDecorationStyle.dotted,
   );
 
-  /// The color of the selection highlight when the spell check menu is visible.
-  ///
-  /// Eyeballed from a screenshot taken on an iPhone 11 running iOS 16.2.
   @visibleForTesting
   static const Color kMisspelledSelectionColor = Color(0x62ff9699);
 
-  /// Default builder for the spell check suggestions toolbar in the Cupertino
-  /// style.
-  ///
-  /// See also:
-  ///  * [spellCheckConfiguration], where this is typically specified for
-  ///    [CupertinoTextField].
-  ///  * [SpellCheckConfiguration.spellCheckSuggestionsToolbarBuilder], the
-  ///    parameter for which this is the default value for [CupertinoTextField].
-  ///  * [TextField.defaultSpellCheckSuggestionsToolbarBuilder], which is like
-  ///    this but specifies the default for [CupertinoTextField].
   @visibleForTesting
   static Widget defaultSpellCheckSuggestionsToolbarBuilder(
     BuildContext context,
@@ -810,7 +469,6 @@ class CupertinoTextField extends StatefulWidget {
     );
   }
 
-  /// {@macro flutter.widgets.undoHistory.controller}
   final UndoHistoryController? undoController;
 
   @override
@@ -883,8 +541,6 @@ class CupertinoTextField extends StatefulWidget {
     }
   });
 
-  /// Returns a new [SpellCheckConfiguration] where the given configuration has
-  /// had any missing values replaced with their defaults for the iOS platform.
   static SpellCheckConfiguration inferIOSSpellCheckConfiguration(
     SpellCheckConfiguration? configuration,
   ) {

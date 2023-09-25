@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Scaffold.drawer].
 
 void main() => runApp(const DrawerExampleApp());
 

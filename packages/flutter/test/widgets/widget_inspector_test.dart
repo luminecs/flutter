@@ -204,7 +204,6 @@ class RenderRepaintBoundaryWithDebugPaint extends RenderRepaintBoundary {
 }
 
 class RepaintBoundaryWithDebugPaint extends RepaintBoundary {
-  /// Creates a widget that isolates repaints.
   const RepaintBoundaryWithDebugPaint({
     super.key,
     super.child,

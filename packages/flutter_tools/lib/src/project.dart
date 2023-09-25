@@ -30,7 +30,6 @@ import 'xcode_project.dart';
 export 'cmake_project.dart';
 export 'xcode_project.dart';
 
-/// Enum for each officially supported platform.
 enum SupportedPlatform {
   android,
   ios,
@@ -56,8 +55,6 @@ class FlutterProjectFactory {
   final Map<String, FlutterProject> projects =
       <String, FlutterProject>{};
 
-  /// Returns a [FlutterProject] view of the given directory or a ToolExit error,
-  /// if `pubspec.yaml` or `example/pubspec.yaml` is invalid.
   FlutterProject fromDirectory(Directory directory) {
     return projects.putIfAbsent(directory.path, () {
       final FlutterManifest manifest = FlutterProject._readManifest(
@@ -77,28 +74,14 @@ class FlutterProjectFactory {
   }
 }
 
-/// Represents the contents of a Flutter project at the specified [directory].
-///
-/// [FlutterManifest] information is read from `pubspec.yaml` and
-/// `example/pubspec.yaml` files on construction of a [FlutterProject] instance.
-/// The constructed instance carries an immutable snapshot representation of the
-/// presence and content of those files. Accordingly, [FlutterProject] instances
-/// should be discarded upon changes to the `pubspec.yaml` files, but can be
-/// used across changes to other files, as no other file-level information is
-/// cached.
 class FlutterProject {
   @visibleForTesting
   FlutterProject(this.directory, this.manifest, this._exampleManifest);
 
-  /// Returns a [FlutterProject] view of the given directory or a ToolExit error,
-  /// if `pubspec.yaml` or `example/pubspec.yaml` is invalid.
   static FlutterProject fromDirectory(Directory directory) => globals.projectFactory.fromDirectory(directory);
 
-  /// Returns a [FlutterProject] view of the current directory or a ToolExit error,
-  /// if `pubspec.yaml` or `example/pubspec.yaml` is invalid.
   static FlutterProject current() => globals.projectFactory.fromDirectory(globals.fs.currentDirectory);
 
-  /// Create a [FlutterProject] and bypass the project caching.
   @visibleForTesting
   static FlutterProject fromDirectoryTest(Directory directory, [Logger? logger]) {
     final FileSystem fileSystem = directory.fileSystem;
@@ -118,21 +101,14 @@ class FlutterProject {
     return FlutterProject(directory, manifest, exampleManifest);
   }
 
-  /// The location of this project.
   final Directory directory;
 
-  /// The location of the build folder.
   Directory get buildDirectory => directory.childDirectory('build');
 
-  /// The manifest of this project.
   final FlutterManifest manifest;
 
-  /// The manifest of the example sub-project of this project.
   final FlutterManifest _exampleManifest;
 
-  /// The set of organization names found in this project as
-  /// part of iOS product bundle identifier, Android application ID, or
-  /// Gradle group ID.
   Future<Set<String>> get organizationNames async {
     final List<String> candidates = <String>[];
 
@@ -184,53 +160,34 @@ class FlutterProject {
     return null;
   }
 
-  /// The iOS sub project of this project.
   late final IosProject ios = IosProject.fromFlutter(this);
 
-  /// The Android sub project of this project.
   late final AndroidProject android = AndroidProject._(this);
 
-  /// The web sub project of this project.
   late final WebProject web = WebProject._(this);
 
-  /// The MacOS sub project of this project.
   late final MacOSProject macos = MacOSProject.fromFlutter(this);
 
-  /// The Linux sub project of this project.
   late final LinuxProject linux = LinuxProject.fromFlutter(this);
 
-  /// The Windows sub project of this project.
   late final WindowsProject windows = WindowsProject.fromFlutter(this);
 
-  /// The Fuchsia sub project of this project.
   late final FuchsiaProject fuchsia = FuchsiaProject._(this);
 
-  /// The `pubspec.yaml` file of this project.
   File get pubspecFile => directory.childFile('pubspec.yaml');
 
-  /// The `.packages` file of this project.
   File get packagesFile => directory.childFile('.packages');
 
-  /// The `package_config.json` file of the project.
-  ///
-  /// This is the replacement for .packages which contains language
-  /// version information.
   File get packageConfigFile => directory.childDirectory('.dart_tool').childFile('package_config.json');
 
-  /// The `.metadata` file of this project.
   File get metadataFile => directory.childFile('.metadata');
 
-  /// The `.flutter-plugins` file of this project.
   File get flutterPluginsFile => directory.childFile('.flutter-plugins');
 
-  /// The `.flutter-plugins-dependencies` file of this project,
-  /// which contains the dependencies each plugin depends on.
   File get flutterPluginsDependenciesFile => directory.childFile('.flutter-plugins-dependencies');
 
-  /// The `.dart-tool` directory of this project.
   Directory get dartTool => directory.childDirectory('.dart_tool');
 
-  /// The directory containing the generated code for this project.
   Directory get generated => directory
     .absolute
     .childDirectory('.dart_tool')
@@ -238,31 +195,24 @@ class FlutterProject {
     .childDirectory('generated')
     .childDirectory(manifest.appName);
 
-  /// The generated Dart plugin registrant for non-web platforms.
   File get dartPluginRegistrant => dartTool
     .childDirectory('flutter_build')
     .childFile('dart_plugin_registrant.dart');
 
-  /// The example sub-project of this project.
   FlutterProject get example => FlutterProject(
     _exampleDirectory(directory),
     _exampleManifest,
     FlutterManifest.empty(logger: globals.logger),
   );
 
-  /// True if this project is a Flutter module project.
   bool get isModule => manifest.isModule;
 
-  /// True if this project is a Flutter plugin project.
   bool get isPlugin => manifest.isPlugin;
 
-  /// True if the Flutter project is using the AndroidX support library.
   bool get usesAndroidX => manifest.usesAndroidX;
 
-  /// True if this project has an example application.
   bool get hasExampleApp => _exampleDirectory(directory).existsSync();
 
-  /// Returns a list of platform names that are supported by the project.
   List<SupportedPlatform> getSupportedPlatforms({bool includeRoot = false}) {
     final List<SupportedPlatform> platforms = includeRoot ? <SupportedPlatform>[SupportedPlatform.root] : <SupportedPlatform>[];
     if (android.existsSync()) {
@@ -289,14 +239,8 @@ class FlutterProject {
     return platforms;
   }
 
-  /// The directory that will contain the example if an example exists.
   static Directory _exampleDirectory(Directory directory) => directory.childDirectory('example');
 
-  /// Reads and validates the `pubspec.yaml` file at [path], asynchronously
-  /// returning a [FlutterManifest] representation of the contents.
-  ///
-  /// Completes with an empty [FlutterManifest], if the file does not exist.
-  /// Completes with a ToolExit on validation error.
   static FlutterManifest _readManifest(String path, {
     required Logger logger,
     required FileSystem fileSystem,
@@ -324,10 +268,6 @@ class FlutterProject {
     return manifest;
   }
 
-  /// Reapplies template files and regenerates project files and plugin
-  /// registrants for app and module projects only.
-  ///
-  /// Will not create project platform directories if they do not already exist.
   Future<void> regeneratePlatformSpecificTooling({DeprecationBehavior deprecationBehavior = DeprecationBehavior.none}) async {
     return ensureReadyForPlatformSpecificTooling(
       androidPlatform: android.existsSync(),
@@ -342,8 +282,6 @@ class FlutterProject {
     );
   }
 
-  /// Applies template files and generates project files and plugin
-  /// registrants for app and module projects only for the specified platforms.
   Future<void> ensureReadyForPlatformSpecificTooling({
     bool androidPlatform = false,
     bool iosPlatform = false,
@@ -391,7 +329,6 @@ class FlutterProject {
     }
   }
 
-  /// Returns a json encoded string containing the [appName], [version], and [buildNumber] that is used to generate version.json
   String getVersionInfo()  {
     final String? buildName = manifest.buildName;
     final String? buildNumber = manifest.buildNumber;
@@ -407,20 +344,13 @@ class FlutterProject {
   }
 }
 
-/// Base class for projects per platform.
 abstract class FlutterProjectPlatform {
 
-  /// Plugin's platform config key, e.g., "macos", "ios".
   String get pluginConfigKey;
 
-  /// Whether the platform exists in the project.
   bool existsSync();
 }
 
-/// Represents the Android sub-project of a Flutter project.
-///
-/// Instances will reflect the contents of the `android/` sub-folder of
-/// Flutter applications and the `.android/` sub-folder of Flutter module projects.
 class AndroidProject extends FlutterProjectPlatform {
   AndroidProject._(this.parent);
 
@@ -438,7 +368,6 @@ class AndroidProject extends FlutterProjectPlatform {
   static const String javaGradleCompatUrl =
     'https://docs.gradle.org/current/userguide/compatibility.html#java';
 
-  /// The parent of this project.
   final FlutterProject parent;
 
   @override
@@ -450,9 +379,6 @@ class AndroidProject extends FlutterProjectPlatform {
   static final RegExp _declarativeKotlinPluginPattern = RegExp('^\\s*id\\s+[\'"]kotlin-android[\'"]\\s*\$');
   static final RegExp _groupPattern = RegExp('^\\s*group\\s+[\'"](.*)[\'"]\\s*\$');
 
-  /// The Gradle root directory of the Android host app. This is the directory
-  /// containing the `app/` subdirectory and the `settings.gradle` file that
-  /// includes it in the overall Gradle project.
   Directory get hostAppGradleRoot {
     if (!isModule || _editableHostAppDirectory.existsSync()) {
       return _editableHostAppDirectory;
@@ -460,27 +386,19 @@ class AndroidProject extends FlutterProjectPlatform {
     return ephemeralDirectory;
   }
 
-  /// The Gradle root directory of the Android wrapping of Flutter and plugins.
-  /// This is the same as [hostAppGradleRoot] except when the project is
-  /// a Flutter module with an editable host app.
   Directory get _flutterLibGradleRoot => isModule ? ephemeralDirectory : _editableHostAppDirectory;
 
   Directory get ephemeralDirectory => parent.directory.childDirectory('.android');
   Directory get _editableHostAppDirectory => parent.directory.childDirectory('android');
 
-  /// True if the parent Flutter project is a module.
   bool get isModule => parent.isModule;
 
-  /// True if the parent Flutter project is a plugin.
   bool get isPlugin => parent.isPlugin;
 
-  /// True if the Flutter project is using the AndroidX support library.
   bool get usesAndroidX => parent.usesAndroidX;
 
-  /// Returns true if the current version of the Gradle plugin is supported.
   late final bool isSupportedVersion = _computeSupportedVersion();
 
-  /// Gets all build variants of this project.
   Future<List<String>> getBuildVariants() async {
     if (!existsSync() || androidBuilder == null) {
       return const <String>[];
@@ -488,10 +406,6 @@ class AndroidProject extends FlutterProjectPlatform {
     return androidBuilder!.getBuildVariants(project: parent);
   }
 
-  /// Outputs app link related settings into a json file.
-  ///
-  /// The file is stored in
-  /// `<project>/build/app/app-link-settings-<variant>.json`.
   Future<void> outputsAppLinkSettings({required String variant}) async {
     if (!existsSync() || androidBuilder == null) {
       return;
@@ -533,15 +447,12 @@ class AndroidProject extends FlutterProjectPlatform {
     return false;
   }
 
-  /// True, if the app project is using Kotlin.
   bool get isKotlin {
     final bool imperativeMatch = firstMatchInFile(appGradleFile, _imperativeKotlinPluginPattern) != null;
     final bool declarativeMatch = firstMatchInFile(appGradleFile, _declarativeKotlinPluginPattern) != null;
     return imperativeMatch || declarativeMatch;
   }
 
-  /// Gets the module-level build.gradle file.
-  /// See https://developer.android.com/build#module-level.
   File get appGradleFile => hostAppGradleRoot.childDirectory('app')
       .childFile('build.gradle');
 
@@ -563,16 +474,11 @@ class AndroidProject extends FlutterProjectPlatform {
     return globals.fs.directory(globals.fs.path.join(hostAppGradleRoot.path, 'app', 'build', 'outputs', 'apk'));
   }
 
-  /// Whether the current flutter project has an Android sub-project.
   @override
   bool existsSync() {
     return parent.isModule || _editableHostAppDirectory.existsSync();
   }
 
-  /// Check if the versions of Java, Gradle and AGP are compatible.
-  ///
-  /// This is expected to be called from
-  /// flutter_tools/lib/src/project_validator.dart.
   Future<ProjectValidatorResult> validateJavaAndGradleAgpVersions() async {
     // Constructing ProjectValidatorResult happens here and not in
     // flutter_tools/lib/src/project_validator.dart because of the additional
@@ -591,9 +497,6 @@ class AndroidProject extends FlutterProjectPlatform {
     );
   }
 
-  /// Ensures Java SDK is compatible with the project's Gradle version and
-  /// the project's Gradle version is compatible with the AGP version used
-  /// in build.gradle.
   Future<CompatibilityResult> hasValidJavaGradleAgpVersions() async {
     final String? gradleVersion = await gradle.getGradleVersion(
         hostAppGradleRoot, globals.logger, globals.processManager);
@@ -642,8 +545,6 @@ $javaGradleCompatUrl
     return firstMatchInFile(appGradleFile, _applicationIdPattern)?.group(1);
   }
 
-  /// Get the namespace for newer Android projects,
-  /// which replaces the `package` attribute in the Manifest.xml.
   String? get namespace {
     try {
       // firstMatchInFile() reads per line but `_androidNamespacePattern` matches a multiline pattern.
@@ -658,7 +559,6 @@ $javaGradleCompatUrl
     return firstMatchInFile(gradleFile, _groupPattern)?.group(1);
   }
 
-  /// The build directory where the Android artifacts are placed.
   Directory get buildDirectory {
     return parent.buildDirectory;
   }
@@ -822,24 +722,16 @@ The detected reason was:
   }
 }
 
-/// Iteration of the embedding Java API in the engine used by the Android project.
 enum AndroidEmbeddingVersion {
-  /// V1 APIs based on io.flutter.app.FlutterActivity.
   v1,
-  /// V2 APIs based on io.flutter.embedding.android.FlutterActivity.
   v2,
 }
 
-/// Data class that holds the results of checking for embedding version.
-///
-/// This class includes the reason why a particular embedding was selected.
 class AndroidEmbeddingVersionResult {
   AndroidEmbeddingVersionResult(this.version, this.reason);
 
-  /// The embedding version.
   AndroidEmbeddingVersion version;
 
-  /// The reason why the embedding version was selected.
   String reason;
 }
 
@@ -853,7 +745,6 @@ enum DeprecationBehavior {
   exit,
 }
 
-/// Represents the web sub-project of a Flutter project.
 class WebProject extends FlutterProjectPlatform {
   WebProject._(this.parent);
 
@@ -862,32 +753,25 @@ class WebProject extends FlutterProjectPlatform {
   @override
   String get pluginConfigKey => WebPlugin.kConfigKey;
 
-  /// Whether this flutter project has a web sub-project.
   @override
   bool existsSync() {
     return parent.directory.childDirectory('web').existsSync()
       && indexFile.existsSync();
   }
 
-  /// The 'lib' directory for the application.
   Directory get libDirectory => parent.directory.childDirectory('lib');
 
-  /// The directory containing additional files for the application.
   Directory get directory => parent.directory.childDirectory('web');
 
-  /// The html file used to host the flutter web application.
   File get indexFile => parent.directory
       .childDirectory('web')
       .childFile('index.html');
 
-  /// The .dart_tool/dartpad directory
   Directory get dartpadToolDirectory => parent.directory
       .childDirectory('.dart_tool')
       .childDirectory('dartpad');
 
   Future<void> ensureReadyForPlatformSpecificTooling() async {
-    /// Create .dart_tool/dartpad/web_plugin_registrant.dart.
-    /// See: https://github.com/dart-lang/dart-services/pull/874
     await injectBuildTimePluginFiles(
       parent,
       destination: dartpadToolDirectory,
@@ -896,7 +780,6 @@ class WebProject extends FlutterProjectPlatform {
   }
 }
 
-/// The Fuchsia sub project.
 class FuchsiaProject {
   FuchsiaProject._(this.project);
 
@@ -922,7 +805,6 @@ class CompatibilityResult {
   final String description;
 }
 
-/// Converts a [Version] to a string that can be parsed by [Version.parse].
 String? versionToParsableString(Version? version) {
   if (version == null) {
     return null;

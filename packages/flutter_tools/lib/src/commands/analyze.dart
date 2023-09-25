@@ -169,7 +169,6 @@ class AnalyzeCommand extends FlutterCommand {
     );
   }
 
-  /// The working directory for testing analysis using dartanalyzer.
   final Directory? workingDirectory;
 
   final Artifacts _artifacts;

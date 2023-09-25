@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-///
 //  Generated code. Do not modify.
 //  source: conductor_state.proto
 //
@@ -27,7 +26,6 @@ const ReleasePhase$json = const {
   ],
 };
 
-/// Descriptor for `ReleasePhase`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List releasePhaseDescriptor = $convert.base64Decode(
     'CgxSZWxlYXNlUGhhc2USHAoYQVBQTFlfRU5HSU5FX0NIRVJSWVBJQ0tTEAASHAoYQ09ERVNJR05fRU5HSU5FX0JJTkFSSUVTEAESHwobQVBQTFlfRlJBTUVXT1JLX0NIRVJSWVBJQ0tTEAISEwoPUFVCTElTSF9WRVJTSU9OEAMSEwoPUFVCTElTSF9DSEFOTkVMEAQSEgoOVkVSSUZZX1JFTEVBU0UQBRIVChFSRUxFQVNFX0NPTVBMRVRFRBAG');
 @$core.Deprecated('Use cherrypickStateDescriptor instead')
@@ -41,7 +39,6 @@ const CherrypickState$json = const {
   ],
 };
 
-/// Descriptor for `CherrypickState`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List cherrypickStateDescriptor = $convert.base64Decode(
     'Cg9DaGVycnlwaWNrU3RhdGUSCwoHUEVORElORxAAEhkKFVBFTkRJTkdfV0lUSF9DT05GTElDVBABEg0KCUNPTVBMRVRFRBACEg0KCUFCQU5ET05FRBAD');
 @$core.Deprecated('Use releaseTypeDescriptor instead')
@@ -55,7 +52,6 @@ const ReleaseType$json = const {
   ],
 };
 
-/// Descriptor for `ReleaseType`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List releaseTypeDescriptor = $convert.base64Decode(
     'CgtSZWxlYXNlVHlwZRISCg5TVEFCTEVfSU5JVElBTBAAEhEKDVNUQUJMRV9IT1RGSVgQARIQCgxCRVRBX0lOSVRJQUwQAhIPCgtCRVRBX0hPVEZJWBAD');
 @$core.Deprecated('Use remoteDescriptor instead')
@@ -67,7 +63,6 @@ const Remote$json = const {
   ],
 };
 
-/// Descriptor for `Remote`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List remoteDescriptor =
     $convert.base64Decode('CgZSZW1vdGUSEgoEbmFtZRgBIAEoCVIEbmFtZRIQCgN1cmwYAiABKAlSA3VybA==');
 @$core.Deprecated('Use cherrypickDescriptor instead')
@@ -80,7 +75,6 @@ const Cherrypick$json = const {
   ],
 };
 
-/// Descriptor for `Cherrypick`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List cherrypickDescriptor = $convert.base64Decode(
     'CgpDaGVycnlwaWNrEiQKDXRydW5rUmV2aXNpb24YASABKAlSDXRydW5rUmV2aXNpb24SKAoPYXBwbGllZFJldmlzaW9uGAIgASgJUg9hcHBsaWVkUmV2aXNpb24SNgoFc3RhdGUYAyABKA4yIC5jb25kdWN0b3Jfc3RhdGUuQ2hlcnJ5cGlja1N0YXRlUgVzdGF0ZQ==');
 @$core.Deprecated('Use repositoryDescriptor instead')
@@ -99,7 +93,6 @@ const Repository$json = const {
   ],
 };
 
-/// Descriptor for `Repository`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List repositoryDescriptor = $convert.base64Decode(
     'CgpSZXBvc2l0b3J5EigKD2NhbmRpZGF0ZUJyYW5jaBgBIAEoCVIPY2FuZGlkYXRlQnJhbmNoEigKD3N0YXJ0aW5nR2l0SGVhZBgCIAEoCVIPc3RhcnRpbmdHaXRIZWFkEiYKDmN1cnJlbnRHaXRIZWFkGAMgASgJUg5jdXJyZW50R2l0SGVhZBIiCgxjaGVja291dFBhdGgYBCABKAlSDGNoZWNrb3V0UGF0aBIzCgh1cHN0cmVhbRgFIAEoCzIXLmNvbmR1Y3Rvcl9zdGF0ZS5SZW1vdGVSCHVwc3RyZWFtEi8KBm1pcnJvchgGIAEoCzIXLmNvbmR1Y3Rvcl9zdGF0ZS5SZW1vdGVSBm1pcnJvchI9CgtjaGVycnlwaWNrcxgHIAMoCzIbLmNvbmR1Y3Rvcl9zdGF0ZS5DaGVycnlwaWNrUgtjaGVycnlwaWNrcxIiCgxkYXJ0UmV2aXNpb24YCCABKAlSDGRhcnRSZXZpc2lvbhIkCg13b3JraW5nQnJhbmNoGAkgASgJUg13b3JraW5nQnJhbmNo');
 @$core.Deprecated('Use conductorStateDescriptor instead')
@@ -119,6 +112,5 @@ const ConductorState$json = const {
   ],
 };
 
-/// Descriptor for `ConductorState`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List conductorStateDescriptor = $convert.base64Decode(
     'Cg5Db25kdWN0b3JTdGF0ZRImCg5yZWxlYXNlQ2hhbm5lbBgBIAEoCVIOcmVsZWFzZUNoYW5uZWwSJgoOcmVsZWFzZVZlcnNpb24YAiABKAlSDnJlbGVhc2VWZXJzaW9uEjMKBmVuZ2luZRgEIAEoCzIbLmNvbmR1Y3Rvcl9zdGF0ZS5SZXBvc2l0b3J5UgZlbmdpbmUSOQoJZnJhbWV3b3JrGAUgASgLMhsuY29uZHVjdG9yX3N0YXRlLlJlcG9zaXRvcnlSCWZyYW1ld29yaxIgCgtjcmVhdGVkRGF0ZRgGIAEoA1ILY3JlYXRlZERhdGUSKAoPbGFzdFVwZGF0ZWREYXRlGAcgASgDUg9sYXN0VXBkYXRlZERhdGUSEgoEbG9ncxgIIAMoCVIEbG9ncxJBCgxjdXJyZW50UGhhc2UYCSABKA4yHS5jb25kdWN0b3Jfc3RhdGUuUmVsZWFzZVBoYXNlUgxjdXJyZW50UGhhc2USKgoQY29uZHVjdG9yVmVyc2lvbhgKIAEoCVIQY29uZHVjdG9yVmVyc2lvbhI+CgtyZWxlYXNlVHlwZRgLIAEoDjIcLmNvbmR1Y3Rvcl9zdGF0ZS5SZWxlYXNlVHlwZVILcmVsZWFzZVR5cGU=');

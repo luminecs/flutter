@@ -32,42 +32,18 @@ export 'package:flutter/services.dart' show TextRange, TextSelection;
 // defaults set in the engine (eg, LibTxt's text_style.h, paragraph_style.h).
 const double _kDefaultFontSize = 14.0;
 
-/// How overflowing text should be handled.
-///
-/// A [TextOverflow] can be passed to [Text] and [RichText] via their
-/// [Text.overflow] and [RichText.overflow] properties respectively.
 enum TextOverflow {
-  /// Clip the overflowing text to fix its container.
   clip,
 
-  /// Fade the overflowing text to transparent.
   fade,
 
-  /// Use an ellipsis to indicate that the text has overflowed.
   ellipsis,
 
-  /// Render overflowing text outside of its container.
   visible,
 }
 
-/// Holds the [Size] and baseline required to represent the dimensions of
-/// a placeholder in text.
-///
-/// Placeholders specify an empty space in the text layout, which is used
-/// to later render arbitrary inline widgets into defined by a [WidgetSpan].
-///
-/// See also:
-///
-///  * [WidgetSpan], a subclass of [InlineSpan] and [PlaceholderSpan] that
-///    represents an inline widget embedded within text. The space this
-///    widget takes is indicated by a placeholder.
-///  * [RichText], a text widget that supports text inline widgets.
 @immutable
 class PlaceholderDimensions {
-  /// Constructs a [PlaceholderDimensions] with the specified parameters.
-  ///
-  /// The `size` and `alignment` are required as a placeholder's dimensions
-  /// require at least `size` and `alignment` to be fully defined.
   const PlaceholderDimensions({
     required this.size,
     required this.alignment,
@@ -75,35 +51,14 @@ class PlaceholderDimensions {
     this.baselineOffset,
   });
 
-  /// A constant representing an empty placeholder.
   static const PlaceholderDimensions empty = PlaceholderDimensions(size: Size.zero, alignment: ui.PlaceholderAlignment.bottom);
 
-  /// Width and height dimensions of the placeholder.
   final Size size;
 
-  /// How to align the placeholder with the text.
-  ///
-  /// See also:
-  ///
-  ///  * [baseline], the baseline to align to when using
-  ///    [dart:ui.PlaceholderAlignment.baseline],
-  ///    [dart:ui.PlaceholderAlignment.aboveBaseline],
-  ///    or [dart:ui.PlaceholderAlignment.belowBaseline].
-  ///  * [baselineOffset], the distance of the alphabetic baseline from the upper
-  ///    edge of the placeholder.
   final ui.PlaceholderAlignment alignment;
 
-  /// Distance of the [baseline] from the upper edge of the placeholder.
-  ///
-  /// Only used when [alignment] is [ui.PlaceholderAlignment.baseline].
   final double? baselineOffset;
 
-  /// The [TextBaseline] to align to. Used with:
-  ///
-  ///  * [ui.PlaceholderAlignment.baseline]
-  ///  * [ui.PlaceholderAlignment.aboveBaseline]
-  ///  * [ui.PlaceholderAlignment.belowBaseline]
-  ///  * [ui.PlaceholderAlignment.middle]
   final TextBaseline? baseline;
 
   @override
@@ -134,36 +89,13 @@ class PlaceholderDimensions {
   }
 }
 
-/// The different ways of measuring the width of one or more lines of text.
-///
-/// See [Text.textWidthBasis], for example.
 enum TextWidthBasis {
-  /// multiline text will take up the full width given by the parent. For single
-  /// line text, only the minimum amount of width needed to contain the text
-  /// will be used. A common use case for this is a standard series of
-  /// paragraphs.
   parent,
 
-  /// The width will be exactly enough to contain the longest line and no
-  /// longer. A common use case for this is chat bubbles.
   longestLine,
 }
 
-/// A [TextBoundary] subclass for locating word breaks.
-///
-/// The underlying implementation uses [UAX #29](https://unicode.org/reports/tr29/)
-/// defined default word boundaries.
-///
-/// The default word break rules can be tailored to meet the requirements of
-/// different use cases. For instance, the default rule set keeps horizontal
-/// whitespaces together as a single word, which may not make sense in a
-/// word-counting context -- "hello    world" counts as 3 words instead of 2.
-/// An example is the [moveByWordBoundary] variant, which is a tailored
-/// word-break locator that more closely matches the default behavior of most
-/// platforms and editors when it comes to handling text editing keyboard
-/// shortcuts that move or delete word by word.
 class WordBoundary extends TextBoundary {
-  /// Creates a [WordBoundary] with the text and layout information.
   WordBoundary._(this._text, this._paragraph);
 
   final InlineSpan _text;
@@ -226,17 +158,6 @@ class WordBoundary extends TextBoundary {
     return hardBreakRulesApply || !RegExp(r'[\p{Space_Separator}\p{Punctuation}]', unicode: true).hasMatch(String.fromCharCode(innerCodePoint));
   }
 
-  /// Returns a [TextBoundary] suitable for handling keyboard navigation
-  /// commands that change the current selection word by word.
-  ///
-  /// This [TextBoundary] is used by text widgets in the flutter framework to
-  /// provide default implementation for text editing shortcuts, for example,
-  /// "delete to the previous word".
-  ///
-  /// The implementation applies the same set of rules [WordBoundary] uses,
-  /// except that word breaks end on a space separator or a punctuation will be
-  /// skipped, to match the behavior of most platforms. Additional rules may be
-  /// added in the future to better match platform behaviors.
   late final TextBoundary moveByWordBoundary = _UntilTextBoundary(this, _skipSpacesAndPunctuations);
 }
 
@@ -277,35 +198,18 @@ class _TextLayout {
   // object when it's no logner needed.
   ui.Paragraph _paragraph;
 
-  /// Whether this layout has been invalidated and disposed.
-  ///
-  /// Only for use when asserts are enabled.
   bool get debugDisposed => _paragraph.debugDisposed;
 
-  /// The horizontal space required to paint this text.
-  ///
-  /// If a line ends with trailing spaces, the trailing spaces may extend
-  /// outside of the horizontal paint bounds defined by [width].
   double get width => _paragraph.width;
 
-  /// The vertical space required to paint this text.
   double get height => _paragraph.height;
 
-  /// The width at which decreasing the width of the text would prevent it from
-  /// painting itself completely within its bounds.
   double get minIntrinsicLineExtent => _paragraph.minIntrinsicWidth;
 
-  /// The width at which increasing the width of the text no longer decreases the height.
-  ///
-  /// Includes trailing spaces if any.
   double get maxIntrinsicLineExtent => _paragraph.maxIntrinsicWidth;
 
-  /// The distance from the left edge of the leftmost glyph to the right edge of
-  /// the rightmost glyph in the paragraph.
   double get longestLine => _paragraph.longestLine;
 
-  /// Returns the distance from the top of the text to the first baseline of the
-  /// given type.
   double getDistanceToBaseline(TextBaseline baseline) {
     return switch (baseline) {
       TextBaseline.alphabetic => _paragraph.alphabeticBaseline,
@@ -408,67 +312,24 @@ class _TextPainterLayoutCacheWithOffset {
   TextPosition? _previousCaretPosition;
 }
 
-/// This is used to cache and pass the computed metrics regarding the
-/// caret's size and position. This is preferred due to the expensive
-/// nature of the calculation.
-///
 // A _CaretMetrics is either a _LineCaretMetrics or an _EmptyLineCaretMetrics.
 @immutable
 sealed class _CaretMetrics { }
 
-/// The _CaretMetrics for carets located in a non-empty line. Carets located in a
-/// non-empty line are associated with a glyph within the same line.
 final class _LineCaretMetrics implements _CaretMetrics {
   const _LineCaretMetrics({required this.offset, required this.writingDirection, required this.fullHeight});
-  /// The offset of the top left corner of the caret from the top left
-  /// corner of the paragraph.
   final Offset offset;
-  /// The writing direction of the glyph the _CaretMetrics is associated with.
   final TextDirection writingDirection;
-  /// The full height of the glyph at the caret position.
   final double fullHeight;
 }
 
-/// The _CaretMetrics for carets located in an empty line (when the text is
-/// empty, or the caret is between two a newline characters).
 final class _EmptyLineCaretMetrics implements _CaretMetrics {
   const _EmptyLineCaretMetrics({ required this.lineVerticalOffset });
 
-  /// The y offset of the unoccupied line.
   final double lineVerticalOffset;
 }
 
-/// An object that paints a [TextSpan] tree into a [Canvas].
-///
-/// To use a [TextPainter], follow these steps:
-///
-/// 1. Create a [TextSpan] tree and pass it to the [TextPainter]
-///    constructor.
-///
-/// 2. Call [layout] to prepare the paragraph.
-///
-/// 3. Call [paint] as often as desired to paint the paragraph.
-///
-/// 4. Call [dispose] when the object will no longer be accessed to release
-///    native resources. For [TextPainter] objects that are used repeatedly and
-///    stored on a [State] or [RenderObject], call [dispose] from
-///    [State.dispose] or [RenderObject.dispose] or similar. For [TextPainter]
-///    objects that are only used ephemerally, it is safe to immediately dispose
-///    them after the last call to methods or properties on the object.
-///
-/// If the width of the area into which the text is being painted
-/// changes, return to step 2. If the text to be painted changes,
-/// return to step 1.
-///
-/// The default text style is white. To change the color of the text,
-/// pass a [TextStyle] object to the [TextSpan] in `text`.
 class TextPainter {
-  /// Creates a text painter that paints the given text.
-  ///
-  /// The `text` and `textDirection` arguments are optional but [text] and
-  /// [textDirection] must be non-null before calling [layout].
-  ///
-  /// The [maxLines] property, if non-null, must be greater than zero.
   TextPainter({
     InlineSpan? text,
     TextAlign textAlign = TextAlign.start,
@@ -500,14 +361,6 @@ class TextPainter {
        _textWidthBasis = textWidthBasis,
        _textHeightBehavior = textHeightBehavior;
 
-  /// Computes the width of a configured [TextPainter].
-  ///
-  /// This is a convenience method that creates a text painter with the supplied
-  /// parameters, lays it out with the supplied [minWidth] and [maxWidth], and
-  /// returns its [TextPainter.width] making sure to dispose the underlying
-  /// resources. Doing this operation is expensive and should be avoided
-  /// whenever it is possible to preserve the [TextPainter] to paint the
-  /// text or get other information about it.
   static double computeWidth({
     required InlineSpan text,
     required TextDirection textDirection,
@@ -552,14 +405,6 @@ class TextPainter {
     }
   }
 
-  /// Computes the max intrinsic width of a configured [TextPainter].
-  ///
-  /// This is a convenience method that creates a text painter with the supplied
-  /// parameters, lays it out with the supplied [minWidth] and [maxWidth], and
-  /// returns its [TextPainter.maxIntrinsicWidth] making sure to dispose the
-  /// underlying resources. Doing this operation is expensive and should be avoided
-  /// whenever it is possible to preserve the [TextPainter] to paint the
-  /// text or get other information about it.
   static double computeMaxIntrinsicWidth({
     required InlineSpan text,
     required TextDirection textDirection,
@@ -636,12 +481,6 @@ class TextPainter {
 
   StackTrace? _debugMarkNeedsLayoutCallStack;
 
-  /// Marks this text painter's layout information as dirty and removes cached
-  /// information.
-  ///
-  /// Uses this method to notify text painter to relayout in the case of
-  /// layout changes in engine. In most cases, updating text painter properties
-  /// in framework will automatically invoke this method.
   void markNeedsLayout() {
     assert(() {
       if (_layoutCache != null) {
@@ -653,14 +492,6 @@ class TextPainter {
     _layoutCache = null;
   }
 
-  /// The (potentially styled) text to paint.
-  ///
-  /// After this is set, you must call [layout] before the next call to [paint].
-  /// This and [textDirection] must be non-null before you call [layout].
-  ///
-  /// The [InlineSpan] this provides is in the form of a tree that may contain
-  /// multiple instances of [TextSpan]s and [WidgetSpan]s. To obtain a plain text
-  /// representation of the contents of this [TextPainter], use [plainText].
   InlineSpan? get text => _text;
   InlineSpan? _text;
   set text(InlineSpan? value) {
@@ -690,20 +521,12 @@ class TextPainter {
     // Neither relayout or repaint is needed.
   }
 
-  /// Returns a plain text version of the text to paint.
-  ///
-  /// This uses [InlineSpan.toPlainText] to get the full contents of all nodes in the tree.
   String get plainText {
     _cachedPlainText ??= _text?.toPlainText(includeSemanticsLabels: false);
     return _cachedPlainText ?? '';
   }
   String? _cachedPlainText;
 
-  /// How the text should be aligned horizontally.
-  ///
-  /// After this is set, you must call [layout] before the next call to [paint].
-  ///
-  /// The [textAlign] property defaults to [TextAlign.start].
   TextAlign get textAlign => _textAlign;
   TextAlign _textAlign;
   set textAlign(TextAlign value) {
@@ -714,21 +537,6 @@ class TextPainter {
     markNeedsLayout();
   }
 
-  /// The default directionality of the text.
-  ///
-  /// This controls how the [TextAlign.start], [TextAlign.end], and
-  /// [TextAlign.justify] values of [textAlign] are resolved.
-  ///
-  /// This is also used to disambiguate how to render bidirectional text. For
-  /// example, if the [text] is an English phrase followed by a Hebrew phrase,
-  /// in a [TextDirection.ltr] context the English phrase will be on the left
-  /// and the Hebrew phrase to its right, while in a [TextDirection.rtl]
-  /// context, the English phrase will be on the right and the Hebrew phrase on
-  /// its left.
-  ///
-  /// After this is set, you must call [layout] before the next call to [paint].
-  ///
-  /// This and [text] must be non-null before you call [layout].
   TextDirection? get textDirection => _textDirection;
   TextDirection? _textDirection;
   set textDirection(TextDirection? value) {
@@ -741,15 +549,6 @@ class TextPainter {
     _layoutTemplate = null; // Shouldn't really matter, but for strict correctness...
   }
 
-  /// Deprecated. Will be removed in a future version of Flutter. Use
-  /// [textScaler] instead.
-  ///
-  /// The number of font pixels for each logical pixel.
-  ///
-  /// For example, if the text scale factor is 1.5, text will be 50% larger than
-  /// the specified font size.
-  ///
-  /// After this is set, you must call [layout] before the next call to [paint].
   @Deprecated(
     'Use textScaler instead. '
     'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
@@ -765,17 +564,6 @@ class TextPainter {
     textScaler = TextScaler.linear(value);
   }
 
-  /// {@template flutter.painting.textPainter.textScaler}
-  /// The font scaling strategy to use when laying out and rendering the text.
-  ///
-  /// The value usually comes from [MediaQuery.textScalerOf], which typically
-  /// reflects the user-specified text scaling value in the platform's
-  /// accessibility settings. The [TextStyle.fontSize] of the text will be
-  /// adjusted by the [TextScaler] before the text is laid out and rendered.
-  /// {@endtemplate}
-  ///
-  /// The [layout] method must be called after [textScaler] changes as it
-  /// affects the text layout.
   TextScaler get textScaler => _textScaler;
   TextScaler _textScaler;
   set textScaler(TextScaler value) {
@@ -788,22 +576,6 @@ class TextPainter {
     _layoutTemplate = null;
   }
 
-  /// The string used to ellipsize overflowing text. Setting this to a non-empty
-  /// string will cause this string to be substituted for the remaining text
-  /// if the text can not fit within the specified maximum width.
-  ///
-  /// Specifically, the ellipsis is applied to the last line before the line
-  /// truncated by [maxLines], if [maxLines] is non-null and that line overflows
-  /// the width constraint, or to the first line that is wider than the width
-  /// constraint, if [maxLines] is null. The width constraint is the `maxWidth`
-  /// passed to [layout].
-  ///
-  /// After this is set, you must call [layout] before the next call to [paint].
-  ///
-  /// The higher layers of the system, such as the [Text] widget, represent
-  /// overflow effects using the [TextOverflow] enum. The
-  /// [TextOverflow.ellipsis] value corresponds to setting this property to
-  /// U+2026 HORIZONTAL ELLIPSIS (…).
   String? get ellipsis => _ellipsis;
   String? _ellipsis;
   set ellipsis(String? value) {
@@ -815,7 +587,6 @@ class TextPainter {
     markNeedsLayout();
   }
 
-  /// The locale used to select region-specific glyphs.
   Locale? get locale => _locale;
   Locale? _locale;
   set locale(Locale? value) {
@@ -826,16 +597,8 @@ class TextPainter {
     markNeedsLayout();
   }
 
-  /// An optional maximum number of lines for the text to span, wrapping if
-  /// necessary.
-  ///
-  /// If the text exceeds the given number of lines, it is truncated such that
-  /// subsequent lines are dropped.
-  ///
-  /// After this is set, you must call [layout] before the next call to [paint].
   int? get maxLines => _maxLines;
   int? _maxLines;
-  /// The value may be null. If it is not null, then it must be greater than zero.
   set maxLines(int? value) {
     assert(value == null || value > 0);
     if (_maxLines == value) {
@@ -845,18 +608,6 @@ class TextPainter {
     markNeedsLayout();
   }
 
-  /// {@template flutter.painting.textPainter.strutStyle}
-  /// The strut style to use. Strut style defines the strut, which sets minimum
-  /// vertical layout metrics.
-  ///
-  /// Omitting or providing null will disable strut.
-  ///
-  /// Omitting or providing null for any properties of [StrutStyle] will result in
-  /// default values being used. It is highly recommended to at least specify a
-  /// [StrutStyle.fontSize].
-  ///
-  /// See [StrutStyle] for details.
-  /// {@endtemplate}
   StrutStyle? get strutStyle => _strutStyle;
   StrutStyle? _strutStyle;
   set strutStyle(StrutStyle? value) {
@@ -867,9 +618,6 @@ class TextPainter {
     markNeedsLayout();
   }
 
-  /// {@template flutter.painting.textPainter.textWidthBasis}
-  /// Defines how to measure the width of the rendered text.
-  /// {@endtemplate}
   TextWidthBasis get textWidthBasis => _textWidthBasis;
   TextWidthBasis _textWidthBasis;
   set textWidthBasis(TextWidthBasis value) {
@@ -880,7 +628,6 @@ class TextPainter {
     _textWidthBasis = value;
   }
 
-  /// {@macro dart.ui.textHeightBehavior}
   ui.TextHeightBehavior? get textHeightBehavior => _textHeightBehavior;
   ui.TextHeightBehavior? _textHeightBehavior;
   set textHeightBehavior(ui.TextHeightBehavior? value) {
@@ -891,11 +638,6 @@ class TextPainter {
     markNeedsLayout();
   }
 
-  /// An ordered list of [TextBox]es that bound the positions of the placeholders
-  /// in the paragraph.
-  ///
-  /// Each box corresponds to a [PlaceholderSpan] in the order they were defined
-  /// in the [InlineSpan] tree.
   List<TextBox>? get inlinePlaceholderBoxes {
     final _TextPainterLayoutCacheWithOffset? layout = _layoutCache;
     if (layout == null) {
@@ -912,15 +654,6 @@ class TextPainter {
     return rawBoxes.map((TextBox box) => _shiftTextBox(box, offset)).toList(growable: false);
   }
 
-  /// Sets the dimensions of each placeholder in [text].
-  ///
-  /// The number of [PlaceholderDimensions] provided should be the same as the
-  /// number of [PlaceholderSpan]s in text. Passing in an empty or null `value`
-  /// will do nothing.
-  ///
-  /// If [layout] is attempted without setting the placeholder dimensions, the
-  /// placeholders will be ignored in the text layout and no valid
-  /// [inlinePlaceholderBoxes] will be returned.
   void setPlaceholderDimensions(List<PlaceholderDimensions>? value) {
     if (value == null || value.isEmpty || listEquals(value, _placeholderDimensions)) {
       return;
@@ -981,83 +714,40 @@ class TextPainter {
       ..layout(const ui.ParagraphConstraints(width: double.infinity));
   }
 
-  /// The height of a space in [text] in logical pixels.
-  ///
-  /// Not every line of text in [text] will have this height, but this height
-  /// is "typical" for text in [text] and useful for sizing other objects
-  /// relative a typical line of text.
-  ///
-  /// Obtaining this value does not require calling [layout].
-  ///
-  /// The style of the [text] property is used to determine the font settings
-  /// that contribute to the [preferredLineHeight]. If [text] is null or if it
-  /// specifies no styles, the default [TextStyle] values are used (a 10 pixel
-  /// sans-serif font).
   double get preferredLineHeight => (_layoutTemplate ??= _createLayoutTemplate()).height;
 
-  /// The width at which decreasing the width of the text would prevent it from
-  /// painting itself completely within its bounds.
-  ///
-  /// Valid only after [layout] has been called.
   double get minIntrinsicWidth {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.minIntrinsicLineExtent;
   }
 
-  /// The width at which increasing the width of the text no longer decreases the height.
-  ///
-  /// Valid only after [layout] has been called.
   double get maxIntrinsicWidth {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.maxIntrinsicLineExtent;
   }
 
-  /// The horizontal space required to paint this text.
-  ///
-  /// Valid only after [layout] has been called.
   double get width {
     assert(_debugAssertTextLayoutIsValid);
     assert(!_debugNeedsRelayout);
     return _layoutCache!.contentWidth;
   }
 
-  /// The vertical space required to paint this text.
-  ///
-  /// Valid only after [layout] has been called.
   double get height {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.height;
   }
 
-  /// The amount of space required to paint this text.
-  ///
-  /// Valid only after [layout] has been called.
   Size get size {
     assert(_debugAssertTextLayoutIsValid);
     assert(!_debugNeedsRelayout);
     return Size(width, height);
   }
 
-  /// Returns the distance from the top of the text to the first baseline of the
-  /// given type.
-  ///
-  /// Valid only after [layout] has been called.
   double computeDistanceToActualBaseline(TextBaseline baseline) {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.layout.getDistanceToBaseline(baseline);
   }
 
-  /// Whether any text was truncated or ellipsized.
-  ///
-  /// If [maxLines] is not null, this is true if there were more lines to be
-  /// drawn than the given [maxLines], and thus at least one line was omitted in
-  /// the output; otherwise it is false.
-  ///
-  /// If [maxLines] is null, this is true if [ellipsis] is not the empty string
-  /// and there was a line that overflowed the `maxWidth` argument passed to
-  /// [layout]; otherwise it is false.
-  ///
-  /// Valid only after [layout] has been called.
   bool get didExceedMaxLines {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.paragraph.didExceedMaxLines;
@@ -1076,15 +766,6 @@ class TextPainter {
     return builder.build();
   }
 
-  /// Computes the visual position of the glyphs for painting the text.
-  ///
-  /// The text will layout with a width that's as close to its max intrinsic
-  /// width (or its longest line, if [textWidthBasis] is set to
-  /// [TextWidthBasis.parent]) as possible while still being greater than or
-  /// equal to `minWidth` and less than or equal to `maxWidth`.
-  ///
-  /// The [text] and [textDirection] properties must be non-null before this is
-  /// called.
   void layout({ double minWidth = 0.0, double maxWidth = double.infinity }) {
     assert(!maxWidth.isNaN);
     assert(!minWidth.isNaN);
@@ -1139,18 +820,6 @@ class TextPainter {
     _layoutCache = newLayoutCache;
   }
 
-  /// Paints the text onto the given canvas at the given offset.
-  ///
-  /// Valid only after [layout] has been called.
-  ///
-  /// If you cannot see the text being painted, check that your text color does
-  /// not conflict with the background on which you are drawing. The default
-  /// text color is white (to contrast with the default black background color),
-  /// so if you are writing an application with a white background, the text
-  /// will not be visible by default.
-  ///
-  /// To set the text style, specify a [TextStyle] when creating the [TextSpan]
-  /// that you pass to the [TextPainter] constructor or to the [text] property.
   void paint(Canvas canvas, Offset offset) {
     final _TextPainterLayoutCacheWithOffset? layoutCache = _layoutCache;
     if (layoutCache == null) {
@@ -1190,27 +859,11 @@ class TextPainter {
     return value >= 0x0 && value <= 0xFFFFF;
   }
 
-  /// Returns true iff the given value is a valid UTF-16 high (first) surrogate.
-  /// The value must be a UTF-16 code unit, meaning it must be in the range
-  /// 0x0000-0xFFFF.
-  ///
-  /// See also:
-  ///   * https://en.wikipedia.org/wiki/UTF-16#Code_points_from_U+010000_to_U+10FFFF
-  ///   * [isLowSurrogate], which checks the same thing for low (second)
-  /// surrogates.
   static bool isHighSurrogate(int value) {
     assert(_isUTF16(value));
     return value & 0xFC00 == 0xD800;
   }
 
-  /// Returns true iff the given value is a valid UTF-16 low (second) surrogate.
-  /// The value must be a UTF-16 code unit, meaning it must be in the range
-  /// 0x0000-0xFFFF.
-  ///
-  /// See also:
-  ///   * https://en.wikipedia.org/wiki/UTF-16#Code_points_from_U+010000_to_U+10FFFF
-  ///   * [isHighSurrogate], which checks the same thing for high (first)
-  /// surrogates.
   static bool isLowSurrogate(int value) {
     assert(_isUTF16(value));
     return value & 0xFC00 == 0xDC00;
@@ -1224,8 +877,6 @@ class TextPainter {
     return value == 0x200F || value == 0x200E;
   }
 
-  /// Returns the closest offset after `offset` at which the input cursor can be
-  /// positioned.
   int? getOffsetAfter(int offset) {
     final int? nextCodeUnit = _text!.codeUnitAt(offset);
     if (nextCodeUnit == null) {
@@ -1235,8 +886,6 @@ class TextPainter {
     return isHighSurrogate(nextCodeUnit) ? offset + 2 : offset + 1;
   }
 
-  /// Returns the closest offset before `offset` at which the input cursor can
-  /// be positioned.
   int? getOffsetBefore(int offset) {
     final int? prevCodeUnit = _text!.codeUnitAt(offset - 1);
     if (prevCodeUnit == null) {
@@ -1363,9 +1012,6 @@ class TextPainter {
     };
   }
 
-  /// Returns the offset at which to paint the caret.
-  ///
-  /// Valid only after [layout] has been called.
   Offset getOffsetForCaret(TextPosition position, Rect caretPrototype) {
     final _CaretMetrics caretMetrics;
     final _TextPainterLayoutCacheWithOffset layoutCache = _layoutCache!;
@@ -1399,11 +1045,6 @@ class TextPainter {
     return Offset(adjustedDx, rawOffset.dy + layoutCache.paintOffset.dy);
   }
 
-  /// {@template flutter.painting.textPainter.getFullHeightForCaret}
-  /// Returns the strut bounded height of the glyph at the given `position`.
-  /// {@endtemplate}
-  ///
-  /// Valid only after [layout] has been called.
   double? getFullHeightForCaret(TextPosition position, Rect caretPrototype) {
     if (position.offset < 0) {
       // TODO(LongCatIsLooong): make this case impossible; see https://github.com/flutter/flutter/issues/79495
@@ -1439,24 +1080,6 @@ class TextPainter {
     return _caretMetrics = metrics ?? const _EmptyLineCaretMetrics(lineVerticalOffset: 0);
   }
 
-  /// Returns a list of rects that bound the given selection.
-  ///
-  /// The [selection] must be a valid range (with [TextSelection.isValid] true).
-  ///
-  /// The [boxHeightStyle] and [boxWidthStyle] arguments may be used to select
-  /// the shape of the [TextBox]s. These properties default to
-  /// [ui.BoxHeightStyle.tight] and [ui.BoxWidthStyle.tight] respectively.
-  ///
-  /// A given selection might have more than one rect if this text painter
-  /// contains bidirectional text because logically contiguous text might not be
-  /// visually contiguous.
-  ///
-  /// Leading or trailing newline characters will be represented by zero-width
-  /// `TextBox`es.
-  ///
-  /// The method only returns `TextBox`es of glyphs that are entirely enclosed by
-  /// the given `selection`: a multi-code-unit glyph will be excluded if only
-  /// part of its code units are in `selection`.
   List<TextBox> getBoxesForSelection(
     TextSelection selection, {
     ui.BoxHeightStyle boxHeightStyle = ui.BoxHeightStyle.tight,
@@ -1481,7 +1104,6 @@ class TextPainter {
       : boxes.map((TextBox box) => _shiftTextBox(box, offset)).toList(growable: false);
   }
 
-  /// Returns the position within the text for the given pixel offset.
   TextPosition getPositionForOffset(Offset offset) {
     assert(_debugAssertTextLayoutIsValid);
     assert(!_debugNeedsRelayout);
@@ -1489,35 +1111,13 @@ class TextPainter {
     return cachedLayout.paragraph.getPositionForOffset(offset - cachedLayout.paintOffset);
   }
 
-  /// {@template flutter.painting.TextPainter.getWordBoundary}
-  /// Returns the text range of the word at the given offset. Characters not
-  /// part of a word, such as spaces, symbols, and punctuation, have word breaks
-  /// on both sides. In such cases, this method will return a text range that
-  /// contains the given text position.
-  ///
-  /// Word boundaries are defined more precisely in Unicode Standard Annex #29
-  /// <http://www.unicode.org/reports/tr29/#Word_Boundaries>.
-  /// {@endtemplate}
   TextRange getWordBoundary(TextPosition position) {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.paragraph.getWordBoundary(position);
   }
 
-  /// {@template flutter.painting.TextPainter.wordBoundaries}
-  /// Returns a [TextBoundary] that can be used to perform word boundary analysis
-  /// on the current [text].
-  ///
-  /// This [TextBoundary] uses word boundary rules defined in [Unicode Standard
-  /// Annex #29](http://www.unicode.org/reports/tr29/#Word_Boundaries).
-  /// {@endtemplate}
-  ///
-  /// Currently word boundary analysis can only be performed after [layout]
-  /// has been called.
   WordBoundary get wordBoundaries => WordBoundary._(text!, _layoutCache!.paragraph);
 
-  /// Returns the text range of the line at the given offset.
-  ///
-  /// The newline (if any) is not returned as part of the range.
   TextRange getLineBoundary(TextPosition position) {
     assert(_debugAssertTextLayoutIsValid);
     return _layoutCache!.paragraph.getLineBoundary(position);
@@ -1551,17 +1151,6 @@ class TextPainter {
     );
   }
 
-  /// Returns the full list of [LineMetrics] that describe in detail the various
-  /// metrics of each laid out line.
-  ///
-  /// The [LineMetrics] list is presented in the order of the lines they represent.
-  /// For example, the first line is in the zeroth index.
-  ///
-  /// [LineMetrics] contains measurements such as ascent, descent, baseline, and
-  /// width for the line as a whole, and may be useful for aligning additional
-  /// widgets to a particular line.
-  ///
-  /// Valid only after [layout] has been called.
   List<ui.LineMetrics> computeLineMetrics() {
     assert(_debugAssertTextLayoutIsValid);
     assert(!_debugNeedsRelayout);
@@ -1578,9 +1167,6 @@ class TextPainter {
 
   bool _disposed = false;
 
-  /// Whether this object has been disposed or not.
-  ///
-  /// Only for use when asserts are enabled.
   bool get debugDisposed {
     bool? disposed;
     assert(() {
@@ -1590,9 +1176,6 @@ class TextPainter {
     return disposed ?? (throw StateError('debugDisposed only available when asserts are on.'));
   }
 
-  /// Releases the resources associated with this painter.
-  ///
-  /// After disposal this painter is unusable.
   void dispose() {
     assert(() {
       _disposed = true;

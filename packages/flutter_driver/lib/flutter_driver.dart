@@ -2,13 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Provides API to test Flutter applications that run on real
-/// devices and emulators.
-///
-/// The application runs in a separate process from the test itself.
-///
-/// This is Flutter's version of Selenium WebDriver (generic web),
-/// Protractor (Angular), Espresso (Android) or Earl Gray (iOS).
 library flutter_driver;
 
 export 'src/common/deserialization_factory.dart';

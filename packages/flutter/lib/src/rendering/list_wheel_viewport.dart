@@ -16,137 +16,26 @@ import 'viewport_offset.dart';
 
 typedef _ChildSizingFunction = double Function(RenderBox child);
 
-/// A delegate used by [RenderListWheelViewport] to manage its children.
-///
-/// [RenderListWheelViewport] during layout will ask the delegate to create
-/// children that are visible in the viewport and remove those that are not.
 abstract class ListWheelChildManager {
-  /// The maximum number of children that can be provided to
-  /// [RenderListWheelViewport].
-  ///
-  /// If non-null, the children will have index in the range
-  /// `[0, childCount - 1]`.
-  ///
-  /// If null, then there's no explicit limits to the range of the children
-  /// except that it has to be contiguous. If [childExistsAt] for a certain
-  /// index returns false, that index is already past the limit.
   int? get childCount;
 
-  /// Checks whether the delegate is able to provide a child widget at the given
-  /// index.
-  ///
-  /// This function is not about whether the child at the given index is
-  /// attached to the [RenderListWheelViewport] or not.
   bool childExistsAt(int index);
 
-  /// Creates a new child at the given index and updates it to the child list
-  /// of [RenderListWheelViewport]. If no child corresponds to `index`, then do
-  /// nothing.
-  ///
-  /// It is possible to create children with negative indices.
   void createChild(int index, { required RenderBox? after });
 
-  /// Removes the child element corresponding with the given RenderBox.
   void removeChild(RenderBox child);
 }
 
-/// [ParentData] for use with [RenderListWheelViewport].
 class ListWheelParentData extends ContainerBoxParentData<RenderBox> {
-  /// Index of this child in its parent's child list.
-  ///
-  /// This must be maintained by the [ListWheelChildManager].
   int? index;
 
-  /// Transform applied to this child during painting.
-  ///
-  /// Can be used to find the local bounds of this child in the viewport,
-  /// and then use it, for example, in hit testing.
-  ///
-  /// May be null if child was laid out, but not painted
-  /// by the parent, but normally this shouldn't happen,
-  /// because [RenderListWheelViewport] paints all of the
-  /// children it has laid out.
   Matrix4? transform;
 }
 
-/// Render, onto a wheel, a bigger sequential set of objects inside this viewport.
-///
-/// Takes a scrollable set of fixed sized [RenderBox]es and renders them
-/// sequentially from top down on a vertical scrolling axis.
-///
-/// It starts with the first scrollable item in the center of the main axis
-/// and ends with the last scrollable item in the center of the main axis. This
-/// is in contrast to typical lists that start with the first scrollable item
-/// at the start of the main axis and ends with the last scrollable item at the
-/// end of the main axis.
-///
-/// Instead of rendering its children on a flat plane, it renders them
-/// as if each child is broken into its own plane and that plane is
-/// perpendicularly fixed onto a cylinder which rotates along the scrolling
-/// axis.
-///
-/// This class works in 3 coordinate systems:
-///
-/// 1. The **scrollable layout coordinates**. This coordinate system is used to
-///    communicate with [ViewportOffset] and describes its children's abstract
-///    offset from the beginning of the scrollable list at (0.0, 0.0).
-///
-///    The list is scrollable from the start of the first child item to the
-///    start of the last child item.
-///
-///    Children's layout coordinates don't change as the viewport scrolls.
-///
-/// 2. The **untransformed plane's viewport painting coordinates**. Children are
-///    not painted in this coordinate system. It's an abstract intermediary used
-///    before transforming into the next cylindrical coordinate system.
-///
-///    This system is the **scrollable layout coordinates** translated by the
-///    scroll offset such that (0.0, 0.0) is the top left corner of the
-///    viewport.
-///
-///    Because the viewport is centered at the scrollable list's scroll offset
-///    instead of starting at the scroll offset, there are paintable children
-///    ~1/2 viewport length before and after the scroll offset instead of ~1
-///    viewport length after the scroll offset.
-///
-///    Children's visibility inclusion in the viewport is determined in this
-///    system regardless of the cylinder's properties such as [diameterRatio]
-///    or [perspective]. In other words, a 100px long viewport will always
-///    paint 10-11 visible 10px children if there are enough children in the
-///    viewport.
-///
-/// 3. The **transformed cylindrical space viewport painting coordinates**.
-///    Children from system 2 get their positions transformed into a cylindrical
-///    projection matrix instead of its Cartesian offset with respect to the
-///    scroll offset.
-///
-///    Children in this coordinate system are painted.
-///
-///    The wheel's size and the maximum and minimum visible angles are both
-///    controlled by [diameterRatio]. Children visible in the **untransformed
-///    plane's viewport painting coordinates**'s viewport will be radially
-///    evenly laid out between the maximum and minimum angles determined by
-///    intersecting the viewport's main axis length with a cylinder whose
-///    diameter is [diameterRatio] times longer, as long as those angles are
-///    between -pi/2 and pi/2.
-///
-///    For example, if [diameterRatio] is 2.0 and this [RenderListWheelViewport]
-///    is 100.0px in the main axis, then the diameter is 200.0. And children
-///    will be evenly laid out between that cylinder's -arcsin(1/2) and
-///    arcsin(1/2) angles.
-///
-///    The cylinder's 0 degree side is always centered in the
-///    [RenderListWheelViewport]. The transformation from **untransformed
-///    plane's viewport painting coordinates** is also done such that the child
-///    in the center of that plane will be mostly untransformed with children
-///    above and below it being transformed more as the angle increases.
 class RenderListWheelViewport
     extends RenderBox
     with ContainerRenderObjectMixin<RenderBox, ListWheelParentData>
     implements RenderAbstractViewport {
-  /// Creates a [RenderListWheelViewport] which renders children on a wheel.
-  ///
-  /// Optional arguments have reasonable defaults.
   RenderListWheelViewport({
     required this.childManager,
     required ViewportOffset offset,
@@ -186,40 +75,24 @@ class RenderListWheelViewport
     addAll(children);
   }
 
-  /// An arbitrary but aesthetically reasonable default value for [diameterRatio].
   static const double defaultDiameterRatio = 2.0;
 
-  /// An arbitrary but aesthetically reasonable default value for [perspective].
   static const double defaultPerspective = 0.003;
 
-  /// An error message to show when the provided [diameterRatio] is zero.
   static const String diameterRatioZeroMessage = "You can't set a diameterRatio "
       'of 0 or of a negative number. It would imply a cylinder of 0 in diameter '
       'in which case nothing will be drawn.';
 
-  /// An error message to show when the [perspective] value is too high.
   static const String perspectiveTooHighMessage = 'A perspective too high will '
       'be clipped in the z-axis and therefore not renderable. Value must be '
       'between 0 and 0.01.';
 
-  /// An error message to show when [clipBehavior] and [renderChildrenOutsideViewport]
-  /// are set to conflicting values.
   static const String clipBehaviorAndRenderChildrenOutsideViewportConflict =
       'Cannot renderChildrenOutsideViewport and clip since children '
       'rendered outside will be clipped anyway.';
 
-  /// The delegate that manages the children of this object.
-  ///
-  /// This delegate must maintain the [ListWheelParentData.index] value.
   final ListWheelChildManager childManager;
 
-  /// The associated ViewportOffset object for the viewport describing the part
-  /// of the content inside that's visible.
-  ///
-  /// The [ViewportOffset.pixels] value determines the scroll offset that the
-  /// viewport uses to select which part of its content to display. As the user
-  /// scrolls the viewport, this value changes, which changes the content that
-  /// is displayed.
   ViewportOffset get offset => _offset;
   ViewportOffset _offset;
   set offset(ViewportOffset value) {
@@ -236,34 +109,6 @@ class RenderListWheelViewport
     markNeedsLayout();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.diameterRatio}
-  /// A ratio between the diameter of the cylinder and the viewport's size
-  /// in the main axis.
-  ///
-  /// A value of 1 means the cylinder has the same diameter as the viewport's
-  /// size.
-  ///
-  /// A value smaller than 1 means items at the edges of the cylinder are
-  /// entirely contained inside the viewport.
-  ///
-  /// A value larger than 1 means angles less than ±[pi] / 2 from the
-  /// center of the cylinder are visible.
-  ///
-  /// The same number of children will be visible in the viewport regardless of
-  /// the [diameterRatio]. The number of children visible is based on the
-  /// viewport's length along the main axis divided by the children's
-  /// [itemExtent]. Then the children are evenly distributed along the visible
-  /// angles up to ±[pi] / 2.
-  ///
-  /// Just as it's impossible to stretch a paper to cover the an entire
-  /// half of a cylinder's surface where the cylinder has the same diameter
-  /// as the paper's length, choosing a [diameterRatio] smaller than [pi]
-  /// will leave same gaps between the children.
-  ///
-  /// Defaults to an arbitrary but aesthetically reasonable number of 2.0.
-  ///
-  /// Must be a positive number.
-  /// {@endtemplate}
   double get diameterRatio => _diameterRatio;
   double _diameterRatio;
   set diameterRatio(double value) {
@@ -279,20 +124,6 @@ class RenderListWheelViewport
     markNeedsSemanticsUpdate();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.perspective}
-  /// Perspective of the cylindrical projection.
-  ///
-  /// A number between 0 and 0.01 where 0 means looking at the cylinder from
-  /// infinitely far with an infinitely small field of view and 1 means looking
-  /// at the cylinder from infinitely close with an infinitely large field of
-  /// view (which cannot be rendered).
-  ///
-  /// Defaults to an arbitrary but aesthetically reasonable number of 0.003.
-  /// A larger number brings the vanishing point closer and a smaller number
-  /// pushes the vanishing point further.
-  ///
-  /// Must be a positive number.
-  /// {@endtemplate}
   double get perspective => _perspective;
   double _perspective;
   set perspective(double value) {
@@ -309,31 +140,7 @@ class RenderListWheelViewport
     markNeedsSemanticsUpdate();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.offAxisFraction}
-  /// How much the wheel is horizontally off-center, as a fraction of its width.
 
-  /// This property creates the visual effect of looking at a vertical wheel from
-  /// its side where its vanishing points at the edge curves to one side instead
-  /// of looking at the wheel head-on.
-  ///
-  /// The value is horizontal distance between the wheel's center and the vertical
-  /// vanishing line at the edges of the wheel, represented as a fraction of the
-  /// wheel's width.
-  ///
-  /// The value `0.0` means the wheel is looked at head-on and its vanishing
-  /// line runs through the center of the wheel. Negative values means moving
-  /// the wheel to the left of the observer, thus the edges curve to the right.
-  /// Positive values means moving the wheel to the right of the observer,
-  /// thus the edges curve to the left.
-  ///
-  /// The visual effect causes the wheel's edges to curve rather than moving
-  /// the center. So a value of `0.5` means the edges' vanishing line will touch
-  /// the wheel's size's left edge.
-  ///
-  /// Defaults to `0.0`, which means looking at the wheel head-on.
-  /// The visual effect can be unaesthetic if this value is too far from the
-  /// range `[-0.5, 0.5]`.
-  /// {@endtemplate}
   double get offAxisFraction => _offAxisFraction;
   double _offAxisFraction = 0.0;
   set offAxisFraction(double value) {
@@ -344,9 +151,6 @@ class RenderListWheelViewport
     markNeedsPaint();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.useMagnifier}
-  /// Whether to use the magnifier for the center item of the wheel.
-  /// {@endtemplate}
   bool get useMagnifier => _useMagnifier;
   bool _useMagnifier = false;
   set useMagnifier(bool value) {
@@ -356,16 +160,6 @@ class RenderListWheelViewport
     _useMagnifier = value;
     markNeedsPaint();
   }
-  /// {@template flutter.rendering.RenderListWheelViewport.magnification}
-  /// The zoomed-in rate of the magnifier, if it is used.
-  ///
-  /// The default value is 1.0, which will not change anything.
-  /// If the value is > 1.0, the center item will be zoomed in by that rate, and
-  /// it will also be rendered as flat, not cylindrical like the rest of the list.
-  /// The item will be zoomed out if magnification < 1.0.
-  ///
-  /// Must be positive.
-  /// {@endtemplate}
   double get magnification => _magnification;
   double _magnification = 1.0;
   set magnification(double value) {
@@ -377,14 +171,6 @@ class RenderListWheelViewport
     markNeedsPaint();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.overAndUnderCenterOpacity}
-  /// The opacity value that will be applied to the wheel that appears below and
-  /// above the magnifier.
-  ///
-  /// The default value is 1.0, which will not change anything.
-  ///
-  /// Must be greater than or equal to 0, and less than or equal to 1.
-  /// {@endtemplate}
   double get overAndUnderCenterOpacity => _overAndUnderCenterOpacity;
   double _overAndUnderCenterOpacity = 1.0;
   set overAndUnderCenterOpacity(double value) {
@@ -396,12 +182,6 @@ class RenderListWheelViewport
     markNeedsPaint();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.itemExtent}
-  /// The size of the children along the main axis. Children [RenderBox]es will
-  /// be given the [BoxConstraints] of this exact size.
-  ///
-  /// Must be a positive number.
-  /// {@endtemplate}
   double get itemExtent => _itemExtent;
   double _itemExtent;
   set itemExtent(double value) {
@@ -414,26 +194,6 @@ class RenderListWheelViewport
   }
 
 
-  /// {@template flutter.rendering.RenderListWheelViewport.squeeze}
-  /// The angular compactness of the children on the wheel.
-  ///
-  /// This denotes a ratio of the number of children on the wheel vs the number
-  /// of children that would fit on a flat list of equivalent size, assuming
-  /// [diameterRatio] of 1.
-  ///
-  /// For instance, if this RenderListWheelViewport has a height of 100px and
-  /// [itemExtent] is 20px, 5 items would fit on an equivalent flat list.
-  /// With a [squeeze] of 1, 5 items would also be shown in the
-  /// RenderListWheelViewport. With a [squeeze] of 2, 10 items would be shown
-  /// in the RenderListWheelViewport.
-  ///
-  /// Changing this value will change the number of children built and shown
-  /// inside the wheel.
-  ///
-  /// Must be a positive number.
-  /// {@endtemplate}
-  ///
-  /// Defaults to 1.
   double get squeeze => _squeeze;
   double _squeeze;
   set squeeze(double value) {
@@ -446,16 +206,6 @@ class RenderListWheelViewport
     markNeedsSemanticsUpdate();
   }
 
-  /// {@template flutter.rendering.RenderListWheelViewport.renderChildrenOutsideViewport}
-  /// Whether to paint children inside the viewport only.
-  ///
-  /// If false, every child will be painted. However the [Scrollable] is still
-  /// the size of the viewport and detects gestures inside only.
-  ///
-  /// Defaults to false. Cannot be true if [clipBehavior] is not [Clip.none]
-  /// since children outside the viewport will be clipped, and therefore cannot
-  /// render children outside the viewport.
-  /// {@endtemplate}
   bool get renderChildrenOutsideViewport => _renderChildrenOutsideViewport;
   bool _renderChildrenOutsideViewport;
   set renderChildrenOutsideViewport(bool value) {
@@ -471,9 +221,6 @@ class RenderListWheelViewport
     markNeedsSemanticsUpdate();
   }
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.hardEdge].
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior = Clip.hardEdge;
   set clipBehavior(Clip value) {
@@ -511,14 +258,11 @@ class RenderListWheelViewport
   @override
   bool get isRepaintBoundary => true;
 
-  /// Main axis length in the untransformed plane.
   double get _viewportExtent {
     assert(hasSize);
     return size.height;
   }
 
-  /// Main axis scroll extent in the **scrollable layout coordinates** that puts
-  /// the first item in the center.
   double get _minEstimatedScrollExtent {
     assert(hasSize);
     if (childManager.childCount == null) {
@@ -527,8 +271,6 @@ class RenderListWheelViewport
     return 0.0;
   }
 
-  /// Main axis scroll extent in the **scrollable layout coordinates** that puts
-  /// the last item in the center.
   double get _maxEstimatedScrollExtent {
     assert(hasSize);
     if (childManager.childCount == null) {
@@ -538,32 +280,16 @@ class RenderListWheelViewport
     return math.max(0.0, (childManager.childCount! - 1) * _itemExtent);
   }
 
-  /// Scroll extent distance in the untransformed plane between the center
-  /// position in the viewport and the top position in the viewport.
-  ///
-  /// It's also the distance in the untransformed plane that children's painting
-  /// is offset by with respect to those children's [BoxParentData.offset].
   double get _topScrollMarginExtent {
     assert(hasSize);
     // Consider adding alignment options other than center.
     return -size.height / 2.0 + _itemExtent / 2.0;
   }
 
-  /// Transforms a **scrollable layout coordinates**' y position to the
-  /// **untransformed plane's viewport painting coordinates**' y position given
-  /// the current scroll offset.
   double _getUntransformedPaintingCoordinateY(double layoutCoordinateY) {
     return layoutCoordinateY - _topScrollMarginExtent - offset.pixels;
   }
 
-  /// Given the _diameterRatio, return the largest absolute angle of the item
-  /// at the edge of the portion of the visible cylinder.
-  ///
-  /// For a _diameterRatio of 1 or less than 1 (i.e. the viewport is bigger
-  /// than the cylinder diameter), this value reaches and clips at pi / 2.
-  ///
-  /// When the center of children passes this angle, they are no longer painted
-  /// if [renderChildrenOutsideViewport] is false.
   double get _maxVisibleRadian {
     if (_diameterRatio < 1.0) {
       return math.pi / 2.0;
@@ -619,19 +345,14 @@ class RenderListWheelViewport
     return constraints.biggest;
   }
 
-  /// Gets the index of a child by looking at its [parentData].
-  ///
-  /// This relies on the [childManager] maintaining [ListWheelParentData.index].
   int indexOf(RenderBox child) {
     final ListWheelParentData childParentData = child.parentData! as ListWheelParentData;
     assert(childParentData.index != null);
     return childParentData.index!;
   }
 
-  /// Returns the index of the child at the given offset.
   int scrollOffsetToIndex(double scrollOffset) => (scrollOffset / itemExtent).floor();
 
-  /// Returns the scroll offset of the child with the given index.
   double indexToScrollOffset(int index) => index * itemExtent;
 
   void _createChild(int index, { RenderBox? after }) {
@@ -656,15 +377,6 @@ class RenderListWheelViewport
     childParentData.offset = Offset(crossPosition, indexToScrollOffset(index));
   }
 
-  /// Performs layout based on how [childManager] provides children.
-  ///
-  /// From the current scroll offset, the minimum index and maximum index that
-  /// is visible in the viewport can be calculated. The index range of the
-  /// currently active children can also be acquired by looking directly at
-  /// the current child list. This function has to modify the current index
-  /// range to match the target index range by removing children that are no
-  /// longer visible and creating those that are visible but not yet provided
-  /// by [childManager].
   @override
   void performLayout() {
     offset.applyViewportDimension(_viewportExtent);
@@ -825,7 +537,6 @@ class RenderListWheelViewport
     super.dispose();
   }
 
-  /// Paints all children visible in the current viewport.
   void _paintVisibleChildren(PaintingContext context, Offset offset) {
     // The magnifier cannot be turned off if the opacity is less than 1.0.
     if (overAndUnderCenterOpacity >= 1) {
@@ -1038,8 +749,6 @@ class RenderListWheelViewport
     childParentData.transform = transform;
   }
 
-  /// Return the Matrix4 transformation that would zoom in content in the
-  /// magnified area.
   Matrix4 _magnifyTransform() {
     final Matrix4 magnify = Matrix4.identity();
     magnify.translate(size.width * (-_offAxisFraction + 0.5), size.height / 2);
@@ -1048,8 +757,6 @@ class RenderListWheelViewport
     return magnify;
   }
 
-  /// Apply incoming transformation with the transformation's origin at the
-  /// viewport's center or horizontally off to the side based on offAxisFraction.
   Matrix4 _centerOriginTransform(Matrix4 originalMatrix) {
     final Matrix4 result = Matrix4.identity();
     final Offset centerOriginTranslation = Alignment.center.alongSize(size);

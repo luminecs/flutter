@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for custom labeled radio.
 
 void main() => runApp(const LabeledRadioApp());
 

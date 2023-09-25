@@ -17,8 +17,6 @@ enum TerminalColor {
   grey,
 }
 
-/// A class that contains the context settings for command text output to the
-/// console.
 class OutputPreferences {
   OutputPreferences({
     bool? wrapText,
@@ -30,36 +28,20 @@ class OutputPreferences {
        _overrideWrapColumn = wrapColumn,
        showColor = showColor ?? false;
 
-  /// A version of this class for use in tests.
   OutputPreferences.test({this.wrapText = false, int wrapColumn = kDefaultTerminalColumns, this.showColor = false})
     : _overrideWrapColumn = wrapColumn, _stdio = null;
 
   final io.Stdio? _stdio;
 
-  /// If [wrapText] is true, then any text sent to the context's [Logger]
-  /// instance (e.g. from the [printError] or [printStatus] functions) will be
-  /// wrapped (newlines added between words) to be no longer than the
-  /// [wrapColumn] specifies. Defaults to true if there is a terminal. To
-  /// determine if there's a terminal, [OutputPreferences] asks the context's
-  /// stdio.
   final bool wrapText;
 
-  /// The terminal width used by the [wrapText] function if there is no terminal
-  /// attached to [io.Stdio], --wrap is on, and --wrap-columns was not specified.
   static const int kDefaultTerminalColumns = 100;
 
-  /// The column at which output sent to the context's [Logger] instance
-  /// (e.g. from the [printError] or [printStatus] functions) will be wrapped.
-  /// Ignored if [wrapText] is false. Defaults to the width of the output
-  /// terminal, or to [kDefaultTerminalColumns] if not writing to a terminal.
   final int? _overrideWrapColumn;
   int get wrapColumn {
     return _overrideWrapColumn ?? _stdio?.terminalColumns ?? kDefaultTerminalColumns;
   }
 
-  /// Whether or not to output ANSI color codes when writing to the output
-  /// terminal. Defaults to whatever [platform.stdoutSupportsAnsi] says if
-  /// writing to a terminal, and false otherwise.
   final bool showColor;
 
   @override
@@ -68,47 +50,24 @@ class OutputPreferences {
   }
 }
 
-/// The command line terminal, if available.
 abstract class Terminal {
-  /// Create a new test [Terminal].
-  ///
-  /// If not specified, [supportsColor] defaults to `false`.
   factory Terminal.test({bool supportsColor, bool supportsEmoji}) = _TestTerminal;
 
-  /// Whether the current terminal supports color escape codes.
-  ///
-  /// Check [isCliAnimationEnabled] as well before using `\r` or ANSI sequences
-  /// to perform animations.
   bool get supportsColor;
 
-  /// Whether to show animations on this terminal.
   bool get isCliAnimationEnabled;
 
-  /// Whether the current terminal can display emoji.
   bool get supportsEmoji;
 
-  /// When we have a choice of styles (e.g. animated spinners), this selects the
-  /// style to use.
   int get preferredStyle;
 
-  /// Whether we are interacting with the flutter tool via the terminal.
-  ///
-  /// If not set, defaults to false.
   bool get usesTerminalUi;
   set usesTerminalUi(bool value);
 
-  /// Whether there is a terminal attached to stdin.
-  ///
-  /// If true, this usually indicates that a user is using the CLI as
-  /// opposed to using an IDE. This can be used to determine
-  /// whether it is appropriate to show a terminal prompt,
-  /// or whether an automatic selection should be made instead.
   bool get stdinHasTerminal;
 
-  /// Warning mark to use in stdout or stderr.
   String get warningMark;
 
-  /// Success mark to use in stdout.
   String get successMark;
 
   String bolden(String message);
@@ -120,30 +79,8 @@ abstract class Terminal {
   bool get singleCharMode;
   set singleCharMode(bool value);
 
-  /// Return keystrokes from the console.
-  ///
-  /// This is a single-subscription stream. This stream may be closed before
-  /// the application exits.
-  ///
-  /// Useful when the console is in [singleCharMode].
   Stream<String> get keystrokes;
 
-  /// Prompts the user to input a character within a given list. Re-prompts if
-  /// entered character is not in the list.
-  ///
-  /// The `prompt`, if non-null, is the text displayed prior to waiting for user
-  /// input each time. If `prompt` is non-null and `displayAcceptedCharacters`
-  /// is true, the accepted keys are printed next to the `prompt`.
-  ///
-  /// The returned value is the user's input; if `defaultChoiceIndex` is not
-  /// null, and the user presses enter without any other input, the return value
-  /// will be the character in `acceptedCharacters` at the index given by
-  /// `defaultChoiceIndex`.
-  ///
-  /// The accepted characters must be a String with a length of 1, excluding any
-  /// whitespace characters such as `\t`, `\n`, or ` `.
-  ///
-  /// If [usesTerminalUi] is false, throws a [StateError].
   Future<String> promptForCharInput(
     List<String> acceptedCharacters, {
     required Logger logger,
@@ -287,10 +224,6 @@ class AnsiTerminal implements Terminal {
   @override
   String clearScreen() => supportsColor && isCliAnimationEnabled ? clear : '\n\n';
 
-  /// Returns ANSI codes to clear [numberOfLines] lines starting with the line
-  /// the cursor is on.
-  ///
-  /// If the terminal does not support ANSI codes, returns an empty string.
   String clearLines(int numberOfLines) {
     if (!supportsColor || !isCliAnimationEnabled) {
       return '';

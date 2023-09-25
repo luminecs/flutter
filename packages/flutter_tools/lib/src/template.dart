@@ -14,26 +14,17 @@ import 'base/template.dart';
 import 'cache.dart';
 import 'dart/package_map.dart';
 
-/// The Kotlin keywords which are not Java keywords.
-/// They are escaped in Kotlin files.
-///
-/// https://kotlinlang.org/docs/keyword-reference.html
 const List<String> kReservedKotlinKeywords = <String>['when', 'in', 'is'];
 
-/// Provides the path where templates used by flutter_tools are stored.
 class TemplatePathProvider {
   const TemplatePathProvider();
 
-  /// Returns the directory containing the 'name' template directory.
   Directory directoryInPackage(String name, FileSystem fileSystem) {
     final String templatesDir = fileSystem.path.join(Cache.flutterRoot!,
         'packages', 'flutter_tools', 'templates');
     return fileSystem.directory(fileSystem.path.join(templatesDir, name));
   }
 
-  /// Returns the directory containing the 'name' template directory in
-  /// flutter_template_images, to resolve image placeholder against.
-  /// if 'name' is null, return the parent template directory.
   Future<Directory> imageDirectory(String? name, FileSystem fileSystem, Logger logger) async {
     final String toolPackagePath = fileSystem.path.join(
         Cache.flutterRoot!, 'packages', 'flutter_tools');
@@ -52,24 +43,6 @@ class TemplatePathProvider {
 
 TemplatePathProvider get templatePathProvider => context.get<TemplatePathProvider>() ?? const TemplatePathProvider();
 
-/// Expands templates in a directory to a destination. All files that must
-/// undergo template expansion should end with the '.tmpl' extension. All files
-/// that should be replaced with the corresponding image from
-/// flutter_template_images should end with the '.img.tmpl' extension. All other
-/// files are ignored. In case the contents of entire directories must be copied
-/// as is, the directory itself can end with '.tmpl' extension. Files within
-/// such a directory may also contain the '.tmpl' or '.img.tmpl' extensions and
-/// will be considered for expansion. In case certain files need to be copied
-/// but without template expansion (data files, etc.), the '.copy.tmpl'
-/// extension may be used. Furthermore, templates may contain additional
-/// test files intended to run on the CI. Test files must end in `.test.tmpl`
-/// and are only included when the --implementation-tests flag is enabled.
-///
-/// Folders with platform/language-specific content must be named
-/// '<platform>-<language>.tmpl'.
-///
-/// Files in the destination will contain none of the '.tmpl', '.copy.tmpl',
-/// 'img.tmpl', or '-<language>.tmpl' extensions.
 class Template {
   factory Template(Directory templateSource, Directory? imageSourceDir, {
     required FileSystem fileSystem,
@@ -183,9 +156,6 @@ class Template {
 
   final Map<String /* relative */, String /* absolute source */> _templateFilePaths = <String, String>{};
 
-  /// Render the template into [directory].
-  ///
-  /// May throw a [ToolExit] if the directory is not writable.
   int render(
     Directory destination,
     Map<String, Object?> context, {
@@ -201,11 +171,6 @@ class Template {
     int fileCount = 0;
     final bool implementationTests = (context['implementationTests'] as bool?) ?? false;
 
-    /// Returns the resolved destination path corresponding to the specified
-    /// raw destination path, after performing language filtering and template
-    /// expansion on the path itself.
-    ///
-    /// Returns null if the given raw destination path has been filtered.
     String? renderPath(String relativeDestinationPath) {
       final Match? match = _kTemplateLanguageVariant.matchAsPrefix(relativeDestinationPath);
       if (match != null) {
@@ -383,9 +348,6 @@ class Template {
   }
 }
 
-/// Create a copy of the given [context], escaping its values when necessary.
-///
-/// Returns the copied context.
 Map<String, Object?> _createEscapedContextCopy(Map<String, Object?> context) {
   final Map<String, Object?> localContext = Map<String, Object?>.of(context);
 

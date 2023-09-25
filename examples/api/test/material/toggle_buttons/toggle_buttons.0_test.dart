@@ -27,12 +27,10 @@ void main() {
     const Color selectedColor = Color(0xffef9a9a);
     const Color unselectedColor = Color(0x00fffbfe);
 
-    /// First button is selected.
     expect(firstButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
 
-    /// Tap on second button.
     await tester.tap(find.widgetWithText(TextButton, 'Banana'));
     await tester.pumpAndSettle();
 
@@ -40,7 +38,6 @@ void main() {
     secondButton = findButton('Banana');
     thirdButton = findButton('Orange');
 
-    /// Only second button is selected.
     expect(firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
@@ -65,12 +62,10 @@ void main() {
     const Color selectedColor = Color(0xffa5d6a7);
     const Color unselectedColor = Color(0x00fffbfe);
 
-    /// Second button is selected.
     expect(firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
 
-    /// Tap on other two buttons.
     await tester.tap(find.widgetWithText(TextButton, 'Tomatoes'));
     await tester.tap(find.widgetWithText(TextButton, 'Carrots'));
     await tester.pumpAndSettle();
@@ -79,7 +74,6 @@ void main() {
     secondButton = findButton('Potatoes');
     thirdButton = findButton('Carrots');
 
-    /// All buttons are selected.
     expect(firstButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), selectedColor);
@@ -105,12 +99,10 @@ void main() {
     const Color unselectedColor = Color(0x00fffbfe);
 
 
-    /// Third button is selected.
     expect(firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), selectedColor);
 
-    /// Tap on the first button.
     await tester.tap(find.widgetWithIcon(TextButton, Icons.sunny));
     await tester.pumpAndSettle();
 
@@ -118,7 +110,6 @@ void main() {
     secondButton = findButton(Icons.cloud);
     thirdButton = findButton(Icons.ac_unit);
 
-    /// First button os selected.
     expect(firstButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);

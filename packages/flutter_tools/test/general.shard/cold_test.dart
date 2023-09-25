@@ -205,7 +205,6 @@ class TestFlutterDevice extends FlutterDevice {
     required ResidentCompiler generator,
   })  : super(device, buildInfo: BuildInfo.debug, generator: generator, developmentShaderCompiler: const FakeShaderCompiler());
 
-  /// The exception to throw when the connect method is called.
   final Exception exception;
 
   @override

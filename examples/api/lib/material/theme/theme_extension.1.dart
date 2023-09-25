@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-/// Flutter code sample for [ThemeExtension].
 
 @immutable
 class MyColors extends ThemeExtension<MyColors> {

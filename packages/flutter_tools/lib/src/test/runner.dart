@@ -17,11 +17,9 @@ import 'test_wrapper.dart';
 import 'watcher.dart';
 import 'web_test_compiler.dart';
 
-/// A class that abstracts launching the test process from the test runner.
 abstract class FlutterTestRunner {
   const factory FlutterTestRunner() = _FlutterTestRunnerImpl;
 
-  /// Runs tests using package:test and the Flutter engine.
   Future<int> runTests(
     TestWrapper testWrapper,
     List<Uri> testFiles, {

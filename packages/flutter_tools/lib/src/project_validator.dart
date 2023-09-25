@@ -23,7 +23,6 @@ abstract class ProjectValidator {
   String get title;
   bool get machineOutput => false;
   bool supportsProject(FlutterProject project);
-  /// Can return more than one result in case a file/command have a lot of info to share to the user
   Future<List<ProjectValidatorResult>> start(FlutterProject project);
 }
 
@@ -34,9 +33,6 @@ abstract class MachineProjectValidator extends ProjectValidator {
   bool get machineOutput => true;
 }
 
-/// Validator run for all platforms that extract information from the pubspec.yaml.
-///
-/// Specific info from different platforms should be written in their own ProjectValidator.
 class VariableDumpMachineProjectValidator extends MachineProjectValidator {
   VariableDumpMachineProjectValidator({
     required this.logger,
@@ -202,9 +198,6 @@ class VariableDumpMachineProjectValidator extends MachineProjectValidator {
   String get title => 'Machine JSON variable dump';
 }
 
-/// Validator run for all platforms that extract information from the pubspec.yaml.
-///
-/// Specific info from different platforms should be written in their own ProjectValidator.
 class GeneralInfoProjectValidator extends ProjectValidator{
   @override
   Future<List<ProjectValidatorResult>> start(FlutterProject project) async {

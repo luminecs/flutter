@@ -12,7 +12,6 @@ import 'package:flutter_test/flutter_test.dart';
 import '../rendering/rendering_tester.dart';
 
 class SpyFixedExtentScrollController extends FixedExtentScrollController {
-  /// Override for test visibility only.
   @override
   bool get hasListeners => super.hasListeners;
 }

@@ -10,8 +10,6 @@ import 'package:webdriver/async_io.dart';
 
 // TODO(web): Migrate this test to a normal integration_test with a WidgetTester.
 
-/// The following test is used as a simple smoke test for verifying Flutter
-/// Framework and Flutter Web Engine integration.
 void main() {
   group('Hello World App', () {
     final SerializableFinder titleFinder = find.byValueKey('title');

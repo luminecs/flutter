@@ -17,7 +17,6 @@ import 'gen_l10n_types.dart';
 import 'localizations_utils.dart';
 import 'message_parser.dart';
 
-/// Run the localizations generation script with the configuration [options].
 Future<LocalizationsGenerator> generateLocalizations({
   required Directory projectDir,
   Directory? dependenciesDir,
@@ -108,14 +107,8 @@ stderr:\n${result.stderr}''',
   return generator;
 }
 
-/// The path for the synthetic package.
 String _defaultSyntheticPackagePath(FileSystem fileSystem) => fileSystem.path.join('.dart_tool', 'flutter_gen');
 
-/// The default path used when the `_useSyntheticPackage` setting is set to true
-/// in [LocalizationsGenerator].
-///
-/// See [LocalizationsGenerator.initialize] for where and how it is used by the
-/// localizations tool.
 String _syntheticL10nPackagePath(FileSystem fileSystem) => fileSystem.path.join(_defaultSyntheticPackagePath(fileSystem), 'gen_l10n');
 
 // Generate method parameters and also infer the correct types from the usage of the placeholders
@@ -218,7 +211,6 @@ String generateNumberFormattingLogic(Message message) {
   return formatStatements.isEmpty ? '@(none)' : formatStatements.join();
 }
 
-/// List of possible cases for plurals defined the ICU messageFormat syntax.
 Map<String, String> pluralCases = <String, String>{
   '0': 'zero',
   '1': 'one',
@@ -463,14 +455,6 @@ String _generateDelegateClass({
 }
 
 class LocalizationsGenerator {
-  /// Initializes [inputDirectory], [outputDirectory], [templateArbFile],
-  /// [outputFile] and [className].
-  ///
-  /// Throws an [L10nException] when a provided configuration is not allowed
-  /// by [LocalizationsGenerator].
-  ///
-  /// Throws a [FileSystemException] when a file operation necessary for setting
-  /// up the [LocalizationsGenerator] cannot be completed.
   factory LocalizationsGenerator({
     required FileSystem fileSystem,
     required String inputPathString,
@@ -519,9 +503,6 @@ class LocalizationsGenerator {
     );
   }
 
-  /// Creates an instance of the localizations generator class.
-  ///
-  /// It takes in a [FileSystem] representation that the class will act upon.
   LocalizationsGenerator._(this._fs, {
     required this.inputDirectory,
     required this.outputDirectory,
@@ -561,49 +542,18 @@ class LocalizationsGenerator {
   @visibleForTesting
   final bool usesNullableGetter;
 
-  /// The directory that contains the project's arb files, as well as the
-  /// header file, if specified.
-  ///
-  /// It is assumed that all input files (e.g. [templateArbFile], arb files
-  /// for translated messages, header file templates) will reside here.
   final Directory inputDirectory;
 
-  /// The Flutter project's root directory.
   final Directory? projectDirectory;
 
-  /// The directory to generate the project's localizations files in.
-  ///
-  /// It is assumed that all output files (e.g. The localizations
-  /// [outputFile], `messages_<locale>.dart` and `messages_all.dart`)
-  /// will reside here.
   final Directory outputDirectory;
 
-  /// The input arb file which defines all of the messages that will be
-  /// exported by the generated class that's written to [outputFile].
   final File templateArbFile;
 
-  /// The file to write the generated abstract localizations and
-  /// localizations delegate classes to. Separate localizations
-  /// files will also be generated for each language using this
-  /// filename as a prefix and the locale as the suffix.
   final File baseOutputFile;
 
-  /// The class name to be used for the localizations class in [outputFile].
-  ///
-  /// For example, if 'AppLocalizations' is passed in, a class named
-  /// AppLocalizations will be used for localized message lookups.
   final String className;
 
-  /// The list of preferred supported locales.
-  ///
-  /// By default, the list of supported locales in the localizations class
-  /// will be sorted in alphabetical order. However, this option
-  /// allows for a set of preferred locales to appear at the top of the
-  /// list.
-  ///
-  /// The order of locales in this list will also be the order of locale
-  /// priority. For example, if a device supports 'en' and 'es' and
-  /// ['es', 'en'] is passed in, the 'es' locale will take priority over 'en'.
   final List<LocaleInfo> preferredSupportedLocales;
 
   // Whether we need to import intl or not. This flag is updated after parsing
@@ -613,14 +563,10 @@ class LocalizationsGenerator {
   // Whether we want to use escaping for ICU messages.
   bool useEscaping = false;
 
-  /// Whether any errors were caught. This is set after encountering any errors
-  /// from calling [_generateMethod].
   bool hadErrors = false;
 
-  /// Whether to use relaxed syntax.
   bool useRelaxedSyntax = false;
 
-  /// The list of all arb path strings in [inputDirectory].
   List<String> get arbPathStrings {
     return _allBundles.bundles.map((AppResourceBundle bundle) => bundle.file.path).toList();
   }
@@ -629,60 +575,30 @@ class LocalizationsGenerator {
     return _outputFileList;
   }
 
-  /// The supported language codes as found in the arb files located in
-  /// [inputDirectory].
   final Set<String> supportedLanguageCodes = <String>{};
 
-  /// The supported locales as found in the arb files located in
-  /// [inputDirectory].
   final Set<LocaleInfo> supportedLocales = <LocaleInfo>{};
 
-  /// The header to be prepended to the generated Dart localization file.
   final String header;
 
   final Map<LocaleInfo, List<String>> _unimplementedMessages = <LocaleInfo, List<String>>{};
 
-  /// Whether to generate the Dart localization file with locales imported as
-  /// deferred, allowing for lazy loading of each locale in Flutter web.
-  ///
-  /// This can reduce a web app’s initial startup time by decreasing the size of
-  /// the JavaScript bundle. When [_useDeferredLoading] is set to true, the
-  /// messages for a particular locale are only downloaded and loaded by the
-  /// Flutter app as they are needed. For projects with a lot of different
-  /// locales and many localization strings, it can be an performance
-  /// improvement to have deferred loading. For projects with a small number of
-  /// locales, the difference is negligible, and might slow down the start up
-  /// compared to bundling the localizations with the rest of the application.
-  ///
-  /// This flag does not affect other platforms such as mobile or desktop.
   final bool useDeferredLoading;
 
-  /// Contains a map of each output language file to its corresponding content in
-  /// string format.
   final Map<File, String> _languageFileMap = <File, String>{};
 
-  /// A generated file that will contain the list of messages for each locale
-  /// that do not have a translation yet.
   final File? untranslatedMessagesFile;
 
-  /// The file that contains the list of inputs and outputs for generating
-  /// localizations.
   @visibleForTesting
   final File? inputsAndOutputsListFile;
   final List<String> _inputFileList = <String>[];
   final List<String> _outputFileList = <String>[];
 
-  /// Whether or not resource attributes are required for each corresponding
-  /// resource id.
-  ///
-  /// Resource attributes provide metadata about the message.
   @visibleForTesting
   final bool areResourceAttributesRequired;
 
-  /// Logger to be used during the execution of the script.
   Logger logger;
 
-  /// Whether or not to suppress warnings or not.
   final bool suppressWarnings;
 
   static bool _isNotReadable(FileStat fileStat) {
@@ -716,7 +632,6 @@ class LocalizationsGenerator {
     return directory;
   }
 
-  /// Sets the reference [Directory] for [inputDirectory].
   @visibleForTesting
   static Directory inputDirectoryFromPath(FileSystem fileSystem, String inputPathString, Directory? projectDirectory) {
     final Directory inputDirectory = fileSystem.directory(
@@ -742,7 +657,6 @@ class LocalizationsGenerator {
     return inputDirectory;
   }
 
-  /// Sets the reference [Directory] for [outputDirectory].
   @visibleForTesting
   static Directory outputDirectoryFromPath(FileSystem fileSystem, String outputPathString, bool useSyntheticPackage, Directory? projectDirectory) {
     Directory outputDirectory;
@@ -762,7 +676,6 @@ class LocalizationsGenerator {
     return outputDirectory;
   }
 
-  /// Sets the reference [File] for [templateArbFile].
   @visibleForTesting
   static File templateArbFileFromFileName(String templateArbFileName, Directory inputDirectory) {
     final File templateArbFile = inputDirectory.childFile(templateArbFileName);
@@ -802,8 +715,6 @@ class LocalizationsGenerator {
     return true;
   }
 
-  /// Sets the [className] for the localizations and localizations delegate
-  /// classes.
   @visibleForTesting
   static String classNameFromString(String classNameString) {
     if (classNameString.isEmpty) {
@@ -817,8 +728,6 @@ class LocalizationsGenerator {
     return classNameString;
   }
 
-  /// Sets [preferredSupportedLocales] so that this particular list of locales
-  /// will take priority over the other locales.
   @visibleForTesting
   static List<LocaleInfo> preferredSupportedLocalesFromLocales(List<String>? inputLocales) {
     if (inputLocales == null || inputLocales.isEmpty) {

@@ -21,23 +21,12 @@ import 'src/channel.dart';
 
 const String _success = 'success';
 
-/// Whether results should be reported to the native side over the method
-/// channel.
-///
-/// This is enabled by default for use by native test frameworks like Android
-/// instrumentation or XCTest. When running with the Flutter Tool through
-/// `flutter test integration_test` though, it will be disabled as the Flutter
-/// tool will be responsible for collection of test results.
 const bool _shouldReportResultsToNative = bool.fromEnvironment(
   'INTEGRATION_TEST_SHOULD_REPORT_RESULTS_TO_NATIVE',
   defaultValue: true,
 );
 
-/// A subclass of [LiveTestWidgetsFlutterBinding] that reports tests results
-/// on a channel to adapt them to native instrumentation test format.
 class IntegrationTestWidgetsFlutterBinding extends LiveTestWidgetsFlutterBinding implements IntegrationTestResults {
-  /// Sets up a listener to report that the tests are finished when everything is
-  /// torn down.
   IntegrationTestWidgetsFlutterBinding() {
     tearDownAll(() async {
       if (!_allTestsPassed.isCompleted) {
@@ -135,20 +124,9 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     _instance = this;
   }
 
-  /// The singleton instance of this object.
-  ///
-  /// Provides access to the features exposed by this class. The binding must
-  /// be initialized before using this getter; this is typically done by calling
-  /// [IntegrationTestWidgetsFlutterBinding.ensureInitialized].
   static IntegrationTestWidgetsFlutterBinding get instance => BindingBase.checkInstance(_instance);
   static IntegrationTestWidgetsFlutterBinding? _instance;
 
-  /// Returns an instance of the [IntegrationTestWidgetsFlutterBinding], creating and
-  /// initializing it if necessary.
-  ///
-  /// See also:
-  ///
-  ///  * [WidgetsFlutterBinding.ensureInitialized], the equivalent in the widgets framework.
   static IntegrationTestWidgetsFlutterBinding ensureInitialized() {
     if (_instance == null) {
       IntegrationTestWidgetsFlutterBinding();
@@ -156,30 +134,14 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     return _instance!;
   }
 
-  /// Test results that will be populated after the tests have completed.
-  ///
-  /// Keys are the test descriptions, and values are either [_success] or
-  /// a [Failure].
   @visibleForTesting
   Map<String, Object> results = <String, Object>{};
 
-  /// The extra data for the reported result.
-  ///
-  /// The values in `reportData` must be json-serializable objects or `null`.
-  /// If it's `null`, no extra data is attached to the result.
-  ///
-  /// The default value is `null`.
   @override
   Map<String, dynamic>? reportData;
 
-  /// Manages callbacks received from driver side and commands send to driver
-  /// side.
   final CallbackManager callbackManager = driver_actions.callbackManager;
 
-  /// Takes a screenshot.
-  ///
-  /// On Android, you need to call `convertFlutterSurfaceToImage()`, and
-  /// pump a frame before taking a screenshot.
   Future<List<int>> takeScreenshot(String screenshotName, [Map<String, Object?>? args]) async {
     reportData ??= <String, dynamic>{};
     reportData!['screenshots'] ??= <dynamic>[];
@@ -190,18 +152,10 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     return data['bytes']! as List<int>;
   }
 
-  /// Android only. Converts the Flutter surface to an image view.
-  /// Be aware that if you are conducting a perf test, you may not want to call
-  /// this method since the this is an expensive operation that affects the
-  /// rendering of a Flutter app.
-  ///
-  /// Once the screenshot is taken, call `revertFlutterImage()` to restore
-  /// the original Flutter surface.
   Future<void> convertFlutterSurfaceToImage() async {
     await callbackManager.convertFlutterSurfaceToImage();
   }
 
-  /// The callback function to response the driver side input.
   @visibleForTesting
   Future<Map<String, dynamic>> callback(Map<String, String> params) async {
     return callbackManager.callback(
@@ -241,7 +195,6 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
 
   vm.VmService? _vmService;
 
-  /// Initialize the [vm.VmService] settings for the timeline.
   @visibleForTesting
   Future<void> enableTimeline({
     List<String> streams = const <String>['all'],
@@ -271,19 +224,6 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     await _vmService!.setVMTimelineFlags(streams);
   }
 
-  /// Runs [action] and returns a [vm.Timeline] trace for it.
-  ///
-  /// Waits for the `Future` returned by [action] to complete prior to stopping
-  /// the trace.
-  ///
-  /// The `streams` parameter limits the recorded timeline event streams to only
-  /// the ones listed. By default, all streams are recorded.
-  /// See `timeline_streams` in
-  /// [Dart-SDK/runtime/vm/timeline.cc](https://github.com/dart-lang/sdk/blob/main/runtime/vm/timeline.cc)
-  ///
-  /// If [retainPriorEvents] is true, retains events recorded prior to calling
-  /// [action]. Otherwise, prior events are cleared before calling [action]. By
-  /// default, prior events are cleared.
   Future<vm.Timeline> traceTimeline(
     Future<dynamic> Function() action, {
     List<String> streams = const <String>['all'],
@@ -305,44 +245,6 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     );
   }
 
-  /// This is a convenience method that calls [traceTimeline] and sends the
-  /// result back to the host for the [flutter_driver] style tests.
-  ///
-  /// This records the timeline during `action` and adds the result to
-  /// [reportData] with `reportKey`. The [reportData] contains extra information
-  /// from the test other than test success/fail. It will be passed back to the
-  /// host and be processed by the [ResponseDataCallback] defined in
-  /// [integration_test_driver.integrationDriver]. By default it will be written
-  /// to `build/integration_response_data.json` with the key `timeline`.
-  ///
-  /// For tests with multiple calls of this method, `reportKey` needs to be a
-  /// unique key, otherwise the later result will override earlier one. Tests
-  /// that call this multiple times must also provide a custom
-  /// [ResponseDataCallback] to decide where and how to write the output
-  /// timelines. For example,
-  ///
-  /// ```dart
-  /// import 'package:integration_test/integration_test_driver.dart';
-  ///
-  /// Future<void> main() {
-  ///   return integrationDriver(
-  ///     responseDataCallback: (Map<String, dynamic>? data) async {
-  ///       if (data != null) {
-  ///         for (final MapEntry<String, dynamic> entry in data.entries) {
-  ///           print('Writing ${entry.key} to the disk.');
-  ///           await writeResponseData(
-  ///             entry.value as Map<String, dynamic>,
-  ///             testOutputFilename: entry.key,
-  ///           );
-  ///         }
-  ///       }
-  ///     },
-  ///   );
-  /// }
-  /// ```
-  ///
-  /// The `streams` and `retainPriorEvents` parameters are passed as-is to
-  /// [traceTimeline].
   Future<void> traceAction(
     Future<dynamic> Function() action, {
     List<String> streams = const <String>['all'],
@@ -381,11 +283,6 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     );
   }
 
-  /// Watches the [FrameTiming] during `action` and report it to the binding
-  /// with key `reportKey`.
-  ///
-  /// This can be used to implement performance tests previously using
-  /// [traceAction] and [TimelineSummary] from [flutter_driver]
   Future<void> watchPerformance(
     Future<void> Function() action, {
     String reportKey = 'performance',

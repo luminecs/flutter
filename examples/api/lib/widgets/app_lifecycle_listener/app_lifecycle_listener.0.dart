@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-/// Flutter code sample for [AppLifecycleListener].
 
 void main() {
   runApp(const AppLifecycleListenerExample());

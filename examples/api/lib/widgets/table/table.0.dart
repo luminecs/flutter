@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Table].
 
 void main() => runApp(const TableExampleApp());
 

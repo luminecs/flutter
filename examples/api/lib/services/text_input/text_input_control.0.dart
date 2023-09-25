@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [TextInputControl].
 
 void main() => runApp(const TextInputControlExampleApp());
 
@@ -122,13 +121,10 @@ class MyTextInputControl with TextInputControl {
   TextEditingValue _editingState = TextEditingValue.empty;
   final ValueNotifier<bool> _visible = ValueNotifier<bool>(false);
 
-  /// The input control's visibility state for updating the visual presentation.
   ValueListenable<bool> get visible => _visible;
 
-  /// Register the input control.
   void register() => TextInput.setInputControl(this);
 
-  /// Restore the original platform input control.
   void unregister() => TextInput.restorePlatformInputControl();
 
   @override
@@ -140,10 +136,6 @@ class MyTextInputControl with TextInputControl {
   @override
   void setEditingState(TextEditingValue value) => _editingState = value;
 
-  /// Process user input.
-  ///
-  /// Updates the internal editing state by inserting the input text,
-  /// and by replacing the current selection if any.
   void processUserInput(String input) {
     _editingState = _editingState.copyWith(
       text: _insertText(input),

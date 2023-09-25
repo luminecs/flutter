@@ -14,7 +14,6 @@ import '../cache.dart';
 import 'flutter_adapter_args.dart';
 import 'mixins.dart';
 
-/// A base DAP Debug Adapter for Flutter applications and tests.
 abstract class FlutterBaseDebugAdapter extends DartDebugAdapter<FlutterLaunchRequestArguments, FlutterAttachRequestArguments>
     with PidTracker {
   FlutterBaseDebugAdapter(
@@ -39,10 +38,6 @@ abstract class FlutterBaseDebugAdapter extends DartDebugAdapter<FlutterLaunchReq
 
   final String flutterSdkRoot;
 
-  /// Whether DDS should be enabled in the Flutter process.
-  ///
-  /// We never enable DDS in the DAP process for Flutter, so this value is not
-  /// the same as what is passed to the base class, which is always provided 'false'.
   final bool enableFlutterDds;
 
   @override
@@ -53,17 +48,9 @@ abstract class FlutterBaseDebugAdapter extends DartDebugAdapter<FlutterLaunchReq
   final FlutterAttachRequestArguments Function(Map<String, Object?> obj)
       parseAttachArgs = FlutterAttachRequestArguments.fromJson;
 
-  /// Whether the VM Service closing should be used as a signal to terminate the debug session.
-  ///
-  /// Since we always have a process for Flutter (whether run or attach) we'll
-  /// always use its termination instead, so this is always false.
   @override
   bool get terminateOnVmServiceClose => false;
 
-  /// Whether or not the user requested debugging be enabled.
-  ///
-  /// For debugging to be enabled, the user must have chosen "Debug" (and not
-  /// "Run") in the editor (which maps to the DAP `noDebug` field).
   bool get enableDebugger {
     final DartCommonLaunchAttachRequestArguments args = this.args;
     if (args is FlutterLaunchRequestArguments) {
@@ -77,21 +64,6 @@ abstract class FlutterBaseDebugAdapter extends DartDebugAdapter<FlutterLaunchReq
   }
 
   void configureOrgDartlangSdkMappings() {
-    /// When a user navigates into 'dart:xxx' sources in their editor (via the
-    /// analysis server) they will land in flutter_sdk/bin/cache/pkg/sky_engine.
-    ///
-    /// The running VM knows nothing about these paths and will resolve these
-    /// libraries to 'org-dartlang-sdk://' URIs. We need to map between these
-    /// to ensure that if a user puts a breakpoint inside sky_engine the VM can
-    /// apply it to the correct place and once hit, we can navigate the user
-    /// back to the correct file on their disk.
-    ///
-    /// The mapping is handled by the base adapter but we need to override the
-    /// paths to match the layout used by Flutter.
-    ///
-    /// In future this might become unnecessary if
-    /// https://github.com/dart-lang/sdk/issues/48435 is implemented. Until
-    /// then, providing these mappings improves the debugging experience.
 
     // Clear original Dart SDK mappings because they're not valid here.
     orgDartlangSdkMappings.clear();
@@ -114,11 +86,6 @@ abstract class FlutterBaseDebugAdapter extends DartDebugAdapter<FlutterLaunchReq
     // not terminate the debugee.
   }
 
-  /// Called by [disconnectRequest] to request that we forcefully shut down the app being run (or in the case of an attach, disconnect).
-  ///
-  /// Client IDEs/editors should send a terminateRequest before a
-  /// disconnectRequest to allow a graceful shutdown. This method must terminate
-  /// quickly and therefore may leave orphaned processes.
   @override
   Future<void> disconnectImpl() async {
     if (isAttach) {

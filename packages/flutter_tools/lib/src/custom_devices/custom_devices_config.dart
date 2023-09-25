@@ -11,15 +11,7 @@ import '../base/platform.dart';
 import '../cache.dart';
 import 'custom_device_config.dart';
 
-/// Represents the custom devices config file on disk which in turn
-/// contains a list of individual custom device configs.
 class CustomDevicesConfig {
-  /// Load a [CustomDevicesConfig] from a (possibly non-existent) location on disk.
-  ///
-  /// The config is loaded on construction. Any error while loading will be logged
-  /// but will not result in an exception being thrown. The file will not be deleted
-  /// when it's not valid JSON (which other configurations do) and will not
-  /// be implicitly created when it doesn't exist.
   CustomDevicesConfig({
     required Platform platform,
     required FileSystem fileSystem,
@@ -94,11 +86,6 @@ class CustomDevicesConfig {
     return uri.toString();
   }
 
-  /// Ensure the config file exists on disk by creating one with default values
-  /// if it doesn't exist yet.
-  ///
-  /// The config file should always be present so we can give the user a path
-  /// to a file they can edit.
   void ensureFileExists() {
     if (!_fileSystem.file(_config.configPath).existsSync()) {
       _config.setValue(_kSchema, _defaultSchema);
@@ -122,11 +109,6 @@ class CustomDevicesConfig {
     return json;
   }
 
-  /// Get the list of [CustomDeviceConfig]s that are listed in the config file
-  /// including disabled ones.
-  ///
-  /// Throws an Exception when the config could not be loaded and logs any
-  /// errors.
   List<CustomDeviceConfig> get devices {
     final List<dynamic>? typedListNullable = _getDevicesJsonValue();
     if (typedListNullable == null) {
@@ -148,11 +130,6 @@ class CustomDevicesConfig {
     return revived;
   }
 
-  /// Get the list of [CustomDeviceConfig]s that are listed in the config file
-  /// including disabled ones.
-  ///
-  /// Returns an empty list when the config could not be loaded and logs any
-  /// errors.
   List<CustomDeviceConfig> tryGetDevices() {
     try {
       return devices;
@@ -162,11 +139,6 @@ class CustomDevicesConfig {
     }
   }
 
-  /// Set the list of [CustomDeviceConfig]s in the config file.
-  ///
-  /// It should generally be avoided to call this often, since this could mean
-  /// data loss. If you want to add or remove a device from the config,
-  /// consider using [add] or [remove].
   set devices(List<CustomDeviceConfig> configs) {
     _config.setValue(
       _kCustomDevicesConfigKey,
@@ -174,13 +146,6 @@ class CustomDevicesConfig {
     );
   }
 
-  /// Add a custom device to the config file.
-  ///
-  /// Works even when some of the custom devices in the config file are not
-  /// valid.
-  ///
-  /// May throw a [CustomDeviceRevivalException] if `config['custom-devices']`
-  /// is not a list.
   void add(CustomDeviceConfig config) {
     _config.setValue(
       _kCustomDevicesConfigKey,
@@ -191,15 +156,10 @@ class CustomDevicesConfig {
     );
   }
 
-  /// Returns true if the config file contains a device with id [deviceId].
   bool contains(String deviceId) {
     return devices.any((CustomDeviceConfig device) => device.id == deviceId);
   }
 
-  /// Removes the first device with this device id from the config file.
-  ///
-  /// Returns true if the device was successfully removed, false if a device
-  /// with this id could not be found.
   bool remove(String deviceId) {
     final List<CustomDeviceConfig> modifiedDevices = devices;
 

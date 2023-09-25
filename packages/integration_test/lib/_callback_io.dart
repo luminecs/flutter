@@ -11,19 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'common.dart';
 import 'src/channel.dart';
 
-/// The dart:io implementation of [CallbackManager].
-///
-/// See also:
-///
-///  * `_callback_web.dart`, which has the dart:html implementation
 CallbackManager get callbackManager => _singletonCallbackManager;
 
-/// IOCallbackManager singleton.
 final IOCallbackManager _singletonCallbackManager = IOCallbackManager();
 
-/// Manages communication between `integration_tests` and the `driver_tests`.
-///
-/// This is the dart:io implementation.
 class IOCallbackManager implements CallbackManager {
   @override
   Future<Map<String, dynamic>> callback(

@@ -20,53 +20,7 @@ import 'outlined_button_theme.dart';
 import 'theme.dart';
 import 'theme_data.dart';
 
-/// A Material Design "Outlined Button"; essentially a [TextButton]
-/// with an outlined border.
-///
-/// Outlined buttons are medium-emphasis buttons. They contain actions
-/// that are important, but they aren’t the primary action in an app.
-///
-/// An outlined button is a label [child] displayed on a (zero
-/// elevation) [Material] widget. The label's [Text] and [Icon]
-/// widgets are displayed in the [style]'s
-/// [ButtonStyle.foregroundColor] and the outline's weight and color
-/// are defined by [ButtonStyle.side]. The button reacts to touches
-/// by filling with the [style]'s [ButtonStyle.overlayColor].
-///
-/// The outlined button's default style is defined by [defaultStyleOf].
-/// The style of this outline button can be overridden with its [style]
-/// parameter. The style of all text buttons in a subtree can be
-/// overridden with the [OutlinedButtonTheme] and the style of all of the
-/// outlined buttons in an app can be overridden with the [Theme]'s
-/// [ThemeData.outlinedButtonTheme] property.
-///
-/// Unlike [TextButton] or [ElevatedButton], outline buttons have a
-/// default [ButtonStyle.side] which defines the appearance of the
-/// outline. Because the default `side` is non-null, it
-/// unconditionally overrides the shape's [OutlinedBorder.side]. In
-/// other words, to specify an outlined button's shape _and_ the
-/// appearance of its outline, both the [ButtonStyle.shape] and
-/// [ButtonStyle.side] properties must be specified.
-///
-/// {@tool dartpad}
-/// Here is an example of a basic [OutlinedButton].
-///
-/// ** See code in examples/api/lib/material/outlined_button/outlined_button.0.dart **
-/// {@end-tool}
-///
-/// The static [styleFrom] method is a convenient way to create a
-/// outlined button [ButtonStyle] from simple values.
-///
-/// See also:
-///
-///  * [ElevatedButton], a filled button whose material elevates when pressed.
-///  * [FilledButton], a filled button that doesn't elevate when pressed.
-///  * [FilledButton.tonal], a filled button variant that uses a secondary fill color.
-///  * [TextButton], a button with no outline or fill color.
-///  * <https://material.io/design/components/buttons.html>
-///  * <https://m3.material.io/components/buttons>
 class OutlinedButton extends ButtonStyleButton {
-  /// Create an OutlinedButton.
   const OutlinedButton({
     super.key,
     required super.onPressed,
@@ -81,11 +35,6 @@ class OutlinedButton extends ButtonStyleButton {
     required super.child,
   });
 
-  /// Create a text button from a pair of widgets that serve as the button's
-  /// [icon] and [label].
-  ///
-  /// The icon and label are arranged in a row and padded by 12 logical pixels
-  /// at the start, and 16 at the end, with an 8 pixel gap in between.
   factory OutlinedButton.icon({
     Key? key,
     required VoidCallback? onPressed,
@@ -99,42 +48,6 @@ class OutlinedButton extends ButtonStyleButton {
     required Widget label,
   }) = _OutlinedButtonWithIcon;
 
-  /// A static convenience method that constructs an outlined button
-  /// [ButtonStyle] given simple values.
-  ///
-  ///
-  /// The [foregroundColor] and [disabledForegroundColor] colors are used
-  /// to create a [MaterialStateProperty] [ButtonStyle.foregroundColor], and
-  /// a derived [ButtonStyle.overlayColor].
-  ///
-  /// The [backgroundColor] and [disabledBackgroundColor] colors are
-  /// used to create a [MaterialStateProperty] [ButtonStyle.backgroundColor].
-  ///
-  /// Similarly, the [enabledMouseCursor] and [disabledMouseCursor]
-  /// parameters are used to construct [ButtonStyle.mouseCursor].
-  ///
-  /// All of the other parameters are either used directly or used to
-  /// create a [MaterialStateProperty] with a single value for all
-  /// states.
-  ///
-  /// All parameters default to null, by default this method returns
-  /// a [ButtonStyle] that doesn't override anything.
-  ///
-  /// For example, to override the default shape and outline for an
-  /// [OutlinedButton], one could write:
-  ///
-  /// ```dart
-  /// OutlinedButton(
-  ///   style: OutlinedButton.styleFrom(
-  ///      shape: const StadiumBorder(),
-  ///      side: const BorderSide(width: 2, color: Colors.green),
-  ///   ),
-  ///   child: const Text('Seasons of Love'),
-  ///   onPressed: () {
-  ///     // ...
-  ///   },
-  /// ),
-  /// ```
   static ButtonStyle styleFrom({
     Color? foregroundColor,
     Color? backgroundColor,
@@ -208,102 +121,6 @@ class OutlinedButton extends ButtonStyleButton {
     );
   }
 
-  /// Defines the button's default appearance.
-  ///
-  /// With the exception of [ButtonStyle.side], which defines the
-  /// outline, and [ButtonStyle.padding], the returned style is the
-  /// same as for [TextButton].
-  ///
-  /// The button [child]'s [Text] and [Icon] widgets are rendered with
-  /// the [ButtonStyle]'s foreground color. The button's [InkWell] adds
-  /// the style's overlay color when the button is focused, hovered
-  /// or pressed. The button's background color becomes its [Material]
-  /// color and is transparent by default.
-  ///
-  /// All of the ButtonStyle's defaults appear below. In this list
-  /// "Theme.foo" is shorthand for `Theme.of(context).foo`. Color
-  /// scheme values like "onSurface(0.38)" are shorthand for
-  /// `onSurface.withOpacity(0.38)`. [MaterialStateProperty] valued
-  /// properties that are not followed by a sublist have the same
-  /// value for all states, otherwise the values are as specified for
-  /// each state and "others" means all other states.
-  ///
-  /// The color of the [ButtonStyle.textStyle] is not used, the
-  /// [ButtonStyle.foregroundColor] is used instead.
-  ///
-  /// ## Material 2 defaults
-  ///
-  /// * `textStyle` - Theme.textTheme.button
-  /// * `backgroundColor` - transparent
-  /// * `foregroundColor`
-  ///   * disabled - Theme.colorScheme.onSurface(0.38)
-  ///   * others - Theme.colorScheme.primary
-  /// * `overlayColor`
-  ///   * hovered - Theme.colorScheme.primary(0.04)
-  ///   * focused or pressed - Theme.colorScheme.primary(0.12)
-  /// * `shadowColor` - Theme.shadowColor
-  /// * `elevation` - 0
-  /// * `padding`
-  ///   * `textScaleFactor <= 1` - horizontal(16)
-  ///   * `1 < textScaleFactor <= 2` - lerp(horizontal(16), horizontal(8))
-  ///   * `2 < textScaleFactor <= 3` - lerp(horizontal(8), horizontal(4))
-  ///   * `3 < textScaleFactor` - horizontal(4)
-  /// * `minimumSize` - Size(64, 36)
-  /// * `fixedSize` - null
-  /// * `maximumSize` - Size.infinite
-  /// * `side` - BorderSide(width: 1, color: Theme.colorScheme.onSurface(0.12))
-  /// * `shape` - RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))
-  /// * `mouseCursor`
-  ///   * disabled - SystemMouseCursors.basic
-  ///   * others - SystemMouseCursors.click
-  /// * `visualDensity` - theme.visualDensity
-  /// * `tapTargetSize` - theme.materialTapTargetSize
-  /// * `animationDuration` - kThemeChangeDuration
-  /// * `enableFeedback` - true
-  /// * `alignment` - Alignment.center
-  /// * `splashFactory` - InkRipple.splashFactory
-  ///
-  /// ## Material 3 defaults
-  ///
-  /// If [ThemeData.useMaterial3] is set to true the following defaults will
-  /// be used:
-  ///
-  /// * `textStyle` - Theme.textTheme.labelLarge
-  /// * `backgroundColor` - transparent
-  /// * `foregroundColor`
-  ///   * disabled - Theme.colorScheme.onSurface(0.38)
-  ///   * others - Theme.colorScheme.primary
-  /// * `overlayColor`
-  ///   * hovered - Theme.colorScheme.primary(0.08)
-  ///   * focused or pressed - Theme.colorScheme.primary(0.12)
-  ///   * others - null
-  /// * `shadowColor` - Colors.transparent,
-  /// * `surfaceTintColor` - null
-  /// * `elevation` - 0
-  /// * `padding`
-  ///   * `textScaleFactor <= 1` - horizontal(24)
-  ///   * `1 < textScaleFactor <= 2` - lerp(horizontal(24), horizontal(12))
-  ///   * `2 < textScaleFactor <= 3` - lerp(horizontal(12), horizontal(6))
-  ///   * `3 < textScaleFactor` - horizontal(6)
-  /// * `minimumSize` - Size(64, 40)
-  /// * `fixedSize` - null
-  /// * `maximumSize` - Size.infinite
-  /// * `side`
-  ///   * disabled - BorderSide(color: Theme.colorScheme.onSurface(0.12))
-  ///   * others - BorderSide(color: Theme.colorScheme.outline)
-  /// * `shape` - StadiumBorder()
-  /// * `mouseCursor`
-  ///   * disabled - SystemMouseCursors.basic
-  ///   * others - SystemMouseCursors.click
-  /// * `visualDensity` - theme.visualDensity
-  /// * `tapTargetSize` - theme.materialTapTargetSize
-  /// * `animationDuration` - kThemeChangeDuration
-  /// * `enableFeedback` - true
-  /// * `alignment` - Alignment.center
-  /// * `splashFactory` - Theme.splashFactory
-  ///
-  /// For the [OutlinedButton.icon] factory, the start (generally the left) value of
-  /// [padding] is reduced from 24 to 16.
   @override
   ButtonStyle defaultStyleOf(BuildContext context) {
     final ThemeData theme = Theme.of(context);

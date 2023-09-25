@@ -16,13 +16,6 @@ void main() {
   runApp(const LifeCycleSpy());
 }
 
-/// A Test widget that spies on app life cycle changes.
-///
-/// It will collect the AppLifecycleState sequence during its lifetime, and it
-/// will rewire semantics harness if the sequence it receives matches the
-/// expected list.
-///
-/// Rewiring semantics is a signal to native IOS test that the test has passed.
 class LifeCycleSpy extends StatefulWidget {
   const LifeCycleSpy({super.key});
 

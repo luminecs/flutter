@@ -12,25 +12,7 @@ export 'package:flutter/rendering.dart' show SemanticsData;
 
 const String _matcherHelp = 'Try dumping the semantics with debugDumpSemanticsTree(DebugSemanticsDumpOrder.inverseHitTest) from the package:flutter/rendering.dart library to see what the semantics tree looks like.';
 
-/// Test semantics data that is compared against real semantics tree.
-///
-/// Useful with [hasSemantics] and [SemanticsTester] to test the contents of the
-/// semantics tree.
 class TestSemantics {
-  /// Creates an object with some test semantics data.
-  ///
-  /// The [id] field is required. The root node has an id of zero. Other nodes
-  /// are given a unique id when they are created, in a predictable fashion, and
-  /// so these values can be hard-coded.
-  ///
-  /// The [rect] field is required and has no default. Convenient values are
-  /// available:
-  ///
-  ///  * [TestSemantics.rootRect]: 2400x1600, the test screen's size in physical
-  ///    pixels, useful for the node with id zero.
-  ///
-  ///  * [TestSemantics.fullScreen] 800x600, the test screen's size in logical
-  ///    pixels, useful for other full-screen widgets.
   TestSemantics({
     this.id,
     this.flags = 0,
@@ -55,8 +37,6 @@ class TestSemantics {
        assert(actions is int || actions is List<SemanticsAction>),
        tags = tags?.toSet() ?? <SemanticsTag>{};
 
-  /// Creates an object with some test semantics data, with the [id] and [rect]
-  /// set to the appropriate values for the root node.
   TestSemantics.root({
     this.flags = 0,
     this.actions = 0,
@@ -81,16 +61,6 @@ class TestSemantics {
        thickness = 0.0,
        tags = tags?.toSet() ?? <SemanticsTag>{};
 
-  /// Creates an object with some test semantics data, with the [id] and [rect]
-  /// set to the appropriate values for direct children of the root node.
-  ///
-  /// The [transform] is set to a 3.0 scale (to account for the
-  /// [dart:ui.FlutterView.devicePixelRatio] being 3.0 on the test
-  /// pseudo-device).
-  ///
-  /// The [rect] field is required and has no default. The
-  /// [TestSemantics.fullScreen] property may be useful as a value; it describes
-  /// an 800x600 rectangle, which is the test screen's size in logical pixels.
   TestSemantics.rootChild({
     this.id,
     this.flags = 0,
@@ -116,109 +86,40 @@ class TestSemantics {
        transform = _applyRootChildScale(transform),
        tags = tags?.toSet() ?? <SemanticsTag>{};
 
-  /// The unique identifier for this node.
-  ///
-  /// The root node has an id of zero. Other nodes are given a unique id when
-  /// they are created.
   final int? id;
 
-  /// The [SemanticsFlag]s set on this node.
-  ///
-  /// There are two ways to specify this property: as an `int` that encodes the
-  /// flags as a bit field, or as a `List<SemanticsFlag>` that are _on_.
-  ///
-  /// Using `List<SemanticsFlag>` is recommended due to better readability.
   final dynamic flags;
 
-  /// The [SemanticsAction]s set on this node.
-  ///
-  /// There are two ways to specify this property: as an `int` that encodes the
-  /// actions as a bit field, or as a `List<SemanticsAction>`.
-  ///
-  /// Using `List<SemanticsAction>` is recommended due to better readability.
-  ///
-  /// The tester does not check the function corresponding to the action, but
-  /// only its existence.
   final dynamic actions;
 
-  /// A textual description of this node.
   final String label;
 
-  /// A textual description for the value of this node.
   final String value;
 
-  /// What [value] will become after [SemanticsAction.increase] has been
-  /// performed.
   final String increasedValue;
 
-  /// What [value] will become after [SemanticsAction.decrease] has been
-  /// performed.
   final String decreasedValue;
 
-  /// A brief textual description of the result of the action that can be
-  /// performed on this node.
   final String hint;
 
-  /// A textual tooltip of this node.
   final String tooltip;
 
-  /// The reading direction of the [label].
-  ///
-  /// Even if this is not set, the [hasSemantics] matcher will verify that if a
-  /// label is present on the [SemanticsNode], a [SemanticsNode.textDirection]
-  /// is also set.
   final TextDirection? textDirection;
 
-  /// The bounding box for this node in its coordinate system.
-  ///
-  /// Convenient values are available:
-  ///
-  ///  * [TestSemantics.rootRect]: 2400x1600, the test screen's size in physical
-  ///    pixels, useful for the node with id zero.
-  ///
-  ///  * [TestSemantics.fullScreen] 800x600, the test screen's size in logical
-  ///    pixels, useful for other full-screen widgets.
   final Rect? rect;
 
-  /// The test screen's size in physical pixels, typically used as the [rect]
-  /// for the node with id zero.
-  ///
-  /// See also:
-  ///
-  ///  * [TestSemantics.root], which uses this value to describe the root
-  ///    node.
   static const Rect rootRect = Rect.fromLTWH(0.0, 0.0, 2400.0, 1800.0);
 
-  /// The test screen's size in logical pixels, useful for the [rect] of
-  /// full-screen widgets other than the root node.
   static const Rect fullScreen = Rect.fromLTWH(0.0, 0.0, 800.0, 600.0);
 
-  /// The transform from this node's coordinate system to its parent's coordinate system.
-  ///
-  /// By default, the transform is null, which represents the identity
-  /// transformation (i.e., that this node has the same coordinate system as its
-  /// parent).
   final Matrix4? transform;
 
-  /// The elevation of this node relative to the parent node.
-  ///
-  /// See also:
-  ///
-  ///  * [SemanticsConfiguration.elevation] for a detailed discussion regarding
-  ///    elevation and semantics.
   final double? elevation;
 
-  /// The extend that this node occupies in z-direction starting at [elevation].
-  ///
-  /// See also:
-  ///
-  ///  * [SemanticsConfiguration.thickness] for a more detailed definition.
   final double? thickness;
 
-  /// The index of the first visible semantic node within a scrollable.
   final int? scrollIndex;
 
-  /// The total number of semantic nodes within a scrollable.
   final int? scrollChildren;
 
   final TextSelection? textSelection;
@@ -231,10 +132,8 @@ class TestSemantics {
     return result;
   }
 
-  /// The children of this node.
   final List<TestSemantics> children;
 
-  /// The tags of this node.
   final Set<SemanticsTag> tags;
 
   bool _matches(
@@ -412,14 +311,7 @@ class TestSemantics {
   }
 }
 
-/// Ensures that the given widget tester has a semantics tree to test.
-///
-/// Useful with [hasSemantics] to test the contents of the semantics tree.
 class SemanticsTester {
-  /// Creates a semantics tester for the given widget tester.
-  ///
-  /// You should call [dispose] at the end of a test that creates a semantics
-  /// tester.
   SemanticsTester(this.tester) {
     _semanticsHandle = tester.ensureSemantics();
 
@@ -432,15 +324,9 @@ class SemanticsTester {
     addTearDown(dispose);
   }
 
-  /// The widget tester that this object is testing the semantics of.
   final WidgetTester tester;
   SemanticsHandle? _semanticsHandle;
 
-  /// Release resources held by this semantics tester.
-  ///
-  /// Call this function at the end of any test that uses a semantics tester. It
-  /// is OK to call this function multiple times. If the resources have already
-  /// been released, the subsequent calls have no effect.
   @mustCallSuper
   void dispose() {
     _semanticsHandle?.dispose();
@@ -470,13 +356,6 @@ class SemanticsTester {
     return true;
   }
 
-  /// Returns all semantics nodes in the current semantics tree whose properties
-  /// match the non-null arguments.
-  ///
-  /// If multiple arguments are non-null, each of the returned nodes must match
-  /// on all of them.
-  ///
-  /// If `ancestor` is not null, only the descendants of it are returned.
   Iterable<SemanticsNode> nodesWith({
     AttributedString? attributedLabel,
     AttributedString? attributedValue,
@@ -577,54 +456,6 @@ class SemanticsTester {
     return result;
   }
 
-  /// Generates an expression that creates a [TestSemantics] reflecting the
-  /// current tree of [SemanticsNode]s.
-  ///
-  /// Use this method to generate code for unit tests. It works similar to
-  /// screenshot testing. The very first time you add semantics to a widget you
-  /// verify manually that the widget behaves correctly. You then use this
-  /// method to generate test code for this widget.
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  /// testWidgets('generate code for MyWidget', (WidgetTester tester) async {
-  ///   var semantics = SemanticsTester(tester);
-  ///   await tester.pumpWidget(MyWidget());
-  ///   print(semantics.generateTestSemanticsExpressionForCurrentSemanticsTree());
-  ///   semantics.dispose();
-  /// });
-  /// ```
-  ///
-  /// You can now copy the code printed to the console into a unit test:
-  ///
-  /// ```dart
-  /// testWidgets('generate code for MyWidget', (WidgetTester tester) async {
-  ///   var semantics = SemanticsTester(tester);
-  ///   await tester.pumpWidget(MyWidget());
-  ///   expect(semantics, hasSemantics(
-  ///     // Generated code:
-  ///     TestSemantics(
-  ///       ... properties and child nodes ...
-  ///     ),
-  ///     ignoreRect: true,
-  ///     ignoreTransform: true,
-  ///     ignoreId: true,
-  ///   ));
-  ///   semantics.dispose();
-  /// });
-  /// ```
-  ///
-  /// At this point the unit test should automatically pass because it was
-  /// generated from the actual [SemanticsNode]s. Next time the semantics tree
-  /// changes, the test code may either be updated manually, or regenerated and
-  /// replaced using this method again.
-  ///
-  /// Avoid submitting huge piles of generated test code. This will make test
-  /// code hard to review and it will make it tempting to regenerate test code
-  /// every time and ignore potential regressions. Make sure you do not
-  /// over-test. Prefer breaking your widgets into smaller widgets and test them
-  /// individually.
   String generateTestSemanticsExpressionForCurrentSemanticsTree(DebugSemanticsDumpOrder childOrder) {
     final SemanticsNode? node = tester.binding.pipelineOwner.semanticsOwner?.rootSemanticsNode;
     return _generateSemanticsTestForNode(node, 0, childOrder);
@@ -656,8 +487,6 @@ class SemanticsTester {
     return '<SemanticsAction>[${list.join(', ')}]';
   }
 
-  /// Recursively generates [TestSemantics] code for [node] and its children,
-  /// indenting the expression by `indentAmount`.
   static String _generateSemanticsTestForNode(SemanticsNode? node, int indentAmount, DebugSemanticsDumpOrder childOrder) {
     if (node == null) {
       return 'null';
@@ -775,7 +604,6 @@ class _HasSemantics extends Matcher {
   }
 }
 
-/// Asserts that a [SemanticsTester] has a semantics tree that exactly matches the given semantics.
 Matcher hasSemantics(
   TestSemantics semantics, {
   bool ignoreRect = false,
@@ -887,10 +715,6 @@ class _IncludesNodeWith extends Matcher {
   }
 }
 
-/// Asserts that a node in the semantics tree of [SemanticsTester] has `label`,
-/// `textDirection`, and `actions`.
-///
-/// If null is provided for an argument, it will match against any value.
 Matcher includesNodeWith({
   String? label,
   AttributedString? attributedLabel,

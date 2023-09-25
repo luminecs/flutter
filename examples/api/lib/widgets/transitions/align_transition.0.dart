@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AlignTransition].
 
 void main() => runApp(const AlignTransitionExampleApp());
 
@@ -26,8 +25,6 @@ class AlignTransitionExample extends StatefulWidget {
   State<AlignTransitionExample> createState() => _AlignTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _AlignTransitionExampleState extends State<AlignTransitionExample> with TickerProviderStateMixin {
   // Using `late final` for lazy initialization. See
   // https://dart.dev/null-safety/understanding-null-safety#lazy-initialization.

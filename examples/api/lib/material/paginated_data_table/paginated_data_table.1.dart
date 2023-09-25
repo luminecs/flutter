@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [PaginatedDataTable].
 
 class MyDataSource extends DataTableSource {
   static const List<int> _displayIndexToRawIndex = <int>[ 0, 3, 4, 5, 6 ];

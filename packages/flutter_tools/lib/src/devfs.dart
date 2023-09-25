@@ -24,23 +24,15 @@ import 'vmservice.dart';
 const String _kFontManifest = 'FontManifest.json';
 
 class DevFSConfig {
-  /// Should DevFS assume that symlink targets are stable?
   bool cacheSymlinks = false;
-  /// Should DevFS assume that there are no symlinks to directories?
   bool noDirectorySymlinks = false;
 }
 
 DevFSConfig? get devFSConfig => context.get<DevFSConfig>();
 
-/// Common superclass for content copied to the device.
 abstract class DevFSContent {
-  /// Return true if this is the first time this method is called
-  /// or if the entry has been modified since this method was last called.
   bool get isModified;
 
-  /// Return true if this is the first time this method is called
-  /// or if the entry has been modified after the given time
-  /// or if the given time is null.
   bool isModifiedAfter(DateTime time);
 
   int get size;
@@ -145,7 +137,6 @@ class DevFSFileContent extends DevFSContent {
   Stream<List<int>> contentsAsStream() => _getFile().openRead();
 }
 
-/// Byte content to be copied to the device.
 class DevFSByteContent extends DevFSContent {
   DevFSByteContent(this._bytes);
 
@@ -162,7 +153,6 @@ class DevFSByteContent extends DevFSContent {
     _modificationTime = DateTime.now();
   }
 
-  /// Return true only once so that the content is written to the device only once.
   @override
   bool get isModified {
     final bool modified = _isModified;
@@ -186,7 +176,6 @@ class DevFSByteContent extends DevFSContent {
       Stream<List<int>>.fromIterable(<List<int>>[_bytes]);
 }
 
-/// String content to be copied to the device.
 class DevFSStringContent extends DevFSByteContent {
   DevFSStringContent(String string)
     : _string = string,
@@ -207,16 +196,6 @@ class DevFSStringContent extends DevFSByteContent {
   }
 }
 
-/// A string compressing DevFSContent.
-///
-/// A specialized DevFSContent similar to DevFSByteContent where the contents
-/// are the compressed bytes of a string. Its difference is that the original
-/// uncompressed string can be compared with directly without the indirection
-/// of a compute-expensive uncompress/decode and compress/encode to compare
-/// the strings.
-///
-/// The `hintString` parameter is a zlib dictionary hinting mechanism to suggest
-/// the most common string occurrences to potentially assist with compression.
 class DevFSStringCompressingBytesContent extends DevFSContent {
   DevFSStringCompressingBytesContent(this._string, { String? hintString })
     : _compressor = ZLibEncoder(
@@ -235,7 +214,6 @@ class DevFSStringCompressingBytesContent extends DevFSContent {
 
   late final List<int> bytes = _compressor.convert(utf8.encode(_string));
 
-  /// Return true only once so that the content is written to the device only once.
   @override
   bool get isModified {
     final bool modified = _isModified;
@@ -257,7 +235,6 @@ class DevFSStringCompressingBytesContent extends DevFSContent {
   @override
   Stream<List<int>> contentsAsStream() => Stream<List<int>>.value(bytes);
 
-  /// This checks the source string with another string.
   bool equals(String string) => _string == string;
 }
 
@@ -271,13 +248,7 @@ class DevFSException implements Exception {
   String toString() => 'DevFSException($message, $error, $stackTrace)';
 }
 
-/// Interface responsible for syncing asset files to a development device.
 abstract class DevFSWriter {
-  /// Write the assets in [entries] to the target device.
-  ///
-  /// The keys of the map are relative from the [baseUri].
-  ///
-  /// Throws a [DevFSException] if the process fails to complete.
   Future<void> write(Map<Uri, DevFSContent> entries, Uri baseUri, DevFSWriter parent);
 }
 
@@ -443,9 +414,6 @@ class UpdateFSReport {
 }
 
 class DevFS {
-  /// Create a [DevFS] named [fsName] for the local files in [rootDirectory].
-  ///
-  /// Failed uploads are retried after [uploadRetryThrottle] duration, defaults to 500ms.
   DevFS(
     FlutterVmService serviceProtocol,
     this.fsName,
@@ -485,7 +453,6 @@ class DevFS {
   // A flag to indicate whether we have called `setAssetDirectory` on the target device.
   bool hasSetAssetDirectory = false;
 
-  /// Whether the font manifest was uploaded during [update].
   bool didUpdateFontManifest = false;
 
   List<Uri> sources = <Uri>[];
@@ -538,22 +505,10 @@ class DevFS {
     _logger.printTrace('DevFS: Deleted filesystem on the device ($_baseUri)');
   }
 
-  /// Mark the [lastCompiled] time to the previous successful compile.
-  ///
-  /// Sometimes a hot reload will be rejected by the VM due to a change in the
-  /// structure of the code not supporting the hot reload. In these cases,
-  /// the best resolution is a hot restart. However, the resident runner
-  /// will not recognize this file as having been changed since the delta
-  /// will already have been accepted. Instead, reset the compile time so
-  /// that the last updated files are included in subsequent compilations until
-  /// a reload is accepted.
   void resetLastCompiled() {
     lastCompiled = _previousCompiled;
   }
 
-  /// Updates files on the device.
-  ///
-  /// Returns the number of bytes synced.
   Future<UpdateFSReport> update({
     required Uri mainUri,
     required ResidentCompiler generator,
@@ -725,18 +680,9 @@ class DevFS {
     );
   }
 
-  /// Converts a platform-specific file path to a platform-independent URL path.
   String _asUriPath(String filePath) => '${_fileSystem.path.toUri(filePath).path}/';
 }
 
-/// An implementation of a devFS writer which copies physical files for devices
-/// running on the same host.
-///
-/// DevFS entries which correspond to physical files are copied using [File.copySync],
-/// while entries that correspond to arbitrary string/byte values are written from
-/// memory.
-///
-/// Requires that the file system is the same for both the tool and application.
 class LocalDevFSWriter implements DevFSWriter {
   LocalDevFSWriter({
     required FileSystem fileSystem,

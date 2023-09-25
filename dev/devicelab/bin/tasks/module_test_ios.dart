@@ -14,8 +14,6 @@ import 'package:flutter_devicelab/framework/task_result.dart';
 import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:path/path.dart' as path;
 
-/// Tests that the Flutter module project template works and supports
-/// adding Flutter to an existing iOS app.
 Future<void> main() async {
   await task(() async {
     // Update pod repo.

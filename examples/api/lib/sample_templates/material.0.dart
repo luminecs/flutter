@@ -31,7 +31,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Placeholder].
 
 void main() {
   runApp(const SampleApp());
@@ -49,11 +48,6 @@ class SampleApp extends StatelessWidget {
   }
 }
 
-/// Include comments about each class, and make them dartdoc comments, so that
-/// links (e.g. [Placeholder]) are active in IDEs.
-///
-/// Name the classes appropriately for the example (don't leave it as
-/// "PlaceholderExample"!).
 class PlaceholderExample extends StatelessWidget {
   const PlaceholderExample({super.key});
 

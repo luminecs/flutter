@@ -10,7 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'binary_messenger.dart';
 import 'binding.dart';
 
-/// A [BinaryMessenger] for use on background (non-root) isolates.
 class BackgroundIsolateBinaryMessenger extends BinaryMessenger {
   BackgroundIsolateBinaryMessenger._();
 
@@ -19,9 +18,6 @@ class BackgroundIsolateBinaryMessenger extends BinaryMessenger {
       <int, Completer<ByteData?>>{};
   int _messageCount = 0;
 
-  /// The existing instance of this class, if any.
-  ///
-  /// Throws if [ensureInitialized] has not been called at least once.
   static BinaryMessenger get instance {
     if (_instance == null) {
       throw StateError(
@@ -34,12 +30,6 @@ class BackgroundIsolateBinaryMessenger extends BinaryMessenger {
 
   static BinaryMessenger? _instance;
 
-  /// Ensures that [BackgroundIsolateBinaryMessenger.instance] has been initialized.
-  ///
-  /// The argument should be the value obtained from [ServicesBinding.rootIsolateToken]
-  /// on the root isolate.
-  ///
-  /// This function is idempotent (calling it multiple times is harmless but has no effect).
   static void ensureInitialized(ui.RootIsolateToken token) {
     if (_instance == null) {
       ui.PlatformDispatcher.instance.registerBackgroundIsolate(token);

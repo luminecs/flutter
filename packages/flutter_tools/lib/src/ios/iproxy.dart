@@ -8,9 +8,6 @@ import '../base/io.dart';
 import '../base/logger.dart';
 import '../base/process.dart';
 
-/// Wraps iproxy command line tool port forwarding.
-///
-/// See https://github.com/libimobiledevice/libusbmuxd.
 class IProxy {
   IProxy({
     required String iproxyPath,
@@ -22,10 +19,6 @@ class IProxy {
         _logger = logger,
         _iproxyPath = iproxyPath;
 
-  /// Create a [IProxy] for testing.
-  ///
-  /// This specifies the path to iproxy as 'iproxy` and the dyLdLibEntry as
-  /// 'DYLD_LIBRARY_PATH: /path/to/libs'.
   factory IProxy.test({
     required Logger logger,
     required ProcessManager processManager,

@@ -9,24 +9,8 @@ import 'package:flutter/widgets.dart';
 
 import 'theme.dart';
 
-/// Defines a theme for [Dialog] widgets.
-///
-/// Descendant widgets obtain the current [DialogTheme] object using
-/// `DialogTheme.of(context)`. Instances of [DialogTheme] can be customized with
-/// [DialogTheme.copyWith].
-///
-/// [titleTextStyle] and [contentTextStyle] are used in [AlertDialog]s and [SimpleDialog]s.
-///
-/// See also:
-///
-///  * [Dialog], a dialog that can be customized using this [DialogTheme].
-///  * [AlertDialog], a dialog that can be customized using this [DialogTheme].
-///  * [SimpleDialog], a dialog that can be customized using this [DialogTheme].
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class DialogTheme with Diagnosticable {
-  /// Creates a dialog theme that can be used for [ThemeData.dialogTheme].
   const DialogTheme({
     this.backgroundColor,
     this.elevation,
@@ -40,40 +24,26 @@ class DialogTheme with Diagnosticable {
     this.actionsPadding,
   });
 
-  /// Overrides the default value for [Dialog.backgroundColor].
   final Color? backgroundColor;
 
-  /// Overrides the default value for [Dialog.elevation].
   final double? elevation;
 
-  /// Overrides the default value for [Dialog.shadowColor].
   final Color? shadowColor;
 
-  /// Overrides the default value for [Dialog.surfaceTintColor].
   final Color? surfaceTintColor;
 
-  /// Overrides the default value for [Dialog.shape].
   final ShapeBorder? shape;
 
-  /// Overrides the default value for [Dialog.alignment].
   final AlignmentGeometry? alignment;
 
-  /// Overrides the default value for [DefaultTextStyle] for [SimpleDialog.title] and
-  /// [AlertDialog.title].
   final TextStyle? titleTextStyle;
 
-  /// Overrides the default value for [DefaultTextStyle] for [SimpleDialog.children] and
-  /// [AlertDialog.content].
   final TextStyle? contentTextStyle;
 
-  /// Overrides the default value for [AlertDialog.actionsPadding].
   final EdgeInsetsGeometry? actionsPadding;
 
-  /// Used to configure the [IconTheme] for the [AlertDialog.icon] widget.
   final Color? iconColor;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   DialogTheme copyWith({
     Color? backgroundColor,
     double? elevation,
@@ -100,14 +70,10 @@ class DialogTheme with Diagnosticable {
     );
   }
 
-  /// The data from the closest [DialogTheme] instance given the build context.
   static DialogTheme of(BuildContext context) {
     return Theme.of(context).dialogTheme;
   }
 
-  /// Linearly interpolate between two dialog themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static DialogTheme lerp(DialogTheme? a, DialogTheme? b, double t) {
     if (identical(a, b) && a != null) {
       return a;

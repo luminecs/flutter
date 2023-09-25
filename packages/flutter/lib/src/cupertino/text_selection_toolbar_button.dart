@@ -31,9 +31,7 @@ const CupertinoDynamicColor _kToolbarPressedColor = CupertinoDynamicColor.withBr
 // Value measured from screenshot of iOS 16.0.2
 const EdgeInsets _kToolbarButtonPadding = EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0);
 
-/// A button in the style of the iOS text selection toolbar buttons.
 class CupertinoTextSelectionToolbarButton extends StatefulWidget {
-  /// Create an instance of [CupertinoTextSelectionToolbarButton].
   const CupertinoTextSelectionToolbarButton({
     super.key,
     this.onPressed,
@@ -41,8 +39,6 @@ class CupertinoTextSelectionToolbarButton extends StatefulWidget {
   }) : text = null,
        buttonItem = null;
 
-  /// Create an instance of [CupertinoTextSelectionToolbarButton] whose child is
-  /// a [Text] widget styled like the default iOS text selection toolbar button.
   const CupertinoTextSelectionToolbarButton.text({
     super.key,
     this.onPressed,
@@ -50,8 +46,6 @@ class CupertinoTextSelectionToolbarButton extends StatefulWidget {
   }) : buttonItem = null,
        child = null;
 
-  /// Create an instance of [CupertinoTextSelectionToolbarButton] from the given
-  /// [ContextMenuButtonItem].
   CupertinoTextSelectionToolbarButton.buttonItem({
     super.key,
     required ContextMenuButtonItem this.buttonItem,
@@ -59,32 +53,14 @@ class CupertinoTextSelectionToolbarButton extends StatefulWidget {
        text = null,
        onPressed = buttonItem.onPressed;
 
-  /// {@template flutter.cupertino.CupertinoTextSelectionToolbarButton.child}
-  /// The child of this button.
-  ///
-  /// Usually a [Text] or an [Icon].
-  /// {@endtemplate}
   final Widget? child;
 
-  /// {@template flutter.cupertino.CupertinoTextSelectionToolbarButton.onPressed}
-  /// Called when this button is pressed.
-  /// {@endtemplate}
   final VoidCallback? onPressed;
 
-  /// {@template flutter.cupertino.CupertinoTextSelectionToolbarButton.onPressed}
-  /// The buttonItem used to generate the button when using
-  /// [CupertinoTextSelectionToolbarButton.buttonItem].
-  /// {@endtemplate}
   final ContextMenuButtonItem? buttonItem;
 
-  /// {@template flutter.cupertino.CupertinoTextSelectionToolbarButton.text}
-  /// The text used in the button's label when using
-  /// [CupertinoTextSelectionToolbarButton.text].
-  /// {@endtemplate}
   final String? text;
 
-  /// Returns the default button label String for the button of the given
-  /// [ContextMenuButtonItem]'s [ContextMenuButtonType].
   static String getButtonLabel(BuildContext context, ContextMenuButtonItem buttonItem) {
     if (buttonItem.label != null) {
       return buttonItem.label!;

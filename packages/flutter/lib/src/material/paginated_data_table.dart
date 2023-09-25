@@ -21,65 +21,7 @@ import 'material_state.dart';
 import 'progress_indicator.dart';
 import 'theme.dart';
 
-/// A Material Design data table that shows data using multiple pages.
-///
-/// A paginated data table shows [rowsPerPage] rows of data per page and
-/// provides controls for showing other pages.
-///
-/// Data is read lazily from a [DataTableSource]. The widget is presented
-/// as a [Card].
-///
-/// If the [key] is a [PageStorageKey], the [initialFirstRowIndex] is persisted
-/// to [PageStorage].
-///
-/// {@tool dartpad}
-///
-/// This sample shows how to display a [DataTable] with three columns: name,
-/// age, and role. The columns are defined by three [DataColumn] objects. The
-/// table contains three rows of data for three example users, the data for
-/// which is defined by three [DataRow] objects.
-///
-/// ** See code in examples/api/lib/material/paginated_data_table/paginated_data_table.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-///
-/// This example shows how paginated data tables can supported sorted data.
-///
-/// ** See code in examples/api/lib/material/paginated_data_table/paginated_data_table.1.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [DataTable], which is not paginated.
-///  * <https://material.io/go/design-data-tables#data-tables-tables-within-cards>
 class PaginatedDataTable extends StatefulWidget {
-  /// Creates a widget describing a paginated [DataTable] on a [Card].
-  ///
-  /// The [header] should give the card's header, typically a [Text] widget.
-  ///
-  /// The [columns] argument must be a list of as many [DataColumn] objects as
-  /// the table is to have columns, ignoring the leading checkbox column if any.
-  /// The [columns] argument must have a length greater than zero and cannot be
-  /// null.
-  ///
-  /// If the table is sorted, the column that provides the current primary key
-  /// should be specified by index in [sortColumnIndex], 0 meaning the first
-  /// column in [columns], 1 being the next one, and so forth.
-  ///
-  /// The actual sort order can be specified using [sortAscending]; if the sort
-  /// order is ascending, this should be true (the default), otherwise it should
-  /// be false.
-  ///
-  /// The [source] should be a long-lived [DataTableSource]. The same source
-  /// should be provided each time a particular [PaginatedDataTable] widget is
-  /// created; avoid creating a new [DataTableSource] with each new instance of
-  /// the [PaginatedDataTable] widget unless the data table really is to now
-  /// show entirely different data from a new source.
-  ///
-  /// Themed by [DataTableTheme]. [DataTableThemeData.decoration] is ignored.
-  /// To modify the border or background color of the [PaginatedDataTable], use
-  /// [CardTheme], since a [Card] wraps the inner [DataTable].
   PaginatedDataTable({
     super.key,
     this.header,
@@ -132,170 +74,68 @@ class PaginatedDataTable extends StatefulWidget {
           'You cannot both set primary to true and pass an explicit controller.',
        );
 
-  /// The table card's optional header.
-  ///
-  /// This is typically a [Text] widget, but can also be a [Row] of
-  /// [TextButton]s. To show icon buttons at the top end side of the table with
-  /// a header, set the [actions] property.
-  ///
-  /// If items in the table are selectable, then, when the selection is not
-  /// empty, the header is replaced by a count of the selected items. The
-  /// [actions] are still visible when items are selected.
   final Widget? header;
 
-  /// Icon buttons to show at the top end side of the table. The [header] must
-  /// not be null to show the actions.
-  ///
-  /// Typically, the exact actions included in this list will vary based on
-  /// whether any rows are selected or not.
-  ///
-  /// These should be size 24.0 with default padding (8.0).
   final List<Widget>? actions;
 
-  /// The configuration and labels for the columns in the table.
   final List<DataColumn> columns;
 
-  /// The current primary sort key's column.
-  ///
-  /// See [DataTable.sortColumnIndex] for details.
-  ///
-  /// The direction of the sort is specified using [sortAscending].
   final int? sortColumnIndex;
 
-  /// Whether the column mentioned in [sortColumnIndex], if any, is sorted
-  /// in ascending order.
-  ///
-  /// See [DataTable.sortAscending] for details.
   final bool sortAscending;
 
-  /// Invoked when the user selects or unselects every row, using the
-  /// checkbox in the heading row.
-  ///
-  /// See [DataTable.onSelectAll].
   final ValueSetter<bool?>? onSelectAll;
 
-  /// The height of each row (excluding the row that contains column headings).
-  ///
-  /// This value is optional and defaults to kMinInteractiveDimension if not
-  /// specified.
   @Deprecated(
     'Migrate to use dataRowMinHeight and dataRowMaxHeight instead. '
     'This feature was deprecated after v3.7.0-5.0.pre.',
   )
   double? get dataRowHeight => dataRowMinHeight == dataRowMaxHeight ? dataRowMinHeight : null;
 
-  /// The minimum height of each row (excluding the row that contains column headings).
-  ///
-  /// This value is optional and defaults to [kMinInteractiveDimension] if not
-  /// specified.
   final double? dataRowMinHeight;
 
-  /// The maximum height of each row (excluding the row that contains column headings).
-  ///
-  /// This value is optional and defaults to [kMinInteractiveDimension] if not
-  /// specified.
   final double? dataRowMaxHeight;
 
-  /// The height of the heading row.
-  ///
-  /// This value is optional and defaults to 56.0 if not specified.
   final double headingRowHeight;
 
-  /// The horizontal margin between the edges of the table and the content
-  /// in the first and last cells of each row.
-  ///
-  /// When a checkbox is displayed, it is also the margin between the checkbox
-  /// the content in the first data column.
-  ///
-  /// This value defaults to 24.0 to adhere to the Material Design specifications.
-  ///
-  /// If [checkboxHorizontalMargin] is null, then [horizontalMargin] is also the
-  /// margin between the edge of the table and the checkbox, as well as the
-  /// margin between the checkbox and the content in the first data column.
   final double horizontalMargin;
 
-  /// The horizontal margin between the contents of each data column.
-  ///
-  /// This value defaults to 56.0 to adhere to the Material Design specifications.
   final double columnSpacing;
 
-  /// {@macro flutter.material.dataTable.showCheckboxColumn}
   final bool showCheckboxColumn;
 
-  /// Flag to display the pagination buttons to go to the first and last pages.
   final bool showFirstLastButtons;
 
-  /// The index of the first row to display when the widget is first created.
   final int? initialFirstRowIndex;
 
-  /// Invoked when the user switches to another page.
-  ///
-  /// The value is the index of the first row on the currently displayed page.
   final ValueChanged<int>? onPageChanged;
 
-  /// The number of rows to show on each page.
-  ///
-  /// See also:
-  ///
-  ///  * [onRowsPerPageChanged]
-  ///  * [defaultRowsPerPage]
   final int rowsPerPage;
 
-  /// The default value for [rowsPerPage].
-  ///
-  /// Useful when initializing the field that will hold the current
-  /// [rowsPerPage], when implemented [onRowsPerPageChanged].
   static const int defaultRowsPerPage = 10;
 
-  /// The options to offer for the rowsPerPage.
-  ///
-  /// The current [rowsPerPage] must be a value in this list.
-  ///
-  /// The values in this list should be sorted in ascending order.
   final List<int> availableRowsPerPage;
 
-  /// Invoked when the user selects a different number of rows per page.
-  ///
-  /// If this is null, then the value given by [rowsPerPage] will be used
-  /// and no affordance will be provided to change the value.
   final ValueChanged<int?>? onRowsPerPageChanged;
 
-  /// The data source which provides data to show in each row.
-  ///
-  /// This object should generally have a lifetime longer than the
-  /// [PaginatedDataTable] widget itself; it should be reused each time the
-  /// [PaginatedDataTable] constructor is called.
   final DataTableSource source;
 
-  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
 
-  /// Horizontal margin around the checkbox, if it is displayed.
-  ///
-  /// If null, then [horizontalMargin] is used as the margin between the edge
-  /// of the table and the checkbox, as well as the margin between the checkbox
-  /// and the content in the first data column. This value defaults to 24.0.
   final double? checkboxHorizontalMargin;
 
-  /// Defines the color of the arrow heads in the footer.
   final Color? arrowHeadColor;
 
-  /// {@macro flutter.widgets.scroll_view.controller}
   final ScrollController? controller;
 
-  /// {@macro flutter.widgets.scroll_view.primary}
   final bool? primary;
 
-   /// {@macro flutter.material.dataTable.headingRowColor}
   final MaterialStateProperty<Color?>? headingRowColor;
 
   @override
   PaginatedDataTableState createState() => PaginatedDataTableState();
 }
 
-/// Holds the state of a [PaginatedDataTable].
-///
-/// The table can be programmatically paged using the [pageTo] method.
 class PaginatedDataTableState extends State<PaginatedDataTable> {
   late int _firstRowIndex;
   late int _rowCount;
@@ -355,7 +195,6 @@ class PaginatedDataTableState extends State<PaginatedDataTable> {
     _rows.clear();
   }
 
-  /// Ensures that the given row is visible.
   void pageTo(int rowIndex) {
     final int oldFirstRowIndex = _firstRowIndex;
     setState(() {

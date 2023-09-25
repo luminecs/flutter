@@ -6,7 +6,6 @@ import '../base/platform.dart';
 import '../doctor_validator.dart';
 import '../features.dart';
 
-/// The macOS-specific implementation of a [Workflow].
 class MacOSWorkflow implements Workflow {
   const MacOSWorkflow({
     required Platform platform,

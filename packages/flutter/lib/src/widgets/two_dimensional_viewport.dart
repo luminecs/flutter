@@ -32,105 +32,9 @@ export 'package:flutter/rendering.dart' show AxisDirection;
 //   void layoutChildSequence() { }
 // }
 
-/// Signature for a function that creates a widget for a given [ChildVicinity],
-/// e.g., in a [TwoDimensionalScrollView], but may return null.
-///
-/// Used by [TwoDimensionalChildBuilderDelegate.builder] and other APIs that
-/// use lazily-generated widgets where the child count may not be known
-/// ahead of time.
-///
-/// Unlike most builders, this callback can return null, indicating the
-/// [ChildVicinity.xIndex] or [ChildVicinity.yIndex] is out of range. Whether
-/// and when this is valid depends on the semantics of the builder. For example,
-/// [TwoDimensionalChildBuilderDelegate.builder] returns
-/// null when one or both of the indices is out of range, where the range is
-/// defined by the [TwoDimensionalChildBuilderDelegate.maxXIndex] or
-/// [TwoDimensionalChildBuilderDelegate.maxYIndex]; so in that case the
-/// vicinity values may determine whether returning null is valid or not.
-///
-/// See also:
-///
-///  * [WidgetBuilder], which is similar but only takes a [BuildContext].
-///  * [NullableIndexedWidgetBuilder], which is similar but may return null.
-///  * [IndexedWidgetBuilder], which is similar but not nullable.
 typedef TwoDimensionalIndexedWidgetBuilder = Widget? Function(BuildContext, ChildVicinity vicinity);
 
-/// A widget through which a portion of larger content can be viewed, typically
-/// in combination with a [TwoDimensionalScrollable].
-///
-/// [TwoDimensionalViewport] is the visual workhorse of the two dimensional
-/// scrolling machinery. It displays a subset of its children according to its
-/// own dimensions and the given [horizontalOffset] an [verticalOffset]. As the
-/// offsets vary, different children are visible through the viewport.
-///
-/// Subclasses must implement [createRenderObject] and [updateRenderObject].
-/// Both of these methods require the render object to be a subclass of
-/// [RenderTwoDimensionalViewport]. This class will create its own
-/// [RenderObjectElement] which already implements the
-/// [TwoDimensionalChildManager], which means subclasses should cast the
-/// [BuildContext] to provide as the child manager to the
-/// [RenderTwoDimensionalViewport].
-///
-/// {@tool snippet}
-/// This is an example of a subclass implementation of [TwoDimensionalViewport],
-/// `SimpleTwoDimensionalViewport`. The `RenderSimpleTwoDimensionalViewport` is
-/// a subclass of [RenderTwoDimensionalViewport].
-///
-/// ```dart
-/// class SimpleTwoDimensionalViewport extends TwoDimensionalViewport {
-///   const SimpleTwoDimensionalViewport({
-///     super.key,
-///     required super.verticalOffset,
-///     required super.verticalAxisDirection,
-///     required super.horizontalOffset,
-///     required super.horizontalAxisDirection,
-///     required super.delegate,
-///     required super.mainAxis,
-///     super.cacheExtent,
-///     super.clipBehavior = Clip.hardEdge,
-///   });
-///
-///   @override
-///   RenderSimpleTwoDimensionalViewport createRenderObject(BuildContext context) {
-///     return RenderSimpleTwoDimensionalViewport(
-///       horizontalOffset: horizontalOffset,
-///       horizontalAxisDirection: horizontalAxisDirection,
-///       verticalOffset: verticalOffset,
-///       verticalAxisDirection: verticalAxisDirection,
-///       mainAxis: mainAxis,
-///       delegate: delegate,
-///       childManager: context as TwoDimensionalChildManager,
-///       cacheExtent: cacheExtent,
-///       clipBehavior: clipBehavior,
-///     );
-///   }
-///
-///   @override
-///   void updateRenderObject(BuildContext context, RenderSimpleTwoDimensionalViewport renderObject) {
-///     renderObject
-///       ..horizontalOffset = horizontalOffset
-///       ..horizontalAxisDirection = horizontalAxisDirection
-///       ..verticalOffset = verticalOffset
-///       ..verticalAxisDirection = verticalAxisDirection
-///       ..mainAxis = mainAxis
-///       ..delegate = delegate
-///       ..cacheExtent = cacheExtent
-///       ..clipBehavior = clipBehavior;
-///   }
-/// }
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///   * [Viewport], the equivalent of this widget that scrolls in only one
-///     dimension.
 abstract class TwoDimensionalViewport extends RenderObjectWidget {
-  /// Creates a viewport for [RenderBox] objects that extend and scroll in both
-  /// horizontal and vertical dimensions.
-  ///
-  /// The viewport listens to the [horizontalOffset] and [verticalOffset], which
-  /// means this widget does not need to be rebuilt when the offsets change.
   const TwoDimensionalViewport({
     super.key,
     required this.verticalOffset,
@@ -150,65 +54,20 @@ abstract class TwoDimensionalViewport extends RenderObjectWidget {
          'TwoDimensionalViewport.horizontalAxisDirection is not Axis.horizontal.'
        );
 
-  /// Which part of the content inside the viewport should be visible in the
-  /// vertical axis.
-  ///
-  /// The [ViewportOffset.pixels] value determines the scroll offset that the
-  /// viewport uses to select which part of its content to display. As the user
-  /// scrolls the viewport vertically, this value changes, which changes the
-  /// content that is displayed.
-  ///
-  /// Typically a [ScrollPosition].
   final ViewportOffset verticalOffset;
 
-  /// The direction in which the [verticalOffset]'s [ViewportOffset.pixels]
-  /// increases.
-  ///
-  /// For example, if the axis direction is [AxisDirection.down], a scroll
-  /// offset of zero is at the top of the viewport and increases towards the
-  /// bottom of the viewport.
-  ///
-  /// Must be either [AxisDirection.down] or [AxisDirection.up] in correlation
-  /// with an [Axis.vertical].
   final AxisDirection verticalAxisDirection;
 
-  /// Which part of the content inside the viewport should be visible in the
-  /// horizontal axis.
-  ///
-  /// The [ViewportOffset.pixels] value determines the scroll offset that the
-  /// viewport uses to select which part of its content to display. As the user
-  /// scrolls the viewport horizontally, this value changes, which changes the
-  /// content that is displayed.
-  ///
-  /// Typically a [ScrollPosition].
   final ViewportOffset horizontalOffset;
 
-  /// The direction in which the [horizontalOffset]'s [ViewportOffset.pixels]
-  /// increases.
-  ///
-  /// For example, if the axis direction is [AxisDirection.right], a scroll
-  /// offset of zero is at the left of the viewport and increases towards the
-  /// right of the viewport.
-  ///
-  /// Must be either [AxisDirection.left] or [AxisDirection.right] in correlation
-  /// with an [Axis.horizontal].
   final AxisDirection horizontalAxisDirection;
 
-  /// The main axis of the two.
-  ///
-  /// Used to determine the paint order of the children of the viewport. When
-  /// the main axis is [Axis.vertical], children will be painted in row major
-  /// order, according to their associated [ChildVicinity]. When the main axis
-  /// is [Axis.horizontal], the children will be painted in column major order.
   final Axis mainAxis;
 
-  /// {@macro flutter.rendering.RenderViewportBase.cacheExtent}
   final double? cacheExtent;
 
-  /// {@macro flutter.material.Material.clipBehavior}
   final Clip clipBehavior;
 
-  /// A delegate that provides the children for the [TwoDimensionalViewport].
   final TwoDimensionalChildDelegate delegate;
 
   @override
@@ -379,46 +238,11 @@ class _TwoDimensionalViewportElement extends RenderObjectElement
   }
 }
 
-/// Parent data structure used by [RenderTwoDimensionalViewport].
-///
-/// The parent data primarily describes where a child is in the viewport. The
-/// [layoutOffset] must be set by subclasses of [RenderTwoDimensionalViewport],
-/// during [RenderTwoDimensionalViewport.layoutChildSequence] which represents
-/// the position of the child in the viewport.
-///
-/// The [paintOffset] is computed by [RenderTwoDimensionalViewport] after
-/// [RenderTwoDimensionalViewport.layoutChildSequence]. If subclasses of
-/// RenderTwoDimensionalViewport override the paint method, the [paintOffset]
-/// should be used to position the child in the viewport in order to account for
-/// a reversed [AxisDirection] in one or both dimensions.
 class TwoDimensionalViewportParentData extends ParentData  with KeepAliveParentDataMixin {
-  /// The offset at which to paint the child in the parent's coordinate system.
-  ///
-  /// This [Offset] represents the top left corner of the child of the
-  /// [TwoDimensionalViewport].
-  ///
-  /// This value must be set by implementors during
-  /// [RenderTwoDimensionalViewport.layoutChildSequence]. After the method is
-  /// complete, the [RenderTwoDimensionalViewport] will compute the
-  /// [paintOffset] based on this value to account for the [AxisDirection].
   Offset? layoutOffset;
 
-  /// The logical positioning of children in two dimensions.
-  ///
-  /// While children may not be strictly laid out in rows and columns, the
-  /// relative positioning determines traversal of
-  /// children in row or column major format.
-  ///
-  /// This is set in the [RenderTwoDimensionalViewport.buildOrObtainChildFor].
   ChildVicinity vicinity = ChildVicinity.invalid;
 
-  /// Whether or not the child is actually visible within the viewport.
-  ///
-  /// For example, if a child is contained within the
-  /// [RenderTwoDimensionalViewport.cacheExtent] and out of view.
-  ///
-  /// This is used during [RenderTwoDimensionalViewport.paint] in order to skip
-  /// painting children that cannot be seen.
   bool get isVisible {
     assert(() {
       if (_paintExtent == null) {
@@ -436,40 +260,12 @@ class TwoDimensionalViewportParentData extends ParentData  with KeepAliveParentD
     return _paintExtent != Size.zero || _paintExtent!.height != 0.0 || _paintExtent!.width != 0.0;
   }
 
-  /// Represents the extent in both dimensions of the child that is actually
-  /// visible.
-  ///
-  /// For example, if a child [RenderBox] had a height of 100 pixels, and a
-  /// width of 100 pixels, but was scrolled to positions such that only 50
-  /// pixels of both width and height were visible, the paintExtent would be
-  /// represented as `Size(50.0, 50.0)`.
-  ///
-  /// This is set in [RenderTwoDimensionalViewport.updateChildPaintData].
   Size? _paintExtent;
 
-  /// The previous sibling in the parent's child list according to the traversal
-  /// order specified by [RenderTwoDimensionalViewport.mainAxis].
   RenderBox? _previousSibling;
 
-  /// The next sibling in the parent's child list according to the traversal
-  /// order specified by [RenderTwoDimensionalViewport.mainAxis].
   RenderBox? _nextSibling;
 
-  /// The position of the child relative to the bounds and [AxisDirection] of
-  /// the viewport.
-  ///
-  /// This is the distance from the top left visible corner of the parent to the
-  /// top left visible corner of the child. When the [AxisDirection]s are
-  /// [AxisDirection.down] or [AxisDirection.right], this value is the same as
-  /// the [layoutOffset]. This value deviates when scrolling in the reverse
-  /// directions of [AxisDirection.up] and [AxisDirection.left] to reposition
-  /// the children correctly.
-  ///
-  /// This is set in [RenderTwoDimensionalViewport.updateChildPaintData], after
-  /// [RenderTwoDimensionalViewport.layoutChildSequence].
-  ///
-  /// If overriding [RenderTwoDimensionalViewport.paint], use this value to
-  /// position the children instead of [layoutOffset].
   Offset? paintOffset;
 
   @override
@@ -487,22 +283,8 @@ class TwoDimensionalViewportParentData extends ParentData  with KeepAliveParentD
   }
 }
 
-/// A base class for viewing render objects that scroll in two dimensions.
-///
-/// The viewport listens to two [ViewportOffset]s, which determines the
-/// visible content.
-///
-/// Subclasses must implement [layoutChildSequence], calling on
-/// [buildOrObtainChildFor] to manage the children of the viewport.
-///
-/// Subclasses should not override [performLayout], as it handles housekeeping
-/// on either side of the call to [layoutChildSequence].
 // TODO(Piinks): ensureVisible https://github.com/flutter/flutter/issues/126299
 abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderAbstractViewport {
-  /// Initializes fields for subclasses.
-  ///
-  /// The [cacheExtent], if null, defaults to
-  /// [RenderAbstractViewport.defaultCacheExtent].
   RenderTwoDimensionalViewport({
     required ViewportOffset horizontalOffset,
     required AxisDirection horizontalAxisDirection,
@@ -536,15 +318,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     }());
   }
 
-  /// Which part of the content inside the viewport should be visible in the
-  /// horizontal axis.
-  ///
-  /// The [ViewportOffset.pixels] value determines the scroll offset that the
-  /// viewport uses to select which part of its content to display. As the user
-  /// scrolls the viewport horizontally, this value changes, which changes the
-  /// content that is displayed.
-  ///
-  /// Typically a [ScrollPosition].
   ViewportOffset get horizontalOffset => _horizontalOffset;
   ViewportOffset _horizontalOffset;
   set horizontalOffset(ViewportOffset value) {
@@ -561,11 +334,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     markNeedsLayout();
   }
 
-  /// The direction in which the [horizontalOffset] increases.
-  ///
-  /// For example, if the axis direction is [AxisDirection.right], a scroll
-  /// offset of zero is at the left of the viewport and increases towards the
-  /// right of the viewport.
   AxisDirection get horizontalAxisDirection => _horizontalAxisDirection;
   AxisDirection _horizontalAxisDirection;
   set horizontalAxisDirection(AxisDirection value) {
@@ -576,15 +344,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     markNeedsLayout();
   }
 
-  /// Which part of the content inside the viewport should be visible in the
-  /// vertical axis.
-  ///
-  /// The [ViewportOffset.pixels] value determines the scroll offset that the
-  /// viewport uses to select which part of its content to display. As the user
-  /// scrolls the viewport vertically, this value changes, which changes the
-  /// content that is displayed.
-  ///
-  /// Typically a [ScrollPosition].
   ViewportOffset get verticalOffset => _verticalOffset;
   ViewportOffset _verticalOffset;
   set verticalOffset(ViewportOffset value) {
@@ -601,11 +360,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     markNeedsLayout();
   }
 
-  /// The direction in which the [verticalOffset] increases.
-  ///
-  /// For example, if the axis direction is [AxisDirection.down], a scroll
-  /// offset of zero is at the top the viewport and increases towards the
-  /// bottom of the viewport.
   AxisDirection get verticalAxisDirection => _verticalAxisDirection;
   AxisDirection _verticalAxisDirection;
   set verticalAxisDirection(AxisDirection value) {
@@ -616,7 +370,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     markNeedsLayout();
   }
 
-  /// Supplies children for layout in the viewport.
   TwoDimensionalChildDelegate get delegate => _delegate;
   TwoDimensionalChildDelegate _delegate;
   set delegate(covariant TwoDimensionalChildDelegate value) {
@@ -636,16 +389,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     }
   }
 
-  /// The major axis of the two dimensions.
-  ///
-  /// This is can be used by subclasses to determine paint order,
-  /// visitor patterns like row and column major ordering, or hit test
-  /// precedence.
-  ///
-  /// See also:
-  ///
-  ///  * [TwoDimensionalScrollView], which assigns the [PrimaryScrollController]
-  ///    to the [TwoDimensionalScrollView.mainAxis] and shares this value.
   Axis  get mainAxis => _mainAxis;
   Axis _mainAxis;
   set mainAxis(Axis value) {
@@ -657,7 +400,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     markNeedsLayout();
   }
 
-  /// {@macro flutter.rendering.RenderViewportBase.cacheExtent}
   double  get cacheExtent => _cacheExtent ?? RenderAbstractViewport.defaultCacheExtent;
   double? _cacheExtent;
   set cacheExtent(double? value) {
@@ -668,7 +410,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     markNeedsLayout();
   }
 
-  /// {@macro flutter.material.Material.clipBehavior}
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior;
   set clipBehavior(Clip value) {
@@ -682,11 +423,7 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
 
   final TwoDimensionalChildManager _childManager;
   final Map<ChildVicinity, RenderBox> _children = <ChildVicinity, RenderBox>{};
-  /// Children that have been laid out (or re-used) during the course of
-  /// performLayout, used to update the keep alive bucket at the end of
-  /// performLayout.
   final Map<ChildVicinity, RenderBox> _activeChildrenForLayoutPass = <ChildVicinity, RenderBox>{};
-  /// The nodes being kept alive despite not being visible.
   final Map<ChildVicinity, RenderBox> _keepAliveBucket = <ChildVicinity, RenderBox>{};
 
   late List<RenderBox> _debugDanglingKeepAlives;
@@ -709,54 +446,17 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
   int? _leadingYIndex;
   int? _trailingYIndex;
 
-  /// The first child of the viewport according to the traversal order of the
-  /// [mainAxis].
-  ///
-  /// {@template flutter.rendering.twoDimensionalViewport.paintOrder}
-  /// The [mainAxis] correlates with the [ChildVicinity] of each child to paint
-  /// the children in a row or column major order.
-  ///
-  /// By default, the [mainAxis] is [Axis.vertical], which would result in a
-  /// row major paint order, visiting children in the horizontal indices before
-  /// advancing to the next vertical index.
-  /// {@endtemplate}
-  ///
-  /// This value is null during [layoutChildSequence] as children are reified
-  /// into the correct order after layout is completed. This can be used when
-  /// overriding [paint] in order to paint the children in the correct order.
   RenderBox? get firstChild => _firstChild;
   RenderBox? _firstChild;
 
-  /// The last child in the viewport according to the traversal order of the
-  /// [mainAxis].
-  ///
-  /// {@macro flutter.rendering.twoDimensionalViewport.paintOrder}
-  ///
-  /// This value is null during [layoutChildSequence] as children are reified
-  /// into the correct order after layout is completed. This can be used when
-  /// overriding [paint] in order to paint the children in the correct order.
   RenderBox? get lastChild => _lastChild;
   RenderBox? _lastChild;
 
-  /// The previous child before the given child in the child list according to
-  /// the traversal order of the [mainAxis].
-  ///
-  /// {@macro flutter.rendering.twoDimensionalViewport.paintOrder}
-  ///
-  /// This method is useful when overriding [paint] in order to paint children
-  /// in the correct order.
   RenderBox? childBefore(RenderBox child) {
     assert(child.parent == this);
     return parentDataOf(child)._previousSibling;
   }
 
-  /// The next child after the given child in the child list according to
-  /// the traversal order of the [mainAxis].
-  ///
-  /// {@macro flutter.rendering.twoDimensionalViewport.paintOrder}
-  ///
-  /// This method is useful when overriding [paint] in order to paint children
-  /// in the correct order.
   RenderBox? childAfter(RenderBox child) {
     assert(child.parent == this);
     return parentDataOf(child)._nextSibling;
@@ -773,25 +473,12 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     }
   }
 
-  /// Convenience method for retrieving and casting the [ParentData] of the
-  /// viewport's children.
-  ///
-  /// Children must have a [ParentData] of type
-  /// [TwoDimensionalViewportParentData], or a subclass thereof.
   @protected
   TwoDimensionalViewportParentData parentDataOf(RenderBox child) {
     assert(_children.containsValue(child));
     return child.parentData! as TwoDimensionalViewportParentData;
   }
 
-  /// Returns the active child located at the provided [ChildVicinity], if there
-  /// is one.
-  ///
-  /// This can be used by subclasses to access currently active children to make
-  /// use of their size or [TwoDimensionalViewportParentData], such as when
-  /// overriding the [paint] method.
-  ///
-  /// Returns null if there is no active child for the given [ChildVicinity].
   @protected
   RenderBox? getChildFor(ChildVicinity vicinity) => _children[vicinity];
 
@@ -898,9 +585,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     return false;
   }
 
-  /// The dimensions of the viewport.
-  ///
-  /// This [Size] represents the width and height of the visible area.
   Size get viewportDimension {
     assert(hasSize);
     return size;
@@ -926,30 +610,9 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     return const RevealedOffset(offset: 0.0, rect: Rect.zero);
   }
 
-  /// Should be used by subclasses to invalidate any cached metrics for the
-  /// viewport.
-  ///
-  /// This is set to true when the viewport has been resized, indicating that
-  /// any cached dimensions are invalid.
-  ///
-  /// After performLayout, the value is set to false until the viewport
-  /// dimensions are changed again in [performResize].
-  ///
-  /// Subclasses are not required to use this value, but it can be used to
-  /// safely cache layout information in between layout calls.
   bool get didResize => _didResize;
   bool _didResize = true;
 
-  /// Should be used by subclasses to invalidate any cached data from the
-  /// [delegate].
-  ///
-  /// This value is set to false after [layoutChildSequence]. If
-  /// [markNeedsLayout] is called `withDelegateRebuild` set to true, then this
-  /// value will be updated to true, signifying any cached delegate information
-  /// needs to be updated in the next call to [layoutChildSequence].
-  ///
-  /// Subclasses are not required to use this value, but it can be used to
-  /// safely cache layout information in between layout calls.
   @protected
   bool get needsDelegateRebuild => _needsDelegateRebuild;
   bool _needsDelegateRebuild = true;
@@ -960,26 +623,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     super.markNeedsLayout();
   }
 
-  /// Primary work horse of [performLayout].
-  ///
-  /// Subclasses must implement this method to layout the children of the
-  /// viewport. The [TwoDimensionalViewportParentData.layoutOffset] must be set
-  /// during this method in order for the children to be positioned during paint.
-  /// Further, children of the viewport must be laid out with the expectation
-  /// that the parent (this viewport) will use their size.
-  ///
-  /// ```dart
-  /// child.layout(constraints, parentUsesSize: true);
-  /// ```
-  ///
-  /// The primary methods used for creating and obtaining children is
-  /// [buildOrObtainChildFor], which takes a [ChildVicinity] that is used by the
-  /// [TwoDimensionalChildDelegate]. If a child is not provided by the delegate
-  /// for the provided vicinity, the method will return null, otherwise, it will
-  /// return the [RenderBox] of the child.
-  ///
-  /// After [layoutChildSequence] is completed, any remaining children that were
-  /// not obtained will be disposed.
   void layoutChildSequence();
 
   @override
@@ -1130,16 +773,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     return true;
   }
 
-  /// Returns the child for a given [ChildVicinity], should be called during
-  /// [layoutChildSequence] in order to instantiate or retrieve children.
-  ///
-  /// This method will build the child if it has not been already, or will reuse
-  /// it if it already exists, whether it was part of the previous frame or kept
-  /// alive.
-  ///
-  /// Children for the given [ChildVicinity] will be inserted into the active
-  /// children list, and so should be visible, or contained within the
-  /// [cacheExtent].
   RenderBox? buildOrObtainChildFor(ChildVicinity vicinity) {
     assert(vicinity != ChildVicinity.invalid);
     // This should only be called during layout.
@@ -1184,9 +817,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     return child;
   }
 
-  /// Called after [layoutChildSequence] to compute the
-  /// [TwoDimensionalViewportParentData.paintOffset] and
-  /// [TwoDimensionalViewportParentData._paintExtent] of the child.
   void updateChildPaintData(RenderBox child) {
     final TwoDimensionalViewportParentData childParentData = parentDataOf(child);
     assert(
@@ -1215,16 +845,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
       || !childParentData.isVisible;
   }
 
-  /// Computes the portion of the child that is visible, assuming that only the
-  /// region from the [ViewportOffset.pixels] of both dimensions to the
-  /// [cacheExtent] is visible, and that the relationship between scroll offsets
-  /// and paint offsets is linear.
-  ///
-  /// For example, if the [ViewportOffset]s each have a scroll offset of 100 and
-  /// the arguments to this method describe a child with [layoutOffset] of
-  /// `Offset(50.0, 50.0)`, with a size of `Size(200.0, 200.0)`, then the
-  /// returned value would be `Size(150.0, 150.0)`, representing the visible
-  /// extent of the child.
   Size computeChildPaintExtent(Offset layoutOffset, Size childSize) {
     if (childSize == Size.zero || childSize.height == 0.0 || childSize.width == 0.0) {
       return Size.zero;
@@ -1286,16 +906,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     return Size(width, height);
   }
 
-  /// The offset at which the given `child` should be painted.
-  ///
-  /// The returned offset is from the top left corner of the inside of the
-  /// viewport to the top left corner of the paint coordinate system of the
-  /// `child`.
-  ///
-  /// This is useful when the one or both of the axes of the viewport are
-  /// reversed. The normalized layout offset of the child is used to compute
-  /// the paint offset in relation to the [verticalAxisDirection] and
-  /// [horizontalAxisDirection].
   @protected
   Offset computeAbsolutePaintOffsetFor(
     RenderBox child, {
@@ -1436,13 +1046,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
     return true;
   }
 
-  /// Throws an exception saying that the object does not support returning
-  /// intrinsic dimensions if, in debug mode, we are not in the
-  /// [RenderObject.debugCheckingIntrinsics] mode.
-  ///
-  /// This is used by [computeMinIntrinsicWidth] et al because viewports do not
-  /// generally support returning intrinsic dimensions. See the discussion at
-  /// [computeMinIntrinsicWidth].
   @protected
   bool debugThrowIfNotCheckingIntrinsics() {
     assert(() {
@@ -1497,11 +1100,6 @@ abstract class RenderTwoDimensionalViewport extends RenderBox implements RenderA
   }
 }
 
-/// A delegate used by [RenderTwoDimensionalViewport] to manage its children.
-///
-/// [RenderTwoDimensionalViewport] objects reify their children lazily to avoid
-/// spending resources on children that are not visible in the viewport. This
-/// delegate lets these objects create, reuse and remove children.
 abstract class TwoDimensionalChildManager {
   void _startLayout();
   void _buildChild(ChildVicinity vicinity);
@@ -1509,45 +1107,18 @@ abstract class TwoDimensionalChildManager {
   void _endLayout();
 }
 
-/// The relative position of a child in a [TwoDimensionalViewport] in relation
-/// to other children of the viewport.
-///
-/// While children can be plotted arbitrarily in two dimensional space, the
-/// [ChildVicinity] is used to disambiguate their positions, determining how to
-/// traverse the children of the space.
-///
-/// Combined with the [RenderTwoDimensionalViewport.mainAxis], each child's
-/// vicinity determines its paint order among all of the children.
 @immutable
 class ChildVicinity implements Comparable<ChildVicinity> {
-  /// Creates a reference to a child in a two dimensional plane, with the
-  /// [xIndex] and [yIndex] being relative to other children in the viewport.
   const ChildVicinity({
     required this.xIndex,
     required this.yIndex,
   }) : assert(xIndex >= -1),
        assert(yIndex >= -1);
 
-  /// Represents an unassigned child position. The given child may be in the
-  /// process of moving from one position to another.
   static const ChildVicinity invalid = ChildVicinity(xIndex: -1, yIndex: -1);
 
-  /// The index of the child in the horizontal axis, relative to neighboring
-  /// children.
-  ///
-  /// While children's offset and positioning may not be strictly defined in
-  /// terms of rows and columns, like a table, [ChildVicinity.xIndex] and
-  /// [ChildVicinity.yIndex] represents order of traversal in row or column
-  /// major format.
   final int xIndex;
 
-  /// The index of the child in the vertical axis, relative to neighboring
-  /// children.
-  ///
-  /// While children's offset and positioning may not be strictly defined in
-  /// terms of rows and columns, like a table, [ChildVicinity.xIndex] and
-  /// [ChildVicinity.yIndex] represents order of traversal in row or column
-  /// major format.
   final int yIndex;
 
   @override

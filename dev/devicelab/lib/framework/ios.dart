@@ -47,10 +47,6 @@ Future<String?> minPhoneOSVersion(String pathToBinary) async {
   return minVersion;
 }
 
-/// Creates and boots a new simulator, passes the new simulator's identifier to
-/// `testFunction`.
-///
-/// Remember to call removeIOSimulator in the test teardown.
 Future<void> testWithNewIOSSimulator(
   String deviceName,
   SimulatorFunction testFunction, {
@@ -109,7 +105,6 @@ Future<void> testWithNewIOSSimulator(
   await testFunction(deviceId);
 }
 
-/// Shuts down and deletes simulator with deviceId.
 Future<void> removeIOSimulator(String? deviceId) async {
   if (deviceId != null && deviceId != '') {
     await eval(

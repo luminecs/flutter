@@ -9,8 +9,6 @@ import 'package:flutter_devicelab/framework/task_result.dart';
 import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:path/path.dart' as path;
 
-/// Tests that the Flutter plugin template works. Use `pod lib lint`
-/// to confirm the plugin module can be imported into an app.
 Future<void> main() async {
   await task(() async {
 

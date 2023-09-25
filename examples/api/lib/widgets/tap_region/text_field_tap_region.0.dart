@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [TextFieldTapRegion].
 
 void main() => runApp(const TapRegionApp());
 
@@ -65,8 +64,6 @@ class _TextFieldTapRegionExampleState extends State<TextFieldTapRegionExample> {
   }
 }
 
-/// An integer example of the generic [SpinnerField] that validates input and
-/// increments by a delta.
 class IntegerSpinnerField extends StatelessWidget {
   const IntegerSpinnerField({
     super.key,
@@ -115,11 +112,6 @@ class IntegerSpinnerField extends StatelessWidget {
   }
 }
 
-/// A generic "spinner" field example which adds extra buttons next to a
-/// [TextField] to increment and decrement the value.
-///
-/// This widget uses [TextFieldTapRegion] to indicate that tapping on the
-/// spinner buttons should not cause the text field to lose focus.
 class SpinnerField<T> extends StatefulWidget {
   SpinnerField({
     super.key,

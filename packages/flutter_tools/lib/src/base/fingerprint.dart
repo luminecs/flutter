@@ -10,11 +10,6 @@ import 'file_system.dart';
 import 'logger.dart';
 import 'utils.dart';
 
-/// A tool that can be used to compute, compare, and write [Fingerprint]s for a
-/// set of input files and associated build settings.
-///
-/// This class should only be used in situations where `assemble` is not appropriate,
-/// such as checking if Cocoapods should be run.
 class Fingerprinter {
   Fingerprinter({
     required this.fingerprintPath,
@@ -72,10 +67,6 @@ class Fingerprinter {
   List<String> _getPaths() => _paths;
 }
 
-/// A fingerprint that uniquely identifies a set of build input files and
-/// properties.
-///
-/// See [Fingerprinter].
 @immutable
 class Fingerprint {
   const Fingerprint._({
@@ -96,10 +87,6 @@ class Fingerprint {
     );
   }
 
-  /// Creates a Fingerprint from serialized JSON.
-  ///
-  /// Throws [Exception], if there is a version mismatch between the
-  /// serializing framework and this framework.
   factory Fingerprint.fromJson(String jsonData) {
     final Map<String, dynamic>? content = castStringKeyedMap(json.decode(jsonData));
     final Map<String, String>? files = content == null

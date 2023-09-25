@@ -13,7 +13,6 @@ import 'keyboard_key.g.dart';
 
 export 'keyboard_key.g.dart' show LogicalKeyboardKey, PhysicalKeyboardKey;
 
-/// Maps Android-specific key codes to the matching [LogicalKeyboardKey].
 const Map<int, LogicalKeyboardKey> kAndroidToLogicalKey = <int, LogicalKeyboardKey>{
   3: LogicalKeyboardKey.goHome,
   4: LogicalKeyboardKey.goBack,
@@ -277,7 +276,6 @@ const Map<int, LogicalKeyboardKey> kAndroidToLogicalKey = <int, LogicalKeyboardK
   279: LogicalKeyboardKey.paste,
 };
 
-/// Maps Android-specific scan codes to the matching [PhysicalKeyboardKey].
 const Map<int, PhysicalKeyboardKey> kAndroidToPhysicalKey = <int, PhysicalKeyboardKey>{
   1: PhysicalKeyboardKey.escape,
   2: PhysicalKeyboardKey.digit1,
@@ -513,9 +511,6 @@ const Map<int, PhysicalKeyboardKey> kAndroidToPhysicalKey = <int, PhysicalKeyboa
   583: PhysicalKeyboardKey.launchAssistant,
 };
 
-/// A map of Android key codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<int, LogicalKeyboardKey> kAndroidNumPadMap = <int, LogicalKeyboardKey>{
   144: LogicalKeyboardKey.numpad0,
   145: LogicalKeyboardKey.numpad1,
@@ -538,7 +533,6 @@ const Map<int, LogicalKeyboardKey> kAndroidNumPadMap = <int, LogicalKeyboardKey>
   163: LogicalKeyboardKey.numpadParenRight,
 };
 
-/// Maps Fuchsia-specific IDs to the matching [LogicalKeyboardKey].
 const Map<int, LogicalKeyboardKey> kFuchsiaToLogicalKey = <int, LogicalKeyboardKey>{
   0x1200000010: LogicalKeyboardKey.hyper,
   0x1200000011: LogicalKeyboardKey.superKey,
@@ -775,8 +769,6 @@ const Map<int, LogicalKeyboardKey> kFuchsiaToLogicalKey = <int, LogicalKeyboardK
   0x12000c028c: LogicalKeyboardKey.mailSend,
 };
 
-/// Maps Fuchsia-specific USB HID Usage IDs to the matching
-/// [PhysicalKeyboardKey].
 const Map<int, PhysicalKeyboardKey> kFuchsiaToPhysicalKey = <int, PhysicalKeyboardKey>{
   0x00000010: PhysicalKeyboardKey.hyper,
   0x00000011: PhysicalKeyboardKey.superKey,
@@ -1049,9 +1041,6 @@ const Map<int, PhysicalKeyboardKey> kFuchsiaToPhysicalKey = <int, PhysicalKeyboa
   0x000c029f: PhysicalKeyboardKey.showAllWindows,
 };
 
-/// Maps macOS-specific key code values representing [PhysicalKeyboardKey].
-///
-/// MacOS doesn't provide a scan code, but a virtual keycode to represent a physical key.
 const Map<int, PhysicalKeyboardKey> kMacOsToPhysicalKey = <int, PhysicalKeyboardKey>{
   0x00000000: PhysicalKeyboardKey.keyA,
   0x00000001: PhysicalKeyboardKey.keyS,
@@ -1175,9 +1164,6 @@ const Map<int, PhysicalKeyboardKey> kMacOsToPhysicalKey = <int, PhysicalKeyboard
   0x0000007e: PhysicalKeyboardKey.arrowUp,
 };
 
-/// A map of macOS key codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<int, LogicalKeyboardKey> kMacOsNumPadMap = <int, LogicalKeyboardKey>{
   0x00000041: LogicalKeyboardKey.numpadDecimal,
   0x00000043: LogicalKeyboardKey.numpadMultiply,
@@ -1198,8 +1184,6 @@ const Map<int, LogicalKeyboardKey> kMacOsNumPadMap = <int, LogicalKeyboardKey>{
   0x0000005f: LogicalKeyboardKey.numpadComma,
 };
 
-/// A map of macOS key codes which are numbered function keys, so that they
-/// can be excluded when asking "is the Fn modifier down?".
 const Map<int, LogicalKeyboardKey> kMacOsFunctionKeyMap = <int, LogicalKeyboardKey>{
   0x00000040: LogicalKeyboardKey.f17,
   0x0000004f: LogicalKeyboardKey.f18,
@@ -1223,12 +1207,6 @@ const Map<int, LogicalKeyboardKey> kMacOsFunctionKeyMap = <int, LogicalKeyboardK
   0x0000007a: LogicalKeyboardKey.f1,
 };
 
-/// A map of macOS key codes presenting [LogicalKeyboardKey].
-///
-/// Logical key codes are not available in macOS key events. Most of the logical keys
-/// are derived from its `characterIgnoringModifiers`, but those keys that don't
-/// have a character representation will be derived from their key codes using
-/// this map.
 const Map<int, LogicalKeyboardKey> kMacOsToLogicalKey = <int, LogicalKeyboardKey>{
   36: LogicalKeyboardKey.enter,
   48: LogicalKeyboardKey.tab,
@@ -1303,9 +1281,6 @@ const Map<int, LogicalKeyboardKey> kMacOsToLogicalKey = <int, LogicalKeyboardKey
   126: LogicalKeyboardKey.arrowUp,
 };
 
-/// Maps iOS-specific key code values representing [PhysicalKeyboardKey].
-///
-/// iOS doesn't provide a scan code, but a virtual keycode to represent a physical key.
 const Map<int, PhysicalKeyboardKey> kIosToPhysicalKey = <int, PhysicalKeyboardKey>{
   0x00000000: PhysicalKeyboardKey.usbReserved,
   0x00000001: PhysicalKeyboardKey.usbErrorRollOver,
@@ -1468,11 +1443,6 @@ const Map<int, PhysicalKeyboardKey> kIosToPhysicalKey = <int, PhysicalKeyboardKe
   0x000000e7: PhysicalKeyboardKey.metaRight,
 };
 
-/// Maps iOS specific string values of nonvisible keys to logical keys
-///
-/// Some unprintable keys on iOS has literal names on their key label, such as
-/// "UIKeyInputEscape". See:
-/// https://developer.apple.com/documentation/uikit/uikeycommand/input_strings_for_special_keys?language=objc
 const Map<String, LogicalKeyboardKey> kIosSpecialLogicalMap = <String, LogicalKeyboardKey>{
   'UIKeyInputEscape': LogicalKeyboardKey.escape,
   'UIKeyInputF1': LogicalKeyboardKey.f1,
@@ -1497,9 +1467,6 @@ const Map<String, LogicalKeyboardKey> kIosSpecialLogicalMap = <String, LogicalKe
   'UIKeyInputPageDown': LogicalKeyboardKey.pageDown,
 };
 
-/// A map of iOS key codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<int, LogicalKeyboardKey> kIosNumPadMap = <int, LogicalKeyboardKey>{
   0x00000054: LogicalKeyboardKey.numpadDivide,
   0x00000055: LogicalKeyboardKey.numpadMultiply,
@@ -1522,12 +1489,6 @@ const Map<int, LogicalKeyboardKey> kIosNumPadMap = <int, LogicalKeyboardKey>{
   0x000000b7: LogicalKeyboardKey.numpadParenRight,
 };
 
-/// A map of iOS key codes presenting [LogicalKeyboardKey].
-///
-/// Logical key codes are not available in iOS key events. Most of the logical keys
-/// are derived from its `characterIgnoringModifiers`, but those keys that don't
-/// have a character representation will be derived from their key codes using
-/// this map.
 const Map<int, LogicalKeyboardKey> kIosToLogicalKey = <int, LogicalKeyboardKey>{
   40: LogicalKeyboardKey.enter,
   41: LogicalKeyboardKey.escape,
@@ -1604,7 +1565,6 @@ const Map<int, LogicalKeyboardKey> kIosToLogicalKey = <int, LogicalKeyboardKey>{
   231: LogicalKeyboardKey.metaRight,
 };
 
-/// Maps GLFW-specific key codes to the matching [LogicalKeyboardKey].
 const Map<int, LogicalKeyboardKey> kGlfwToLogicalKey = <int, LogicalKeyboardKey>{
   32: LogicalKeyboardKey.space,
   39: LogicalKeyboardKey.quote,
@@ -1722,9 +1682,6 @@ const Map<int, LogicalKeyboardKey> kGlfwToLogicalKey = <int, LogicalKeyboardKey>
   348: LogicalKeyboardKey.contextMenu,
 };
 
-/// A map of GLFW key codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<int, LogicalKeyboardKey> kGlfwNumpadMap = <int, LogicalKeyboardKey>{
   320: LogicalKeyboardKey.numpad0,
   321: LogicalKeyboardKey.numpad1,
@@ -1743,7 +1700,6 @@ const Map<int, LogicalKeyboardKey> kGlfwNumpadMap = <int, LogicalKeyboardKey>{
   336: LogicalKeyboardKey.numpadEqual,
 };
 
-/// Maps GTK-specific key codes to the matching [LogicalKeyboardKey].
 const Map<int, LogicalKeyboardKey> kGtkToLogicalKey = <int, LogicalKeyboardKey>{
   165: LogicalKeyboardKey.intlYen,
   64774: LogicalKeyboardKey.eraseEof,
@@ -1918,9 +1874,6 @@ const Map<int, LogicalKeyboardKey> kGtkToLogicalKey = <int, LogicalKeyboardKey>{
   269025191: LogicalKeyboardKey.suspend,
 };
 
-/// A map of GTK key codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<int, LogicalKeyboardKey> kGtkNumpadMap = <int, LogicalKeyboardKey>{
   65429: LogicalKeyboardKey.numpad7,
   65430: LogicalKeyboardKey.numpad4,
@@ -1949,7 +1902,6 @@ const Map<int, LogicalKeyboardKey> kGtkNumpadMap = <int, LogicalKeyboardKey>{
   65469: LogicalKeyboardKey.numpadEqual,
 };
 
-/// Maps XKB specific key code values representing [PhysicalKeyboardKey].
 const Map<int, PhysicalKeyboardKey> kLinuxToPhysicalKey = <int, PhysicalKeyboardKey>{
   0x00000009: PhysicalKeyboardKey.escape,
   0x0000000a: PhysicalKeyboardKey.digit1,
@@ -2170,7 +2122,6 @@ const Map<int, PhysicalKeyboardKey> kLinuxToPhysicalKey = <int, PhysicalKeyboard
   0x00000281: PhysicalKeyboardKey.privacyScreenToggle,
 };
 
-/// Maps Web KeyboardEvent codes to the matching [LogicalKeyboardKey].
 const Map<String, LogicalKeyboardKey> kWebToLogicalKey = <String, LogicalKeyboardKey>{
   'AVRInput': LogicalKeyboardKey.avrInput,
   'AVRPower': LogicalKeyboardKey.avrPower,
@@ -2475,7 +2426,6 @@ const Map<String, LogicalKeyboardKey> kWebToLogicalKey = <String, LogicalKeyboar
   'ZoomToggle': LogicalKeyboardKey.zoomToggle,
 };
 
-/// Maps Web KeyboardEvent codes to the matching [PhysicalKeyboardKey].
 const Map<String, PhysicalKeyboardKey> kWebToPhysicalKey = <String, PhysicalKeyboardKey>{
   'Abort': PhysicalKeyboardKey.abort,
   'Again': PhysicalKeyboardKey.again,
@@ -2710,9 +2660,6 @@ const Map<String, PhysicalKeyboardKey> kWebToPhysicalKey = <String, PhysicalKeyb
   'ZoomToggle': PhysicalKeyboardKey.zoomToggle,
 };
 
-/// A map of Web KeyboardEvent codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<String, LogicalKeyboardKey> kWebNumPadMap = <String, LogicalKeyboardKey>{
   'Numpad0': LogicalKeyboardKey.numpad0,
   'Numpad1': LogicalKeyboardKey.numpad1,
@@ -2735,9 +2682,6 @@ const Map<String, LogicalKeyboardKey> kWebNumPadMap = <String, LogicalKeyboardKe
   'NumpadSubtract': LogicalKeyboardKey.numpadSubtract,
 };
 
-/// A map of Web KeyboardEvent keys which needs to be decided based on location,
-/// typically for numpad keys and modifier keys. Used to provide different key
-/// objects for keys like KEY_EQUALS and NUMPAD_EQUALS.
 const Map<String, List<LogicalKeyboardKey?>> kWebLocationMap = <String, List<LogicalKeyboardKey?>>{
   '*': <LogicalKeyboardKey?>[LogicalKeyboardKey.asterisk, null, null, LogicalKeyboardKey.numpadMultiply],
   '+': <LogicalKeyboardKey?>[LogicalKeyboardKey.add, null, null, LogicalKeyboardKey.numpadAdd],
@@ -2773,7 +2717,6 @@ const Map<String, List<LogicalKeyboardKey?>> kWebLocationMap = <String, List<Log
   'Shift': <LogicalKeyboardKey?>[LogicalKeyboardKey.shiftLeft, LogicalKeyboardKey.shiftLeft, LogicalKeyboardKey.shiftRight, null],
 };
 
-/// Maps Windows KeyboardEvent codes to the matching [LogicalKeyboardKey].
 const Map<int, LogicalKeyboardKey> kWindowsToLogicalKey = <int, LogicalKeyboardKey>{
   3: LogicalKeyboardKey.cancel,
   8: LogicalKeyboardKey.backspace,
@@ -2934,7 +2877,6 @@ const Map<int, LogicalKeyboardKey> kWindowsToLogicalKey = <int, LogicalKeyboardK
   250: LogicalKeyboardKey.play,
 };
 
-/// Maps Windows KeyboardEvent codes to the matching [PhysicalKeyboardKey].
 const Map<int, PhysicalKeyboardKey> kWindowsToPhysicalKey = <int, PhysicalKeyboardKey>{
   1: PhysicalKeyboardKey.escape,
   2: PhysicalKeyboardKey.digit1,
@@ -3095,9 +3037,6 @@ const Map<int, PhysicalKeyboardKey> kWindowsToPhysicalKey = <int, PhysicalKeyboa
   57453: PhysicalKeyboardKey.mediaSelect,
 };
 
-/// A map of Windows KeyboardEvent codes which have printable representations, but appear
-/// on the number pad. Used to provide different key objects for keys like
-/// KEY_EQUALS and NUMPAD_EQUALS.
 const Map<int, LogicalKeyboardKey> kWindowsNumPadMap = <int, LogicalKeyboardKey>{
   96: LogicalKeyboardKey.numpad0,
   97: LogicalKeyboardKey.numpad1,

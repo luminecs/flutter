@@ -11,12 +11,9 @@ import 'physical_key_data.dart';
 import 'utils.dart';
 
 
-/// Generates the key mapping for Android, based on the information in the key
-/// data structure given to it.
 class AndroidCodeGenerator extends PlatformCodeGenerator {
   AndroidCodeGenerator(super.keyData, super.logicalData);
 
-  /// This generates the map of Android key codes to logical keys.
   String get _androidKeyCodeMap {
     final StringBuffer androidKeyCodeMap = StringBuffer();
     for (final LogicalKeyEntry entry in logicalData.entries) {
@@ -27,7 +24,6 @@ class AndroidCodeGenerator extends PlatformCodeGenerator {
     return androidKeyCodeMap.toString().trimRight();
   }
 
-  /// This generates the map of Android scan codes to physical keys.
   String get _androidScanCodeMap {
     final StringBuffer androidScanCodeMap = StringBuffer();
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -80,7 +76,6 @@ class AndroidCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the mask values for the part of a key code that defines its plane.
   String get _maskConstants {
     final StringBuffer buffer = StringBuffer();
     const List<MaskConstant> maskConstants = <MaskConstant>[

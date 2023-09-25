@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FocusTraversalGroup].
 
 void main() => runApp(const FocusTraversalGroupExampleApp());
 
@@ -19,8 +18,6 @@ class FocusTraversalGroupExampleApp extends StatelessWidget {
   }
 }
 
-/// A button wrapper that adds either a numerical or lexical order, depending on
-/// the type of T.
 class OrderedButton<T> extends StatefulWidget {
   const OrderedButton({
     super.key,

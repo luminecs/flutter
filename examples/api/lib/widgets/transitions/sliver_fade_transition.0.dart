@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SliverFadeTransition].
 
 void main() => runApp(const SliverFadeTransitionExampleApp());
 

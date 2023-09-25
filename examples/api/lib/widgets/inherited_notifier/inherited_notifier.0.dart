@@ -6,7 +6,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [InheritedNotifier].
 
 void main() => runApp(const InheritedNotifierExampleApp());
 
@@ -59,8 +58,6 @@ class InheritedNotifierExample extends StatefulWidget {
   State<InheritedNotifierExample> createState() => _InheritedNotifierExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _InheritedNotifierExampleState extends State<InheritedNotifierExample> with TickerProviderStateMixin {
   late AnimationController _controller;
 

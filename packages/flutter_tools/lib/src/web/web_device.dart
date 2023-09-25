@@ -28,11 +28,9 @@ class WebApplicationPackage extends ApplicationPackage {
   @override
   String get name => flutterProject.manifest.appName;
 
-  /// The location of the web source assets.
   Directory get webSourcePath => flutterProject.directory.childDirectory('web');
 }
 
-/// A web device that supports a chromium browser.
 abstract class ChromiumDevice extends Device {
   ChromiumDevice({
     required String name,
@@ -53,7 +51,6 @@ abstract class ChromiumDevice extends Device {
   final FileSystem _fileSystem;
   final Logger _logger;
 
-  /// The active chrome instance.
   Chromium? _chrome;
 
   // This device does not actually support hot reload, but the current implementation of the resident runner
@@ -186,7 +183,6 @@ abstract class ChromiumDevice extends Device {
   }
 }
 
-/// The Google Chrome browser based on Chromium.
 class GoogleChromeDevice extends ChromiumDevice {
   GoogleChromeDevice({
     required Platform platform,
@@ -242,7 +238,6 @@ class GoogleChromeDevice extends ChromiumDevice {
   }
 }
 
-/// The Microsoft Edge browser based on Chromium.
 class MicrosoftEdgeDevice extends ChromiumDevice {
   MicrosoftEdgeDevice({
     required ChromiumLauncher chromiumLauncher,
@@ -379,7 +374,6 @@ String parseVersionForWindows(String input) {
 }
 
 
-/// A special device type to allow serving for arbitrary browsers.
 class WebServerDevice extends Device {
   WebServerDevice({
     required Logger logger,

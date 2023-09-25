@@ -13,7 +13,6 @@ import '../base/file_system.dart';
 import '../build_system/hash.dart';
 import '../convert.dart';
 
-/// Adler-32 and MD5 hashes of blocks in files.
 class BlockHashes {
   BlockHashes({
     required this.blockSize,
@@ -23,19 +22,14 @@ class BlockHashes {
     required this.fileMd5,
   });
 
-  /// The block size used to generate the hashes.
   final int blockSize;
 
-  /// Total size of the file.
   final int totalSize;
 
-  /// List of adler32 hashes of each block in the file.
   final List<int> adler32;
 
-  /// List of MD5 hashes of each block in the file.
   final List<String> md5;
 
-  /// MD5 hash of the whole file.
   final String fileMd5;
 
   Map<String, Object> toJson() => <String, Object>{
@@ -57,7 +51,6 @@ class BlockHashes {
   }
 }
 
-/// Converts a stream of bytes, into a stream of bytes of fixed chunk size.
 @visibleForTesting
 Stream<Uint8List> convertToChunks(Stream<Uint8List> source, int chunkSize) {
   final BytesBuilder bytesBuilder = BytesBuilder(copy: false);
@@ -102,7 +95,6 @@ Stream<Uint8List> convertToChunks(Stream<Uint8List> source, int chunkSize) {
 
 const int _adler32Prime = 65521;
 
-/// Helper function to calculate Adler32 hash of a binary.
 @visibleForTesting
 int adler32Hash(List<int> binary) {
   // The maximum integer that can be stored in the `int` data type.
@@ -130,12 +122,10 @@ int adler32Hash(List<int> binary) {
   return ((b & 0xffff) << 16) | (a & 0xffff);
 }
 
-/// Helper to calculate rolling Adler32 hash of a file.
 @visibleForTesting
 class RollingAdler32 {
   RollingAdler32(this.blockSize): _buffer = Uint8List(blockSize);
 
-  /// Block size of the rolling hash calculation.
   final int blockSize;
 
   int processedBytes = 0;
@@ -145,11 +135,8 @@ class RollingAdler32 {
   int _a = 1;
   int _b = 0;
 
-  /// The current rolling hash value.
   int get hash => ((_b & 0xffff) << 16) | (_a & 0xffff);
 
-  /// Push a new character into the rolling chunk window, and returns the
-  /// current hash value.
   int push(int char) {
     processedBytes++;
 
@@ -174,8 +161,6 @@ class RollingAdler32 {
     return hash;
   }
 
-  /// Returns a [Uint8List] of size [blockSize] that was used to calculate the
-  /// current Adler32 hash.
   Uint8List currentBlock() {
     if (processedBytes < blockSize) {
       return Uint8List.sublistView(_buffer, 0, processedBytes);
@@ -196,31 +181,7 @@ class RollingAdler32 {
   }
 }
 
-/// Helper for rsync-like file transfer.
-///
-/// The algorithm works as follows.
-///
-/// First, in the destination device, calculate hashes of the every block of
-/// the same size. Two hashes are used, Adler-32 for the rolling hash, and MD5
-/// as a hash with a lower chance of collision.
-///
-/// The block size is chosen to balance between the amount of data required in
-/// the initial transmission, and the amount of data needed for rebuilding the
-/// file.
-///
-/// Next, on the machine that contains the source file, we calculate the
-/// rolling hash of the source file, for every possible position. If the hash
-/// is found on the block hashes, we then compare the MD5 of the block. If both
-/// the Adler-32 and MD5 hash match, we consider that the block is identical.
-///
-/// For each block that can be found, we will generate the instruction asking
-/// the destination machine to read block from the destination block. For
-/// blocks that can't be found, we will transfer the content of the blocks.
-///
-/// On the receiving end, it will build a copy of the source file from the
-/// given instructions.
 class FileTransfer {
-  /// Calculate hashes of blocks in the file.
   Future<BlockHashes> calculateBlockHashesOfFile(File file, { int? blockSize }) async {
     final int totalSize = await file.length();
     blockSize ??= max(sqrt(totalSize).ceil(), 2560);
@@ -246,11 +207,6 @@ class FileTransfer {
     );
   }
 
-  /// Compute the instructions to rebuild the source [file] with the block
-  /// hashes of the destination file.
-  ///
-  /// Returns an empty list if the destination file is exactly the same as the
-  /// source file.
   Future<List<FileDeltaBlock>> computeDelta(File file, BlockHashes hashes) async {
     // Skip computing delta if the destination file matches the source file.
     if (await file.length() == hashes.totalSize && await _md5OfFile(file) == hashes.fileMd5) {
@@ -336,8 +292,6 @@ class FileTransfer {
     return blocks;
   }
 
-  /// Generates the binary blocks that need to be transferred to the remote
-  /// end to regenerate the file.
   Future<Uint8List> binaryForRebuilding(File file, List<FileDeltaBlock> delta) async {
     final RandomAccessFile binaryView = await file.open();
     final Iterable<FileDeltaBlock> toTransfer = delta.where((FileDeltaBlock block) => !block.copyFromDestination);
@@ -355,8 +309,6 @@ class FileTransfer {
     return buffer;
   }
 
-  /// Generate the new destination file from the source file, with the
-  /// [blocks] and [binary] stream given.
   Future<bool> rebuildFile(File file, List<FileDeltaBlock> delta, Stream<List<int>> binary) async {
     final RandomAccessFile fileView = await file.open();
 
@@ -406,19 +358,15 @@ class FileTransfer {
   }
 }
 
-/// Represents a single line of instruction on how to generate the target file.
 @immutable
 class FileDeltaBlock {
   const FileDeltaBlock.fromSource({required this.start, required this.size}): copyFromDestination = false;
   const FileDeltaBlock.fromDestination({required this.start, required this.size}): copyFromDestination = true;
 
-  /// If true, this block should be read from the destination file.
   final bool copyFromDestination;
 
-  /// The size of the current block.
   final int size;
 
-  /// Byte offset in the destination file from which the block should be read.
   final int start;
 
   Map<String, Object> toJson() => <String, Object> {

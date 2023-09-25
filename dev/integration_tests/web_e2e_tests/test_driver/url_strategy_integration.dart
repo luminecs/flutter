@@ -40,14 +40,7 @@ void main() {
   });
 }
 
-/// This URL strategy mimics the browser's history as closely as possible
-/// while doing it all in memory with no interaction with the browser.
-///
-/// It keeps a list of history entries and event listeners in memory and
-/// manipulates them in order to achieve the desired functionality.
 class TestUrlStrategy extends UrlStrategy {
-  /// Creates an instance of [TestUrlStrategy] and populates it with a list
-  /// that has [initialEntry] as the only item.
   TestUrlStrategy.fromEntry(TestHistoryEntry initialEntry)
       : _currentEntryIndex = 0,
         history = <TestHistoryEntry>[initialEntry];
@@ -71,9 +64,6 @@ class TestUrlStrategy extends UrlStrategy {
     history[_currentEntryIndex] = entry;
   }
 
-  /// Whether we are still within the history of the Flutter Web app. This
-  /// remains true until we go back in history beyond the entry where the app
-  /// started.
   bool get withinAppHistory => _currentEntryIndex >= 0;
 
   @override
@@ -123,15 +113,10 @@ class TestUrlStrategy extends UrlStrategy {
     };
   }
 
-  /// Simulates the scheduling of a new event loop by creating a delayed future.
-  /// Details explained here: https://webdev.dartlang.org/articles/performance/event-loop
   Future<void> _nextEventLoop(ui.VoidCallback callback) {
     return Future<void>.delayed(Duration.zero).then((_) => callback());
   }
 
-  /// Invokes all the attached event listeners in order of
-  /// attaching. This method should be called asynchronously to make it behave
-  /// like a real browser.
   void _firePopStateEvent() {
     assert(withinAppHistory);
     final html.PopStateEvent event = html.PopStateEvent(

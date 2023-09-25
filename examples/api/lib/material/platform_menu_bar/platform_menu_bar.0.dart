@@ -7,7 +7,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [PlatformMenuBar].
 
 void main() => runApp(const ExampleApp());
 
@@ -55,9 +54,7 @@ class _PlatformMenuBarExampleState extends State<PlatformMenuBarExample> {
 
   @override
   Widget build(BuildContext context) {
-    ////////////////////////////////////
     // THIS SAMPLE ONLY WORKS ON MACOS.
-    ////////////////////////////////////
 
     // This builds a menu hierarchy that looks like this:
     // Flutter API Sample

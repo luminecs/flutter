@@ -18,26 +18,15 @@ import 'text_painter.dart';
 import 'text_span.dart';
 import 'text_style.dart';
 
-/// Possible ways to draw Flutter's logo.
 enum FlutterLogoStyle {
-  /// Show only Flutter's logo, not the "Flutter" label.
-  ///
-  /// This is the default behavior for [FlutterLogoDecoration] objects.
   markOnly,
 
-  /// Show Flutter's logo on the left, and the "Flutter" label to its right.
   horizontal,
 
-  /// Show Flutter's logo above the "Flutter" label.
   stacked,
 }
 
-/// An immutable description of how to paint Flutter's logo.
 class FlutterLogoDecoration extends Decoration {
-  /// Creates a decoration that knows how to paint Flutter's logo.
-  ///
-  /// The [style] controls whether and where to draw the "Flutter" label. If one
-  /// is shown, the [textColor] controls the color of the label.
   const FlutterLogoDecoration({
     this.textColor = const Color(0xFF757575),
     this.style = FlutterLogoStyle.markOnly,
@@ -47,20 +36,12 @@ class FlutterLogoDecoration extends Decoration {
 
   const FlutterLogoDecoration._(this.textColor, this.style, this.margin, this._position, this._opacity);
 
-  /// The color used to paint the "Flutter" text on the logo, if [style] is
-  /// [FlutterLogoStyle.horizontal] or [FlutterLogoStyle.stacked].
-  ///
-  /// If possible, the default (a medium grey) should be used against a white
-  /// background.
   final Color textColor;
 
-  /// Whether and where to draw the "Flutter" text. By default, only the logo
-  /// itself is drawn.
   // This property isn't actually used when painting. It's only really used to
   // set the internal _position property.
   final FlutterLogoStyle style;
 
-  /// How far to inset the logo from the edge of the container.
   final EdgeInsets margin;
 
   // The following are set when lerping, to represent states that can't be
@@ -83,19 +64,6 @@ class FlutterLogoDecoration extends Decoration {
   @override
   bool get isComplex => !_inTransition;
 
-  /// Linearly interpolate between two Flutter logo descriptions.
-  ///
-  /// Interpolates both the color and the style in a continuous fashion.
-  ///
-  /// If both values are null, this returns null. Otherwise, it returns a
-  /// non-null value. If one of the values is null, then the result is obtained
-  /// by scaling the other value's opacity and [margin].
-  ///
-  /// {@macro dart.ui.shadow.lerp}
-  ///
-  /// See also:
-  ///
-  ///  * [Decoration.lerp], which interpolates between arbitrary decorations.
   static FlutterLogoDecoration? lerp(FlutterLogoDecoration? a, FlutterLogoDecoration? b, double t) {
     assert(a == null || a.debugAssertIsValid());
     assert(b == null || b.debugAssertIsValid());
@@ -204,7 +172,6 @@ class FlutterLogoDecoration extends Decoration {
 }
 
 
-/// An object that paints a [BoxDecoration] into a canvas.
 class _FlutterLogoPainter extends BoxPainter {
   _FlutterLogoPainter(this._config)
       : assert(_config.debugAssertIsValid()),

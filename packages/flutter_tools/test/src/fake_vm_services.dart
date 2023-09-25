@@ -11,8 +11,6 @@ import 'package:vm_service/vm_service.dart' as vm_service;
 
 export 'package:test/test.dart' hide isInstanceOf, test;
 
-/// A fake implementation of a vm_service that mocks the JSON-RPC request
-/// and response structure.
 class FakeVmServiceHost {
   FakeVmServiceHost({
     required List<VmServiceExpectation> requests,
@@ -101,11 +99,8 @@ class FakeVmServiceRequest implements VmServiceExpectation {
 
   final String method;
 
-  /// When true, the vm service is automatically closed.
   final bool close;
 
-  /// If non-null, the error code for a [vm_service.RPCError] in place of a
-  /// standard response.
   final int? errorCode;
   final Map<String, Object?>? args;
   final Map<String, Object?>? jsonResponse;

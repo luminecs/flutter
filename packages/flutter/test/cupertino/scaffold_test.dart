@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../image_data.dart';
 
-/// Integration tests testing both [CupertinoPageScaffold] and [CupertinoTabScaffold].
 void main() {
   testWidgets('Contents are behind translucent bar', (WidgetTester tester) async {
     await tester.pumpWidget(

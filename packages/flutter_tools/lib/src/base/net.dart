@@ -20,7 +20,6 @@ typedef HttpClientFactory = HttpClient Function();
 
 typedef UrlTunneller = Future<String> Function(String url);
 
-/// If [httpClientFactory] is null, a default [HttpClient] is used.
 class Net {
   Net({
     HttpClientFactory? httpClientFactory,
@@ -37,14 +36,6 @@ class Net {
 
   final Platform _platform;
 
-  /// Download a file from the given URL.
-  ///
-  /// If a destination file is not provided, returns the bytes.
-  ///
-  /// If a destination file is provided, streams the bytes to that file and
-  /// returns an empty list.
-  ///
-  /// If [maxAttempts] is exceeded, returns null.
   Future<List<int>?> fetchUrl(Uri url, {
     int? maxAttempts,
     File? destFile,
@@ -86,7 +77,6 @@ class Net {
     }
   }
 
-  /// Check if the given URL points to a valid endpoint.
   Future<bool> doesRemoteFileExist(Uri url) => _attempt(url, onlyHeaders: true);
 
   // Returns true on success and false on failure.
@@ -169,7 +159,6 @@ class Net {
   }
 }
 
-/// An IOSink that collects whatever is written to it.
 class _MemoryIOSink implements IOSink {
   @override
   Encoding encoding = utf8;
@@ -230,7 +219,6 @@ class _MemoryIOSink implements IOSink {
   Future<void> flush() async { }
 }
 
-/// Returns [true] if [address] is an IPv6 address.
 bool isIPv6Address(String address) {
   try {
     Uri.parseIPv6Address(address);

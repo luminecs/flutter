@@ -18,7 +18,6 @@ import 'package:process/process.dart';
 
 import './common.dart';
 
-/// Verify all binaries in the Flutter cache are expected by Conductor.
 void main() {
   test(
       'validate the expected binaries from the conductor codesign command are present in the cache',

@@ -29,14 +29,9 @@ import '../cupertino_localizations.dart';
 // method defined in `flutter_localizations/lib/src/cupertino_localizations.dart`.''';
 }
 
-/// Returns the source of the constructor for a GlobalCupertinoLocalizations
-/// subclass.
 String generateCupertinoConstructor(LocaleInfo locale) {
   final String localeName = locale.originalString;
   return '''
-  /// Create an instance of the translation bundle for ${describeLocale(localeName)}.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalization${locale.camelCase()}({
     super.localeName = '$localeName',
     required super.fullYearFormat,

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// A 50x50 blue square png.
 const List<int> kBlueSquarePng = <int>[
   0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49,
   0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x32, 0x08, 0x06,
@@ -29,8 +28,6 @@ const List<int> kTransparentImage = <int>[
   0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82,
 ];
 
-/// An animated GIF image with 3 1x1 pixel frames (a red, green, and blue
-/// frames). The GIF animates forever, and each frame has a 100ms delay.
 const List<int> kAnimatedGif = <int> [
   0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0xa1, 0x03, 0x00,
   0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff, 0xff, 0xff, 0x21,
@@ -43,7 +40,6 @@ const List<int> kAnimatedGif = <int> [
   0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3b,
 ];
 
-/// A PNG with 100x100 blue pixels.
 //
 // Constructed by the following code:
 // ```dart
@@ -92,7 +88,6 @@ const List<int> kBlueRectPng = <int> [
   170, 48, 200, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
 ];
 
-/// A portrait-mode (50x100) PNG with blue pixels.
 const List<int> kBluePortraitPng = <int> [
   137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 50, 0,
   0, 0, 100, 8, 6, 0, 0, 0, 196, 232, 99, 91, 0, 0, 0, 4, 115, 66, 73, 84, 8, 8,
@@ -108,7 +103,6 @@ const List<int> kBluePortraitPng = <int> [
   153, 87, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
 ];
 
-/// A landscape-mode (100x50) PNG with blue pixels.
 const List<int> kBlueLandscapePng = <int> [
   137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 100, 0,
   0, 0, 50, 8, 6, 0, 0, 0, 170, 53, 126, 190, 0, 0, 0, 4, 115, 66, 73, 84, 8, 8,

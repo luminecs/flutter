@@ -25,12 +25,6 @@ export 'binary_messenger.dart' show BinaryMessenger;
 export 'hardware_keyboard.dart' show HardwareKeyboard, KeyEventManager;
 export 'restoration.dart' show RestorationManager;
 
-/// Listens for platform messages and directs them to the [defaultBinaryMessenger].
-///
-/// The [ServicesBinding] also registers a [LicenseEntryCollector] that exposes
-/// the licenses found in the `LICENSE` file stored at the root of the asset
-/// bundle, and implements the `ext.flutter.evict` service extension (see
-/// [evict]).
 mixin ServicesBinding on BindingBase, SchedulerBinding {
   @override
   void initInstances() {
@@ -48,21 +42,12 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
     initializationComplete();
   }
 
-  /// The current [ServicesBinding], if one has been created.
-  ///
-  /// Provides access to the features exposed by this mixin. The binding must
-  /// be initialized before using this getter; this is typically done by calling
-  /// [runApp] or [WidgetsFlutterBinding.ensureInitialized].
   static ServicesBinding get instance => BindingBase.checkInstance(_instance);
   static ServicesBinding? _instance;
 
-  /// The global singleton instance of [HardwareKeyboard], which can be used to
-  /// query keyboard states.
   HardwareKeyboard get keyboard => _keyboard;
   late final HardwareKeyboard _keyboard;
 
-  /// The global singleton instance of [KeyEventManager], which is used
-  /// internally to dispatch key messages.
   KeyEventManager get keyEventManager => _keyEventManager;
   late final KeyEventManager _keyEventManager;
 
@@ -75,75 +60,24 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
     });
   }
 
-  /// The default instance of [BinaryMessenger].
-  ///
-  /// This is used to send messages from the application to the platform, and
-  /// keeps track of which handlers have been registered on each channel so
-  /// it may dispatch incoming messages to the registered handler.
-  ///
-  /// The default implementation returns a [BinaryMessenger] that delivers the
-  /// messages in the same order in which they are sent.
   BinaryMessenger get defaultBinaryMessenger => _defaultBinaryMessenger;
   late final BinaryMessenger _defaultBinaryMessenger;
 
-  /// A token that represents the root isolate, used for coordinating with background
-  /// isolates.
-  ///
-  /// This property is primarily intended for use with
-  /// [BackgroundIsolateBinaryMessenger.ensureInitialized], which takes a
-  /// [RootIsolateToken] as its argument. The value `null` is returned when
-  /// executed from background isolates.
   static ui.RootIsolateToken? get rootIsolateToken => ui.RootIsolateToken.instance;
 
-  /// The low level buffering and dispatch mechanism for messages sent by
-  /// plugins on the engine side to their corresponding plugin code on
-  /// the framework side.
-  ///
-  /// This exposes the [dart:ui.channelBuffers] object. Bindings can override
-  /// this getter to intercept calls to the [ChannelBuffers] mechanism (for
-  /// example, for tests).
-  ///
-  /// In production, direct access to this object should not be necessary.
-  /// Messages are received and dispatched by the [defaultBinaryMessenger]. This
-  /// object is primarily used to send mock messages in tests, via the
-  /// [ChannelBuffers.push] method (simulating a plugin sending a message to the
-  /// framework).
-  ///
-  /// See also:
-  ///
-  ///  * [PlatformDispatcher.sendPlatformMessage], which is used for sending
-  ///    messages to plugins from the framework (the opposite of
-  ///    [channelBuffers]).
-  ///  * [platformDispatcher], the [PlatformDispatcher] singleton.
   ui.ChannelBuffers get channelBuffers => ui.channelBuffers;
 
-  /// Creates a default [BinaryMessenger] instance that can be used for sending
-  /// platform messages.
-  ///
-  /// Many Flutter framework components that communicate with the platform
-  /// assume messages are received by the platform in the same order in which
-  /// they are sent. When overriding this method, be sure the [BinaryMessenger]
-  /// implementation guarantees FIFO delivery.
   @protected
   BinaryMessenger createBinaryMessenger() {
     return const _DefaultBinaryMessenger._();
   }
 
-  /// Called when the operating system notifies the application of a memory
-  /// pressure situation.
-  ///
-  /// This method exposes the `memoryPressure` notification from
-  /// [SystemChannels.system].
   @protected
   @mustCallSuper
   void handleMemoryPressure() {
     rootBundle.clear();
   }
 
-  /// Handler called for messages received on the [SystemChannels.system]
-  /// message channel.
-  ///
-  /// Other bindings may override this to respond to incoming system messages.
   @protected
   @mustCallSuper
   Future<void> handleSystemMessage(Object systemMessage) async {
@@ -156,10 +90,6 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
     return;
   }
 
-  /// Adds relevant licenses to the [LicenseRegistry].
-  ///
-  /// By default, the [ServicesBinding]'s implementation of [initLicenses] adds
-  /// all the licenses collected by the `flutter` tool during compilation.
   @protected
   @mustCallSuper
   void initLicenses() {
@@ -226,10 +156,6 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
     }());
   }
 
-  /// Called in response to the `ext.flutter.evict` service extension.
-  ///
-  /// This is used by the `flutter` tool during hot reload so that any images
-  /// that have changed on disk get cleared from caches.
   @protected
   @mustCallSuper
   void evict(String asset) {
@@ -238,17 +164,6 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
 
   // App life cycle
 
-  /// Initializes the [lifecycleState] with the
-  /// [dart:ui.PlatformDispatcher.initialLifecycleState].
-  ///
-  /// Once the [lifecycleState] is populated through any means (including this
-  /// method), this method will do nothing. This is because the
-  /// [dart:ui.PlatformDispatcher.initialLifecycleState] may already be stale
-  /// and it no longer makes sense to use the initial state at dart vm startup
-  /// as the current state anymore.
-  ///
-  /// The latest state should be obtained by subscribing to
-  /// [WidgetsBindingObserver.didChangeAppLifecycleState].
   @protected
   void readInitialLifecycleStateFromNativeWindow() {
     if (lifecycleState != null || platformDispatcher.initialLifecycleState.isEmpty) {
@@ -371,70 +286,10 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
     return null;
   }
 
-  /// Handles any requests for application exit that may be received on the
-  /// [SystemChannels.platform] method channel.
-  ///
-  /// By default, returns [ui.AppExitResponse.exit].
-  ///
-  /// {@template flutter.services.binding.ServicesBinding.requestAppExit}
-  /// Not all exits are cancelable, so not all exits will call this function. Do
-  /// not rely on this function as a place to save critical data, because you
-  /// will be disappointed. There are a number of ways that the application can
-  /// exit without letting the application know first: power can be unplugged,
-  /// the battery removed, the application can be killed in a task manager or
-  /// command line, or the device could have a rapid unplanned disassembly (i.e.
-  /// it could explode). In all of those cases (and probably others), no
-  /// notification will be given to the application that it is about to exit.
-  /// {@endtemplate}
-  ///
-  /// {@tool sample}
-  /// This examples shows how an application can cancel (or not) OS requests for
-  /// quitting an application. Currently this is only supported on macOS and
-  /// Linux.
-  ///
-  /// ** See code in examples/api/lib/services/binding/handle_request_app_exit.0.dart **
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  /// * [WidgetsBindingObserver.didRequestAppExit], which can be overridden to
-  ///   respond to this message.
-  /// * [WidgetsBinding.handleRequestAppExit] which overrides this method to
-  ///   notify its observers.
   Future<ui.AppExitResponse> handleRequestAppExit() async {
     return ui.AppExitResponse.exit;
   }
 
-  /// Exits the application by calling the native application API method for
-  /// exiting an application cleanly.
-  ///
-  /// This differs from calling `dart:io`'s [exit] function in that it gives the
-  /// engine a chance to clean up resources so that it doesn't crash on exit, so
-  /// calling this is always preferred over calling [exit]. It also optionally
-  /// gives handlers of [handleRequestAppExit] a chance to cancel the
-  /// application exit.
-  ///
-  /// The [exitType] indicates what kind of exit to perform. For
-  /// [ui.AppExitType.cancelable] exits, the application is queried through a
-  /// call to [handleRequestAppExit], where the application can optionally
-  /// cancel the request for exit. If the [exitType] is
-  /// [ui.AppExitType.required], then the application exits immediately without
-  /// querying the application.
-  ///
-  /// For [ui.AppExitType.cancelable] exits, the returned response value is the
-  /// response obtained from the application as to whether the exit was canceled
-  /// or not. Practically, the response will never be [ui.AppExitResponse.exit],
-  /// since the application will have already exited by the time the result
-  /// would have been received.
-  ///
-  /// The optional [exitCode] argument will be used as the application exit code
-  /// on platforms where an exit code is supported. On other platforms it may be
-  /// ignored. It defaults to zero.
-  ///
-  /// See also:
-  ///
-  /// * [WidgetsBindingObserver.didRequestAppExit] for a handler you can
-  ///   override on a [WidgetsBindingObserver] to receive exit requests.
   Future<ui.AppExitResponse> exitApplication(ui.AppExitType exitType, [int exitCode = 0]) async {
     final Map<String, Object?>? result = await SystemChannels.platform.invokeMethod<Map<String, Object?>>(
       'System.exitApplication',
@@ -454,22 +309,9 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
     }
   }
 
-  /// The [RestorationManager] synchronizes the restoration data between
-  /// engine and framework.
-  ///
-  /// See the docs for [RestorationManager] for a discussion of restoration
-  /// state and how it is organized in Flutter.
-  ///
-  /// To use a different [RestorationManager] subclasses can override
-  /// [createRestorationManager], which is called to create the instance
-  /// returned by this getter.
   RestorationManager get restorationManager => _restorationManager;
   late RestorationManager _restorationManager;
 
-  /// Creates the [RestorationManager] instance available via
-  /// [restorationManager].
-  ///
-  /// Can be overridden in subclasses to create a different [RestorationManager].
   @protected
   RestorationManager createRestorationManager() {
     return RestorationManager();
@@ -477,42 +319,19 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
 
   SystemUiChangeCallback? _systemUiChangeCallback;
 
-  /// Sets the callback for the `SystemChrome.systemUIChange` method call
-  /// received on the [SystemChannels.platform] channel.
-  ///
-  /// This is typically not called directly. System UI changes that this method
-  /// responds to are associated with [SystemUiMode]s, which are configured
-  /// using [SystemChrome]. Use [SystemChrome.setSystemUIChangeCallback] to configure
-  /// along with other SystemChrome settings.
-  ///
-  /// See also:
-  ///
-  ///   * [SystemChrome.setEnabledSystemUIMode], which specifies the
-  ///     [SystemUiMode] to have visible when the application is running.
   // ignore: use_setters_to_change_properties, (API predates enforcing the lint)
   void setSystemUiChangeCallback(SystemUiChangeCallback? callback) {
     _systemUiChangeCallback = callback;
   }
 
-  /// Alert the engine that the binding is registered. This instructs the engine to
-  /// register its top level window handler on Windows. This signals that the app
-  /// is able to process "System.requestAppExit" signals from the engine.
   @protected
   Future<void> initializationComplete() async {
     await SystemChannels.platform.invokeMethod('System.initializationComplete');
   }
 }
 
-/// Signature for listening to changes in the [SystemUiMode].
-///
-/// Set by [SystemChrome.setSystemUIChangeCallback].
 typedef SystemUiChangeCallback = Future<void> Function(bool systemOverlaysAreVisible);
 
-/// The default implementation of [BinaryMessenger].
-///
-/// This messenger sends messages from the app-side to the platform-side and
-/// dispatches incoming messages from the platform-side to the appropriate
-/// handler.
 class _DefaultBinaryMessenger extends BinaryMessenger {
   const _DefaultBinaryMessenger._();
 

@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-/// Flutter code sample for [BuildOwner].
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

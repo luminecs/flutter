@@ -30,19 +30,12 @@ const EdgeInsets _kFloatingCursorSizeIncrease = EdgeInsets.symmetric(horizontal:
 // The corner radius of the floating cursor in pixels.
 const Radius _kFloatingCursorRadius = Radius.circular(1.0);
 
-/// Represents the coordinates of the point in a selection, and the text
-/// direction at that point, relative to top left of the [RenderEditable] that
-/// holds the selection.
 @immutable
 class TextSelectionPoint {
-  /// Creates a description of a point in a text selection.
   const TextSelectionPoint(this.point, this.direction);
 
-  /// Coordinates of the lower left or lower right corner of the selection,
-  /// relative to the top left of the [RenderEditable] object.
   final Offset point;
 
-  /// Direction of the text at this edge of the selection.
   final TextDirection? direction;
 
   @override
@@ -75,56 +68,6 @@ class TextSelectionPoint {
 
 }
 
-/// The consecutive sequence of [TextPosition]s that the caret should move to
-/// when the user navigates the paragraph using the upward arrow key or the
-/// downward arrow key.
-///
-/// {@template flutter.rendering.RenderEditable.verticalArrowKeyMovement}
-/// When the user presses the upward arrow key or the downward arrow key, on
-/// many platforms (macOS for instance), the caret will move to the previous
-/// line or the next line, while maintaining its original horizontal location.
-/// When it encounters a shorter line, the caret moves to the closest horizontal
-/// location within that line, and restores the original horizontal location
-/// when a long enough line is encountered.
-///
-/// Additionally, the caret will move to the beginning of the document if the
-/// upward arrow key is pressed and the caret is already on the first line. If
-/// the downward arrow key is pressed next, the caret will restore its original
-/// horizontal location and move to the second line. Similarly the caret moves
-/// to the end of the document if the downward arrow key is pressed when it's
-/// already on the last line.
-///
-/// Consider a left-aligned paragraph:
-///   aa|
-///   a
-///   aaa
-/// where the caret was initially placed at the end of the first line. Pressing
-/// the downward arrow key once will move the caret to the end of the second
-/// line, and twice the arrow key moves to the third line after the second "a"
-/// on that line. Pressing the downward arrow key again, the caret will move to
-/// the end of the third line (the end of the document). Pressing the upward
-/// arrow key in this state will result in the caret moving to the end of the
-/// second line.
-///
-/// Vertical caret runs are typically interrupted when the layout of the text
-/// changes (including when the text itself changes), or when the selection is
-/// changed by other input events or programmatically (for example, when the
-/// user pressed the left arrow key).
-/// {@endtemplate}
-///
-/// The [movePrevious] method moves the caret location (which is
-/// [VerticalCaretMovementRun.current]) to the previous line, and in case
-/// the caret is already on the first line, the method does nothing and returns
-/// false. Similarly the [moveNext] method moves the caret to the next line, and
-/// returns false if the caret is already on the last line.
-///
-/// The [moveByOffset] method takes a pixel offset from the current position to move
-/// the caret up or down.
-///
-/// If the underlying paragraph's layout changes, [isValid] becomes false and
-/// the [VerticalCaretMovementRun] must not be used. The [isValid] property must
-/// be checked before calling [movePrevious], [moveNext] and [moveByOffset],
-/// or accessing [current].
 class VerticalCaretMovementRun implements Iterator<TextPosition> {
   VerticalCaretMovementRun._(
     this._editable,
@@ -142,13 +85,6 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
   final RenderEditable _editable;
 
   bool _isValid = true;
-  /// Whether this [VerticalCaretMovementRun] can still continue.
-  ///
-  /// A [VerticalCaretMovementRun] run is valid if the underlying text layout
-  /// hasn't changed.
-  ///
-  /// The [current] value and the [movePrevious], [moveNext] and [moveByOffset]
-  /// methods must not be accessed when [isValid] is false.
   bool get isValid {
     if (!_isValid) {
       return false;
@@ -199,9 +135,6 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
     return true;
   }
 
-  /// Move back to the previous element.
-  ///
-  /// Returns true and updates [current] if successful.
   bool movePrevious() {
     assert(isValid);
     if (_currentLine <= 0) {
@@ -214,12 +147,6 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
     return true;
   }
 
-  /// Move forward or backward by a number of elements determined
-  /// by pixel [offset].
-  ///
-  /// If [offset] is negative, move backward; otherwise move forward.
-  ///
-  /// Returns true and updates [current] if successful.
   bool moveByOffset(double offset) {
     final Offset initialOffset = _currentOffset;
     if (offset >= 0.0) {
@@ -239,36 +166,7 @@ class VerticalCaretMovementRun implements Iterator<TextPosition> {
   }
 }
 
-/// Displays some text in a scrollable container with a potentially blinking
-/// cursor and with gesture recognizers.
-///
-/// This is the renderer for an editable text field. It does not directly
-/// provide affordances for editing the text, but it does handle text selection
-/// and manipulation of the text cursor.
-///
-/// The [text] is displayed, scrolled by the given [offset], aligned according
-/// to [textAlign]. The [maxLines] property controls whether the text displays
-/// on one line or many. The [selection], if it is not collapsed, is painted in
-/// the [selectionColor]. If it _is_ collapsed, then it represents the cursor
-/// position. The cursor is shown while [showCursor] is true. It is painted in
-/// the [cursorColor].
-///
-/// Keyboard handling, IME handling, scrolling, toggling the [showCursor] value
-/// to actually blink the cursor, and other features not mentioned above are the
-/// responsibility of higher layers and not handled by this object.
 class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults implements TextLayoutMetrics {
-  /// Creates a render object that implements the visual aspects of a text field.
-  ///
-  /// The [textAlign] argument defaults to [TextAlign.start].
-  ///
-  /// If [showCursor] is not specified, then it defaults to hiding the cursor.
-  ///
-  /// The [maxLines] property can be set to null to remove the restriction on
-  /// the number of lines. By default, it is 1, meaning this is a single-line
-  /// text field. If it is not null, it must be greater than zero.
-  ///
-  /// Use [ViewportOffset.zero] for the [offset] if there is no need for
-  /// scrolling.
   RenderEditable({
     InlineSpan? text,
     required TextDirection textDirection,
@@ -385,7 +283,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     addAll(children);
   }
 
-  /// Child render objects
   _RenderEditableCustomPaint? _foregroundRenderObject;
   _RenderEditableCustomPaint? _backgroundRenderObject;
 
@@ -425,12 +322,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _foregroundPainter = newPainter;
   }
 
-  /// The [RenderEditablePainter] to use for painting above this
-  /// [RenderEditable]'s text content.
-  ///
-  /// The new [RenderEditablePainter] will replace the previously specified
-  /// foreground painter, and schedule a repaint if the new painter's
-  /// `shouldRepaint` method returns true.
   RenderEditablePainter? get foregroundPainter => _foregroundPainter;
   RenderEditablePainter? _foregroundPainter;
   set foregroundPainter(RenderEditablePainter? newPainter) {
@@ -455,12 +346,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _painter = newPainter;
   }
 
-  /// Sets the [RenderEditablePainter] to use for painting beneath this
-  /// [RenderEditable]'s text content.
-  ///
-  /// The new [RenderEditablePainter] will replace the previously specified
-  /// painter, and schedule a repaint if the new painter's `shouldRepaint`
-  /// method returns true.
   RenderEditablePainter? get painter => _painter;
   RenderEditablePainter? _painter;
   set painter(RenderEditablePainter? newPainter) {
@@ -503,7 +388,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   double? _textLayoutLastMaxWidth;
   double? _textLayoutLastMinWidth;
 
-  /// Assert that the last layout still matches the constraints.
   void debugAssertLayoutUpToDate() {
     assert(
       _textLayoutLastMaxWidth == constraints.maxWidth &&
@@ -512,20 +396,8 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     );
   }
 
-  /// Whether the [handleEvent] will propagate pointer events to selection
-  /// handlers.
-  ///
-  /// If this property is true, the [handleEvent] assumes that this renderer
-  /// will be notified of input gestures via [handleTapDown], [handleTap],
-  /// [handleDoubleTap], and [handleLongPress].
-  ///
-  /// If there are any gesture recognizers in the text span, the [handleEvent]
-  /// will still propagate pointer events to those recognizers.
-  ///
-  /// The default value of this property is false.
   bool ignorePointer;
 
-  /// {@macro dart.ui.textHeightBehavior}
   TextHeightBehavior? get textHeightBehavior => _textPainter.textHeightBehavior;
   set textHeightBehavior(TextHeightBehavior? value) {
     if (_textPainter.textHeightBehavior == value) {
@@ -535,7 +407,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// {@macro flutter.painting.textPainter.textWidthBasis}
   TextWidthBasis get textWidthBasis => _textPainter.textWidthBasis;
   set textWidthBasis(TextWidthBasis value) {
     if (_textPainter.textWidthBasis == value) {
@@ -545,9 +416,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// The pixel ratio of the current device.
-  ///
-  /// Should be obtained by querying MediaQuery for the devicePixelRatio.
   double get devicePixelRatio => _devicePixelRatio;
   double _devicePixelRatio;
   set devicePixelRatio(double value) {
@@ -558,9 +426,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// Character used for obscuring text if [obscureText] is true.
-  ///
-  /// Must have a length of exactly one.
   String get obscuringCharacter => _obscuringCharacter;
   String _obscuringCharacter;
   set obscuringCharacter(String value) {
@@ -572,7 +437,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsLayout();
   }
 
-  /// Whether to hide the text being edited (e.g., for passwords).
   bool get obscureText => _obscureText;
   bool _obscureText;
   set obscureText(bool value) {
@@ -584,56 +448,24 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// Controls how tall the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxHeightStyle] for details on available styles.
   ui.BoxHeightStyle get selectionHeightStyle => _selectionPainter.selectionHeightStyle;
   set selectionHeightStyle(ui.BoxHeightStyle value) {
     _selectionPainter.selectionHeightStyle = value;
   }
 
-  /// Controls how wide the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxWidthStyle] for details on available styles.
   ui.BoxWidthStyle get selectionWidthStyle => _selectionPainter.selectionWidthStyle;
   set selectionWidthStyle(ui.BoxWidthStyle value) {
     _selectionPainter.selectionWidthStyle = value;
   }
 
-  /// The object that controls the text selection, used by this render object
-  /// for implementing cut, copy, and paste keyboard shortcuts.
-  ///
-  /// It will make cut, copy and paste functionality work with the most recently
-  /// set [TextSelectionDelegate].
   TextSelectionDelegate textSelectionDelegate;
 
-  /// Track whether position of the start of the selected text is within the viewport.
-  ///
-  /// For example, if the text contains "Hello World", and the user selects
-  /// "Hello", then scrolls so only "World" is visible, this will become false.
-  /// If the user scrolls back so that the "H" is visible again, this will
-  /// become true.
-  ///
-  /// This bool indicates whether the text is scrolled so that the handle is
-  /// inside the text field viewport, as opposed to whether it is actually
-  /// visible on the screen.
   ValueListenable<bool> get selectionStartInViewport => _selectionStartInViewport;
   final ValueNotifier<bool> _selectionStartInViewport = ValueNotifier<bool>(true);
 
-  /// Track whether position of the end of the selected text is within the viewport.
-  ///
-  /// For example, if the text contains "Hello World", and the user selects
-  /// "World", then scrolls so only "Hello" is visible, this will become
-  /// 'false'. If the user scrolls back so that the "d" is visible again, this
-  /// will become 'true'.
-  ///
-  /// This bool indicates whether the text is scrolled so that the handle is
-  /// inside the text field viewport, as opposed to whether it is actually
-  /// visible on the screen.
   ValueListenable<bool> get selectionEndInViewport => _selectionEndInViewport;
   final ValueNotifier<bool> _selectionEndInViewport = ValueNotifier<bool>(true);
 
-  /// Returns the TextPosition above or below the given offset.
   TextPosition _getTextPositionVertical(TextPosition position, double verticalOffset) {
     final Offset caretOffset = _textPainter.getOffsetForCaret(position, _caretPrototype);
     final Offset caretOffsetTranslated = caretOffset.translate(0.0, verticalOffset);
@@ -642,7 +474,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
 
   // Start TextLayoutMetrics.
 
-  /// {@macro flutter.services.TextLayoutMetrics.getLineAtOffset}
   @override
   TextSelection getLineAtOffset(TextPosition position) {
     debugAssertLayoutUpToDate();
@@ -654,13 +485,11 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     return TextSelection(baseOffset: line.start, extentOffset: line.end);
   }
 
-  /// {@macro flutter.painting.TextPainter.getWordBoundary}
   @override
   TextRange getWordBoundary(TextPosition position) {
     return _textPainter.getWordBoundary(position);
   }
 
-  /// {@macro flutter.services.TextLayoutMetrics.getTextPositionAbove}
   @override
   TextPosition getTextPositionAbove(TextPosition position) {
     // The caret offset gives a location in the upper left hand corner of
@@ -671,7 +500,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     return _getTextPositionVertical(position, verticalOffset);
   }
 
-  /// {@macro flutter.services.TextLayoutMetrics.getTextPositionBelow}
   @override
   TextPosition getTextPositionBelow(TextPosition position) {
     // The caret offset gives a location in the upper left hand corner of
@@ -751,10 +579,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _backgroundRenderObject?.markNeedsPaint();
   }
 
-  /// Marks the render object as needing to be laid out again and have its text
-  /// metrics recomputed.
-  ///
-  /// Implies [markNeedsLayout].
   @protected
   void markNeedsTextLayout() {
     _textLayoutLastMaxWidth = null;
@@ -770,16 +594,8 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _textLayoutLastMinWidth = null;
   }
 
-  /// Returns a plain text version of the text in [TextPainter].
-  ///
-  /// If [obscureText] is true, returns the obscured text. See
-  /// [obscureText] and [obscuringCharacter].
-  /// In order to get the styled text as an [InlineSpan] tree, use [text].
   String get plainText => _textPainter.plainText;
 
-  /// The text to paint in the form of a tree of [InlineSpan]s.
-  ///
-  /// In order to get the plain text representation, use [plainText].
   InlineSpan? get text => _textPainter.text;
   final TextPainter _textPainter;
   AttributedString? _cachedAttributedValue;
@@ -797,7 +613,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// How the text should be aligned horizontally.
   TextAlign get textAlign => _textPainter.textAlign;
   set textAlign(TextAlign value) {
     if (_textPainter.textAlign == value) {
@@ -807,17 +622,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// The directionality of the text.
-  ///
-  /// This decides how the [TextAlign.start], [TextAlign.end], and
-  /// [TextAlign.justify] values of [textAlign] are interpreted.
-  ///
-  /// This is also used to disambiguate how to render bidirectional text. For
-  /// example, if the [text] is an English phrase followed by a Hebrew phrase,
-  /// in a [TextDirection.ltr] context the English phrase will be on the left
-  /// and the Hebrew phrase to its right, while in a [TextDirection.rtl]
-  /// context, the English phrase will be on the right and the Hebrew phrase on
-  /// its left.
   // TextPainter.textDirection is nullable, but it is set to a
   // non-null value in the RenderEditable constructor and we refuse to
   // set it to null here, so _textPainter.textDirection cannot be null.
@@ -831,16 +635,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// Used by this renderer's internal [TextPainter] to select a locale-specific
-  /// font.
-  ///
-  /// In some cases the same Unicode character may be rendered differently depending
-  /// on the locale. For example the '骨' character is rendered differently in
-  /// the Chinese and Japanese locales. In these cases the [locale] may be used
-  /// to select a locale-specific font.
-  ///
-  /// If this value is null, a system-dependent algorithm is used to select
-  /// the font.
   Locale? get locale => _textPainter.locale;
   set locale(Locale? value) {
     if (_textPainter.locale == value) {
@@ -850,8 +644,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// The [StrutStyle] used by the renderer's internal [TextPainter] to
-  /// determine the strut to use.
   StrutStyle? get strutStyle => _textPainter.strutStyle;
   set strutStyle(StrutStyle? value) {
     if (_textPainter.strutStyle == value) {
@@ -861,24 +653,16 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// The color to use when painting the cursor.
   Color? get cursorColor => _caretPainter.caretColor;
   set cursorColor(Color? value) {
     _caretPainter.caretColor = value;
   }
 
-  /// The color to use when painting the cursor aligned to the text while
-  /// rendering the floating cursor.
-  ///
-  /// Typically this would be set to [CupertinoColors.inactiveGray].
-  ///
-  /// If this is null, the background cursor is not painted.
   Color? get backgroundCursorColor => _caretPainter.backgroundCursorColor;
   set backgroundCursorColor(Color? value) {
     _caretPainter.backgroundCursorColor = value;
   }
 
-  /// Whether to paint the cursor.
   ValueNotifier<bool> get showCursor => _showCursor;
   ValueNotifier<bool> _showCursor;
   set showCursor(ValueNotifier<bool> value) {
@@ -899,7 +683,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _caretPainter.shouldPaint = showCursor.value;
   }
 
-  /// Whether the editable is currently focused.
   bool get hasFocus => _hasFocus;
   bool _hasFocus = false;
   set hasFocus(bool value) {
@@ -910,7 +693,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// Whether this rendering object will take a full line regardless the text width.
   bool get forceLine => _forceLine;
   bool _forceLine = false;
   set forceLine(bool value) {
@@ -921,7 +703,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsLayout();
   }
 
-  /// Whether this rendering object is read only.
   bool get readOnly => _readOnly;
   bool _readOnly = false;
   set readOnly(bool value) {
@@ -932,19 +713,8 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// The maximum number of lines for the text to span, wrapping if necessary.
-  ///
-  /// If this is 1 (the default), the text will not wrap, but will extend
-  /// indefinitely instead.
-  ///
-  /// If this is null, there is no limit to the number of lines.
-  ///
-  /// When this is not null, the intrinsic height of the render object is the
-  /// height of one line of text multiplied by this value. In other words, this
-  /// also controls the height of the actual editing widget.
   int? get maxLines => _maxLines;
   int? _maxLines;
-  /// The value may be null. If it is not null, then it must be greater than zero.
   set maxLines(int? value) {
     assert(value == null || value > 0);
     if (maxLines == value) {
@@ -959,10 +729,8 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// {@macro flutter.widgets.editableText.minLines}
   int? get minLines => _minLines;
   int? _minLines;
-  /// The value may be null. If it is not null, then it must be greater than zero.
   set minLines(int? value) {
     assert(value == null || value > 0);
     if (minLines == value) {
@@ -972,7 +740,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// {@macro flutter.widgets.editableText.expands}
   bool get expands => _expands;
   bool _expands;
   set expands(bool value) {
@@ -983,19 +750,11 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// The color to use when painting the selection.
   Color? get selectionColor => _selectionPainter.highlightColor;
   set selectionColor(Color? value) {
     _selectionPainter.highlightColor = value;
   }
 
-  /// Deprecated. Will be removed in a future version of Flutter. Use
-  /// [textScaler] instead.
-  ///
-  /// The number of font pixels for each logical pixel.
-  ///
-  /// For example, if the text scale factor is 1.5, text will be 50% larger than
-  /// the specified font size.
   @Deprecated(
     'Use textScaler instead. '
     'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
@@ -1011,7 +770,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     textScaler = TextScaler.linear(value);
   }
 
-  /// {@macro flutter.painting.textPainter.textScaler}
   TextScaler get textScaler => _textPainter.textScaler;
   set textScaler(TextScaler value) {
     if (_textPainter.textScaler == value) {
@@ -1021,12 +779,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsTextLayout();
   }
 
-  /// The region of text that is selected, if any.
-  ///
-  /// The caret position is represented by a collapsed selection.
-  ///
-  /// If [selection] is null, there is no selection and attempts to
-  /// manipulate the selection will throw.
   TextSelection? get selection => _selection;
   TextSelection? _selection;
   set selection(TextSelection? value) {
@@ -1039,11 +791,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// The offset at which the text should be painted.
-  ///
-  /// If the text content is larger than the editable line itself, the editable
-  /// line clips the text. This property controls which part of the text is
-  /// visible by shifting the text by the given offset before clipping.
   ViewportOffset get offset => _offset;
   ViewportOffset _offset;
   set offset(ViewportOffset value) {
@@ -1060,7 +807,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsLayout();
   }
 
-  /// How thick the cursor will be.
   double get cursorWidth => _cursorWidth;
   double _cursorWidth = 1.0;
   set cursorWidth(double value) {
@@ -1071,12 +817,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsLayout();
   }
 
-  /// How tall the cursor will be.
-  ///
-  /// This can be null, in which case the getter will actually return [preferredLineHeight].
-  ///
-  /// Setting this to itself fixes the value to the current [preferredLineHeight]. Setting
-  /// this to null returns the behavior of deferring to [preferredLineHeight].
   // TODO(ianh): This is a confusing API. We should have a separate getter for the effective cursor height.
   double get cursorHeight => _cursorHeight ?? preferredLineHeight;
   double? _cursorHeight;
@@ -1088,12 +828,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsLayout();
   }
 
-  /// {@template flutter.rendering.RenderEditable.paintCursorAboveText}
-  /// If the cursor should be painted on top of the text or underneath it.
-  ///
-  /// By default, the cursor should be painted on top for iOS platforms and
-  /// underneath for Android platforms.
-  /// {@endtemplate}
   bool get paintCursorAboveText => _paintCursorOnTop;
   bool _paintCursorOnTop;
   set paintCursorAboveText(bool value) {
@@ -1109,31 +843,16 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _updatePainter(_painter);
   }
 
-  /// {@template flutter.rendering.RenderEditable.cursorOffset}
-  /// The offset that is used, in pixels, when painting the cursor on screen.
-  ///
-  /// By default, the cursor position should be set to an offset of
-  /// (-[cursorWidth] * 0.5, 0.0) on iOS platforms and (0, 0) on Android
-  /// platforms. The origin from where the offset is applied to is the arbitrary
-  /// location where the cursor ends up being rendered from by default.
-  /// {@endtemplate}
   Offset get cursorOffset => _caretPainter.cursorOffset;
   set cursorOffset(Offset value) {
     _caretPainter.cursorOffset = value;
   }
 
-  /// How rounded the corners of the cursor should be.
-  ///
-  /// A null value is the same as [Radius.zero].
   Radius? get cursorRadius => _caretPainter.cursorRadius;
   set cursorRadius(Radius? value) {
     _caretPainter.cursorRadius = value;
   }
 
-  /// The [LayerLink] of start selection handle.
-  ///
-  /// [RenderEditable] is responsible for calculating the [Offset] of this
-  /// [LayerLink], which will be used as [CompositedTransformTarget] of start handle.
   LayerLink get startHandleLayerLink => _startHandleLayerLink;
   LayerLink _startHandleLayerLink;
   set startHandleLayerLink(LayerLink value) {
@@ -1144,10 +863,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsPaint();
   }
 
-  /// The [LayerLink] of end selection handle.
-  ///
-  /// [RenderEditable] is responsible for calculating the [Offset] of this
-  /// [LayerLink], which will be used as [CompositedTransformTarget] of end handle.
   LayerLink get endHandleLayerLink => _endHandleLayerLink;
   LayerLink _endHandleLayerLink;
   set endHandleLayerLink(LayerLink value) {
@@ -1158,28 +873,11 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsPaint();
   }
 
-  /// The padding applied to text field. Used to determine the bounds when
-  /// moving the floating cursor.
-  ///
-  /// Defaults to a padding with left, top and right set to 4, bottom to 5.
   EdgeInsets floatingCursorAddedMargin;
 
   bool _floatingCursorOn = false;
   late TextPosition _floatingCursorTextPosition;
 
-  /// Whether to allow the user to change the selection.
-  ///
-  /// Since [RenderEditable] does not handle selection manipulation
-  /// itself, this actually only affects whether the accessibility
-  /// hints provided to the system (via
-  /// [describeSemanticsConfiguration]) will enable selection
-  /// manipulation. It's the responsibility of this object's owner
-  /// to provide selection manipulation affordances.
-  ///
-  /// This field is used by [selectionEnabled] (which then controls
-  /// the accessibility hints mentioned above). When null,
-  /// [obscureText] is used to determine the value of
-  /// [selectionEnabled] instead.
   bool? get enableInteractiveSelection => _enableInteractiveSelection;
   bool? _enableInteractiveSelection;
   set enableInteractiveSelection(bool? value) {
@@ -1191,33 +889,10 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     markNeedsSemanticsUpdate();
   }
 
-  /// Whether interactive selection are enabled based on the values of
-  /// [enableInteractiveSelection] and [obscureText].
-  ///
-  /// Since [RenderEditable] does not handle selection manipulation
-  /// itself, this actually only affects whether the accessibility
-  /// hints provided to the system (via
-  /// [describeSemanticsConfiguration]) will enable selection
-  /// manipulation. It's the responsibility of this object's owner
-  /// to provide selection manipulation affordances.
-  ///
-  /// By default, [enableInteractiveSelection] is null, [obscureText] is false,
-  /// and this getter returns true.
-  ///
-  /// If [enableInteractiveSelection] is null and [obscureText] is true, then this
-  /// getter returns false. This is the common case for password fields.
-  ///
-  /// If [enableInteractiveSelection] is non-null then its value is
-  /// returned. An application might [enableInteractiveSelection] to
-  /// true to enable interactive selection for a password field, or to
-  /// false to unconditionally disable interactive selection.
   bool get selectionEnabled {
     return enableInteractiveSelection ?? !obscureText;
   }
 
-  /// The color used to paint the prompt rectangle.
-  ///
-  /// The prompt rectangle will only be requested on non-web iOS applications.
   // TODO(ianh): We should change the getter to return null when _promptRectRange is null
   // (otherwise, if you set it to null and then get it, you get back non-null).
   // Alternatively, we could stop supporting setting this to null.
@@ -1226,30 +901,16 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _autocorrectHighlightPainter.highlightColor = newValue;
   }
 
-  /// Dismisses the currently displayed prompt rectangle and displays a new prompt rectangle
-  /// over [newRange] in the given color [promptRectColor].
-  ///
-  /// The prompt rectangle will only be requested on non-web iOS applications.
-  ///
-  /// When set to null, the currently displayed prompt rectangle (if any) will be dismissed.
   // ignore: use_setters_to_change_properties, (API predates enforcing the lint)
   void setPromptRectRange(TextRange? newRange) {
     _autocorrectHighlightPainter.highlightedRange = newRange;
   }
 
-  /// The maximum amount the text is allowed to scroll.
-  ///
-  /// This value is only valid after layout and can change as additional
-  /// text is entered or removed in order to accommodate expanding when
-  /// [expands] is set to true.
   double get maxScrollExtent => _maxScrollExtent;
   double _maxScrollExtent = 0;
 
   double get _caretMargin => _kCaretGap + cursorWidth;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.hardEdge].
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior = Clip.hardEdge;
   set clipBehavior(Clip value) {
@@ -1260,8 +921,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     }
   }
 
-  /// Collected during [describeSemanticsConfiguration], used by
-  /// [assembleSemanticsNode] and [_combineSemanticsInfo].
   List<InlineSpanSemanticsInformation>? _semanticsInfo;
 
   // Caches [SemanticsNode]s created during [assembleSemanticsNode] so they
@@ -1270,11 +929,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   // [assembleSemanticsNode] invocations.
   LinkedHashMap<Key, SemanticsNode>? _cachedChildNodes;
 
-  /// Returns a list of rects that bound the given selection, and the text
-  /// direction. The text direction is used by the engine to calculate
-  /// the closest position to a given point.
-  ///
-  /// See [TextPainter.getBoxesForSelection] for more details.
   List<TextBox> getBoxesForSelection(TextSelection selection) {
     _computeTextMetricsIfNeeded();
     return _textPainter.getBoxesForSelection(selection)
@@ -1687,18 +1341,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   // the text may position outside the visible region even when the text fits.
   bool get _hasVisualOverflow => _maxScrollExtent > 0 || _paintOffset != Offset.zero;
 
-  /// Returns the local coordinates of the endpoints of the given selection.
-  ///
-  /// If the selection is collapsed (and therefore occupies a single point), the
-  /// returned list is of length one. Otherwise, the selection is not collapsed
-  /// and the returned list is of length two. In this case, however, the two
-  /// points might actually be co-located (e.g., because of a bidirectional
-  /// selection that contains some text but whose ends meet in the middle).
-  ///
-  /// See also:
-  ///
-  ///  * [getLocalRectForCaret], which is the equivalent but for
-  ///    a [TextPosition] rather than a [TextSelection].
   List<TextSelectionPoint> getEndpointsForSelection(TextSelection selection) {
     _computeTextMetricsIfNeeded();
 
@@ -1721,14 +1363,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     }
   }
 
-  /// Returns the smallest [Rect], in the local coordinate system, that covers
-  /// the text within the [TextRange] specified.
-  ///
-  /// This method is used to calculate the approximate position of the IME bar
-  /// on iOS.
-  ///
-  /// Returns null if [TextRange.isValid] is false for the given `range`, or the
-  /// given `range` is collapsed.
   Rect? getRectForComposingRange(TextRange range) {
     if (!range.isValid || range.isCollapsed) {
       return null;
@@ -1747,31 +1381,12 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     )?.shift(_paintOffset);
   }
 
-  /// Returns the position in the text for the given global coordinate.
-  ///
-  /// See also:
-  ///
-  ///  * [getLocalRectForCaret], which is the reverse operation, taking
-  ///    a [TextPosition] and returning a [Rect].
-  ///  * [TextPainter.getPositionForOffset], which is the equivalent method
-  ///    for a [TextPainter] object.
   TextPosition getPositionForPoint(Offset globalPosition) {
     _computeTextMetricsIfNeeded();
     globalPosition += -_paintOffset;
     return _textPainter.getPositionForOffset(globalToLocal(globalPosition));
   }
 
-  /// Returns the [Rect] in local coordinates for the caret at the given text
-  /// position.
-  ///
-  /// See also:
-  ///
-  ///  * [getPositionForPoint], which is the reverse operation, taking
-  ///    an [Offset] in global coordinates and returning a [TextPosition].
-  ///  * [getEndpointsForSelection], which is the equivalent but for
-  ///    a selection rather than a particular text position.
-  ///  * [TextPainter.getOffsetForCaret], the equivalent method for a
-  ///    [TextPainter] object.
   Rect getLocalRectForCaret(TextPosition caretPosition) {
     _computeTextMetricsIfNeeded();
     final Rect caretPrototype = _caretPrototype;
@@ -1826,8 +1441,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     return _textPainter.maxIntrinsicWidth + _caretMargin;
   }
 
-  /// An estimate of the height of a line in the text. See [TextPainter.preferredLineHeight].
-  /// This does not require the layout to be updated.
   double get preferredLineHeight => _textPainter.preferredLineHeight;
 
   int? _cachedLineBreakCount;
@@ -1941,27 +1554,13 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   Offset? _lastTapDownPosition;
   Offset? _lastSecondaryTapDownPosition;
 
-  /// {@template flutter.rendering.RenderEditable.lastSecondaryTapDownPosition}
-  /// The position of the most recent secondary tap down event on this text
-  /// input.
-  /// {@endtemplate}
   Offset? get lastSecondaryTapDownPosition => _lastSecondaryTapDownPosition;
 
-  /// Tracks the position of a secondary tap event.
-  ///
-  /// Should be called before attempting to change the selection based on the
-  /// position of a secondary tap.
   void handleSecondaryTapDown(TapDownDetails details) {
     _lastTapDownPosition = details.globalPosition;
     _lastSecondaryTapDownPosition = details.globalPosition;
   }
 
-  /// If [ignorePointer] is false (the default) then this method is called by
-  /// the internal gesture recognizer's [TapGestureRecognizer.onTapDown]
-  /// callback.
-  ///
-  /// When [ignorePointer] is true, an ancestor widget must respond to tap
-  /// down events by calling this method.
   void handleTapDown(TapDownDetails details) {
     _lastTapDownPosition = details.globalPosition;
   }
@@ -1970,12 +1569,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     handleTapDown(details);
   }
 
-  /// If [ignorePointer] is false (the default) then this method is called by
-  /// the internal gesture recognizer's [TapGestureRecognizer.onTap]
-  /// callback.
-  ///
-  /// When [ignorePointer] is true, an ancestor widget must respond to tap
-  /// events by calling this method.
   void handleTap() {
     selectPosition(cause: SelectionChangedCause.tap);
   }
@@ -1984,22 +1577,10 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     handleTap();
   }
 
-  /// If [ignorePointer] is false (the default) then this method is called by
-  /// the internal gesture recognizer's [DoubleTapGestureRecognizer.onDoubleTap]
-  /// callback.
-  ///
-  /// When [ignorePointer] is true, an ancestor widget must respond to double
-  /// tap events by calling this method.
   void handleDoubleTap() {
     selectWord(cause: SelectionChangedCause.doubleTap);
   }
 
-  /// If [ignorePointer] is false (the default) then this method is called by
-  /// the internal gesture recognizer's [LongPressGestureRecognizer.onLongPress]
-  /// callback.
-  ///
-  /// When [ignorePointer] is true, an ancestor widget must respond to long
-  /// press events by calling this method.
   void handleLongPress() {
     selectWord(cause: SelectionChangedCause.longPress);
   }
@@ -2008,24 +1589,10 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     handleLongPress();
   }
 
-  /// Move selection to the location of the last tap down.
-  ///
-  /// {@template flutter.rendering.RenderEditable.selectPosition}
-  /// This method is mainly used to translate user inputs in global positions
-  /// into a [TextSelection]. When used in conjunction with a [EditableText],
-  /// the selection change is fed back into [TextEditingController.selection].
-  ///
-  /// If you have a [TextEditingController], it's generally easier to
-  /// programmatically manipulate its `value` or `selection` directly.
-  /// {@endtemplate}
   void selectPosition({ required SelectionChangedCause cause }) {
     selectPositionAt(from: _lastTapDownPosition!, cause: cause);
   }
 
-  /// Select text between the global positions [from] and [to].
-  ///
-  /// [from] corresponds to the [TextSelection.baseOffset], and [to] corresponds
-  /// to the [TextSelection.extentOffset].
   void selectPositionAt({ required Offset from, Offset? to, required SelectionChangedCause cause }) {
     _layoutText(minWidth: constraints.minWidth, maxWidth: constraints.maxWidth);
     final TextPosition fromPosition = _textPainter.getPositionForOffset(globalToLocal(from - _paintOffset));
@@ -2045,24 +1612,12 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _setSelection(newSelection, cause);
   }
 
-  /// {@macro flutter.painting.TextPainter.wordBoundaries}
   WordBoundary get wordBoundaries => _textPainter.wordBoundaries;
 
-  /// Select a word around the location of the last tap down.
-  ///
-  /// {@macro flutter.rendering.RenderEditable.selectPosition}
   void selectWord({ required SelectionChangedCause cause }) {
     selectWordsInRange(from: _lastTapDownPosition!, cause: cause);
   }
 
-  /// Selects the set words of a paragraph that intersect a given range of global positions.
-  ///
-  /// The set of words selected are not strictly bounded by the range of global positions.
-  ///
-  /// The first and last endpoints of the selection will always be at the
-  /// beginning and end of a word respectively.
-  ///
-  /// {@macro flutter.rendering.RenderEditable.selectPosition}
   void selectWordsInRange({ required Offset from, Offset? to, required SelectionChangedCause cause }) {
     _computeTextMetricsIfNeeded();
     final TextPosition fromPosition = _textPainter.getPositionForOffset(globalToLocal(from - _paintOffset));
@@ -2081,9 +1636,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     );
   }
 
-  /// Move the selection to the beginning or end of a word.
-  ///
-  /// {@macro flutter.rendering.RenderEditable.selectPosition}
   void selectWordEdge({ required SelectionChangedCause cause }) {
     _computeTextMetricsIfNeeded();
     assert(_lastTapDownPosition != null);
@@ -2098,8 +1650,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     _setSelection(newSelection, cause);
   }
 
-  /// Returns a [TextSelection] that encompasses the word at the given
-  /// [TextPosition].
   @visibleForTesting
   TextSelection getWordAtOffset(TextPosition position) {
     debugAssertLayoutUpToDate();
@@ -2221,9 +1771,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
 
   // TODO(LongCatIsLooong): https://github.com/flutter/flutter/issues/120836
   //
-  /// On iOS, the cursor is taller than the cursor on Android. The height
-  /// of the cursor for iOS is approximate and obtained through an eyeball
-  /// comparison.
   void _computeCaretPrototype() {
     switch (defaultTargetPlatform) {
       case TargetPlatform.iOS:
@@ -2327,7 +1874,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
   bool _resetOriginOnBottom = false;
   double? _resetFloatingCursorAnimationValue;
 
-  /// Returns the position within the text field closest to the raw cursor offset.
   Offset calculateBoundedFloatingCursorOffset(Offset rawCursorOffset) {
     Offset deltaPosition = Offset.zero;
     final double topBound = -floatingCursorAddedMargin.top;
@@ -2378,8 +1924,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     return adjustedOffset;
   }
 
-  /// Sets the screen position of the floating cursor and the text position
-  /// closest to the cursor.
   void setFloatingCursor(FloatingCursorDragState state, Offset boundedOffset, TextPosition lastTextPosition, { double? resetLerpValue }) {
     if (state == FloatingCursorDragState.Start) {
       _relativeOrigin = Offset.zero;
@@ -2420,20 +1964,6 @@ class RenderEditable extends RenderBox with RelayoutWhenSystemFontsChangeMixin, 
     );
   }
 
-  /// Starts a [VerticalCaretMovementRun] at the given location in the text, for
-  /// handling consecutive vertical caret movements.
-  ///
-  /// This can be used to handle consecutive upward/downward arrow key movements
-  /// in an input field.
-  ///
-  /// {@macro flutter.rendering.RenderEditable.verticalArrowKeyMovement}
-  ///
-  /// The [VerticalCaretMovementRun.isValid] property indicates whether the text
-  /// layout has changed and the vertical caret run is invalidated.
-  ///
-  /// The caller should typically discard a [VerticalCaretMovementRun] when
-  /// its [VerticalCaretMovementRun.isValid] becomes false, or on other
-  /// occasions where the vertical caret run should be interrupted.
   VerticalCaretMovementRun startVerticalCaretMovement(TextPosition startPosition) {
     final List<ui.LineMetrics> metrics = _textPainter.computeLineMetrics();
     final MapEntry<int, Offset> currentLine = _lineNumberFor(startPosition, metrics);
@@ -2629,53 +2159,9 @@ class _RenderEditableCustomPaint extends RenderBox {
   Size computeDryLayout(BoxConstraints constraints) => constraints.biggest;
 }
 
-/// An interface that paints within a [RenderEditable]'s bounds, above or
-/// beneath its text content.
-///
-/// This painter is typically used for painting auxiliary content that depends
-/// on text layout metrics (for instance, for painting carets and text highlight
-/// blocks). It can paint independently from its [RenderEditable], allowing it
-/// to repaint without triggering a repaint on the entire [RenderEditable] stack
-/// when only auxiliary content changes (e.g. a blinking cursor) are present. It
-/// will be scheduled to repaint when:
-///
-///  * It's assigned to a new [RenderEditable] (replacing a prior
-///    [RenderEditablePainter]) and the [shouldRepaint] method returns true.
-///  * Any of the [RenderEditable]s it is attached to repaints.
-///  * The [notifyListeners] method is called, which typically happens when the
-///    painter's attributes change.
-///
-/// See also:
-///
-///  * [RenderEditable.foregroundPainter], which takes a [RenderEditablePainter]
-///    and sets it as the foreground painter of the [RenderEditable].
-///  * [RenderEditable.painter], which takes a [RenderEditablePainter]
-///    and sets it as the background painter of the [RenderEditable].
-///  * [CustomPainter], a similar class which paints within a [RenderCustomPaint].
 abstract class RenderEditablePainter extends ChangeNotifier {
-  /// Determines whether repaint is needed when a new [RenderEditablePainter]
-  /// is provided to a [RenderEditable].
-  ///
-  /// If the new instance represents different information than the old
-  /// instance, then the method should return true, otherwise it should return
-  /// false. When [oldDelegate] is null, this method should always return true
-  /// unless the new painter initially does not paint anything.
-  ///
-  /// If the method returns false, then the [paint] call might be optimized
-  /// away. However, the [paint] method will get called whenever the
-  /// [RenderEditable]s it attaches to repaint, even if [shouldRepaint] returns
-  /// false.
   bool shouldRepaint(RenderEditablePainter? oldDelegate);
 
-  /// Paints within the bounds of a [RenderEditable].
-  ///
-  /// The given [Canvas] has the same coordinate space as the [RenderEditable],
-  /// which may be different from the coordinate space the [RenderEditable]'s
-  /// [TextPainter] uses, when the text moves inside the [RenderEditable].
-  ///
-  /// Paint operations performed outside of the region defined by the [canvas]'s
-  /// origin and the [size] parameter may get clipped, when [RenderEditable]'s
-  /// [RenderEditable.clipBehavior] is not [Clip.none].
   void paint(Canvas canvas, Size size, RenderEditable renderEditable);
 }
 
@@ -2708,9 +2194,6 @@ class _TextHighlightPainter extends RenderEditablePainter {
     notifyListeners();
   }
 
-  /// Controls how tall the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxHeightStyle] for details on available styles.
   ui.BoxHeightStyle get selectionHeightStyle => _selectionHeightStyle;
   ui.BoxHeightStyle _selectionHeightStyle = ui.BoxHeightStyle.tight;
   set selectionHeightStyle(ui.BoxHeightStyle value) {
@@ -2721,9 +2204,6 @@ class _TextHighlightPainter extends RenderEditablePainter {
     notifyListeners();
   }
 
-  /// Controls how wide the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxWidthStyle] for details on available styles.
   ui.BoxWidthStyle get selectionWidthStyle => _selectionWidthStyle;
   ui.BoxWidthStyle _selectionWidthStyle = ui.BoxWidthStyle.tight;
   set selectionWidthStyle(ui.BoxWidthStyle value) {

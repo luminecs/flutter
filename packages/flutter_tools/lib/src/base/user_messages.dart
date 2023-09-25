@@ -5,7 +5,6 @@
 import 'context.dart';
 import 'platform.dart';
 
-/// Contains messages produced by Flutter tools.
 //
 // This allows partial reimplementations of the flutter tool to override
 // certain messages.
@@ -13,7 +12,6 @@ import 'platform.dart';
 // https://github.com/flutter/flutter/issues/125155.
 UserMessages get userMessages => context.get<UserMessages>()!;
 
-/// Class containing message strings that can be produced by Flutter tools.
 class UserMessages {
   // Messages used in multiple components.
   String get flutterToolBugInstructions =>

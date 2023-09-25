@@ -27,11 +27,6 @@ class MotionEventsPage extends PageWidget {
   }
 }
 
-/// Wraps a flutter driver [DataHandler] with one that waits until a delegate is set.
-///
-/// This allows the driver test to call [FlutterDriver.requestData] before the handler was
-/// set by the app in which case the requestData call will only complete once the app is ready
-/// for it.
 class FutureDataHandler {
   final Completer<DataHandler> handlerCompleter = Completer<DataHandler>();
 
@@ -55,10 +50,8 @@ class MotionEventsBodyState extends State<MotionEventsBody> {
 
   MethodChannel? viewChannel;
 
-  /// The list of motion events that were passed to the FlutterView.
   List<Map<String, dynamic>> flutterViewEvents = <Map<String, dynamic>>[];
 
-  /// The list of motion events that were passed to the embedded view.
   List<Map<String, dynamic>> embeddedViewEvents = <Map<String, dynamic>>[];
 
   @override

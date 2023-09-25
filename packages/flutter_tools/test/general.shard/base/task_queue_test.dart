@@ -10,9 +10,6 @@ import '../../src/common.dart';
 
 void main() {
   group('TaskQueue', () {
-    /// A special test designed to check shared [TaskQueue]
-    /// behavior when exceptions occur after a delay in the passed closures to
-    /// [TaskQueue.add].
     test('no deadlock when delayed exceptions fire in closures', () async {
       final TaskQueue<void> sharedTracker = TaskQueue<void>(maxJobs: 2);
       expect(() async {
@@ -36,7 +33,6 @@ void main() {
         return t;
       }, throwsA(const TypeMatcher<TestException>()));
 
-      /// We deadlock here if the exception is not handled properly.
       await sharedTracker.tasksComplete;
     });
 
@@ -61,8 +57,6 @@ void main() {
       expect(completed.length, equals(2));
     });
 
-    /// Verify that if there are more exceptions than the maximum number
-    /// of in-flight [Future]s that there is no deadlock.
     test('basic parallel processing works with no deadlock', () async {
       final Set<int> completed = <int>{};
       final TaskQueue<void> tracker = TaskQueue<void>(maxJobs: 10);

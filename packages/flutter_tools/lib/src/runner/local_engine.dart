@@ -13,19 +13,6 @@ import '../base/user_messages.dart' hide userMessages;
 import '../cache.dart';
 import '../dart/package_map.dart';
 
-/// A strategy for locating the `out/` directory of a local engine build.
-///
-/// The flutter tool can be run with the output files of one or more engine builds
-/// replacing the cached artifacts. Typically this is done by setting the
-/// `--local-engine` command line flag to the name of the desired engine variant
-/// (e.g. "host_debug_unopt"). Provided that the `flutter/` and `engine/` directories
-/// are located adjacent to one another, the output folder will be located
-/// automatically.
-///
-/// For scenarios where the engine is not adjacent to flutter, the
-/// `--local-engine-src-path` can be provided to give an exact path.
-///
-/// For more information on local engines, see README.md.
 class LocalEngineLocator {
   LocalEngineLocator({
     required Platform platform,
@@ -45,7 +32,6 @@ class LocalEngineLocator {
   final String _flutterRoot;
   final UserMessages _userMessages;
 
-  /// Returns the engine build path of a local engine if one is located, otherwise `null`.
   Future<EngineBuildPaths?> findEnginePath({
     String? engineSourcePath,
     String? localEngine,

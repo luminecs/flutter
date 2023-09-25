@@ -70,7 +70,6 @@ class DeferredComponentsProject extends Project {
   final DeferredComponentsConfig deferredComponents;
 }
 
-/// Contains the necessary files for a bare-bones deferred component release app.
 class BasicDeferredComponentsConfig extends DeferredComponentsConfig {
   @override
   String get deferredLibrary => r'''
@@ -585,19 +584,16 @@ asset 2 contents
   List<DeferredComponentModule> get deferredComponents => <DeferredComponentModule>[DeferredComponentModule('component1')];
 }
 
-/// Missing android dynamic feature module.
 class NoAndroidDynamicFeatureModuleDeferredComponentsConfig extends BasicDeferredComponentsConfig {
   @override
   List<DeferredComponentModule> get deferredComponents => <DeferredComponentModule>[];
 }
 
-/// Missing golden
 class NoGoldenDeferredComponentsConfig extends BasicDeferredComponentsConfig {
   @override
   String? get deferredComponentsGolden => null;
 }
 
-/// Missing golden
 class MismatchedGoldenDeferredComponentsConfig extends BasicDeferredComponentsConfig {
   @override
   String get deferredComponentsGolden => r'''

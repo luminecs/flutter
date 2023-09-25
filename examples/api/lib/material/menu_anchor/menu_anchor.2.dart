@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [MenuAnchor].
 
 // This is the type used by the menu below.
 enum SampleItem { itemOne, itemTwo, itemThree }

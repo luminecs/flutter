@@ -13,7 +13,6 @@ import 'package:test_api/scaffolding.dart' as test_package;
 
 import 'binding.dart';
 
-/// Ensure the appropriate test binding is initialized.
 TestWidgetsFlutterBinding ensureInitialized([@visibleForTesting Map<String, String>? environment]) {
   environment ??= Platform.environment;
   if (environment.containsKey('FLUTTER_TEST') && environment['FLUTTER_TEST'] != 'false') {
@@ -22,12 +21,10 @@ TestWidgetsFlutterBinding ensureInitialized([@visibleForTesting Map<String, Stri
   return LiveTestWidgetsFlutterBinding.ensureInitialized();
 }
 
-/// Setup mocking of the global [HttpClient].
 void setupHttpOverrides() {
   HttpOverrides.global = _MockHttpOverrides();
 }
 
-/// Setup mocking of platform assets if `UNIT_TEST_ASSETS` is defined.
 void mockFlutterAssets() {
   if (!Platform.environment.containsKey('UNIT_TEST_ASSETS')) {
     return;
@@ -36,8 +33,6 @@ void mockFlutterAssets() {
   assert(Platform.environment['APP_NAME'] != null);
   final String prefix =  'packages/${Platform.environment['APP_NAME']!}/';
 
-  /// Navigation related actions (pop, push, replace) broadcasts these actions via
-  /// platform messages.
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (MethodCall methodCall) async { return null; });
 
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler('flutter/assets', (ByteData? message) {
@@ -64,10 +59,6 @@ void mockFlutterAssets() {
   });
 }
 
-/// Provides a default [HttpClient] which always returns empty 400 responses.
-///
-/// If another [HttpClient] is provided using [HttpOverrides.runZoned], that will
-/// take precedence over this provider.
 class _MockHttpOverrides extends HttpOverrides {
   bool warningPrinted = false;
   @override
@@ -92,7 +83,6 @@ class _MockHttpOverrides extends HttpOverrides {
   }
 }
 
-/// A mocked [HttpClient] which always returns a [_MockHttpRequest].
 class _MockHttpClient implements HttpClient {
   @override
   bool autoUncompress = true;
@@ -207,7 +197,6 @@ class _MockHttpClient implements HttpClient {
   }
 }
 
-/// A mocked [HttpClientRequest] which always returns a [_MockHttpClientResponse].
 class _MockHttpRequest implements HttpClientRequest {
   @override
   bool bufferOutput = true;
@@ -282,7 +271,6 @@ class _MockHttpRequest implements HttpClientRequest {
   void writeln([ Object? obj = '' ]) { }
 }
 
-/// A mocked [HttpClientResponse] which is empty and has a [statusCode] of 400.
 // TODO(tvolkert): Change to `extends Stream<Uint8List>` once
 // https://dart-review.googlesource.com/c/sdk/+/104525 is rolled into the framework.
 class _MockHttpResponse implements HttpClientResponse {
@@ -530,7 +518,6 @@ class _MockHttpResponse implements HttpClientResponse {
   }
 }
 
-/// A mocked [HttpHeaders] that ignores all writes.
 class _MockHttpHeaders implements HttpHeaders {
   @override
   List<String>? operator [](String name) => <String>[];

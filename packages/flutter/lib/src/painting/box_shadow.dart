@@ -10,26 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'basic_types.dart';
 import 'debug.dart';
 
-/// A shadow cast by a box.
-///
-/// [BoxShadow] can cast non-rectangular shadows if the box is non-rectangular
-/// (e.g., has a border radius or a circular shape).
-///
-/// This class is similar to CSS box-shadow.
-///
-/// See also:
-///
-///  * [Canvas.drawShadow], which is a more efficient way to draw shadows.
-///  * [PhysicalModel], a widget for showing shadows.
-///  * [kElevationToShadow], for some predefined shadows used in Material
-///    Design.
-///  * [Shadow], which is the parent class that lacks [spreadRadius].
 @immutable
 class BoxShadow extends ui.Shadow {
-  /// Creates a box shadow.
-  ///
-  /// By default, the shadow is solid black with zero [offset], zero [blurRadius],
-  /// zero [spreadRadius], and [BlurStyle.normal].
   const BoxShadow({
     super.color,
     super.offset,
@@ -38,20 +20,10 @@ class BoxShadow extends ui.Shadow {
     this.blurStyle = BlurStyle.normal,
   });
 
-  /// The amount the box should be inflated prior to applying the blur.
   final double spreadRadius;
 
-  /// The [BlurStyle] to use for this shadow.
-  ///
-  /// Defaults to [BlurStyle.normal].
   final BlurStyle blurStyle;
 
-  /// Create the [Paint] object that corresponds to this shadow description.
-  ///
-  /// The [offset] and [spreadRadius] are not represented in the [Paint] object.
-  /// To honor those as well, the shape should be inflated by [spreadRadius] pixels
-  /// in every direction and then translated by [offset] before being filled using
-  /// this [Paint].
   @override
   Paint toPaint() {
     final Paint result = Paint()
@@ -66,7 +38,6 @@ class BoxShadow extends ui.Shadow {
     return result;
   }
 
-  /// Returns a new box shadow with its offset, blurRadius, and spreadRadius scaled by the given factor.
   @override
   BoxShadow scale(double factor) {
     return BoxShadow(
@@ -78,13 +49,6 @@ class BoxShadow extends ui.Shadow {
     );
   }
 
-  /// Linearly interpolate between two box shadows.
-  ///
-  /// If either box shadow is null, this function linearly interpolates from
-  /// a box shadow that matches the other box shadow in color but has a zero
-  /// offset and a zero blurRadius.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static BoxShadow? lerp(BoxShadow? a, BoxShadow? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -104,11 +68,6 @@ class BoxShadow extends ui.Shadow {
     );
   }
 
-  /// Linearly interpolate between two lists of box shadows.
-  ///
-  /// If the lists differ in length, excess items are lerped with null.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static List<BoxShadow>? lerpList(List<BoxShadow>? a, List<BoxShadow>? b, double t) {
     if (identical(a, b)) {
       return a;

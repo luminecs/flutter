@@ -58,9 +58,6 @@ const String _resourceFileAfter = '''
 #endif
 ''';
 
-/// Migrates Windows apps to set Flutter's version information.
-///
-/// See https://github.com/flutter/flutter/issues/73652.
 class VersionMigration extends ProjectMigrator {
   VersionMigration(WindowsProject project, super.logger)
     : _cmakeFile = project.runnerCmakeFile, _resourceFile = project.runnerResourceFile;

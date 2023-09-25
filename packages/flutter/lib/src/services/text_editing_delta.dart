@@ -41,29 +41,13 @@ bool _debugTextRangeIsValid(TextRange range, String text) {
                             && (range.end >= 0 && range.end <= text.length);
 }
 
-/// A structure representing a granular change that has occurred to the editing
-/// state as a result of text editing.
-///
-/// See also:
-///
-///  * [TextEditingDeltaInsertion], a delta representing an insertion.
-///  * [TextEditingDeltaDeletion], a delta representing a deletion.
-///  * [TextEditingDeltaReplacement], a delta representing a replacement.
-///  * [TextEditingDeltaNonTextUpdate], a delta representing an update to the
-///    selection and/or composing region.
-///  * [TextInputConfiguration], to opt-in your [DeltaTextInputClient] to receive
-///    [TextEditingDelta]'s you must set [TextInputConfiguration.enableDeltaModel]
-///    to true.
 abstract class TextEditingDelta with Diagnosticable {
-  /// Creates a delta for a given change to the editing state.
   const TextEditingDelta({
     required this.oldText,
     required this.selection,
     required this.composing,
   });
 
-  /// Creates an instance of this class from a JSON object by inferring the
-  /// type of delta based on values sent from the engine.
   factory TextEditingDelta.fromJSON(Map<String, dynamic> encoded) {
     // An insertion delta is one where replacement destination is collapsed.
     //
@@ -225,35 +209,17 @@ abstract class TextEditingDelta with Diagnosticable {
     );
   }
 
-  /// The old text state before the delta has occurred.
   final String oldText;
 
-  /// The range of text that is currently selected after the delta has been
-  /// applied.
   final TextSelection selection;
 
-  /// The range of text that is still being composed after the delta has been
-  /// applied.
   final TextRange composing;
 
-  /// This method will take the given [TextEditingValue] and return a new
-  /// [TextEditingValue] with that instance of [TextEditingDelta] applied to it.
   TextEditingValue apply(TextEditingValue value);
 }
 
-/// A structure representing an insertion of a single/or contiguous sequence of
-/// characters at some offset of an editing state.
 @immutable
 class TextEditingDeltaInsertion extends TextEditingDelta {
-  /// Creates an insertion delta for a given change to the editing state.
-  ///
-  /// {@template flutter.services.TextEditingDelta.optIn}
-  /// See also:
-  ///
-  ///  * [TextInputConfiguration], to opt-in your [DeltaTextInputClient] to receive
-  ///    [TextEditingDelta]'s you must set [TextInputConfiguration.enableDeltaModel]
-  ///    to true.
-  /// {@endtemplate}
   const TextEditingDeltaInsertion({
     required super.oldText,
     required this.textInserted,
@@ -262,10 +228,8 @@ class TextEditingDeltaInsertion extends TextEditingDelta {
     required super.composing,
   });
 
-  /// The text that is being inserted into [oldText].
   final String textInserted;
 
-  /// The offset in the [oldText] where the insertion begins.
   final int insertionOffset;
 
   @override
@@ -292,13 +256,8 @@ class TextEditingDeltaInsertion extends TextEditingDelta {
   }
 }
 
-/// A structure representing the deletion of a single/or contiguous sequence of
-/// characters in an editing state.
 @immutable
 class TextEditingDeltaDeletion extends TextEditingDelta {
-  /// Creates a deletion delta for a given change to the editing state.
-  ///
-  /// {@macro flutter.services.TextEditingDelta.optIn}
   const TextEditingDeltaDeletion({
     required super.oldText,
     required this.deletedRange,
@@ -306,10 +265,8 @@ class TextEditingDeltaDeletion extends TextEditingDelta {
     required super.composing,
   });
 
-  /// The range in [oldText] that is being deleted.
   final TextRange deletedRange;
 
-  /// The text from [oldText] that is being deleted.
   String get textDeleted => oldText.substring(deletedRange.start, deletedRange.end);
 
   @override
@@ -336,19 +293,8 @@ class TextEditingDeltaDeletion extends TextEditingDelta {
   }
 }
 
-/// A structure representing a replacement of a range of characters with a
-/// new sequence of text.
 @immutable
 class TextEditingDeltaReplacement extends TextEditingDelta {
-  /// Creates a replacement delta for a given change to the editing state.
-  ///
-  /// The range that is being replaced can either grow or shrink based on the
-  /// given replacement text.
-  ///
-  /// A replacement can occur in cases such as auto-correct, suggestions, and
-  /// when a selection is replaced by a single character.
-  ///
-  /// {@macro flutter.services.TextEditingDelta.optIn}
   const TextEditingDeltaReplacement({
     required super.oldText,
     required this.replacementText,
@@ -357,13 +303,10 @@ class TextEditingDeltaReplacement extends TextEditingDelta {
     required super.composing,
   });
 
-  /// The new text that is replacing [replacedRange] in [oldText].
   final String replacementText;
 
-  /// The range in [oldText] that is being replaced.
   final TextRange replacedRange;
 
-  /// The original text that is being replaced in [oldText].
   String get textReplaced => oldText.substring(replacedRange.start, replacedRange.end);
 
   @override
@@ -391,19 +334,8 @@ class TextEditingDeltaReplacement extends TextEditingDelta {
   }
 }
 
-/// A structure representing changes to the selection and/or composing regions
-/// of an editing state and no changes to the text value.
 @immutable
 class TextEditingDeltaNonTextUpdate extends TextEditingDelta {
-  /// Creates a delta representing no updates to the text value of the current
-  /// editing state. This delta includes updates to the selection and/or composing
-  /// regions.
-  ///
-  /// A situation where this delta would be created is when dragging the selection
-  /// handles. There are no changes to the text, but there are updates to the selection
-  /// and potentially the composing region as well.
-  ///
-  /// {@macro flutter.services.TextEditingDelta.optIn}
   const TextEditingDeltaNonTextUpdate({
     required super.oldText,
     required super.selection,

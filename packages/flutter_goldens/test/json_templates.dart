@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Json response template for the contents of the auth_opt.json file created by
-/// goldctl.
 String authTemplate({
   bool gsutil = false,
 }) {
@@ -16,8 +14,6 @@ String authTemplate({
   ''';
 }
 
-/// Json response template for Skia Gold image request:
-/// https://flutter-gold.skia.org/img/images/[imageHash].png
 List<List<int>> imageResponseTemplate() {
   return <List<int>>[
     <int>[

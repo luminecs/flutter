@@ -6,7 +6,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [EditableText.onContentInserted].
 
 void main() => runApp(const KeyboardInsertedContentApp());
 

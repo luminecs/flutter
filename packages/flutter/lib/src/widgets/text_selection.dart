@@ -31,93 +31,20 @@ import 'transitions.dart';
 export 'package:flutter/rendering.dart' show TextSelectionPoint;
 export 'package:flutter/services.dart' show TextSelectionDelegate;
 
-/// The type for a Function that builds a toolbar's container with the given
-/// child.
-///
-/// See also:
-///
-///   * [TextSelectionToolbar.toolbarBuilder], which is of this type.
-///     type.
-///   * [CupertinoTextSelectionToolbar.toolbarBuilder], which is similar, but
-///     for a Cupertino-style toolbar.
 typedef ToolbarBuilder = Widget Function(BuildContext context, Widget child);
 
-/// ParentData that determines whether or not to paint the corresponding child.
-///
-/// Used in the layout of the Cupertino and Material text selection menus, which
-/// decide whether or not to paint their buttons after laying them out and
-/// determining where they overflow.
 class ToolbarItemsParentData extends ContainerBoxParentData<RenderBox> {
-  /// Whether or not this child is painted.
-  ///
-  /// Children in the selection toolbar may be laid out for measurement purposes
-  /// but not painted. This allows these children to be identified.
   bool shouldPaint = false;
 
   @override
   String toString() => '${super.toString()}; shouldPaint=$shouldPaint';
 }
 
-/// An interface for building the selection UI, to be provided by the
-/// implementer of the toolbar widget.
-///
-/// Parts of this class, including [buildToolbar], have been deprecated in favor
-/// of [EditableText.contextMenuBuilder], which is now the preferred way to
-/// customize the context menus.
-///
-/// ## Use with [EditableText.contextMenuBuilder]
-///
-/// For backwards compatibility during the deprecation period, when
-/// [EditableText.selectionControls] is set to an object that does not mix in
-/// [TextSelectionHandleControls], [EditableText.contextMenuBuilder] is ignored
-/// in favor of the deprecated [buildToolbar].
-///
-/// To migrate code from [buildToolbar] to the preferred
-/// [EditableText.contextMenuBuilder], while still using [buildHandle], mix in
-/// [TextSelectionHandleControls] into the [TextSelectionControls] subclass when
-/// moving any toolbar code to a callback passed to
-/// [EditableText.contextMenuBuilder].
-///
-/// In due course, [buildToolbar] will be removed, and the mixin will no longer
-/// be necessary as a way to flag to the framework that the code has been
-/// migrated and does not expect [buildToolbar] to be called.
-///
-/// For more information, see <https://docs.flutter.dev/release/breaking-changes/context-menus>.
-///
-/// See also:
-///
-///  * [SelectionArea], which selects appropriate text selection controls
-///    based on the current platform.
 abstract class TextSelectionControls {
-  /// Builds a selection handle of the given `type`.
-  ///
-  /// The top left corner of this widget is positioned at the bottom of the
-  /// selection position.
-  ///
-  /// The supplied [onTap] should be invoked when the handle is tapped, if such
-  /// interaction is allowed. As a counterexample, the default selection handle
-  /// on iOS [cupertinoTextSelectionControls] does not call [onTap] at all,
-  /// since its handles are not meant to be tapped.
   Widget buildHandle(BuildContext context, TextSelectionHandleType type, double textLineHeight, [VoidCallback? onTap]);
 
-  /// Get the anchor point of the handle relative to itself. The anchor point is
-  /// the point that is aligned with a specific point in the text. A handle
-  /// often visually "points to" that location.
   Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight);
 
-  /// Builds a toolbar near a text selection.
-  ///
-  /// Typically displays buttons for copying and pasting text.
-  ///
-  /// The [globalEditableRegion] parameter is the TextField size of the global
-  /// coordinate system in logical pixels.
-  ///
-  /// The [textLineHeight] parameter is the [RenderEditable.preferredLineHeight]
-  /// of the [RenderEditable] we are building a toolbar for.
-  ///
-  /// The [selectionMidpoint] parameter is a general calculation midpoint
-  /// parameter of the toolbar. More detailed position information
-  /// is computable from the [endpoints] parameter.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -133,17 +60,8 @@ abstract class TextSelectionControls {
     Offset? lastSecondaryTapDownPosition,
   );
 
-  /// Returns the size of the selection handle.
   Size getHandleSize(double textLineHeight);
 
-  /// Whether the current selection of the text field managed by the given
-  /// `delegate` can be removed from the text field and placed into the
-  /// [Clipboard].
-  ///
-  /// By default, false is returned when nothing is selected in the text field.
-  ///
-  /// Subclasses can use this to decide if they should expose the cut
-  /// functionality to the user.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -152,13 +70,6 @@ abstract class TextSelectionControls {
     return delegate.cutEnabled && !delegate.textEditingValue.selection.isCollapsed;
   }
 
-  /// Whether the current selection of the text field managed by the given
-  /// `delegate` can be copied to the [Clipboard].
-  ///
-  /// By default, false is returned when nothing is selected in the text field.
-  ///
-  /// Subclasses can use this to decide if they should expose the copy
-  /// functionality to the user.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -167,15 +78,6 @@ abstract class TextSelectionControls {
     return delegate.copyEnabled && !delegate.textEditingValue.selection.isCollapsed;
   }
 
-  /// Whether the text field managed by the given `delegate` supports pasting
-  /// from the clipboard.
-  ///
-  /// Subclasses can use this to decide if they should expose the paste
-  /// functionality to the user.
-  ///
-  /// This does not consider the contents of the clipboard. Subclasses may want
-  /// to, for example, disallow pasting when the clipboard contains an empty
-  /// string.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -184,12 +86,6 @@ abstract class TextSelectionControls {
     return delegate.pasteEnabled;
   }
 
-  /// Whether the current selection of the text field managed by the given
-  /// `delegate` can be extended to include the entire content of the text
-  /// field.
-  ///
-  /// Subclasses can use this to decide if they should expose the select all
-  /// functionality to the user.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -198,10 +94,6 @@ abstract class TextSelectionControls {
     return delegate.selectAllEnabled && delegate.textEditingValue.text.isNotEmpty && delegate.textEditingValue.selection.isCollapsed;
   }
 
-  /// Call [TextSelectionDelegate.cutSelection] to cut current selection.
-  ///
-  /// This is called by subclasses when their cut affordance is activated by
-  /// the user.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -210,10 +102,6 @@ abstract class TextSelectionControls {
     delegate.cutSelection(SelectionChangedCause.toolbar);
   }
 
-  /// Call [TextSelectionDelegate.copySelection] to copy current selection.
-  ///
-  /// This is called by subclasses when their copy affordance is activated by
-  /// the user.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -222,14 +110,6 @@ abstract class TextSelectionControls {
     delegate.copySelection(SelectionChangedCause.toolbar);
   }
 
-  /// Call [TextSelectionDelegate.pasteText] to paste text.
-  ///
-  /// This is called by subclasses when their paste affordance is activated by
-  /// the user.
-  ///
-  /// This function is asynchronous since interacting with the clipboard is
-  /// asynchronous. Race conditions may exist with this API as currently
-  /// implemented.
   // TODO(ianh): https://github.com/flutter/flutter/issues/11427
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
@@ -239,13 +119,6 @@ abstract class TextSelectionControls {
     delegate.pasteText(SelectionChangedCause.toolbar);
   }
 
-  /// Call [TextSelectionDelegate.selectAll] to set the current selection to
-  /// contain the entire text value.
-  ///
-  /// Does not hide the toolbar.
-  ///
-  /// This is called by subclasses when their select-all affordance is activated
-  /// by the user.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -255,17 +128,6 @@ abstract class TextSelectionControls {
   }
 }
 
-/// Text selection controls that do not show any toolbars or handles.
-///
-/// This is a placeholder, suitable for temporary use during development, but
-/// not practical for production. For example, it provides no way for the user
-/// to interact with selections: no context menus on desktop, no toolbars or
-/// drag handles on mobile, etc. For production, consider using
-/// [MaterialTextSelectionControls] or creating a custom subclass of
-/// [TextSelectionControls].
-///
-/// The [emptyTextSelectionControls] global variable has a
-/// suitable instance of this class.
 class EmptyTextSelectionControls extends TextSelectionControls {
   @override
   Size getHandleSize(double textLineHeight) => Size.zero;
@@ -293,27 +155,10 @@ class EmptyTextSelectionControls extends TextSelectionControls {
   }
 }
 
-/// Text selection controls that do not show any toolbars or handles.
-///
-/// This is a placeholder, suitable for temporary use during development, but
-/// not practical for production. For example, it provides no way for the user
-/// to interact with selections: no context menus on desktop, no toolbars or
-/// drag handles on mobile, etc. For production, consider using
-/// [materialTextSelectionControls] or creating a custom subclass of
-/// [TextSelectionControls].
 final TextSelectionControls emptyTextSelectionControls = EmptyTextSelectionControls();
 
 
-/// An object that manages a pair of text selection handles for a
-/// [RenderEditable].
-///
-/// This class is a wrapper of [SelectionOverlay] to provide APIs specific for
-/// [RenderEditable]s. To manage selection handles for custom widgets, use
-/// [SelectionOverlay] instead.
 class TextSelectionOverlay {
-  /// Creates an object that manages overlay entries for selection handles.
-  ///
-  /// The [context] must have an [Overlay] as an ancestor.
   TextSelectionOverlay({
     required TextEditingValue value,
     required this.context,
@@ -366,33 +211,20 @@ class TextSelectionOverlay {
     );
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.context}
-  /// The context in which the selection UI should appear.
-  ///
-  /// This context must have an [Overlay] as an ancestor because this object
-  /// will display the text selection handles in that [Overlay].
-  /// {@endtemplate}
   final BuildContext context;
 
   // TODO(mpcomplete): what if the renderObject is removed or replaced, or
   // moves? Not sure what cases I need to handle, or how to handle them.
-  /// The editable line in which the selected text is being displayed.
   final RenderEditable renderObject;
 
-  /// {@macro flutter.widgets.SelectionOverlay.selectionControls}
   final TextSelectionControls? selectionControls;
 
-  /// {@macro flutter.widgets.SelectionOverlay.selectionDelegate}
   final TextSelectionDelegate selectionDelegate;
 
   late final SelectionOverlay _selectionOverlay;
 
-  /// {@macro flutter.widgets.EditableText.contextMenuBuilder}
-  ///
-  /// If not provided, no context menu will be built.
   final WidgetBuilder? contextMenuBuilder;
 
-  /// Retrieve current value.
   @visibleForTesting
   TextEditingValue get value => _value;
 
@@ -410,12 +242,6 @@ class TextSelectionOverlay {
     _effectiveToolbarVisibility.value = renderObject.selectionStartInViewport.value || renderObject.selectionEndInViewport.value;
   }
 
-  /// Whether selection handles are visible.
-  ///
-  /// Set to false if you want to hide the handles. Use this property to show or
-  /// hide the handle without rebuilding them.
-  ///
-  /// Defaults to false.
   bool get handlesVisible => _handlesVisible;
   bool _handlesVisible = false;
   set handlesVisible(bool visible) {
@@ -426,16 +252,13 @@ class TextSelectionOverlay {
     _updateTextSelectionOverlayVisibilities();
   }
 
-  /// {@macro flutter.widgets.SelectionOverlay.showHandles}
   void showHandles() {
     _updateSelectionOverlay();
     _selectionOverlay.showHandles();
   }
 
-  /// {@macro flutter.widgets.SelectionOverlay.hideHandles}
   void hideHandles() => _selectionOverlay.hideHandles();
 
-  /// {@macro flutter.widgets.SelectionOverlay.showToolbar}
   void showToolbar() {
     _updateSelectionOverlay();
 
@@ -456,8 +279,6 @@ class TextSelectionOverlay {
     return;
   }
 
-  /// Shows toolbar with spell check suggestions of misspelled words that are
-  /// available for click-and-replace.
   void showSpellCheckSuggestionsToolbar(
     WidgetBuilder spellCheckSuggestionsToolbarBuilder
   ) {
@@ -471,7 +292,6 @@ class TextSelectionOverlay {
     hideHandles();
   }
 
-  /// {@macro flutter.widgets.SelectionOverlay.showMagnifier}
   void showMagnifier(Offset positionToShow) {
     final TextPosition position = renderObject.getPositionForPoint(positionToShow);
     _updateSelectionOverlay();
@@ -484,7 +304,6 @@ class TextSelectionOverlay {
     );
   }
 
-  /// {@macro flutter.widgets.SelectionOverlay.updateMagnifier}
   void updateMagnifier(Offset positionToShow) {
     final TextPosition position = renderObject.getPositionForPoint(positionToShow);
     _updateSelectionOverlay();
@@ -497,20 +316,10 @@ class TextSelectionOverlay {
     );
   }
 
-  /// {@macro flutter.widgets.SelectionOverlay.hideMagnifier}
   void hideMagnifier() {
     _selectionOverlay.hideMagnifier();
   }
 
-  /// Updates the overlay after the selection has changed.
-  ///
-  /// If this method is called while the [SchedulerBinding.schedulerPhase] is
-  /// [SchedulerPhase.persistentCallbacks], i.e. during the build, layout, or
-  /// paint phases (see [WidgetsBinding.drawFrame]), then the update is delayed
-  /// until the post-frame callbacks phase. Otherwise the update is done
-  /// synchronously. This means that it is safe to call during builds, but also
-  /// that if you do call this during a build, the UI will not update until the
-  /// next frame (i.e. many milliseconds later).
   void update(TextEditingValue newValue) {
     if (_value == newValue) {
       return;
@@ -544,10 +353,6 @@ class TextSelectionOverlay {
       ..toolbarLocation = renderObject.lastSecondaryTapDownPosition;
   }
 
-  /// Causes the overlay to update its rendering.
-  ///
-  /// This is intended to be called when the [renderObject] may have changed its
-  /// text metrics (e.g. because the text was scrolled).
   void updateForScroll() {
     _updateSelectionOverlay();
     // This method may be called due to windows metrics changes. In that case,
@@ -556,34 +361,18 @@ class TextSelectionOverlay {
     _selectionOverlay.markNeedsBuild();
   }
 
-  /// Whether the handles are currently visible.
   bool get handlesAreVisible => _selectionOverlay._handles != null && handlesVisible;
 
-  /// {@macro flutter.widgets.SelectionOverlay.toolbarIsVisible}
-  ///
-  /// See also:
-  ///
-  ///   * [spellCheckToolbarIsVisible], which is only whether the spell check menu
-  ///     specifically is visible.
   bool get toolbarIsVisible => _selectionOverlay.toolbarIsVisible;
 
-  /// Whether the magnifier is currently visible.
   bool get magnifierIsVisible => _selectionOverlay._magnifierController.shown;
 
-  /// Whether the spell check menu is currently visible.
-  ///
-  /// See also:
-  ///
-  ///   * [toolbarIsVisible], which is whether any toolbar is visible.
   bool get spellCheckToolbarIsVisible => _selectionOverlay._spellCheckToolbarController.isShown;
 
-  /// {@macro flutter.widgets.SelectionOverlay.hide}
   void hide() => _selectionOverlay.hide();
 
-  /// {@macro flutter.widgets.SelectionOverlay.hideToolbar}
   void hideToolbar() => _selectionOverlay.hideToolbar();
 
-  /// {@macro flutter.widgets.SelectionOverlay.dispose}
   void dispose() {
     _selectionOverlay.dispose();
     renderObject.selectionStartInViewport.removeListener(_updateTextSelectionOverlayVisibilities);
@@ -694,13 +483,6 @@ class TextSelectionOverlay {
     );
   }
 
-  /// Given a handle position and drag position, returns the position of handle
-  /// after the drag.
-  ///
-  /// The handle jumps instantly between lines when the drag reaches a full
-  /// line's height away from the original handle position. In other words, the
-  /// line jump happens when the contact point would be located at the same
-  /// place on the handle at the new line as when the gesture started.
   double _getHandleDy(double dragDy, double handleDy) {
     final double distanceDragged = dragDy - handleDy;
     final int dragDirection = distanceDragged < 0.0 ? -1 : 1;
@@ -907,14 +689,7 @@ class TextSelectionOverlay {
   }
 }
 
-/// An object that manages a pair of selection handles and a toolbar.
-///
-/// The selection handles are displayed in the [Overlay] that most closely
-/// encloses the given [BuildContext].
 class SelectionOverlay {
-  /// Creates an object that manages overlay entries for selection handles.
-  ///
-  /// The [context] must have an [Overlay] as an ancestor.
   SelectionOverlay({
     required this.context,
     this.debugRequiredFor,
@@ -958,48 +733,21 @@ class SelectionOverlay {
        _toolbarLocation = toolbarLocation,
        assert(debugCheckHasOverlay(context));
 
-  /// {@macro flutter.widgets.SelectionOverlay.context}
   final BuildContext context;
 
   final ValueNotifier<MagnifierInfo> _magnifierInfo =
       ValueNotifier<MagnifierInfo>(MagnifierInfo.empty);
 
-  /// [MagnifierController.show] and [MagnifierController.hide] should not be called directly, except
-  /// from inside [showMagnifier] and [hideMagnifier]. If it is desired to show or hide the magnifier,
-  /// call [showMagnifier] or [hideMagnifier]. This is because the magnifier needs to orchestrate
-  /// with other properties in [SelectionOverlay].
   final MagnifierController _magnifierController = MagnifierController();
 
-  /// {@macro flutter.widgets.magnifier.TextMagnifierConfiguration.intro}
-  ///
-  /// {@macro flutter.widgets.magnifier.intro}
-  ///
-  /// By default, [SelectionOverlay]'s [TextMagnifierConfiguration] is disabled.
-  ///
-  /// {@macro flutter.widgets.magnifier.TextMagnifierConfiguration.details}
   final TextMagnifierConfiguration magnifierConfiguration;
 
-  /// {@template flutter.widgets.SelectionOverlay.toolbarIsVisible}
-  /// Whether the toolbar is currently visible.
-  ///
-  /// Includes both the text selection toolbar and the spell check menu.
-  /// {@endtemplate}
   bool get toolbarIsVisible {
     return selectionControls is TextSelectionHandleControls
         ? _contextMenuController.isShown || _spellCheckToolbarController.isShown
         : _toolbar != null || _spellCheckToolbarController.isShown;
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.showMagnifier}
-  /// Shows the magnifier, and hides the toolbar if it was showing when [showMagnifier]
-  /// was called. This is safe to call on platforms not mobile, since
-  /// a magnifierBuilder will not be provided, or the magnifierBuilder will return null
-  /// on platforms not mobile.
-  ///
-  /// This is NOT the source of truth for if the magnifier is up or not,
-  /// since magnifiers may hide themselves. If this info is needed, check
-  /// [MagnifierController.shown].
-  /// {@endtemplate}
   void showMagnifier(MagnifierInfo initialMagnifierInfo) {
     if (toolbarIsVisible) {
       hideToolbar();
@@ -1029,11 +777,6 @@ class SelectionOverlay {
         builder: (_) => builtMagnifier);
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.hideMagnifier}
-  /// Hide the current magnifier.
-  ///
-  /// This does nothing if there is no magnifier.
-  /// {@endtemplate}
   void hideMagnifier() {
     // This cannot be a check on `MagnifierController.shown`, since
     // it's possible that the magnifier is still in the overlay, but
@@ -1045,9 +788,6 @@ class SelectionOverlay {
     _magnifierController.hide();
   }
 
-  /// The type of start selection handle.
-  ///
-  /// Changing the value while the handles are visible causes them to rebuild.
   TextSelectionHandleType get startHandleType => _startHandleType;
   TextSelectionHandleType _startHandleType;
   set startHandleType(TextSelectionHandleType value) {
@@ -1058,11 +798,6 @@ class SelectionOverlay {
     markNeedsBuild();
   }
 
-  /// The line height at the selection start.
-  ///
-  /// This value is used for calculating the size of the start selection handle.
-  ///
-  /// Changing the value while the handles are visible causes them to rebuild.
   double get lineHeightAtStart => _lineHeightAtStart;
   double _lineHeightAtStart;
   set lineHeightAtStart(double value) {
@@ -1075,15 +810,8 @@ class SelectionOverlay {
 
   bool _isDraggingStartHandle = false;
 
-  /// Whether the start handle is visible.
-  ///
-  /// If the value changes, the start handle uses [FadeTransition] to transition
-  /// itself on and off the screen.
-  ///
-  /// If this is null, the start selection handle will always be visible.
   final ValueListenable<bool>? startHandlesVisible;
 
-  /// Called when the users start dragging the start selection handles.
   final ValueChanged<DragStartDetails>? onStartHandleDragStart;
 
   void _handleStartHandleDragStart(DragStartDetails details) {
@@ -1108,11 +836,8 @@ class SelectionOverlay {
     onStartHandleDragUpdate?.call(details);
   }
 
-  /// Called when the users drag the start selection handles to new locations.
   final ValueChanged<DragUpdateDetails>? onStartHandleDragUpdate;
 
-  /// Called when the users lift their fingers after dragging the start selection
-  /// handles.
   final ValueChanged<DragEndDetails>? onStartHandleDragEnd;
 
   void _handleStartHandleDragEnd(DragEndDetails details) {
@@ -1125,9 +850,6 @@ class SelectionOverlay {
     onStartHandleDragEnd?.call(details);
   }
 
-  /// The type of end selection handle.
-  ///
-  /// Changing the value while the handles are visible causes them to rebuild.
   TextSelectionHandleType get endHandleType => _endHandleType;
   TextSelectionHandleType _endHandleType;
   set endHandleType(TextSelectionHandleType value) {
@@ -1138,11 +860,6 @@ class SelectionOverlay {
     markNeedsBuild();
   }
 
-  /// The line height at the selection end.
-  ///
-  /// This value is used for calculating the size of the end selection handle.
-  ///
-  /// Changing the value while the handles are visible causes them to rebuild.
   double get lineHeightAtEnd => _lineHeightAtEnd;
   double _lineHeightAtEnd;
   set lineHeightAtEnd(double value) {
@@ -1155,15 +872,8 @@ class SelectionOverlay {
 
   bool _isDraggingEndHandle = false;
 
-  /// Whether the end handle is visible.
-  ///
-  /// If the value changes, the end handle uses [FadeTransition] to transition
-  /// itself on and off the screen.
-  ///
-  /// If this is null, the end selection handle will always be visible.
   final ValueListenable<bool>? endHandlesVisible;
 
-  /// Called when the users start dragging the end selection handles.
   final ValueChanged<DragStartDetails>? onEndHandleDragStart;
 
   void _handleEndHandleDragStart(DragStartDetails details) {
@@ -1188,11 +898,8 @@ class SelectionOverlay {
     onEndHandleDragUpdate?.call(details);
   }
 
-  /// Called when the users drag the end selection handles to new locations.
   final ValueChanged<DragUpdateDetails>? onEndHandleDragUpdate;
 
-  /// Called when the users lift their fingers after dragging the end selection
-  /// handles.
   final ValueChanged<DragEndDetails>? onEndHandleDragEnd;
 
   void _handleEndHandleDragEnd(DragEndDetails details) {
@@ -1205,15 +912,8 @@ class SelectionOverlay {
     onEndHandleDragEnd?.call(details);
   }
 
-  /// Whether the toolbar is visible.
-  ///
-  /// If the value changes, the toolbar uses [FadeTransition] to transition
-  /// itself on and off the screen.
-  ///
-  /// If this is null the toolbar will always be visible.
   final ValueListenable<bool>? toolbarVisible;
 
-  /// The text selection positions of selection start and end.
   List<TextSelectionPoint> get selectionEndpoints => _selectionEndpoints;
   List<TextSelectionPoint> _selectionEndpoints;
   set selectionEndpoints(List<TextSelectionPoint> value) {
@@ -1235,85 +935,30 @@ class SelectionOverlay {
     _selectionEndpoints = value;
   }
 
-  /// Debugging information for explaining why the [Overlay] is required.
   final Widget? debugRequiredFor;
 
-  /// The object supplied to the [CompositedTransformTarget] that wraps the text
-  /// field.
   final LayerLink toolbarLayerLink;
 
-  /// The objects supplied to the [CompositedTransformTarget] that wraps the
-  /// location of start selection handle.
   final LayerLink startHandleLayerLink;
 
-  /// The objects supplied to the [CompositedTransformTarget] that wraps the
-  /// location of end selection handle.
   final LayerLink endHandleLayerLink;
 
-  /// {@template flutter.widgets.SelectionOverlay.selectionControls}
-  /// Builds text selection handles and toolbar.
-  /// {@endtemplate}
   final TextSelectionControls? selectionControls;
 
-  /// {@template flutter.widgets.SelectionOverlay.selectionDelegate}
-  /// The delegate for manipulating the current selection in the owning
-  /// text field.
-  /// {@endtemplate}
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
   )
   final TextSelectionDelegate? selectionDelegate;
 
-  /// Determines the way that drag start behavior is handled.
-  ///
-  /// If set to [DragStartBehavior.start], handle drag behavior will
-  /// begin at the position where the drag gesture won the arena. If set to
-  /// [DragStartBehavior.down] it will begin at the position where a down
-  /// event is first detected.
-  ///
-  /// In general, setting this to [DragStartBehavior.start] will make drag
-  /// animation smoother and setting it to [DragStartBehavior.down] will make
-  /// drag behavior feel slightly more reactive.
-  ///
-  /// By default, the drag start behavior is [DragStartBehavior.start].
-  ///
-  /// See also:
-  ///
-  ///  * [DragGestureRecognizer.dragStartBehavior], which gives an example for the different behaviors.
   final DragStartBehavior dragStartBehavior;
 
-  /// {@template flutter.widgets.SelectionOverlay.onSelectionHandleTapped}
-  /// A callback that's optionally invoked when a selection handle is tapped.
-  ///
-  /// The [TextSelectionControls.buildHandle] implementation the text field
-  /// uses decides where the handle's tap "hotspot" is, or whether the
-  /// selection handle supports tap gestures at all. For instance,
-  /// [MaterialTextSelectionControls] calls [onSelectionHandleTapped] when the
-  /// selection handle's "knob" is tapped, while
-  /// [CupertinoTextSelectionControls] builds a handle that's not sufficiently
-  /// large for tapping (as it's not meant to be tapped) so it does not call
-  /// [onSelectionHandleTapped] even when tapped.
-  /// {@endtemplate}
   // See https://github.com/flutter/flutter/issues/39376#issuecomment-848406415
   // for provenance.
   final VoidCallback? onSelectionHandleTapped;
 
-  /// Maintains the status of the clipboard for determining if its contents can
-  /// be pasted or not.
-  ///
-  /// Useful because the actual value of the clipboard can only be checked
-  /// asynchronously (see [Clipboard.getData]).
   final ClipboardStatusNotifier? clipboardStatus;
 
-  /// The location of where the toolbar should be drawn in relative to the
-  /// location of [toolbarLayerLink].
-  ///
-  /// If this is null, the toolbar is drawn based on [selectionEndpoints] and
-  /// the rect of render object of [context].
-  ///
-  /// This is useful for displaying toolbars at the mouse right-click locations
-  /// in desktop devices.
   @Deprecated(
     'Use the `contextMenuBuilder` parameter in `showToolbar` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -1328,14 +973,10 @@ class SelectionOverlay {
     markNeedsBuild();
   }
 
-  /// Controls the fade-in and fade-out animations for the toolbar and handles.
   static const Duration fadeDuration = Duration(milliseconds: 150);
 
-  /// A pair of handles. If this is non-null, there are always 2, though the
-  /// second is hidden when the selection is collapsed.
   List<OverlayEntry>? _handles;
 
-  /// A copy/paste toolbar.
   OverlayEntry? _toolbar;
 
   // Manages the context menu. Not necessarily visible when non-null.
@@ -1343,9 +984,6 @@ class SelectionOverlay {
 
   final ContextMenuController _spellCheckToolbarController = ContextMenuController();
 
-  /// {@template flutter.widgets.SelectionOverlay.showHandles}
-  /// Builds the handles by inserting them into the [context]'s overlay.
-  /// {@endtemplate}
   void showHandles() {
     if (_handles != null) {
       return;
@@ -1358,9 +996,6 @@ class SelectionOverlay {
     Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor).insertAll(_handles!);
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.hideHandles}
-  /// Destroys the handles by removing them from overlay.
-  /// {@endtemplate}
   void hideHandles() {
     if (_handles != null) {
       _handles![0].remove();
@@ -1371,9 +1006,6 @@ class SelectionOverlay {
     }
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.showToolbar}
-  /// Shows the toolbar by inserting it into the [context]'s overlay.
-  /// {@endtemplate}
   void showToolbar({
     BuildContext? context,
     WidgetBuilder? contextMenuBuilder,
@@ -1404,8 +1036,6 @@ class SelectionOverlay {
     );
   }
 
-  /// Shows toolbar with spell check suggestions of misspelled words that are
-  /// available for click-and-replace.
   void showSpellCheckSuggestionsToolbar({
     BuildContext? context,
     required WidgetBuilder builder,
@@ -1429,7 +1059,6 @@ class SelectionOverlay {
 
   bool _buildScheduled = false;
 
-  /// Rebuilds the selection toolbar or handles if they are present.
   void markNeedsBuild() {
     if (_handles == null && _toolbar == null) {
       return;
@@ -1468,9 +1097,6 @@ class SelectionOverlay {
     }
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.hide}
-  /// Hides the entire overlay including the toolbar and the handles.
-  /// {@endtemplate}
   void hide() {
     _magnifierController.hide();
     if (_handles != null) {
@@ -1485,11 +1111,6 @@ class SelectionOverlay {
     }
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.hideToolbar}
-  /// Hides the toolbar part of the overlay.
-  ///
-  /// To hide the whole overlay, see [hide].
-  /// {@endtemplate}
   void hideToolbar() {
     _contextMenuController.remove();
     _spellCheckToolbarController.remove();
@@ -1501,9 +1122,6 @@ class SelectionOverlay {
     _toolbar = null;
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.dispose}
-  /// Disposes this object and release resources.
-  /// {@endtemplate}
   void dispose() {
     hide();
     _magnifierInfo.dispose();
@@ -1612,16 +1230,6 @@ class SelectionOverlay {
     );
   }
 
-  /// {@template flutter.widgets.SelectionOverlay.updateMagnifier}
-  /// Update the current magnifier with new selection data, so the magnifier
-  /// can respond accordingly.
-  ///
-  /// If the magnifier is not shown, this still updates the magnifier position
-  /// because the magnifier may have hidden itself and is looking for a cue to reshow
-  /// itself.
-  ///
-  /// If there is no magnifier in the overlay, this does nothing.
-  /// {@endtemplate}
   void updateMagnifier(MagnifierInfo magnifierInfo) {
     if (_magnifierController.overlayEntry == null) {
       return;
@@ -1713,9 +1321,7 @@ class _SelectionToolbarWrapperState extends State<_SelectionToolbarWrapper> with
   }
 }
 
-/// This widget represents a single draggable selection handle.
 class _SelectionHandleOverlay extends StatefulWidget {
-  /// Create selection overlay.
   const _SelectionHandleOverlay({
     required this.type,
     required this.handleLayerLink,
@@ -1862,71 +1468,19 @@ class _SelectionHandleOverlayState extends State<_SelectionHandleOverlay> with S
   }
 }
 
-/// Delegate interface for the [TextSelectionGestureDetectorBuilder].
-///
-/// The interface is usually implemented by the [State] of text field
-/// implementations wrapping [EditableText], so that they can use a
-/// [TextSelectionGestureDetectorBuilder] to build a
-/// [TextSelectionGestureDetector] for their [EditableText]. The delegate
-/// provides the builder with information about the current state of the text
-/// field. Based on that information, the builder adds the correct gesture
-/// handlers to the gesture detector.
-///
-/// See also:
-///
-///  * [TextField], which implements this delegate for the Material text field.
-///  * [CupertinoTextField], which implements this delegate for the Cupertino
-///    text field.
 abstract class TextSelectionGestureDetectorBuilderDelegate {
-  /// [GlobalKey] to the [EditableText] for which the
-  /// [TextSelectionGestureDetectorBuilder] will build a [TextSelectionGestureDetector].
   GlobalKey<EditableTextState> get editableTextKey;
 
-  /// Whether the text field should respond to force presses.
   bool get forcePressEnabled;
 
-  /// Whether the user may select text in the text field.
   bool get selectionEnabled;
 }
 
-/// Builds a [TextSelectionGestureDetector] to wrap an [EditableText].
-///
-/// The class implements sensible defaults for many user interactions
-/// with an [EditableText] (see the documentation of the various gesture handler
-/// methods, e.g. [onTapDown], [onForcePressStart], etc.). Subclasses of
-/// [TextSelectionGestureDetectorBuilder] can change the behavior performed in
-/// responds to these gesture events by overriding the corresponding handler
-/// methods of this class.
-///
-/// The resulting [TextSelectionGestureDetector] to wrap an [EditableText] is
-/// obtained by calling [buildGestureDetector].
-///
-/// A [TextSelectionGestureDetectorBuilder] must be provided a
-/// [TextSelectionGestureDetectorBuilderDelegate], from which information about
-/// the [EditableText] may be obtained. Typically, the [State] of the widget
-/// that builds the [EditableText] implements this interface, and then passes
-/// itself as the [delegate].
-///
-/// See also:
-///
-///  * [TextField], which uses a subclass to implement the Material-specific
-///    gesture logic of an [EditableText].
-///  * [CupertinoTextField], which uses a subclass to implement the
-///    Cupertino-specific gesture logic of an [EditableText].
 class TextSelectionGestureDetectorBuilder {
-  /// Creates a [TextSelectionGestureDetectorBuilder].
   TextSelectionGestureDetectorBuilder({
     required this.delegate,
   });
 
-  /// The delegate for this [TextSelectionGestureDetectorBuilder].
-  ///
-  /// The delegate provides the builder with information about what actions can
-  /// currently be performed on the text field. Based on this, the builder adds
-  /// the correct gesture handlers to the gesture detector.
-  ///
-  /// Typically implemented by a [State] of a widget that builds an
-  /// [EditableText].
   @protected
   final TextSelectionGestureDetectorBuilderDelegate delegate;
 
@@ -1957,7 +1511,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Returns true if lastSecondaryTapDownPosition was on selection.
   bool get _lastSecondaryTapWasOnSelection {
     assert(renderEditable.lastSecondaryTapDownPosition != null);
     if (renderEditable.selection == null) {
@@ -1992,7 +1545,6 @@ class TextSelectionGestureDetectorBuilder {
         && selection.end >= textPosition.offset;
   }
 
-  /// Returns true if position was on selection.
   bool _positionOnSelection(Offset position, TextSelection? targetSelection) {
     if (targetSelection == null) {
       return false;
@@ -2062,33 +1614,19 @@ class TextSelectionGestureDetectorBuilder {
     );
   }
 
-  /// Whether to show the selection toolbar.
-  ///
-  /// It is based on the signal source when a [onTapDown] is called. This getter
-  /// will return true if current [onTapDown] event is triggered by a touch or
-  /// a stylus.
   bool get shouldShowSelectionToolbar => _shouldShowSelectionToolbar;
   bool _shouldShowSelectionToolbar = true;
 
-  /// The [State] of the [EditableText] for which the builder will provide a
-  /// [TextSelectionGestureDetector].
   @protected
   EditableTextState get editableText => delegate.editableTextKey.currentState!;
 
-  /// The [RenderObject] of the [EditableText] for which the builder will
-  /// provide a [TextSelectionGestureDetector].
   @protected
   RenderEditable get renderEditable => editableText.renderEditable;
 
-  /// Whether the Shift key was pressed when the most recent [PointerDownEvent]
-  /// was tracked by the [BaseTapAndDragGestureRecognizer].
   bool _isShiftPressed = false;
 
-  /// The viewport offset pixels of any [Scrollable] containing the
-  /// [RenderEditable] at the last drag start.
   double _dragStartScrollOffset = 0.0;
 
-  /// The viewport offset pixels of the [RenderEditable] at the last drag start.
   double _dragStartViewportOffset = 0.0;
 
   double get _scrollPosition {
@@ -2123,12 +1661,6 @@ class TextSelectionGestureDetectorBuilder {
   // focused, the cursor moves to the long press position.
   bool _longPressStartedWithoutFocus = false;
 
-  /// Handler for [TextSelectionGestureDetector.onTapTrackStart].
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onTapTrackStart], which triggers this
-  ///    callback.
   @protected
   void onTapTrackStart() {
     _isShiftPressed = HardwareKeyboard.instance.logicalKeysPressed
@@ -2136,25 +1668,11 @@ class TextSelectionGestureDetectorBuilder {
         .isNotEmpty;
   }
 
-  /// Handler for [TextSelectionGestureDetector.onTapTrackReset].
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onTapTrackReset], which triggers this
-  ///    callback.
   @protected
   void onTapTrackReset() {
     _isShiftPressed = false;
   }
 
-  /// Handler for [TextSelectionGestureDetector.onTapDown].
-  ///
-  /// By default, it forwards the tap to [RenderEditable.handleTapDown] and sets
-  /// [shouldShowSelectionToolbar] to true if the tap was initiated by a finger or stylus.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onTapDown], which triggers this callback.
   @protected
   void onTapDown(TapDragDownDetails details) {
     if (!delegate.selectionEnabled) {
@@ -2221,17 +1739,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onForcePressStart].
-  ///
-  /// By default, it selects the word at the position of the force press,
-  /// if selection is enabled.
-  ///
-  /// This callback is only applicable when force press is enabled.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onForcePressStart], which triggers this
-  ///    callback.
   @protected
   void onForcePressStart(ForcePressDetails details) {
     assert(delegate.forcePressEnabled);
@@ -2244,17 +1751,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onForcePressEnd].
-  ///
-  /// By default, it selects words in the range specified in [details] and shows
-  /// toolbar if it is necessary.
-  ///
-  /// This callback is only applicable when force press is enabled.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onForcePressEnd], which triggers this
-  ///    callback.
   @protected
   void onForcePressEnd(ForcePressDetails details) {
     assert(delegate.forcePressEnabled);
@@ -2267,14 +1763,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onSingleTapUp].
-  ///
-  /// By default, it selects word edge if selection is enabled.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onSingleTapUp], which triggers
-  ///    this callback.
   @protected
   void onSingleTapUp(TapDragUpDetails details) {
     if (delegate.selectionEnabled) {
@@ -2368,26 +1856,9 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onSingleTapCancel].
-  ///
-  /// By default, it services as place holder to enable subclass override.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onSingleTapCancel], which triggers
-  ///    this callback.
   @protected
   void onSingleTapCancel() { /* Subclass should override this method if needed. */ }
 
-  /// Handler for [TextSelectionGestureDetector.onSingleLongTapStart].
-  ///
-  /// By default, it selects text position specified in [details] if selection
-  /// is enabled.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onSingleLongTapStart], which triggers
-  ///    this callback.
   @protected
   void onSingleLongTapStart(LongPressStartDetails details) {
     if (delegate.selectionEnabled) {
@@ -2417,15 +1888,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onSingleLongTapMoveUpdate].
-  ///
-  /// By default, it updates the selection location specified in [details] if
-  /// selection is enabled.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onSingleLongTapMoveUpdate], which
-  ///    triggers this callback.
   @protected
   void onSingleLongTapMoveUpdate(LongPressMoveUpdateDetails details) {
     if (delegate.selectionEnabled) {
@@ -2468,14 +1930,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onSingleLongTapEnd].
-  ///
-  /// By default, it shows toolbar if necessary.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onSingleLongTapEnd], which triggers this
-  ///    callback.
   @protected
   void onSingleLongTapEnd(LongPressEndDetails details) {
     _hideMagnifierIfSupportedByPlatform();
@@ -2487,9 +1941,6 @@ class TextSelectionGestureDetectorBuilder {
     _dragStartScrollOffset = 0.0;
   }
 
-  /// Handler for [TextSelectionGestureDetector.onSecondaryTap].
-  ///
-  /// By default, selects the word if possible and shows the toolbar.
   @protected
   void onSecondaryTap() {
     if (!delegate.selectionEnabled) {
@@ -2516,13 +1967,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onSecondaryTapDown].
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onSecondaryTapDown], which triggers this
-  ///    callback.
-  ///  * [onSecondaryTap], which is typically called after this.
   @protected
   void onSecondaryTapDown(TapDownDetails details) {
     // TODO(Renzo-Olivares): Migrate text selection gestures away from saving state
@@ -2535,15 +1979,6 @@ class TextSelectionGestureDetectorBuilder {
     _shouldShowSelectionToolbar = true;
   }
 
-  /// Handler for [TextSelectionGestureDetector.onDoubleTapDown].
-  ///
-  /// By default, it selects a word through [RenderEditable.selectWord] if
-  /// selectionEnabled and shows toolbar if necessary.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onDoubleTapDown], which triggers this
-  ///    callback.
   @protected
   void onDoubleTapDown(TapDragDownDetails details) {
     if (delegate.selectionEnabled) {
@@ -2608,16 +2043,6 @@ class TextSelectionGestureDetectorBuilder {
     );
   }
 
-  /// Handler for [TextSelectionGestureDetector.onTripleTapDown].
-  ///
-  /// By default, it selects a paragraph if
-  /// [TextSelectionGestureDetectorBuilderDelegate.selectionEnabled] is true
-  /// and shows the toolbar if necessary.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onTripleTapDown], which triggers this
-  ///    callback.
   @protected
   void onTripleTapDown(TapDragDownDetails details) {
     if (!delegate.selectionEnabled) {
@@ -2642,14 +2067,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onDragSelectionStart].
-  ///
-  /// By default, it selects a text position specified in [details].
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onDragSelectionStart], which triggers
-  ///    this callback.
   @protected
   void onDragSelectionStart(TapDragStartDetails details) {
     if (!delegate.selectionEnabled) {
@@ -2742,15 +2159,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onDragSelectionUpdate].
-  ///
-  /// By default, it updates the selection location specified in the provided
-  /// details objects.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onDragSelectionUpdate], which triggers
-  ///    this callback./lib/src/material/text_field.dart
   @protected
   void onDragSelectionUpdate(TapDragUpdateDetails details) {
     if (!delegate.selectionEnabled) {
@@ -2945,15 +2353,6 @@ class TextSelectionGestureDetectorBuilder {
     }
   }
 
-  /// Handler for [TextSelectionGestureDetector.onDragSelectionEnd].
-  ///
-  /// By default, it cleans up the state used for handling certain
-  /// built-in behaviors.
-  ///
-  /// See also:
-  ///
-  ///  * [TextSelectionGestureDetector.onDragSelectionEnd], which triggers this
-  ///    callback.
   @protected
   void onDragSelectionEnd(TapDragEndDetails details) {
     _dragBeganOnPreviousSelection = null;
@@ -2969,12 +2368,6 @@ class TextSelectionGestureDetectorBuilder {
     _hideMagnifierIfSupportedByPlatform();
   }
 
-  /// Returns a [TextSelectionGestureDetector] configured with the handlers
-  /// provided by this builder.
-  ///
-  /// The [child] or its subtree should contain an [EditableText] whose key is
-  /// the [GlobalKey] provided by the [delegate]'s
-  /// [TextSelectionGestureDetectorBuilderDelegate.editableTextKey].
   Widget buildGestureDetector({
     Key? key,
     HitTestBehavior? behavior,
@@ -3005,22 +2398,7 @@ class TextSelectionGestureDetectorBuilder {
   }
 }
 
-/// A gesture detector to respond to non-exclusive event chains for a text field.
-///
-/// An ordinary [GestureDetector] configured to handle events like tap and
-/// double tap will only recognize one or the other. This widget detects both:
-/// the first tap and then any subsequent taps that occurs within a time limit
-/// after the first.
-///
-/// See also:
-///
-///  * [TextField], a Material text field which uses this gesture detector.
-///  * [CupertinoTextField], a Cupertino text field which uses this gesture
-///    detector.
 class TextSelectionGestureDetector extends StatefulWidget {
-  /// Create a [TextSelectionGestureDetector].
-  ///
-  /// Multiple callbacks can be called for one sequence of input gesture.
   const TextSelectionGestureDetector({
     super.key,
     this.onTapTrackStart,
@@ -3044,78 +2422,42 @@ class TextSelectionGestureDetector extends StatefulWidget {
     required this.child,
   });
 
-  /// {@macro flutter.gestures.selectionrecognizers.BaseTapAndDragGestureRecognizer.onTapTrackStart}
   final VoidCallback? onTapTrackStart;
 
-  /// {@macro flutter.gestures.selectionrecognizers.BaseTapAndDragGestureRecognizer.onTapTrackReset}
   final VoidCallback? onTapTrackReset;
 
-  /// Called for every tap down including every tap down that's part of a
-  /// double click or a long press, except touches that include enough movement
-  /// to not qualify as taps (e.g. pans and flings).
   final GestureTapDragDownCallback? onTapDown;
 
-  /// Called when a pointer has tapped down and the force of the pointer has
-  /// just become greater than [ForcePressGestureRecognizer.startPressure].
   final GestureForcePressStartCallback? onForcePressStart;
 
-  /// Called when a pointer that had previously triggered [onForcePressStart] is
-  /// lifted off the screen.
   final GestureForcePressEndCallback? onForcePressEnd;
 
-  /// Called for a tap event with the secondary mouse button.
   final GestureTapCallback? onSecondaryTap;
 
-  /// Called for a tap down event with the secondary mouse button.
   final GestureTapDownCallback? onSecondaryTapDown;
 
-  /// Called for the first tap in a series of taps, consecutive taps do not call
-  /// this method.
-  ///
-  /// For example, if the detector was configured with [onTapDown] and
-  /// [onDoubleTapDown], three quick taps would be recognized as a single tap
-  /// down, followed by a tap up, then a double tap down, followed by a single tap down.
   final GestureTapDragUpCallback? onSingleTapUp;
 
-  /// Called for each touch that becomes recognized as a gesture that is not a
-  /// short tap, such as a long tap or drag. It is called at the moment when
-  /// another gesture from the touch is recognized.
   final GestureCancelCallback? onSingleTapCancel;
 
-  /// Called for a single long tap that's sustained for longer than
-  /// [kLongPressTimeout] but not necessarily lifted. Not called for a
-  /// double-tap-hold, which calls [onDoubleTapDown] instead.
   final GestureLongPressStartCallback? onSingleLongTapStart;
 
-  /// Called after [onSingleLongTapStart] when the pointer is dragged.
   final GestureLongPressMoveUpdateCallback? onSingleLongTapMoveUpdate;
 
-  /// Called after [onSingleLongTapStart] when the pointer is lifted.
   final GestureLongPressEndCallback? onSingleLongTapEnd;
 
-  /// Called after a momentary hold or a short tap that is close in space and
-  /// time (within [kDoubleTapTimeout]) to a previous short tap.
   final GestureTapDragDownCallback? onDoubleTapDown;
 
-  /// Called after a momentary hold or a short tap that is close in space and
-  /// time (within [kDoubleTapTimeout]) to a previous double-tap.
   final GestureTapDragDownCallback? onTripleTapDown;
 
-  /// Called when a mouse starts dragging to select text.
   final GestureTapDragStartCallback? onDragSelectionStart;
 
-  /// Called repeatedly as a mouse moves while dragging.
   final GestureTapDragUpdateCallback? onDragSelectionUpdate;
 
-  /// Called when a mouse that was previously dragging is released.
   final GestureTapDragEndCallback? onDragSelectionEnd;
 
-  /// How this gesture detector should behave during hit testing.
-  ///
-  /// This defaults to [HitTestBehavior.deferToChild].
   final HitTestBehavior? behavior;
 
-  /// Child below this widget.
   final Widget child;
 
   @override
@@ -3327,21 +2669,13 @@ class _TextSelectionGestureDetectorState extends State<TextSelectionGestureDetec
   }
 }
 
-/// A [ValueNotifier] whose [value] indicates whether the current contents of
-/// the clipboard can be pasted.
-///
-/// The contents of the clipboard can only be read asynchronously, via
-/// [Clipboard.getData], so this maintains a value that can be used
-/// synchronously. Call [update] to asynchronously update value if needed.
 class ClipboardStatusNotifier extends ValueNotifier<ClipboardStatus> with WidgetsBindingObserver {
-  /// Create a new ClipboardStatusNotifier.
   ClipboardStatusNotifier({
     ClipboardStatus value = ClipboardStatus.unknown,
   }) : super(value);
 
   bool _disposed = false;
 
-  /// Check the [Clipboard] and update [value] if needed.
   Future<void> update() async {
     if (_disposed) {
       return;
@@ -3416,38 +2750,21 @@ class ClipboardStatusNotifier extends ValueNotifier<ClipboardStatus> with Widget
   }
 }
 
-/// An enumeration of the status of the content on the user's clipboard.
 enum ClipboardStatus {
-  /// The clipboard content can be pasted, such as a String of nonzero length.
   pasteable,
 
-  /// The status of the clipboard is unknown. Since getting clipboard data is
-  /// asynchronous (see [Clipboard.getData]), this status often exists while
-  /// waiting to receive the clipboard contents for the first time.
   unknown,
 
-  /// The content on the clipboard is not pasteable, such as when it is empty.
   notPasteable,
 }
 
-/// A [ValueNotifier] whose [value] indicates whether the current device supports the Live Text
-/// (OCR) function.
-///
-/// See also:
-///  * [LiveText], where the availability of Live Text input can be obtained.
-///  * [LiveTextInputStatus], an enumeration that indicates whether the current device is available
-///                           for Live Text input.
-///
-/// Call [update] to asynchronously update [value] if needed.
 class LiveTextInputStatusNotifier extends ValueNotifier<LiveTextInputStatus> with WidgetsBindingObserver {
-  /// Create a new LiveTextStatusNotifier.
   LiveTextInputStatusNotifier({
     LiveTextInputStatus value = LiveTextInputStatus.unknown,
   }) : super(value);
 
   bool _disposed = false;
 
-  /// Check the [LiveTextInputStatus] and update [value] if needed.
   Future<void> update() async {
     if (_disposed) {
       return;
@@ -3522,28 +2839,17 @@ class LiveTextInputStatusNotifier extends ValueNotifier<LiveTextInputStatus> wit
   }
 }
 
-/// An enumeration that indicates whether the current device is available for Live Text input.
-///
-/// See also:
-///  * [LiveText], where the availability of Live Text input can be obtained.
 enum LiveTextInputStatus {
-  /// This device supports Live Text input currently.
   enabled,
 
-  /// The status of the Live Text input is unknown. Since getting the Live Text input availability
-  /// is asynchronous (see [LiveText.isLiveTextInputAvailable]), this status often exists while
-  /// waiting to receive the status value for the first time.
   unknown,
 
-  /// The current device doesn't support Live Text input.
   disabled,
 }
 
 // TODO(justinmc): Deprecate this after TextSelectionControls.buildToolbar is
 // deleted, when users should migrate back to TextSelectionControls.buildHandle.
 // See https://github.com/flutter/flutter/pull/124262
-/// [TextSelectionControls] that specifically do not manage the toolbar in order
-/// to leave that to [EditableText.contextMenuBuilder].
 mixin TextSelectionHandleControls on TextSelectionControls {
   @override
   Widget buildToolbar(

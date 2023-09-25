@@ -15,24 +15,17 @@ import 'test_device.dart';
 import 'test_time_recorder.dart';
 import 'watcher.dart';
 
-/// A class that collects code coverage data during test runs.
 class CoverageCollector extends TestWatcher {
   CoverageCollector({
       this.libraryNames, this.verbose = true, required this.packagesPath,
       this.resolver, this.testTimeRecorder, this.branchCoverage = false});
 
-  /// True when log messages should be emitted.
   final bool verbose;
 
-  /// The path to the package_config.json of the package for which code
-  /// coverage is computed.
   final String packagesPath;
 
-  /// Map of file path to coverage hit map for that file.
   Map<String, coverage.HitMap>? _globalHitmap;
 
-  /// The names of the libraries to gather coverage for. If null, all libraries
-  /// will be accepted.
   Set<String>? libraryNames;
 
   final coverage.Resolver? resolver;
@@ -40,7 +33,6 @@ class CoverageCollector extends TestWatcher {
 
   final TestTimeRecorder? testTimeRecorder;
 
-  /// Whether to collect branch coverage information.
   bool branchCoverage;
 
   static Future<coverage.Resolver> getResolver(String? packagesPath) async {
@@ -80,7 +72,6 @@ class CoverageCollector extends TestWatcher {
     testTimeRecorder?.stop(TestTimePhases.CoverageAddHitmap, stopwatch!);
   }
 
-  /// The directory of the package for which coverage is being collected.
   String get packageDirectory {
     // The coverage package expects the directory of the package itself, and
     // uses that to locate the package_info.json file, which it treats as a
@@ -94,12 +85,6 @@ class CoverageCollector extends TestWatcher {
     return globals.fs.directory(globals.fs.file(packagesPath).dirname).dirname;
   }
 
-  /// Collects coverage for an isolate using the given `port`.
-  ///
-  /// This should be called when the code whose coverage data is being collected
-  /// has been run to completion so that all coverage data has been recorded.
-  ///
-  /// The returned [Future] completes when the coverage is collected.
   Future<void> collectCoverageIsolate(Uri vmServiceUri) async {
     _logMessage('collecting coverage data from $vmServiceUri...');
     final Map<String, dynamic> data = await collect(
@@ -114,12 +99,6 @@ class CoverageCollector extends TestWatcher {
     _logMessage('($vmServiceUri): done merging coverage data into global coverage map.');
   }
 
-  /// Collects coverage for the given [Process] using the given `port`.
-  ///
-  /// This should be called when the code whose coverage data is being collected
-  /// has been run to completion so that all coverage data has been recorded.
-  ///
-  /// The returned [Future] completes when the coverage is collected.
   Future<void> collectCoverage(TestDevice testDevice, {
     @visibleForTesting FlutterVmService? serviceOverride,
   }) async {
@@ -172,10 +151,6 @@ class CoverageCollector extends TestWatcher {
     testTimeRecorder?.stop(TestTimePhases.CoverageTotal, totalTestTimeRecorderStopwatch!);
   }
 
-  /// Returns formatted coverage data once all coverage data has been collected.
-  ///
-  /// This will not start any collection tasks. It us up to the caller of to
-  /// call [collectCoverage] for each process first.
   Future<String?> finalizeCoverage({
     String Function(Map<String, coverage.HitMap> hitmap)? formatter,
     coverage.Resolver? resolver,

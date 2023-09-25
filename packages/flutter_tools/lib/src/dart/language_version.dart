@@ -14,12 +14,10 @@ final RegExp _declarationEnd = RegExp('(import)|(library)|(part)');
 const String _blockCommentStart = '/*';
 const String _blockCommentEnd = '*/';
 
-/// The first language version where null safety was available by default.
 final LanguageVersion nullSafeVersion = LanguageVersion(2, 12);
 
 LanguageVersion? _currentLanguageVersion;
 
-/// Lookup the current Dart language version.
 LanguageVersion currentLanguageVersion(FileSystem fileSystem, String flutterRoot) {
   if (_currentLanguageVersion != null) {
     return _currentLanguageVersion!;
@@ -39,15 +37,6 @@ bool _inUnitTest() {
   return Zone.current[#test.declarer] != null;
 }
 
-/// Attempts to read the language version of a dart [file].
-///
-/// If this is not present, falls back to the language version defined in
-/// [package]. If [package] is not provided and there is no
-/// language version header, returns 2.12. This does not specifically check
-/// for language declarations other than library, part, or import.
-///
-/// The specification for the language version tag is defined at:
-/// https://github.com/dart-lang/language/blob/master/accepted/future-releases/language-versioning/feature-specification.md#individual-library-language-version-override
 LanguageVersion determineLanguageVersion(File file, Package? package, String flutterRoot) {
   int blockCommentDepth = 0;
   // If reading the file fails, default to a null-safe version. The

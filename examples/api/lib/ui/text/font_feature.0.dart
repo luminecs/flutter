@@ -6,7 +6,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FontFeature].
 
 void main() => runApp(const ExampleApp());
 

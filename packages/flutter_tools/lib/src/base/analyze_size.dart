@@ -14,7 +14,6 @@ import 'file_system.dart';
 import 'logger.dart';
 import 'terminal.dart';
 
-/// A class to analyze APK and AOT snapshot and generate a breakdown of the data.
 class SizeAnalyzer {
   SizeAnalyzer({
     required FileSystem fileSystem,
@@ -37,7 +36,6 @@ class SizeAnalyzer {
   static const int _kAotSizeMaxDepth = 2;
   static const int _kZipSizeMaxDepth = 1;
 
-  /// Analyze the [aotSnapshot] in an uncompressed output directory.
   Future<Map<String, Object?>> analyzeAotSnapshot({
     required Directory outputDirectory,
     required File aotSnapshot,
@@ -91,12 +89,6 @@ class SizeAnalyzer {
     return apkAnalysisJson;
   }
 
-  /// Analyzes [apk] and [aotSnapshot] to output a [Map] object that includes
-  /// the breakdown of the both files, where the breakdown of [aotSnapshot] is placed
-  /// under 'lib/arm64-v8a/$_appFilename'.
-  ///
-  /// [kind] must be one of 'apk' or 'aab'.
-  /// The [aotSnapshot] can be either instruction sizes snapshot or a v8 snapshot.
   Future<Map<String, Object?>> analyzeZipSizeAndAotSnapshot({
     required File zipFile,
     required File aotSnapshot,
@@ -208,9 +200,6 @@ class SizeAnalyzer {
     return rootNode;
   }
 
-  /// Prints all children paths for the lib/ directory in an APK.
-  ///
-  /// A brief summary of aot snapshot is printed under 'lib/arm64-v8a/$_appFilename'.
   void _printLibChildrenPaths(
     _SymbolNode currentNode,
     String totalPath,
@@ -245,8 +234,6 @@ class SizeAnalyzer {
     }
   }
 
-  /// Go through the AOT gen snapshot size JSON and print out a collapsed summary
-  /// for the first package level.
   void _printAotSnapshotSummary(_SymbolNode aotSnapshotRoot, {int maxDirectoriesShown = 20, required int level}) {
     _printEntitySize(
       'Dart AOT symbols accounted decompressed size',
@@ -279,7 +266,6 @@ class SizeAnalyzer {
     return chunks.join('/');
   }
 
-  /// Adds breakdown of aot snapshot data as the children of the node at the given path.
   Map<String, Object?> _addAotSnapshotDataToAnalysis({
     required Map<String, Object?> apkAnalysisJson,
     required List<String> path,
@@ -302,7 +288,6 @@ class SizeAnalyzer {
 
   List<String> _leadingPaths = <String>[];
 
-  /// Print an entity's name with its size on the same line.
   void _printEntitySize(
     String entityName, {
     required int byteSize,
@@ -393,8 +378,6 @@ class SizeAnalyzer {
     )..addAllChildren(children);
   }
 
-  /// Builds a node by recursively building all of its children first
-  /// in order to calculate the sum of its children's sizes.
   _SymbolNode? _buildNodeWithChildren(Map<String, Object?> aotSnapshotJson) {
     final List<Object?> rawChildren = aotSnapshotJson['children'] as List<Object?>? ?? <Object?>[];
     final List<_SymbolNode> symbolNodeChildren = <_SymbolNode>[];
@@ -425,14 +408,12 @@ class SizeAnalyzer {
   }
 }
 
-/// A node class that represents a single symbol for AOT size snapshots.
 class _SymbolNode {
   _SymbolNode(
     this.name, {
     this.byteSize = 0,
   })  : _children = <String, _SymbolNode>{};
 
-  /// The human friendly identifier for this node.
   String name;
 
   int byteSize;
@@ -478,7 +459,6 @@ class _SymbolNode {
   }
 }
 
-/// Matches `pattern` against the entirety of `string`.
 @visibleForTesting
 Match? matchesPattern(String string, {required Pattern pattern}) {
   final Match? match = pattern.matchAsPrefix(string);

@@ -17,7 +17,6 @@ import '../project.dart';
 import 'build_macos.dart';
 import 'macos_workflow.dart';
 
-/// A device that represents a desktop MacOS target.
 class MacOSDevice extends DesktopDevice {
   MacOSDevice({
     required ProcessManager processManager,

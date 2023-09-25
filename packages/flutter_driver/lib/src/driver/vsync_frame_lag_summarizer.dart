@@ -8,26 +8,16 @@ import 'timeline.dart';
 const String _kPlatformVsyncEvent = 'VSYNC';
 const String _kUIThreadVsyncProcessEvent = 'VsyncProcessCallback';
 
-/// Event names for frame lag related timeline events.
 const Set<String> kVsyncTimelineEventNames = <String>{
   _kUIThreadVsyncProcessEvent,
   _kPlatformVsyncEvent,
 };
 
-/// Summarizes [TimelineEvents]s corresponding to [kVsyncTimelineEventNames] events.
-///
-/// `VsyncFrameLag` is the time between when a platform vsync event is received to
-/// when the frame starts getting processed by the Flutter Engine. This delay is
-/// typically seen due to non-frame workload related dart tasks being scheduled
-/// on the UI thread.
 class VsyncFrameLagSummarizer {
-  /// Creates a VsyncFrameLagSummarizer given the timeline events.
   VsyncFrameLagSummarizer(this.vsyncEvents);
 
-  /// Timeline events with names in [kVsyncTimelineEventNames].
   final List<TimelineEvent> vsyncEvents;
 
-  /// Computes the average `VsyncFrameLag` over the period of the timeline.
   double computeAverageVsyncFrameLag() {
     final List<double> vsyncFrameLags =
         _computePlatformToFlutterVsyncBeginLags();
@@ -39,8 +29,6 @@ class VsyncFrameLagSummarizer {
     return total / vsyncFrameLags.length;
   }
 
-  /// Computes the [percentile]-th percentile `VsyncFrameLag` over the
-  /// period of the timeline.
   double computePercentileVsyncFrameLag(double percentile) {
     final List<double> vsyncFrameLags =
         _computePlatformToFlutterVsyncBeginLags();

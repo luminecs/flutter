@@ -1330,13 +1330,11 @@ void main() {
   });
 }
 
-/// A fake [Logger] that throws the [Invocation] for any method call.
 class FakeLogger implements Logger {
   @override
   dynamic noSuchMethod(Invocation invocation) => throw invocation; // ignore: only_throw_errors
 }
 
-/// Returns the [Invocation] thrown from a call to [FakeLogger].
 Invocation _invocationFor(dynamic Function() fakeCall) {
   try {
     fakeCall();
@@ -1347,7 +1345,6 @@ Invocation _invocationFor(dynamic Function() fakeCall) {
     'that throw Invocations');
 }
 
-/// Returns a [Matcher] that matches against an expected [Invocation].
 Matcher _matchesInvocation(Invocation expected) {
   return const TypeMatcher<Invocation>()
     // Compare Symbol strings instead of comparing Symbols directly for a nicer failure message.
@@ -1360,8 +1357,6 @@ Matcher _matchesInvocation(Invocation expected) {
     .having((Invocation actual) => actual.namedArguments, 'namedArguments', expected.namedArguments);
 }
 
-/// Returns a [Matcher] that matches against an [Invocation] thrown from a call
-/// to [FakeLogger].
 Matcher _throwsInvocationFor(dynamic Function() fakeCall) =>
   throwsA(_matchesInvocation(_invocationFor(fakeCall)));
 

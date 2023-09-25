@@ -24,49 +24,7 @@ const double _kCupertinoFocusColorOpacity = 0.80;
 const double _kCupertinoFocusColorBrightness = 0.69;
 const double _kCupertinoFocusColorSaturation = 0.835;
 
-/// A macOS-style radio button.
-///
-/// Used to select between a number of mutually exclusive values. When one radio
-/// button in a group is selected, the other radio buttons in the group are
-/// deselected. The values are of type `T`, the type parameter of the
-/// [CupertinoRadio] class. Enums are commonly used for this purpose.
-///
-/// The radio button itself does not maintain any state. Instead, selecting the
-/// radio invokes the [onChanged] callback, passing [value] as a parameter. If
-/// [groupValue] and [value] match, this radio will be selected. Most widgets
-/// will respond to [onChanged] by calling [State.setState] to update the
-/// radio button's [groupValue].
-///
-/// {@tool dartpad}
-/// Here is an example of CupertinoRadio widgets wrapped in CupertinoListTiles.
-///
-/// The currently selected character is passed into `groupValue`, which is
-/// maintained by the example's `State`. In this case, the first [CupertinoRadio]
-/// will start off selected because `_character` is initialized to
-/// `SingingCharacter.lafayette`.
-///
-/// If the second radio button is pressed, the example's state is updated
-/// with `setState`, updating `_character` to `SingingCharacter.jefferson`.
-/// This causes the buttons to rebuild with the updated `groupValue`, and
-/// therefore the selection of the second button.
-///
-/// ** See code in examples/api/lib/cupertino/radio/cupertino_radio.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoSlider], for selecting a value in a range.
-///  * [CupertinoCheckbox] and [CupertinoSwitch], for toggling a particular value on or off.
-///  * [Radio], the Material Design equivalent.
-///  * <https://developer.apple.com/design/human-interface-guidelines/components/selection-and-input/toggles/>
 class CupertinoRadio<T> extends StatefulWidget {
-  /// Creates a macOS-styled radio button.
-  ///
-  /// The following arguments are required:
-  ///
-  /// * [value] and [groupValue] together determine whether the radio button is
-  ///   selected.
-  /// * [onChanged] is called when the user selects this radio button.
   const CupertinoRadio({
     super.key,
     required this.value,
@@ -82,101 +40,26 @@ class CupertinoRadio<T> extends StatefulWidget {
     this.useCheckmarkStyle = false,
   });
 
-  /// The value represented by this radio button.
-  ///
-  /// If this equals the [groupValue], then this radio button will appear
-  /// selected.
   final T value;
 
-  /// The currently selected value for a group of radio buttons.
-  ///
-  /// This radio button is considered selected if its [value] matches the
-  /// [groupValue].
   final T? groupValue;
 
-  /// Called when the user selects this [CupertinoRadio] button.
-  ///
-  /// The radio button passes [value] as a parameter to this callback. It does
-  /// not actually change state until the parent widget rebuilds the radio
-  /// button with a new [groupValue].
-  ///
-  /// If null, the radio button will be displayed as disabled.
-  ///
-  /// The provided callback will not be invoked if this radio button is already
-  /// selected.
-  ///
-  /// The callback provided to [onChanged] should update the state of the parent
-  /// [StatefulWidget] using the [State.setState] method, so that the parent
-  /// gets rebuilt; for example:
-  ///
-  /// ```dart
-  /// CupertinoRadio<SingingCharacter>(
-  ///   value: SingingCharacter.lafayette,
-  ///   groupValue: _character,
-  ///   onChanged: (SingingCharacter? newValue) {
-  ///     setState(() {
-  ///       _character = newValue;
-  ///     });
-  ///   },
-  /// )
-  /// ```
   final ValueChanged<T?>? onChanged;
 
-  /// Set to true if this radio button is allowed to be returned to an
-  /// indeterminate state by selecting it again when selected.
-  ///
-  /// To indicate returning to an indeterminate state, [onChanged] will be
-  /// called with null.
-  ///
-  /// If true, [onChanged] can be called with [value] when selected while
-  /// [groupValue] != [value], or with null when selected again while
-  /// [groupValue] == [value].
-  ///
-  /// If false, [onChanged] will be called with [value] when it is selected
-  /// while [groupValue] != [value], and only by selecting another radio button
-  /// in the group (i.e. changing the value of [groupValue]) can this radio
-  /// button be unselected.
-  ///
-  /// The default is false.
-  ///
-  /// {@tool dartpad}
-  /// This example shows how to enable deselecting a radio button by setting the
-  /// [toggleable] attribute.
-  ///
-  /// ** See code in examples/api/lib/cupertino/radio/cupertino_radio.toggleable.0.dart **
-  /// {@end-tool}
   final bool toggleable;
 
-  /// Controls whether the radio displays in a checkbox style or the default iOS
-  /// radio style.
-  ///
-  /// Defaults to false.
   final bool useCheckmarkStyle;
 
-  /// The color to use when this radio button is selected.
-  ///
-  /// Defaults to [CupertinoColors.activeBlue].
   final Color? activeColor;
 
-  /// The color to use when this radio button is not selected.
-  ///
-  /// Defaults to [CupertinoColors.white].
   final Color? inactiveColor;
 
-  /// The color that fills the inner circle of the radio button when selected.
-  ///
-  /// Defaults to [CupertinoColors.white].
   final Color? fillColor;
 
-  /// The color for the radio's border when it has the input focus.
-  ///
-  /// If null, then a paler form of the [activeColor] will be used.
   final Color? focusColor;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
   bool get _selected => value == groupValue;

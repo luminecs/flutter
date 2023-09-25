@@ -29,13 +29,6 @@ void main() {
     source
       ..createSync(recursive: true)
       ..writeAsStringSync('''
-/// Class documentation
-///
-/// {@tool dartpad}
-/// Example description
-///
-/// ** See code in ${getRelativePath(example)} **
-/// {@end-tool}
 ''');
   }
 

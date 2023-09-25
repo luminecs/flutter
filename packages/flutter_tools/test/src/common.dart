@@ -36,11 +36,6 @@ void tryToDelete(FileSystemEntity fileEntity) {
   }
 }
 
-/// Gets the path to the root of the Flutter repository.
-///
-/// This will first look for a `FLUTTER_ROOT` environment variable. If the
-/// environment variable is set, it will be returned. Otherwise, this will
-/// deduce the path from `platform.script`.
 String getFlutterRoot() {
   const Platform platform = LocalPlatform();
   if (platform.environment.containsKey('FLUTTER_ROOT')) {
@@ -73,7 +68,6 @@ String getFlutterRoot() {
   return path.normalize(path.join(toolsPath, '..', '..'));
 }
 
-/// Capture console print events into a string buffer.
 Future<StringBuffer> capturedConsolePrint(Future<void> Function() body) async {
   final StringBuffer buffer = StringBuffer();
   await runZoned<Future<void>>(() async {
@@ -85,10 +79,8 @@ Future<StringBuffer> capturedConsolePrint(Future<void> Function() body) async {
   return buffer;
 }
 
-/// Matcher for functions that throw [AssertionError].
 final Matcher throwsAssertionError = throwsA(isA<AssertionError>());
 
-/// Matcher for functions that throw [ToolExit].
 Matcher throwsToolExit({ int? exitCode, Pattern? message }) {
   Matcher matcher = _isToolExit;
   if (exitCode != null) {
@@ -100,10 +92,8 @@ Matcher throwsToolExit({ int? exitCode, Pattern? message }) {
   return throwsA(matcher);
 }
 
-/// Matcher for [ToolExit]s.
 final TypeMatcher<ToolExit> _isToolExit = isA<ToolExit>();
 
-/// Matcher for functions that throw [UsageException].
 Matcher throwsUsageException({Pattern? message }) {
   Matcher matcher = _isUsageException;
   if (message != null) {
@@ -112,10 +102,8 @@ Matcher throwsUsageException({Pattern? message }) {
   return throwsA(matcher);
 }
 
-/// Matcher for [UsageException]s.
 final TypeMatcher<UsageException> _isUsageException = isA<UsageException>();
 
-/// Matcher for functions that throw [ProcessException].
 Matcher throwsProcessException({ Pattern? message }) {
   Matcher matcher = _isProcessException;
   if (message != null) {
@@ -124,7 +112,6 @@ Matcher throwsProcessException({ Pattern? message }) {
   return throwsA(matcher);
 }
 
-/// Matcher for [ProcessException]s.
 final TypeMatcher<ProcessException> _isProcessException = isA<ProcessException>();
 
 Future<void> expectToolExitLater(Future<dynamic> future, Matcher messageMatcher) async {
@@ -157,9 +144,6 @@ Matcher containsIgnoringWhitespace(String toSearch) {
   );
 }
 
-/// The tool overrides `test` to ensure that files created under the
-/// system temporary directory are deleted after each test by calling
-/// `LocalFileSystem.dispose()`.
 @isTest
 void test(String description, FutureOr<void> Function() body, {
   String? testOn,
@@ -188,14 +172,6 @@ void test(String description, FutureOr<void> Function() body, {
   );
 }
 
-/// Executes a test body in zone that does not allow context-based injection.
-///
-/// For classes which have been refactored to exclude context-based injection
-/// or globals like [fs] or [platform], prefer using this test method as it
-/// will prevent accidentally including these context getters in future code
-/// changes.
-///
-/// For more information, see https://github.com/flutter/flutter/issues/47161
 @isTest
 void testWithoutContext(String description, FutureOr<void> Function() body, {
   String? testOn,
@@ -221,11 +197,6 @@ void testWithoutContext(String description, FutureOr<void> Function() body, {
   );
 }
 
-/// An implementation of [AppContext] that throws if context.get is called in the test.
-///
-/// The intention of the class is to ensure we do not accidentally regress when
-/// moving towards more explicit dependency injection by accidentally using
-/// a Zone value in place of a constructor parameter.
 class _NoContext implements AppContext {
   const _NoContext();
 
@@ -253,29 +224,11 @@ class _NoContext implements AppContext {
   }
 }
 
-/// Allows inserting file system exceptions into certain
-/// [MemoryFileSystem] operations by tagging path/op combinations.
-///
-/// Example use:
-///
-/// ```
-/// void main() {
-///   var handler = FileExceptionHandler();
-///   var fs = MemoryFileSystem(opHandle: handler.opHandle);
-///
-///   var file = fs.file('foo')..createSync();
-///   handler.addError(file, FileSystemOp.read, FileSystemException('Error Reading foo'));
-///
-///   expect(() => file.writeAsStringSync('A'), throwsA(isA<FileSystemException>()));
-/// }
-/// ```
 class FileExceptionHandler {
   final Map<String, Map<FileSystemOp, FileSystemException>> _contextErrors = <String, Map<FileSystemOp, FileSystemException>>{};
   final Map<FileSystemOp, FileSystemException> _tempErrors = <FileSystemOp, FileSystemException>{};
   static final RegExp _tempDirectoryEnd = RegExp('rand[0-9]+');
 
-  /// Add an exception that will be thrown whenever the file system attached to this
-  /// handler performs the [operation] on the [entity].
   void addError(FileSystemEntity entity, FileSystemOp operation, FileSystemException exception) {
     final String path = entity.path;
     _contextErrors[path] ??= <FileSystemOp, FileSystemException>{};
@@ -286,7 +239,6 @@ class FileExceptionHandler {
     _tempErrors[operation] = exception;
   }
 
-  /// Tear-off this method and pass it to the memory filesystem `opHandle` parameter.
   void opHandle(String path, FileSystemOp operation) {
     if (path.startsWith('.tmp_') || _tempDirectoryEnd.firstMatch(path) != null) {
       final FileSystemException? exception = _tempErrors[operation];

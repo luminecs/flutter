@@ -7,28 +7,13 @@ import 'dart:math' as math;
 import 'box.dart';
 import 'object.dart';
 
-/// Parent data for use with [RenderListBody].
 class ListBodyParentData extends ContainerBoxParentData<RenderBox> { }
 
 typedef _ChildSizingFunction = double Function(RenderBox child);
 
-/// Displays its children sequentially along a given axis, forcing them to the
-/// dimensions of the parent in the other axis.
-///
-/// This layout algorithm arranges its children linearly along the main axis
-/// (either horizontally or vertically). In the cross axis, children are
-/// stretched to match the box's cross-axis extent. In the main axis, children
-/// are given unlimited space and the box expands its main axis to contain all
-/// its children. Because [RenderListBody] boxes expand in the main axis, they
-/// must be given unlimited space in the main axis, typically by being contained
-/// in a viewport with a scrolling direction that matches the box's main axis.
 class RenderListBody extends RenderBox
     with ContainerRenderObjectMixin<RenderBox, ListBodyParentData>,
          RenderBoxContainerDefaultsMixin<RenderBox, ListBodyParentData> {
-  /// Creates a render object that arranges its children sequentially along a
-  /// given axis.
-  ///
-  /// By default, children are arranged along the vertical axis.
   RenderListBody({
     List<RenderBox>? children,
     AxisDirection axisDirection = AxisDirection.down,
@@ -43,10 +28,6 @@ class RenderListBody extends RenderBox
     }
   }
 
-  /// The direction in which the children are laid out.
-  ///
-  /// For example, if the [axisDirection] is [AxisDirection.down], each child
-  /// will be laid out below the next, vertically.
   AxisDirection get axisDirection => _axisDirection;
   AxisDirection _axisDirection;
   set axisDirection(AxisDirection value) {
@@ -57,8 +38,6 @@ class RenderListBody extends RenderBox
     markNeedsLayout();
   }
 
-  /// The axis (horizontal or vertical) corresponding to the current
-  /// [axisDirection].
   Axis get mainAxis => axisDirectionToAxis(axisDirection);
 
   @override

@@ -18,16 +18,6 @@ import 'common.dart';
 import 'icon_tree_shaker.dart';
 import 'shader_compiler.dart';
 
-/// Copy the macOS framework to the correct copy dir by invoking 'rsync'.
-///
-/// This class is abstract to share logic between the three concrete
-/// implementations. The shelling out is done to avoid complications with
-/// preserving special files (e.g., symbolic links) in the framework structure.
-///
-/// The real implementations are:
-///   * [DebugUnpackMacOS]
-///   * [ProfileUnpackMacOS]
-///   * [ReleaseUnpackMacOS]
 abstract class UnpackMacOS extends Target {
   const UnpackMacOS();
 
@@ -146,7 +136,6 @@ abstract class UnpackMacOS extends Target {
   }
 }
 
-/// Unpack the release prebuilt engine framework.
 class ReleaseUnpackMacOS extends UnpackMacOS {
   const ReleaseUnpackMacOS();
 
@@ -160,7 +149,6 @@ class ReleaseUnpackMacOS extends UnpackMacOS {
   ];
 }
 
-/// Unpack the profile prebuilt engine framework.
 class ProfileUnpackMacOS extends UnpackMacOS {
   const ProfileUnpackMacOS();
 
@@ -174,7 +162,6 @@ class ProfileUnpackMacOS extends UnpackMacOS {
   ];
 }
 
-/// Unpack the debug prebuilt engine framework.
 class DebugUnpackMacOS extends UnpackMacOS {
   const DebugUnpackMacOS();
 
@@ -188,11 +175,6 @@ class DebugUnpackMacOS extends UnpackMacOS {
   ];
 }
 
-/// Create an App.framework for debug macOS targets.
-///
-/// This framework needs to exist for the Xcode project to link/bundle,
-/// but it isn't actually executed. To generate something valid, we compile a trivial
-/// constant.
 class DebugMacOSFramework extends Target {
   const DebugMacOSFramework();
 
@@ -359,12 +341,6 @@ class CompileMacOSFramework extends Target {
   ];
 }
 
-/// Bundle the flutter assets into the App.framework.
-///
-/// In debug mode, also include the app.dill and precompiled runtimes.
-///
-/// See https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html
-/// for more information on Framework structure.
 abstract class MacOSBundleFlutterAssets extends Target {
   const MacOSBundleFlutterAssets();
 
@@ -527,7 +503,6 @@ abstract class MacOSBundleFlutterAssets extends Target {
   }
 }
 
-/// Bundle the debug flutter assets into the App.framework.
 class DebugMacOSBundleFlutterAssets extends MacOSBundleFlutterAssets {
   const DebugMacOSBundleFlutterAssets();
 
@@ -558,7 +533,6 @@ class DebugMacOSBundleFlutterAssets extends MacOSBundleFlutterAssets {
   ];
 }
 
-/// Bundle the profile flutter assets into the App.framework.
 class ProfileMacOSBundleFlutterAssets extends MacOSBundleFlutterAssets {
   const ProfileMacOSBundleFlutterAssets();
 
@@ -585,7 +559,6 @@ class ProfileMacOSBundleFlutterAssets extends MacOSBundleFlutterAssets {
 }
 
 
-/// Bundle the release flutter assets into the App.framework.
 class ReleaseMacOSBundleFlutterAssets extends MacOSBundleFlutterAssets {
   const ReleaseMacOSBundleFlutterAssets();
 

@@ -6,7 +6,6 @@ import '../../base/file_system.dart';
 import '../../base/project_migrator.dart';
 import '../../xcode_project.dart';
 
-/// Remove deprecated bitcode build setting.
 class RemoveBitcodeMigration extends ProjectMigrator {
   RemoveBitcodeMigration(
     IosProject project,

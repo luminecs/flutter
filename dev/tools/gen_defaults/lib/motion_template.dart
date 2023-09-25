@@ -6,8 +6,6 @@ import 'template.dart';
 import 'token_logger.dart';
 
 class MotionTemplate extends TokenTemplate {
-  /// Since we generate the tokens dynamically, we need to store them and log
-  /// them manually, instead of using [getToken].
   MotionTemplate(String blockName, String fileName, this.tokens, this.tokensLogger) : super(blockName, fileName, tokens);
   Map<String, dynamic> tokens;
   TokenLogger tokensLogger;
@@ -35,12 +33,6 @@ class MotionTemplate extends TokenTemplate {
     final int milliseconds = (tokenValue as double).toInt();
     return
 '''
-  /// The $tokenName duration (${milliseconds}ms) in the Material specification.
-  ///
-  /// See also:
-  ///
-  /// * [M3 guidelines: Duration tokens](https://m3.material.io/styles/motion/easing-and-duration/tokens-specs#c009dec6-f29b-4503-b9f0-482af14a8bbd)
-  /// * [M3 guidelines: Applying easing and duration](https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration)
   static const Duration $tokenName = Duration(milliseconds: $milliseconds);
 ''';
   }
@@ -53,37 +45,18 @@ class MotionTemplate extends TokenTemplate {
         return match.group(1)!.toUpperCase();
       });
     return '''
-  /// The $tokenName easing curve in the Material specification.
-  ///
-  /// See also:
-  ///
-  /// * [M3 guidelines: Easing tokens](https://m3.material.io/styles/motion/easing-and-duration/tokens-specs#433b1153-2ea3-4fe2-9748-803a47bc97ee)
-  /// * [M3 guidelines: Applying easing and duration](https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration)
   static const Curve $tokenName = $tokenValue;
 ''';
   }
 
   @override
   String generate() => '''
-/// The set of durations in the Material specification.
-///
-/// See also:
-///
-/// * [M3 guidelines: Duration tokens](https://m3.material.io/styles/motion/easing-and-duration/tokens-specs#c009dec6-f29b-4503-b9f0-482af14a8bbd)
-/// * [M3 guidelines: Applying easing and duration](https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration)
 abstract final class Durations {
 ${durationTokens.map((MapEntry<String, dynamic> entry) => durationTokenString(entry.key, entry.value)).join('\n')}}
 
 
 // TODO(guidezpl): Improve with description and assets, b/289870605
 
-/// The set of easing curves in the Material specification.
-///
-/// See also:
-///
-/// * [M3 guidelines: Easing tokens](https://m3.material.io/styles/motion/easing-and-duration/tokens-specs#433b1153-2ea3-4fe2-9748-803a47bc97ee)
-/// * [M3 guidelines: Applying easing and duration](https://m3.material.io/styles/motion/easing-and-duration/applying-easing-and-duration)
-/// * [Curves], for a collection of non-Material animation easing curves.
 abstract final class Easing {
 ${easingCurveTokens.map((MapEntry<String, dynamic> entry) => easingCurveTokenString(entry.key, entry.value)).join('\n')}}
 ''';

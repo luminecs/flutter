@@ -7,10 +7,8 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:path/path.dart' as path;
 
-/// If no `copies` param is passed in, we scale the generated app up to 60k lines.
 const int kTargetLineCount = 60 * 1024;
 
-/// Make `n` copies of flutter_gallery.
 void main(List<String> args) {
   // If we're run from the `tools` dir, set the cwd to the repo root.
   if (path.basename(Directory.current.path) == 'tools') {

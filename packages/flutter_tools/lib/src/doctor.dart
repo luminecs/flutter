@@ -58,7 +58,6 @@ abstract class DoctorValidatorsProvider {
       platform: platform ?? FakePlatform(),
     );
   }
-  /// The singleton instance, pulled from the [AppContext].
   static DoctorValidatorsProvider get _instance => context.get<DoctorValidatorsProvider>()!;
 
   static final DoctorValidatorsProvider defaultInstance = _DefaultDoctorValidatorsProvider(
@@ -237,8 +236,6 @@ class Doctor {
     return DoctorValidatorsProvider._instance.validators;
   }
 
-  /// Return a list of [ValidatorTask] objects and starts validation on all
-  /// objects in [validators].
   List<ValidatorTask> startValidatorTasks() => <ValidatorTask>[
     for (final DoctorValidator validator in validators)
       ValidatorTask(
@@ -276,7 +273,6 @@ class Doctor {
     return DoctorValidatorsProvider._instance.workflows;
   }
 
-  /// Print a summary of the state of the tooling, as well as how to get more info.
   Future<void> summary() async {
     _logger.printStatus(await _summaryText());
   }
@@ -345,17 +341,10 @@ class Doctor {
     return globals.cache.areRemoteArtifactsAvailable(engineVersion: engineRevision);
   }
 
-  /// Maximum allowed duration for an entire validator to take.
-  ///
-  /// This should only ever be reached if a process is stuck.
   // Reduce this to under 5 minutes to diagnose:
   // https://github.com/flutter/flutter/issues/111686
   static const Duration doctorDuration = Duration(minutes: 4, seconds: 30);
 
-  /// Print information about the state of installed tooling.
-  ///
-  /// To exclude personally identifiable information like device names and
-  /// paths, set [showPii] to false.
   Future<bool> diagnose({
     bool androidLicenses = false,
     bool verbose = true,
@@ -463,11 +452,6 @@ class Doctor {
   }
 }
 
-/// A validator that checks the version of Flutter, as well as some auxiliary information
-/// such as the pub or Flutter cache overrides.
-///
-/// This is primarily useful for diagnosing issues on Github bug reports by displaying
-/// specific commit information.
 class FlutterValidator extends DoctorValidator {
   FlutterValidator({
     required Platform platform,
@@ -609,8 +593,6 @@ class FlutterValidator extends DoctorValidator {
     ];
   }
 
-  /// Return a warning if the provided [binary] on the user's path does not
-  /// resolve within the Flutter SDK.
   ValidationMessage? _validateSdkBinary(String binary, String flutterRoot) {
     final String flutterBinDir = _fileSystem.path.join(flutterRoot, 'bin');
 
@@ -723,7 +705,6 @@ class DeviceValidator extends DoctorValidator {
   }
 }
 
-/// Wrapper for doctor to run multiple times with PII and without, running the validators only once.
 class DoctorText {
   DoctorText(
     BufferLogger logger, {

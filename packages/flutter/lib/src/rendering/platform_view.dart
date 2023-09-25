@@ -13,19 +13,11 @@ import 'box.dart';
 import 'layer.dart';
 import 'object.dart';
 
-/// How an embedded platform view behave during hit tests.
 enum PlatformViewHitTestBehavior {
-  /// Opaque targets can be hit by hit tests, causing them to both receive
-  /// events within their bounds and prevent targets visually behind them from
-  /// also receiving events.
   opaque,
 
-  /// Translucent targets both receive events within their bounds and permit
-  /// targets visually behind them to also receive events.
   translucent,
 
-  /// Transparent targets don't receive events within their bounds and permit
-  /// targets visually behind them to receive events.
   transparent,
 }
 
@@ -49,32 +41,7 @@ Set<Type> _factoriesTypeSet<T>(Set<Factory<T>> factories) {
   return factories.map<Type>((Factory<T> factory) => factory.type).toSet();
 }
 
-/// A render object for an Android view.
-///
-/// Requires Android API level 23 or greater.
-///
-/// [RenderAndroidView] is responsible for sizing, displaying and passing touch events to an
-/// Android [View](https://developer.android.com/reference/android/view/View).
-///
-/// {@template flutter.rendering.RenderAndroidView.layout}
-/// The render object's layout behavior is to fill all available space, the parent of this object must
-/// provide bounded layout constraints.
-/// {@endtemplate}
-///
-/// {@template flutter.rendering.RenderAndroidView.gestures}
-/// The render object participates in Flutter's gesture arenas, and dispatches touch events to the
-/// platform view iff it won the arena. Specific gestures that should be dispatched to the platform
-/// view can be specified with factories in the `gestureRecognizers` constructor parameter or
-/// by calling `updateGestureRecognizers`. If the set of gesture recognizers is empty, the gesture
-/// will be dispatched to the platform view iff it was not claimed by any other gesture recognizer.
-/// {@endtemplate}
-///
-/// See also:
-///
-///  * [AndroidView] which is a widget that is used to show an Android view.
-///  * [PlatformViewsService] which is a service for controlling platform views.
 class RenderAndroidView extends PlatformViewRenderBox {
-  /// Creates a render object for an Android view.
   RenderAndroidView({
     required AndroidViewController viewController,
     required PlatformViewHitTestBehavior hitTestBehavior,
@@ -96,13 +63,11 @@ class RenderAndroidView extends PlatformViewRenderBox {
 
   bool _isDisposed = false;
 
-  /// The Android view controller for the Android view associated with this render object.
   @override
   AndroidViewController get controller => _viewController;
 
   AndroidViewController _viewController;
 
-  /// Sets a new Android view controller.
   @override
   set controller(AndroidViewController controller) {
     assert(!_isDisposed);
@@ -120,9 +85,6 @@ class RenderAndroidView extends PlatformViewRenderBox {
     _viewController.addOnPlatformViewCreatedListener(_onPlatformViewCreated);
   }
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.hardEdge].
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior = Clip.hardEdge;
   set clipBehavior(Clip value) {
@@ -269,13 +231,7 @@ class RenderAndroidView extends PlatformViewRenderBox {
   }
 }
 
-/// Common render-layer functionality for iOS and macOS platform views.
-///
-/// Provides the basic rendering logic for iOS and macOS platformviews.
-/// Subclasses shall override handleEvent in order to execute custom event logic.
-/// T represents the class of the view controller for the corresponding widget.
 abstract class RenderDarwinPlatformView<T extends DarwinPlatformViewController> extends RenderBox {
-  /// Creates a render object for a platform view.
   RenderDarwinPlatformView({
     required T viewController,
     required this.hitTestBehavior,
@@ -285,7 +241,6 @@ abstract class RenderDarwinPlatformView<T extends DarwinPlatformViewController> 
   }
 
 
-  /// The unique identifier of the platform view controlled by this controller.
   T get viewController => _viewController;
   T _viewController;
   set viewController(T value) {
@@ -300,7 +255,6 @@ abstract class RenderDarwinPlatformView<T extends DarwinPlatformViewController> 
     }
   }
 
-  /// How to behave during hit testing.
   // The implicit setter is enough here as changing this value will just affect
   // any newly arriving events there's nothing we need to invalidate.
   PlatformViewHitTestBehavior hitTestBehavior;
@@ -380,37 +334,16 @@ abstract class RenderDarwinPlatformView<T extends DarwinPlatformViewController> 
     super.detach();
   }
 
-  /// {@macro flutter.rendering.PlatformViewRenderBox.updateGestureRecognizers}
   void updateGestureRecognizers(Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers);
 }
 
-/// A render object for an iOS UIKit UIView.
-///
-/// [RenderUiKitView] is responsible for sizing and displaying an iOS
-/// [UIView](https://developer.apple.com/documentation/uikit/uiview).
-///
-/// UIViews are added as subviews of the FlutterView and are composited by Quartz.
-///
-/// The viewController is typically generated by [PlatformViewsRegistry.getNextPlatformViewId], the UIView
-/// must have been created by calling [PlatformViewsService.initUiKitView].
-///
-/// {@macro flutter.rendering.RenderAndroidView.layout}
-///
-/// {@macro flutter.rendering.RenderAndroidView.gestures}
-///
-/// See also:
-///
-///  * [UiKitView], which is a widget that is used to show a UIView.
-///  * [PlatformViewsService], which is a service for controlling platform views.
 class RenderUiKitView extends RenderDarwinPlatformView<UiKitViewController> {
-  /// Creates a render object for an iOS UIView.
   RenderUiKitView({
       required super.viewController,
       required super.hitTestBehavior,
       required super.gestureRecognizers,
     });
 
-  /// {@macro flutter.rendering.PlatformViewRenderBox.updateGestureRecognizers}
   @override
   void updateGestureRecognizers(Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers) {
     assert(
@@ -441,9 +374,7 @@ class RenderUiKitView extends RenderDarwinPlatformView<UiKitViewController> {
   }
 }
 
-/// A render object for a macOS platform view.
 class RenderAppKitView extends RenderDarwinPlatformView<AppKitViewController> {
-  /// Creates a render object for a macOS AppKitView.
   RenderAppKitView({
     required super.viewController,
     required super.hitTestBehavior,
@@ -647,12 +578,7 @@ class _PlatformViewGestureRecognizer extends OneSequenceGestureRecognizer {
   }
 }
 
-/// A render object for embedding a platform view.
-///
-/// [PlatformViewRenderBox] presents a platform view by adding a [PlatformViewLayer] layer,
-/// integrates it with the gesture arenas system and adds relevant semantic nodes to the semantics tree.
 class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
-  /// Creating a render object for a [PlatformViewSurface].
   PlatformViewRenderBox({
     required PlatformViewController controller,
     required PlatformViewHitTestBehavior hitTestBehavior,
@@ -663,10 +589,8 @@ class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
     updateGestureRecognizers(gestureRecognizers);
   }
 
-  /// The controller for this render object.
   PlatformViewController get controller => _controller;
   PlatformViewController _controller;
-  /// Setting this value to a new value will result in a repaint.
   set controller(covariant PlatformViewController controller) {
     assert(controller.viewId > -1);
 
@@ -681,22 +605,6 @@ class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
     }
   }
 
-  /// {@template flutter.rendering.PlatformViewRenderBox.updateGestureRecognizers}
-  /// Updates which gestures should be forwarded to the platform view.
-  ///
-  /// Gesture recognizers created by factories in this set participate in the gesture arena for each
-  /// pointer that was put down on the render box. If any of the recognizers on this list wins the
-  /// gesture arena, the entire pointer event sequence starting from the pointer down event
-  /// will be dispatched to the Android view.
-  ///
-  /// The `gestureRecognizers` property must not contain more than one factory with the same [Factory.type].
-  ///
-  /// Setting a new set of gesture recognizer factories with the same [Factory.type]s as the current
-  /// set has no effect, because the factories' constructors would have already been called with the previous set.
-  /// {@endtemplate}
-  ///
-  /// Any active gesture arena the `PlatformView` participates in is rejected when the
-  /// set of gesture recognizers is changed.
   void updateGestureRecognizers(Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers) {
     _updateGestureRecognizersWithCallBack(gestureRecognizers, _controller.dispatchPointerEvent);
   }
@@ -731,10 +639,8 @@ class PlatformViewRenderBox extends RenderBox with _PlatformViewGestureMixin {
   }
 }
 
-/// The Mixin handling the pointer events and gestures of a platform view render box.
 mixin _PlatformViewGestureMixin on RenderBox implements MouseTrackerAnnotation {
 
-  /// How to behave during hit testing.
   // Changing _hitTestBehavior might affect which objects are considered hovered over.
   set hitTestBehavior(PlatformViewHitTestBehavior value) {
     if (value != _hitTestBehavior) {
@@ -748,10 +654,6 @@ mixin _PlatformViewGestureMixin on RenderBox implements MouseTrackerAnnotation {
 
   _HandlePointerEvent? _handlePointerEvent;
 
-  /// {@macro flutter.rendering.RenderAndroidView.updateGestureRecognizers}
-  ///
-  /// Any active gesture arena the `PlatformView` participates in is rejected when the
-  /// set of gesture recognizers is changed.
   void _updateGestureRecognizersWithCallBack(Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers, _HandlePointerEvent handlePointerEvent) {
     assert(
       _factoriesTypeSet(gestureRecognizers).length == gestureRecognizers.length,

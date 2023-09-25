@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [PageView].
 
 void main() => runApp(const PageViewExampleApp());
 
@@ -29,8 +28,6 @@ class PageViewExample extends StatelessWidget {
   Widget build(BuildContext context) {
     final PageController controller = PageController();
     return PageView(
-      /// [PageView.scrollDirection] defaults to [Axis.horizontal].
-      /// Use [Axis.vertical] to scroll vertically.
       controller: controller,
       children: const <Widget>[
         Center(

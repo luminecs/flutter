@@ -19,7 +19,6 @@ import '../flutter_project_metadata.dart';
 import '../project.dart';
 import '../version.dart';
 
-/// Provide suggested GitHub issue templates to user when Flutter encounters an error.
 class GitHubTemplateCreator {
   GitHubTemplateCreator({
     required FileSystem fileSystem,
@@ -37,7 +36,6 @@ class GitHubTemplateCreator {
     return 'https://github.com/flutter/flutter/issues?q=is%3Aissue+${Uri.encodeQueryComponent(errorString)}';
   }
 
-  /// Restricts exception object strings to contain only information about tool internals.
   static String sanitizedCrashException(Object error) {
     if (error is ProcessException) {
       // Suppress args.
@@ -72,9 +70,6 @@ class GitHubTemplateCreator {
     return error.runtimeType.toString();
   }
 
-  /// GitHub URL to present to the user containing encoded suggested template.
-  ///
-  /// Shorten the URL, if possible.
   Future<String> toolCrashIssueTemplateGitHubURL(
       String command,
       Object error,
@@ -114,7 +109,6 @@ ${_projectMetadataInformation()}
       '&labels=${Uri.encodeQueryComponent('tool,severe: crash')}';
   }
 
-  /// Provide information about the Flutter project in the working directory, if present.
   String _projectMetadataInformation() {
     FlutterProject project;
     try {

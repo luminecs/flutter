@@ -428,7 +428,6 @@ class _RecipePageState extends State<RecipePage> {
   }
 }
 
-/// Displays the recipe's name and instructions.
 class RecipeSheet extends StatelessWidget {
   RecipeSheet({ super.key, this.recipe });
 

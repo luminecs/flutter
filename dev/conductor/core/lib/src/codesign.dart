@@ -29,7 +29,6 @@ const String kRevision = 'revision';
 const String kUpstream = 'upstream';
 
 
-/// Command to codesign and verify the signatures of cached binaries.
 class CodesignCommand extends Command<void> {
   CodesignCommand({
     required this.checkouts,
@@ -69,7 +68,6 @@ class CodesignCommand extends Command<void> {
   final ProcessManager processManager;
   final Stdio stdio;
 
-  /// Root directory of the Flutter repository.
   final Directory flutterRoot;
 
   FrameworkRepository? _framework;
@@ -141,10 +139,6 @@ class CodesignCommand extends Command<void> {
     }
   }
 
-  /// Binaries that are expected to be codesigned and have entitlements.
-  ///
-  /// This list should be kept in sync with the actual contents of Flutter's
-  /// cache.
   Future<List<String>> get binariesWithEntitlements async {
     final String frameworkCacheDirectory = await framework.cacheDirectory;
     return <String>[
@@ -185,10 +179,6 @@ class CodesignCommand extends Command<void> {
         .toList();
   }
 
-  /// Binaries that are only expected to be codesigned.
-  ///
-  /// This list should be kept in sync with the actual contents of Flutter's
-  /// cache.
   Future<List<String>> get binariesWithoutEntitlements async {
     final String frameworkCacheDirectory = await framework.cacheDirectory;
     return <String>[
@@ -218,13 +208,6 @@ class CodesignCommand extends Command<void> {
         .toList();
   }
 
-  /// Verify the existence of all expected binaries in cache.
-  ///
-  /// This function ignores code signatures and entitlements, and is intended to
-  /// be run on every commit. It should throw if either new binaries are added
-  /// to the cache or expected binaries removed. In either case, this class'
-  /// [binariesWithEntitlements] or [binariesWithoutEntitlements] lists should
-  /// be updated accordingly.
   @visibleForTesting
   Future<void> verifyExist() async {
     final Set<String> foundFiles = <String>{};
@@ -260,7 +243,6 @@ class CodesignCommand extends Command<void> {
     stdio.printStatus('All expected binaries present.');
   }
 
-  /// Verify code signatures and entitlements of all binaries in the cache.
   @visibleForTesting
   Future<void> verifySignatures() async {
     final List<String> unsignedBinaries = <String>[];
@@ -352,7 +334,6 @@ class CodesignCommand extends Command<void> {
 
   List<String>? _allBinaryPaths;
 
-  /// Find every binary file in the given [rootDirectory].
   Future<List<String>> findBinaryPaths(String rootDirectory) async {
     if (_allBinaryPaths != null) {
       return _allBinaryPaths!;
@@ -380,7 +361,6 @@ class CodesignCommand extends Command<void> {
     return _allBinaryPaths!;
   }
 
-  /// Check mime-type of file at [filePath] to determine if it is binary.
   Future<bool> isBinary(String filePath) async {
     final io.ProcessResult result = await processManager.run(
       <String>[
@@ -393,7 +373,6 @@ class CodesignCommand extends Command<void> {
     return (result.stdout as String).contains('application/x-mach-binary');
   }
 
-  /// Check if the binary has the expected entitlements.
   Future<bool> hasExpectedEntitlements(String binaryPath) async {
     final io.ProcessResult entitlementResult = await processManager.run(
       <String>[

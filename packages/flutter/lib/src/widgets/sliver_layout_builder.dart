@@ -7,24 +7,9 @@ import 'package:flutter/rendering.dart';
 import 'framework.dart';
 import 'layout_builder.dart';
 
-/// The signature of the [SliverLayoutBuilder] builder function.
 typedef SliverLayoutWidgetBuilder = Widget Function(BuildContext context, SliverConstraints constraints);
 
-/// Builds a sliver widget tree that can depend on its own [SliverConstraints].
-///
-/// Similar to the [LayoutBuilder] widget except its builder should return a sliver
-/// widget, and [SliverLayoutBuilder] is itself a sliver. The framework calls the
-/// [builder] function at layout time and provides the current [SliverConstraints].
-/// The [SliverLayoutBuilder]'s final [SliverGeometry] will match the [SliverGeometry]
-/// of its child.
-///
-/// {@macro flutter.widgets.ConstrainedLayoutBuilder}
-///
-/// See also:
-///
-///  * [LayoutBuilder], the non-sliver version of this widget.
 class SliverLayoutBuilder extends ConstrainedLayoutBuilder<SliverConstraints> {
-  /// Creates a sliver widget that defers its building until layout.
   const SliverLayoutBuilder({
     super.key,
     required super.builder,

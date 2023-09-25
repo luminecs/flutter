@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ColorScheme.fromImageProvider] with content-based dynamic color.
 
 const Widget divider = SizedBox(height: 10);
 const double narrowScreenWidthThreshold = 400;

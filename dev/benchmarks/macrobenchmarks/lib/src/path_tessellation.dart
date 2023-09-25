@@ -152,7 +152,6 @@ class IconRow extends StatelessWidget {
   }
 }
 
-/// Parses SVG path data into a [Path] object.
 Path _pathFromString(String pathString) {
   int start = 0;
   final RegExp pattern = RegExp('[MLCHVZ]');

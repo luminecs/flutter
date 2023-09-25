@@ -12,39 +12,15 @@ import 'text_selection_toolbar.dart';
 const double _kToolbarScreenPadding = 8.0;
 const double _kToolbarWidth = 222.0;
 
-/// A Material-style desktop text selection toolbar.
-///
-/// Typically displays buttons for text manipulation, e.g. copying and pasting
-/// text.
-///
-/// Tries to position its top left corner as closely as possible to [anchor]
-/// while remaining fully inside the viewport.
-///
-/// See also:
-///
-///  * [AdaptiveTextSelectionToolbar], which builds the toolbar for the current
-///    platform.
-///  * [TextSelectionToolbar], which is similar, but builds an Android-style
-///    toolbar.
 class DesktopTextSelectionToolbar extends StatelessWidget {
-  /// Creates a const instance of DesktopTextSelectionToolbar.
   const DesktopTextSelectionToolbar({
     super.key,
     required this.anchor,
     required this.children,
   }) : assert(children.length > 0);
 
-  /// {@template flutter.material.DesktopTextSelectionToolbar.anchor}
-  /// The point where the toolbar will attempt to position itself as closely as
-  /// possible.
-  /// {@endtemplate}
   final Offset anchor;
 
-  /// {@macro flutter.material.TextSelectionToolbar.children}
-  ///
-  /// See also:
-  ///   * [DesktopTextSelectionToolbarButton], which builds a default
-  ///     Material-style desktop text selection toolbar text button.
   final List<Widget> children;
 
   // Builds a desktop toolbar in the Material style.

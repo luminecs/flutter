@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'material3.dart';
 import 'recorder.dart';
 
-/// Measures how expensive it is to construct the material 3 components screen.
 class BenchMaterial3Components extends WidgetBuildRecorder {
   BenchMaterial3Components() : super(name: benchmarkName);
 

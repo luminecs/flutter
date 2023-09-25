@@ -8,14 +8,6 @@
 // Examples can assume:
 // import 'package:flutter/rendering.dart';
 
-/// no error: rendering library was imported.
-/// ```dart
-/// print(RenderObject);
-/// ```
 String? bar;
 
-/// error: widgets library was not imported (not even implicitly).
-/// ```dart
-/// print(Widget); // error (undefined_identifier)
-/// ```
 String? foo;

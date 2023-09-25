@@ -566,9 +566,7 @@ class Message {
   }
 }
 
-/// Represents the contents of one ARB file.
 class AppResourceBundle {
-  /// Assuming that the caller has verified that the file exists and is readable.
   factory AppResourceBundle(File file) {
     final Map<String, Object?> resources;
     try {
@@ -642,7 +640,6 @@ class AppResourceBundle {
 
   final File file;
   final LocaleInfo locale;
-  /// JSON representation of the contents of the ARB file.
   final Map<String, Object?> resources;
   final Iterable<String> resourceIds;
 

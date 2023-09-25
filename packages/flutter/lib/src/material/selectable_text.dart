@@ -20,12 +20,6 @@ import 'theme.dart';
 // late BuildContext context;
 // late FocusNode myFocusNode;
 
-/// An eyeballed value that moves the cursor slightly left of where it is
-/// rendered for text on Android so its positioning more accurately matches the
-/// native iOS text cursor positioning.
-///
-/// This value is in device pixels, not logical pixels as is typically used
-/// throughout the codebase.
 const int iOSHorizontalOffset = -2;
 
 class _TextSpanEditingController extends TextEditingController {
@@ -110,73 +104,8 @@ class _SelectableTextSelectionGestureDetectorBuilder extends TextSelectionGestur
   }
 }
 
-/// A run of selectable text with a single style.
-///
-/// The [SelectableText] widget displays a string of text with a single style.
-/// The string might break across multiple lines or might all be displayed on
-/// the same line depending on the layout constraints.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=ZSU3ZXOs6hc}
-///
-/// The [style] argument is optional. When omitted, the text will use the style
-/// from the closest enclosing [DefaultTextStyle]. If the given style's
-/// [TextStyle.inherit] property is true (the default), the given style will
-/// be merged with the closest enclosing [DefaultTextStyle]. This merging
-/// behavior is useful, for example, to make the text bold while using the
-/// default font family and size.
-///
-/// {@macro flutter.material.textfield.wantKeepAlive}
-///
-/// {@tool snippet}
-///
-/// ```dart
-/// const SelectableText(
-///   'Hello! How are you?',
-///   textAlign: TextAlign.center,
-///   style: TextStyle(fontWeight: FontWeight.bold),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// Using the [SelectableText.rich] constructor, the [SelectableText] widget can
-/// display a paragraph with differently styled [TextSpan]s. The sample
-/// that follows displays "Hello beautiful world" with different styles
-/// for each word.
-///
-/// {@tool snippet}
-///
-/// ```dart
-/// const SelectableText.rich(
-///   TextSpan(
-///     text: 'Hello', // default text style
-///     children: <TextSpan>[
-///       TextSpan(text: ' beautiful ', style: TextStyle(fontStyle: FontStyle.italic)),
-///       TextSpan(text: 'world', style: TextStyle(fontWeight: FontWeight.bold)),
-///     ],
-///   ),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// ## Interactivity
-///
-/// To make [SelectableText] react to touch events, use callback [onTap] to achieve
-/// the desired behavior.
-///
-/// See also:
-///
-///  * [Text], which is the non selectable version of this widget.
-///  * [TextField], which is the editable version of this widget.
 class SelectableText extends StatefulWidget {
-  /// Creates a selectable text widget.
-  ///
-  /// If the [style] argument is null, the text will use the style from the
-  /// closest enclosing [DefaultTextStyle].
-  ///
 
-  /// If the [showCursor], [autofocus], [dragStartBehavior],
-  /// [selectionHeightStyle], [selectionWidthStyle] and [data] arguments are
-  /// specified, the [maxLines] argument must be greater than zero.
   const SelectableText(
     String this.data, {
     super.key,
@@ -230,10 +159,6 @@ class SelectableText extends StatefulWidget {
         ),
         textSpan = null;
 
-  /// Creates a selectable text widget with a [TextSpan].
-  ///
-  /// The [TextSpan.children] attribute of the [textSpan] parameter must only
-  /// contain [TextSpan]s. Other types of [InlineSpan] are not allowed.
   const SelectableText.rich(
     TextSpan this.textSpan, {
     super.key,
@@ -287,59 +212,20 @@ class SelectableText extends StatefulWidget {
     ),
     data = null;
 
-  /// The text to display.
-  ///
-  /// This will be null if a [textSpan] is provided instead.
   final String? data;
 
-  /// The text to display as a [TextSpan].
-  ///
-  /// This will be null if [data] is provided instead.
   final TextSpan? textSpan;
 
-  /// Defines the focus for this widget.
-  ///
-  /// Text is only selectable when widget is focused.
-  ///
-  /// The [focusNode] is a long-lived object that's typically managed by a
-  /// [StatefulWidget] parent. See [FocusNode] for more information.
-  ///
-  /// To give the focus to this widget, provide a [focusNode] and then
-  /// use the current [FocusScope] to request the focus:
-  ///
-  /// ```dart
-  /// FocusScope.of(context).requestFocus(myFocusNode);
-  /// ```
-  ///
-  /// This happens automatically when the widget is tapped.
-  ///
-  /// To be notified when the widget gains or loses the focus, add a listener
-  /// to the [focusNode]:
-  ///
-  /// ```dart
-  /// myFocusNode.addListener(() { print(myFocusNode.hasFocus); });
-  /// ```
-  ///
-  /// If null, this widget will create its own [FocusNode] with
-  /// [FocusNode.skipTraversal] parameter set to `true`, which causes the widget
-  /// to be skipped over during focus traversal.
   final FocusNode? focusNode;
 
-  /// The style to use for the text.
-  ///
-  /// If null, defaults [DefaultTextStyle] of context.
   final TextStyle? style;
 
-  /// {@macro flutter.widgets.editableText.strutStyle}
   final StrutStyle? strutStyle;
 
-  /// {@macro flutter.widgets.editableText.textAlign}
   final TextAlign? textAlign;
 
-  /// {@macro flutter.widgets.editableText.textDirection}
   final TextDirection? textDirection;
 
-  /// {@macro flutter.widgets.editableText.textScaleFactor}
   @Deprecated(
     'Use textScaler instead. '
     'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
@@ -347,106 +233,54 @@ class SelectableText extends StatefulWidget {
   )
   final double? textScaleFactor;
 
-  /// {@macro flutter.painting.textPainter.textScaler}
   final TextScaler? textScaler;
 
-  /// {@macro flutter.widgets.editableText.autofocus}
   final bool autofocus;
 
-  /// {@macro flutter.widgets.editableText.minLines}
   final int? minLines;
 
-  /// {@macro flutter.widgets.editableText.maxLines}
   final int? maxLines;
 
-  /// {@macro flutter.widgets.editableText.showCursor}
   final bool showCursor;
 
-  /// {@macro flutter.widgets.editableText.cursorWidth}
   final double cursorWidth;
 
-  /// {@macro flutter.widgets.editableText.cursorHeight}
   final double? cursorHeight;
 
-  /// {@macro flutter.widgets.editableText.cursorRadius}
   final Radius? cursorRadius;
 
-  /// The color of the cursor.
-  ///
-  /// The cursor indicates the current text insertion point.
-  ///
-  /// If null then [DefaultSelectionStyle.cursorColor] is used. If that is also
-  /// null and [ThemeData.platform] is [TargetPlatform.iOS] or
-  /// [TargetPlatform.macOS], then [CupertinoThemeData.primaryColor] is used.
-  /// Otherwise [ColorScheme.primary] of [ThemeData.colorScheme] is used.
   final Color? cursorColor;
 
-  /// Controls how tall the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxHeightStyle] for details on available styles.
   final ui.BoxHeightStyle selectionHeightStyle;
 
-  /// Controls how wide the selection highlight boxes are computed to be.
-  ///
-  /// See [ui.BoxWidthStyle] for details on available styles.
   final ui.BoxWidthStyle selectionWidthStyle;
 
-  /// {@macro flutter.widgets.editableText.enableInteractiveSelection}
   final bool enableInteractiveSelection;
 
-  /// {@macro flutter.widgets.editableText.selectionControls}
   final TextSelectionControls? selectionControls;
 
-  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
 
-  /// Configuration of toolbar options.
-  ///
-  /// Paste and cut will be disabled regardless.
-  ///
-  /// If not set, select all and copy will be enabled by default.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
   )
   final ToolbarOptions? toolbarOptions;
 
-  /// {@macro flutter.widgets.editableText.selectionEnabled}
   bool get selectionEnabled => enableInteractiveSelection;
 
-  /// Called when the user taps on this selectable text.
-  ///
-  /// The selectable text builds a [GestureDetector] to handle input events like tap,
-  /// to trigger focus requests, to move the caret, adjust the selection, etc.
-  /// Handling some of those events by wrapping the selectable text with a competing
-  /// GestureDetector is problematic.
-  ///
-  /// To unconditionally handle taps, without interfering with the selectable text's
-  /// internal gesture detector, provide this callback.
-  ///
-  /// To be notified when the text field gains or loses the focus, provide a
-  /// [focusNode] and add a listener to that.
-  ///
-  /// To listen to arbitrary pointer events without competing with the
-  /// selectable text's internal gesture detector, use a [Listener].
   final GestureTapCallback? onTap;
 
-  /// {@macro flutter.widgets.editableText.scrollPhysics}
   final ScrollPhysics? scrollPhysics;
 
-  /// {@macro flutter.widgets.Text.semanticsLabel}
   final String? semanticsLabel;
 
-  /// {@macro dart.ui.textHeightBehavior}
   final TextHeightBehavior? textHeightBehavior;
 
-  /// {@macro flutter.painting.textPainter.textWidthBasis}
   final TextWidthBasis? textWidthBasis;
 
-  /// {@macro flutter.widgets.editableText.onSelectionChanged}
   final SelectionChangedCallback? onSelectionChanged;
 
-  /// {@macro flutter.widgets.EditableText.contextMenuBuilder}
   final EditableTextContextMenuBuilder? contextMenuBuilder;
 
   static Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
@@ -455,15 +289,6 @@ class SelectableText extends StatefulWidget {
     );
   }
 
-  /// {@macro flutter.widgets.magnifier.TextMagnifierConfiguration.intro}
-  ///
-  /// {@macro flutter.widgets.magnifier.intro}
-  ///
-  /// {@macro flutter.widgets.magnifier.TextMagnifierConfiguration.details}
-  ///
-  /// By default, builds a [CupertinoTextMagnifier] on iOS and [TextMagnifier]
-  /// on Android, and builds nothing on all other platforms. If it is desired to
-  /// suppress the magnifier, consider passing [TextMagnifierConfiguration.disabled].
   final TextMagnifierConfiguration? magnifierConfiguration;
 
   @override
@@ -592,7 +417,6 @@ class _SelectableTextState extends State<SelectableText> implements TextSelectio
     }
   }
 
-  /// Toggle the toolbar when a selection handle is tapped.
   void _handleSelectionHandleTapped() {
     if (_controller.selection.isCollapsed) {
       _editableText!.toggleToolbar();

@@ -7,12 +7,9 @@ import 'dart:async';
 import '../base/file_system.dart';
 import '../globals.dart' as globals;
 
-/// Manages a Font configuration that can be shared across multiple tests.
 class FontConfigManager {
   Directory? _fontsDirectory;
 
-  /// Returns a Font configuration that limits font fallback to the artifact
-  /// cache directory.
   late final File fontConfigFile = (){
     final StringBuffer sb = StringBuffer();
     sb.writeln('<fontconfig>');

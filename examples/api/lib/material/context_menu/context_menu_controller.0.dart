@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 
 void main() => runApp(const ContextMenuControllerExampleApp());
 
-/// A builder that includes an Offset to draw the context menu at.
 typedef ContextMenuBuilder = Widget Function(BuildContext context, Offset offset);
 
 class ContextMenuControllerExampleApp extends StatefulWidget {
@@ -91,20 +90,14 @@ class _ContextMenuControllerExampleAppState extends State<ContextMenuControllerE
   }
 }
 
-/// Shows and hides the context menu based on user gestures.
-///
-/// By default, shows the menu on right clicks and long presses.
 class _ContextMenuRegion extends StatefulWidget {
-  /// Creates an instance of [_ContextMenuRegion].
   const _ContextMenuRegion({
     required this.child,
     required this.contextMenuBuilder,
   });
 
-  /// Builds the context menu.
   final ContextMenuBuilder contextMenuBuilder;
 
-  /// The child widget that will be listened to for gestures.
   final Widget child;
 
   @override

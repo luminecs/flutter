@@ -37,7 +37,6 @@ void main() {
     expect(listView, findsWidgets);
     expect(crossIconFinder, findsNothing);
 
-    /// enable edit mode
     await tester.longPress(listView.first);
     await tester.pump();
 
@@ -59,7 +58,6 @@ void main() {
     final Finder selectAllFinder = find.text('select all');
     expect(listView, findsWidgets);
 
-    /// enable edit mode
     await tester.longPress(listView.first);
     await tester.pump();
 

@@ -7,7 +7,6 @@ import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/task_result.dart';
 import 'package:flutter_devicelab/tasks/build_test_task.dart';
 
-/// Smoke test of a successful task.
 Future<void> main(List<String> args) async {
   deviceOperatingSystem = DeviceOperatingSystem.fake;
   await task(FakeBuildTestTask(args).call);

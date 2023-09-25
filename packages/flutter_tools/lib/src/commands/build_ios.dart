@@ -24,8 +24,6 @@ import '../reporting/reporting.dart';
 import '../runner/flutter_command.dart';
 import 'build.dart';
 
-/// Builds an .app for an iOS app to be used for local testing on an iOS device
-/// or simulator. Can only be run on a macOS host.
 class BuildIOSCommand extends _BuildIOSSubCommand {
   BuildIOSCommand({ required super.logger, required super.verboseHelp }) {
     argParser
@@ -59,19 +57,12 @@ class BuildIOSCommand extends _BuildIOSSubCommand {
   Directory _outputAppDirectory(String xcodeResultOutput) => globals.fs.directory(xcodeResultOutput).parent;
 }
 
-/// The key that uniquely identifies an image file in an image asset.
-/// It consists of (idiom, scale, size?), where size is present for app icon
-/// asset, and null for launch image asset.
 @immutable
 class _ImageAssetFileKey {
   const _ImageAssetFileKey(this.idiom, this.scale, this.size);
 
-  /// The idiom (iphone or ipad).
   final String idiom;
-  /// The scale factor (e.g. 2).
   final int scale;
-  /// The logical size in point (e.g. 83.5).
-  /// Size is present for app icon, and null for launch image.
   final double? size;
 
   @override
@@ -83,14 +74,9 @@ class _ImageAssetFileKey {
       && other.scale == scale
       && other.size == size;
 
-  /// The pixel size based on logical size and scale.
   int? get pixelSize => size == null ? null : (size! * scale).toInt(); // pixel size must be an int.
 }
 
-/// Builds an .xcarchive and optionally .ipa for an iOS app to be generated for
-/// App Store submission.
-///
-/// Can only be run on a macOS host.
 class BuildIOSArchiveCommand extends _BuildIOSSubCommand {
   BuildIOSArchiveCommand({required super.logger, required super.verboseHelp}) {
     argParser.addOption(
@@ -591,7 +577,6 @@ abstract class _BuildIOSSubCommand extends BuildSubCommand {
 
   XcodeBuildAction get xcodeBuildAction;
 
-  /// The result of the Xcode build command. Null until it finishes.
   @protected
   XcodeBuildResult? xcodeBuildResult;
 

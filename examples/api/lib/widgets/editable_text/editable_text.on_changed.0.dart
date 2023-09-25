@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [EditableText.onChanged].
 
 void main() => runApp(const OnChangedExampleApp());
 

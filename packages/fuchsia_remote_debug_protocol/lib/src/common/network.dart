@@ -4,9 +4,6 @@
 
 import 'dart:core';
 
-/// Determines whether `address` is a valid IPv6 or IPv4 address.
-///
-/// Throws an [ArgumentError] if the address is neither.
 void validateAddress(String address) {
   if (!(isIpV4Address(address) || isIpV6Address(address))) {
     throw ArgumentError(
@@ -14,7 +11,6 @@ void validateAddress(String address) {
   }
 }
 
-/// Returns true if `address` is a valid IPv6 address.
 bool isIpV6Address(String address) {
   try {
     // parseIpv6Address fails if there's a zone ID. Since this is still a valid
@@ -27,7 +23,6 @@ bool isIpV6Address(String address) {
   }
 }
 
-/// Returns true if `address` is a valid IPv4 address.
 bool isIpV4Address(String address) {
   try {
     Uri.parseIPv4Address(address);

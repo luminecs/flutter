@@ -11,8 +11,6 @@ import 'base/logger.dart';
 import 'base/platform.dart';
 import 'version.dart';
 
-/// A class that represents global (non-project-specific) internal state that
-/// must persist across tool invocations.
 abstract class PersistentToolState {
   factory PersistentToolState({
     required FileSystem fileSystem,
@@ -34,25 +32,16 @@ abstract class PersistentToolState {
 
   static PersistentToolState? get instance => context.get<PersistentToolState>();
 
-  /// Whether the welcome message should be redisplayed.
-  ///
-  /// May give null if the value has not been set.
   bool? get shouldRedisplayWelcomeMessage;
   void setShouldRedisplayWelcomeMessage(bool value); // Enforced nonnull setter.
 
-  /// Returns the last active version for a given [channel].
-  ///
-  /// If there was no active prior version, returns `null` instead.
   String? lastActiveVersion(Channel channel);
 
-  /// Update the last active version for a given [channel].
   void updateLastActiveVersion(String fullGitHash, Channel channel);
 
-  /// Return the hash of the last active license terms.
   String? get lastActiveLicenseTermsHash;
   void setLastActiveLicenseTermsHash(String value); // Enforced nonnull setter.
 
-  /// Whether this client was already determined to be or not be a bot.
   bool? get isRunningOnBot;
   void setIsRunningOnBot(bool value); // Enforced nonnull setter.
 }

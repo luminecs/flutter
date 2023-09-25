@@ -28,8 +28,6 @@ class PointerSignalTester {
     return listener;
   }
 
-  /// Simulates a new event dispatch cycle by resolving the current event and
-  /// setting a new event to use for future calls.
   void resolve() {
     resolver.resolve(event);
     event = const PointerScrollEvent();

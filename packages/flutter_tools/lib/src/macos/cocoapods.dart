@@ -54,35 +54,18 @@ const String podfileIosMigrationInstructions = '''
 const String podfileMacOSMigrationInstructions = '''
   rm macos/Podfile''';
 
-/// Result of evaluating the CocoaPods installation.
 enum CocoaPodsStatus {
-  /// iOS plugins will not work, installation required.
   notInstalled,
-  /// iOS plugins might not work, upgrade recommended.
   unknownVersion,
-  /// iOS plugins will not work, upgrade required.
   belowMinimumVersion,
-  /// iOS plugins may not work in certain situations (Swift, static libraries),
-  /// upgrade recommended.
   belowRecommendedVersion,
-  /// Everything should be fine.
   recommended,
-  /// iOS plugins will not work, re-install required.
   brokenInstall,
 }
 
 const Version cocoaPodsMinimumVersion = Version.withText(1, 10, 0, '1.10.0');
 const Version cocoaPodsRecommendedVersion = Version.withText(1, 11, 0, '1.11.0');
 
-/// Cocoapods is a dependency management solution for iOS and macOS applications.
-///
-/// Cocoapods is generally installed via ruby gems and interacted with via
-/// the `pod` CLI command.
-///
-/// See also:
-///   * https://cocoapods.org/ - the cocoapods website.
-///   * https://flutter.dev/docs/get-started/install/macos#deploy-to-ios-devices - instructions for
-///     installing iOS/macOS dependencies.
 class CocoaPods {
   CocoaPods({
     required FileSystem fileSystem,
@@ -186,7 +169,6 @@ class CocoaPods {
     return podsProcessed;
   }
 
-  /// Make sure the CocoaPods tools are in the right states.
   Future<bool> _checkPodCondition() async {
     final CocoaPodsStatus installation = await evaluateCocoaPodsInstallation;
     switch (installation) {
@@ -235,9 +217,6 @@ class CocoaPods {
     return true;
   }
 
-  /// Ensures the given Xcode-based sub-project of a parent Flutter project
-  /// contains a suitable `Podfile` and that its `Flutter/Xxx.xcconfig` files
-  /// include pods configuration.
   Future<void> setupPodfile(XcodeBasedProject xcodeProject) async {
     if (!_xcodeProjectInterpreter.isInstalled) {
       // Don't do anything for iOS when host platform doesn't support it.
@@ -274,8 +253,6 @@ class CocoaPods {
     addPodsDependencyToFlutterXcconfig(xcodeProject);
   }
 
-  /// Ensures all `Flutter/Xxx.xcconfig` files for the given Xcode-based
-  /// sub-project of a parent Flutter project include pods configuration.
   void addPodsDependencyToFlutterXcconfig(XcodeBasedProject xcodeProject) {
     _addPodsDependencyToFlutterXcconfig(xcodeProject, 'Debug');
     _addPodsDependencyToFlutterXcconfig(xcodeProject, 'Release');
@@ -294,7 +271,6 @@ class CocoaPods {
     }
   }
 
-  /// Ensures that pod install is deemed needed on next check.
   void invalidatePodInstallOutput(XcodeBasedProject xcodeProject) {
     final File manifestLock = xcodeProject.podManifestLock;
     ErrorHandlingFileSystem.deleteIfExists(manifestLock);

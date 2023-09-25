@@ -18,8 +18,6 @@ import 'device.dart';
 import 'device_port_forwarder.dart';
 import 'protocol_discovery.dart';
 
-/// A partial implementation of Device for desktop-class devices to inherit
-/// from, containing implementations that are common to all desktop devices.
 abstract class DesktopDevice extends Device {
   DesktopDevice(super.id, {
       required PlatformType super.platformType,
@@ -195,27 +193,15 @@ abstract class DesktopDevice extends Device {
     await portForwarder.dispose();
   }
 
-  /// Builds the current project for this device, with the given options.
   Future<void> buildForDevice({
     required BuildInfo buildInfo,
     String? mainPath,
   });
 
-  /// Returns the path to the executable to run for [package] on this device for
-  /// the given [buildMode].
   String? executablePathForDevice(ApplicationPackage package, BuildInfo buildInfo);
 
-  /// Called after a process is attached, allowing any device-specific extra
-  /// steps to be run.
   void onAttached(ApplicationPackage package, BuildInfo buildInfo, Process process) {}
 
-  /// Computes a set of environment variables used to pass debugging information
-  /// to the engine without interfering with application level command line
-  /// arguments.
-  ///
-  /// The format of the environment variables is:
-  ///   * FLUTTER_ENGINE_SWITCHES to the number of switches.
-  ///   * FLUTTER_ENGINE_SWITCH_<N> (indexing from 1) to the individual switches.
   Map<String, String> _computeEnvironment(DebuggingOptions debuggingOptions, bool traceStartup, String? route) {
     int flags = 0;
     final Map<String, String> environment = <String, String>{};
@@ -305,12 +291,9 @@ abstract class DesktopDevice extends Device {
   }
 }
 
-/// A log reader for desktop applications that delegates to a [Process] stdout
-/// and stderr streams.
 class DesktopLogReader extends DeviceLogReader {
   final StreamController<List<int>> _inputController = StreamController<List<int>>.broadcast();
 
-  /// Begin listening to the stdout and stderr streams of the provided [process].
   void initializeProcess(Process process) {
     final StreamSubscription<List<int>> stdoutSub = process.stdout.listen(
       _inputController.add,

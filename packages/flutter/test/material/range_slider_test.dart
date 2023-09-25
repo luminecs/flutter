@@ -1773,8 +1773,6 @@ void main() {
     final TestGesture gesture = await tester.startGesture(middle);
     await tester.pumpAndSettle();
 
-    /// The first circle is the thumb, the second one is the overlapping shape
-    /// circle, and the last one is the second thumb.
     expect(
       find.byType(RangeSlider),
       paints

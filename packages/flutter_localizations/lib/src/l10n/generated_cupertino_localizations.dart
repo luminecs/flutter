@@ -20,11 +20,7 @@ import '../cupertino_localizations.dart';
 // bottom of this file, and used by the [_GlobalCupertinoLocalizationsDelegate.load]
 // method defined in `flutter_localizations/lib/src/cupertino_localizations.dart`.
 
-/// The translations for Afrikaans (`af`).
 class CupertinoLocalizationAf extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Afrikaans.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationAf({
     super.localeName = 'af',
     required super.fullYearFormat,
@@ -182,11 +178,7 @@ class CupertinoLocalizationAf extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Vandag';
 }
 
-/// The translations for Amharic (`am`).
 class CupertinoLocalizationAm extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Amharic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationAm({
     super.localeName = 'am',
     required super.fullYearFormat,
@@ -344,11 +336,7 @@ class CupertinoLocalizationAm extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ዛሬ';
 }
 
-/// The translations for Arabic (`ar`).
 class CupertinoLocalizationAr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Arabic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationAr({
     super.localeName = 'ar',
     required super.fullYearFormat,
@@ -506,11 +494,7 @@ class CupertinoLocalizationAr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'اليوم';
 }
 
-/// The translations for Assamese (`as`).
 class CupertinoLocalizationAs extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Assamese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationAs({
     super.localeName = 'as',
     required super.fullYearFormat,
@@ -668,11 +652,7 @@ class CupertinoLocalizationAs extends GlobalCupertinoLocalizations {
   String get todayLabel => 'আজি';
 }
 
-/// The translations for Azerbaijani (`az`).
 class CupertinoLocalizationAz extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Azerbaijani.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationAz({
     super.localeName = 'az',
     required super.fullYearFormat,
@@ -830,11 +810,7 @@ class CupertinoLocalizationAz extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Bu gün';
 }
 
-/// The translations for Belarusian (`be`).
 class CupertinoLocalizationBe extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Belarusian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationBe({
     super.localeName = 'be',
     required super.fullYearFormat,
@@ -992,11 +968,7 @@ class CupertinoLocalizationBe extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Сёння';
 }
 
-/// The translations for Bulgarian (`bg`).
 class CupertinoLocalizationBg extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Bulgarian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationBg({
     super.localeName = 'bg',
     required super.fullYearFormat,
@@ -1154,11 +1126,7 @@ class CupertinoLocalizationBg extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Днес';
 }
 
-/// The translations for Bengali Bangla (`bn`).
 class CupertinoLocalizationBn extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Bengali Bangla.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationBn({
     super.localeName = 'bn',
     required super.fullYearFormat,
@@ -1316,11 +1284,7 @@ class CupertinoLocalizationBn extends GlobalCupertinoLocalizations {
   String get todayLabel => 'আজ';
 }
 
-/// The translations for Bosnian (`bs`).
 class CupertinoLocalizationBs extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Bosnian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationBs({
     super.localeName = 'bs',
     required super.fullYearFormat,
@@ -1478,11 +1442,7 @@ class CupertinoLocalizationBs extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Danas';
 }
 
-/// The translations for Catalan Valencian (`ca`).
 class CupertinoLocalizationCa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Catalan Valencian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationCa({
     super.localeName = 'ca',
     required super.fullYearFormat,
@@ -1640,11 +1600,7 @@ class CupertinoLocalizationCa extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Avui';
 }
 
-/// The translations for Czech (`cs`).
 class CupertinoLocalizationCs extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Czech.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationCs({
     super.localeName = 'cs',
     required super.fullYearFormat,
@@ -1802,11 +1758,7 @@ class CupertinoLocalizationCs extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Dnes';
 }
 
-/// The translations for Welsh (`cy`).
 class CupertinoLocalizationCy extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Welsh.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationCy({
     super.localeName = 'cy',
     required super.fullYearFormat,
@@ -1964,11 +1916,7 @@ class CupertinoLocalizationCy extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Heddiw';
 }
 
-/// The translations for Danish (`da`).
 class CupertinoLocalizationDa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Danish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationDa({
     super.localeName = 'da',
     required super.fullYearFormat,
@@ -2126,11 +2074,7 @@ class CupertinoLocalizationDa extends GlobalCupertinoLocalizations {
   String get todayLabel => 'I dag';
 }
 
-/// The translations for German (`de`).
 class CupertinoLocalizationDe extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for German.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationDe({
     super.localeName = 'de',
     required super.fullYearFormat,
@@ -2288,11 +2232,7 @@ class CupertinoLocalizationDe extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Heute';
 }
 
-/// The translations for German, as used in Switzerland (`de_CH`).
 class CupertinoLocalizationDeCh extends CupertinoLocalizationDe {
-  /// Create an instance of the translation bundle for German, as used in Switzerland.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationDeCh({
     super.localeName = 'de_CH',
     required super.fullYearFormat,
@@ -2309,11 +2249,7 @@ class CupertinoLocalizationDeCh extends CupertinoLocalizationDe {
   String get modalBarrierDismissLabel => 'Schliessen';
 }
 
-/// The translations for Modern Greek (`el`).
 class CupertinoLocalizationEl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Modern Greek.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEl({
     super.localeName = 'el',
     required super.fullYearFormat,
@@ -2471,11 +2407,7 @@ class CupertinoLocalizationEl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Σήμερα';
 }
 
-/// The translations for English (`en`).
 class CupertinoLocalizationEn extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for English.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEn({
     super.localeName = 'en',
     required super.fullYearFormat,
@@ -2633,11 +2565,7 @@ class CupertinoLocalizationEn extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Today';
 }
 
-/// The translations for English, as used in Australia (`en_AU`).
 class CupertinoLocalizationEnAu extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Australia.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnAu({
     super.localeName = 'en_AU',
     required super.fullYearFormat,
@@ -2663,11 +2591,7 @@ class CupertinoLocalizationEnAu extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in Canada (`en_CA`).
 class CupertinoLocalizationEnCa extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Canada.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnCa({
     super.localeName = 'en_CA',
     required super.fullYearFormat,
@@ -2687,11 +2611,7 @@ class CupertinoLocalizationEnCa extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in the United Kingdom (`en_GB`).
 class CupertinoLocalizationEnGb extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in the United Kingdom.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnGb({
     super.localeName = 'en_GB',
     required super.fullYearFormat,
@@ -2717,11 +2637,7 @@ class CupertinoLocalizationEnGb extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in Ireland (`en_IE`).
 class CupertinoLocalizationEnIe extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Ireland.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnIe({
     super.localeName = 'en_IE',
     required super.fullYearFormat,
@@ -2747,11 +2663,7 @@ class CupertinoLocalizationEnIe extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in India (`en_IN`).
 class CupertinoLocalizationEnIn extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in India.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnIn({
     super.localeName = 'en_IN',
     required super.fullYearFormat,
@@ -2777,11 +2689,7 @@ class CupertinoLocalizationEnIn extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in New Zealand (`en_NZ`).
 class CupertinoLocalizationEnNz extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in New Zealand.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnNz({
     super.localeName = 'en_NZ',
     required super.fullYearFormat,
@@ -2807,11 +2715,7 @@ class CupertinoLocalizationEnNz extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in Singapore (`en_SG`).
 class CupertinoLocalizationEnSg extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Singapore.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnSg({
     super.localeName = 'en_SG',
     required super.fullYearFormat,
@@ -2837,11 +2741,7 @@ class CupertinoLocalizationEnSg extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for English, as used in South Africa (`en_ZA`).
 class CupertinoLocalizationEnZa extends CupertinoLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in South Africa.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEnZa({
     super.localeName = 'en_ZA',
     required super.fullYearFormat,
@@ -2867,11 +2767,7 @@ class CupertinoLocalizationEnZa extends CupertinoLocalizationEn {
   String get selectAllButtonLabel => 'Select all';
 }
 
-/// The translations for Spanish Castilian (`es`).
 class CupertinoLocalizationEs extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Spanish Castilian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEs({
     super.localeName = 'es',
     required super.fullYearFormat,
@@ -3029,11 +2925,7 @@ class CupertinoLocalizationEs extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Hoy';
 }
 
-/// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
 class CupertinoLocalizationEs419 extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Latin America and the Caribbean.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEs419({
     super.localeName = 'es_419',
     required super.fullYearFormat,
@@ -3074,11 +2966,7 @@ class CupertinoLocalizationEs419 extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Argentina (`es_AR`).
 class CupertinoLocalizationEsAr extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Argentina.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsAr({
     super.localeName = 'es_AR',
     required super.fullYearFormat,
@@ -3119,11 +3007,7 @@ class CupertinoLocalizationEsAr extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Bolivia (`es_BO`).
 class CupertinoLocalizationEsBo extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Bolivia.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsBo({
     super.localeName = 'es_BO',
     required super.fullYearFormat,
@@ -3164,11 +3048,7 @@ class CupertinoLocalizationEsBo extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Chile (`es_CL`).
 class CupertinoLocalizationEsCl extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Chile.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsCl({
     super.localeName = 'es_CL',
     required super.fullYearFormat,
@@ -3209,11 +3089,7 @@ class CupertinoLocalizationEsCl extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Colombia (`es_CO`).
 class CupertinoLocalizationEsCo extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Colombia.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsCo({
     super.localeName = 'es_CO',
     required super.fullYearFormat,
@@ -3254,11 +3130,7 @@ class CupertinoLocalizationEsCo extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Costa Rica (`es_CR`).
 class CupertinoLocalizationEsCr extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Costa Rica.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsCr({
     super.localeName = 'es_CR',
     required super.fullYearFormat,
@@ -3299,11 +3171,7 @@ class CupertinoLocalizationEsCr extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in the Dominican Republic (`es_DO`).
 class CupertinoLocalizationEsDo extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in the Dominican Republic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsDo({
     super.localeName = 'es_DO',
     required super.fullYearFormat,
@@ -3344,11 +3212,7 @@ class CupertinoLocalizationEsDo extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Ecuador (`es_EC`).
 class CupertinoLocalizationEsEc extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Ecuador.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsEc({
     super.localeName = 'es_EC',
     required super.fullYearFormat,
@@ -3389,11 +3253,7 @@ class CupertinoLocalizationEsEc extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Guatemala (`es_GT`).
 class CupertinoLocalizationEsGt extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Guatemala.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsGt({
     super.localeName = 'es_GT',
     required super.fullYearFormat,
@@ -3434,11 +3294,7 @@ class CupertinoLocalizationEsGt extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Honduras (`es_HN`).
 class CupertinoLocalizationEsHn extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Honduras.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsHn({
     super.localeName = 'es_HN',
     required super.fullYearFormat,
@@ -3479,11 +3335,7 @@ class CupertinoLocalizationEsHn extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Mexico (`es_MX`).
 class CupertinoLocalizationEsMx extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Mexico.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsMx({
     super.localeName = 'es_MX',
     required super.fullYearFormat,
@@ -3524,11 +3376,7 @@ class CupertinoLocalizationEsMx extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Nicaragua (`es_NI`).
 class CupertinoLocalizationEsNi extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Nicaragua.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsNi({
     super.localeName = 'es_NI',
     required super.fullYearFormat,
@@ -3569,11 +3417,7 @@ class CupertinoLocalizationEsNi extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Panama (`es_PA`).
 class CupertinoLocalizationEsPa extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Panama.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsPa({
     super.localeName = 'es_PA',
     required super.fullYearFormat,
@@ -3614,11 +3458,7 @@ class CupertinoLocalizationEsPa extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Peru (`es_PE`).
 class CupertinoLocalizationEsPe extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Peru.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsPe({
     super.localeName = 'es_PE',
     required super.fullYearFormat,
@@ -3659,11 +3499,7 @@ class CupertinoLocalizationEsPe extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Puerto Rico (`es_PR`).
 class CupertinoLocalizationEsPr extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Puerto Rico.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsPr({
     super.localeName = 'es_PR',
     required super.fullYearFormat,
@@ -3704,11 +3540,7 @@ class CupertinoLocalizationEsPr extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Paraguay (`es_PY`).
 class CupertinoLocalizationEsPy extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Paraguay.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsPy({
     super.localeName = 'es_PY',
     required super.fullYearFormat,
@@ -3749,11 +3581,7 @@ class CupertinoLocalizationEsPy extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in El Salvador (`es_SV`).
 class CupertinoLocalizationEsSv extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in El Salvador.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsSv({
     super.localeName = 'es_SV',
     required super.fullYearFormat,
@@ -3794,11 +3622,7 @@ class CupertinoLocalizationEsSv extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in the United States (`es_US`).
 class CupertinoLocalizationEsUs extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in the United States.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsUs({
     super.localeName = 'es_US',
     required super.fullYearFormat,
@@ -3839,11 +3663,7 @@ class CupertinoLocalizationEsUs extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Uruguay (`es_UY`).
 class CupertinoLocalizationEsUy extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Uruguay.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsUy({
     super.localeName = 'es_UY',
     required super.fullYearFormat,
@@ -3884,11 +3704,7 @@ class CupertinoLocalizationEsUy extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Spanish Castilian, as used in Venezuela (`es_VE`).
 class CupertinoLocalizationEsVe extends CupertinoLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Venezuela.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEsVe({
     super.localeName = 'es_VE',
     required super.fullYearFormat,
@@ -3929,11 +3745,7 @@ class CupertinoLocalizationEsVe extends CupertinoLocalizationEs {
   String get modalBarrierDismissLabel => 'Descartar';
 }
 
-/// The translations for Estonian (`et`).
 class CupertinoLocalizationEt extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Estonian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEt({
     super.localeName = 'et',
     required super.fullYearFormat,
@@ -4091,11 +3903,7 @@ class CupertinoLocalizationEt extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Täna';
 }
 
-/// The translations for Basque (`eu`).
 class CupertinoLocalizationEu extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Basque.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationEu({
     super.localeName = 'eu',
     required super.fullYearFormat,
@@ -4253,11 +4061,7 @@ class CupertinoLocalizationEu extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Gaur';
 }
 
-/// The translations for Persian (`fa`).
 class CupertinoLocalizationFa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Persian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationFa({
     super.localeName = 'fa',
     required super.fullYearFormat,
@@ -4415,11 +4219,7 @@ class CupertinoLocalizationFa extends GlobalCupertinoLocalizations {
   String get todayLabel => 'امروز';
 }
 
-/// The translations for Finnish (`fi`).
 class CupertinoLocalizationFi extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Finnish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationFi({
     super.localeName = 'fi',
     required super.fullYearFormat,
@@ -4577,11 +4377,7 @@ class CupertinoLocalizationFi extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Tänään';
 }
 
-/// The translations for Filipino Pilipino (`fil`).
 class CupertinoLocalizationFil extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Filipino Pilipino.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationFil({
     super.localeName = 'fil',
     required super.fullYearFormat,
@@ -4739,11 +4535,7 @@ class CupertinoLocalizationFil extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Ngayon';
 }
 
-/// The translations for French (`fr`).
 class CupertinoLocalizationFr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for French.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationFr({
     super.localeName = 'fr',
     required super.fullYearFormat,
@@ -4901,11 +4693,7 @@ class CupertinoLocalizationFr extends GlobalCupertinoLocalizations {
   String get todayLabel => "aujourd'hui";
 }
 
-/// The translations for French, as used in Canada (`fr_CA`).
 class CupertinoLocalizationFrCa extends CupertinoLocalizationFr {
-  /// Create an instance of the translation bundle for French, as used in Canada.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationFrCa({
     super.localeName = 'fr_CA',
     required super.fullYearFormat,
@@ -4946,11 +4734,7 @@ class CupertinoLocalizationFrCa extends CupertinoLocalizationFr {
   String get selectAllButtonLabel => 'Tout sélectionner';
 }
 
-/// The translations for Galician (`gl`).
 class CupertinoLocalizationGl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Galician.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationGl({
     super.localeName = 'gl',
     required super.fullYearFormat,
@@ -5108,11 +4892,7 @@ class CupertinoLocalizationGl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Hoxe';
 }
 
-/// The translations for Swiss German Alemannic Alsatian (`gsw`).
 class CupertinoLocalizationGsw extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Swiss German Alemannic Alsatian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationGsw({
     super.localeName = 'gsw',
     required super.fullYearFormat,
@@ -5270,11 +5050,7 @@ class CupertinoLocalizationGsw extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Heute';
 }
 
-/// The translations for Gujarati (`gu`).
 class CupertinoLocalizationGu extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Gujarati.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationGu({
     super.localeName = 'gu',
     required super.fullYearFormat,
@@ -5432,11 +5208,7 @@ class CupertinoLocalizationGu extends GlobalCupertinoLocalizations {
   String get todayLabel => 'આજે';
 }
 
-/// The translations for Hebrew (`he`).
 class CupertinoLocalizationHe extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Hebrew.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationHe({
     super.localeName = 'he',
     required super.fullYearFormat,
@@ -5594,11 +5366,7 @@ class CupertinoLocalizationHe extends GlobalCupertinoLocalizations {
   String get todayLabel => 'היום';
 }
 
-/// The translations for Hindi (`hi`).
 class CupertinoLocalizationHi extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Hindi.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationHi({
     super.localeName = 'hi',
     required super.fullYearFormat,
@@ -5756,11 +5524,7 @@ class CupertinoLocalizationHi extends GlobalCupertinoLocalizations {
   String get todayLabel => 'आज';
 }
 
-/// The translations for Croatian (`hr`).
 class CupertinoLocalizationHr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Croatian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationHr({
     super.localeName = 'hr',
     required super.fullYearFormat,
@@ -5918,11 +5682,7 @@ class CupertinoLocalizationHr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Danas';
 }
 
-/// The translations for Hungarian (`hu`).
 class CupertinoLocalizationHu extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Hungarian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationHu({
     super.localeName = 'hu',
     required super.fullYearFormat,
@@ -6080,11 +5840,7 @@ class CupertinoLocalizationHu extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Ma';
 }
 
-/// The translations for Armenian (`hy`).
 class CupertinoLocalizationHy extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Armenian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationHy({
     super.localeName = 'hy',
     required super.fullYearFormat,
@@ -6242,11 +5998,7 @@ class CupertinoLocalizationHy extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Այսօր';
 }
 
-/// The translations for Indonesian (`id`).
 class CupertinoLocalizationId extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Indonesian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationId({
     super.localeName = 'id',
     required super.fullYearFormat,
@@ -6404,11 +6156,7 @@ class CupertinoLocalizationId extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Hari ini';
 }
 
-/// The translations for Icelandic (`is`).
 class CupertinoLocalizationIs extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Icelandic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationIs({
     super.localeName = 'is',
     required super.fullYearFormat,
@@ -6566,11 +6314,7 @@ class CupertinoLocalizationIs extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Í dag';
 }
 
-/// The translations for Italian (`it`).
 class CupertinoLocalizationIt extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Italian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationIt({
     super.localeName = 'it',
     required super.fullYearFormat,
@@ -6728,11 +6472,7 @@ class CupertinoLocalizationIt extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Oggi';
 }
 
-/// The translations for Japanese (`ja`).
 class CupertinoLocalizationJa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Japanese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationJa({
     super.localeName = 'ja',
     required super.fullYearFormat,
@@ -6890,11 +6630,7 @@ class CupertinoLocalizationJa extends GlobalCupertinoLocalizations {
   String get todayLabel => '今日';
 }
 
-/// The translations for Georgian (`ka`).
 class CupertinoLocalizationKa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Georgian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationKa({
     super.localeName = 'ka',
     required super.fullYearFormat,
@@ -7052,11 +6788,7 @@ class CupertinoLocalizationKa extends GlobalCupertinoLocalizations {
   String get todayLabel => 'დღეს';
 }
 
-/// The translations for Kazakh (`kk`).
 class CupertinoLocalizationKk extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Kazakh.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationKk({
     super.localeName = 'kk',
     required super.fullYearFormat,
@@ -7214,11 +6946,7 @@ class CupertinoLocalizationKk extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Бүгін';
 }
 
-/// The translations for Khmer Central Khmer (`km`).
 class CupertinoLocalizationKm extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Khmer Central Khmer.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationKm({
     super.localeName = 'km',
     required super.fullYearFormat,
@@ -7376,11 +7104,7 @@ class CupertinoLocalizationKm extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ថ្ងៃនេះ';
 }
 
-/// The translations for Kannada (`kn`).
 class CupertinoLocalizationKn extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Kannada.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationKn({
     super.localeName = 'kn',
     required super.fullYearFormat,
@@ -7538,11 +7262,7 @@ class CupertinoLocalizationKn extends GlobalCupertinoLocalizations {
   String get todayLabel => '\u{c87}\u{c82}\u{ca6}\u{cc1}';
 }
 
-/// The translations for Korean (`ko`).
 class CupertinoLocalizationKo extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Korean.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationKo({
     super.localeName = 'ko',
     required super.fullYearFormat,
@@ -7700,11 +7420,7 @@ class CupertinoLocalizationKo extends GlobalCupertinoLocalizations {
   String get todayLabel => '오늘';
 }
 
-/// The translations for Kirghiz Kyrgyz (`ky`).
 class CupertinoLocalizationKy extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Kirghiz Kyrgyz.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationKy({
     super.localeName = 'ky',
     required super.fullYearFormat,
@@ -7862,11 +7578,7 @@ class CupertinoLocalizationKy extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Бүгүн';
 }
 
-/// The translations for Lao (`lo`).
 class CupertinoLocalizationLo extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Lao.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationLo({
     super.localeName = 'lo',
     required super.fullYearFormat,
@@ -8024,11 +7736,7 @@ class CupertinoLocalizationLo extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ມື້ນີ້';
 }
 
-/// The translations for Lithuanian (`lt`).
 class CupertinoLocalizationLt extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Lithuanian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationLt({
     super.localeName = 'lt',
     required super.fullYearFormat,
@@ -8186,11 +7894,7 @@ class CupertinoLocalizationLt extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Šiandien';
 }
 
-/// The translations for Latvian (`lv`).
 class CupertinoLocalizationLv extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Latvian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationLv({
     super.localeName = 'lv',
     required super.fullYearFormat,
@@ -8348,11 +8052,7 @@ class CupertinoLocalizationLv extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Šodien';
 }
 
-/// The translations for Macedonian (`mk`).
 class CupertinoLocalizationMk extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Macedonian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationMk({
     super.localeName = 'mk',
     required super.fullYearFormat,
@@ -8510,11 +8210,7 @@ class CupertinoLocalizationMk extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Денес';
 }
 
-/// The translations for Malayalam (`ml`).
 class CupertinoLocalizationMl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Malayalam.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationMl({
     super.localeName = 'ml',
     required super.fullYearFormat,
@@ -8672,11 +8368,7 @@ class CupertinoLocalizationMl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ഇന്ന്';
 }
 
-/// The translations for Mongolian (`mn`).
 class CupertinoLocalizationMn extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Mongolian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationMn({
     super.localeName = 'mn',
     required super.fullYearFormat,
@@ -8834,11 +8526,7 @@ class CupertinoLocalizationMn extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Өнөөдөр';
 }
 
-/// The translations for Marathi (`mr`).
 class CupertinoLocalizationMr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Marathi.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationMr({
     super.localeName = 'mr',
     required super.fullYearFormat,
@@ -8996,11 +8684,7 @@ class CupertinoLocalizationMr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'आज';
 }
 
-/// The translations for Malay (`ms`).
 class CupertinoLocalizationMs extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Malay.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationMs({
     super.localeName = 'ms',
     required super.fullYearFormat,
@@ -9158,11 +8842,7 @@ class CupertinoLocalizationMs extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Hari ini';
 }
 
-/// The translations for Burmese (`my`).
 class CupertinoLocalizationMy extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Burmese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationMy({
     super.localeName = 'my',
     required super.fullYearFormat,
@@ -9320,11 +9000,7 @@ class CupertinoLocalizationMy extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ယနေ့';
 }
 
-/// The translations for Norwegian Bokmål (`nb`).
 class CupertinoLocalizationNb extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Norwegian Bokmål.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationNb({
     super.localeName = 'nb',
     required super.fullYearFormat,
@@ -9482,11 +9158,7 @@ class CupertinoLocalizationNb extends GlobalCupertinoLocalizations {
   String get todayLabel => 'I dag';
 }
 
-/// The translations for Nepali (`ne`).
 class CupertinoLocalizationNe extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Nepali.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationNe({
     super.localeName = 'ne',
     required super.fullYearFormat,
@@ -9644,11 +9316,7 @@ class CupertinoLocalizationNe extends GlobalCupertinoLocalizations {
   String get todayLabel => 'आज';
 }
 
-/// The translations for Dutch Flemish (`nl`).
 class CupertinoLocalizationNl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Dutch Flemish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationNl({
     super.localeName = 'nl',
     required super.fullYearFormat,
@@ -9806,11 +9474,7 @@ class CupertinoLocalizationNl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Vandaag';
 }
 
-/// The translations for Norwegian (`no`).
 class CupertinoLocalizationNo extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Norwegian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationNo({
     super.localeName = 'no',
     required super.fullYearFormat,
@@ -9968,11 +9632,7 @@ class CupertinoLocalizationNo extends GlobalCupertinoLocalizations {
   String get todayLabel => 'I dag';
 }
 
-/// The translations for Oriya (`or`).
 class CupertinoLocalizationOr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Oriya.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationOr({
     super.localeName = 'or',
     required super.fullYearFormat,
@@ -10130,11 +9790,7 @@ class CupertinoLocalizationOr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ଆଜି';
 }
 
-/// The translations for Panjabi Punjabi (`pa`).
 class CupertinoLocalizationPa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Panjabi Punjabi.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationPa({
     super.localeName = 'pa',
     required super.fullYearFormat,
@@ -10292,11 +9948,7 @@ class CupertinoLocalizationPa extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ਅੱਜ';
 }
 
-/// The translations for Polish (`pl`).
 class CupertinoLocalizationPl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Polish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationPl({
     super.localeName = 'pl',
     required super.fullYearFormat,
@@ -10454,11 +10106,7 @@ class CupertinoLocalizationPl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Dziś';
 }
 
-/// The translations for Portuguese (`pt`).
 class CupertinoLocalizationPt extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Portuguese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationPt({
     super.localeName = 'pt',
     required super.fullYearFormat,
@@ -10616,11 +10264,7 @@ class CupertinoLocalizationPt extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Hoje';
 }
 
-/// The translations for Portuguese, as used in Portugal (`pt_PT`).
 class CupertinoLocalizationPtPt extends CupertinoLocalizationPt {
-  /// Create an instance of the translation bundle for Portuguese, as used in Portugal.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationPtPt({
     super.localeName = 'pt_PT',
     required super.fullYearFormat,
@@ -10664,11 +10308,7 @@ class CupertinoLocalizationPtPt extends CupertinoLocalizationPt {
   String get modalBarrierDismissLabel => 'Ignorar';
 }
 
-/// The translations for Romanian Moldavian Moldovan (`ro`).
 class CupertinoLocalizationRo extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Romanian Moldavian Moldovan.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationRo({
     super.localeName = 'ro',
     required super.fullYearFormat,
@@ -10826,11 +10466,7 @@ class CupertinoLocalizationRo extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Azi';
 }
 
-/// The translations for Russian (`ru`).
 class CupertinoLocalizationRu extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Russian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationRu({
     super.localeName = 'ru',
     required super.fullYearFormat,
@@ -10988,11 +10624,7 @@ class CupertinoLocalizationRu extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Сегодня';
 }
 
-/// The translations for Sinhala Sinhalese (`si`).
 class CupertinoLocalizationSi extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Sinhala Sinhalese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSi({
     super.localeName = 'si',
     required super.fullYearFormat,
@@ -11150,11 +10782,7 @@ class CupertinoLocalizationSi extends GlobalCupertinoLocalizations {
   String get todayLabel => 'අද';
 }
 
-/// The translations for Slovak (`sk`).
 class CupertinoLocalizationSk extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Slovak.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSk({
     super.localeName = 'sk',
     required super.fullYearFormat,
@@ -11312,11 +10940,7 @@ class CupertinoLocalizationSk extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Dnes';
 }
 
-/// The translations for Slovenian (`sl`).
 class CupertinoLocalizationSl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Slovenian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSl({
     super.localeName = 'sl',
     required super.fullYearFormat,
@@ -11474,11 +11098,7 @@ class CupertinoLocalizationSl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Danes';
 }
 
-/// The translations for Albanian (`sq`).
 class CupertinoLocalizationSq extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Albanian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSq({
     super.localeName = 'sq',
     required super.fullYearFormat,
@@ -11636,11 +11256,7 @@ class CupertinoLocalizationSq extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Sot';
 }
 
-/// The translations for Serbian (`sr`).
 class CupertinoLocalizationSr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Serbian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSr({
     super.localeName = 'sr',
     required super.fullYearFormat,
@@ -11798,11 +11414,7 @@ class CupertinoLocalizationSr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Данас';
 }
 
-/// The translations for Serbian, using the Cyrillic script (`sr_Cyrl`).
 class CupertinoLocalizationSrCyrl extends CupertinoLocalizationSr {
-  /// Create an instance of the translation bundle for Serbian, using the Cyrillic script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSrCyrl({
     super.localeName = 'sr_Cyrl',
     required super.fullYearFormat,
@@ -11816,11 +11428,7 @@ class CupertinoLocalizationSrCyrl extends CupertinoLocalizationSr {
   });
 }
 
-/// The translations for Serbian, using the Latin script (`sr_Latn`).
 class CupertinoLocalizationSrLatn extends CupertinoLocalizationSr {
-  /// Create an instance of the translation bundle for Serbian, using the Latin script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSrLatn({
     super.localeName = 'sr_Latn',
     required super.fullYearFormat,
@@ -11918,11 +11526,7 @@ class CupertinoLocalizationSrLatn extends CupertinoLocalizationSr {
   String get todayLabel => 'Danas';
 }
 
-/// The translations for Swedish (`sv`).
 class CupertinoLocalizationSv extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Swedish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSv({
     super.localeName = 'sv',
     required super.fullYearFormat,
@@ -12080,11 +11684,7 @@ class CupertinoLocalizationSv extends GlobalCupertinoLocalizations {
   String get todayLabel => 'I dag';
 }
 
-/// The translations for Swahili (`sw`).
 class CupertinoLocalizationSw extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Swahili.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationSw({
     super.localeName = 'sw',
     required super.fullYearFormat,
@@ -12242,11 +11842,7 @@ class CupertinoLocalizationSw extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Leo';
 }
 
-/// The translations for Tamil (`ta`).
 class CupertinoLocalizationTa extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Tamil.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationTa({
     super.localeName = 'ta',
     required super.fullYearFormat,
@@ -12404,11 +12000,7 @@ class CupertinoLocalizationTa extends GlobalCupertinoLocalizations {
   String get todayLabel => 'இன்று';
 }
 
-/// The translations for Telugu (`te`).
 class CupertinoLocalizationTe extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Telugu.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationTe({
     super.localeName = 'te',
     required super.fullYearFormat,
@@ -12566,11 +12158,7 @@ class CupertinoLocalizationTe extends GlobalCupertinoLocalizations {
   String get todayLabel => 'ఈరోజు';
 }
 
-/// The translations for Thai (`th`).
 class CupertinoLocalizationTh extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Thai.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationTh({
     super.localeName = 'th',
     required super.fullYearFormat,
@@ -12728,11 +12316,7 @@ class CupertinoLocalizationTh extends GlobalCupertinoLocalizations {
   String get todayLabel => 'วันนี้';
 }
 
-/// The translations for Tagalog (`tl`).
 class CupertinoLocalizationTl extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Tagalog.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationTl({
     super.localeName = 'tl',
     required super.fullYearFormat,
@@ -12890,11 +12474,7 @@ class CupertinoLocalizationTl extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Ngayon';
 }
 
-/// The translations for Turkish (`tr`).
 class CupertinoLocalizationTr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Turkish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationTr({
     super.localeName = 'tr',
     required super.fullYearFormat,
@@ -13052,11 +12632,7 @@ class CupertinoLocalizationTr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Bugün';
 }
 
-/// The translations for Ukrainian (`uk`).
 class CupertinoLocalizationUk extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Ukrainian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationUk({
     super.localeName = 'uk',
     required super.fullYearFormat,
@@ -13214,11 +12790,7 @@ class CupertinoLocalizationUk extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Сьогодні';
 }
 
-/// The translations for Urdu (`ur`).
 class CupertinoLocalizationUr extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Urdu.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationUr({
     super.localeName = 'ur',
     required super.fullYearFormat,
@@ -13376,11 +12948,7 @@ class CupertinoLocalizationUr extends GlobalCupertinoLocalizations {
   String get todayLabel => 'آج';
 }
 
-/// The translations for Uzbek (`uz`).
 class CupertinoLocalizationUz extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Uzbek.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationUz({
     super.localeName = 'uz',
     required super.fullYearFormat,
@@ -13538,11 +13106,7 @@ class CupertinoLocalizationUz extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Bugun';
 }
 
-/// The translations for Vietnamese (`vi`).
 class CupertinoLocalizationVi extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Vietnamese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationVi({
     super.localeName = 'vi',
     required super.fullYearFormat,
@@ -13700,11 +13264,7 @@ class CupertinoLocalizationVi extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Hôm nay';
 }
 
-/// The translations for Chinese (`zh`).
 class CupertinoLocalizationZh extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Chinese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationZh({
     super.localeName = 'zh',
     required super.fullYearFormat,
@@ -13862,11 +13422,7 @@ class CupertinoLocalizationZh extends GlobalCupertinoLocalizations {
   String get todayLabel => '今天';
 }
 
-/// The translations for Chinese, using the Han script (`zh_Hans`).
 class CupertinoLocalizationZhHans extends CupertinoLocalizationZh {
-  /// Create an instance of the translation bundle for Chinese, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationZhHans({
     super.localeName = 'zh_Hans',
     required super.fullYearFormat,
@@ -13880,11 +13436,7 @@ class CupertinoLocalizationZhHans extends CupertinoLocalizationZh {
   });
 }
 
-/// The translations for Chinese, using the Han script (`zh_Hant`).
 class CupertinoLocalizationZhHant extends CupertinoLocalizationZh {
-  /// Create an instance of the translation bundle for Chinese, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationZhHant({
     super.localeName = 'zh_Hant',
     required super.fullYearFormat,
@@ -13958,11 +13510,7 @@ class CupertinoLocalizationZhHant extends CupertinoLocalizationZh {
   String get timerPickerMinuteLabelOther => '分鐘';
 }
 
-/// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
 class CupertinoLocalizationZhHantHk extends CupertinoLocalizationZhHant {
-  /// Create an instance of the translation bundle for Chinese, as used in Hong Kong, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationZhHantHk({
     super.localeName = 'zh_Hant_HK',
     required super.fullYearFormat,
@@ -13976,11 +13524,7 @@ class CupertinoLocalizationZhHantHk extends CupertinoLocalizationZhHant {
   });
 }
 
-/// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
 class CupertinoLocalizationZhHantTw extends CupertinoLocalizationZhHant {
-  /// Create an instance of the translation bundle for Chinese, as used in Taiwan, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationZhHantTw({
     super.localeName = 'zh_Hant_TW',
     required super.fullYearFormat,
@@ -14024,11 +13568,7 @@ class CupertinoLocalizationZhHantTw extends CupertinoLocalizationZhHant {
   String get modalBarrierDismissLabel => '關閉';
 }
 
-/// The translations for Zulu (`zu`).
 class CupertinoLocalizationZu extends GlobalCupertinoLocalizations {
-  /// Create an instance of the translation bundle for Zulu.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalCupertinoLocalizations].
   const CupertinoLocalizationZu({
     super.localeName = 'zu',
     required super.fullYearFormat,
@@ -14186,17 +13726,6 @@ class CupertinoLocalizationZu extends GlobalCupertinoLocalizations {
   String get todayLabel => 'Namuhla';
 }
 
-/// The set of supported languages, as language code strings.
-///
-/// The [GlobalCupertinoLocalizations.delegate] can generate localizations for
-/// any [Locale] with a language code from this set, regardless of the region.
-/// Some regions have specific support (e.g. `de` covers all forms of German,
-/// but there is support for `de-CH` specifically to override some of the
-/// translations for Switzerland).
-///
-/// See also:
-///
-///  * [getCupertinoTranslation], whose documentation describes these values.
 final Set<String> kCupertinoSupportedLanguages = HashSet<String>.from(const <String>[
   'af', // Afrikaans
   'am', // Amharic
@@ -14278,98 +13807,6 @@ final Set<String> kCupertinoSupportedLanguages = HashSet<String>.from(const <Str
   'zu', // Zulu
 ]);
 
-/// Creates a [GlobalCupertinoLocalizations] instance for the given `locale`.
-///
-/// All of the function's arguments except `locale` will be passed to the [
-/// GlobalCupertinoLocalizations] constructor. (The `localeName` argument of that
-/// constructor is specified by the actual subclass constructor by this
-/// function.)
-///
-/// The following locales are supported by this package:
-///
-/// {@template flutter.localizations.cupertino.languages}
-///  * `af` - Afrikaans
-///  * `am` - Amharic
-///  * `ar` - Arabic
-///  * `as` - Assamese
-///  * `az` - Azerbaijani
-///  * `be` - Belarusian
-///  * `bg` - Bulgarian
-///  * `bn` - Bengali Bangla
-///  * `bs` - Bosnian
-///  * `ca` - Catalan Valencian
-///  * `cs` - Czech
-///  * `cy` - Welsh
-///  * `da` - Danish
-///  * `de` - German (plus one country variation)
-///  * `el` - Modern Greek
-///  * `en` - English (plus 8 country variations)
-///  * `es` - Spanish Castilian (plus 20 country variations)
-///  * `et` - Estonian
-///  * `eu` - Basque
-///  * `fa` - Persian
-///  * `fi` - Finnish
-///  * `fil` - Filipino Pilipino
-///  * `fr` - French (plus one country variation)
-///  * `gl` - Galician
-///  * `gsw` - Swiss German Alemannic Alsatian
-///  * `gu` - Gujarati
-///  * `he` - Hebrew
-///  * `hi` - Hindi
-///  * `hr` - Croatian
-///  * `hu` - Hungarian
-///  * `hy` - Armenian
-///  * `id` - Indonesian
-///  * `is` - Icelandic
-///  * `it` - Italian
-///  * `ja` - Japanese
-///  * `ka` - Georgian
-///  * `kk` - Kazakh
-///  * `km` - Khmer Central Khmer
-///  * `kn` - Kannada
-///  * `ko` - Korean
-///  * `ky` - Kirghiz Kyrgyz
-///  * `lo` - Lao
-///  * `lt` - Lithuanian
-///  * `lv` - Latvian
-///  * `mk` - Macedonian
-///  * `ml` - Malayalam
-///  * `mn` - Mongolian
-///  * `mr` - Marathi
-///  * `ms` - Malay
-///  * `my` - Burmese
-///  * `nb` - Norwegian Bokmål
-///  * `ne` - Nepali
-///  * `nl` - Dutch Flemish
-///  * `no` - Norwegian
-///  * `or` - Oriya
-///  * `pa` - Panjabi Punjabi
-///  * `pl` - Polish
-///  * `pt` - Portuguese (plus one country variation)
-///  * `ro` - Romanian Moldavian Moldovan
-///  * `ru` - Russian
-///  * `si` - Sinhala Sinhalese
-///  * `sk` - Slovak
-///  * `sl` - Slovenian
-///  * `sq` - Albanian
-///  * `sr` - Serbian (plus 2 scripts)
-///  * `sv` - Swedish
-///  * `sw` - Swahili
-///  * `ta` - Tamil
-///  * `te` - Telugu
-///  * `th` - Thai
-///  * `tl` - Tagalog
-///  * `tr` - Turkish
-///  * `uk` - Ukrainian
-///  * `ur` - Urdu
-///  * `uz` - Uzbek
-///  * `vi` - Vietnamese
-///  * `zh` - Chinese (plus 2 country variations and 2 scripts)
-///  * `zu` - Zulu
-/// {@endtemplate}
-///
-/// Generally speaking, this method is only intended to be used by
-/// [GlobalCupertinoLocalizations.delegate].
 GlobalCupertinoLocalizations? getCupertinoTranslation(
   Locale locale,
   intl.DateFormat fullYearFormat,

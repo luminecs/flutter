@@ -8,8 +8,6 @@ import 'package:native_assets_builder/native_assets_builder.dart'
 import 'package:native_assets_cli/native_assets_cli.dart';
 import 'package:package_config/package_config_types.dart';
 
-/// Mocks all logic instead of using `package:native_assets_builder`, which
-/// relies on doing process calls to `pub` and the local file system.
 class FakeNativeAssetsBuildRunner implements NativeAssetsBuildRunner {
   FakeNativeAssetsBuildRunner({
     this.hasPackageConfigResult = true,

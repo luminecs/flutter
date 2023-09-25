@@ -15,15 +15,7 @@ import '../web/compile.dart';
 import 'test_compiler.dart';
 import 'test_config.dart';
 
-/// Helper class to start golden file comparison in a separate process.
-///
-/// The golden file comparator is configured using flutter_test_config.dart and that
-/// file can contain arbitrary Dart code that depends on dart:ui. Thus it has to
-/// be executed in a `flutter_tester` environment. This helper class generates a
-/// Dart file configured with flutter_test_config.dart to perform the comparison
-/// of golden files.
 class TestGoldenComparator {
-  /// Creates a [TestGoldenComparator] instance.
   TestGoldenComparator(this.shellPath, this.compilerFactory, {
     required Logger logger,
     required FileSystem fileSystem,
@@ -52,8 +44,6 @@ class TestGoldenComparator {
     await _previousComparator?.close();
   }
 
-  /// Start golden comparator in a separate process. Start one file per test file
-  /// to reduce the overhead of starting `flutter_tester`.
   Future<TestGoldenComparatorProcess?> _processForTestFile(Uri testUri) async {
     if (testUri == _previousTestUri) {
       return _previousComparator!;
@@ -112,10 +102,7 @@ class TestGoldenComparator {
   }
 }
 
-/// Represents a `flutter_tester` process started for golden comparison. Also
-/// handles communication with the child process.
 class TestGoldenComparatorProcess {
-  /// Creates a [TestGoldenComparatorProcess] backed by [process].
   TestGoldenComparatorProcess(this.process, {required Logger logger}) : _logger = logger {
     // Pipe stdout and stderr to printTrace and printError.
     // Also parse stdout as a stream of JSON objects.

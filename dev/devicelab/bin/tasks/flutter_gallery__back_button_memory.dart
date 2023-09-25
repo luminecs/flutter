@@ -10,8 +10,6 @@ import 'package:flutter_devicelab/tasks/perf_tests.dart';
 const String packageName = 'io.flutter.demo.gallery';
 const String activityName = 'io.flutter.demo.gallery.MainActivity';
 
-/// Measure application memory usage after pausing and resuming the app
-/// with the Android back button.
 class BackButtonMemoryTest extends MemoryTest {
   BackButtonMemoryTest() : super('${flutterDirectory.path}/dev/integration_tests/flutter_gallery', 'test_memory/back_button.dart', packageName);
 
@@ -21,7 +19,6 @@ class BackButtonMemoryTest extends MemoryTest {
   @override
   int get iterationCount => 5;
 
-  /// Perform a series of back button suspend and resume cycles.
   @override
   Future<void> useMemory() async {
     await launchApp();

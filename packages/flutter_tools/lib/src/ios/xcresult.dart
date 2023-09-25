@@ -9,36 +9,19 @@ import '../../src/convert.dart' show json;
 import '../../src/macos/xcode.dart';
 import '../convert.dart';
 
-/// The generator of xcresults.
-///
-/// Call [generate] after an iOS/MacOS build will generate a [XCResult].
-/// This only works when the `-resultBundleVersion` is set to 3.
-/// * See also: [XCResult].
 class XCResultGenerator {
-  /// Construct the [XCResultGenerator].
   XCResultGenerator({
     required this.resultPath,
     required this.xcode,
     required this.processUtils,
   });
 
-  /// The file path that used to store the xcrun result.
-  ///
-  /// There's usually a `resultPath.xcresult` file in the same folder.
   final String resultPath;
 
-  /// The [ProcessUtils] to run commands.
   final ProcessUtils processUtils;
 
-  /// [Xcode] object used to run xcode command.
   final Xcode xcode;
 
-  /// Generates the XCResult.
-  ///
-  /// Calls `xcrun xcresulttool get --path <resultPath> --format json`,
-  /// then stores the useful information the json into an [XCResult] object.
-  ///
-  /// A`issueDiscarders` can be passed to discard any issues that matches the description of any [XCResultIssueDiscarder] in the list.
   Future<XCResult> generate(
       {List<XCResultIssueDiscarder> issueDiscarders =
           const <XCResultIssueDiscarder>[]}) async {
@@ -72,12 +55,7 @@ class XCResultGenerator {
   }
 }
 
-/// The xcresult of an `xcodebuild` command.
-///
-/// This is the result from an `xcrun xcresulttool get --path <resultPath> --format json` run.
-/// The result contains useful information such as build errors and warnings.
 class XCResult {
-  /// Parse the `resultJson` and stores useful informations in the returned `XCResult`.
   factory XCResult({required Map<String, Object?> resultJson, List<XCResultIssueDiscarder> issueDiscarders = const <XCResultIssueDiscarder>[]}) {
     final List<XCResultIssue> issues = <XCResultIssue>[];
 
@@ -121,7 +99,6 @@ class XCResult {
     );
   }
 
-  /// Create a [XCResult] with constructed [XCResultIssue]s for testing.
   @visibleForTesting
   factory XCResult.test({
     List<XCResultIssue>? issues,
@@ -141,25 +118,14 @@ class XCResult {
     this.parsingErrorMessage,
   });
 
-  /// The issues in the xcresult file.
   final List<XCResultIssue> issues;
 
-  /// Indicate if the xcresult was successfully parsed.
-  ///
-  /// See also: [parsingErrorMessage] for the error message if the parsing was unsuccessful.
   final bool parseSuccess;
 
-  /// The error message describes why the parse if unsuccessful.
-  ///
-  /// This is `null` if [parseSuccess] is `true`.
   final String? parsingErrorMessage;
 }
 
-/// An issue object in the XCResult
 class XCResultIssue {
-  /// Construct an `XCResultIssue` object from `issueJson`.
-  ///
-  /// `issueJson` is the object at xcresultJson[['actions']['_values'][0]['buildResult']['issues']['errorSummaries'/'warningSummaries']['_values'].
   factory XCResultIssue({
     required XCResultIssueType type,
     required Map<String, Object?> issueJson,
@@ -212,7 +178,6 @@ class XCResultIssue {
     );
   }
 
-  /// Create a [XCResultIssue] without JSON parsing for testing.
   @visibleForTesting
   factory XCResultIssue.test({
     XCResultIssueType type = XCResultIssueType.error,
@@ -238,44 +203,23 @@ class XCResultIssue {
     required this.warnings,
   });
 
-  /// The type of the issue.
   final XCResultIssueType type;
 
-  /// The sub type of the issue.
-  ///
-  /// This is a more detailed category about the issue.
-  /// The possible values are `Warning`, `Semantic Issue'` etc.
   final String? subType;
 
-  /// Human readable message for the issue.
-  ///
-  /// This can be displayed to user for their information.
   final String? message;
 
-  /// The location where the issue occurs.
-  ///
-  /// This is a re-formatted version of the "url" value in the json.
-  /// The format looks like <FileLocation>:<StartingLineNumber>:<StartingColumnNumber>.
   final String? location;
 
-  /// Warnings when constructing the issue object.
   final List<String> warnings;
 }
 
-/// The type of an `XCResultIssue`.
 enum XCResultIssueType {
-  /// The issue is an warning.
-  ///
-  /// This is for all the issues under the `warningSummaries` key in the xcresult.
   warning,
 
-  /// The issue is an warning.
-  ///
-  /// This is for all the issues under the `errorSummaries` key in the xcresult.
   error,
 }
 
-/// Discards the [XCResultIssue] that matches any of the matchers.
 class XCResultIssueDiscarder {
   XCResultIssueDiscarder(
       {this.typeMatcher,
@@ -287,24 +231,12 @@ class XCResultIssueDiscarder {
             messageMatcher != null ||
             locationMatcher != null);
 
-  /// The type of the discarder.
-  ///
-  /// A [XCResultIssue] should be discarded if its `type` equals to this.
   final XCResultIssueType? typeMatcher;
 
-  /// The subType of the discarder.
-  ///
-  /// A [XCResultIssue] should be discarded if its `subType` matches the RegExp.
   final RegExp? subTypeMatcher;
 
-  /// The message of the discarder.
-  ///
-  /// A [XCResultIssue] should be discarded if its `message` matches the RegExp.
   final RegExp? messageMatcher;
 
-  /// The location of the discarder.
-  ///
-  /// A [XCResultIssue] should be discarded if its `location` matches the RegExp.
   final RegExp? locationMatcher;
 }
 

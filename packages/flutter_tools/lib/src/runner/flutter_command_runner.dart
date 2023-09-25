@@ -21,7 +21,6 @@ import '../tester/flutter_tester.dart';
 import '../version.dart';
 import '../web/web_device.dart';
 
-/// Common flutter command line options.
 abstract final class FlutterGlobalOptions {
   static const String kColorFlag = 'color';
   static const String kContinuousIntegrationFlag = 'ci';
@@ -350,7 +349,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
     );
   }
 
-  /// Get the root directories of the repo - the directories containing Dart packages.
   List<String> getRepoRoots() {
     final String root = globals.fs.path.absolute(Cache.flutterRoot!);
     // not bin, and not the root
@@ -359,7 +357,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
     }).toList();
   }
 
-  /// Get all pub packages in the Flutter repo.
   List<Directory> getRepoPackages() {
     return getRepoRoots()
       .expand<String>((String root) => _gatherProjectPaths(root))

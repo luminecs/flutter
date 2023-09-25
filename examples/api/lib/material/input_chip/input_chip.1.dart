@@ -277,8 +277,6 @@ class ChipsInputEditingController<T> extends TextEditingController {
 
   final Widget Function(BuildContext context, T data) chipBuilder;
 
-  /// Called whenever chip is either added or removed
-  /// from the outside the context of the text field.
   void updateValues(List<T> values) {
     if (values.length != this.values.length) {
       final String char = String.fromCharCode(kObjectReplacementChar);

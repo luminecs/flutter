@@ -2,38 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// A collection of key/value pairs which provides efficient retrieval of
-/// value by key.
-///
-/// This class implements a persistent map: extending this map with a new
-/// key/value pair does not modify an existing instance but instead creates a
-/// new instance.
-///
-/// Unlike [Map], this class does not support `null` as a key value and
-/// implements only a functionality needed for a specific use case at the
-/// core of the framework.
-///
-/// Underlying implementation uses a variation of *hash array mapped trie*
-/// data structure with compressed (bitmap indexed) nodes.
-///
-/// See also:
-///
-///  * [Bagwell, Phil. Ideal hash trees.](https://infoscience.epfl.ch/record/64398);
-///  * [Steindorfer, Michael J., and Jurgen J. Vinju. "Optimizing hash-array mapped tries for fast and lean immutable JVM collections."](https://dl.acm.org/doi/abs/10.1145/2814270.2814312);
-///  * [Clojure's `PersistentHashMap`](https://github.com/clojure/clojure/blob/master/src/jvm/clojure/lang/PersistentHashMap.java).
-///
 class PersistentHashMap<K extends Object, V> {
-  /// Creates an empty hash map.
   const PersistentHashMap.empty() : this._(null);
 
   const PersistentHashMap._(this._root);
 
   final _TrieNode? _root;
 
-  /// If this map does not already contain the given [key] to [value]
-  /// mapping then create a new version of the map which contains
-  /// all mappings from the current one plus the given [key] to [value]
-  /// mapping.
   PersistentHashMap<K, V> put(K key, V value) {
     final _TrieNode newRoot =
         (_root ?? _CompressedNode.empty).put(0, key, key.hashCode, value);
@@ -43,8 +18,6 @@ class PersistentHashMap<K extends Object, V> {
     return PersistentHashMap<K, V>._(newRoot);
   }
 
-  /// Returns value associated with the given [key] or `null` if [key]
-  /// is not in the map.
   @pragma('dart2js:as:trust')
   V? operator[](K key) {
     if (_root == null) {
@@ -57,10 +30,6 @@ class PersistentHashMap<K extends Object, V> {
   }
 }
 
-/// Base class for nodes in a hash trie.
-///
-/// This trie is keyed by hash code bits using [hashBitsPerLevel] bits
-/// at each level.
 abstract class _TrieNode {
   static const int hashBitsPerLevel = 5;
   static const int hashBitsPerLevelMask = (1 << hashBitsPerLevel) - 1;
@@ -70,19 +39,11 @@ abstract class _TrieNode {
     return (hash >>> bitIndex) & hashBitsPerLevelMask;
   }
 
-  /// Insert [key] to [value] mapping into the trie using bits from [keyHash]
-  /// starting at [bitIndex].
   _TrieNode put(int bitIndex, Object key, int keyHash, Object? value);
 
-  /// Lookup a value associated with the given [key] using bits from [keyHash]
-  /// starting at [bitIndex].
   Object? get(int bitIndex, Object key, int keyHash);
 }
 
-/// A full (uncompressed) node in the trie.
-///
-/// It contains an array with `1<<_hashBitsPerLevel` elements which
-/// are references to deeper nodes.
 class _FullNode extends _TrieNode {
   _FullNode(this.descendants);
 
@@ -113,20 +74,6 @@ class _FullNode extends _TrieNode {
   }
 }
 
-/// Compressed node in the trie.
-///
-/// Instead of storing the full array of outgoing edges this node uses a
-/// compressed representation:
-///
-///   * [_CompressedNode.occupied] has a bit set for indices which are occupied.
-///   * furthermore, each occupied index can either be a `(key, value)` pair
-///     representing an actual key/value mapping or a `(null, trieNode)` pair
-///     representing a descendant node.
-///
-/// Keys and values are stored together in a single array (instead of two
-/// parallel arrays) for performance reasons: this improves memory access
-/// locality and reduces memory usage (two arrays of length N take slightly
-/// more space than one array of length 2*N).
 class _CompressedNode extends _TrieNode {
   _CompressedNode(this.occupiedIndices, this.keyValuePairs);
   _CompressedNode._empty() : this(0, _emptyArray);
@@ -244,7 +191,6 @@ class _CompressedNode extends _TrieNode {
     return null;
   }
 
-  /// Convert this node into an equivalent [_FullNode].
   _FullNode _inflate(int bitIndex) {
     final List<Object?> nodes = _makeArray(_FullNode.numElements);
     int srcIndex = 0;
@@ -285,9 +231,6 @@ class _CompressedNode extends _TrieNode {
   }
 }
 
-/// Trie node representing a full hash collision.
-///
-/// Stores a list of key/value pairs (where all keys have the same hash code).
 class _HashCollisionNode extends _TrieNode {
   _HashCollisionNode(this.hash, this.keyValuePairs);
 
@@ -348,9 +291,6 @@ class _HashCollisionNode extends _TrieNode {
   }
 }
 
-/// Returns number of bits set in a 32bit integer.
-///
-/// dart2js safe because we work with 32bit integers.
 @pragma('vm:prefer-inline')
 @pragma('dart2js:tryInline')
 int _bitCount(int n) {
@@ -363,10 +303,6 @@ int _bitCount(int n) {
   return n & 0x0000003F;
 }
 
-/// Create a copy of the given array.
-///
-/// Caveat: do not replace with List.of or similar methods. They are
-/// considerably slower.
 @pragma('vm:prefer-inline')
 @pragma('dart2js:tryInline')
 List<Object?> _copy(List<Object?> array) {
@@ -377,21 +313,12 @@ List<Object?> _copy(List<Object?> array) {
   return clone;
 }
 
-/// Create a fixed-length array of the given length filled with `null`.
-///
-/// We are using fixed length arrays because they are smaller and
-/// faster to access on VM. Growable arrays are represented by 2 objects
-/// (growable array instance pointing to a fixed array instance) and
-/// consequently fixed length arrays are faster to allocated, require less
-/// memory and are faster to access (less indirections).
 @pragma('vm:prefer-inline')
 @pragma('dart2js:tryInline')
 List<Object?> _makeArray(int length) {
   return List<Object?>.filled(length, null);
 }
 
-/// This helper method becomes an no-op when compiled with dart2js on
-/// with high level of optimizations enabled.
 @pragma('dart2js:tryInline')
 @pragma('dart2js:as:trust')
 @pragma('vm:prefer-inline')

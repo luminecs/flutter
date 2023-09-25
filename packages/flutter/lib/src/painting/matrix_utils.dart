@@ -7,12 +7,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import 'basic_types.dart';
 
-/// Utility functions for working with matrices.
 abstract final class MatrixUtils {
-  /// Returns the given [transform] matrix as an [Offset], if the matrix is
-  /// nothing but a 2D translation.
-  ///
-  /// Otherwise, returns null.
   static Offset? getAsTranslation(Matrix4 transform) {
     final Float64List values = transform.storage;
     // Values are stored in column-major order.
@@ -35,10 +30,6 @@ abstract final class MatrixUtils {
     return null;
   }
 
-  /// Returns the given [transform] matrix as a [double] describing a uniform
-  /// scale, if the matrix is nothing but a symmetric 2D scale transform.
-  ///
-  /// Otherwise, returns null.
   static double? getAsScale(Matrix4 transform) {
     final Float64List values = transform.storage;
     // Values are stored in column-major order.
@@ -62,8 +53,6 @@ abstract final class MatrixUtils {
     return null;
   }
 
-  /// Returns true if the given matrices are exactly equal, and false
-  /// otherwise. Null values are assumed to be the identity matrix.
   static bool matrixEquals(Matrix4? a, Matrix4? b) {
     if (identical(a, b)) {
       return true;
@@ -93,7 +82,6 @@ abstract final class MatrixUtils {
         && a.storage[15] == b.storage[15];
   }
 
-  /// Whether the given matrix is the identity matrix.
   static bool isIdentity(Matrix4 a) {
     return a.storage[0] == 1.0 // col 1
         && a.storage[1] == 0.0
@@ -113,17 +101,6 @@ abstract final class MatrixUtils {
         && a.storage[15] == 1.0;
   }
 
-  /// Applies the given matrix as a perspective transform to the given point.
-  ///
-  /// This function assumes the given point has a z-coordinate of 0.0. The
-  /// z-coordinate of the result is ignored.
-  ///
-  /// While not common, this method may return (NaN, NaN), iff the given `point`
-  /// results in a "point at infinity" in homogeneous coordinates after applying
-  /// the `transform`. For example, a [RenderObject] may set its transform to
-  /// the zero matrix to indicate its content is currently not visible. Trying
-  /// to convert an `Offset` to its coordinate space always results in
-  /// (NaN, NaN).
   static Offset transformPoint(Matrix4 transform, Offset point) {
     final Float64List storage = transform.storage;
     final double x = point.dx;
@@ -143,12 +120,6 @@ abstract final class MatrixUtils {
     }
   }
 
-  /// Returns a rect that bounds the result of applying the given matrix as a
-  /// perspective transform to the given rect.
-  ///
-  /// This version of the operation is slower than the regular transformRect
-  /// method, but it avoids creating infinite values from large finite values
-  /// if it can.
   static Rect _safeTransformRect(Matrix4 transform, Rect rect) {
     final Float64List storage = transform.storage;
     final bool isAffine = storage[3] == 0.0 &&
@@ -187,12 +158,6 @@ abstract final class MatrixUtils {
     }
   }
 
-  /// Returns a rect that bounds the result of applying the given matrix as a
-  /// perspective transform to the given rect.
-  ///
-  /// This function assumes the given rect is in the plane with z equals 0.0.
-  /// The transformed rect is then projected back into the plane with z equals
-  /// 0.0 before computing its bounding rect.
   static Rect transformRect(Matrix4 transform, Rect rect) {
     final Float64List storage = transform.storage;
     final double x = rect.left;
@@ -422,12 +387,6 @@ abstract final class MatrixUtils {
     return (e > f) ? e : f;
   }
 
-  /// Returns a rect that bounds the result of applying the inverse of the given
-  /// matrix as a perspective transform to the given rect.
-  ///
-  /// This function assumes the given rect is in the plane with z equals 0.0.
-  /// The transformed rect is then projected back into the plane with z equals
-  /// 0.0 before computing its bounding rect.
   static Rect inverseTransformRect(Matrix4 transform, Rect rect) {
     // As exposed by `unrelated_type_equality_checks`, this assert was a no-op.
     // Fixing it introduces a bunch of runtime failures; for more context see:
@@ -440,38 +399,6 @@ abstract final class MatrixUtils {
     return transformRect(transform, rect);
   }
 
-  /// Create a transformation matrix which mimics the effects of tangentially
-  /// wrapping the plane on which this transform is applied around a cylinder
-  /// and then looking at the cylinder from a point outside the cylinder.
-  ///
-  /// The `radius` simulates the radius of the cylinder the plane is being
-  /// wrapped onto. If the transformation is applied to a 0-dimensional dot
-  /// instead of a plane, the dot would translate by ± `radius` pixels
-  /// along the `orientation` [Axis] when rotating from 0 to ±90 degrees.
-  ///
-  /// A positive radius means the object is closest at 0 `angle` and a negative
-  /// radius means the object is closest at π `angle` or 180 degrees.
-  ///
-  /// The `angle` argument is the difference in angle in radians between the
-  /// object and the viewing point. A positive `angle` on a positive `radius`
-  /// moves the object up when `orientation` is vertical and right when
-  /// horizontal.
-  ///
-  /// The transformation is always done such that a 0 `angle` keeps the
-  /// transformed object at exactly the same size as before regardless of
-  /// `radius` and `perspective` when `radius` is positive.
-  ///
-  /// The `perspective` argument is a number between 0 and 1 where 0 means
-  /// looking at the object from infinitely far with an infinitely narrow field
-  /// of view and 1 means looking at the object from infinitely close with an
-  /// infinitely wide field of view. Defaults to a sane but arbitrary 0.001.
-  ///
-  /// The `orientation` is the direction of the rotation axis.
-  ///
-  /// Because the viewing position is a point, it's never possible to see the
-  /// outer side of the cylinder at or past ±π/2 or 90 degrees and it's
-  /// almost always possible to end up seeing the inner side of the cylinder
-  /// or the back side of the transformed plane before π / 2 when perspective > 0.
   static Matrix4 createCylindricalProjectionTransform({
     required double radius,
     required double angle,
@@ -514,7 +441,6 @@ abstract final class MatrixUtils {
     return result;
   }
 
-  /// Returns a matrix that transforms every point to [offset].
   static Matrix4 forceToPoint(Offset offset) {
     return Matrix4.identity()
       ..setRow(0, Vector4(0, 0, 0, offset.dx))
@@ -522,10 +448,6 @@ abstract final class MatrixUtils {
   }
 }
 
-/// Returns a list of strings representing the given transform in a format
-/// useful for [TransformProperty].
-///
-/// If the argument is null, returns a list with the single string "null".
 List<String> debugDescribeTransform(Matrix4? transform) {
   if (transform == null) {
     return const <String>['null'];
@@ -538,9 +460,7 @@ List<String> debugDescribeTransform(Matrix4? transform) {
   ];
 }
 
-/// Property which handles [Matrix4] that represent transforms.
 class TransformProperty extends DiagnosticsProperty<Matrix4> {
-  /// Create a diagnostics property for [Matrix4] objects.
   TransformProperty(
     String super.name,
     super.value, {

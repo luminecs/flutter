@@ -10,13 +10,8 @@ import 'dart:math' as math;
 import 'package:path/path.dart' as path;
 import 'package:webkit_inspection_protocol/webkit_inspection_protocol.dart';
 
-/// The number of samples used to extract metrics, such as noise, means,
-/// max/min values.
-///
-/// Keep this constant in sync with the same constant defined in `dev/benchmarks/macrobenchmarks/lib/src/web/recorder.dart`.
 const int _kMeasuredSampleCount = 10;
 
-/// Options passed to Chrome when launching it.
 class ChromeOptions {
   ChromeOptions({
     this.userDataDirectory,
@@ -28,41 +23,23 @@ class ChromeOptions {
     this.enableWasmGC = false,
   });
 
-  /// If not null passed as `--user-data-dir`.
   final String? userDataDirectory;
 
-  /// If not null launches a Chrome tab at this URL.
   final String? url;
 
-  /// The width of the Chrome window.
-  ///
-  /// This is important for screenshots and benchmarks.
   final int windowWidth;
 
-  /// The height of the Chrome window.
-  ///
-  /// This is important for screenshots and benchmarks.
   final int windowHeight;
 
-  /// Launches code in "headless" mode, which allows running Chrome in
-  /// environments without a display, such as LUCI and Cirrus.
   final bool? headless;
 
-  /// The port Chrome will use for its debugging protocol.
-  ///
-  /// If null, Chrome is launched without debugging. When running in headless
-  /// mode without a debug port, Chrome quits immediately. For most tests it is
-  /// typical to set [headless] to true and set a non-null debug port.
   final int? debugPort;
 
-  /// Whether to enable experimental WasmGC flags
   final bool enableWasmGC;
 }
 
-/// A function called when the Chrome process encounters an error.
 typedef ChromeErrorCallback = void Function(String);
 
-/// Manages a single Chrome process.
 class Chrome {
   Chrome._(this._chromeProcess, this._onError, this._debugConnection) {
     // If the Chrome process quits before it was asked to quit, notify the
@@ -74,11 +51,6 @@ class Chrome {
     });
   }
 
-  /// Launches Chrome with the give [options].
-  ///
-  /// The [onError] callback is called with an error message when the Chrome
-  /// process encounters an error. In particular, [onError] is called when the
-  /// Chrome process exits prematurely, i.e. before [stop] is called.
   static Future<Chrome> launch(ChromeOptions options, { String? workingDirectory, required ChromeErrorCallback onError }) async {
     if (!io.Platform.isWindows) {
       final io.ProcessResult versionResult = io.Process.runSync(_findSystemChromeExecutable(), const <String>['--version']);
@@ -138,12 +110,6 @@ class Chrome {
   StreamSubscription<WipEvent>? _tracingSubscription;
   List<Map<String, dynamic>>? _tracingData;
 
-  /// Starts recording a performance trace.
-  ///
-  /// If there is already a tracing session in progress, throws an error. Call
-  /// [endRecordingPerformance] before starting a new tracing session.
-  ///
-  /// The [label] is for debugging convenience.
   Future<void> beginRecordingPerformance(String label) async {
     if (_tracingCompleter != null) {
       throw StateError(
@@ -192,9 +158,6 @@ class Chrome {
     });
   }
 
-  /// Stops a performance tracing session started by [beginRecordingPerformance].
-  ///
-  /// Returns all the collected tracing data unfiltered.
   Future<List<Map<String, dynamic>>?> endRecordingPerformance() async {
     await _debugConnection!.sendCommand('Tracing.end');
     await _tracingCompleter!.future;
@@ -208,7 +171,6 @@ class Chrome {
     await _debugConnection?.page.reload(ignoreCache: ignoreCache);
   }
 
-  /// Stops the Chrome process.
   void stop() {
     _isStopped = true;
     _tracingSubscription?.cancel();
@@ -253,7 +215,6 @@ String _findSystemChromeExecutable() {
   }
 }
 
-/// Waits for Chrome to print DevTools URI and connects to it.
 Future<WipConnection> _connectToChromeDebugPort(io.Process chromeProcess, int port) async {
   final Uri devtoolsUri = await _getRemoteDebuggerUrl(Uri.parse('http://localhost:$port'));
   print('Connecting to DevTools: $devtoolsUri');
@@ -267,7 +228,6 @@ Future<WipConnection> _connectToChromeDebugPort(io.Process chromeProcess, int po
   return debugConnection;
 }
 
-/// Gets the Chrome debugger URL for the web page being benchmarked.
 Future<Uri> _getRemoteDebuggerUrl(Uri base) async {
   final io.HttpClient client = io.HttpClient();
   final io.HttpClientRequest request = await client.getUrl(base.resolve('/json/list'));
@@ -279,7 +239,6 @@ Future<Uri> _getRemoteDebuggerUrl(Uri base) async {
   return base.resolve((jsonObject.first as Map<String, dynamic>)['webSocketDebuggerUrl'] as String);
 }
 
-/// Summarizes a Blink trace down to a few interesting values.
 class BlinkTraceSummary {
   BlinkTraceSummary._({
     required this.averageBeginFrameTime,
@@ -360,24 +319,10 @@ class BlinkTraceSummary {
     }
   }
 
-  /// The average duration of "WebViewImpl::beginFrame" events.
-  ///
-  /// This event contains all of scripting time of an animation frame, plus an
-  /// unknown small amount of work browser does before and after scripting.
   final Duration averageBeginFrameTime;
 
-  /// The average duration of "WebViewImpl::updateAllLifecyclePhases" events.
-  ///
-  /// This event contains style, layout, painting, and compositor computations,
-  /// which are not included in the scripting time. This event does not
-  /// include GPU time, which happens on a separate thread.
   final Duration averageUpdateLifecyclePhasesTime;
 
-  /// The average sum of [averageBeginFrameTime] and
-  /// [averageUpdateLifecyclePhasesTime].
-  ///
-  /// This value contains the vast majority of work the UI thread performs in
-  /// any given animation frame.
   final Duration averageTotalUIFrameTime;
 
   @override
@@ -386,23 +331,16 @@ class BlinkTraceSummary {
     'averageUpdateLifecyclePhasesTime: ${averageUpdateLifecyclePhasesTime.inMicroseconds / 1000}ms)';
 }
 
-/// Contains events pertaining to a single frame in the Blink trace data.
 class BlinkFrame {
-  /// Corresponds to 'WebViewImpl::beginFrame' event.
   BlinkTraceEvent? beginFrame;
 
-  /// Corresponds to 'WebViewImpl::updateAllLifecyclePhases' event.
   BlinkTraceEvent? updateAllLifecyclePhases;
 
-  /// Corresponds to 'measured_frame' begin event.
   BlinkTraceEvent? beginMeasuredFrame;
 
-  /// Corresponds to 'measured_frame' end event.
   BlinkTraceEvent? endMeasuredFrame;
 }
 
-/// Takes a list of events that have non-null [BlinkTraceEvent.tdur] computes
-/// their average as a [Duration] value.
 Duration _computeAverageDuration(List<BlinkTraceEvent> events) {
   // Compute the sum of "tdur" fields of the last _kMeasuredSampleCount events.
   final double sum = events
@@ -417,10 +355,6 @@ Duration _computeAverageDuration(List<BlinkTraceEvent> events) {
   return Duration(microseconds: sum ~/ sampleCount);
 }
 
-/// An event collected by the Blink tracer (in Chrome accessible using chrome://tracing).
-///
-/// See also:
-///  * https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview
 class BlinkTraceEvent {
   BlinkTraceEvent._({
     required this.args,
@@ -434,30 +368,6 @@ class BlinkTraceEvent {
     this.tdur,
   });
 
-  /// Parses an event from its JSON representation.
-  ///
-  /// Sample event encoded as JSON (the data is bogus, this just shows the format):
-  ///
-  /// ```
-  /// {
-  ///   "name": "myName",
-  ///   "cat": "category,list",
-  ///   "ph": "B",
-  ///   "ts": 12345,
-  ///   "pid": 123,
-  ///   "tid": 456,
-  ///   "args": {
-  ///     "someArg": 1,
-  ///     "anotherArg": {
-  ///       "value": "my value"
-  ///     }
-  ///   }
-  /// }
-  /// ```
-  ///
-  /// For detailed documentation of the format see:
-  ///
-  /// https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview
   static BlinkTraceEvent fromJson(Map<String, dynamic> json) {
     return BlinkTraceEvent._(
       args: json['args'] as Map<String, dynamic>,
@@ -472,44 +382,24 @@ class BlinkTraceEvent {
     );
   }
 
-  /// Event-specific data.
   final Map<String, dynamic> args;
 
-  /// Event category.
   final String cat;
 
-  /// Event name.
   final String name;
 
-  /// Event "phase".
   final String ph;
 
-  /// Process ID of the process that emitted the event.
   final int? pid;
 
-  /// Thread ID of the thread that emitted the event.
   final int? tid;
 
-  /// Timestamp in microseconds using tracer clock.
   final int? ts;
 
-  /// Timestamp in microseconds using thread clock.
   final int? tts;
 
-  /// Event duration in microseconds.
   final int? tdur;
 
-  /// A "begin frame" event contains all of the scripting time of an animation
-  /// frame (JavaScript, WebAssembly), plus a negligible amount of internal
-  /// browser overhead.
-  ///
-  /// This event does not include non-UI thread scripting, such as web workers,
-  /// service workers, and CSS Paint paintlets.
-  ///
-  /// WebViewImpl::beginFrame was used in earlier versions of Chrome, kept
-  /// for compatibility.
-  ///
-  /// This event is a duration event that has its `tdur` populated.
   bool get isBeginFrame {
     return ph == 'X' && (
       name == 'WebViewImpl::beginFrame' ||
@@ -518,16 +408,6 @@ class BlinkTraceEvent {
     );
   }
 
-  /// An "update all lifecycle phases" event contains UI thread computations
-  /// related to an animation frame that's outside the scripting phase.
-  ///
-  /// This event includes style recalculation, layer tree update, layout,
-  /// painting, and parts of compositing work.
-  ///
-  /// WebViewImpl::updateAllLifecyclePhases was used in earlier versions of
-  /// Chrome, kept for compatibility.
-  ///
-  /// This event is a duration event that has its `tdur` populated.
   bool get isUpdateAllLifecyclePhases {
     return ph == 'X' && (
       name == 'WebViewImpl::updateAllLifecyclePhases' ||
@@ -535,20 +415,8 @@ class BlinkTraceEvent {
     );
   }
 
-  /// Whether this is the beginning of a "measured_frame" event.
-  ///
-  /// This event is a custom event emitted by our benchmark test harness.
-  ///
-  /// See also:
-  ///  * `recorder.dart`, which emits this event.
   bool get isBeginMeasuredFrame => ph == 'b' && name == 'measured_frame';
 
-  /// Whether this is the end of a "measured_frame" event.
-  ///
-  /// This event is a custom event emitted by our benchmark test harness.
-  ///
-  /// See also:
-  ///  * `recorder.dart`, which emits this event.
   bool get isEndMeasuredFrame => ph == 'e' && name == 'measured_frame';
 
   @override
@@ -564,12 +432,6 @@ class BlinkTraceEvent {
     'tdur: $tdur)';
 }
 
-/// Read an integer out of [json] stored under [key].
-///
-/// Since JSON does not distinguish between `int` and `double`, extra
-/// validation and conversion is needed.
-///
-/// Returns null if the value is null.
 int? _readInt(Map<String, dynamic> json, String key) {
   final num? jsonValue = json[key] as num?;
 
@@ -580,16 +442,6 @@ int? _readInt(Map<String, dynamic> json, String key) {
   return jsonValue.toInt();
 }
 
-/// Used by [Chrome.launch] to detect a glibc bug and retry launching the
-/// browser.
-///
-/// Once every few thousands of launches we hit this glibc bug:
-///
-/// https://sourceware.org/bugzilla/show_bug.cgi?id=19329.
-///
-/// When this happens Chrome spits out something like the following then exits with code 127:
-///
-///     Inconsistency detected by ld.so: ../elf/dl-tls.c: 493: _dl_allocate_tls_init: Assertion `listp->slotinfo[cnt].gen <= GL(dl_tls_generation)' failed!
 const String _kGlibcError = 'Inconsistency detected by ld.so';
 
 Future<io.Process> _spawnChromiumProcess(String executable, List<String> args, { String? workingDirectory }) async {

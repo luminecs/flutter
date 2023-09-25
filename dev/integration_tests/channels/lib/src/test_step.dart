@@ -15,15 +15,6 @@ typedef TestStep = Future<TestStepResult> Function();
 
 const String nothing = '-';
 
-/// Result of a test step checking a nested communication handshake
-/// between the Flutter app and the platform:
-///
-/// - The Flutter app sends a message to the platform.
-/// - The platform, on receipt, echos the message back to Flutter in a separate message.
-/// - The Flutter app records the incoming message echo and replies.
-/// - The platform, on receipt of reply, echos the reply back to Flutter in a separate message.
-/// - The Flutter app records the incoming reply echo.
-/// - The platform finally replies to the original message with another echo.
 class TestStepResult {
   const TestStepResult(
     this.name,

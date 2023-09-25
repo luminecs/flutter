@@ -8,7 +8,6 @@
 
 import 'stock_strings.dart';
 
-/// The translations for Spanish Castilian (`es`).
 class StockStringsEs extends StockStrings {
   StockStringsEs([super.locale = 'es']);
 

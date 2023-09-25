@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigatorState.restorablePush].
 
 void main() => runApp(const RestorablePushExampleApp());
 

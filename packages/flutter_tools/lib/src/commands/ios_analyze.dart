@@ -9,24 +9,12 @@ import '../convert.dart';
 import '../ios/xcodeproj.dart';
 import '../project.dart';
 
-/// The type of analysis to perform.
 enum IOSAnalyzeOption {
-  /// Prints out available build variants of the iOS Xcode sub-project.
-  ///
-  /// An example output:
-  ///
-  /// {"configurations":["Debug","Release","Profile"],"targets":["Runner","RunnerTests"]}
   listBuildOptions,
 
-  /// Outputs universal link settings of the iOS Xcode sub-project into a file.
-  ///
-  /// The file path will be printed after the command is run successfully.
   outputUniversalLinkSettings,
 }
 
-/// Analyze the iOS Xcode sub-project of a Flutter project.
-///
-/// The [userPath] must be point to a flutter project.
 class IOSAnalyze {
   IOSAnalyze({
     required this.project,

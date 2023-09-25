@@ -18,17 +18,10 @@ import 'page_scaffold.dart';
 import 'route.dart';
 import 'theme.dart';
 
-/// Standard iOS navigation bar height without the status bar.
-///
-/// This height is constant and independent of accessibility as it is in iOS.
 const double _kNavBarPersistentHeight = kMinInteractiveDimensionCupertino;
 
-/// Size increase from expanding the navigation bar into an iOS-11-style large title
-/// form in a [CustomScrollView].
 const double _kNavBarLargeTitleHeightExtension = 52.0;
 
-/// Number of logical pixels scrolled down before the title text is transferred
-/// from the normal navigation bar to a big title below the navigation bar.
 const double _kNavBarShowLargeTitleThreshold = 10.0;
 
 const double _kNavBarEdgePadding = 16.0;
@@ -37,7 +30,6 @@ const double _kNavBarBottomPadding = 8.0;
 
 const double _kNavBarBackButtonTapWidth = 50.0;
 
-/// Title text transfer fade.
 const Duration _kNavBarTitleFadeDuration = Duration(milliseconds: 150);
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
@@ -124,11 +116,6 @@ class _FixedSizeSlidingTransition extends AnimatedWidget {
   }
 }
 
-/// Returns `child` wrapped with background and a bottom border if background color
-/// is opaque. Otherwise, also blur with [BackdropFilter].
-///
-/// When `updateSystemUiOverlay` is true, the nav bar will update the OS
-/// status bar's color theme based on the background color of the nav bar.
 Widget _wrapWithBackground({
   Border? border,
   required Color backgroundColor,
@@ -194,62 +181,7 @@ bool _isTransitionable(BuildContext context) {
   return route is PageRoute && !route.fullscreenDialog;
 }
 
-/// An iOS-styled navigation bar.
-///
-/// The navigation bar is a toolbar that minimally consists of a widget, normally
-/// a page title, in the [middle] of the toolbar.
-///
-/// It also supports a [leading] and [trailing] widget before and after the
-/// [middle] widget while keeping the [middle] widget centered.
-///
-/// The [leading] widget will automatically be a back chevron icon button (or a
-/// close button in case of a fullscreen dialog) to pop the current route if none
-/// is provided and [automaticallyImplyLeading] is true (true by default).
-///
-/// The [middle] widget will automatically be a title text from the current
-/// [CupertinoPageRoute] if none is provided and [automaticallyImplyMiddle] is
-/// true (true by default).
-///
-/// It should be placed at top of the screen and automatically accounts for
-/// the OS's status bar.
-///
-/// If the given [backgroundColor]'s opacity is not 1.0 (which is the case by
-/// default), it will produce a blurring effect to the content behind it.
-///
-/// When [transitionBetweenRoutes] is true, this navigation bar will transition
-/// on top of the routes instead of inside them if the route being transitioned
-/// to also has a [CupertinoNavigationBar] or a [CupertinoSliverNavigationBar]
-/// with [transitionBetweenRoutes] set to true. If [transitionBetweenRoutes] is
-/// true, none of the [Widget] parameters can contain a key in its subtree since
-/// that widget will exist in multiple places in the tree simultaneously.
-///
-/// By default, only one [CupertinoNavigationBar] or [CupertinoSliverNavigationBar]
-/// should be present in each [PageRoute] to support the default transitions.
-/// Use [transitionBetweenRoutes] or [heroTag] to customize the transition
-/// behavior for multiple navigation bars per route.
-///
-/// When used in a [CupertinoPageScaffold], [CupertinoPageScaffold.navigationBar]
-/// disables text scaling to match the native iOS behavior. To override
-/// this behavior, wrap each of the `navigationBar`'s components inside a
-/// [MediaQuery] with the desired [TextScaler].
-///
-/// {@tool dartpad}
-/// This example shows a [CupertinoNavigationBar] placed in a [CupertinoPageScaffold].
-/// Since [backgroundColor]'s opacity is not 1.0, there is a blur effect and
-/// content slides underneath.
-///
-/// ** See code in examples/api/lib/cupertino/nav_bar/cupertino_navigation_bar.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoPageScaffold], a page layout helper typically hosting the
-///    [CupertinoNavigationBar].
-///  * [CupertinoSliverNavigationBar] for a navigation bar to be placed in a
-///    scrolling list and that supports iOS-11-style large titles.
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/bars/navigation-bars/>
 class CupertinoNavigationBar extends StatefulWidget implements ObstructingPreferredSizeWidget {
-  /// Creates a navigation bar in the iOS style.
   const CupertinoNavigationBar({
     super.key,
     this.leading,
@@ -270,149 +202,33 @@ class CupertinoNavigationBar extends StatefulWidget implements ObstructingPrefer
          'transition due to transitionBetweenRoutes = false.',
        );
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.leading}
-  /// Widget to place at the start of the navigation bar. Normally a back button
-  /// for a normal page or a cancel button for full page dialogs.
-  ///
-  /// If null and [automaticallyImplyLeading] is true, an appropriate button
-  /// will be automatically created.
-  /// {@endtemplate}
   final Widget? leading;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.automaticallyImplyLeading}
-  /// Controls whether we should try to imply the leading widget if null.
-  ///
-  /// If true and [leading] is null, automatically try to deduce what the [leading]
-  /// widget should be. If [leading] widget is not null, this parameter has no effect.
-  ///
-  /// Specifically this navigation bar will:
-  ///
-  /// 1. Show a 'Close' button if the current route is a `fullscreenDialog`.
-  /// 2. Show a back chevron with [previousPageTitle] if [previousPageTitle] is
-  ///    not null.
-  /// 3. Show a back chevron with the previous route's `title` if the current
-  ///    route is a [CupertinoPageRoute] and the previous route is also a
-  ///    [CupertinoPageRoute].
-  /// {@endtemplate}
   final bool automaticallyImplyLeading;
 
-  /// Controls whether we should try to imply the middle widget if null.
-  ///
-  /// If true and [middle] is null, automatically fill in a [Text] widget with
-  /// the current route's `title` if the route is a [CupertinoPageRoute].
-  /// If [middle] widget is not null, this parameter has no effect.
   final bool automaticallyImplyMiddle;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.previousPageTitle}
-  /// Manually specify the previous route's title when automatically implying
-  /// the leading back button.
-  ///
-  /// Overrides the text shown with the back chevron instead of automatically
-  /// showing the previous [CupertinoPageRoute]'s `title` when
-  /// [automaticallyImplyLeading] is true.
-  ///
-  /// Has no effect when [leading] is not null or if [automaticallyImplyLeading]
-  /// is false.
-  /// {@endtemplate}
   final String? previousPageTitle;
 
-  /// Widget to place in the middle of the navigation bar. Normally a title or
-  /// a segmented control.
-  ///
-  /// If null and [automaticallyImplyMiddle] is true, an appropriate [Text]
-  /// title will be created if the current route is a [CupertinoPageRoute] and
-  /// has a `title`.
   final Widget? middle;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.trailing}
-  /// Widget to place at the end of the navigation bar. Normally additional actions
-  /// taken on the page such as a search or edit function.
-  /// {@endtemplate}
   final Widget? trailing;
 
   // TODO(xster): https://github.com/flutter/flutter/issues/10469 implement
   // support for double row navigation bars.
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.backgroundColor}
-  /// The background color of the navigation bar. If it contains transparency, the
-  /// tab bar will automatically produce a blurring effect to the content
-  /// behind it.
-  ///
-  /// Defaults to [CupertinoTheme]'s `barBackgroundColor` if null.
-  /// {@endtemplate}
   final Color? backgroundColor;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.brightness}
-  /// The brightness of the specified [backgroundColor].
-  ///
-  /// Setting this value changes the style of the system status bar. Typically
-  /// used to increase the contrast ratio of the system status bar over
-  /// [backgroundColor].
-  ///
-  /// If set to null, the value of the property will be inferred from the relative
-  /// luminance of [backgroundColor].
-  /// {@endtemplate}
   final Brightness? brightness;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.padding}
-  /// Padding for the contents of the navigation bar.
-  ///
-  /// If null, the navigation bar will adopt the following defaults:
-  ///
-  ///  * Vertically, contents will be sized to the same height as the navigation
-  ///    bar itself minus the status bar.
-  ///  * Horizontally, padding will be 16 pixels according to iOS specifications
-  ///    unless the leading widget is an automatically inserted back button, in
-  ///    which case the padding will be 0.
-  ///
-  /// Vertical padding won't change the height of the nav bar.
-  /// {@endtemplate}
   final EdgeInsetsDirectional? padding;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.border}
-  /// The border of the navigation bar. By default renders a single pixel bottom border side.
-  ///
-  /// If a border is null, the navigation bar will not display a border.
-  /// {@endtemplate}
   final Border? border;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.transitionBetweenRoutes}
-  /// Whether to transition between navigation bars.
-  ///
-  /// When [transitionBetweenRoutes] is true, this navigation bar will transition
-  /// on top of the routes instead of inside it if the route being transitioned
-  /// to also has a [CupertinoNavigationBar] or a [CupertinoSliverNavigationBar]
-  /// with [transitionBetweenRoutes] set to true.
-  ///
-  /// This transition will also occur on edge back swipe gestures like on iOS
-  /// but only if the previous page below has `maintainState` set to true on the
-  /// [PageRoute].
-  ///
-  /// When set to true, only one navigation bar can be present per route unless
-  /// [heroTag] is also set.
-  ///
-  /// This value defaults to true.
-  /// {@endtemplate}
   final bool transitionBetweenRoutes;
 
-  /// {@template flutter.cupertino.CupertinoNavigationBar.heroTag}
-  /// Tag for the navigation bar's Hero widget if [transitionBetweenRoutes] is true.
-  ///
-  /// Defaults to a common tag between all [CupertinoNavigationBar] and
-  /// [CupertinoSliverNavigationBar] instances of the same [Navigator]. With the
-  /// default tag, all navigation bars of the same navigator can transition
-  /// between each other as long as there's only one navigation bar per route.
-  ///
-  /// This [heroTag] can be overridden to manually handle having multiple
-  /// navigation bars per route or to transition between multiple
-  /// [Navigator]s.
-  ///
-  /// To disable Hero transitions for this navigation bar, set
-  /// [transitionBetweenRoutes] to false.
-  /// {@endtemplate}
   final Object heroTag;
 
-  /// True if the navigation bar's background color has no transparency.
   @override
   bool shouldFullyObstruct(BuildContext context) {
     final Color backgroundColor = CupertinoDynamicColor.maybeResolve(this.backgroundColor, context)
@@ -506,75 +322,7 @@ class _CupertinoNavigationBarState extends State<CupertinoNavigationBar> {
   }
 }
 
-/// An iOS-styled navigation bar with iOS-11-style large titles using slivers.
-///
-/// The [CupertinoSliverNavigationBar] must be placed in a sliver group such
-/// as the [CustomScrollView].
-///
-/// This navigation bar consists of two sections, a pinned static section on top
-/// and a sliding section containing iOS-11-style large title below it.
-///
-/// It should be placed at top of the screen and automatically accounts for
-/// the iOS status bar.
-///
-/// Minimally, a [largeTitle] widget will appear in the middle of the app bar
-/// when the sliver is collapsed and transfer to the area below in larger font
-/// when the sliver is expanded.
-///
-/// For advanced uses, an optional [middle] widget can be supplied to show a
-/// different widget in the middle of the navigation bar when the sliver is collapsed.
-///
-/// Like [CupertinoNavigationBar], it also supports a [leading] and [trailing]
-/// widget on the static section on top that remains while scrolling.
-///
-/// The [leading] widget will automatically be a back chevron icon button (or a
-/// close button in case of a fullscreen dialog) to pop the current route if none
-/// is provided and [automaticallyImplyLeading] is true (true by default).
-///
-/// The [largeTitle] widget will automatically be a title text from the current
-/// [CupertinoPageRoute] if none is provided and [automaticallyImplyTitle] is
-/// true (true by default).
-///
-/// When [transitionBetweenRoutes] is true, this navigation bar will transition
-/// on top of the routes instead of inside them if the route being transitioned
-/// to also has a [CupertinoNavigationBar] or a [CupertinoSliverNavigationBar]
-/// with [transitionBetweenRoutes] set to true. If [transitionBetweenRoutes] is
-/// true, none of the [Widget] parameters can contain any [GlobalKey]s in their
-/// subtrees since those widgets will exist in multiple places in the tree
-/// simultaneously.
-///
-/// By default, only one [CupertinoNavigationBar] or [CupertinoSliverNavigationBar]
-/// should be present in each [PageRoute] to support the default transitions.
-/// Use [transitionBetweenRoutes] or [heroTag] to customize the transition
-/// behavior for multiple navigation bars per route.
-///
-/// [CupertinoSliverNavigationBar] by default disables text scaling to match the
-/// native iOS behavior. To override this behavior, wrap each of the
-/// [CupertinoSliverNavigationBar]'s components inside a [MediaQuery] with the
-/// desired [TextScaler].
-///
-/// The [stretch] parameter determines whether the nav bar should stretch to
-/// fill the over-scroll area. The nav bar can still expand and contract as the
-/// user scrolls, but it will also stretch when the user over-scrolls if the
-/// [stretch] value is `true`. Defaults to `false`.
-///
-/// {@tool dartpad}
-/// This example shows [CupertinoSliverNavigationBar] in action inside a [CustomScrollView].
-///
-/// ** See code in examples/api/lib/cupertino/nav_bar/cupertino_sliver_nav_bar.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoNavigationBar], an iOS navigation bar for use on non-scrolling
-///    pages.
-///  * [CustomScrollView], a ScrollView that creates custom scroll effects using slivers.
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/bars/navigation-bars/>
 class CupertinoSliverNavigationBar extends StatefulWidget {
-  /// Creates a navigation bar for scrolling lists.
-  ///
-  /// If [automaticallyImplyTitle] is false, then the [largeTitle] argument is
-  /// required.
   const CupertinoSliverNavigationBar({
     super.key,
     this.largeTitle,
@@ -599,103 +347,36 @@ class CupertinoSliverNavigationBar extends StatefulWidget {
          'true.',
        );
 
-  /// The navigation bar's title.
-  ///
-  /// This text will appear in the top static navigation bar when collapsed and
-  /// below the navigation bar, in a larger font, when expanded.
-  ///
-  /// A suitable [DefaultTextStyle] is provided around this widget as it is
-  /// moved around, to change its font size.
-  ///
-  /// If [middle] is null, then the [largeTitle] widget will be inserted into
-  /// the tree in two places when transitioning from the collapsed state to the
-  /// expanded state. It is therefore imperative that this subtree not contain
-  /// any [GlobalKey]s, and that it not rely on maintaining state (for example,
-  /// animations will not survive the transition from one location to the other,
-  /// and may in fact be visible in two places at once during the transition).
-  ///
-  /// If null and [automaticallyImplyTitle] is true, an appropriate [Text]
-  /// title will be created if the current route is a [CupertinoPageRoute] and
-  /// has a `title`.
-  ///
-  /// This parameter must either be non-null or the route must have a title
-  /// ([CupertinoPageRoute.title]) and [automaticallyImplyTitle] must be true.
   final Widget? largeTitle;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.leading}
-  ///
-  /// This widget is visible in both collapsed and expanded states.
   final Widget? leading;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.automaticallyImplyLeading}
   final bool automaticallyImplyLeading;
 
-  /// Controls whether we should try to imply the [largeTitle] widget if null.
-  ///
-  /// If true and [largeTitle] is null, automatically fill in a [Text] widget
-  /// with the current route's `title` if the route is a [CupertinoPageRoute].
-  /// If [largeTitle] widget is not null, this parameter has no effect.
   final bool automaticallyImplyTitle;
 
-  /// Controls whether [middle] widget should always be visible (even in
-  /// expanded state).
-  ///
-  /// If true (default) and [middle] is not null, [middle] widget is always
-  /// visible. If false, [middle] widget is visible only in collapsed state if
-  /// it is provided.
-  ///
-  /// This should be set to false if you only want to show [largeTitle] in
-  /// expanded state and [middle] in collapsed state.
   final bool alwaysShowMiddle;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.previousPageTitle}
   final String? previousPageTitle;
 
-  /// A widget to place in the middle of the static navigation bar instead of
-  /// the [largeTitle].
-  ///
-  /// This widget is visible in both collapsed and expanded states if
-  /// [alwaysShowMiddle] is true, otherwise just in collapsed state. The text
-  /// supplied in [largeTitle] will no longer appear in collapsed state if a
-  /// [middle] widget is provided.
   final Widget? middle;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.trailing}
-  ///
-  /// This widget is visible in both collapsed and expanded states.
   final Widget? trailing;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.backgroundColor}
   final Color? backgroundColor;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.brightness}
   final Brightness? brightness;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.padding}
   final EdgeInsetsDirectional? padding;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.border}
   final Border? border;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.transitionBetweenRoutes}
   final bool transitionBetweenRoutes;
 
-  /// {@macro flutter.cupertino.CupertinoNavigationBar.heroTag}
   final Object heroTag;
 
-  /// True if the navigation bar's background color has no transparency.
   bool get opaque => backgroundColor?.alpha == 0xFF;
 
-  /// Whether the nav bar should stretch to fill the over-scroll area.
-  ///
-  /// The nav bar can still expand and contract as the user scrolls, but it will
-  /// also stretch when the user over-scrolls if the [stretch] value is `true`.
-  ///
-  /// When set to `true`, the nav bar will prevent subsequent slivers from
-  /// accessing overscrolls. This may be undesirable for using overscroll-based
-  /// widgets like the [CupertinoSliverRefreshControl].
-  ///
-  /// Defaults to `false`.
   final bool stretch;
 
   @override
@@ -905,10 +586,6 @@ class _LargeTitleNavigationBarSliverDelegate
   }
 }
 
-/// The large title of the navigation bar.
-///
-/// Magnifies on over-scroll when [CupertinoSliverNavigationBar.stretch]
-/// parameter is true.
 class _LargeTitle extends SingleChildRenderObjectWidget {
   const _LargeTitle({ super.child });
 
@@ -1022,11 +699,6 @@ class _RenderLargeTitle extends RenderShiftedBox {
   }
 }
 
-/// The top part of the navigation bar that's never scrolled away.
-///
-/// Consists of the entire navigation bar without background and border when used
-/// without large titles. With large titles, it's the top static half that
-/// doesn't scroll.
 class _PersistentNavigationBar extends StatelessWidget {
   const _PersistentNavigationBar({
     required this.components,
@@ -1037,8 +709,6 @@ class _PersistentNavigationBar extends StatelessWidget {
   final _NavigationBarStaticComponents components;
 
   final EdgeInsetsDirectional? padding;
-  /// Whether the middle widget has a visible animated opacity. A null value
-  /// means the middle opacity will not be animated.
   final bool? middleVisible;
 
   @override
@@ -1263,8 +933,6 @@ class _NavigationBarStaticComponents {
     return KeyedSubtree(key: backChevronKey, child: const _BackChevron());
   }
 
-  /// This widget is not decorated with a font since the font style could
-  /// animate during transitions.
   final KeyedSubtree? backLabel;
   static KeyedSubtree? createBackLabel({
     required GlobalKey backLabelKey,
@@ -1292,8 +960,6 @@ class _NavigationBarStaticComponents {
     );
   }
 
-  /// This widget is not decorated with a font since the font style could
-  /// animate during transitions.
   final KeyedSubtree? middle;
   static KeyedSubtree? createMiddle({
     required GlobalKey middleKey,
@@ -1350,8 +1016,6 @@ class _NavigationBarStaticComponents {
     );
   }
 
-  /// This widget is not decorated with a font since the font style could
-  /// animate during transitions.
   final KeyedSubtree? largeTitle;
   static KeyedSubtree? createLargeTitle({
     required GlobalKey largeTitleKey,
@@ -1381,22 +1045,7 @@ class _NavigationBarStaticComponents {
   }
 }
 
-/// A nav bar back button typically used in [CupertinoNavigationBar].
-///
-/// This is automatically inserted into [CupertinoNavigationBar] and
-/// [CupertinoSliverNavigationBar]'s `leading` slot when
-/// `automaticallyImplyLeading` is true.
-///
-/// When manually inserted, the [CupertinoNavigationBarBackButton] should only
-/// be used in routes that can be popped unless a custom [onPressed] is
-/// provided.
-///
-/// Shows a back chevron and the previous route's title when available from
-/// the previous [CupertinoPageRoute.title]. If [previousPageTitle] is specified,
-/// it will be shown instead.
 class CupertinoNavigationBarBackButton extends StatelessWidget {
-  /// Construct a [CupertinoNavigationBarBackButton] that can be used to pop
-  /// the current route.
   const CupertinoNavigationBarBackButton({
     super.key,
     this.color,
@@ -1414,26 +1063,10 @@ class CupertinoNavigationBarBackButton extends StatelessWidget {
       color = null,
       onPressed = null;
 
-  /// The [Color] of the back button.
-  ///
-  /// Can be used to override the color of the back button chevron and label.
-  ///
-  /// Defaults to [CupertinoTheme]'s `primaryColor` if null.
   final Color? color;
 
-  /// An override for showing the previous route's title. If null, it will be
-  /// automatically derived from [CupertinoPageRoute.title] if the current and
-  /// previous routes are both [CupertinoPageRoute]s.
   final String? previousPageTitle;
 
-  /// An override callback to perform instead of the default behavior which is
-  /// to pop the [Navigator].
-  ///
-  /// It can, for instance, be used to pop the platform's navigation stack
-  /// via [SystemNavigator] instead of Flutter's [Navigator] in add-to-app
-  /// situations.
-  ///
-  /// Defaults to null.
   final VoidCallback? onPressed;
 
   final Widget? _backChevron;
@@ -1536,8 +1169,6 @@ class _BackChevron extends StatelessWidget {
   }
 }
 
-/// A widget that shows next to the back chevron when `automaticallyImplyLeading`
-/// is true.
 class _BackLabel extends StatelessWidget {
   const _BackLabel({
     required this.specifiedPreviousTitle,
@@ -1590,14 +1221,6 @@ class _BackLabel extends StatelessWidget {
   }
 }
 
-/// This should always be the first child of Hero widgets.
-///
-/// This class helps each Hero transition obtain the start or end navigation
-/// bar's box size and the inner components of the navigation bar that will
-/// move around.
-///
-/// It should be wrapped around the biggest [RenderBox] of the static
-/// navigation bar in each route.
 class _TransitionableNavigationBar extends StatelessWidget {
   _TransitionableNavigationBar({
     required this.componentsKeys,
@@ -1663,21 +1286,6 @@ class _TransitionableNavigationBar extends StatelessWidget {
   }
 }
 
-/// This class represents the widget that will be in the Hero flight instead of
-/// the 2 static navigation bars by taking inner components from both.
-///
-/// The `topNavBar` parameter is the nav bar that was on top regardless of
-/// push/pop direction.
-///
-/// Similarly, the `bottomNavBar` parameter is the nav bar that was at the
-/// bottom regardless of the push/pop direction.
-///
-/// If [MediaQuery.padding] is still present in this widget's [BuildContext],
-/// that padding will become part of the transitional navigation bar as well.
-///
-/// [MediaQuery.padding] should be consistent between the from/to routes and
-/// the Hero overlay. Inconsistent [MediaQuery.padding] will produce undetermined
-/// results.
 class _NavigationBarTransition extends StatelessWidget {
   _NavigationBarTransition({
     required this.animation,
@@ -1765,27 +1373,6 @@ class _NavigationBarTransition extends StatelessWidget {
   }
 }
 
-/// This class helps create widgets that are in transition based on static
-/// components from the bottom and top navigation bars.
-///
-/// It animates these transitional components both in terms of position and
-/// their appearance.
-///
-/// Instead of running the transitional components through their normal static
-/// navigation bar layout logic, this creates transitional widgets that are based
-/// on these widgets' existing render objects' layout and position.
-///
-/// This is possible because this widget is only used during Hero transitions
-/// where both the from and to routes are already built and laid out.
-///
-/// The components' existing layout constraints and positions are then
-/// replicated using [Positioned] or [PositionedTransition] wrappers.
-///
-/// This class should never return [KeyedSubtree]s created by
-/// _NavigationBarStaticComponents directly. Since widgets from
-/// _NavigationBarStaticComponents are still present in the widget tree during the
-/// hero transitions, it would cause global key duplications. Instead, return
-/// only the [KeyedSubtree]s' child.
 @immutable
 class _NavigationBarComponentsTransition {
   _NavigationBarComponentsTransition({
@@ -2384,8 +1971,6 @@ class _NavigationBarComponentsTransition {
   }
 }
 
-/// Navigation bars' hero rect tween that will move between the static bars
-/// but keep a constant size that's the bigger of both navigation bars.
 RectTween _linearTranslateWithLargestRectSizeTween(Rect? begin, Rect? end) {
   final Size largestSize = Size(
     math.max(begin!.size.width, end!.size.width),
@@ -2423,7 +2008,6 @@ Widget _navBarHeroLaunchPadBuilder(
   );
 }
 
-/// Navigation bars' hero flight shuttle builder.
 Widget _navBarHeroFlightShuttleBuilder(
   BuildContext flightContext,
   Animation<double> animation,

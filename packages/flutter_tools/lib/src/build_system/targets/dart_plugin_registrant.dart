@@ -12,15 +12,9 @@ import '../../flutter_plugins.dart';
 import '../../project.dart';
 import '../build_system.dart';
 
-/// Generates a new `./dart_tool/flutter_build/dart_plugin_registrant.dart`
-/// based on the current dependency map in `pubspec.lock`.
 class DartPluginRegistrantTarget extends Target {
-  /// Construct a [DartPluginRegistrantTarget].
   const DartPluginRegistrantTarget() : _project = null;
 
-  /// Construct a [DartPluginRegistrantTarget].
-  ///
-  /// If `project` is unset, a [FlutterProject] based on environment is used.
   @visibleForTesting
   factory DartPluginRegistrantTarget.test(FlutterProject project) {
     return DartPluginRegistrantTarget._(project);

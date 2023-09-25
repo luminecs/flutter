@@ -4,9 +4,6 @@
 
 import 'timeline.dart';
 
-/// GC related timeline events.
-///
-/// All these events occur only on the UI thread and are non overlapping.
 const Set<String> kGCRootEvents = <String>{
   'CollectNewGeneration',
   'CollectOldGeneration',
@@ -14,22 +11,9 @@ const Set<String> kGCRootEvents = <String>{
   'StartConcurrentMark',
 };
 
-/// Summarizes [TimelineEvents]s corresponding to [kGCRootEvents] category.
-///
-/// A sample event (some fields have been omitted for brevity):
-/// ```json
-/// {
-///   "name": "StartConcurrentMarking",
-///   "cat": "GC",
-///   "ts": 3240710599608,
-/// }
-/// ```
-/// This class provides methods to compute the total time spend in GC on
-/// the UI thread.
 class GCSummarizer {
   GCSummarizer._(this.totalGCTimeMillis);
 
-  /// Creates a [GCSummarizer] given the timeline events.
   static GCSummarizer fromEvents(List<TimelineEvent> gcEvents) {
     double totalGCTimeMillis = 0;
     TimelineEvent? lastGCBeginEvent;
@@ -54,6 +38,5 @@ class GCSummarizer {
     return GCSummarizer._(totalGCTimeMillis);
   }
 
-  /// Total time spent doing GC on the UI thread.
   final double totalGCTimeMillis;
 }

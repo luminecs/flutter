@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SearchAnchor].
 
 const Duration fakeAPIDuration = Duration(seconds: 1);
 

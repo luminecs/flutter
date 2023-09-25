@@ -4,9 +4,6 @@
 
 import 'dart:collection';
 
-/// Parsing the output of "dart pub deps --json"
-///
-/// expected structure: {"name": "package name", "source": "hosted", "dependencies": [...]}
 class DartDependencyPackage {
   DartDependencyPackage({
     required this.name,

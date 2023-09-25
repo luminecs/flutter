@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for base [CupertinoListSection] and [CupertinoListTile].
 
 void main() => runApp(const CupertinoListSectionBaseApp());
 

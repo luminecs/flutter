@@ -9,8 +9,6 @@ import '../cache.dart';
 import '../features.dart';
 import '../runner/flutter_command.dart';
 
-/// The flutter precache command allows downloading of cache artifacts without
-/// the use of device/artifact autodetection.
 class PrecacheCommand extends FlutterCommand {
   PrecacheCommand({
     bool verboseHelp = false,
@@ -80,7 +78,6 @@ class PrecacheCommand extends FlutterCommand {
   @override
   bool get shouldUpdateCache => false;
 
-  /// Some flags are umbrella names that expand to include multiple artifacts.
   static const Map<String, List<String>> _expandedArtifacts = <String, List<String>>{
     'android': <String>[
       'android_gen_snapshot',
@@ -89,8 +86,6 @@ class PrecacheCommand extends FlutterCommand {
     ],
   };
 
-  /// Returns a reverse mapping of _expandedArtifacts, from child artifact name
-  /// to umbrella name.
   Map<String, String> _umbrellaForArtifactMap() {
     return <String, String>{
       for (final MapEntry<String, List<String>> entry in _expandedArtifacts.entries)
@@ -99,9 +94,6 @@ class PrecacheCommand extends FlutterCommand {
     };
   }
 
-  /// Returns the name of all artifacts that were explicitly chosen via flags.
-  ///
-  /// If an umbrella is chosen, its children will be included as well.
   Set<String> _explicitArtifactSelections() {
     final Map<String, String> umbrellaForArtifact = _umbrellaForArtifactMap();
     final Set<String> selections = <String>{};

@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [TextFormField].
 
 void main() => runApp(const TextFormFieldExampleApp());
 

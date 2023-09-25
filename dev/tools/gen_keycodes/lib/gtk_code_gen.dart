@@ -11,8 +11,6 @@ import 'physical_key_data.dart';
 import 'utils.dart';
 
 
-/// Generates the key mapping for GTK, based on the information in the key
-/// data structure given to it.
 class GtkCodeGenerator extends PlatformCodeGenerator {
   GtkCodeGenerator(
     super.keyData,
@@ -23,7 +21,6 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
   ) : _modifierBitMapping = parseMapOfListOfString(modifierBitMapping),
       _lockBitMapping = parseMapOfListOfString(lockBitMapping);
 
-  /// This generates the map of XKB scan codes to Flutter physical keys.
   String get _xkbScanCodeMap {
     final OutputLines<int> lines = OutputLines<int>('GTK scancode map');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -35,7 +32,6 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map of GTK keyval codes to Flutter logical keys.
   String get _gtkKeyvalCodeMap {
     final OutputLines<int> lines = OutputLines<int>('GTK keyval map');
     for (final LogicalKeyEntry entry in logicalData.entries) {
@@ -110,7 +106,6 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the mask values for the part of a key code that defines its plane.
   String get _maskConstants {
     final StringBuffer buffer = StringBuffer();
     const List<MaskConstant> maskConstants = <MaskConstant>[

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Focus].
 
 void main() => runApp(const FocusExampleApp());
 

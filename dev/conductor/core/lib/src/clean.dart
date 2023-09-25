@@ -15,9 +15,6 @@ import './stdio.dart';
 const String kYesFlag = 'yes';
 const String kStateOption = 'state-file';
 
-/// Command to clean up persistent state file.
-///
-/// If the release was not completed, this command will abort the release.
 class CleanCommand extends Command<void> {
   CleanCommand({
     required this.checkouts,
@@ -77,9 +74,6 @@ class CleanCommand extends Command<void> {
   }
 }
 
-/// Context for cleaning up persistent state file.
-///
-/// This is a frontend-agnostic implementation.
 class CleanContext {
   CleanContext({
     required this.stateFile,

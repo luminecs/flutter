@@ -206,7 +206,6 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
-/// A class to represent a line of input code.
 @immutable
 class _Line {
   const _Line({this.code = '', this.line = -1, this.indent = 0})
@@ -317,9 +316,6 @@ class _SnippetCheckerException extends _ErrorBase implements Exception {
   int get hashCode => Object.hash(message, file, line);
 }
 
-/// A class representing an analysis error along with the context of the error.
-///
-/// Changes how it converts to a string based on the source of the error.
 @immutable
 class _AnalysisError extends _ErrorBase {
   const _AnalysisError(
@@ -358,30 +354,7 @@ class _AnalysisError extends _ErrorBase {
   int get hashCode => Object.hash(file, line, column, message, errorCode, source);
 }
 
-/// Checks code snippets for analysis errors.
-///
-/// Extracts dartdoc content from flutter package source code, identifies code
-/// sections, and writes them to a temporary directory, where 'flutter analyze'
-/// is used to analyze the sources for problems. If problems are found, the
-/// error output from the analyzer is parsed for details, and the problem
-/// locations are translated back to the source location.
 class _SnippetChecker {
-  /// Creates a [_SnippetChecker].
-  ///
-  /// The positional argument is the path to the package directory for the
-  /// flutter package within the Flutter root dir.
-  ///
-  /// The optional `tempDirectory` argument supplies the location for the
-  /// temporary files to be written and analyzed. If not supplied, it defaults
-  /// to a system generated temp directory.
-  ///
-  /// The optional `verbose` argument indicates whether or not status output
-  /// should be emitted while doing the check.
-  ///
-  /// The optional `dartUiLocation` argument indicates the location of the
-  /// `dart:ui` code to be analyzed along with the framework code. If not
-  /// supplied, the default location of the `dart:ui` code in the Flutter
-  /// repository is used (i.e. "<flutter repo>/bin/cache/pkg/sky_engine/lib/ui").
   _SnippetChecker(
     this._flutterPackages, {
     String? tempDirectory,
@@ -391,84 +364,50 @@ class _SnippetChecker {
        _keepTmp = tempDirectory != null,
        _dartUiLocation = dartUiLocation;
 
-  /// The prefix of each comment line
   static const String _dartDocPrefix = '///';
 
-  /// The prefix of each comment line with a space appended.
   static const String _dartDocPrefixWithSpace = '$_dartDocPrefix ';
 
-  /// A RegExp that matches the beginning of a dartdoc snippet.
   static final RegExp _dartDocSnippetBeginRegex = RegExp(r'{@tool ([^ }]+)(?:| ([^}]*))}');
 
-  /// A RegExp that matches the end of a dartdoc snippet.
   static final RegExp _dartDocSnippetEndRegex = RegExp(r'{@end-tool}');
 
-  /// A RegExp that matches the start of a code block within dartdoc.
   static final RegExp _codeBlockStartRegex = RegExp(r'^ */// *```dart$');
 
-  /// A RegExp that matches the start of a code block within a regular comment.
-  /// Such blocks are not analyzed. They can be used to give sample code for
-  /// internal (private) APIs where visibility would make analyzing the sample
-  /// code problematic.
   static final RegExp _uncheckedCodeBlockStartRegex = RegExp(r'^ *// *```dart$');
 
-  /// A RegExp that matches the end of a code block within dartdoc.
   static final RegExp _codeBlockEndRegex = RegExp(r'^ */// *``` *$');
 
-  /// A RegExp that matches a line starting with a comment or annotation
   static final RegExp _nonCodeRegExp = RegExp(r'^ *(//|@)');
 
-  /// A RegExp that matches things that look like a function declaration.
   static final RegExp _maybeFunctionDeclarationRegExp = RegExp(r'^([A-Z][A-Za-z0-9_<>, ?]*|int|double|num|bool|void)\?? (_?[a-z][A-Za-z0-9_<>]*)\(.*');
 
-  /// A RegExp that matches things that look like a getter.
   static final RegExp _maybeGetterDeclarationRegExp = RegExp(r'^([A-Z][A-Za-z0-9_<>?]*|int|double|num|bool)\?? get (_?[a-z][A-Za-z0-9_<>]*) (?:=>|{).*');
 
-  /// A RegExp that matches an identifier followed by a colon, potentially with two spaces of indent.
   static final RegExp _namedArgumentRegExp = RegExp(r'^(?:  )?([a-zA-Z0-9_]+): ');
 
-  /// A RegExp that matches things that look unambiguously like top-level declarations.
   static final RegExp _topLevelDeclarationRegExp = RegExp(r'^(abstract|class|mixin|enum|typedef|final|extension) ');
 
-  /// A RegExp that matches things that look unambiguously like statements.
   static final RegExp _statementRegExp = RegExp(r'^(if|while|for|try) ');
 
-  /// A RegExp that matches things that look unambiguously like declarations that must be in a class.
   static final RegExp _classDeclarationRegExp = RegExp(r'^(static) ');
 
-  /// A RegExp that matches a line that ends with a comma (and maybe a comment)
   static final RegExp _trailingCommaRegExp = RegExp(r'^(.*),(| *//.*)$');
 
-  /// A RegExp that matches a line that ends with a semicolon (and maybe a comment)
   static final RegExp _trailingSemicolonRegExp = RegExp(r'^(.*);(| *//.*)$');
 
-  /// A RegExp that matches a line that ends with a closing brace (and maybe a comment)
   static final RegExp _trailingCloseBraceRegExp = RegExp(r'^(.*)}(| *//.*)$');
 
-  /// A RegExp that matches a line that only contains a commented-out ellipsis
-  /// (and maybe whitespace). Has three groups: before, ellipsis, after.
   static final RegExp _ellipsisRegExp = RegExp(r'^( *)(// \.\.\.)( *)$');
 
-  /// Whether or not to print verbose output.
   final bool verbose;
 
-  /// Whether or not to keep the temp directory around after running.
-  ///
-  /// Defaults to false.
   final bool _keepTmp;
 
-  /// The temporary directory where all output is written. This will be deleted
-  /// automatically if there are no errors unless _keepTmp is true.
   final Directory _tempDirectory;
 
-  /// The package directories within the flutter root dir that will be checked.
   final List<Directory> _flutterPackages;
 
-  /// The directory for the dart:ui code to be analyzed with the flutter code.
-  ///
-  /// If this is null, then no dart:ui code is included in the analysis. It
-  /// defaults to the location inside of the flutter bin/cache directory that
-  /// contains the dart:ui code supplied by the engine.
   final Directory? _dartUiLocation;
 
   static List<File> _listDartFiles(Directory directory, {bool recursive = false}) {
@@ -487,13 +426,11 @@ class _SnippetChecker {
     '// ignore_for_file: unused_local_variable',
   ];
 
-  /// Computes the headers needed for each snippet file.
   List<_Line> get headersWithoutImports {
     return _headersWithoutImports ??= ignoresDirectives.map<_Line>((String code) => _Line.generated(code: code)).toList();
   }
   List<_Line>? _headersWithoutImports;
 
-  /// Computes the headers needed for each snippet file.
   List<_Line> get headersWithImports {
     return _headersWithImports ??= <String>[
       ...ignoresDirectives,
@@ -511,8 +448,6 @@ class _SnippetChecker {
   }
   List<_Line>? _headersWithImports;
 
-  /// Checks all the snippets in the Dart files in [_flutterPackage] for errors.
-  /// Returns true if any errors are found, false otherwise.
   Future<bool> checkSnippets() async {
     final Map<String, _SnippetFile> snippets = <String, _SnippetFile>{};
     if (_dartUiLocation != null && !_dartUiLocation.existsSync()) {
@@ -567,8 +502,6 @@ class _SnippetChecker {
     }
   }
 
-  /// Creates a name for the snippets tool to use for the snippet ID from a
-  /// filename and starting line number.
   String _createNameFromSource(String prefix, String filename, int start) {
     String snippetId = path.split(filename).join('.');
     snippetId = path.basenameWithoutExtension(snippetId);
@@ -576,8 +509,6 @@ class _SnippetChecker {
     return snippetId;
   }
 
-  /// Extracts the snippets from the Dart files in [files], writes them
-  /// to disk, and adds them to the [snippetMap].
   Future<List<Object>> _extractSnippets(
     List<File> files, {
     required Map<String, _SnippetFile> snippetMap,
@@ -712,10 +643,6 @@ class _SnippetChecker {
     return errors;
   }
 
-  /// Process one block of snippet code (the part inside of "```" markers). Uses
-  /// a primitive heuristic to make snippet blocks into valid Dart code.
-  ///
-  /// `block` argument will get mutated, but is copied before this function returns.
   _SnippetFile _processBlock(_Line startingLine, List<String> block, List<_Line> assumptions, List<_Line> ignoreAssumptionsOnly, String filename, _SnippetFile? lastExample, List<_Line> customImports) {
     if (block.isEmpty) {
       throw _SnippetCheckerException('${startingLine.asLocation(filename, 0)}: Empty ```dart block in snippet code.');
@@ -890,8 +817,6 @@ class _SnippetChecker {
     }
   }
 
-  /// Creates the configuration files necessary for the analyzer to consider
-  /// the temporary directory a package, and sets which lint rules to enforce.
   void _createConfigurationFiles() {
     final File targetPubSpec = File(path.join(_tempDirectory.path, 'pubspec.yaml'));
     if (!targetPubSpec.existsSync()) {
@@ -915,7 +840,6 @@ class _SnippetChecker {
     }
   }
 
-  /// Writes out a snippet section to the disk and returns the file.
   File _writeSnippetFile(_SnippetFile snippetFile) {
     final String snippetFileId = _createNameFromSource('snippet', snippetFile.filename, snippetFile.indexLine);
     final File outputFile = File(path.join(_tempDirectory.path, '$snippetFileId.dart'))..createSync(recursive: true);
@@ -924,8 +848,6 @@ class _SnippetChecker {
     return outputFile;
   }
 
-  /// Starts the analysis phase of checking the snippets by invoking the analyzer
-  /// and parsing its output. Returns the errors, if any.
   List<Object> _analyze(Map<String, _SnippetFile> snippets) {
     final List<String> analyzerOutput = _runAnalyzer();
     final List<Object> errors = <Object>[];
@@ -1021,7 +943,6 @@ class _SnippetChecker {
     return errors;
   }
 
-  /// Invokes the analyzer on the given [directory] and returns the stdout (with some lines filtered).
   List<String> _runAnalyzer() {
     _createConfigurationFiles();
     // Run pub get to avoid output from getting dependencies in the analyzer
@@ -1064,8 +985,6 @@ class _SnippetChecker {
   }
 }
 
-/// A class to represent a section of snippet code, marked by "```dart ... ```", that ends up
-/// in a file we then analyze (each snippet is in its own file).
 class _SnippetFile {
   const _SnippetFile(this.code, this.generatorComment, this.filename, this.indexLine);
 

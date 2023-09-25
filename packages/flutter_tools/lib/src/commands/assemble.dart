@@ -26,7 +26,6 @@ import '../project.dart';
 import '../reporting/reporting.dart';
 import '../runner/flutter_command.dart';
 
-/// All currently implemented targets.
 List<Target> _kDefaultTargets = <Target>[
   // Shared targets
   const CopyAssets(),
@@ -78,8 +77,6 @@ List<Target> _kDefaultTargets = <Target>[
   const ReleaseBundleWindowsAssets(),
 ];
 
-/// Assemble provides a low level API to interact with the flutter tool build
-/// system.
 class AssembleCommand extends FlutterCommand {
   AssembleCommand({ bool verboseHelp = false, required BuildSystem buildSystem })
     : _buildSystem = buildSystem {
@@ -164,7 +161,6 @@ class AssembleCommand extends FlutterCommand {
     return super.requiredArtifacts;
   }
 
-  /// The target(s) we are building.
   List<Target> createTargets() {
     final ArgResults argumentResults = argResults!;
     if (argumentResults.rest.isEmpty) {
@@ -206,7 +202,6 @@ class AssembleCommand extends FlutterCommand {
 
   late final Environment _environment = _createEnvironment();
 
-  /// The environmental configuration for a build invocation.
   Environment _createEnvironment() {
     final FlutterProject flutterProject = FlutterProject.current();
     String? output = stringArg('output');
@@ -370,7 +365,6 @@ void writeListIfChanged(List<File> files, String path) {
   }
 }
 
-/// Output performance measurement data in [outFile].
 @visibleForTesting
 void writePerformanceData(Iterable<PerformanceMeasurement> measurements, File outFile) {
   final Map<String, Object> jsonData = <String, Object>{

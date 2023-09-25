@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [RangeSlider].
 
 void main() => runApp(const RangeSliderExampleApp());
 

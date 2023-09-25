@@ -12,7 +12,6 @@ import 'file_system.dart';
 import 'logger.dart';
 import 'process.dart';
 
-/// A snapshot build configuration.
 class SnapshotType {
   SnapshotType(this.platform, this.mode);
 
@@ -23,7 +22,6 @@ class SnapshotType {
   String toString() => '$platform $mode';
 }
 
-/// Interface to the gen_snapshot command-line tool.
 class GenSnapshot {
   GenSnapshot({
     required Artifacts artifacts,
@@ -40,7 +38,6 @@ class GenSnapshot {
         Artifact.genSnapshot, platform: snapshotType.platform, mode: snapshotType.mode);
   }
 
-  /// Ignored warning messages from gen_snapshot.
   static const Set<String> kIgnoredWarnings = <String>{
     // --strip on elf snapshot.
     'Warning: Generating ELF library without DWARF debugging information.',
@@ -101,12 +98,8 @@ class AOTSnapshotter {
   final Xcode _xcode;
   final GenSnapshot _genSnapshot;
 
-  /// If true then AOTSnapshotter would report timings for individual building
-  /// steps (Dart front-end parsing and snapshot generation) in a stable
-  /// machine readable form. See [AOTSnapshotter._timedStep].
   final bool reportTimings;
 
-  /// Builds an architecture-specific ahead-of-time compiled snapshot of the specified script.
   Future<int> build({
     required TargetPlatform platform,
     required BuildMode buildMode,
@@ -247,8 +240,6 @@ class AOTSnapshotter {
     }
   }
 
-  /// Builds an iOS or macOS framework at [outputPath]/App.framework from the assembly
-  /// source at [assemblyPath].
   Future<int> _buildFramework({
     required DarwinArch appleArch,
     required bool isIOS,

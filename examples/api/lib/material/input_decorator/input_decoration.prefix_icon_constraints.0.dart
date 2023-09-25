@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [InputDecoration.prefixIconConstraints].
 
 void main() => runApp(const PrefixIconConstraintsExampleApp());
 

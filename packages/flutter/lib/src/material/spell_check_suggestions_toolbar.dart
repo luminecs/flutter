@@ -17,64 +17,25 @@ import 'text_selection_toolbar_text_button.dart';
 // Size eyeballed on Pixel 4 emulator running Android API 31.
 const double _kDefaultToolbarHeight = 193.0;
 
-/// The maximum number of suggestions in the toolbar is 3, plus a delete button.
 const int _kMaxSuggestions = 3;
 
-/// The default spell check suggestions toolbar for Android.
-///
-/// Tries to position itself below the [anchor], but if it doesn't fit, then it
-/// readjusts to fit above bottom view insets.
-///
-/// See also:
-///
-///  * [CupertinoSpellCheckSuggestionsToolbar], which is similar but builds an
-///    iOS-style spell check toolbar.
 class SpellCheckSuggestionsToolbar extends StatelessWidget {
-  /// Constructs a [SpellCheckSuggestionsToolbar].
-  ///
-  /// [buttonItems] must not contain more than four items, generally three
-  /// suggestions and one delete button.
   const SpellCheckSuggestionsToolbar({
     super.key,
     required this.anchor,
     required this.buttonItems,
   }) : assert(buttonItems.length <= _kMaxSuggestions + 1);
 
-  /// Constructs a [SpellCheckSuggestionsToolbar] with the default children for
-  /// an [EditableText].
-  ///
-  /// See also:
-  ///  * [CupertinoSpellCheckSuggestionsToolbar.editableText], which is similar
-  ///    but builds an iOS-style toolbar.
   SpellCheckSuggestionsToolbar.editableText({
     super.key,
     required EditableTextState editableTextState,
   }) : buttonItems = buildButtonItems(editableTextState) ?? <ContextMenuButtonItem>[],
        anchor = getToolbarAnchor(editableTextState.contextMenuAnchors);
 
-  /// {@template flutter.material.SpellCheckSuggestionsToolbar.anchor}
-  /// The focal point below which the toolbar attempts to position itself.
-  /// {@endtemplate}
   final Offset anchor;
 
-  /// The [ContextMenuButtonItem]s that will be turned into the correct button
-  /// widgets and displayed in the spell check suggestions toolbar.
-  ///
-  /// Must not contain more than four items, typically three suggestions and a
-  /// delete button.
-  ///
-  /// See also:
-  ///
-  ///  * [AdaptiveTextSelectionToolbar.buttonItems], the list of
-  ///    [ContextMenuButtonItem]s that are used to build the buttons of the
-  ///    text selection toolbar.
-  ///  * [CupertinoSpellCheckSuggestionsToolbar.buttonItems], the list of
-  ///    [ContextMenuButtonItem]s used to build the Cupertino style spell check
-  ///    suggestions toolbar.
   final List<ContextMenuButtonItem> buttonItems;
 
-  /// Builds the button items for the toolbar based on the available
-  /// spell check suggestions.
   static List<ContextMenuButtonItem>? buildButtonItems(
     EditableTextState editableTextState,
   ) {
@@ -146,14 +107,12 @@ class SpellCheckSuggestionsToolbar extends StatelessWidget {
     editableTextState.hideToolbar();
   }
 
-  /// Determines the Offset that the toolbar will be anchored to.
   static Offset getToolbarAnchor(TextSelectionToolbarAnchors anchors) {
     // Since this will be positioned below the anchor point, use the secondary
     // anchor by default.
     return anchors.secondaryAnchor == null ? anchors.primaryAnchor : anchors.secondaryAnchor!;
   }
 
-  /// Builds the toolbar buttons based on the [buttonItems].
   List<Widget> _buildToolbarButtons(BuildContext context) {
     return buttonItems.map((ContextMenuButtonItem buttonItem) {
       final TextSelectionToolbarTextButton button =
@@ -222,8 +181,6 @@ class SpellCheckSuggestionsToolbar extends StatelessWidget {
   }
 }
 
-/// The Material-styled toolbar outline for the spell check suggestions
-/// toolbar.
 class _SpellCheckSuggestionsToolbarContainer extends StatelessWidget {
   const _SpellCheckSuggestionsToolbarContainer({
     required this.height,

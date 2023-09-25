@@ -14,9 +14,6 @@ class Calculator extends StatefulWidget {
 }
 
 class CalculatorState extends State<Calculator> {
-  /// As the user taps keys we update the current `_expression` and we also
-  /// keep a stack of previous expressions so we can return to earlier states
-  /// when the user hits the DEL key.
   final List<CalcExpression> _expressionStack = <CalcExpression>[];
   CalcExpression _expression = CalcExpression.empty();
 
@@ -27,7 +24,6 @@ class CalculatorState extends State<Calculator> {
     _expression = expression;
   }
 
-  /// Pop the top expression off of the stack and make it the current expression.
   void popCalcExpression() {
     if (_expressionStack.isNotEmpty) {
       _expression = _expressionStack.removeLast();
@@ -36,7 +32,6 @@ class CalculatorState extends State<Calculator> {
     }
   }
 
-  /// Set `resultExpression` to the current expression and clear the stack.
   void setResult(CalcExpression resultExpression) {
     _expressionStack.clear();
     _expression = resultExpression;

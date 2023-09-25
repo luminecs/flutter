@@ -716,11 +716,6 @@ void main() {
   );
 }
 
-/// A [ContainerLayer] that contains a stack of layers: `layer` in the front,
-/// and another layer annotated with `value` in the back.
-///
-/// It is a utility function that helps checking the opacity returned by
-/// [Layer.findAnnotations].
 Layer _withBackgroundAnnotation(int value, Layer layer) {
   return _Layers(
     ContainerLayer(),
@@ -777,21 +772,8 @@ class _TestAnnotatedLayer extends Layer {
   // The return value of [findAnnotations] during a successful hit.
   final bool opaque;
 
-  /// The [offset] is optionally used to translate the clip region for the
-  /// hit-testing of [find] by [offset].
-  ///
-  /// If not provided, offset defaults to [Offset.zero].
-  ///
-  /// Ignored if [size] is not set.
   final Offset offset;
 
-  /// The [size] is optionally used to clip the hit-testing of [find].
-  ///
-  /// If not provided, all offsets are considered to be contained within this
-  /// layer, unless an ancestor layer applies a clip.
-  ///
-  /// If [offset] is set, then the offset is applied to the size region before
-  /// hit testing in [find].
   final Size? size;
 
   @override

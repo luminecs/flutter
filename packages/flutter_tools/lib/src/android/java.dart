@@ -15,7 +15,6 @@ import 'android_studio.dart';
 
 const String _javaExecutable = 'java';
 
-/// Represents an installation of Java.
 class Java {
 
   Java({
@@ -33,25 +32,8 @@ class Java {
       _processManager = processManager,
       _processUtils = ProcessUtils(processManager: processManager, logger: logger);
 
-  /// Within the Java ecosystem, this environment variable is typically set
-  /// the install location of a Java Runtime Environment (JRE) or Java
-  /// Development Kit (JDK).
-  ///
-  /// Tools that depend on Java and need to find it will often check this
-  /// variable. If you are looking to set `JAVA_HOME` when stating a process,
-  /// consider using the [environment] instance property instead.
   static String javaHomeEnvironmentVariable = 'JAVA_HOME';
 
-  /// Finds the Java runtime environment that should be used for all java-dependent
-  /// operations across the tool.
-  ///
-  /// This searches for Java in the following places, in order:
-  ///
-  /// 1. the runtime environment bundled with Android Studio;
-  /// 2. the runtime environment found in the JAVA_HOME env variable, if set; or
-  /// 3. the java binary found on PATH.
-  ///
-  /// Returns null if no java binary could be found.
   static Java? find({
     required Config config,
     required AndroidStudio? androidStudio,
@@ -95,20 +77,8 @@ class Java {
     );
   }
 
-  /// The path of the runtime environments' home directory.
-  ///
-  /// This should only be used for logging and validation purposes.
-  /// If you need to set JAVA_HOME when starting a process, consider
-  /// using [environment] instead.
-  /// If you need to inspect the files of the runtime, considering adding
-  /// a new method to this class instead.
   final String? javaHome;
 
-  /// The path of the runtime environments' java binary.
-  ///
-  /// This should be only used for logging and validation purposes.
-  /// If you need to invoke the binary directly, consider adding a new method
-  /// to this class instead.
   final String binaryPath;
 
   final Logger _logger;
@@ -118,12 +88,6 @@ class Java {
   final ProcessManager _processManager;
   final ProcessUtils _processUtils;
 
-  /// Returns an environment variable map with
-  /// 1. JAVA_HOME set if this object has a known home directory, and
-  /// 2. The java binary folder appended onto PATH, if the binary location is known.
-  ///
-  /// This map should be used as the environment when invoking any Java-dependent
-  /// processes, such as Gradle or Android SDK tools (avdmanager, sdkmanager, etc.)
   Map<String, String> get environment {
     return <String, String>{
       if (javaHome != null) javaHomeEnvironmentVariable: javaHome!,
@@ -133,8 +97,6 @@ class Java {
     };
   }
 
-  /// Returns the version of java in the format \d(.\d)+(.\d)+
-  /// Returns null if version could not be determined.
   late final Version? version = (() {
     final RunResult result = _processUtils.runSync(
       <String>[binaryPath, '--version'],

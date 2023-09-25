@@ -4,12 +4,7 @@
 
 import 'package:flutter/scheduler.dart';
 
-/// A [TickerProvider] that creates a standalone ticker.
-///
-/// Useful in tests that create an [AnimationController] outside of the widget
-/// tree.
 class TestVSync implements TickerProvider {
-  /// Creates a ticker provider that creates standalone tickers.
   const TestVSync();
 
   @override

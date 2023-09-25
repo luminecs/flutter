@@ -9,25 +9,8 @@ import 'package:flutter/widgets.dart';
 
 import 'theme.dart';
 
-/// Defines default property values for descendant [BottomAppBar] widgets.
-///
-/// Descendant widgets obtain the current [BottomAppBarTheme] object using
-/// `BottomAppBarTheme.of(context)`. Instances of [BottomAppBarTheme] can be
-/// customized with [BottomAppBarTheme.copyWith].
-///
-/// Typically a [BottomAppBarTheme] is specified as part of the overall [Theme]
-/// with [ThemeData.bottomAppBarTheme].
-///
-/// All [BottomAppBarTheme] properties are `null` by default. When null, the
-/// [BottomAppBar] constructor provides defaults.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class BottomAppBarTheme with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.bottomAppBarTheme].
   const BottomAppBarTheme({
     this.color,
     this.elevation,
@@ -38,35 +21,20 @@ class BottomAppBarTheme with Diagnosticable {
     this.padding,
   });
 
-  /// Overrides the default value for [BottomAppBar.color].
-  ///
-  /// If null, [BottomAppBar] uses [ThemeData.bottomAppBarColor].
   final Color? color;
 
-  /// Overrides the default value for [BottomAppBar.elevation].
   final double? elevation;
 
-  /// Overrides the default value for [BottomAppBar.shape].
   final NotchedShape? shape;
 
-  /// Overrides the default value for [BottomAppBar.height].
   final double? height;
 
-  /// Overrides the default value for [BottomAppBar.surfaceTintColor].
-  ///
-  /// If null, [BottomAppBar] will not display an overlay color.
-  ///
-  /// See [Material.surfaceTintColor] for more details.
   final Color? surfaceTintColor;
 
-  /// Overrides the default value for [BottomAppBar.shadowColor].
   final Color? shadowColor;
 
-  /// Overrides the default value for [BottomAppBar.padding].
   final EdgeInsetsGeometry? padding;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   BottomAppBarTheme copyWith({
     Color? color,
     double? elevation,
@@ -87,14 +55,10 @@ class BottomAppBarTheme with Diagnosticable {
     );
   }
 
-  /// The [ThemeData.bottomAppBarTheme] property of the ambient [Theme].
   static BottomAppBarTheme of(BuildContext context) {
     return Theme.of(context).bottomAppBarTheme;
   }
 
-  /// Linearly interpolate between two BAB themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static BottomAppBarTheme lerp(BottomAppBarTheme? a, BottomAppBarTheme? b, double t) {
     if (identical(a, b) && a != null) {
       return a;

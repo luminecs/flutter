@@ -46,8 +46,6 @@ enum ExampleEnum {
   deferToChild,
 }
 
-/// Encode and decode to JSON to make sure all objects in the JSON for the
-/// [DiagnosticsNode] are valid JSON.
 Map<String, Object?> simulateJsonSerialization(DiagnosticsNode node) {
   return json.decode(json.encode(node.toJsonMap(const DiagnosticsSerializationDelegate()))) as Map<String, Object?>;
 }

@@ -18,16 +18,9 @@ class TestGestureFlutterBinding extends BindingBase with GestureBinding, Schedul
     _instance = this;
   }
 
-  /// The singleton instance of this object.
-  ///
-  /// Provides access to the features exposed by this class. The binding must
-  /// be initialized before using this getter; this is typically done by calling
-  /// [TestGestureFlutterBinding.ensureInitialized].
   static TestGestureFlutterBinding get instance => BindingBase.checkInstance(_instance);
   static TestGestureFlutterBinding? _instance;
 
-  /// Returns an instance of the [TestGestureFlutterBinding], creating and
-  /// initializing it if necessary.
   static TestGestureFlutterBinding ensureInitialized() {
     if (_instance == null) {
       TestGestureFlutterBinding();

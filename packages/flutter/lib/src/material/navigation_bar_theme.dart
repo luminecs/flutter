@@ -15,32 +15,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines default property values for descendant [NavigationBar]
-/// widgets.
-///
-/// Descendant widgets obtain the current [NavigationBarThemeData] object
-/// using `NavigationBarTheme.of(context)`. Instances of
-/// [NavigationBarThemeData] can be customized with
-/// [NavigationBarThemeData.copyWith].
-///
-/// Typically a [NavigationBarThemeData] is specified as part of the
-/// overall [Theme] with [ThemeData.navigationBarTheme]. Alternatively, a
-/// [NavigationBarTheme] inherited widget can be used to theme [NavigationBar]s
-/// in a subtree of widgets.
-///
-/// All [NavigationBarThemeData] properties are `null` by default.
-/// When null, the [NavigationBar] will provide its own defaults based on the
-/// overall [Theme]'s textTheme and colorScheme. See the individual
-/// [NavigationBar] properties for details.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class NavigationBarThemeData with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.navigationBarTheme] and
-  /// [NavigationBarTheme].
   const NavigationBarThemeData({
     this.height,
     this.backgroundColor,
@@ -54,45 +30,26 @@ class NavigationBarThemeData with Diagnosticable {
     this.labelBehavior,
   });
 
-  /// Overrides the default value of [NavigationBar.height].
   final double? height;
 
-  /// Overrides the default value of [NavigationBar.backgroundColor].
   final Color? backgroundColor;
 
-  /// Overrides the default value of [NavigationBar.elevation].
   final double? elevation;
 
-  /// Overrides the default value of [NavigationBar.shadowColor].
   final Color? shadowColor;
 
-  /// Overrides the default value of [NavigationBar.surfaceTintColor].
   final Color? surfaceTintColor;
 
-  /// Overrides the default value of [NavigationBar]'s selection indicator.
   final Color? indicatorColor;
 
-  /// Overrides the default shape of the [NavigationBar]'s selection indicator.
   final ShapeBorder? indicatorShape;
 
-  /// The style to merge with the default text style for
-  /// [NavigationDestination] labels.
-  ///
-  /// You can use this to specify a different style when the label is selected.
   final MaterialStateProperty<TextStyle?>? labelTextStyle;
 
-  /// The theme to merge with the default icon theme for
-  /// [NavigationDestination] icons.
-  ///
-  /// You can use this to specify a different icon theme when the icon is
-  /// selected.
   final MaterialStateProperty<IconThemeData?>? iconTheme;
 
-  /// Overrides the default value of [NavigationBar.labelBehavior].
   final NavigationDestinationLabelBehavior? labelBehavior;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   NavigationBarThemeData copyWith({
     double? height,
     Color? backgroundColor,
@@ -119,11 +76,6 @@ class NavigationBarThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two navigation rail themes.
-  ///
-  /// If both arguments are null then null is returned.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static NavigationBarThemeData? lerp(NavigationBarThemeData? a, NavigationBarThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -193,39 +145,15 @@ class NavigationBarThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines visual properties for [NavigationBar]s and
-/// [NavigationDestination]s in this widget's subtree.
-///
-/// Values specified here are used for [NavigationBar] properties that are not
-/// given an explicit non-null value.
-///
-/// See also:
-///
-///  * [ThemeData.navigationBarTheme], which describes the
-///    [NavigationBarThemeData] in the overall theme for the application.
 class NavigationBarTheme extends InheritedTheme {
-  /// Creates a navigation rail theme that controls the
-  /// [NavigationBarThemeData] properties for a [NavigationBar].
   const NavigationBarTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Specifies the background color, label text style, icon theme, and label
-  /// type values for descendant [NavigationBar] widgets.
   final NavigationBarThemeData data;
 
-  /// The closest instance of this class that encloses the given context.
-  ///
-  /// If there is no enclosing [NavigationBarTheme] widget, then
-  /// [ThemeData.navigationBarTheme] is used.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// NavigationBarThemeData theme = NavigationBarTheme.of(context);
-  /// ```
   static NavigationBarThemeData of(BuildContext context) {
     final NavigationBarTheme? navigationBarTheme = context.dependOnInheritedWidgetOfExactType<NavigationBarTheme>();
     return navigationBarTheme?.data ?? Theme.of(context).navigationBarTheme;

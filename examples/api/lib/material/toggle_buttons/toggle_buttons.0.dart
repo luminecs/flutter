@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ToggleButtons].
 
 const List<Widget> fruits = <Widget>[Text('Apple'), Text('Banana'), Text('Orange')];
 

@@ -187,12 +187,6 @@ class _BackdropTitle extends AnimatedWidget {
   }
 }
 
-/// Builds a Backdrop.
-///
-/// A Backdrop widget has two layers, front and back. The front layer is shown
-/// by default, and slides down to show the back layer, from which a user
-/// can make a selection. The user can also configure the titles for when the
-/// front or back layer is showing.
 class Backdrop extends StatefulWidget {
   const Backdrop({
     super.key,

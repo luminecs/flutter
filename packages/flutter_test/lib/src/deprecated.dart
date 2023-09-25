@@ -6,17 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'binding.dart';
 
-/// Shim to support the obsolete [setMockMessageHandler] and
-/// [checkMockMessageHandler] methods on [BinaryMessenger] in tests.
-///
-/// The implementations defer to [TestDefaultBinaryMessengerBinding.defaultBinaryMessenger].
-///
-/// Rather than calling [setMockMessageHandler] on the
-/// `ServicesBinding.defaultBinaryMessenger`, use
-/// `tester.binding.defaultBinaryMessenger.setMockMessageHandler` directly. This
-/// more accurately represents the actual method invocation.
 extension TestBinaryMessengerExtension on BinaryMessenger {
-  /// Shim for [TestDefaultBinaryMessenger.setMockMessageHandler].
   @Deprecated(
     'Use tester.binding.defaultBinaryMessenger.setMockMessageHandler or '
     'TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler instead. '
@@ -27,7 +17,6 @@ extension TestBinaryMessengerExtension on BinaryMessenger {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(channel, handler);
   }
 
-  /// Shim for [TestDefaultBinaryMessenger.checkMockMessageHandler].
   @Deprecated(
     'Use tester.binding.defaultBinaryMessenger.checkMockMessageHandler or '
     'TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.checkMockMessageHandler instead. '
@@ -39,16 +28,7 @@ extension TestBinaryMessengerExtension on BinaryMessenger {
   }
 }
 
-/// Shim to support the obsolete [setMockMessageHandler] and
-/// [checkMockMessageHandler] methods on [BasicMessageChannel] in tests.
-///
-/// The implementations defer to [TestDefaultBinaryMessengerBinding.defaultBinaryMessenger].
-///
-/// Rather than calling [setMockMessageHandler] on the message channel, use
-/// `tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler`
-/// directly. This more accurately represents the actual method invocation.
 extension TestBasicMessageChannelExtension<T> on BasicMessageChannel<T> {
-  /// Shim for [TestDefaultBinaryMessenger.setMockDecodedMessageHandler].
   @Deprecated(
     'Use tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler or '
     'TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockDecodedMessageHandler instead. '
@@ -59,7 +39,6 @@ extension TestBasicMessageChannelExtension<T> on BasicMessageChannel<T> {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockDecodedMessageHandler<T>(this, handler);
   }
 
-  /// Shim for [TestDefaultBinaryMessenger.checkMockMessageHandler].
   @Deprecated(
     'Use tester.binding.defaultBinaryMessenger.checkMockMessageHandler or '
     'TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.checkMockMessageHandler instead. '
@@ -71,16 +50,7 @@ extension TestBasicMessageChannelExtension<T> on BasicMessageChannel<T> {
   }
 }
 
-/// Shim to support the obsolete [setMockMethodCallHandler] and
-/// [checkMockMethodCallHandler] methods on [MethodChannel] in tests.
-///
-/// The implementations defer to [TestDefaultBinaryMessengerBinding.defaultBinaryMessenger].
-///
-/// Rather than calling [setMockMethodCallHandler] on the method channel, use
-/// `tester.binding.defaultBinaryMessenger.setMockMethodCallHandler` directly.
-/// This more accurately represents the actual method invocation.
 extension TestMethodChannelExtension on MethodChannel {
-  /// Shim for [TestDefaultBinaryMessenger.setMockMethodCallHandler].
   @Deprecated(
     'Use tester.binding.defaultBinaryMessenger.setMockMethodCallHandler or '
     'TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler instead. '
@@ -91,7 +61,6 @@ extension TestMethodChannelExtension on MethodChannel {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(this, handler);
   }
 
-  /// Shim for [TestDefaultBinaryMessenger.checkMockMessageHandler].
   @Deprecated(
     'Use tester.binding.defaultBinaryMessenger.checkMockMessageHandler or '
     'TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.checkMockMessageHandler instead. '

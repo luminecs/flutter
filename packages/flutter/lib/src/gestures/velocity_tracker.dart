@@ -10,43 +10,26 @@ import 'lsq_solver.dart';
 
 export 'dart:ui' show Offset, PointerDeviceKind;
 
-/// A velocity in two dimensions.
 @immutable
 class Velocity {
-  /// Creates a [Velocity].
   const Velocity({
     required this.pixelsPerSecond,
   });
 
-  /// A velocity that isn't moving at all.
   static const Velocity zero = Velocity(pixelsPerSecond: Offset.zero);
 
-  /// The number of pixels per second of velocity in the x and y directions.
   final Offset pixelsPerSecond;
 
-  /// Return the negation of a velocity.
   Velocity operator -() => Velocity(pixelsPerSecond: -pixelsPerSecond);
 
-  /// Return the difference of two velocities.
   Velocity operator -(Velocity other) {
     return Velocity(pixelsPerSecond: pixelsPerSecond - other.pixelsPerSecond);
   }
 
-  /// Return the sum of two velocities.
   Velocity operator +(Velocity other) {
     return Velocity(pixelsPerSecond: pixelsPerSecond + other.pixelsPerSecond);
   }
 
-  /// Return a velocity whose magnitude has been clamped to [minValue]
-  /// and [maxValue].
-  ///
-  /// If the magnitude of this Velocity is less than minValue then return a new
-  /// Velocity with the same direction and with magnitude [minValue]. Similarly,
-  /// if the magnitude of this Velocity is greater than maxValue then return a
-  /// new Velocity with the same direction and magnitude [maxValue].
-  ///
-  /// If the magnitude of this Velocity is within the specified bounds then
-  /// just return this.
   Velocity clampMagnitude(double minValue, double maxValue) {
     assert(minValue >= 0.0);
     assert(maxValue >= 0.0 && maxValue >= minValue);
@@ -73,21 +56,7 @@ class Velocity {
   String toString() => 'Velocity(${pixelsPerSecond.dx.toStringAsFixed(1)}, ${pixelsPerSecond.dy.toStringAsFixed(1)})';
 }
 
-/// A two dimensional velocity estimate.
-///
-/// VelocityEstimates are computed by [VelocityTracker.getVelocityEstimate]. An
-/// estimate's [confidence] measures how well the velocity tracker's position
-/// data fit a straight line, [duration] is the time that elapsed between the
-/// first and last position sample used to compute the velocity, and [offset]
-/// is similarly the difference between the first and last positions.
-///
-/// See also:
-///
-///  * [VelocityTracker], which computes [VelocityEstimate]s.
-///  * [Velocity], which encapsulates (just) a velocity vector and provides some
-///    useful velocity operations.
 class VelocityEstimate {
-  /// Creates a dimensional velocity estimate.
   const VelocityEstimate({
     required this.pixelsPerSecond,
     required this.confidence,
@@ -95,21 +64,12 @@ class VelocityEstimate {
     required this.offset,
   });
 
-  /// The number of pixels per second of velocity in the x and y directions.
   final Offset pixelsPerSecond;
 
-  /// A value between 0.0 and 1.0 that indicates how well [VelocityTracker]
-  /// was able to fit a straight line to its position data.
-  ///
-  /// The value of this property is 1.0 for a perfect fit, 0.0 for a poor fit.
   final double confidence;
 
-  /// The time that elapsed between the first and last position sample used
-  /// to compute [pixelsPerSecond].
   final Duration duration;
 
-  /// The difference between the first and last position sample used
-  /// to compute [pixelsPerSecond].
   final Offset offset;
 
   @override
@@ -126,19 +86,8 @@ class _PointAtTime {
   String toString() => '_PointAtTime($point at $time)';
 }
 
-/// Computes a pointer's velocity based on data from [PointerMoveEvent]s.
-///
-/// The input data is provided by calling [addPosition]. Adding data is cheap.
-///
-/// To obtain a velocity, call [getVelocity] or [getVelocityEstimate]. This will
-/// compute the velocity based on the data added so far. Only call these when
-/// you need to use the velocity, as they are comparatively expensive.
-///
-/// The quality of the velocity estimation will be better if more data points
-/// have been received.
 class VelocityTracker {
 
-  /// Create a new velocity tracker for a pointer [kind].
   VelocityTracker.withKind(this.kind);
 
   static const int _assumePointerMoveStoppedMilliseconds = 40;
@@ -146,14 +95,12 @@ class VelocityTracker {
   static const int _horizonMilliseconds = 100;
   static const int _minSampleSize = 3;
 
-  /// The kind of pointer this tracker is for.
   final PointerDeviceKind kind;
 
   // Circular buffer; current sample at _index.
   final List<_PointAtTime?> _samples = List<_PointAtTime?>.filled(_historySize, null);
   int _index = 0;
 
-  /// Adds a position as the given time to the tracker.
   void addPosition(Duration time, Offset position) {
     _index += 1;
     if (_index == _historySize) {
@@ -162,12 +109,6 @@ class VelocityTracker {
     _samples[_index] = _PointAtTime(position, time);
   }
 
-  /// Returns an estimate of the velocity of the object being tracked by the
-  /// tracker given the current information available to the tracker.
-  ///
-  /// Information is added using [addPosition].
-  ///
-  /// Returns null if there is no data on which to base an estimate.
   VelocityEstimate? getVelocityEstimate() {
     final List<double> x = <double>[];
     final List<double> y = <double>[];
@@ -237,13 +178,6 @@ class VelocityTracker {
     );
   }
 
-  /// Computes the velocity of the pointer at the time of the last
-  /// provided data point.
-  ///
-  /// This can be expensive. Only call this when you need the velocity.
-  ///
-  /// Returns [Velocity.zero] if there is no data from which to compute an
-  /// estimate or if the estimated velocity is zero.
   Velocity getVelocity() {
     final VelocityEstimate? estimate = getVelocityEstimate();
     if (estimate == null || estimate.pixelsPerSecond == Offset.zero) {
@@ -253,35 +187,9 @@ class VelocityTracker {
   }
 }
 
-/// A [VelocityTracker] subclass that provides a close approximation of iOS
-/// scroll view's velocity estimation strategy.
-///
-/// The estimated velocity reported by this class is a close approximation of
-/// the velocity an iOS scroll view would report with the same
-/// [PointerMoveEvent]s, when the touch that initiates a fling is released.
-///
-/// This class differs from the [VelocityTracker] class in that it uses weighted
-/// average of the latest few velocity samples of the tracked pointer, instead
-/// of doing a linear regression on a relatively large amount of data points, to
-/// estimate the velocity of the tracked pointer. Adding data points and
-/// estimating the velocity are both cheap.
-///
-/// To obtain a velocity, call [getVelocity] or [getVelocityEstimate]. The
-/// estimated velocity is typically used as the initial flinging velocity of a
-/// `Scrollable`, when its drag gesture ends.
-///
-/// See also:
-///
-/// * [scrollViewWillEndDragging(_:withVelocity:targetContentOffset:)](https://developer.apple.com/documentation/uikit/uiscrollviewdelegate/1619385-scrollviewwillenddragging),
-///   the iOS method that reports the fling velocity when the touch is released.
 class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
-  /// Create a new IOSScrollViewFlingVelocityTracker.
   IOSScrollViewFlingVelocityTracker(super.kind) : super.withKind();
 
-  /// The velocity estimation uses at most 4 `_PointAtTime` samples. The extra
-  /// samples are there to make the `VelocityEstimate.offset` sufficiently large
-  /// to be recognized as a fling. See
-  /// `VerticalDragGestureRecognizer.isFlingGesture`.
   static const int _sampleSize = 20;
 
   final List<_PointAtTime?> _touchSamples = List<_PointAtTime?>.filled(_sampleSize, null);
@@ -365,24 +273,7 @@ class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
   }
 }
 
-/// A [VelocityTracker] subclass that provides a close approximation of macOS
-/// scroll view's velocity estimation strategy.
-///
-/// The estimated velocity reported by this class is a close approximation of
-/// the velocity a macOS scroll view would report with the same
-/// [PointerMoveEvent]s, when the touch that initiates a fling is released.
-///
-/// This class differs from the [VelocityTracker] class in that it uses weighted
-/// average of the latest few velocity samples of the tracked pointer, instead
-/// of doing a linear regression on a relatively large amount of data points, to
-/// estimate the velocity of the tracked pointer. Adding data points and
-/// estimating the velocity are both cheap.
-///
-/// To obtain a velocity, call [getVelocity] or [getVelocityEstimate]. The
-/// estimated velocity is typically used as the initial flinging velocity of a
-/// `Scrollable`, when its drag gesture ends.
 class MacOSScrollViewFlingVelocityTracker extends IOSScrollViewFlingVelocityTracker {
-  /// Create a new MacOSScrollViewFlingVelocityTracker.
   MacOSScrollViewFlingVelocityTracker(super.kind);
 
   @override

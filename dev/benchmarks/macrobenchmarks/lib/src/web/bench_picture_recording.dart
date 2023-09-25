@@ -6,31 +6,13 @@ import 'dart:ui';
 
 import 'recorder.dart';
 
-/// Measure the performance of paint bounds estimation by recording a picture
-/// without actually rendering it.
-///
-/// Bounds estimation is done in two phases:
-///
-/// * As we call drawing methods on `Canvas` we grow bounds with every paint op.
-/// * When we're done recording a picture we call `PictureRecorder.endRecording`
-///   at which point we compute the overall picture bounds and cache the result.
-///
-/// This benchmarks puts emphasis on paint operations that trigger expensive
-/// math such as `transformLTRB`. To do that we push non-identity transforms
-/// and rotations before calling drawing methods.
 class BenchPictureRecording extends RawRecorder {
   BenchPictureRecording() : super(name: benchmarkName);
 
   static const String benchmarkName = 'bench_picture_recording';
 
-  /// Cached paint used for drawing.
-  ///
-  /// We want to avoid polluting the results with paint initialization logic.
   late Paint paint;
 
-  /// A prelaid out and cached paragraph.
-  ///
-  /// This is cached to remove text layout time from the benchmark time.
   late Paragraph paragraph;
 
   @override

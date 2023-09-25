@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Focus].
 
 void main() => runApp(const FocusExampleApp());
 
@@ -26,10 +25,8 @@ class FocusableText extends StatelessWidget {
     required this.autofocus,
   });
 
-  /// The string to display as the text for this widget.
   final String data;
 
-  /// Whether or not to focus this widget initially if nothing else is focused.
   final bool autofocus;
 
   @override

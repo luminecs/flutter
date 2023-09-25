@@ -13,21 +13,7 @@ import '../project.dart';
 import '../template.dart';
 import 'deferred_components_validator.dart';
 
-/// A class to configure and run deferred component setup verification checks
-/// and tasks.
-///
-/// Once constructed, checks and tasks can be executed by calling the respective
-/// methods. The results of the checks are stored internally and can be
-/// displayed to the user by calling [displayResults].
 class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
-  /// Constructs a validator instance.
-  ///
-  /// The [templatesDir] parameter is optional. If null, the tool's default
-  /// templates directory will be used.
-  ///
-  /// When [exitOnFail] is set to true, the [handleResults] and [attemptToolExit]
-  /// methods will exit the tool when this validator detects a recommended
-  /// change. This defaults to true.
   DeferredComponentsPrebuildValidator(super.projectDir, super.logger, super.platform, {
     super.exitOnFail,
     super.title,
@@ -36,19 +22,6 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
 
   final Directory? _templatesDir;
 
-  /// Checks if an android dynamic feature module exists for each deferred
-  /// component.
-  ///
-  /// Returns true if the check passed with no recommended changes, and false
-  /// otherwise.
-  ///
-  /// This method looks for the existence of `android/<componentname>/build.gradle`
-  /// and `android/<componentname>/src/main/AndroidManifest.xml`. If either of
-  /// these files does not exist, it will generate it in the validator output
-  /// directory based off of a template.
-  ///
-  /// This method does not check if the contents of either of the files are
-  /// valid, as there are many ways that they can be validly configured.
   Future<bool> checkAndroidDynamicFeature(List<DeferredComponent> components) async {
     inputs.add(projectDir.childFile('pubspec.yaml'));
     if (components.isEmpty) {
@@ -83,26 +56,6 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
     return !changesMade;
   }
 
-  /// Checks if the base module `app`'s `strings.xml` contain string
-  /// resources for each component's name.
-  ///
-  /// Returns true if the check passed with no recommended changes, and false
-  /// otherwise.
-  ///
-  /// In each dynamic feature module's AndroidManifest.xml, the
-  /// name of the module is a string resource. This checks if
-  /// the needed string resources are in the base module `strings.xml`.
-  /// If not, this method will generate a modified `strings.xml` (or a
-  /// completely new one if the original file did not exist) in the
-  /// validator's output directory.
-  ///
-  /// For example, if there is a deferred component named `component1`,
-  /// there should be the following string resource:
-  ///
-  ///   <string name="component1Name">component1</string>
-  ///
-  /// The string element's name attribute should be the component name with
-  /// `Name` as a suffix, and the text contents should be the component name.
   bool checkAndroidResourcesStrings(List<DeferredComponent> components) {
     final Directory androidDir = projectDir.childDirectory('android');
     inputs.add(projectDir.childFile('pubspec.yaml'));
@@ -198,7 +151,6 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
     return false;
   }
 
-  /// Deletes all files inside of the validator's output directory.
   void clearOutputDir() {
     final Directory dir = projectDir.childDirectory('build').childDirectory(DeferredComponentsValidator.kDeferredComponentsTempDirectory);
     ErrorHandlingFileSystem.deleteIfExists(dir, recursive: true);

@@ -7,7 +7,6 @@ import '../convert.dart';
 import 'test_device.dart';
 import 'watcher.dart';
 
-/// Prints JSON events when running a test in --machine mode.
 class EventPrinter extends TestWatcher {
   EventPrinter({required StringSink out, TestWatcher? parent})
     : _out = out,

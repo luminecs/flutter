@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SharedAppData].
 
 class ShowSharedValue extends StatelessWidget {
   const ShowSharedValue({super.key, required this.appDataKey});

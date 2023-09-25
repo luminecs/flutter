@@ -20,10 +20,6 @@ export 'package:flutter/services.dart' show
   MouseCursor,
   SystemMouseCursors;
 
-/// Signature for hit testing at the given offset for the specified view.
-///
-/// It is used by the [MouseTracker] to fetch annotations for the mouse
-/// position.
 typedef MouseTrackerHitTest = HitTestResult Function(Offset offset, int viewId);
 
 // Various states of a connected mouse device used by [MouseTracker].
@@ -73,19 +69,12 @@ class _MouseState {
 // the mouse device is hovering.
 @immutable
 class _MouseTrackerUpdateDetails with Diagnosticable {
-  /// When device update is triggered by a new frame.
-  ///
-  /// All parameters are required.
   const _MouseTrackerUpdateDetails.byNewFrame({
     required this.lastAnnotations,
     required this.nextAnnotations,
     required PointerEvent this.previousEvent,
   }) : triggeringEvent = null;
 
-  /// When device update is triggered by a pointer event.
-  ///
-  /// The [lastAnnotations], [nextAnnotations], and [triggeringEvent] are
-  /// required.
   const _MouseTrackerUpdateDetails.byPointerEvent({
     required this.lastAnnotations,
     required this.nextAnnotations,
@@ -93,40 +82,19 @@ class _MouseTrackerUpdateDetails with Diagnosticable {
     required PointerEvent this.triggeringEvent,
   });
 
-  /// The annotations that the device is hovering before the update.
-  ///
-  /// It is never null.
   final LinkedHashMap<MouseTrackerAnnotation, Matrix4> lastAnnotations;
 
-  /// The annotations that the device is hovering after the update.
-  ///
-  /// It is never null.
   final LinkedHashMap<MouseTrackerAnnotation, Matrix4> nextAnnotations;
 
-  /// The last event that the device observed before the update.
-  ///
-  /// If the update is triggered by a frame, the [previousEvent] is never null,
-  /// since the pointer must have been added before.
-  ///
-  /// If the update is triggered by a pointer event, the [previousEvent] is not
-  /// null except for cases where the event is the first event observed by the
-  /// pointer (which is not necessarily a [PointerAddedEvent]).
   final PointerEvent? previousEvent;
 
-  /// The event that triggered this update.
-  ///
-  /// It is non-null if and only if the update is triggered by a pointer event.
   final PointerEvent? triggeringEvent;
 
-  /// The pointing device of this update.
   int get device {
     final int result = (previousEvent ?? triggeringEvent)!.device;
     return result;
   }
 
-  /// The last event that the device observed after the update.
-  ///
-  /// The [latestEvent] is never null.
   PointerEvent get latestEvent {
     final PointerEvent result = triggeringEvent ?? previousEvent!;
     return result;
@@ -143,29 +111,7 @@ class _MouseTrackerUpdateDetails with Diagnosticable {
   }
 }
 
-/// Tracks the relationship between mouse devices and annotations, and
-/// triggers mouse events and cursor changes accordingly.
-///
-/// The [MouseTracker] tracks the relationship between mouse devices and
-/// [MouseTrackerAnnotation], notified by [updateWithEvent] and
-/// [updateAllDevices]. At every update, [MouseTracker] triggers the following
-/// changes if applicable:
-///
-///  * Dispatches mouse-related pointer events (pointer enter, hover, and exit).
-///  * Changes mouse cursors.
-///  * Notifies when [mouseIsConnected] changes.
-///
-/// This class is a [ChangeNotifier] that notifies its listeners if the value of
-/// [mouseIsConnected] changes.
-///
-/// An instance of [MouseTracker] is owned by the global singleton
-/// [RendererBinding].
 class MouseTracker extends ChangeNotifier {
-  /// Create a mouse tracker.
-  ///
-  /// The `hitTestInView` is used to find the render objects on a given
-  /// position in the specific view. It is typically provided by the
-  /// [RendererBinding].
   MouseTracker(MouseTrackerHitTest hitTestInView)
     : _hitTestInView = hitTestInView;
 
@@ -287,23 +233,8 @@ class MouseTracker extends ChangeNotifier {
     );
   }
 
-  /// Whether or not at least one mouse is connected and has produced events.
   bool get mouseIsConnected => _mouseStates.isNotEmpty;
 
-  /// Perform a device update for one device according to the given new event.
-  ///
-  /// The [updateWithEvent] is typically called by [RendererBinding] during the
-  /// handler of a pointer event. All pointer events should call this method,
-  /// and let [MouseTracker] filter which to react to.
-  ///
-  /// The `hitTestResult` serves as an optional optimization, and is the hit
-  /// test result already performed by [RendererBinding] for other gestures. It
-  /// can be null, but when it's not null, it should be identical to the result
-  /// from directly calling `hitTestInView` given in the constructor (which
-  /// means that it should not use the cached result for [PointerMoveEvent]).
-  ///
-  /// The [updateWithEvent] is one of the two ways of updating mouse
-  /// states, the other one being [updateAllDevices].
   void updateWithEvent(PointerEvent event, HitTestResult? hitTestResult) {
     if (event.kind != PointerDeviceKind.mouse) {
       return;
@@ -358,16 +289,6 @@ class MouseTracker extends ChangeNotifier {
     });
   }
 
-  /// Perform a device update for all detected devices.
-  ///
-  /// The [updateAllDevices] is typically called during the post frame phase,
-  /// indicating a frame has passed and all objects have potentially moved. For
-  /// each connected device, the [updateAllDevices] will make a hit test on the
-  /// device's last seen position, and check if necessary changes need to be
-  /// made.
-  ///
-  /// The [updateAllDevices] is one of the two ways of updating mouse
-  /// states, the other one being [updateWithEvent].
   void updateAllDevices() {
     _deviceUpdatePhase(() {
       for (final _MouseState dirtyState in _mouseStates.values) {
@@ -384,13 +305,6 @@ class MouseTracker extends ChangeNotifier {
     });
   }
 
-  /// Returns the active mouse cursor for a device.
-  ///
-  /// The return value is the last [MouseCursor] activated onto this device, even
-  /// if the activation failed.
-  ///
-  /// This function is only active when asserts are enabled. In release builds,
-  /// it always returns null.
   @visibleForTesting
   MouseCursor? debugDeviceActiveCursor(int device) {
     return _mouseCursorMixin.debugDeviceActiveCursor(device);

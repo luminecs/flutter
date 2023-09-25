@@ -51,9 +51,6 @@ class _NestedListener extends StatelessWidget {
   }
 }
 
-/// Creates a grid of mouse regions, then continuously hovers over them.
-///
-/// Measures our ability to hit test mouse regions.
 class BenchMouseRegionMixedGridHover extends WidgetRecorder {
   BenchMouseRegionMixedGridHover() : super(name: benchmarkName) {
     _tester = _Tester(onDataPoint: handleDataPoint);

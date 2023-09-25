@@ -8,8 +8,6 @@ import 'package:flutter_tools/src/base/io.dart';
 import '../src/common.dart';
 import 'test_utils.dart';
 
-/// Tests that apps can be built using the deprecated `android/settings.gradle` file.
-/// This test should be removed once apps have been migrated to this new file.
 // TODO(egarciad): Migrate existing files, https://github.com/flutter/flutter/issues/54566
 void main() {
   test('android project using deprecated settings.gradle will still build', () async {

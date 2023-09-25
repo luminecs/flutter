@@ -7,30 +7,14 @@ import 'dart:ui';
 import 'recorder.dart';
 import 'test_data.dart';
 
-/// The height of each row.
 const double kRowHeight = 20.0;
 
-/// Number of rows.
 const int kRows = 100;
 
-/// Number of columns.
 const int kColumns = 10;
 
-/// The amount the picture is scrolled on every iteration of the benchmark.
 const double kScrollDelta = 2.0;
 
-/// Draws one complex picture, then moves a clip around it simulating scrolling
-/// large static content.
-///
-/// This benchmark measures how efficient we are at taking advantage of the
-/// static picture when all that changes is the clip.
-///
-/// See also:
-///
-/// * `bench_text_out_of_picture_bounds.dart`, which measures a volatile
-///   picture with a static clip.
-/// * https://github.com/flutter/flutter/issues/42987, which this benchmark is
-///   based on.
 class BenchDynamicClipOnStaticPicture extends SceneBuilderRecorder {
   BenchDynamicClipOnStaticPicture() : super(name: benchmarkName) {
     // If the scrollable extent is too small, the benchmark may end up

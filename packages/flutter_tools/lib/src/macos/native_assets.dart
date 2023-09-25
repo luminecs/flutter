@@ -12,11 +12,6 @@ import '../globals.dart' as globals;
 import '../native_assets.dart';
 import 'native_assets_host.dart';
 
-/// Dry run the native builds.
-///
-/// This does not build native assets, it only simulates what the final paths
-/// of all assets will be so that this can be embedded in the kernel file and
-/// the Xcode project.
 Future<Uri?> dryRunNativeAssetsMacOS({
   required NativeAssetsBuildRunner buildRunner,
   required Uri projectUri,
@@ -58,13 +53,6 @@ Future<Iterable<Asset>> dryRunNativeAssetsMacOSInternal(
   return nativeAssetPaths;
 }
 
-/// Builds native assets.
-///
-/// If [darwinArchs] is omitted, the current target architecture is used.
-///
-/// If [flutterTester] is true, absolute paths are emitted in the native
-/// assets mapping. This can be used for JIT mode without sandbox on the host.
-/// This is used in `flutter test` and `flutter run -d flutter-tester`.
 Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsMacOS({
   required NativeAssetsBuildRunner buildRunner,
   List<DarwinArch>? darwinArchs,
@@ -110,7 +98,6 @@ Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsMacOS({
   return (nativeAssetsUri, dependencies.toList());
 }
 
-/// Extract the [Target] from a [DarwinArch].
 Target _getNativeTarget(DarwinArch darwinArch) {
   switch (darwinArch) {
     case DarwinArch.arm64:

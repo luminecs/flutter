@@ -11,26 +11,17 @@ import '../globals.dart' as globals;
 import '../ios/plist_parser.dart';
 import '../xcode_project.dart';
 
-/// Tests whether a [FileSystemEntity] is an macOS bundle directory.
 bool _isBundleDirectory(FileSystemEntity entity) =>
     entity is Directory && entity.path.endsWith('.app');
 
 abstract class MacOSApp extends ApplicationPackage {
   MacOSApp({required String projectBundleId}) : super(id: projectBundleId);
 
-  /// Creates a new [MacOSApp] from a macOS project directory.
   factory MacOSApp.fromMacOSProject(MacOSProject project) {
     // projectBundleId is unused for macOS apps. Use a placeholder bundle ID.
     return BuildableMacOSApp(project, 'com.example.placeholder');
   }
 
-  /// Creates a new [MacOSApp] from an existing app bundle.
-  ///
-  /// `applicationBinary` is the path to the framework directory created by an
-  /// Xcode build. By default, this is located under
-  /// "~/Library/Developer/Xcode/DerivedData/" and contains an executable
-  /// which is expected to start the application and send the vmService
-  /// port over stdout.
   static MacOSApp? fromPrebuiltApp(FileSystemEntity applicationBinary) {
     final _BundleInfo? bundleInfo = _executableFromBundle(applicationBinary);
     if (bundleInfo == null) {
@@ -46,7 +37,6 @@ abstract class MacOSApp extends ApplicationPackage {
     );
   }
 
-  /// Look up the executable name for a macOS application bundle.
   static _BundleInfo? _executableFromBundle(FileSystemEntity applicationBundle) {
     final FileSystemEntityType entityType = globals.fs.typeSync(applicationBundle.path);
     if (entityType == FileSystemEntityType.notFound) {
@@ -121,10 +111,6 @@ class PrebuiltMacOSApp extends MacOSApp implements PrebuiltApplicationPackage {
   }) : _executable = executable,
        super(projectBundleId: projectBundleId);
 
-  /// The uncompressed bundle of the application.
-  ///
-  /// [MacOSApp.fromPrebuiltApp] will uncompress the application into a temporary
-  /// directory even when an `.zip` file was used to create the [MacOSApp] instance.
   final Directory uncompressedBundle;
   final String bundleName;
   final String projectBundleId;
@@ -140,9 +126,6 @@ class PrebuiltMacOSApp extends MacOSApp implements PrebuiltApplicationPackage {
   @override
   String? executable(BuildInfo buildInfo) => _executable;
 
-  /// A [File] or [Directory] pointing to the application bundle.
-  ///
-  /// This can be either a `.zip` file or an uncompressed `.app` directory.
   @override
   final FileSystemEntity applicationPackage;
 }

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ExpansionTile] and [ExpansionTileController].
 
 void main() {
   runApp(const ExpansionTileControllerApp());

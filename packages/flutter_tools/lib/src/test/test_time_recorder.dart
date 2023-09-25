@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 import '../base/logger.dart';
 
-/// Utility class that can record time used in different phases of a test run.
 class TestTimeRecorder {
   TestTimeRecorder(this.logger,
       {this.stopwatchFactory = const StopwatchFactory()})
@@ -53,7 +52,6 @@ class TestTimeRecorder {
   }
 }
 
-/// Utility class that can record time used in a specific phase of a test run.
 class TestTimeRecord {
   TestTimeRecord(this.stopwatchFactory)
       : _wallClockRuntime = stopwatchFactory.createStopwatch();
@@ -92,38 +90,21 @@ class TestTimeRecord {
 }
 
 enum TestTimePhases {
-  /// Covers entire TestRunner run, i.e. from the test runner was asked to `runTests` until it is done.
-  ///
-  /// This implicitly includes all the other phases.
   TestRunner,
 
-  /// Covers time spent compiling, including subsequent copying of files.
   Compile,
 
-  /// Covers time spent running, i.e. from starting the test device until the test has finished.
   Run,
 
-  /// Covers all time spent collecting coverage.
   CoverageTotal,
 
-  /// Covers collecting the coverage, but not parsing nor adding to hit map.
-  ///
-  /// This is included in [CoverageTotal]
   CoverageCollect,
 
-  /// Covers parsing the json from the coverage collected.
-  ///
-  /// This is included in [CoverageTotal]
   CoverageParseJson,
 
-  /// Covers adding the parsed coverage to the hitmap.
-  ///
-  /// This is included in [CoverageTotal]
   CoverageAddHitmap,
 
-  /// Covers time spent in `collectCoverageData`, mostly formatting and writing coverage data to file.
   CoverageDataCollect,
 
-  /// Covers time spend in the Watchers `handleFinishedTest` call. This is probably collecting coverage.
   WatcherFinishedTest,
 }

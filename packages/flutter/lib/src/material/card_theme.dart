@@ -9,29 +9,9 @@ import 'package:flutter/widgets.dart';
 
 import 'theme.dart';
 
-/// Defines default property values for descendant [Card] widgets.
-///
-/// Descendant widgets obtain the current [CardTheme] object using
-/// `CardTheme.of(context)`. Instances of [CardTheme] can be
-/// customized with [CardTheme.copyWith].
-///
-/// Typically a [CardTheme] is specified as part of the overall [Theme]
-/// with [ThemeData.cardTheme].
-///
-/// All [CardTheme] properties are `null` by default. When null, the [Card]
-/// will use the values from [ThemeData] if they exist, otherwise it will
-/// provide its own defaults.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class CardTheme with Diagnosticable {
 
-  /// Creates a theme that can be used for [ThemeData.cardTheme].
-  ///
-  /// The [elevation] must be null or non-negative.
   const CardTheme({
     this.clipBehavior,
     this.color,
@@ -42,47 +22,20 @@ class CardTheme with Diagnosticable {
     this.shape,
   }) : assert(elevation == null || elevation >= 0.0);
 
-  /// Overrides the default value for [Card.clipBehavior].
-  ///
-  /// If null, [Card] uses [Clip.none].
   final Clip? clipBehavior;
 
-  /// Overrides the default value for [Card.color].
-  ///
-  /// If null, [Card] uses [ThemeData.cardColor].
   final Color? color;
 
-  /// Overrides the default value for [Card.shadowColor].
-  ///
-  /// If null, [Card] defaults to fully opaque black.
   final Color? shadowColor;
 
-  /// Overrides the default value for [Card.surfaceTintColor].
-  ///
-  /// If null, [Card] will not display an overlay color.
-  ///
-  /// See [Material.surfaceTintColor] for more details.
   final Color? surfaceTintColor;
 
-  /// Overrides the default value for [Card.elevation].
-  ///
-  /// If null, [Card] uses a default of 1.0.
   final double? elevation;
 
-  /// Overrides the default value for [Card.margin].
-  ///
-  /// If null, [Card] uses a default margin of 4.0 logical pixels on all sides:
-  /// `EdgeInsets.all(4.0)`.
   final EdgeInsetsGeometry? margin;
 
-  /// Overrides the default value for [Card.shape].
-  ///
-  /// If null, [Card] then uses a [RoundedRectangleBorder] with a circular
-  /// corner radius of 4.0.
   final ShapeBorder? shape;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   CardTheme copyWith({
     Clip? clipBehavior,
     Color? color,
@@ -103,14 +56,10 @@ class CardTheme with Diagnosticable {
     );
   }
 
-  /// The [ThemeData.cardTheme] property of the ambient [Theme].
   static CardTheme of(BuildContext context) {
     return Theme.of(context).cardTheme;
   }
 
-  /// Linearly interpolate between two Card themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static CardTheme lerp(CardTheme? a, CardTheme? b, double t) {
     if (identical(a, b) && a != null) {
       return a;

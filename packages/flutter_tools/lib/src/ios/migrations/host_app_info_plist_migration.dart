@@ -9,7 +9,6 @@ import '../../xcode_project.dart';
 const String _kDisableMinimumFrameDurationKey = 'CADisableMinimumFrameDurationOnPhone';
 const String _kIndirectInputEventsKey = 'UIApplicationSupportsIndirectInputEvents';
 
-/// Update Info.plist.
 class HostAppInfoPlistMigration extends ProjectMigrator {
   HostAppInfoPlistMigration(
     IosProject project,

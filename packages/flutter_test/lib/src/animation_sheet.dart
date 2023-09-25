@@ -39,95 +39,12 @@ class _AsyncImage {
   }
 }
 
-/// Records the frames of an animating widget, and later displays the frames as a
-/// grid in an animation sheet.
-///
-/// This class does not support Web, because the animation sheet utilizes taking
-/// screenshots, which is unsupported on the Web. Tests that use this class must
-/// be noted with `skip: isBrowser`.
-/// (https://github.com/flutter/flutter/issues/56001)
-///
-/// Using this class includes the following steps:
-///
-///  * Create an instance of this class.
-///  * Register [dispose] to the test's tear down callbacks.
-///  * Pump frames that render the target widget wrapped in [record]. Every frame
-///    that has `recording` being true will be recorded.
-///  * Acquire the output image with [collate] and compare against the golden
-///    file.
-///
-/// {@tool snippet}
-/// The following example shows how to record an animation sheet of an [InkWell]
-/// being pressed then released.
-///
-/// ```dart
-/// testWidgets('Inkwell animation sheet', (WidgetTester tester) async {
-///   // Create instance
-///   final AnimationSheetBuilder animationSheet = AnimationSheetBuilder(frameSize: const Size(48, 24));
-///   addTearDown(animationSheet.dispose);
-///
-///   final Widget target = Material(
-///     child: Directionality(
-///       textDirection: TextDirection.ltr,
-///       child: InkWell(
-///         splashColor: Colors.blue,
-///         onTap: () {},
-///       ),
-///     ),
-///   );
-///
-///   // Optional: setup before recording (`recording` is false)
-///   await tester.pumpWidget(animationSheet.record(
-///     target,
-///     recording: false,
-///   ));
-///
-///   final TestGesture gesture = await tester.startGesture(tester.getCenter(find.byType(InkWell)));
-///
-///   // Start recording (`recording` is true)
-///   await tester.pumpFrames(animationSheet.record(
-///     target,
-///     recording: true, // ignore: avoid_redundant_argument_values
-///   ), const Duration(seconds: 1));
-///
-///   await gesture.up();
-///
-///   await tester.pumpFrames(animationSheet.record(
-///     target,
-///     recording: true, // ignore: avoid_redundant_argument_values
-///   ), const Duration(seconds: 1));
-///
-///   // Compare against golden file
-///   await expectLater(
-///     animationSheet.collate(800),
-///     matchesGoldenFile('inkwell.press.animation.png'),
-///   );
-/// }, skip: isBrowser); // Animation sheet does not support browser https://github.com/flutter/flutter/issues/56001
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [GoldenFileComparator], which introduces Golden File Testing.
 class AnimationSheetBuilder {
-  /// Starts a session of building an animation sheet.
-  ///
-  /// The [frameSize] is a tight constraint for the child to be recorded, and must not
-  /// be null.
-  ///
-  /// The [allLayers] controls whether to record elements drawn out of the subtree,
-  /// and defaults to false.
   AnimationSheetBuilder({
     required this.frameSize,
     this.allLayers = false,
   }) : assert(!kIsWeb);
 
-  /// Dispose all recorded frames and result images.
-  ///
-  /// This method must be called before the test case ends (usually as a tear
-  /// down callback) to properly deallocate the images.
-  ///
-  /// After this method is called, there will be no frames to [collate].
   Future<void> dispose() async {
     final List<_AsyncImage> targets = <_AsyncImage>[
       ..._recordedFrames,
@@ -140,45 +57,12 @@ class AnimationSheetBuilder {
     }
   }
 
-  /// The size of the child to be recorded.
-  ///
-  /// This size is applied as a tight layout constraint for the child, and is
-  /// fixed throughout the building session.
   final Size frameSize;
 
-  /// Whether the captured image comes from the entire tree, or only the
-  /// subtree of [record].
-  ///
-  /// If [allLayers] is false, then the [record] widget will capture the image
-  /// composited by its subtree. If [allLayers] is true, then the [record] will
-  /// capture the entire tree composited and clipped by [record]'s region.
-  ///
-  /// The two modes are identical if there is nothing in front of [record].
-  /// But in rare cases, what needs to be captured has to be rendered out of
-  /// [record]'s subtree in its front. By setting [allLayers] to true, [record]
-  /// captures everything within its region even if drawn outside of its
-  /// subtree.
-  ///
-  /// Defaults to false.
   final bool allLayers;
 
   final List<_AsyncImage> _recordedFrames = <_AsyncImage>[];
 
-  /// Returns a widget that renders a widget in a box that can be recorded.
-  ///
-  /// The returned widget wraps `child` in a box with a fixed size specified by
-  /// [frameSize]. The `key` is also applied to the returned widget.
-  ///
-  /// The frame is only recorded if the `recording` argument is true, or during
-  /// a procedure that is wrapped within [recording]. In either case, the
-  /// painted result of each frame will be stored and later available for
-  /// [collate]. If neither condition is met, the frames are not recorded, which
-  /// is useful during setup phases.
-  ///
-  /// See also:
-  ///
-  ///  * [WidgetTester.pumpFrames], which renders a widget in a series of frames
-  ///    with a fixed time interval.
   Widget record(Widget child, {
     Key? key,
     bool recording = true,
@@ -206,16 +90,6 @@ class AnimationSheetBuilder {
   // They're stored here to be disposed by [dispose].
   final List<_AsyncImage> _results = <_AsyncImage>[];
 
-  /// Returns an result image by putting all frames together in a table.
-  ///
-  /// This method returns an image that arranges the captured frames in a table,
-  /// which has `cellsPerRow` images per row with the order from left to right,
-  /// top to bottom.
-  ///
-  /// The result image of this method is managed by [AnimationSheetBuilder],
-  /// and should not be disposed by the caller.
-  ///
-  /// An example of using this method can be found at [AnimationSheetBuilder].
   Future<ui.Image> collate(int cellsPerRow) async {
     assert(_recordedFrames.isNotEmpty,
       'No frames are collected. Have you forgot to set `recording` to true?');
@@ -384,7 +258,6 @@ class _RenderRootableRepaintBoundary extends RenderRepaintBoundary {
 
 // A [RepaintBoundary], except that its render object has a `fullscreenToImage` method.
 class _RootableRepaintBoundary extends SingleChildRenderObjectWidget {
-  /// Creates a widget that isolates repaints.
   const _RootableRepaintBoundary({ super.key, super.child });
 
   @override

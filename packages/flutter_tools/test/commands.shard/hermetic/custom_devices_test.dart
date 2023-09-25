@@ -289,8 +289,6 @@ class FakeCommandRunner extends FlutterCommandRunner {
   }
 }
 
-/// May take platform, logger, processManager and fileSystem from context if
-/// not explicitly specified.
 CustomDevicesCommand createCustomDevicesCommand({
   CustomDevicesConfig Function(FileSystem, Logger)? config,
   Terminal Function(Platform)? terminal,
@@ -334,8 +332,6 @@ CustomDevicesCommand createCustomDevicesCommand({
   );
 }
 
-/// May take platform, logger, processManager and fileSystem from context if
-/// not explicitly specified.
 CommandRunner<void> createCustomDevicesCommandRunner({
   CustomDevicesConfig Function(FileSystem, Logger)? config,
   Terminal Function(Platform)? terminal,

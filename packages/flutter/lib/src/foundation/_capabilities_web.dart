@@ -9,5 +9,4 @@ import 'dart:js_interop';
 @JS('window.flutterCanvasKit')
 external JSAny? get _windowFlutterCanvasKit;
 
-/// The web implementation of [isCanvasKit]
 bool get isCanvasKit => _windowFlutterCanvasKit != null;

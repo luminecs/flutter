@@ -39,38 +39,25 @@ const List<BoxShadow> _kSliderBoxShadows = <BoxShadow> [
   ),
 ];
 
-/// Paints an iOS-style slider thumb or switch thumb.
-///
-/// Used by [CupertinoSwitch] and [CupertinoSlider].
 class CupertinoThumbPainter {
-  /// Creates an object that paints an iOS-style slider thumb.
   const CupertinoThumbPainter({
     this.color = CupertinoColors.white,
     this.shadows = _kSliderBoxShadows,
   });
 
-  /// Creates an object that paints an iOS-style switch thumb.
   const CupertinoThumbPainter.switchThumb({
     Color color = CupertinoColors.white,
     List<BoxShadow> shadows = _kSwitchBoxShadows,
   }) : this(color: color, shadows: shadows);
 
-  /// The color of the interior of the thumb.
   final Color color;
 
-  /// The list of [BoxShadow] to paint below the thumb.
   final List<BoxShadow> shadows;
 
-  /// Half the default diameter of the thumb.
   static const double radius = 14.0;
 
-  /// The default amount the thumb should be extended horizontally when pressed.
   static const double extension = 7.0;
 
-  /// Paints the thumb onto the given canvas in the given rectangle.
-  ///
-  /// Consider using [radius] and [extension] when deciding how large a
-  /// rectangle to use for the thumb.
   void paint(Canvas canvas, Rect rect) {
     final RRect rrect = RRect.fromRectAndRadius(
       rect,

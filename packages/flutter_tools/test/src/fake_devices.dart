@@ -9,8 +9,6 @@ import 'package:flutter_tools/src/build_info.dart';
 import 'package:flutter_tools/src/device.dart';
 import 'package:flutter_tools/src/project.dart';
 
-/// A list of fake devices to test JSON serialization
-/// (`Device.toJson()` and `--machine` flag for `devices` command)
 List<FakeDeviceJsonData> fakeDevices = <FakeDeviceJsonData>[
   FakeDeviceJsonData(
     FakeDevice('ephemeral', 'ephemeral', type: PlatformType.android),
@@ -108,7 +106,6 @@ List<FakeDeviceJsonData> fakeDevices = <FakeDeviceJsonData>[
   ),
 ];
 
-/// Fake device to test `devices` command.
 class FakeDevice extends Device {
   FakeDevice(this.name, String id, {
     bool ephemeral = true,
@@ -185,7 +182,6 @@ class FakeDevice extends Device {
   Future<String> sdkNameAndVersion = Future<String>.value('Test SDK (1.2.3)');
 }
 
-/// Combines fake device with its canonical JSON representation.
 class FakeDeviceJsonData {
   FakeDeviceJsonData(this.dev, this.json);
 
@@ -257,7 +253,6 @@ class FakePollingDeviceDiscovery extends PollingDeviceDiscovery {
   List<String> wellKnownIds = <String>[];
 }
 
-/// A fake implementation of the [DeviceLogReader].
 class FakeDeviceLogReader extends DeviceLogReader {
   @override
   String get name => 'FakeLogReader';

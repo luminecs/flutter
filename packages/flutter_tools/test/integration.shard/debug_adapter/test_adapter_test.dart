@@ -131,7 +131,6 @@ void main() {
   });
 }
 
-/// Matchers for the expected console output of [TestsProject].
 final List<Object> _testsProjectExpectedOutput = <Object>[
   // First test
   '✓ Flutter tests can pass',
@@ -149,8 +148,6 @@ final List<Object> _testsProjectExpectedOutput = <Object>[
   'Exited (1).',
 ];
 
-/// A helper that verifies a full set of expected test results for the
-/// [TestsProject] script.
 void _expectStandardTestsProjectResults(TestEvents events) {
   // Check we received all expected test events passed through from
   // package:test.

@@ -2,19 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// The Flutter painting library.
-///
-/// To use, import `package:flutter/painting.dart`.
-///
-/// This library includes a variety of classes that wrap the Flutter
-/// engine's painting API for more specialized purposes, such as painting scaled
-/// images, interpolating between shadows, painting borders around boxes, etc.
-///
-/// In particular:
-///
-///  * Use the [TextPainter] class for painting text.
-///  * Use [Decoration] (and more concretely [BoxDecoration]) for
-///    painting boxes.
 library painting;
 
 export 'dart:ui' show PlaceholderAlignment, Shadow, TextHeightBehavior, TextLeadingDistribution;

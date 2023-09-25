@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [DeletableChipAttributes.onDeleted].
 
 void main() => runApp(const OnDeletedExampleApp());
 

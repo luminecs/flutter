@@ -688,12 +688,8 @@ void main() {
   });
 }
 
-/// Fake chrome connection that fails to get tabs a few times.
 class FakeChromeConnection extends Fake implements ChromeConnection {
 
-  /// Create a connection that throws a connection exception on first
-  /// [maxRetries] calls to [getTabs].
-  /// If [maxRetries] is `null`, [getTabs] calls never succeed.
   FakeChromeConnection({this.maxRetries}): _retries = 0;
 
   final List<ChromeTab> tabs = <ChromeTab>[];

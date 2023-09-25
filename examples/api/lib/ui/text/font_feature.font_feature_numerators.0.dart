@@ -6,7 +6,6 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 
-/// Flutter code sample for [FontFeature.FontFeature.numerators].
 
 void main() => runApp(const ExampleApp());
 
@@ -22,7 +21,6 @@ class ExampleApp extends StatelessWidget {
   }
 }
 
-/// This is the stateless widget that the main application instantiates.
 class ExampleWidget extends StatelessWidget {
   const ExampleWidget({super.key});
 

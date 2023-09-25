@@ -35,8 +35,6 @@ Future<void> _withApkInstall(
   }
 }
 
-/// Since we don't check the gradle wrapper in with the android host project we
-/// yank the gradle wrapper from the module (which is added by the Flutter tool).
 void _copyGradleFromModule(String source, String destination) {
   print('copying gradle from module $source to $destination');
   final String wrapperPath = path.join(source, '.android', 'gradlew');

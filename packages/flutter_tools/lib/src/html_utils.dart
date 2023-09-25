@@ -7,20 +7,8 @@ import 'package:html/parser.dart';
 
 import 'base/common.dart';
 
-/// Placeholder for base href
 const String kBaseHrefPlaceholder = r'$FLUTTER_BASE_HREF';
 
-/// Utility class for parsing and performing operations on the contents of the
-/// index.html file.
-///
-/// For example, to parse the base href from the index.html file:
-///
-/// ```dart
-/// String parseBaseHref(File indexHtmlFile) {
-///   final IndexHtml indexHtml = IndexHtml(indexHtmlFile.readAsStringSync());
-///   return indexHtml.getBaseHref();
-/// }
-/// ```
 class IndexHtml {
   IndexHtml(this._content);
 
@@ -29,7 +17,6 @@ class IndexHtml {
 
   Document _getDocument() => parse(_content);
 
-  /// Parses the base href from the index.html file.
   String getBaseHref() {
     final Element? baseElement = _getDocument().querySelector('base');
     final String? baseHref = baseElement?.attributes == null
@@ -58,7 +45,6 @@ class IndexHtml {
     return stripLeadingSlash(stripTrailingSlash(baseHref));
   }
 
-  /// Applies substitutions to the content of the index.html file.
   void applySubstitutions({
     required String baseHref,
     required String? serviceWorkerVersion,
@@ -84,7 +70,6 @@ class IndexHtml {
   }
 }
 
-/// Strips the leading slash from a path.
 String stripLeadingSlash(String path) {
   while (path.startsWith('/')) {
     path = path.substring(1);
@@ -92,7 +77,6 @@ String stripLeadingSlash(String path) {
   return path;
 }
 
-/// Strips the trailing slash from a path.
 String stripTrailingSlash(String path) {
   while (path.endsWith('/')) {
     path = path.substring(0, path.length - 1);

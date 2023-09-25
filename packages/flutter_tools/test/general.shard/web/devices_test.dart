@@ -390,7 +390,6 @@ void main() {
   });
 }
 
-/// A test implementation of the [ChromiumLauncher] that launches a fixed instance.
 class TestChromiumLauncher implements ChromiumLauncher {
   TestChromiumLauncher();
 

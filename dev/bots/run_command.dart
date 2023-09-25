@@ -11,13 +11,6 @@ import 'package:path/path.dart' as path;
 
 import 'utils.dart';
 
-/// Runs the `executable` and returns standard output as a stream of lines.
-///
-/// The returned stream reaches its end immediately after the command exits.
-///
-/// If `expectNonZeroExit` is false and the process exits with a non-zero exit
-/// code fails the test immediately by exiting the test process with exit code
-/// 1.
 Stream<String> runAndGetStdout(String executable, List<String> arguments, {
   String? workingDirectory,
   Map<String, String>? environment,
@@ -44,44 +37,27 @@ Stream<String> runAndGetStdout(String executable, List<String> arguments, {
   yield* output.stream;
 }
 
-/// Represents a running process launched using [startCommand].
 class Command {
   Command._(this.process, this._time, this._savedStdout, this._savedStderr);
 
-  /// The raw process that was launched for this command.
   final io.Process process;
   final Stopwatch _time;
   final Future<String> _savedStdout;
   final Future<String> _savedStderr;
 }
 
-/// The result of running a command using [startCommand] and [runCommand];
 class CommandResult {
   CommandResult._(this.exitCode, this.elapsedTime, this.flattenedStdout, this.flattenedStderr);
 
-  /// The exit code of the process.
   final int exitCode;
 
-  /// The amount of time it took the process to complete.
   final Duration elapsedTime;
 
-  /// Standard output decoded as a string using UTF8 decoder.
   final String? flattenedStdout;
 
-  /// Standard error output decoded as a string using UTF8 decoder.
   final String? flattenedStderr;
 }
 
-/// Starts the `executable` and returns a command object representing the
-/// running process.
-///
-/// `outputListener` is called for every line of standard output from the
-/// process, and is given the [Process] object. This can be used to interrupt
-/// an indefinitely running process, for example, by waiting until the process
-/// emits certain output.
-///
-/// `outputMode` controls where the standard output from the command process
-/// goes. See [OutputMode].
 Future<Command> startCommand(String executable, List<String> arguments, {
   String? workingDirectory,
   Map<String, String>? environment,
@@ -135,20 +111,6 @@ Future<Command> startCommand(String executable, List<String> arguments, {
   );
 }
 
-/// Runs the `executable` and waits until the process exits.
-///
-/// If the process exits with a non-zero exit code and `expectNonZeroExit` is
-/// false, calls foundError (which does not terminate execution!).
-///
-/// `outputListener` is called for every line of standard output from the
-/// process, and is given the [Process] object. This can be used to interrupt
-/// an indefinitely running process, for example, by waiting until the process
-/// emits certain output.
-///
-/// Returns the result of the finished process.
-///
-/// `outputMode` controls where the standard output from the command process
-/// goes. See [OutputMode].
 Future<CommandResult> runCommand(String executable, List<String> arguments, {
   String? workingDirectory,
   Map<String, String>? environment,
@@ -212,20 +174,8 @@ Future<CommandResult> runCommand(String executable, List<String> arguments, {
   return result;
 }
 
-/// Specifies what to do with the command output from [runCommand] and [startCommand].
 enum OutputMode {
-  /// Forwards standard output and standard error streams to the test process'
-  /// standard output stream (i.e. stderr is redirected to stdout).
-  ///
-  /// Use this mode if all you want is print the output of the command to the
-  /// console. The output is no longer available after the process exits.
   print,
 
-  /// Saves standard output and standard error streams in memory.
-  ///
-  /// Captured output can be retrieved from the [CommandResult] object.
-  ///
-  /// Use this mode in tests that need to inspect the output of a command, or
-  /// when the output should not be printed to console.
   capture,
 }

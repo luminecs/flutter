@@ -21,10 +21,7 @@ import 'dart/pub.dart';
 import 'globals.dart' as globals;
 import 'project.dart';
 
-/// An implementation of the [Cache] which provides all of Flutter's default artifacts.
 class FlutterCache extends Cache {
-  /// [rootOverride] is configurable for testing.
-  /// [artifacts] is configurable for testing.
   FlutterCache({
     required Logger logger,
     required super.fileSystem,
@@ -63,11 +60,6 @@ class FlutterCache extends Cache {
 }
 
 
-/// Ensures that the source files for all of the dependencies for the
-/// flutter_tool are present.
-///
-/// This does not handle cases where the source files are modified or the
-/// directory contents are incomplete.
 class PubDependencies extends ArtifactSet {
   PubDependencies({
     // Needs to be lazy to avoid reading from the cache before the root is initialized.
@@ -134,7 +126,6 @@ class PubDependencies extends ArtifactSet {
   }
 }
 
-/// A cached artifact containing fonts used for Material Design.
 class MaterialFonts extends CachedArtifact {
   MaterialFonts(Cache cache) : super(
     'material_fonts',
@@ -155,10 +146,6 @@ class MaterialFonts extends CachedArtifact {
   Uri _toStorageUri(String path) => Uri.parse('${cache.storageBaseUrl}/$path');
 }
 
-/// A cached artifact containing the web dart:ui sources, platform dill files,
-/// and libraries.json.
-///
-/// This SDK references code within the regular Dart sdk to reduce download size.
 class FlutterWebSdk extends CachedArtifact {
   FlutterWebSdk(Cache cache)
    : super(
@@ -217,7 +204,6 @@ class LegacyCanvasKitRemover extends ArtifactSet {
   ) => _getLegacyCanvasKitDirectory(fileSystem).delete(recursive: true);
 }
 
-/// A cached artifact containing the dart:ui source code.
 class FlutterSdk extends EngineCachedArtifact {
   FlutterSdk(Cache cache, {
     required Platform platform,
@@ -285,7 +271,6 @@ class MacOSEngineArtifacts extends EngineCachedArtifact {
   List<String> getLicenseDirs() => const <String>[];
 }
 
-/// Artifacts required for desktop Windows builds.
 class WindowsEngineArtifacts extends EngineCachedArtifact {
   WindowsEngineArtifacts(Cache cache, {
     required Platform platform,
@@ -313,7 +298,6 @@ class WindowsEngineArtifacts extends EngineCachedArtifact {
   List<String> getLicenseDirs() => const <String>[];
 }
 
-/// Artifacts required for desktop Linux builds.
 class LinuxEngineArtifacts extends EngineCachedArtifact {
   LinuxEngineArtifacts(Cache cache, {
     required Platform platform
@@ -346,7 +330,6 @@ class LinuxEngineArtifacts extends EngineCachedArtifact {
   List<String> getLicenseDirs() => const <String>[];
 }
 
-/// The artifact used to generate snapshots for Android builds.
 class AndroidGenSnapshotArtifacts extends EngineCachedArtifact {
   AndroidGenSnapshotArtifacts(Cache cache, {
     required Platform platform,
@@ -383,11 +366,6 @@ class AndroidGenSnapshotArtifacts extends EngineCachedArtifact {
   List<String> getLicenseDirs() { return <String>[]; }
 }
 
-/// A cached artifact containing the Maven dependencies used to build Android projects.
-///
-/// This is a no-op if the android SDK is not available.
-///
-/// Set [Java] to `null` to indicate that no Java/JDK installation could be found.
 class AndroidMavenArtifacts extends ArtifactSet {
   AndroidMavenArtifacts(this.cache, {
     required Java? java,
@@ -454,8 +432,6 @@ class AndroidMavenArtifacts extends ArtifactSet {
   String get name => 'android-maven-artifacts';
 }
 
-/// Artifacts used for internal builds. The flutter tool builds Android projects
-/// using the artifacts cached by [AndroidMavenArtifacts].
 class AndroidInternalBuildArtifacts extends EngineCachedArtifact {
   AndroidInternalBuildArtifacts(Cache cache) : super(
     'android-internal-build-artifacts',
@@ -509,10 +485,6 @@ class IOSEngineArtifacts extends EngineCachedArtifact {
   }
 }
 
-/// A cached artifact containing Gradle Wrapper scripts and binaries.
-///
-/// While this is only required for Android, we need to always download it due
-/// the ensurePlatformSpecificTooling logic.
 class GradleWrapper extends CachedArtifact {
   GradleWrapper(Cache cache) : super(
     'gradle_wrapper',
@@ -563,7 +535,6 @@ class GradleWrapper extends CachedArtifact {
   }
 }
 
-/// Common functionality for pulling Fuchsia SDKs.
 abstract class _FuchsiaSDKArtifacts extends CachedArtifact {
   _FuchsiaSDKArtifacts(Cache cache, String platform) :
     _path = 'fuchsia/sdk/core/$platform-amd64',
@@ -585,7 +556,6 @@ abstract class _FuchsiaSDKArtifacts extends CachedArtifact {
   }
 }
 
-/// The pre-built flutter runner for Fuchsia development.
 class FlutterRunnerSDKArtifacts extends CachedArtifact {
   FlutterRunnerSDKArtifacts(Cache cache, {
     required Platform platform,
@@ -618,17 +588,12 @@ class FlutterRunnerSDKArtifacts extends CachedArtifact {
   }
 }
 
-/// Implementations of this class can resolve URLs for packages that are versioned.
-///
-/// See also [CipdArchiveResolver].
 abstract class VersionedPackageResolver {
   const VersionedPackageResolver();
 
-  /// Returns the URL for the artifact.
   String resolveUrl(String packageName, String version);
 }
 
-/// Resolves the CIPD archive URL for a given package and version.
 class CipdArchiveResolver extends VersionedPackageResolver {
   const CipdArchiveResolver(this.cache);
 
@@ -640,7 +605,6 @@ class CipdArchiveResolver extends VersionedPackageResolver {
   }
 }
 
-/// The debug symbols for flutter runner for Fuchsia development.
 class FlutterRunnerDebugSymbols extends CachedArtifact {
   FlutterRunnerDebugSymbols(Cache cache, {
     required Platform platform,
@@ -682,7 +646,6 @@ class FlutterRunnerDebugSymbols extends CachedArtifact {
   }
 }
 
-/// The Fuchsia core SDK for Linux.
 class LinuxFuchsiaSDKArtifacts extends _FuchsiaSDKArtifacts {
   LinuxFuchsiaSDKArtifacts(Cache cache, {
     required Platform platform,
@@ -704,7 +667,6 @@ class LinuxFuchsiaSDKArtifacts extends _FuchsiaSDKArtifacts {
   }
 }
 
-/// The Fuchsia core SDK for MacOS.
 class MacOSFuchsiaSDKArtifacts extends _FuchsiaSDKArtifacts {
   MacOSFuchsiaSDKArtifacts(Cache cache, {
     required Platform platform,
@@ -726,7 +688,6 @@ class MacOSFuchsiaSDKArtifacts extends _FuchsiaSDKArtifacts {
   }
 }
 
-/// Cached artifacts for font subsetting.
 class FontSubsetArtifacts extends EngineCachedArtifact {
   FontSubsetArtifacts(Cache cache, {
     required Platform platform,
@@ -764,7 +725,6 @@ class FontSubsetArtifacts extends EngineCachedArtifact {
   List<String> getPackageDirs() => const <String>[];
 }
 
-/// Cached iOS/USB binary artifacts.
 class IosUsbArtifacts extends CachedArtifact {
   IosUsbArtifacts(String name, Cache cache, {
     required Platform platform,

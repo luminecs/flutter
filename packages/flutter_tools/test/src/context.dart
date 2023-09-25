@@ -46,7 +46,6 @@ export 'package:flutter_tools/src/base/context.dart' show Generator;
 
 export 'fake_process_manager.dart' show FakeCommand, FakeProcessManager, ProcessManager;
 
-/// Return the test logger. This assumes that the current Logger is a BufferLogger.
 BufferLogger get testLogger => context.get<Logger>()! as BufferLogger;
 
 FakeDeviceManager get testDeviceManager => context.get<DeviceManager>()! as FakeDeviceManager;
@@ -300,9 +299,6 @@ class FakeDoctor extends Doctor {
   bool get canLaunchAnything => true;
 
   @override
-  /// Replaces the android workflow with a version that overrides licensesAccepted,
-  /// to prevent individual tests from having to mock out the process for
-  /// the Doctor.
   List<DoctorValidator> get validators {
     final List<DoctorValidator> superValidators = super.validators;
     return superValidators.map<DoctorValidator>((DoctorValidator v) {
@@ -371,7 +367,6 @@ class FakeXcodeProjectInterpreter implements XcodeProjectInterpreter {
   List<String> xcrunCommand() => <String>['xcrun'];
 }
 
-/// Prevent test crashest from being reported to the crash backend.
 class NoopCrashReporter implements CrashReporter {
   const NoopCrashReporter();
 

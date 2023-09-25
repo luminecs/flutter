@@ -27,8 +27,6 @@ import '../features.dart';
 import '../runner/flutter_command.dart';
 import '../runner/flutter_command_runner.dart';
 
-/// just the function signature of the [print] function.
-/// The Object arg may be null.
 typedef PrintFn = void Function(Object);
 
 class CustomDevicesCommand extends FlutterCommand {
@@ -164,9 +162,6 @@ Requires the custom devices feature to be enabled. You can enable it using "flut
   }
 }
 
-/// This class is meant to provide some commonly used utility functions
-/// to the subcommands, like backing up the config file & checking if the
-/// feature is enabled.
 abstract class CustomDevicesCommandBase extends FlutterCommand {
   CustomDevicesCommandBase({
     required this.customDevicesConfig,
@@ -180,13 +175,9 @@ abstract class CustomDevicesCommandBase extends FlutterCommand {
   @protected final FileSystem? fileSystem;
   @protected final Logger logger;
 
-  /// The path to the (potentially non-existing) backup of the config file.
   @protected
   String get configBackupPath => '${customDevicesConfig.configPath}.bak';
 
-  /// Copies the current config file to [configBackupPath], overwriting it
-  /// if necessary. Returns false and does nothing if the current config file
-  /// doesn't exist. (True otherwise)
   @protected
   bool backup() {
     final File configFile = fileSystem!.file(customDevicesConfig.configPath);
@@ -197,9 +188,6 @@ abstract class CustomDevicesCommandBase extends FlutterCommand {
     return false;
   }
 
-  /// Checks if the custom devices feature is enabled and returns true/false
-  /// accordingly. Additionally, logs an error if it's not enabled with a hint
-  /// on how to enable it.
   @protected
   void checkFeatureEnabled() {
     if (!featureFlags.areCustomDevicesEnabled) {
@@ -371,8 +359,6 @@ class CustomDevicesAddCommand extends CustomDevicesCommandBase {
     logger.printError(err);
   }
 
-  /// Check this config by executing some of the commands, see if they run
-  /// fine.
   Future<bool> _checkConfigWithLogging(final CustomDeviceConfig config) async {
     final CustomDevice device = CustomDevice(
       config: config,
@@ -457,10 +443,6 @@ class CustomDevicesAddCommand extends CustomDevicesCommandBase {
     return result;
   }
 
-  /// Run non-interactively (useful if running from scripts or bots),
-  /// add value of the `--json` arg to the config.
-  ///
-  /// Only check if `--check` is explicitly specified. (Don't check by default)
   Future<FlutterCommandResult> runNonInteractively() async {
     final String jsonStr = stringArg(_kJson)!;
     final bool shouldCheck = boolArg(_kCheck);
@@ -497,7 +479,6 @@ class CustomDevicesAddCommand extends CustomDevicesCommandBase {
 
   bool _isValidIpAddr(String s) => InternetAddress.tryParse(s) != null;
 
-  /// Ask the user to input a string.
   Future<String?> askForString(
     String name, {
     String? description,
@@ -532,7 +513,6 @@ class CustomDevicesAddCommand extends CustomDevicesCommandBase {
     }
   }
 
-  /// Ask the user for a y(es) / n(o) or empty input.
   Future<bool> askForBool(
     String name, {
     String? description,
@@ -555,8 +535,6 @@ class CustomDevicesAddCommand extends CustomDevicesCommandBase {
     }
   }
 
-  /// Ask the user if he wants to apply the config.
-  /// Shows a different prompt if errors or warnings exist in the config.
   Future<bool> askApplyConfig({bool hasErrorsOrWarnings = false}) {
     return askForBool(
       'apply',
@@ -568,8 +546,6 @@ class CustomDevicesAddCommand extends CustomDevicesCommandBase {
     );
   }
 
-  /// Run interactively (with user prompts), the target device should be
-  /// connected to via ssh.
   Future<FlutterCommandResult> runInteractivelySsh() async {
     final bool shouldCheck = boolArg(_kCheck);
 

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [DecoratedBoxTransition].
 
 void main() => runApp(const DecoratedBoxTransitionExampleApp());
 
@@ -26,8 +25,6 @@ class DecoratedBoxTransitionExample extends StatefulWidget {
   State<DecoratedBoxTransitionExample> createState() => _DecoratedBoxTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _DecoratedBoxTransitionExampleState extends State<DecoratedBoxTransitionExample> with TickerProviderStateMixin {
   final DecorationTween decorationTween = DecorationTween(
     begin: BoxDecoration(

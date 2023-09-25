@@ -51,7 +51,6 @@ class AndroidEmulators extends EmulatorDiscovery {
   @override
   Future<List<Emulator>> get emulators => _getEmulatorAvds();
 
-  /// Return the list of available emulator AVDs.
   Future<List<AndroidEmulator>> _getEmulatorAvds() async {
     final String? emulatorPath = _androidSdk?.emulatorPath;
     if (emulatorPath == null) {
@@ -66,8 +65,6 @@ class AndroidEmulators extends EmulatorDiscovery {
     return emulators;
   }
 
-  /// Parse the given `emulator -list-avds` output in [text], and fill out the given list
-  /// of emulators by reading information from the relevant ini files.
   void _extractEmulatorAvdInfo(String text, List<AndroidEmulator> emulators) {
     for (final String id in text.trim().split('\n').where((String l) => l != '')) {
       emulators.add(_loadEmulatorInfo(id));

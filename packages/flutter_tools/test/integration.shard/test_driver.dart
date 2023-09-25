@@ -228,15 +228,6 @@ abstract class FlutterTestDriver {
     return isolate;
   }
 
-  /// Add a breakpoint and wait for it to trip the program execution.
-  ///
-  /// Only call this when you are absolutely sure that the program under test
-  /// will hit the breakpoint _in the future_.
-  ///
-  /// In particular, do not call this if the program is currently racing to pass
-  /// the line of code you are breaking on. Pretend that calling this will take
-  /// an hour before setting the breakpoint. Would the code still eventually hit
-  /// the breakpoint and stop?
   Future<void> breakAt(Uri uri, int line) async {
     final String isolateId = await _getFlutterIsolateId();
     final Future<Event> event = subscribeToPauseEvent(isolateId);
@@ -270,18 +261,6 @@ abstract class FlutterTestDriver {
     return waitForDebugEvent(kind, isolateId, event);
   }
 
-  /// Subscribes to debug events containing [kind].
-  ///
-  /// Returns a future that completes when the [kind] event is received.
-  ///
-  /// This method should be called before the command that triggers
-  /// the event to subscribe to the event in time, for example:
-  ///
-  /// ```dart
-  /// var event = subscribeToDebugEvent('Pause', id); // Subscribe to 'pause' events.
-  /// ...                                             // Code that pauses the app.
-  /// await waitForDebugEvent('Pause', id, event);    // Isolate is paused now.
-  /// ```
   Future<Event> subscribeToDebugEvent(String kind, String isolateId) {
     _debugPrint('Start listening for $kind events');
 
@@ -292,9 +271,6 @@ abstract class FlutterTestDriver {
       }).first;
   }
 
-  /// Wait for the [event] if needed.
-  ///
-  /// Return immediately if the isolate is already in the desired state.
   Future<Isolate> waitForDebugEvent(String kind, String isolateId, Future<Event> event) {
     return _timeoutWithMessages<Isolate>(
       () async {

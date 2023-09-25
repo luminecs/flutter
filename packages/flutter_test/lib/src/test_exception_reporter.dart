@@ -6,19 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:test_api/scaffolding.dart' as test_package;
 
-/// Signature for the [reportTestException] callback.
 typedef TestExceptionReporter = void Function(FlutterErrorDetails details, String testDescription);
 
-/// A function that is called by the test framework when an unexpected error
-/// occurred during a test.
-///
-/// This function is responsible for reporting the error to the user such that
-/// the user can easily diagnose what failed when inspecting the test results.
-/// It is also responsible for reporting the error to the test framework itself
-/// in order to cause the test to fail.
-///
-/// This function is pluggable to handle the cases where tests are run in
-/// contexts _other_ than via `flutter test`.
 TestExceptionReporter get reportTestException => _reportTestException;
 TestExceptionReporter _reportTestException = _defaultTestExceptionReporter;
 set reportTestException(TestExceptionReporter handler) {

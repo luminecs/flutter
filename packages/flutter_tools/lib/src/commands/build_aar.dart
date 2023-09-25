@@ -148,8 +148,6 @@ class BuildAarCommand extends BuildSubCommand {
     return FlutterCommandResult.success();
   }
 
-  /// Returns the [FlutterProject] which is determined from the remaining command-line
-  /// argument if any or the current working directory.
   FlutterProject _getProject() {
     final List<String> remainingArguments = argResults!.rest;
     if (remainingArguments.isEmpty) {

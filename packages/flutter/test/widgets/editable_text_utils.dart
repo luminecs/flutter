@@ -8,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// On web, the context menu (aka toolbar) is provided by the browser.
 const bool isContextMenuProvidedByPlatform = isBrowser;
 
 // Returns the RenderEditable at the given index, or the first if not given.
@@ -50,7 +49,6 @@ Offset textOffsetToPosition(WidgetTester tester, int offset, {int index = 0}) {
   return endpoints[0].point + const Offset(kIsWeb? 1.0 : 0.0, -2.0);
 }
 
-/// Mimic key press events by sending key down and key up events via the [tester].
 Future<void> sendKeys(
     WidgetTester tester,
     List<LogicalKeyboardKey> keys, {

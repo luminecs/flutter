@@ -17,7 +17,6 @@ import 'application_package.dart';
 import 'build_linux.dart';
 import 'linux_workflow.dart';
 
-/// A device that represents a desktop Linux target.
 class LinuxDevice extends DesktopDevice {
   LinuxDevice({
     required ProcessManager processManager,

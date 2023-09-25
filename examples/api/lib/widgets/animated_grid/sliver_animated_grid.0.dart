@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SliverAnimatedGrid].
 
 void main() => runApp(const SliverAnimatedGridSample());
 

@@ -20,7 +20,6 @@ import '../../devfs.dart';
 import '../../device.dart';
 import '../build_system.dart';
 
-/// The output shader format that should be used by the [ShaderCompiler].
 enum ShaderTarget {
   impellerAndroid('--runtime-stage-gles'),
   impelleriOS('--runtime-stage-metal'),
@@ -31,7 +30,6 @@ enum ShaderTarget {
   final String target;
 }
 
-/// A wrapper around [ShaderCompiler] to support hot reload of shader sources.
 class DevelopmentShaderCompiler {
   DevelopmentShaderCompiler({
     required ShaderCompiler shaderCompiler,
@@ -50,8 +48,6 @@ class DevelopmentShaderCompiler {
   bool _debugConfigured = false;
   bool _jsonMode = false;
 
-  /// Configure the output format of the shader compiler for a particular
-  /// flutter device.
   void configureCompiler(TargetPlatform? platform, { required ImpellerStatus impellerStatus }) {
     switch (platform) {
       case TargetPlatform.ios:
@@ -83,8 +79,6 @@ class DevelopmentShaderCompiler {
     _debugConfigured = true;
   }
 
-  /// Recompile the input shader and return a devfs content that should be synced
-  /// to the attached device in its place.
   Future<DevFSContent?> recompileShader(DevFSContent inputShader) async {
     assert(_debugConfigured);
     final File output = _fileSystem.systemTempDirectory.childFile('${_random.nextDouble()}.temp');
@@ -123,8 +117,6 @@ class DevelopmentShaderCompiler {
   }
 }
 
-/// A class the wraps the functionality of the Impeller shader compiler
-/// impellerc.
 class ShaderCompiler {
   ShaderCompiler({
     required ProcessManager processManager,
@@ -141,22 +133,11 @@ class ShaderCompiler {
   final FileSystem _fs;
   final Artifacts _artifacts;
 
-  /// The [Source] inputs that targets using this should depend on.
-  ///
-  /// See [Target.inputs].
   static const List<Source> inputs = <Source>[
     Source.pattern('{FLUTTER_ROOT}/packages/flutter_tools/lib/src/build_system/targets/shader_compiler.dart'),
     Source.hostArtifact(HostArtifact.impellerc),
   ];
 
-  /// Calls impellerc, which transforms the [input] glsl shader into a
-  /// platform specific shader at [outputPath].
-  ///
-  /// All parameters are required.
-  ///
-  /// If the shader compiler subprocess fails, it will print the stdout and
-  /// stderr to the log and throw a [ShaderCompilerException]. Otherwise, it
-  /// will return true.
   Future<bool> compileShader({
     required File input,
     required String outputPath,

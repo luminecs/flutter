@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for migrating from [ToggleButtons] to [SegmentedButton].
 
 void main() {
   runApp(const ToggleButtonsApp());

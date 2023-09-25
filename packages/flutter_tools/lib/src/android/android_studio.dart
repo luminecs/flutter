@@ -29,7 +29,6 @@ final RegExp _dotHomeStudioVersionMatcher =
     RegExp(r'^\.?(AndroidStudio[^\d]*)([\d.]+)');
 
 class AndroidStudio {
-  /// A [version] value of null represents an unknown version.
   AndroidStudio(
     this.directory, {
     this.version,
@@ -146,9 +145,6 @@ class AndroidStudio {
   final String directory;
   final String studioAppName;
 
-  /// The version of Android Studio.
-  ///
-  /// A null value represents an unknown version.
   final Version? version;
 
   final String? configuredPath;
@@ -158,12 +154,6 @@ class AndroidStudio {
   bool _isValid = false;
   final List<String> _validationMessages = <String>[];
 
-  /// The path of the JDK bundled with Android Studio.
-  ///
-  /// This will be null if the bundled JDK could not be found or run.
-  ///
-  /// If you looking to invoke the java binary or add it to the system
-  /// environment variables, consider using the [Java] class instead.
   String? get javaPath => _javaPath;
 
   bool get isValid => _isValid;
@@ -183,7 +173,6 @@ class AndroidStudio {
       return null;
     }
     if (globals.platform.isMacOS) {
-      /// plugin path of Android Studio has been changed after version 4.1.
       if (major >= 4 && minor >= 1) {
         return globals.fs.path.join(
           homeDirPath,
@@ -230,11 +219,6 @@ class AndroidStudio {
 
   List<String> get validationMessages => _validationMessages;
 
-  /// Locates the newest, valid version of Android Studio.
-  ///
-  /// In the case that `--android-studio-dir` is configured, the version of
-  /// Android Studio found at that location is always returned, even if it is
-  /// invalid.
   static AndroidStudio? latestValid() {
     final Directory? configuredStudioDir = _configuredDir();
 
@@ -482,10 +466,6 @@ class AndroidStudio {
     return studios;
   }
 
-  /// Gets the Android Studio install directory set by the user, if it is configured.
-  ///
-  /// The returned [Directory], if not null, is guaranteed to have existed during
-  /// this function's execution.
   static Directory? _configuredDir() {
     final String? configuredPath = globals.config.getValue('android-studio-dir') as String?;
     if (configuredPath == null) {

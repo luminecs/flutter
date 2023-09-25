@@ -18,25 +18,14 @@ import 'layout_helper.dart';
 import 'object.dart';
 import 'selection.dart';
 
-/// The start and end positions for a word.
 typedef _WordBoundaryRecord = ({TextPosition wordStart, TextPosition wordEnd});
 
 const String _kEllipsis = '\u2026';
 
-/// Used by the [RenderParagraph] to map its rendering children to their
-/// corresponding semantics nodes.
-///
-/// The [RichText] uses this to tag the relation between its placeholder spans
-/// and their semantics nodes.
 @immutable
 class PlaceholderSpanIndexSemanticsTag extends SemanticsTag {
-  /// Creates a semantics tag with the input `index`.
-  ///
-  /// Different [PlaceholderSpanIndexSemanticsTag]s with the same `index` are
-  /// consider the same.
   const PlaceholderSpanIndexSemanticsTag(this.index) : super('PlaceholderSpanIndexSemanticsTag($index)');
 
-  /// The index of this tag.
   final int index;
 
   @override
@@ -49,21 +38,10 @@ class PlaceholderSpanIndexSemanticsTag extends SemanticsTag {
   int get hashCode => Object.hash(PlaceholderSpanIndexSemanticsTag, index);
 }
 
-/// Parent data used by [RenderParagraph] and [RenderEditable] to annotate
-/// inline contents (such as [WidgetSpan]s) with.
 class TextParentData extends ParentData with ContainerParentDataMixin<RenderBox> {
-  /// The offset at which to paint the child in the parent's coordinate system.
-  ///
-  /// A `null` value indicates this inline widget is not laid out. For instance,
-  /// when the inline widget has never been laid out, or the inline widget is
-  /// ellipsized away.
   Offset? get offset => _offset;
   Offset? _offset;
 
-  /// The [PlaceholderSpan] associated with this render child.
-  ///
-  /// This field is usually set by a [ParentDataWidget], and is typically not
-  /// null when `performLayout` is called.
   PlaceholderSpan? span;
 
   @override
@@ -77,38 +55,6 @@ class TextParentData extends ParentData with ContainerParentDataMixin<RenderBox>
   String toString() => 'widget: $span, ${offset == null ? "not laid out" : "offset: $offset"}';
 }
 
-/// A mixin that provides useful default behaviors for text [RenderBox]es
-/// ([RenderParagraph] and [RenderEditable] for example) with inline content
-/// children managed by the [ContainerRenderObjectMixin] mixin.
-///
-/// This mixin assumes every child managed by the [ContainerRenderObjectMixin]
-/// mixin corresponds to a [PlaceholderSpan], and they are organized in logical
-/// order of the text (the order each [PlaceholderSpan] is encountered when the
-/// user reads the text).
-///
-/// To use this mixin in a [RenderBox] class:
-///
-///  * Call [layoutInlineChildren] in the `performLayout` and `computeDryLayout`
-///    implementation, and during intrinsic size calculations, to get the size
-///    information of the inline widgets as a `List` of `PlaceholderDimensions`.
-///    Determine the positioning of the inline widgets (which is usually done by
-///    a [TextPainter] using its line break algorithm).
-///
-///  * Call [positionInlineChildren] with the positioning information of the
-///    inline widgets.
-///
-///  * Implement [RenderBox.applyPaintTransform], optionally with
-///    [defaultApplyPaintTransform].
-///
-///  * Call [paintInlineChildren] in [RenderBox.paint] to paint the inline widgets.
-///
-///  * Call [hitTestInlineChildren] in [RenderBox.hitTestChildren] to hit test the
-///    inline widgets.
-///
-/// See also:
-///
-///  * [WidgetSpan.extractFromInlineSpan], a helper function for extracting
-///    [WidgetSpan]s from an [InlineSpan] tree.
 mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectMixin<RenderBox, TextParentData> {
   @override
   void setupParentData(RenderBox child) {
@@ -138,19 +84,6 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
         );
   }
 
-  /// Computes the layout for every inline child using the given `layoutChild`
-  /// function and the `maxWidth` constraint.
-  ///
-  /// Returns a list of [PlaceholderDimensions], representing the layout results
-  /// for each child managed by the [ContainerRenderObjectMixin] mixin.
-  ///
-  /// Since this method does not impose a maximum height constraint on the
-  /// inline children, some children may become taller than this [RenderBox].
-  ///
-  /// See also:
-  ///
-  ///  * [TextPainter.setPlaceholderDimensions], the method that usually takes
-  ///    the layout results from this method as the input.
   @protected
   List<PlaceholderDimensions> layoutInlineChildren(double maxWidth, ChildLayouter layoutChild) {
     return <PlaceholderDimensions>[
@@ -159,18 +92,6 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
     ];
   }
 
-  /// Positions each inline child according to the coordinates provided in the
-  /// `boxes` list.
-  ///
-  /// The `boxes` list must be in logical order, which is the order each child
-  /// is encountered when the user reads the text. Usually the length of the
-  /// list equals [childCount], but it can be less than that, when some children
-  /// are ommitted due to ellipsing. It never exceeds [childCount].
-  ///
-  /// See also:
-  ///
-  ///  * [TextPainter.inlinePlaceholderBoxes], the method that can be used to
-  ///    get the input `boxes`.
   @protected
   void positionInlineChildren(List<ui.TextBox> boxes) {
     RenderBox? child = firstChild;
@@ -190,11 +111,6 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
     }
   }
 
-  /// Applies the transform that would be applied when painting the given child
-  /// to the given matrix.
-  ///
-  /// Render children whose [TextParentData.offset] is null zeros out the
-  /// `transform` to indicate they're invisible thus should not be painted.
   @protected
   void defaultApplyPaintTransform(RenderBox child, Matrix4 transform) {
     final TextParentData childParentData = child.parentData! as TextParentData;
@@ -206,10 +122,6 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
     }
   }
 
-  /// Paints each inline child.
-  ///
-  /// Render children whose [TextParentData.offset] is null will be skipped by
-  /// this method.
   @protected
   void paintInlineChildren(PaintingContext context, Offset offset) {
     RenderBox? child = firstChild;
@@ -224,10 +136,6 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
     }
   }
 
-  /// Performs a hit test on each inline child.
-  ///
-  /// Render children whose [TextParentData.offset] is null will be skipped by
-  /// this method.
   @protected
   bool hitTestInlineChildren(BoxHitTestResult result, Offset position) {
     RenderBox? child = firstChild;
@@ -251,12 +159,7 @@ mixin RenderInlineChildrenContainerDefaults on RenderBox, ContainerRenderObjectM
   }
 }
 
-/// A render object that displays a paragraph of text.
 class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBox, TextParentData>, RenderInlineChildrenContainerDefaults, RelayoutWhenSystemFontsChangeMixin {
-  /// Creates a paragraph render object.
-  ///
-  /// The [maxLines] property may be null (and indeed defaults to null), but if
-  /// it is not null, it must be greater than zero.
   RenderParagraph(InlineSpan text, {
     TextAlign textAlign = TextAlign.start,
     required TextDirection textDirection,
@@ -309,7 +212,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
 
   List<InlineSpanSemanticsInformation>? _cachedCombinedSemanticsInfos;
 
-  /// The text to display.
   InlineSpan get text => _textPainter.text!;
   set text(InlineSpan value) {
     switch (_textPainter.text!.compareTo(value)) {
@@ -339,10 +241,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     }
   }
 
-  /// The ongoing selections in this paragraph.
-  ///
-  /// The selection does not include selections in [PlaceholderSpan] if there
-  /// are any.
   @visibleForTesting
   List<TextSelection> get selections {
     if (_lastSelectableFragments == null) {
@@ -369,7 +267,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
   // fragment in this list.
   List<_SelectableFragment>? _lastSelectableFragments;
 
-  /// The [SelectionRegistrar] this paragraph will be, or is, registered to.
   SelectionRegistrar? get registrar => _registrar;
   SelectionRegistrar? _registrar;
   set registrar(SelectionRegistrar? value) {
@@ -445,7 +342,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     super.dispose();
   }
 
-  /// How the text should be aligned horizontally.
   TextAlign get textAlign => _textPainter.textAlign;
   set textAlign(TextAlign value) {
     if (_textPainter.textAlign == value) {
@@ -455,17 +351,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsPaint();
   }
 
-  /// The directionality of the text.
-  ///
-  /// This decides how the [TextAlign.start], [TextAlign.end], and
-  /// [TextAlign.justify] values of [textAlign] are interpreted.
-  ///
-  /// This is also used to disambiguate how to render bidirectional text. For
-  /// example, if the [text] is an English phrase followed by a Hebrew phrase,
-  /// in a [TextDirection.ltr] context the English phrase will be on the left
-  /// and the Hebrew phrase to its right, while in a [TextDirection.rtl]
-  /// context, the English phrase will be on the right and the Hebrew phrase on
-  /// its left.
   TextDirection get textDirection => _textPainter.textDirection!;
   set textDirection(TextDirection value) {
     if (_textPainter.textDirection == value) {
@@ -475,13 +360,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// Whether the text should break at soft line breaks.
-  ///
-  /// If false, the glyphs in the text will be positioned as if there was
-  /// unlimited horizontal space.
-  ///
-  /// If [softWrap] is false, [overflow] and [textAlign] may have unexpected
-  /// effects.
   bool get softWrap => _softWrap;
   bool _softWrap;
   set softWrap(bool value) {
@@ -492,7 +370,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// How visual overflow should be handled.
   TextOverflow get overflow => _overflow;
   TextOverflow _overflow;
   set overflow(TextOverflow value) {
@@ -504,13 +381,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// Deprecated. Will be removed in a future version of Flutter. Use
-  /// [textScaler] instead.
-  ///
-  /// The number of font pixels for each logical pixel.
-  ///
-  /// For example, if the text scale factor is 1.5, text will be 50% larger than
-  /// the specified font size.
   @Deprecated(
     'Use textScaler instead. '
     'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
@@ -526,7 +396,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     textScaler = TextScaler.linear(value);
   }
 
-  /// {@macro flutter.painting.textPainter.textScaler}
   TextScaler get textScaler => _textPainter.textScaler;
   set textScaler(TextScaler value) {
     if (_textPainter.textScaler == value) {
@@ -537,12 +406,7 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// An optional maximum number of lines for the text to span, wrapping if
-  /// necessary. If the text exceeds the given number of lines, it will be
-  /// truncated according to [overflow] and [softWrap].
   int? get maxLines => _textPainter.maxLines;
-  /// The value may be null. If it is not null, then it must be greater than
-  /// zero.
   set maxLines(int? value) {
     assert(value == null || value > 0);
     if (_textPainter.maxLines == value) {
@@ -553,15 +417,7 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// Used by this paragraph's internal [TextPainter] to select a
-  /// locale-specific font.
-  ///
-  /// In some cases, the same Unicode character may be rendered differently
-  /// depending on the locale. For example, the '骨' character is rendered
-  /// differently in the Chinese and Japanese locales. In these cases, the
-  /// [locale] may be used to select a locale-specific font.
   Locale? get locale => _textPainter.locale;
-  /// The value may be null.
   set locale(Locale? value) {
     if (_textPainter.locale == value) {
       return;
@@ -571,9 +427,7 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// {@macro flutter.painting.textPainter.strutStyle}
   StrutStyle? get strutStyle => _textPainter.strutStyle;
-  /// The value may be null.
   set strutStyle(StrutStyle? value) {
     if (_textPainter.strutStyle == value) {
       return;
@@ -583,7 +437,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// {@macro flutter.painting.textPainter.textWidthBasis}
   TextWidthBasis get textWidthBasis => _textPainter.textWidthBasis;
   set textWidthBasis(TextWidthBasis value) {
     if (_textPainter.textWidthBasis == value) {
@@ -594,7 +447,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// {@macro dart.ui.textHeightBehavior}
   ui.TextHeightBehavior? get textHeightBehavior => _textPainter.textHeightBehavior;
   set textHeightBehavior(ui.TextHeightBehavior? value) {
     if (_textPainter.textHeightBehavior == value) {
@@ -605,9 +457,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     markNeedsLayout();
   }
 
-  /// The color to use when painting the selection.
-  ///
-  /// Ignored if the text is not selectable (e.g. if [registrar] is null).
   Color? get selectionColor => _selectionColor;
   Color? _selectionColor;
   set selectionColor(Color? value) {
@@ -689,8 +538,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     return _textPainter.computeDistanceToActualBaseline(TextBaseline.alphabetic);
   }
 
-  /// Whether all inline widget children of this [RenderBox] support dry layout
-  /// calculation.
   bool _canComputeDryLayoutForInlineWidgets() {
     // Dry layout cannot be calculated without a full layout for
     // alignments that require the baseline (baseline, aboveBaseline,
@@ -739,10 +586,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
   bool _needsClipping = false;
   ui.Shader? _overflowShader;
 
-  /// Whether this paragraph currently has a [dart:ui.Shader] for its overflow
-  /// effect.
-  ///
-  /// Used to test this object. Not for use in production.
   @visibleForTesting
   bool get debugHasOverflowShader => _overflowShader != null;
 
@@ -920,40 +763,18 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     }
   }
 
-  /// Returns the offset at which to paint the caret.
-  ///
-  /// Valid only after [layout].
   Offset getOffsetForCaret(TextPosition position, Rect caretPrototype) {
     assert(!debugNeedsLayout);
     _layoutTextWithConstraints(constraints);
     return _textPainter.getOffsetForCaret(position, caretPrototype);
   }
 
-  /// {@macro flutter.painting.textPainter.getFullHeightForCaret}
-  ///
-  /// Valid only after [layout].
   double? getFullHeightForCaret(TextPosition position) {
     assert(!debugNeedsLayout);
     _layoutTextWithConstraints(constraints);
     return _textPainter.getFullHeightForCaret(position, Rect.zero);
   }
 
-  /// Returns a list of rects that bound the given selection.
-  ///
-  /// The [boxHeightStyle] and [boxWidthStyle] arguments may be used to select
-  /// the shape of the [TextBox]es. These properties default to
-  /// [ui.BoxHeightStyle.tight] and [ui.BoxWidthStyle.tight] respectively.
-  ///
-  /// A given selection might have more than one rect if the [RenderParagraph]
-  /// contains multiple [InlineSpan]s or bidirectional text, because logically
-  /// contiguous text might not be visually contiguous.
-  ///
-  /// Valid only after [layout].
-  ///
-  /// See also:
-  ///
-  ///  * [TextPainter.getBoxesForSelection], the method in TextPainter to get
-  ///    the equivalent boxes.
   List<ui.TextBox> getBoxesForSelection(
     TextSelection selection, {
     ui.BoxHeightStyle boxHeightStyle = ui.BoxHeightStyle.tight,
@@ -968,24 +789,12 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     );
   }
 
-  /// Returns the position within the text for the given pixel offset.
-  ///
-  /// Valid only after [layout].
   TextPosition getPositionForOffset(Offset offset) {
     assert(!debugNeedsLayout);
     _layoutTextWithConstraints(constraints);
     return _textPainter.getPositionForOffset(offset);
   }
 
-  /// Returns the text range of the word at the given offset. Characters not
-  /// part of a word, such as spaces, symbols, and punctuation, have word breaks
-  /// on both sides. In such cases, this method will return a text range that
-  /// contains the given text position.
-  ///
-  /// Word boundaries are defined more precisely in Unicode Standard Annex #29
-  /// <http://www.unicode.org/reports/tr29/#Word_Boundaries>.
-  ///
-  /// Valid only after [layout].
   TextRange getWordBoundary(TextPosition position) {
     assert(!debugNeedsLayout);
     _layoutTextWithConstraints(constraints);
@@ -1014,22 +823,11 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
     return _textPainter.getPositionForOffset(caretOffsetTranslated);
   }
 
-  /// Returns the size of the text as laid out.
-  ///
-  /// This can differ from [size] if the text overflowed or if the [constraints]
-  /// provided by the parent [RenderObject] forced the layout to be bigger than
-  /// necessary for the given [text].
-  ///
-  /// This returns the [TextPainter.size] of the underlying [TextPainter].
-  ///
-  /// Valid only after [layout].
   Size get textSize {
     assert(!debugNeedsLayout);
     return _textPainter.size;
   }
 
-  /// Collected during [describeSemanticsConfiguration], used by
-  /// [assembleSemanticsNode] and [_combineSemanticsInfo].
   List<InlineSpanSemanticsInformation>? _semanticsInfo;
 
   @override
@@ -1307,13 +1105,6 @@ class RenderParagraph extends RenderBox with ContainerRenderObjectMixin<RenderBo
   }
 }
 
-/// A continuous, selectable piece of paragraph.
-///
-/// Since the selections in [PlaceHolderSpan] are handled independently in its
-/// subtree, a selection in [RenderParagraph] can't continue across a
-/// [PlaceHolderSpan]. The [RenderParagraph] splits itself on [PlaceHolderSpan]
-/// to create multiple `_SelectableFragment`s so that they can be selected
-/// separately.
 class _SelectableFragment with Selectable, ChangeNotifier implements TextLayoutMetrics {
   _SelectableFragment({
     required this.paragraph,
@@ -1920,10 +1711,6 @@ class _SelectableFragment with Selectable, ChangeNotifier implements TextLayoutM
     return MapEntry<TextPosition, SelectionResult>(newPosition, result);
   }
 
-  /// Whether the given text position is contained in current selection
-  /// range.
-  ///
-  /// The parameter `start` must be smaller than `end`.
   bool _positionIsWithinCurrentSelection(TextPosition position) {
     if (_textSelectionStart == null || _textSelectionEnd == null) {
       return false;
@@ -1941,10 +1728,6 @@ class _SelectableFragment with Selectable, ChangeNotifier implements TextLayoutM
     return _compareTextPositions(currentStart, position) >= 0 && _compareTextPositions(currentEnd, position) <= 0;
   }
 
-  /// Compares two text positions.
-  ///
-  /// Returns 1 if `position` < `otherPosition`, -1 if `position` > `otherPosition`,
-  /// or 0 if they are equal.
   static int _compareTextPositions(TextPosition position, TextPosition otherPosition) {
     if (position.offset < otherPosition.offset) {
       return 1;

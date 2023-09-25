@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for custom list items.
 
 void main() => runApp(const CustomListItemApp());
 

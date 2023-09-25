@@ -144,8 +144,6 @@ void main() {
   });
 }
 
-/// Asserts that all unbounded intrinsic dimensions for [object] match
-/// [dimension].
 void _expectIntrinsicDimensions(RenderBox object, double dimension) {
   expect(object.getMinIntrinsicWidth(double.infinity), equals(dimension));
   expect(object.getMaxIntrinsicWidth(double.infinity), equals(dimension));

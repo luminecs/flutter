@@ -21,9 +21,6 @@ const String kBenchmarkABVersion = '1.0';
 
 enum FieldJustification { LEFT, RIGHT, CENTER }
 
-/// Collects data from an A/B test and produces a summary for human evaluation.
-///
-/// See [printSummary] for more.
 class ABTest {
   ABTest({required this.localEngine, required this.localEngineHost, required this.taskName})
       : runStart = DateTime.now(),
@@ -57,11 +54,6 @@ class ABTest {
     };
   }
 
-  /// Adds the result of a single A run of the benchmark.
-  ///
-  /// The result may contain multiple score keys.
-  ///
-  /// [result] is expected to be a serialization of [TaskResult].
   void addAResult(TaskResult result) {
     if (_runEnd != null) {
       throw StateError('Cannot add results to ABTest after it is finalized');
@@ -69,11 +61,6 @@ class ABTest {
     _addResult(result, _aResults);
   }
 
-  /// Adds the result of a single B run of the benchmark.
-  ///
-  /// The result may contain multiple score keys.
-  ///
-  /// [result] is expected to be a serialization of [TaskResult].
   void addBResult(TaskResult result) {
     if (_runEnd != null) {
       throw StateError('Cannot add results to ABTest after it is finalized');
@@ -133,9 +120,6 @@ class ABTest {
     buffer.writeln();
   }
 
-  /// Returns the summary as a tab-separated spreadsheet.
-  ///
-  /// This value can be copied straight to a Google Spreadsheet for further analysis.
   String asciiSummary() {
     final Map<String, _ScoreSummary> summariesA = _summarize(_aResults);
     final Map<String, _ScoreSummary> summariesB = _summarize(_bResults);
@@ -182,8 +166,6 @@ class ABTest {
     return buffer.toString();
   }
 
-  /// Returns unprocessed data collected by the A/B test formatted as
-  /// a tab-separated spreadsheet.
   String rawResults() {
     final StringBuffer buffer = StringBuffer();
     for (final String scoreKey in _allScoreKeys) {
@@ -218,9 +200,6 @@ class ABTest {
     };
   }
 
-  /// Returns the summary as a tab-separated spreadsheet.
-  ///
-  /// This value can be copied straight to a Google Spreadsheet for further analysis.
   String printSummary() {
     final Map<String, _ScoreSummary> summariesA = _summarize(_aResults);
     final Map<String, _ScoreSummary> summariesB = _summarize(_bResults);
@@ -263,11 +242,8 @@ class _ScoreSummary {
     required this.noise,
   });
 
-  /// Average (arithmetic mean) of a series of values collected by a benchmark.
   final double average;
 
-  /// The noise (standard deviation divided by [average]) in the collected
-  /// values.
   final double noise;
 
   String get averageString => average.toStringAsFixed(2);
@@ -298,19 +274,11 @@ Map<String, _ScoreSummary> _summarize(Map<String, List<double>> results) {
   });
 }
 
-/// Computes the arithmetic mean (or average) of given [values].
 double _computeAverage(Iterable<double> values) {
   final double sum = values.reduce((double a, double b) => a + b);
   return sum / values.length;
 }
 
-/// Computes population standard deviation.
-///
-/// Unlike sample standard deviation, which divides by N - 1, this divides by N.
-///
-/// See also:
-///
-/// * https://en.wikipedia.org/wiki/Standard_deviation
 double _computeStandardDeviationForPopulation(Iterable<double> population) {
   final double mean = _computeAverage(population);
   final double sumOfSquaredDeltas = population.fold<double>(

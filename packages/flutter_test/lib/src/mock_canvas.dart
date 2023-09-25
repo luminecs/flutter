@@ -16,442 +16,70 @@ import 'test_async_utils.dart';
 // late RenderObject myRenderObject;
 // late Symbol methodName;
 
-/// Matches objects or functions that paint a display list that matches the
-/// canvas calls described by the pattern.
-///
-/// Specifically, this can be applied to [RenderObject]s, [Finder]s that
-/// correspond to a single [RenderObject], and functions that have either of the
-/// following signatures:
-///
-/// ```dart
-/// void exampleOne(PaintingContext context, Offset offset) { }
-/// void exampleTwo(Canvas canvas) { }
-/// ```
-///
-/// In the case of functions that take a [PaintingContext] and an [Offset], the
-/// [paints] matcher will always pass a zero offset.
-///
-/// To specify the pattern, call the methods on the returned object. For example:
-///
-/// ```dart
-/// expect(myRenderObject, paints..circle(radius: 10.0)..circle(radius: 20.0));
-/// ```
-///
-/// This particular pattern would verify that the render object `myRenderObject`
-/// paints, among other things, two circles of radius 10.0 and 20.0 (in that
-/// order).
-///
-/// See [PaintPattern] for a discussion of the semantics of paint patterns.
-///
-/// To match something which paints nothing, see [paintsNothing].
-///
-/// To match something which asserts instead of painting, see [paintsAssertion].
 PaintPattern get paints => _TestRecordingCanvasPatternMatcher();
 
-/// Matches objects or functions that does not paint anything on the canvas.
 Matcher get paintsNothing => _TestRecordingCanvasPaintsNothingMatcher();
 
-/// Matches objects or functions that assert when they try to paint.
 Matcher get paintsAssertion => _TestRecordingCanvasPaintsAssertionMatcher();
 
-/// Matches objects or functions that draw `methodName` exactly `count` number
-/// of times.
 Matcher paintsExactlyCountTimes(Symbol methodName, int count) {
   return _TestRecordingCanvasPaintsCountMatcher(methodName, count);
 }
 
-/// Signature for the [PaintPattern.something] and [PaintPattern.everything]
-/// predicate argument.
-///
-/// Used by the [paints] matcher.
-///
-/// The `methodName` argument is a [Symbol], and can be compared with the symbol
-/// literal syntax, for example:
-///
-/// ```dart
-/// if (methodName == #drawCircle) {
-///   // ...
-/// }
-/// ```
 typedef PaintPatternPredicate = bool Function(Symbol methodName, List<dynamic> arguments);
 
-/// The signature of [RenderObject.paint] functions.
 typedef _ContextPainterFunction = void Function(PaintingContext context, Offset offset);
 
-/// The signature of functions that paint directly on a canvas.
 typedef _CanvasPainterFunction = void Function(Canvas canvas);
 
-/// Builder interface for patterns used to match display lists (canvas calls).
-///
-/// The [paints] matcher returns a [PaintPattern] so that you can build the
-/// pattern in the [expect] call.
-///
-/// Patterns are subset matches, meaning that any calls not described by the
-/// pattern are ignored. This allows, for instance, transforms to be skipped.
 abstract class PaintPattern {
-  /// Indicates that a transform is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.transform] is found. The call's
-  /// arguments are compared to those provided here. If any fail to match, or if
-  /// no call to [Canvas.transform] is found, then the matcher fails.
-  ///
-  /// Dynamic so matchers can be more easily passed in.
-  ///
-  /// The `matrix4` argument is dynamic so it can be either a [Matcher], or a
-  /// [Float64List] of [double]s. If it is a [Float64List] of [double]s then
-  /// each value in the matrix must match in the expected matrix. A deep
-  /// matching [Matcher] such as [equals] can be used to test each value in the
-  /// matrix with utilities such as [moreOrLessEquals].
   void transform({ dynamic matrix4 });
 
-  /// Indicates that a translation transform is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.translate] is found. The call's
-  /// arguments are compared to those provided here. If any fail to match, or if
-  /// no call to [Canvas.translate] is found, then the matcher fails.
   void translate({ double? x, double? y });
 
-  /// Indicates that a scale transform is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.scale] is found. The call's
-  /// arguments are compared to those provided here. If any fail to match, or if
-  /// no call to [Canvas.scale] is found, then the matcher fails.
   void scale({ double? x, double? y });
 
-  /// Indicates that a rotate transform is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.rotate] is found. If the `angle`
-  /// argument is provided here, the call's argument is compared to it. If that
-  /// fails to match, or if no call to [Canvas.rotate] is found, then the
-  /// matcher fails.
   void rotate({ double? angle });
 
-  /// Indicates that a save is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.save] is found. If none is
-  /// found, the matcher fails.
-  ///
-  /// See also:
-  ///
-  ///  * [restore], which indicates that a restore is expected next.
-  ///  * [saveRestore], which indicates that a matching pair of save/restore
-  ///    calls is expected next.
   void save();
 
-  /// Indicates that a restore is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.restore] is found. If none is
-  /// found, the matcher fails.
-  ///
-  /// See also:
-  ///
-  ///  * [save], which indicates that a save is expected next.
-  ///  * [saveRestore], which indicates that a matching pair of save/restore
-  ///    calls is expected next.
   void restore();
 
-  /// Indicates that a matching pair of save/restore calls is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.save] is found, then, calls are
-  /// skipped until the matching [Canvas.restore] call is found. If no matching
-  /// pair of calls could be found, the matcher fails.
-  ///
-  /// See also:
-  ///
-  ///  * [save], which indicates that a save is expected next.
-  ///  * [restore], which indicates that a restore is expected next.
   void saveRestore();
 
-  /// Indicates that a rectangular clip is expected next.
-  ///
-  /// The next rectangular clip is examined. Any arguments that are passed to
-  /// this method are compared to the actual [Canvas.clipRect] call's argument
-  /// and any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.clipRect] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.clipRect] call are ignored.
   void clipRect({ Rect? rect });
 
-  /// Indicates that a path clip is expected next.
-  ///
-  /// The next path clip is examined.
-  /// The path that is passed to the actual [Canvas.clipPath] call is matched
-  /// using [pathMatcher].
-  ///
-  /// If no call to [Canvas.clipPath] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.clipPath] call are ignored.
   void clipPath({ Matcher? pathMatcher });
 
-  /// Indicates that a rectangle is expected next.
-  ///
-  /// The next rectangle is examined. Any arguments that are passed to this
-  /// method are compared to the actual [Canvas.drawRect] call's arguments
-  /// and any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.drawRect] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawRect] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void rect({ Rect? rect, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Indicates that a rounded rectangle clip is expected next.
-  ///
-  /// The next rounded rectangle clip is examined. Any arguments that are passed
-  /// to this method are compared to the actual [Canvas.clipRRect] call's
-  /// argument and any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.clipRRect] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.clipRRect] call are ignored.
   void clipRRect({ RRect? rrect });
 
-  /// Indicates that a rounded rectangle is expected next.
-  ///
-  /// The next rounded rectangle is examined. Any arguments that are passed to
-  /// this method are compared to the actual [Canvas.drawRRect] call's arguments
-  /// and any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.drawRRect] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawRRect] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void rrect({ RRect? rrect, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Indicates that a rounded rectangle outline is expected next.
-  ///
-  /// The next call to [Canvas.drawRRect] is examined. Any arguments that are
-  /// passed to this method are compared to the actual [Canvas.drawRRect] call's
-  /// arguments and any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.drawRRect] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawRRect] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void drrect({ RRect? outer, RRect? inner, Color? color, double strokeWidth, bool hasMaskFilter, PaintingStyle style });
 
-  /// Indicates that a circle is expected next.
-  ///
-  /// The next circle is examined. Any arguments that are passed to this method
-  /// are compared to the actual [Canvas.drawCircle] call's arguments and any
-  /// mismatches result in failure.
-  ///
-  /// If no call to [Canvas.drawCircle] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawCircle] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void circle({ double? x, double? y, double? radius, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Indicates that a path is expected next.
-  ///
-  /// The next path is examined. Any arguments that are passed to this method
-  /// are compared to the actual [Canvas.drawPath] call's `paint` argument, and
-  /// any mismatches result in failure.
-  ///
-  /// To introspect the Path object (as it stands after the painting has
-  /// completed), the `includes` and `excludes` arguments can be provided to
-  /// specify points that should be considered inside or outside the path
-  /// (respectively).
-  ///
-  /// If no call to [Canvas.drawPath] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawPath] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void path({ Iterable<Offset>? includes, Iterable<Offset>? excludes, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Indicates that a line is expected next.
-  ///
-  /// The next line is examined. Any arguments that are passed to this method
-  /// are compared to the actual [Canvas.drawLine] call's `p1`, `p2`, and
-  /// `paint` arguments, and any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.drawLine] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawLine] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void line({ Offset? p1, Offset? p2, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Indicates that an arc is expected next.
-  ///
-  /// The next arc is examined. Any arguments that are passed to this method
-  /// are compared to the actual [Canvas.drawArc] call's `paint` argument, and
-  /// any mismatches result in failure.
-  ///
-  /// If no call to [Canvas.drawArc] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawArc] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void arc({ Rect? rect, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style, StrokeCap? strokeCap });
 
-  /// Indicates that a paragraph is expected next.
-  ///
-  /// Calls are skipped until a call to [Canvas.drawParagraph] is found. Any
-  /// arguments that are passed to this method are compared to the actual
-  /// [Canvas.drawParagraph] call's argument, and any mismatches result in
-  /// failure.
-  ///
-  /// The `offset` argument can be either an [Offset] or a [Matcher]. If it is
-  /// an [Offset] then the actual value must match the expected offset
-  /// precisely. If it is a [Matcher] then the comparison is made according to
-  /// the semantics of the [Matcher]. For example, [within] can be used to
-  /// assert that the actual offset is within a given distance from the expected
-  /// offset.
-  ///
-  /// If no call to [Canvas.drawParagraph] was made, then this results in
-  /// failure.
   void paragraph({ ui.Paragraph? paragraph, dynamic offset });
 
-  /// Indicates that a shadow is expected next.
-  ///
-  /// The next shadow is examined. Any arguments that are passed to this method
-  /// are compared to the actual [Canvas.drawShadow] call's `paint` argument,
-  /// and any mismatches result in failure.
-  ///
-  /// In tests, shadows from framework features such as [BoxShadow] or
-  /// [Material] are disabled by default, and thus this predicate would not
-  /// match. The [debugDisableShadows] flag controls this.
-  ///
-  /// To introspect the Path object (as it stands after the painting has
-  /// completed), the `includes` and `excludes` arguments can be provided to
-  /// specify points that should be considered inside or outside the path
-  /// (respectively).
-  ///
-  /// If no call to [Canvas.drawShadow] was made, then this results in failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawShadow] call are ignored.
   void shadow({ Iterable<Offset>? includes, Iterable<Offset>? excludes, Color? color, double? elevation, bool? transparentOccluder });
 
-  /// Indicates that an image is expected next.
-  ///
-  /// The next call to [Canvas.drawImage] is examined, and its arguments
-  /// compared to those passed to _this_ method.
-  ///
-  /// If no call to [Canvas.drawImage] was made, then this results in
-  /// failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawImage] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void image({ ui.Image? image, double? x, double? y, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Indicates that an image subsection is expected next.
-  ///
-  /// The next call to [Canvas.drawImageRect] is examined, and its arguments
-  /// compared to those passed to _this_ method.
-  ///
-  /// If no call to [Canvas.drawImageRect] was made, then this results in
-  /// failure.
-  ///
-  /// Any calls made between the last matched call (if any) and the
-  /// [Canvas.drawImageRect] call are ignored.
-  ///
-  /// The [Paint]-related arguments (`color`, `strokeWidth`, `hasMaskFilter`,
-  /// `style`) are compared against the state of the [Paint] object after the
-  /// painting has completed, not at the time of the call. If the same [Paint]
-  /// object is reused multiple times, then this may not match the actual
-  /// arguments as they were seen by the method.
   void drawImageRect({ ui.Image? image, Rect? source, Rect? destination, Color? color, double? strokeWidth, bool? hasMaskFilter, PaintingStyle? style });
 
-  /// Provides a custom matcher.
-  ///
-  /// Each method call after the last matched call (if any) will be passed to
-  /// the given predicate, along with the values of its (positional) arguments.
-  ///
-  /// For each one, the predicate must either return a boolean or throw a
-  /// [String].
-  ///
-  /// If the predicate returns true, the call is considered a successful match
-  /// and the next step in the pattern is examined. If this was the last step,
-  /// then any calls that were not yet matched are ignored and the [paints]
-  /// [Matcher] is considered a success.
-  ///
-  /// If the predicate returns false, then the call is considered uninteresting
-  /// and the predicate will be called again for the next [Canvas] call that was
-  /// made by the [RenderObject] under test. If this was the last call, then the
-  /// [paints] [Matcher] is considered to have failed.
-  ///
-  /// If the predicate throws a [String], then the [paints] [Matcher] is
-  /// considered to have failed. The thrown string is used in the message
-  /// displayed from the test framework and should be complete sentence
-  /// describing the problem.
   void something(PaintPatternPredicate predicate);
 
-  /// Provides a custom matcher.
-  ///
-  /// Each method call after the last matched call (if any) will be passed to
-  /// the given predicate, along with the values of its (positional) arguments.
-  ///
-  /// For each one, the predicate must either return a boolean or throw a
-  /// [String].
-  ///
-  /// The predicate will be applied to each [Canvas] call until it returns false
-  /// or all of the method calls have been tested.
-  ///
-  /// If the predicate returns false, then the [paints] [Matcher] is considered
-  /// to have failed. If all calls are tested without failing, then the [paints]
-  /// [Matcher] is considered a success.
-  ///
-  /// If the predicate throws a [String], then the [paints] [Matcher] is
-  /// considered to have failed. The thrown string is used in the message
-  /// displayed from the test framework and should be complete sentence
-  /// describing the problem.
   void everything(PaintPatternPredicate predicate);
 }
 
-/// Matches a [Path] that contains (as defined by [Path.contains]) the given
-/// `includes` points and does not contain the given `excludes` points.
 Matcher isPathThat({
   Iterable<Offset> includes = const <Offset>[],
   Iterable<Offset> excludes = const <Offset>[],

@@ -13,9 +13,6 @@ import 'io.dart';
 
 typedef SignalHandler = FutureOr<void> Function(ProcessSignal signal);
 
-/// A class that manages signal handlers.
-///
-/// Signal handlers are run in the order that they were added.
 abstract class Signals {
   @visibleForTesting
   factory Signals.test({
@@ -29,29 +26,13 @@ abstract class Signals {
     ProcessSignal.sigint,
   ];
 
-  /// Adds a signal handler to run on receipt of signal.
-  ///
-  /// The handler will run after all handlers that were previously added for the
-  /// signal. The function returns an abstract token that should be provided to
-  /// removeHandler to remove the handler.
   Object addHandler(ProcessSignal signal, SignalHandler handler);
 
-  /// Removes a signal handler.
-  ///
-  /// Removes the signal handler for the signal identified by the abstract
-  /// token parameter. Returns true if the handler was removed and false
-  /// otherwise.
   Future<bool> removeHandler(ProcessSignal signal, Object token);
 
-  /// If a [SignalHandler] throws an error, either synchronously or
-  /// asynchronously, it will be added to this stream instead of propagated.
   Stream<Object> get errors;
 }
 
-/// A class that manages the real dart:io signal handlers.
-///
-/// We use a singleton instance of this class to ensure that all handlers for
-/// fatal signals run before this class calls exit().
 class LocalSignals implements Signals {
   LocalSignals._(
     this.exitSignals, {

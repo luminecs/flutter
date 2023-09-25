@@ -11,19 +11,14 @@ import 'package:flutter/widgets.dart';
 import 'binding.dart';
 import 'tree_traversal.dart';
 
-/// Signature for [CommonFinders.byWidgetPredicate].
 typedef WidgetPredicate = bool Function(Widget widget);
 
-/// Signature for [CommonFinders.byElementPredicate].
 typedef ElementPredicate = bool Function(Element element);
 
-/// Signature for [CommonSemanticsFinders.byPredicate].
 typedef SemanticsNodePredicate = bool Function(SemanticsNode node);
 
-/// Signature for [FinderBase.describeMatch].
 typedef DescribeMatchCallback = String Function(Plurality plurality);
 
-/// Some frequently used [Finder]s and [SemanticsFinder]s.
 const CommonFinders find = CommonFinders._();
 
 // Examples can assume:
@@ -32,46 +27,11 @@ const CommonFinders find = CommonFinders._();
 // late String filePath;
 // late Key backKey;
 
-/// Provides lightweight syntax for getting frequently used [Finder]s and
-/// [SemanticsFinder]s through [semantics].
-///
-/// This class is instantiated once, as [find].
 class CommonFinders {
   const CommonFinders._();
 
-  /// Some frequently used semantics finders.
   CommonSemanticsFinders get semantics => const CommonSemanticsFinders._();
 
-  /// Finds [Text], [EditableText], and optionally [RichText] widgets
-  /// containing string equal to the `text` argument.
-  ///
-  /// If `findRichText` is false, all standalone [RichText] widgets are
-  /// ignored and `text` is matched with [Text.data] or [Text.textSpan].
-  /// If `findRichText` is true, [RichText] widgets (and therefore also
-  /// [Text] and [Text.rich] widgets) are matched by comparing the
-  /// [InlineSpan.toPlainText] with the given `text`.
-  ///
-  /// For [EditableText] widgets, the `text` is always compared to the current
-  /// value of the [EditableText.controller].
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.text('Back'), findsOneWidget);
-  /// ```
-  ///
-  /// This will match [Text], [Text.rich], and [EditableText] widgets that
-  /// contain the "Back" string.
-  ///
-  /// ```dart
-  /// expect(find.text('Close', findRichText: true), findsOneWidget);
-  /// ```
-  ///
-  /// This will match [Text], [Text.rich], [EditableText], as well as standalone
-  /// [RichText] widgets that contain the "Close" string.
   Finder text(
     String text, {
     bool findRichText = false,
@@ -84,38 +44,6 @@ class CommonFinders {
     );
   }
 
-  /// Finds [Text] and [EditableText], and optionally [RichText] widgets
-  /// which contain the given `pattern` argument.
-  ///
-  /// If `findRichText` is false, all standalone [RichText] widgets are
-  /// ignored and `pattern` is matched with [Text.data] or [Text.textSpan].
-  /// If `findRichText` is true, [RichText] widgets (and therefore also
-  /// [Text] and [Text.rich] widgets) are matched by comparing the
-  /// [InlineSpan.toPlainText] with the given `pattern`.
-  ///
-  /// For [EditableText] widgets, the `pattern` is always compared to the current
-  /// value of the [EditableText.controller].
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.textContaining('Back'), findsOneWidget);
-  /// expect(find.textContaining(RegExp(r'(\w+)')), findsOneWidget);
-  /// ```
-  ///
-  /// This will match [Text], [Text.rich], and [EditableText] widgets that
-  /// contain the given pattern : 'Back' or RegExp(r'(\w+)').
-  ///
-  /// ```dart
-  /// expect(find.textContaining('Close', findRichText: true), findsOneWidget);
-  /// expect(find.textContaining(RegExp(r'(\w+)'), findRichText: true), findsOneWidget);
-  /// ```
-  ///
-  /// This will match [Text], [Text.rich], [EditableText], as well as standalone
-  /// [RichText] widgets that contain the given pattern : 'Close' or RegExp(r'(\w+)').
   Finder textContaining(
     Pattern pattern, {
     bool findRichText = false,
@@ -128,23 +56,6 @@ class CommonFinders {
     );
   }
 
-  /// Looks for widgets that contain a [Text] descendant with `text`
-  /// in it.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// // Suppose there is a button with text 'Update' in it:
-  /// const Button(
-  ///   child: Text('Update')
-  /// );
-  ///
-  /// // It can be found and tapped like this:
-  /// tester.tap(find.widgetWithText(Button, 'Update'));
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder widgetWithText(Type widgetType, String text, { bool skipOffstage = true }) {
     return find.ancestor(
       of: find.text(text, skipOffstage: skipOffstage),
@@ -152,100 +63,16 @@ class CommonFinders {
     );
   }
 
-  /// Finds [Image] and [FadeInImage] widgets containing `image` equal to the
-  /// `image` argument.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.image(FileImage(File(filePath))), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder image(ImageProvider image, { bool skipOffstage = true }) => _ImageWidgetFinder(image, skipOffstage: skipOffstage);
 
-  /// Finds widgets by searching for one with the given `key`.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byKey(backKey), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byKey(Key key, { bool skipOffstage = true }) => _KeyWidgetFinder(key, skipOffstage: skipOffstage);
 
-  /// Finds widgets by searching for widgets implementing a particular type.
-  ///
-  /// This matcher accepts subtypes. For example a
-  /// `bySubtype<StatefulWidget>()` will find any stateful widget.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.bySubtype<IconButton>(), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
-  ///
-  /// See also:
-  /// * [byType], which does not do subtype tests.
   Finder bySubtype<T extends Widget>({ bool skipOffstage = true }) => _SubtypeWidgetFinder<T>(skipOffstage: skipOffstage);
 
-  /// Finds widgets by searching for widgets with a particular type.
-  ///
-  /// This does not do subclass tests, so for example
-  /// `byType(StatefulWidget)` will never find anything since [StatefulWidget]
-  /// is an abstract class.
-  ///
-  /// The `type` argument must be a subclass of [Widget].
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byType(IconButton), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
-  ///
-  /// See also:
-  /// * [bySubtype], which allows subtype tests.
   Finder byType(Type type, { bool skipOffstage = true }) => _TypeWidgetFinder(type, skipOffstage: skipOffstage);
 
-  /// Finds [Icon] widgets containing icon data equal to the `icon`
-  /// argument.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byIcon(Icons.inbox), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byIcon(IconData icon, { bool skipOffstage = true }) => _IconWidgetFinder(icon, skipOffstage: skipOffstage);
 
-  /// Looks for widgets that contain an [Icon] descendant displaying [IconData]
-  /// `icon` in it.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// // Suppose there is a button with icon 'arrow_forward' in it:
-  /// const Button(
-  ///   child: Icon(Icons.arrow_forward)
-  /// );
-  ///
-  /// // It can be found and tapped like this:
-  /// tester.tap(find.widgetWithIcon(Button, Icons.arrow_forward));
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder widgetWithIcon(Type widgetType, IconData icon, { bool skipOffstage = true }) {
     return find.ancestor(
       of: find.byIcon(icon),
@@ -253,23 +80,6 @@ class CommonFinders {
     );
   }
 
-  /// Looks for widgets that contain an [Image] descendant displaying
-  /// [ImageProvider] `image` in it.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// // Suppose there is a button with an image in it:
-  /// Button(
-  ///   child: Image.file(File(filePath))
-  /// );
-  ///
-  /// // It can be found and tapped like this:
-  /// tester.tap(find.widgetWithImage(Button, FileImage(File(filePath))));
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder widgetWithImage(Type widgetType, ImageProvider image, { bool skipOffstage = true }) {
     return find.ancestor(
       of: find.image(image),
@@ -277,75 +87,14 @@ class CommonFinders {
     );
   }
 
-  /// Finds widgets by searching for elements with a particular type.
-  ///
-  /// This does not do subclass tests, so for example
-  /// `byElementType(VirtualViewportElement)` will never find anything
-  /// since [RenderObjectElement] is an abstract class.
-  ///
-  /// The `type` argument must be a subclass of [Element].
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byElementType(SingleChildRenderObjectElement), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byElementType(Type type, { bool skipOffstage = true }) => _ElementTypeWidgetFinder(type, skipOffstage: skipOffstage);
 
-  /// Finds widgets whose current widget is the instance given by the `widget`
-  /// argument.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// // Suppose there is a button created like this:
-  /// Widget myButton = const Button(
-  ///   child: Text('Update')
-  /// );
-  ///
-  /// // It can be found and tapped like this:
-  /// tester.tap(find.byWidget(myButton));
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byWidget(Widget widget, { bool skipOffstage = true }) => _ExactWidgetFinder(widget, skipOffstage: skipOffstage);
 
-  /// Finds widgets using a widget `predicate`.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byWidgetPredicate(
-  ///   (Widget widget) => widget is Tooltip && widget.message == 'Back',
-  ///   description: 'with tooltip "Back"',
-  /// ), findsOneWidget);
-  /// ```
-  ///
-  /// If `description` is provided, then this uses it as the description of the
-  /// [Finder] and appears, for example, in the error message when the finder
-  /// fails to locate the desired widget. Otherwise, the description prints the
-  /// signature of the predicate function.
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byWidgetPredicate(WidgetPredicate predicate, { String? description, bool skipOffstage = true }) {
     return _WidgetPredicateWidgetFinder(predicate, description: description, skipOffstage: skipOffstage);
   }
 
-  /// Finds [Tooltip] widgets with the given `message`.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byTooltip('Back'), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byTooltip(String message, { bool skipOffstage = true }) {
     return byWidgetPredicate(
       (Widget widget) => widget is Tooltip && widget.message == message,
@@ -353,48 +102,10 @@ class CommonFinders {
     );
   }
 
-  /// Finds widgets using an element `predicate`.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.byElementPredicate(
-  ///   // Finds elements of type SingleChildRenderObjectElement, including
-  ///   // those that are actually subclasses of that type.
-  ///   // (contrast with byElementType, which only returns exact matches)
-  ///   (Element element) => element is SingleChildRenderObjectElement,
-  ///   description: '$SingleChildRenderObjectElement element',
-  /// ), findsOneWidget);
-  /// ```
-  ///
-  /// If `description` is provided, then this uses it as the description of the
-  /// [Finder] and appears, for example, in the error message when the finder
-  /// fails to locate the desired widget. Otherwise, the description prints the
-  /// signature of the predicate function.
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder byElementPredicate(ElementPredicate predicate, { String? description, bool skipOffstage = true }) {
     return _ElementPredicateWidgetFinder(predicate, description: description, skipOffstage: skipOffstage);
   }
 
-  /// Finds widgets that are descendants of the `of` parameter and that match
-  /// the `matching` parameter.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.descendant(
-  ///   of: find.widgetWithText(Row, 'label_1'),
-  ///   matching: find.text('value_1'),
-  /// ), findsOneWidget);
-  /// ```
-  ///
-  /// If the `matchRoot` argument is true then the widget(s) specified by `of`
-  /// will be matched along with the descendants.
-  ///
-  /// If the `skipOffstage` argument is true (the default), then nodes that are
-  /// [Offstage] or that are from inactive [Route]s are skipped.
   Finder descendant({
     required FinderBase<Element> of,
     required FinderBase<Element> matching,
@@ -404,27 +115,6 @@ class CommonFinders {
     return _DescendantWidgetFinder(of, matching, matchRoot: matchRoot, skipOffstage: skipOffstage);
   }
 
-  /// Finds widgets that are ancestors of the `of` parameter and that match
-  /// the `matching` parameter.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// // Test if a Text widget that contains 'faded' is the
-  /// // descendant of an Opacity widget with opacity 0.5:
-  /// expect(
-  ///   tester.widget<Opacity>(
-  ///     find.ancestor(
-  ///       of: find.text('faded'),
-  ///       matching: find.byType(Opacity),
-  ///     )
-  ///   ).opacity,
-  ///   0.5
-  /// );
-  /// ```
-  ///
-  /// If the `matchRoot` argument is true then the widget(s) specified by `of`
-  /// will be matched along with the ancestors.
   Finder ancestor({
     required FinderBase<Element> of,
     required FinderBase<Element> matching,
@@ -433,27 +123,6 @@ class CommonFinders {
     return _AncestorWidgetFinder(of, matching, matchLeaves: matchRoot);
   }
 
-  /// Finds [Semantics] widgets matching the given `label`, either by
-  /// [RegExp.hasMatch] or string equality.
-  ///
-  /// The framework may combine semantics labels in certain scenarios, such as
-  /// when multiple [Text] widgets are in a [MaterialButton] widget. In such a
-  /// case, it may be preferable to match by regular expression. Consumers of
-  /// this API __must not__ introduce unsuitable content into the semantics tree
-  /// for the purposes of testing; in particular, you should prefer matching by
-  /// regular expression rather than by string if the framework has combined
-  /// your semantics, and not try to force the framework to break up the
-  /// semantics nodes. Breaking up the nodes would have an undesirable effect on
-  /// screen readers and other accessibility services.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// expect(find.bySemanticsLabel('Back'), findsOneWidget);
-  /// ```
-  ///
-  /// If the `skipOffstage` argument is true (the default), then this skips
-  /// nodes that are [Offstage] or that are from inactive [Route]s.
   Finder bySemanticsLabel(Pattern label, { bool skipOffstage = true }) {
     if (!SemanticsBinding.instance.semanticsEnabled) {
       throw StateError('Semantics are not enabled. '
@@ -481,16 +150,9 @@ class CommonFinders {
 }
 
 
-/// Provides lightweight syntax for getting frequently used semantics finders.
-///
-/// This class is instantiated once, as [CommonFinders.semantics], under [find].
 class CommonSemanticsFinders {
   const CommonSemanticsFinders._();
 
-  /// Finds an ancestor of `of` that matches `matching`.
-  ///
-  /// If `matchRoot` is true, then the results of `of` are included in the
-  /// search and results.
   FinderBase<SemanticsNode> ancestor({
     required FinderBase<SemanticsNode> of,
     required FinderBase<SemanticsNode> matching,
@@ -499,10 +161,6 @@ class CommonSemanticsFinders {
     return _AncestorSemanticsFinder(of, matching, matchRoot);
   }
 
-  /// Finds a descendant of `of` that matches `matching`.
-  ///
-  /// If `matchRoot` is true, then the results of `of` are included in the
-  /// search and results.
   FinderBase<SemanticsNode> descendant({
     required FinderBase<SemanticsNode> of,
     required FinderBase<SemanticsNode> matching,
@@ -511,17 +169,6 @@ class CommonSemanticsFinders {
     return _DescendantSemanticsFinder(of, matching, matchRoot: matchRoot);
   }
 
-  /// Finds any [SemanticsNode]s matching the given `predicate`.
-  ///
-  /// If `describeMatch` is provided, it will be used to describe the
-  /// [FinderBase] and [FinderResult]s.
-  /// {@macro flutter_test.finders.FinderBase.describeMatch}
-  ///
-  /// {@template flutter_test.finders.CommonSemanticsFinders.viewParameter}
-  /// The `view` provided will be used to determine the semantics tree where
-  /// the search will be evaluated. If not provided, the search will be
-  /// evaluated against the semantics tree of [WidgetTester.view].
-  /// {@endtemplate}
   SemanticsFinder byPredicate(
     SemanticsNodePredicate predicate, {
     DescribeMatchCallback? describeMatch,
@@ -534,10 +181,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has a [SemanticsNode.label] that matches
-  /// the given `label`.
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byLabel(Pattern label, {FlutterView? view}) {
     return byPredicate(
       (SemanticsNode node) => _matchesPattern(node.label, label),
@@ -549,10 +192,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has a [SemanticsNode.value] that matches
-  /// the given `value`.
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byValue(Pattern value, {FlutterView? view}) {
     return byPredicate(
       (SemanticsNode node) => _matchesPattern(node.value, value),
@@ -564,10 +203,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has a [SemanticsNode.hint] that matches
-  /// the given `hint`.
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byHint(Pattern hint, {FlutterView? view}) {
     return byPredicate(
       (SemanticsNode node) => _matchesPattern(node.hint, hint),
@@ -579,9 +214,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has the given [SemanticsAction].
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byAction(SemanticsAction action, {FlutterView? view}) {
     return byPredicate(
       (SemanticsNode node) => node.getSemanticsData().hasAction(action),
@@ -593,10 +225,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has at least one of the given
-  /// [SemanticsAction]s.
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byAnyAction(List<SemanticsAction> actions, {FlutterView? view}) {
     final int actionsInt = actions.fold(0, (int value, SemanticsAction action) => value | action.index);
     return byPredicate(
@@ -609,9 +237,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has the given [SemanticsFlag].
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byFlag(SemanticsFlag flag, {FlutterView? view}) {
     return byPredicate(
       (SemanticsNode node) => node.hasFlag(flag),
@@ -623,10 +248,6 @@ class CommonSemanticsFinders {
     );
   }
 
-  /// Finds any [SemanticsNode]s that has at least one of the given
-  /// [SemanticsFlag]s.
-  ///
-  /// {@macro flutter_test.finders.CommonSemanticsFinders.viewParameter}
   SemanticsFinder byAnyFlag(List<SemanticsFlag> flags, {FlutterView? view}) {
     final int flagsInt = flags.fold(0, (int value, SemanticsFlag flag) => value | flag.index);
     return byPredicate(
@@ -657,13 +278,9 @@ class CommonSemanticsFinders {
   }
 }
 
-/// Describes how a string of text should be pluralized.
 enum Plurality {
-  /// Text should be pluralized to describe zero items.
   zero,
-  /// Text should be pluralized to describe a single item.
   one,
-  /// Text should be pluralized to describe more than one item.
   many;
 
   static Plurality _fromNum(num source) {
@@ -676,29 +293,9 @@ enum Plurality {
   }
 }
 
-/// Encapsulates the logic for searching a list of candidates and filtering the
-/// candidates to only those that meet the requirements defined by the finder.
-///
-/// Implementations will need to implement [allCandidates] to define the total
-/// possible search space and [findInCandidates] to define the requirements of
-/// the finder.
-///
-/// This library contains [Finder] and [SemanticsFinder] for searching
-/// Flutter's element and semantics trees respectively.
-///
-/// If the search can be represented as a predicate, then consider using
-/// [MatchFinderMixin] along with the [Finder] or [SemanticsFinder] base class.
-///
-/// If the search further filters the results from another finder, consider using
-/// [ChainedFinderMixin] along with the [Finder] or [SemanticsFinder] base class.
 abstract class FinderBase<CandidateType> {
   bool _cached = false;
 
-  /// The results of the latest [evaluate] or [tryEvaluate] call.
-  ///
-  /// Unlike [evaluate] and [tryEvaluate], [found] will not re-execute the
-  /// search for this finder. Either [evaluate] or [tryEvaluate] must be called
-  /// before accessing [found].
   FinderResult<CandidateType> get found {
     assert(
       _found != null,
@@ -709,73 +306,22 @@ abstract class FinderBase<CandidateType> {
   }
   FinderResult<CandidateType>? _found;
 
-  /// Whether or not this finder has any results in [found].
   bool get hasFound => _found != null;
 
-  /// Describes zero, one, or more candidates that match the requirements of a
-  /// finder.
-  ///
-  /// {@template flutter_test.finders.FinderBase.describeMatch}
-  /// The description returned should be a brief English phrase describing a
-  /// matching candidate with the proper plural form. As an example for a string
-  /// finder that is looking for strings starting with "hello":
-  ///
-  /// ```dart
-  /// String describeMatch(Plurality plurality) {
-  ///   return switch (plurality) {
-  ///     Plurality.zero || Plurality.many => 'strings starting with "hello"',
-  ///     Plurality.one => 'string starting with "hello"',
-  ///   };
-  /// }
-  /// ```
-  /// {@endtemplate}
-  ///
-  /// This will be used both to describe a finder and the results of searching
-  /// with that finder.
-  ///
-  /// See also:
-  ///
-  ///   * [FinderBase.toString] where this is used to fully describe the finder
-  ///   * [FinderResult.toString] where this is used to provide context to the
-  ///     results of a search
   String describeMatch(Plurality plurality);
 
-  /// Returns all of the items that will be considered by this finder.
   @protected
   Iterable<CandidateType> get allCandidates;
 
-  /// Returns a variant of this finder that only matches the first item
-  /// found by this finder.
   FinderBase<CandidateType> get first => _FirstFinder<CandidateType>(this);
 
-  /// Returns a variant of this finder that only matches the last item
-  /// found by this finder.
   FinderBase<CandidateType> get last => _LastFinder<CandidateType>(this);
 
-  /// Returns a variant of this finder that only matches the item at the
-  /// given index found by this finder.
   FinderBase<CandidateType> at(int index) => _IndexFinder<CandidateType>(this, index);
 
-  /// Returns all the items in the given list that match this
-  /// finder's requirements.
-  ///
-  /// This is overridden to define the requirements of the finder when
-  /// implementing finders that directly extend [FinderBase]. If a finder can
-  /// be efficiently described just in terms of a predicate function, consider
-  /// mixing in [MatchFinderMixin] and implementing [MatchFinderMixin.matches]
-  /// instead.
   @protected
   Iterable<CandidateType> findInCandidates(Iterable<CandidateType> candidates);
 
-  /// Searches a set of candidates for those that meet the requirements set by
-  /// this finder and returns the result of that search.
-  ///
-  /// See also:
-  ///
-  ///   * [found] which will return the latest results without re-executing the
-  ///     search.
-  ///   * [tryEvaluate] which will indicate whether any results were found rather
-  ///     than directly returning results.
   FinderResult<CandidateType> evaluate() {
     if (!_cached || _found == null) {
       _found = FinderResult<CandidateType>(describeMatch, findInCandidates(allCandidates));
@@ -783,42 +329,11 @@ abstract class FinderBase<CandidateType> {
     return found;
   }
 
-  /// Searches a set of candidates for those that meet the requirements set by
-  /// this finder and returns whether the search found any matching candidates.
-  ///
-  /// This is useful in cases where an action needs to be repeated while or
-  /// until a finder has results. The results from the search can be accessed
-  /// using the [found] property without re-executing the search.
-  ///
-  /// ## Sample code
-  ///
-  /// ```dart
-  /// testWidgets('Top text loads first', (WidgetTester tester) async {
-  ///   // Assume a widget is pumped with a top and bottom loading area, with
-  ///   // the texts "Top loaded" and "Bottom loaded" when loading is complete.
-  ///   // await tester.pumpWidget(...)
-  ///
-  ///   // Wait until at least one loaded widget is available
-  ///   Finder loadedFinder = find.textContaining('loaded');
-  ///   while (!loadedFinder.tryEvaluate()) {
-  ///     await tester.pump(const Duration(milliseconds: 100));
-  ///   }
-  ///
-  ///   expect(loadedFinder.found, hasLength(1));
-  ///   expect(tester.widget<Text>(loadedFinder).data, contains('Top'));
-  /// });
-  /// ```
   bool tryEvaluate() {
     evaluate();
     return found.isNotEmpty;
   }
 
-  /// Runs the given callback using cached results.
-  ///
-  /// While in this callback, this [FinderBase] will cache the results from the
-  /// next call to [evaluate] or [tryEvaluate] and then no longer evaluate new results
-  /// until the callback completes. After the first call, all calls to [evaluate],
-  /// [tryEvaluate] or [found] will return the same results without evaluating.
   void runCached(VoidCallback run) {
     reset();
     _cached = true;
@@ -830,20 +345,10 @@ abstract class FinderBase<CandidateType> {
     }
   }
 
-  /// Resets all state of this [FinderBase].
-  ///
-  /// Generally used between tests to reset the state of [found] if a finder is
-  /// used across multiple tests.
   void reset() {
     _found = null;
   }
 
-  /// A string representation of this finder or its results.
-  ///
-  /// By default, this describes the results of the search in order to play
-  /// nicely with [expect] and its output when a failure occurs. If you wish
-  /// to get a string representation of the finder itself, pass [describeSelf]
-  /// as `true`.
   @override
   String toString({bool describeSelf = false}) {
     if (describeSelf) {
@@ -857,12 +362,7 @@ abstract class FinderBase<CandidateType> {
   }
 }
 
-/// The results of searching with a [FinderBase].
 class FinderResult<CandidateType> extends Iterable<CandidateType> {
-  /// Creates a new [FinderResult] that describes the `values` using the given
-  /// `describeMatch` callback.
-  ///
-  /// {@macro flutter_test.finders.FinderBase.describeMatch}
   FinderResult(DescribeMatchCallback describeMatch, Iterable<CandidateType> values)
     : _describeMatch = describeMatch, _values = values;
 
@@ -886,12 +386,9 @@ class FinderResult<CandidateType> extends Iterable<CandidateType> {
   }
 }
 
-/// Provides backwards compatibility with the original [Finder] API.
 mixin _LegacyFinderMixin on FinderBase<Element> {
   Iterable<Element>? _precacheResults;
 
-  /// Describes what the finder is looking for. The description should be
-  /// a brief English noun phrase describing the finder's requirements.
   @Deprecated(
     'Use FinderBase.describeMatch instead. '
     'FinderBase.describeMatch allows for more readable descriptions and removes ambiguity about pluralization. '
@@ -899,15 +396,6 @@ mixin _LegacyFinderMixin on FinderBase<Element> {
   )
   String get description;
 
-  /// Returns all the elements in the given list that match this
-  /// finder's pattern.
-  ///
-  /// When implementing Finders that inherit directly from
-  /// [Finder], [findInCandidates] is the main method to override. This method
-  /// is maintained for backwards compatibility and will be removed in a future
-  /// version of Flutter. If the finder can efficiently be described just in
-  /// terms of a predicate function, consider mixing in [MatchFinderMixin]
-  /// instead.
   @Deprecated(
     'Override FinderBase.findInCandidates instead. '
     'Using the FinderBase API allows for more consistent caching behavior and cleaner options for interacting with the widget tree. '
@@ -917,11 +405,6 @@ mixin _LegacyFinderMixin on FinderBase<Element> {
     return findInCandidates(candidates);
   }
 
-  /// Attempts to evaluate the finder. Returns whether any elements in the tree
-  /// matched the finder. If any did, then the result is cached and can be obtained
-  /// from [evaluate].
-  ///
-  /// If this returns true, you must call [evaluate] before you call [precache] again.
   @Deprecated(
     'Use FinderBase.tryFind or FinderBase.runCached instead. '
     'Using the FinderBase API allows for more consistent caching behavior and cleaner options for interacting with the widget tree. '
@@ -942,20 +425,9 @@ mixin _LegacyFinderMixin on FinderBase<Element> {
   }
 }
 
-/// A base class for creating finders that search the [Element] tree for
-/// [Widget]s.
-///
-/// The [findInCandidates] method must be overriden and will be enforced at
-/// compilation after [apply] is removed.
 abstract class Finder extends FinderBase<Element> with _LegacyFinderMixin {
-  /// Creates a new [Finder] with the given `skipOffstage` value.
   Finder({this.skipOffstage = true});
 
-  /// Whether this finder skips nodes that are offstage.
-  ///
-  /// If this is true, then the elements are walked using
-  /// [Element.debugVisitOnstageChildren]. This skips offstage children of
-  /// [Offstage] widgets, as well as children of inactive [Route]s.
   final bool skipOffstage;
 
   @override
@@ -983,21 +455,12 @@ abstract class Finder extends FinderBase<Element> with _LegacyFinderMixin {
     };
   }
 
-  /// Returns a variant of this finder that only matches elements reachable by
-  /// a hit test.
-  ///
-  /// The `at` parameter specifies the location relative to the size of the
-  /// target element where the hit test is performed.
   Finder hitTestable({ Alignment at = Alignment.center }) => _HitTestableWidgetFinder(this, at);
 }
 
-/// A base class for creating finders that search the semantics tree.
 abstract class SemanticsFinder extends FinderBase<SemanticsNode> {
-  /// Creates a new [SemanticsFinder] that will search starting at the given
-  /// `root`.
   SemanticsFinder(this.root);
 
-  /// The root of the semantics tree that this finder will search.
   final SemanticsNode root;
 
   @override
@@ -1006,16 +469,10 @@ abstract class SemanticsFinder extends FinderBase<SemanticsNode> {
   }
 }
 
-/// A mixin that applies additional filtering to the results of a parent [Finder].
  mixin ChainedFinderMixin<CandidateType> on FinderBase<CandidateType> {
 
-  /// Another finder whose results will be further filtered.
   FinderBase<CandidateType> get parent;
 
-  /// Return another [Iterable] when given an [Iterable] of candidates from a
-  /// parent [FinderBase].
-  ///
-  /// This is the main method to implement when mixing in [ChainedFinderMixin].
   Iterable<CandidateType> filter(Iterable<CandidateType> parentCandidates);
 
   @override
@@ -1027,9 +484,7 @@ abstract class SemanticsFinder extends FinderBase<SemanticsNode> {
   Iterable<CandidateType> get allCandidates => parent.allCandidates;
 }
 
-/// Applies additional filtering against a [parent] widget finder.
 abstract class ChainedFinder extends Finder with ChainedFinderMixin<Element> {
-  /// Create a Finder chained against the candidates of another `parent` [Finder].
   ChainedFinder(this.parent);
 
   @override
@@ -1156,12 +611,7 @@ class _HitTestableWidgetFinder extends ChainedFinder {
   }
 }
 
-/// A mixin for creating finders that search candidates for those that match
-/// a given pattern.
 mixin MatchFinderMixin<CandidateType> on FinderBase<CandidateType> {
-  /// Returns true if the given element matches the pattern.
-  ///
-  /// When implementing a MatchFinder, this is the main method to override.
   bool matches(CandidateType candidate);
 
   @override
@@ -1170,10 +620,7 @@ mixin MatchFinderMixin<CandidateType> on FinderBase<CandidateType> {
   }
 }
 
-/// Searches candidates for any that match a particular pattern.
 abstract class MatchFinder extends Finder with MatchFinderMixin<Element> {
-  /// Initializes a predicate-based Finder. Used by subclasses to initialize the
-  /// `skipOffstage` property.
   MatchFinder({ super.skipOffstage });
 }
 
@@ -1183,17 +630,6 @@ abstract class _MatchTextFinder extends MatchFinder {
     super.skipOffstage,
   });
 
-  /// Whether standalone [RichText] widgets should be found or not.
-  ///
-  /// Defaults to `false`.
-  ///
-  /// If disabled, only [Text] widgets will be matched. [RichText] widgets
-  /// *without* a [Text] ancestor will be ignored.
-  /// If enabled, only [RichText] widgets will be matched. This *implicitly*
-  /// matches [Text] widgets as well since they always insert a [RichText]
-  /// child.
-  ///
-  /// In either case, [EditableText] widgets will also be matched.
   final bool findRichText;
 
   bool matchesText(String textToMatch);

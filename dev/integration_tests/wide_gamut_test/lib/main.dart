@@ -8,7 +8,6 @@ import 'dart:typed_data' show ByteData, Uint8List;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-/// A 100x100 png in Display P3 colorspace.
 const String _displayP3Logo =
     'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAABdWlDQ1BrQ0dDb2xv'
     'clNwYWNlRGlzcGxheVAzAAAokXWQvUvDUBTFT6tS0DqIDh0cMolD1NIKdnFoKxRF'

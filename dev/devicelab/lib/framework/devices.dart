@@ -22,7 +22,6 @@ class DeviceException implements Exception {
   String toString() => '$DeviceException: $message';
 }
 
-/// Gets the artifact path relative to the current directory.
 String getArtifactPath() {
   return path.normalize(
       path.join(
@@ -32,7 +31,6 @@ String getArtifactPath() {
     );
 }
 
-/// Return the item is in idList if find a match, otherwise return null
 String? _findMatchId(List<String> idList, String idPattern) {
   String? candidate;
   idPattern = idPattern.toLowerCase();
@@ -47,10 +45,8 @@ String? _findMatchId(List<String> idList, String idPattern) {
   return candidate;
 }
 
-/// The root of the API for controlling devices.
 DeviceDiscovery get devices => DeviceDiscovery();
 
-/// Device operating system the test is configured to test.
 enum DeviceOperatingSystem {
   android,
   androidArm,
@@ -63,10 +59,8 @@ enum DeviceOperatingSystem {
   windows,
 }
 
-/// Device OS to test on.
 DeviceOperatingSystem deviceOperatingSystem = DeviceOperatingSystem.android;
 
-/// Discovers available devices and chooses one to work with.
 abstract class DeviceDiscovery {
   factory DeviceDiscovery() {
     switch (deviceOperatingSystem) {
@@ -92,105 +86,59 @@ abstract class DeviceDiscovery {
     }
   }
 
-  /// Selects a device to work with, load-balancing between devices if more than
-  /// one are available.
-  ///
-  /// Calling this method does not guarantee that the same device will be
-  /// returned. For such behavior see [workingDevice].
   Future<void> chooseWorkingDevice();
 
-  /// Selects a device to work with by device ID.
   Future<void> chooseWorkingDeviceById(String deviceId);
 
-  /// A device to work with.
-  ///
-  /// Returns the same device when called repeatedly (unlike
-  /// [chooseWorkingDevice]). This is useful when you need to perform multiple
-  /// operations on one.
   Future<Device> get workingDevice;
 
-  /// Lists all available devices' IDs.
   Future<List<String>> discoverDevices();
 
-  /// Checks the health of the available devices.
   Future<Map<String, HealthCheckResult>> checkDevices();
 
-  /// Prepares the system to run tasks.
   Future<void> performPreflightTasks();
 }
 
-/// A proxy for one specific device.
 abstract class Device {
   // Const constructor so subclasses may be const.
   const Device();
 
-  /// A unique device identifier.
   String get deviceId;
 
-  /// Whether the device is awake.
   Future<bool> isAwake();
 
-  /// Whether the device is asleep.
   Future<bool> isAsleep();
 
-  /// Wake up the device if it is not awake.
   Future<void> wakeUp();
 
-  /// Send the device to sleep mode.
   Future<void> sendToSleep();
 
-  /// Emulates pressing the home button.
   Future<void> home();
 
-  /// Emulates pressing the power button, toggling the device's on/off state.
   Future<void> togglePower();
 
-  /// Unlocks the device.
-  ///
-  /// Assumes the device doesn't have a secure unlock pattern.
   Future<void> unlock();
 
-  /// Attempt to reboot the phone, if possible.
   Future<void> reboot();
 
-  /// Emulate a tap on the touch screen.
   Future<void> tap(int x, int y);
 
-  /// Read memory statistics for a process.
   Future<Map<String, dynamic>> getMemoryStats(String packageName);
 
-  /// Stream the system log from the device.
-  ///
-  /// Flutter applications' `print` statements end up in this log
-  /// with some prefix.
   Stream<String> get logcat;
 
-  /// Clears the device logs.
-  ///
-  /// This is important because benchmarks tests rely on the logs produced by
-  /// the flutter run command.
-  ///
-  /// On Android, those logs may contain logs from previous test.
   Future<void> clearLogs();
 
-  /// Whether this device supports calls to [startLoggingToSink]
-  /// and [stopLoggingToSink].
   bool get canStreamLogs => false;
 
-  /// Starts logging to an [IOSink].
-  ///
-  /// If `clear` is set to true, the log will be cleared before starting. This
-  /// is not supported on all platforms.
   Future<void> startLoggingToSink(IOSink sink, {bool clear = true}) {
     throw UnimplementedError();
   }
 
-  /// Stops logging that was started by [startLoggingToSink].
   Future<void> stopLoggingToSink() {
     throw UnimplementedError();
   }
 
-  /// Stop a process.
   Future<void> stop(String packageName);
 
   @override
@@ -247,8 +195,6 @@ class AndroidDeviceDiscovery implements DeviceDiscovery {
     }
   }
 
-  /// Picks a random Android device out of connected devices and sets it as
-  /// [workingDevice].
   @override
   Future<void> chooseWorkingDevice() async {
     final List<AndroidDevice> allDevices = (await discoverDevices())
@@ -493,7 +439,6 @@ class FuchsiaDeviceDiscovery implements DeviceDiscovery {
     return _workingDevice!;
   }
 
-  /// Picks the first connected Fuchsia device.
   @override
   Future<void> chooseWorkingDevice() async {
     final List<FuchsiaDevice> allDevices = (await discoverDevices())
@@ -577,19 +522,16 @@ class AndroidDevice extends Device {
   String deviceInfo = '';
   int apiLevel = 0;
 
-  /// Whether the device is awake.
   @override
   Future<bool> isAwake() async {
     return await _getWakefulness() == 'Awake';
   }
 
-  /// Whether the device is asleep.
   @override
   Future<bool> isAsleep() async {
     return await _getWakefulness() == 'Asleep';
   }
 
-  /// Wake up the device if it is not awake using [togglePower].
   @override
   Future<void> wakeUp() async {
     if (!(await isAwake())) {
@@ -597,7 +539,6 @@ class AndroidDevice extends Device {
     }
   }
 
-  /// Send the device to sleep mode if it is not asleep using [togglePower].
   @override
   Future<void> sendToSleep() async {
     if (!(await isAsleep())) {
@@ -605,22 +546,16 @@ class AndroidDevice extends Device {
     }
   }
 
-  /// Sends `KEYCODE_HOME` (3), which causes the device to go to the home screen.
   @override
   Future<void> home() async {
     await shellExec('input', const <String>['keyevent', '3']);
   }
 
-  /// Sends `KEYCODE_POWER` (26), which causes the device to toggle its mode
-  /// between awake and asleep.
   @override
   Future<void> togglePower() async {
     await shellExec('input', const <String>['keyevent', '26']);
   }
 
-  /// Unlocks the device by sending `KEYCODE_MENU` (82).
-  ///
-  /// This only works when the device doesn't have a secure unlock pattern.
   @override
   Future<void> unlock() async {
     await wakeUp();
@@ -632,9 +567,6 @@ class AndroidDevice extends Device {
     await shellExec('input', <String>['tap', '$x', '$y']);
   }
 
-  /// Retrieves device's wakefulness state.
-  ///
-  /// See: https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/PowerManagerInternal.java
   Future<String> _getWakefulness() async {
     final String powerInfo = await shellEval('dumpsys', <String>['power']);
     // A motoG4 phone returns `mWakefulness=Awake`.
@@ -679,17 +611,14 @@ class AndroidDevice extends Device {
     }
   }
 
-  /// Executes [command] on `adb shell`.
   Future<void> shellExec(String command, List<String> arguments, { Map<String, String>? environment, bool silent = false }) async {
     await adb(<String>['shell', command, ...arguments], environment: environment, silent: silent);
   }
 
-  /// Executes [command] on `adb shell` and returns its standard output as a [String].
   Future<String> shellEval(String command, List<String> arguments, { Map<String, String>? environment, bool silent = false }) {
     return adb(<String>['shell', command, ...arguments], environment: environment, silent: silent);
   }
 
-  /// Runs `adb` with the given [arguments], selecting this device.
   Future<String> adb(
       List<String> arguments, {
       Map<String, String>? environment,
@@ -875,8 +804,6 @@ class IosDeviceDiscovery implements DeviceDiscovery {
     return _workingDevice!;
   }
 
-  /// Picks a random iOS device out of connected devices and sets it as
-  /// [workingDevice].
   @override
   Future<void> chooseWorkingDevice() async {
     final List<IosDevice> allDevices = (await discoverDevices())
@@ -967,7 +894,6 @@ class IosDeviceDiscovery implements DeviceDiscovery {
   }
 }
 
-/// iOS device.
 class IosDevice extends Device {
   IosDevice({ required this.deviceId });
 
@@ -1239,7 +1165,6 @@ class WindowsDevice extends Device {
   Future<void> wakeUp() async { }
 }
 
-/// Fuchsia device.
 class FuchsiaDevice extends Device {
   const FuchsiaDevice({ required this.deviceId });
 
@@ -1293,7 +1218,6 @@ class FuchsiaDevice extends Device {
   }
 }
 
-/// Path to the `adb` executable.
 String get adbPath {
   final String? androidHome = Platform.environment['ANDROID_HOME'] ?? Platform.environment['ANDROID_SDK_ROOT'];
 
@@ -1393,7 +1317,6 @@ class FakeDeviceDiscovery implements DeviceDiscovery {
     return _workingDevice!;
   }
 
-  /// The Fake is only available for by ID device discovery.
   @override
   Future<void> chooseWorkingDevice() async {
     throw const DeviceException('No fake devices detected');

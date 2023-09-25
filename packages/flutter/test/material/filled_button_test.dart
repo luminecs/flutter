@@ -1164,7 +1164,6 @@ void main() {
       return topLeft & renderBox.size;
     }
 
-    /// Computes the padding between two [Rect]s, one inside the other.
     EdgeInsets paddingBetween({ required Rect parent, required Rect child }) {
       assert (parent.intersect(child) == child);
       return EdgeInsets.fromLTRB(

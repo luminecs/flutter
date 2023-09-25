@@ -28,54 +28,36 @@ const String kSnapshotFileName = 'flutter_tools.snapshot'; // in //flutter/bin/c
 const String kFlutterToolsScriptFileName = 'flutter_tools.dart'; // in //flutter/packages/flutter_tools/bin/
 const String kFlutterEnginePackageName = 'sky_engine';
 
-/// A tag for a set of development artifacts that need to be cached.
 class DevelopmentArtifact {
 
   const DevelopmentArtifact._(this.name, {this.feature});
 
-  /// The name of the artifact.
-  ///
-  /// This should match the flag name in precache.dart.
   final String name;
 
-  /// A feature to control the visibility of this artifact.
   final Feature? feature;
 
-  /// Artifacts required for Android development.
   static const DevelopmentArtifact androidGenSnapshot = DevelopmentArtifact._('android_gen_snapshot', feature: flutterAndroidFeature);
   static const DevelopmentArtifact androidMaven = DevelopmentArtifact._('android_maven', feature: flutterAndroidFeature);
 
   // Artifacts used for internal builds.
   static const DevelopmentArtifact androidInternalBuild = DevelopmentArtifact._('android_internal_build', feature: flutterAndroidFeature);
 
-  /// Artifacts required for iOS development.
   static const DevelopmentArtifact iOS = DevelopmentArtifact._('ios', feature: flutterIOSFeature);
 
-  /// Artifacts required for web development.
   static const DevelopmentArtifact web = DevelopmentArtifact._('web', feature: flutterWebFeature);
 
-  /// Artifacts required for desktop macOS.
   static const DevelopmentArtifact macOS = DevelopmentArtifact._('macos', feature: flutterMacOSDesktopFeature);
 
-  /// Artifacts required for desktop Windows.
   static const DevelopmentArtifact windows = DevelopmentArtifact._('windows', feature: flutterWindowsDesktopFeature);
 
-  /// Artifacts required for desktop Linux.
   static const DevelopmentArtifact linux = DevelopmentArtifact._('linux', feature: flutterLinuxDesktopFeature);
 
-  /// Artifacts required for Fuchsia.
   static const DevelopmentArtifact fuchsia = DevelopmentArtifact._('fuchsia', feature: flutterFuchsiaFeature);
 
-  /// Artifacts required for the Flutter Runner.
   static const DevelopmentArtifact flutterRunner = DevelopmentArtifact._('flutter_runner', feature: flutterFuchsiaFeature);
 
-  /// Artifacts required for any development platform.
-  ///
-  /// This does not need to be explicitly returned from requiredArtifacts as
-  /// it will always be downloaded.
   static const DevelopmentArtifact universal = DevelopmentArtifact._('universal');
 
-  /// The values of DevelopmentArtifacts.
   static final List<DevelopmentArtifact> values = <DevelopmentArtifact>[
     androidGenSnapshot,
     androidMaven,
@@ -94,27 +76,7 @@ class DevelopmentArtifact {
   String toString() => 'Artifact($name)';
 }
 
-/// A wrapper around the `bin/cache/` directory.
-///
-/// This does not provide any artifacts by default. See [FlutterCache] for the default
-/// artifact set.
-///
-/// ## Artifact mirrors
-///
-/// Some environments cannot reach the Google Cloud Storage buckets and CIPD due
-/// to regional or corporate policies.
-///
-/// To enable Flutter users in these environments, the Flutter tool supports
-/// custom artifact mirrors that the administrators of such environments may
-/// provide. To use an artifact mirror, the user defines the [kFlutterStorageBaseUrl]
-/// (`FLUTTER_STORAGE_BASE_URL`) environment variable that points to the mirror.
-/// Flutter tool reads this variable and uses it instead of the default URLs.
-///
-/// For more details on specific URLs used to download artifacts, see
-/// [storageBaseUrl] and [cipdBaseUrl].
 class Cache {
-  /// [rootOverride] is configurable for testing.
-  /// [artifacts] is configurable for testing.
   Cache({
     @protected Directory? rootOverride,
     @protected List<ArtifactSet>? artifacts,
@@ -131,11 +93,6 @@ class Cache {
       _fsUtils = FileSystemUtils(fileSystem: fileSystem, platform: platform),
       _artifacts = artifacts ?? <ArtifactSet>[];
 
-  /// Create a [Cache] for testing.
-  ///
-  /// Defaults to a memory file system, fake platform,
-  /// buffer logger, and no accessible artifacts.
-  /// By default, the root cache directory path is "cache".
   factory Cache.test({
     Directory? rootOverride,
     List<ArtifactSet>? artifacts,
@@ -179,7 +136,6 @@ class Cache {
     _artifacts.add(artifactSet);
   }
 
-  /// This has to be lazy because it requires FLUTTER_ROOT to be initialized.
   ArtifactUpdater _createUpdater() {
     return ArtifactUpdater(
       operatingSystemUtils: _osUtils,
@@ -205,26 +161,6 @@ class Cache {
   // Explore making this field lazy to catch non-initialized access.
   static String? flutterRoot;
 
-  /// Determine the absolute and normalized path for the root of the current
-  /// Flutter checkout.
-  ///
-  /// This method has a series of fallbacks for determining the repo location. The
-  /// first success will immediately return the root without further checks.
-  ///
-  /// The order of these tests is:
-  ///   1. FLUTTER_ROOT environment variable contains the path.
-  ///   2. Platform script is a data URI scheme, returning `../..` to support
-  ///      tests run from `packages/flutter_tools`.
-  ///   3. Platform script is package URI scheme, returning the grandparent directory
-  ///      of the package config file location from `packages/flutter_tools/.packages`.
-  ///   4. Platform script file path is the snapshot path generated by `bin/flutter`,
-  ///      returning the grandparent directory from `bin/cache`.
-  ///   5. Platform script file name is the entrypoint in `packages/flutter_tools/bin/flutter_tools.dart`,
-  ///      returning the 4th parent directory.
-  ///   6. The current directory
-  ///
-  /// If an exception is thrown during any of these checks, an error message is
-  /// printed and `.` is returned by default (6).
   static String defaultFlutterRoot({
     required Platform platform,
     required FileSystem fileSystem,
@@ -285,37 +221,21 @@ class Cache {
   static RandomAccessFile? _lock;
   static bool _lockEnabled = true;
 
-  /// Turn off the [lock]/[releaseLock] mechanism.
-  ///
-  /// This is used by the tests since they run simultaneously and all in one
-  /// process and so it would be a mess if they had to use the lock.
   @visibleForTesting
   static void disableLocking() {
     _lockEnabled = false;
   }
 
-  /// Turn on the [lock]/[releaseLock] mechanism.
-  ///
-  /// This is used by the tests.
   @visibleForTesting
   static void enableLocking() {
     _lockEnabled = true;
   }
 
-  /// Check if lock acquired, skipping FLUTTER_ALREADY_LOCKED reentrant checks.
-  ///
-  /// This is used by the tests.
   @visibleForTesting
   static bool isLocked() {
     return _lock != null;
   }
 
-  /// Lock the cache directory.
-  ///
-  /// This happens while required artifacts are updated
-  /// (see [FlutterCommandRunner.runCommand]).
-  ///
-  /// This uses normal POSIX flock semantics.
   Future<void> lock() async {
     if (!_lockEnabled) {
       return;
@@ -356,10 +276,6 @@ class Cache {
     }
   }
 
-  /// Releases the lock.
-  ///
-  /// This happens automatically on startup (see [FlutterCommand.verifyThenRunCommand])
-  /// after the command's required artifacts are updated.
   void releaseLock() {
     if (!_lockEnabled || _lock == null) {
       return;
@@ -368,8 +284,6 @@ class Cache {
     _lock = null;
   }
 
-  /// Checks if the current process owns the lock for the cache directory at
-  /// this very moment; throws a [StateError] if it doesn't.
   void checkLockAcquired() {
     if (_lockEnabled && _lock == null && _platform.environment['FLUTTER_ALREADY_LOCKED'] != 'true') {
       throw StateError(
@@ -407,7 +321,6 @@ class Cache {
   }
   String ? _devToolsVersion;
 
-  /// The current version of Dart used to build Flutter and run the tool.
   String get dartSdkVersion {
     if (_dartSdkVersion == null) {
       // Make the version string more customer-friendly.
@@ -422,7 +335,6 @@ class Cache {
   }
   String? _dartSdkVersion;
 
-  /// The current version of Dart used to build Flutter and run the tool.
   String get dartSdkBuild {
     if (_dartSdkBuild == null) {
       // Make the version string more customer-friendly.
@@ -438,7 +350,6 @@ class Cache {
   String? _dartSdkBuild;
 
 
-  /// The current version of the Flutter engine the flutter tool will download.
   String get engineRevision {
     _engineRevision ??= getVersionFor('engine');
     if (_engineRevision == null) {
@@ -448,13 +359,6 @@ class Cache {
   }
   String? _engineRevision;
 
-  /// The "realm" for the storage URL.
-  ///
-  /// For production artifacts from Engine post-submit and release builds,
-  /// this string will be empty, and the `storageBaseUrl` will be unmodified.
-  /// When non-empty, this string will be appended to the `storageBaseUrl` after
-  /// a '/'. For artifacts generated by Engine presubmits, the realm should be
-  /// "flutter_archives_v2".
   String get storageRealm {
     _storageRealm ??= getRealmFor('engine');
     if (_storageRealm == null) {
@@ -464,17 +368,6 @@ class Cache {
   }
   String? _storageRealm;
 
-  /// The base for URLs that store Flutter engine artifacts that are fetched
-  /// during the installation of the Flutter SDK.
-  ///
-  /// By default the base URL is https://storage.googleapis.com. However, if
-  /// `FLUTTER_STORAGE_BASE_URL` environment variable ([kFlutterStorageBaseUrl])
-  /// is provided, the environment variable value is returned instead.
-  ///
-  /// See also:
-  ///
-  ///  * [cipdBaseUrl], which determines how CIPD artifacts are fetched.
-  ///  * [Cache] class-level dartdocs that explain how artifact mirrors work.
   String get storageBaseUrl {
     String? overrideUrl = _platform.environment[kFlutterStorageBaseUrl];
     if (overrideUrl == null) {
@@ -499,25 +392,6 @@ class Cache {
       : storageBaseUrl.replaceAll('/$storageRealm', '');
   }
 
-  /// The base for URLs that store Flutter engine artifacts in CIPD.
-  ///
-  /// For some platforms, such as Web and Fuchsia, CIPD artifacts are fetched
-  /// during the installation of the Flutter SDK, in addition to those fetched
-  /// from [storageBaseUrl].
-  ///
-  /// By default the base URL is https://chrome-infra-packages.appspot.com/dl.
-  /// However, if `FLUTTER_STORAGE_BASE_URL` environment variable is provided
-  /// ([kFlutterStorageBaseUrl]), then the following value is used:
-  ///
-  ///     FLUTTER_STORAGE_BASE_URL/flutter_infra_release/cipd
-  ///
-  /// See also:
-  ///
-  ///  * [storageBaseUrl], which determines how engine artifacts stored in the
-  ///    Google Cloud Storage buckets are fetched.
-  ///  * https://chromium.googlesource.com/infra/luci/luci-go/+/refs/heads/main/cipd,
-  ///    which contains information about CIPD.
-  ///  * [Cache] class-level dartdocs that explain how artifact mirrors work.
   String get cipdBaseUrl {
     final String? overrideUrl = _platform.environment[kFlutterStorageBaseUrl];
     if (overrideUrl == null) {
@@ -555,7 +429,6 @@ class Cache {
     _hasWarnedAboutStorageOverride = true;
   }
 
-  /// Return the top-level directory in the cache; this is `bin/cache`.
   Directory getRoot() {
     if (_rootOverride != null) {
       return _fileSystem.directory(_fileSystem.path.join(_rootOverride.path, 'bin', 'cache'));
@@ -568,10 +441,6 @@ class Cache {
     return _osUtils.hostPlatform.platformName;
   }
 
-  /// Return a directory in the cache dir. For `pkg`, this will return `bin/cache/pkg`.
-  ///
-  /// When [shouldCreate] is true, the cache directory at [name] will be created
-  /// if it does not already exist.
   Directory getCacheDir(String name, { bool shouldCreate = true }) {
     final Directory dir = _fileSystem.directory(_fileSystem.path.join(getRoot().path, name));
     if (!dir.existsSync() && shouldCreate) {
@@ -581,17 +450,12 @@ class Cache {
     return dir;
   }
 
-  /// Return the top-level directory for artifact downloads.
   Directory getDownloadDir() => getCacheDir('downloads');
 
-  /// Return the top-level mutable directory in the cache; this is `bin/cache/artifacts`.
   Directory getCacheArtifacts() => getCacheDir('artifacts');
 
-  /// Location of LICENSE file.
   File getLicenseFile() => _fileSystem.file(_fileSystem.path.join(flutterRoot!, 'LICENSE'));
 
-  /// Get a named directory from with the cache's artifact directory; for example,
-  /// `material_fonts` would return `bin/cache/artifacts/material_fonts`.
   Directory getArtifactDirectory(String name) {
     return getCacheArtifacts().childDirectory(name);
   }
@@ -617,8 +481,6 @@ class Cache {
   }
   MapEntry<String, String>? _dyLdLibEntry;
 
-  /// The web sdk has to be co-located with the dart-sdk so that they can share source
-  /// code.
   Directory getWebSdkDirectory() {
     return getRoot().childDirectory('flutter_web_sdk');
   }
@@ -643,7 +505,6 @@ class Cache {
     return realmFile.existsSync() ? realmFile.readAsStringSync().trim() : '';
   }
 
-  /// Delete all stamp files maintained by the cache.
   void clearStampFiles() {
     try {
       getStampFileFor('flutter_tools').deleteSync();
@@ -656,9 +517,6 @@ class Cache {
     }
   }
 
-  /// Read the stamp for [artifactName].
-  ///
-  /// If the file is missing or cannot be parsed, returns `null`.
   String? getStampFor(String artifactName) {
     final File stampFile = getStampFileFor(artifactName);
     if (!stampFile.existsSync()) {
@@ -679,8 +537,6 @@ class Cache {
     return _fileSystem.file(_fileSystem.path.join(getRoot().path, '$artifactName.stamp'));
   }
 
-  /// Returns `true` if either [entity] is older than the tools stamp or if
-  /// [entity] doesn't exist.
   bool isOlderThanToolsStamp(FileSystemEntity entity) {
     final File flutterToolsStamp = getStampFileFor('flutter_tools');
     return _fsUtils.isOlderThanReference(
@@ -698,7 +554,6 @@ class Cache {
     return true;
   }
 
-  /// Update the cache to contain all `requiredArtifacts`.
   Future<void> updateAll(Set<DevelopmentArtifact> requiredArtifacts, {bool offline = false}) async {
     if (!_lockEnabled) {
       return;
@@ -757,22 +612,17 @@ class Cache {
   }
 }
 
-/// Representation of a set of artifacts used by the tool.
 abstract class ArtifactSet {
   ArtifactSet(this.developmentArtifact);
 
-  /// The development artifact.
   final DevelopmentArtifact developmentArtifact;
 
-  /// [true] if the artifact is up to date.
   Future<bool> isUpToDate(FileSystem fileSystem);
 
-  /// The environment variables (if any) required to consume the artifacts.
   Map<String, String> get environment {
     return const <String, String>{};
   }
 
-  /// Updates the artifact.
   Future<void> update(
     ArtifactUpdater artifactUpdater,
     Logger logger,
@@ -781,7 +631,6 @@ abstract class ArtifactSet {
     {bool offline = false}
   );
 
-  /// The canonical name of the artifact.
   String get name;
 
   // The name of the stamp file. Defaults to the same as the
@@ -789,7 +638,6 @@ abstract class ArtifactSet {
   String get stampName => name;
 }
 
-/// An artifact set managed by the cache.
 abstract class CachedArtifact extends ArtifactSet {
   CachedArtifact(
     this.name,
@@ -867,7 +715,6 @@ abstract class CachedArtifact extends ArtifactSet {
     artifactUpdater.removeDownloadedFiles();
   }
 
-  /// Hook method for extra checks for being up-to-date.
   bool isUpToDateInner(FileSystem fileSystem) => true;
 
   Future<void> updateInner(
@@ -888,13 +735,10 @@ abstract class EngineCachedArtifact extends CachedArtifact {
   @override
   final String stampName;
 
-  /// Return a list of (directory path, download URL path) tuples.
   List<List<String>> getBinaryDirs();
 
-  /// A list of cache directory paths to which the LICENSE file should be copied.
   List<String> getLicenseDirs();
 
-  /// A list of the dart package directories to download.
   List<String> getPackageDirs();
 
   @override
@@ -1000,8 +844,6 @@ abstract class EngineCachedArtifact extends CachedArtifact {
   }
 }
 
-/// An API for downloading and un-archiving artifacts, such as engine binaries or
-/// additional source code.
 class ArtifactUpdater {
   ArtifactUpdater({
     required OperatingSystemUtils operatingSystemUtils,
@@ -1019,7 +861,6 @@ class ArtifactUpdater {
        _platform = platform,
        _allowedBaseUrls = allowedBaseUrls;
 
-  /// The number of times the artifact updater will repeat the artifact download loop.
   static const int _kRetryCount = 2;
 
   final Logger _logger;
@@ -1029,21 +870,11 @@ class ArtifactUpdater {
   final HttpClient _httpClient;
   final Platform _platform;
 
-  /// Artifacts should only be downloaded from URLs that use one of these
-  /// prefixes.
-  ///
-  /// [ArtifactUpdater] will issue a warning if an attempt to download from a
-  /// non-compliant URL is made.
   final List<String> _allowedBaseUrls;
 
-  /// Keep track of the files we've downloaded for this execution so we
-  /// can delete them after completion. We don't delete them right after
-  /// extraction in case [update] is interrupted, so we can restart without
-  /// starting from scratch.
   @visibleForTesting
   final List<File> downloadedFiles = <File>[];
 
-  /// These filenames, should they exist after extracting an archive, should be deleted.
   static const Set<String> _denylistedBasenames = <String>{'entitlements.txt', 'without_entitlements.txt'};
   void _removeDenylistedFiles(Directory directory) {
     for (final FileSystemEntity entity in directory.listSync(recursive: true)) {
@@ -1056,7 +887,6 @@ class ArtifactUpdater {
     }
   }
 
-  /// Download a zip archive from the given [url] and unzip it to [location].
   Future<void> downloadZipArchive(
     String message,
     Uri url,
@@ -1070,7 +900,6 @@ class ArtifactUpdater {
     );
   }
 
-  /// Download a gzipped tarball from the given [url] and unpack it to [location].
   Future<void> downloadZippedTarball(String message, Uri url, Directory location) {
     return _downloadArchive(
       message,
@@ -1080,7 +909,6 @@ class ArtifactUpdater {
     );
   }
 
-  /// Download an archive from the given [url] and unzip it to [location].
   Future<void> _downloadArchive(
     String message,
     Uri url,
@@ -1133,8 +961,6 @@ class ArtifactUpdater {
       } finally {
         status.stop();
       }
-      /// Unzipping multiple file into a directory will not remove old files
-      /// from previous versions that are not present in the new bundle.
       final Directory destination = location.childDirectory(
         tempFile.fileSystem.path.basenameWithoutExtension(tempFile.path)
       );
@@ -1177,14 +1003,6 @@ class ArtifactUpdater {
     }
   }
 
-  /// Download bytes from [url], throwing non-200 responses as an exception.
-  ///
-  /// Validates that the md5 of the content bytes matches the provided
-  /// `x-goog-hash` header, if present. This header should contain an md5 hash
-  /// if the download source is Google cloud storage.
-  ///
-  /// See also:
-  ///   * https://cloud.google.com/storage/docs/xml-api/reference-headers#xgooghash
   Future<void> _download(Uri url, File file, Status status) async {
     final bool isAllowedUrl = _allowedBaseUrls.any((String baseUrl) => url.toString().startsWith(baseUrl));
 
@@ -1266,22 +1084,18 @@ class ArtifactUpdater {
     return md5Hash;
   }
 
-  /// Create a temporary file and invoke [onTemporaryFile] with the file as
-  /// argument, then add the temporary file to the [downloadedFiles].
   File _createDownloadFile(String name) {
     final File tempFile = _fileSystem.file(_fileSystem.path.join(_tempStorage.path, name));
     downloadedFiles.add(tempFile);
     return tempFile;
   }
 
-  /// Create the given [directory] and parents, as necessary.
   void _ensureExists(Directory directory) {
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
   }
 
-  /// Clear any zip/gzip files downloaded.
   void removeDownloadedFiles() {
     for (final File file in downloadedFiles) {
       if (!file.existsSync()) {
@@ -1325,8 +1139,6 @@ String flattenNameSubdirs(Uri url, FileSystem fileSystem) {
   return fileSystem.path.joinAll(convertedPieces);
 }
 
-/// Given a name containing slashes, colons, and backslashes, expand it into
-/// something that doesn't.
 String _flattenNameNoSubdirs(String fileName) {
   final List<int> replacedCodeUnits = <int>[
     for (final int codeUnit in fileName.codeUnits)

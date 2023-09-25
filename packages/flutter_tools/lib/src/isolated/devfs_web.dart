@@ -77,9 +77,6 @@ const String _kDefaultIndex = '''
 </html>
 ''';
 
-/// An expression compiler connecting to FrontendServer.
-///
-/// This is only used in development mode.
 class WebExpressionCompiler implements ExpressionCompiler {
   WebExpressionCompiler(this._generator, {
     required FileSystem fileSystem,
@@ -122,9 +119,6 @@ class WebExpressionCompiler implements ExpressionCompiler {
   Future<bool> updateDependencies(Map<String, ModuleInfo> modules) async => true;
 }
 
-/// A web server which handles serving JavaScript and assets.
-///
-/// This is only used in development mode.
 class WebAssetServer implements AssetReader {
   @visibleForTesting
   WebAssetServer(
@@ -169,13 +163,6 @@ class WebAssetServer implements AssetReader {
     return _webMemoryFS.write(codeFile, manifestFile, sourcemapFile, metadataFile);
   }
 
-  /// Start the web asset server on a [hostname] and [port].
-  ///
-  /// If [testMode] is true, do not actually initialize dwds or the shelf static
-  /// server.
-  ///
-  /// Unhandled exceptions will throw a [ToolExit] with the error and stack
-  /// trace.
   static Future<WebAssetServer> start(
     ChromiumLauncher? chromiumLauncher,
     String hostname,
@@ -342,9 +329,6 @@ class WebAssetServer implements AssetReader {
   @visibleForTesting
   Uint8List? getMetadata(String path) => _webMemoryFS.metadataFiles[path];
 
-  /// The base path to serve from.
-  ///
-  /// It should have no leading or trailing slashes.
   @visibleForTesting
   @override
   String basePath;
@@ -483,7 +467,6 @@ class WebAssetServer implements AssetReader {
     return shelf.Response.ok(file.openRead(), headers: headers);
   }
 
-  /// Tear down the http server running.
   Future<void> dispose() async {
     if (_dwdsInit) {
       await dwds.stop();
@@ -491,7 +474,6 @@ class WebAssetServer implements AssetReader {
     return _httpServer.close();
   }
 
-  /// Write a single file into the in-memory cache.
   void writeFile(String filePath, String contents) {
     writeBytes(filePath, const Utf8Encoder().convert(contents));
   }
@@ -500,7 +482,6 @@ class WebAssetServer implements AssetReader {
     _webMemoryFS.files[filePath] = contents;
   }
 
-  /// Determines what rendering backed to use.
   WebRendererMode webRenderer = WebRendererMode.html;
 
   shelf.Response _serveIndex() {
@@ -634,12 +615,7 @@ typedef VmServiceFactory = Future<vm_service.VmService> Function(
   required Logger logger,
 });
 
-/// The web specific DevFS implementation.
 class WebDevFS implements DevFS {
-  /// Create a new [WebDevFS] instance.
-  ///
-  /// [testMode] is true, do not actually initialize dwds or the shelf static
-  /// server.
   WebDevFS({
     required this.hostname,
     required int port,
@@ -692,9 +668,6 @@ class WebDevFS implements DevFS {
   Future<DebugConnection>? _cachedExtensionFuture;
   StreamSubscription<void>? _connectedApps;
 
-  /// Connect and retrieve the [DebugConnection] for the current application.
-  ///
-  /// Only calls [AppConnection.runMain] on the subsequent connections.
   Future<ConnectionResult?> connect(
     bool useDebugExtension, {
     @visibleForTesting
@@ -980,9 +953,6 @@ class ReleaseAssetServer {
   final FileSystemUtils _fileSystemUtils;
   final Platform _platform;
 
-  /// The base path to serve from.
-  ///
-  /// It should have no leading or trailing slashes.
   @visibleForTesting
   final String basePath;
 

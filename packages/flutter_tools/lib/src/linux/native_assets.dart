@@ -13,10 +13,6 @@ import '../build_info.dart';
 import '../globals.dart' as globals;
 import '../native_assets.dart';
 
-/// Dry run the native builds.
-///
-/// This does not build native assets, it only simulates what the final paths
-/// of all assets will be so that this can be embedded in the kernel file.
 Future<Uri?> dryRunNativeAssetsLinux({
   required NativeAssetsBuildRunner buildRunner,
   required Uri projectUri,
@@ -67,13 +63,6 @@ Future<Iterable<Asset>> dryRunNativeAssetsLinuxInternal(
   return nativeAssetPaths;
 }
 
-/// Builds native assets.
-///
-/// If [targetPlatform] is omitted, the current target architecture is used.
-///
-/// If [flutterTester] is true, absolute paths are emitted in the native
-/// assets mapping. This can be used for JIT mode without sandbox on the host.
-/// This is used in `flutter test` and `flutter run -d flutter-tester`.
 Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsLinux({
   required NativeAssetsBuildRunner buildRunner,
   TargetPlatform? targetPlatform,
@@ -159,7 +148,6 @@ Asset _targetLocationLinux(Asset asset, Uri? absolutePath) {
   throw Exception('Unsupported asset path type ${path.runtimeType} in asset $asset');
 }
 
-/// Extract the [Target] from a [TargetPlatform].
 Target _getNativeTarget(TargetPlatform targetPlatform) {
   switch (targetPlatform) {
     case TargetPlatform.linux_x64:
@@ -205,9 +193,6 @@ Future<void> _copyNativeAssetsLinux(
   }
 }
 
-/// Flutter expects `clang++` to be on the path on Linux hosts.
-///
-/// Search for the accompanying `clang`, `ar`, and `ld`.
 Future<CCompilerConfig> cCompilerConfigLinux() async {
   const String kClangPlusPlusBinary = 'clang++';
   const String kClangBinary = 'clang';

@@ -8,8 +8,6 @@ import 'package:crypto/crypto.dart';
 import '../convert.dart';
 import '../persistent_tool_state.dart';
 
-/// This message is displayed on the first run of the Flutter tool, or anytime
-/// that the contents of this string change.
 const String _kFlutterFirstRunMessage = '''
   ╔════════════════════════════════════════════════════════════════════════════╗
   ║                 Welcome to Flutter! - https://flutter.dev                  ║
@@ -40,8 +38,6 @@ const String _kFlutterFirstRunMessage = '''
   ╚════════════════════════════════════════════════════════════════════════════╝
 ''';
 
-/// The first run messenger determines whether the first run license terms
-/// need to be displayed.
 class FirstRunMessenger {
   FirstRunMessenger({
     required PersistentToolState persistentToolState
@@ -49,15 +45,6 @@ class FirstRunMessenger {
 
   final PersistentToolState _persistentToolState;
 
-  /// Whether the license terms should be displayed.
-  ///
-  /// This is implemented by caching a hash of the previous license terms. This
-  /// does not update the cache hash value.
-  ///
-  /// The persistent tool state setting [PersistentToolState.redisplayWelcomeMessage]
-  /// can also be used to make this return false. This is primarily used to ensure
-  /// that the license terms are not printed during a `flutter upgrade`, until the
-  /// user manually runs the tool.
   bool shouldDisplayLicenseTerms() {
     if (_persistentToolState.shouldRedisplayWelcomeMessage == false) {
       return false;
@@ -66,14 +53,11 @@ class FirstRunMessenger {
     return oldHash != _currentHash;
   }
 
-  /// Update the cached license terms hash once the new terms have been displayed.
   void confirmLicenseTermsDisplayed() {
     _persistentToolState.setLastActiveLicenseTermsHash(_currentHash);
   }
 
-  /// The hash of the current license representation.
   String get _currentHash =>  hex.encode(md5.convert(utf8.encode(licenseTerms)).bytes);
 
-  /// The current license terms.
   String get licenseTerms => _kFlutterFirstRunMessage;
 }

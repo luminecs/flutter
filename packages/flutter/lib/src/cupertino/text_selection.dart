@@ -22,7 +22,6 @@ const double _kSelectionHandleRadius = 6;
 // screen. Eyeballed value.
 const double _kArrowScreenPadding = 26.0;
 
-/// Draws a single text selection handle with a bar and a ball.
 class _TextSelectionHandlePainter extends CustomPainter {
   const _TextSelectionHandlePainter(this.color);
 
@@ -54,10 +53,6 @@ class _TextSelectionHandlePainter extends CustomPainter {
   bool shouldRepaint(_TextSelectionHandlePainter oldPainter) => color != oldPainter.color;
 }
 
-/// iOS Cupertino styled text selection handle controls.
-///
-/// Specifically does not manage the toolbar, which is left to
-/// [EditableText.contextMenuBuilder].
 @Deprecated(
   'Use `CupertinoTextSelectionControls`. '
   'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -65,12 +60,7 @@ class _TextSelectionHandlePainter extends CustomPainter {
 class CupertinoTextSelectionHandleControls extends CupertinoTextSelectionControls with TextSelectionHandleControls {
 }
 
-/// iOS Cupertino styled text selection controls.
-///
-/// The [cupertinoTextSelectionControls] global variable has a
-/// suitable instance of this class.
 class CupertinoTextSelectionControls extends TextSelectionControls {
-  /// Returns the size of the Cupertino handle.
   @override
   Size getHandleSize(double textLineHeight) {
     return Size(
@@ -79,7 +69,6 @@ class CupertinoTextSelectionControls extends TextSelectionControls {
     );
   }
 
-  /// Builder for iOS-style copy/paste text selection toolbar.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -108,7 +97,6 @@ class CupertinoTextSelectionControls extends TextSelectionControls {
     );
   }
 
-  /// Builder for iOS text selection edges.
   @override
   Widget buildHandle(BuildContext context, TextSelectionHandleType type, double textLineHeight, [VoidCallback? onTap]) {
     // iOS selection handles do not respond to taps.
@@ -149,9 +137,6 @@ class CupertinoTextSelectionControls extends TextSelectionControls {
     }
   }
 
-  /// Gets anchor for cupertino-style text selection handles.
-  ///
-  /// See [TextSelectionControls.getHandleAnchor].
   @override
   Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight) {
     final Size handleSize;
@@ -187,11 +172,9 @@ class CupertinoTextSelectionControls extends TextSelectionControls {
 // TODO(justinmc): Deprecate this after TextSelectionControls.buildToolbar is
 // deleted, when users should migrate back to cupertinoTextSelectionControls.
 // See https://github.com/flutter/flutter/pull/124262
-/// Text selection handle controls that follow iOS design conventions.
 final TextSelectionControls cupertinoTextSelectionHandleControls =
     CupertinoTextSelectionHandleControls();
 
-/// Text selection controls that follow iOS design conventions.
 final TextSelectionControls cupertinoTextSelectionControls =
     CupertinoTextSelectionControls();
 

@@ -73,30 +73,15 @@ Future<PortForwarder> _dummyPortForwardingFunction(
   return _DummyPortForwarder(remotePort, remotePort);
 }
 
-/// Utility class for creating connections to the Fuchsia Device.
-///
-/// If executed on a host (non-Fuchsia device), behaves the same as running
-/// [FuchsiaRemoteConnection.connect] whereby the `FUCHSIA_REMOTE_URL` and
-/// `FUCHSIA_SSH_CONFIG` variables must be set. If run on a Fuchsia device, will
-/// connect locally without need for environment variables.
 abstract final class FuchsiaCompat {
   static void _init() {
     fuchsiaPortForwardingFunction = _dummyPortForwardingFunction;
   }
 
-  /// Restores state to normal if running on a Fuchsia device.
-  ///
-  /// Noop if running on the host machine.
   static void cleanup() {
     restoreFuchsiaPortForwardingFunction();
   }
 
-  /// Creates a connection to the Fuchsia device's Dart VM's.
-  ///
-  /// See [FuchsiaRemoteConnection.connect] for more details.
-  /// [FuchsiaCompat.cleanup] must be called when the connection is no longer in
-  /// use. It is the caller's responsibility to call
-  /// [FuchsiaRemoteConnection.stop].
   static Future<FuchsiaRemoteConnection> connect() async {
     FuchsiaCompat._init();
     return FuchsiaRemoteConnection.connectWithSshCommandRunner(

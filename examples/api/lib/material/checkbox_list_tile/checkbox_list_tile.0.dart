@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
-/// Flutter code sample for [CheckboxListTile].
 
 void main() => runApp(const CheckboxListTileApp());
 

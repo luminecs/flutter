@@ -16,11 +16,7 @@ import 'convert.dart';
 import 'device.dart';
 import 'reporting/reporting.dart';
 
-/// A wrapper around [MDnsClient] to find a Dart VM Service instance.
 class MDnsVmServiceDiscovery {
-  /// Creates a new [MDnsVmServiceDiscovery] object.
-  ///
-  /// The [_client] parameter will be defaulted to a new [MDnsClient] if null.
   MDnsVmServiceDiscovery({
     MDnsClient? mdnsClient,
     MDnsClient? preliminaryMDnsClient,
@@ -45,36 +41,6 @@ class MDnsVmServiceDiscovery {
 
   static MDnsVmServiceDiscovery? get instance => context.get<MDnsVmServiceDiscovery>();
 
-  /// Executes an mDNS query for Dart VM Services.
-  /// Checks for services that have already been launched.
-  /// If none are found, it will listen for new services to become active
-  /// and return the first it finds that match the parameters.
-  ///
-  /// The [applicationId] parameter may be used to specify which application
-  /// to find. For Android, it refers to the package name; on iOS, it refers to
-  /// the bundle ID.
-  ///
-  /// The [deviceVmservicePort] parameter may be used to specify which port
-  /// to find.
-  ///
-  /// The [useDeviceIPAsHost] parameter flags whether to get the device IP
-  /// and the [ipv6] parameter flags whether to get an iPv6 address
-  /// (otherwise it will get iPv4).
-  ///
-  /// The [timeout] parameter determines how long to continue to wait for
-  /// services to become active.
-  ///
-  /// If [applicationId] is not null, this method will find the port and authentication code
-  /// of the Dart VM Service for that application. If it cannot find a service matching
-  /// that application identifier after the [timeout], it will call [throwToolExit].
-  ///
-  /// If [applicationId] is null and there are multiple Dart VM Services available,
-  /// the user will be prompted with a list of available services with the respective
-  /// app-id and device-vmservice-port to use and asked to select one.
-  ///
-  /// If it is null and there is only one available or it's the first found instance
-  /// of Dart VM Service, it will return that instance's information regardless of
-  /// what application the service instance is for.
   @visibleForTesting
   Future<MDnsVmServiceDiscoveryResult?> queryForAttach({
     String? applicationId,
@@ -119,31 +85,6 @@ class MDnsVmServiceDiscovery {
     return results.first;
   }
 
-  /// Executes an mDNS query for Dart VM Services.
-  /// Listens for new services to become active and returns the first it finds that
-  /// match the parameters.
-  ///
-  /// The [applicationId] parameter must be set to specify which application
-  /// to find. For Android, it refers to the package name; on iOS, it refers to
-  /// the bundle ID.
-  ///
-  /// The [deviceVmservicePort] parameter must be set to specify which port
-  /// to find.
-  ///
-  /// [applicationId] and either [deviceVmservicePort] or [deviceName] are
-  /// required for launch so that if multiple flutter apps are running on
-  /// different devices, it will only match with the device running the desired app.
-  ///
-  /// The [useDeviceIPAsHost] parameter flags whether to get the device IP
-  /// and the [ipv6] parameter flags whether to get an iPv6 address
-  /// (otherwise it will get iPv4).
-  ///
-  /// The [timeout] parameter determines how long to continue to wait for
-  /// services to become active.
-  ///
-  /// If a Dart VM Service matching the [applicationId] and
-  /// [deviceVmservicePort]/[deviceName] cannot be found before the [timeout]
-  /// is reached, it will call [throwToolExit].
   @visibleForTesting
   Future<MDnsVmServiceDiscoveryResult?> queryForLaunch({
     required String applicationId,
@@ -168,9 +109,6 @@ class MDnsVmServiceDiscovery {
     );
   }
 
-  /// Polls for Dart VM Services and returns the first it finds that match
-  /// the [applicationId]/[deviceVmservicePort] (if applicable).
-  /// Returns null if no results are found.
   @visibleForTesting
   Future<MDnsVmServiceDiscoveryResult?> firstMatchingVmService(
     MDnsClient client, {
@@ -371,16 +309,6 @@ class MDnsVmServiceDiscovery {
     return authCode;
   }
 
-  /// Gets Dart VM Service Uri for `flutter attach`.
-  /// Executes an mDNS query and waits until a Dart VM Service is found.
-  ///
-  /// When [useDeviceIPAsHost] is true, it will use the device's IP as the
-  /// host and will not forward the port.
-  ///
-  /// Differs from [getVMServiceUriForLaunch] because it can search for any available Dart VM Service.
-  /// Since [applicationId] and [deviceVmservicePort] are optional, it can either look for any service
-  /// or a specific service matching [applicationId]/[deviceVmservicePort].
-  /// It may find more than one service, which will throw an error listing the found services.
   Future<Uri?> getVMServiceUriForAttach(
     String? applicationId,
     Device device, {
@@ -408,15 +336,6 @@ class MDnsVmServiceDiscovery {
     );
   }
 
-  /// Gets Dart VM Service Uri for `flutter run`.
-  /// Executes an mDNS query and waits until the Dart VM Service service is found.
-  ///
-  /// When [useDeviceIPAsHost] is true, it will use the device's IP as the
-  /// host and will not forward the port.
-  ///
-  /// Differs from [getVMServiceUriForAttach] because it only searches for a specific service.
-  /// This is enforced by [applicationId] being required and using either the
-  /// [deviceVmservicePort] or the [device]'s name to query.
   Future<Uri?> getVMServiceUriForLaunch(
     String applicationId,
     Device device, {

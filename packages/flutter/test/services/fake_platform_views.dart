@@ -9,14 +9,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Used in internal testing.
 class FakePlatformViewController extends PlatformViewController {
   FakePlatformViewController(this.viewId);
 
   bool disposed = false;
   bool focusCleared = false;
 
-  /// Events that are dispatched.
   List<PointerEvent> dispatchedPointerEvents = <PointerEvent>[];
 
   @override
@@ -64,7 +62,6 @@ class FakeAndroidViewController implements AndroidViewController {
 
   final List<PlatformViewCreatedCallback> _createdCallbacks = <PlatformViewCreatedCallback>[];
 
-  /// Events that are dispatched.
   List<PointerEvent> dispatchedPointerEvents = <PointerEvent>[];
 
   @override
@@ -171,9 +168,6 @@ class FakeAndroidPlatformViewsController {
 
   Map<int, Offset> offsets = <int, Offset>{};
 
-  /// True if Texture Layer Hybrid Composition mode should be enabled.
-  ///
-  /// When false, `create` will simulate the engine's fallback mode.
   bool allowTextureLayerMode = true;
 
   void registerViewType(String viewType) {

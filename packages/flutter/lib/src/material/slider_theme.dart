@@ -14,87 +14,15 @@ import 'material_state.dart';
 import 'slider.dart';
 import 'theme.dart';
 
-/// Applies a slider theme to descendant [Slider] widgets.
-///
-/// A slider theme describes the colors and shape choices of the slider
-/// components.
-///
-/// Descendant widgets obtain the current theme's [SliderThemeData] object using
-/// [SliderTheme.of]. When a widget uses [SliderTheme.of], it is automatically
-/// rebuilt if the theme later changes.
-///
-/// The slider is as big as the largest of
-/// the [SliderComponentShape.getPreferredSize] of the thumb shape,
-/// the [SliderComponentShape.getPreferredSize] of the overlay shape,
-/// and the [SliderTickMarkShape.getPreferredSize] of the tick mark shape.
-///
-/// See also:
-///
-///  * [SliderThemeData], which describes the actual configuration of a slider
-///    theme.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
-///  * [SliderTrackShape], which can be used to create custom shapes for the
-///    [Slider]'s track.
-///  * [SliderTickMarkShape], which can be used to create custom shapes for the
-///    [Slider]'s tick marks.
-///  * [RangeSliderThumbShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s thumb.
-///  * [RangeSliderValueIndicatorShape], which can be used to create custom
-///    shapes for the [RangeSlider]'s value indicator.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [RangeSliderTickMarkShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s tick marks.
 class SliderTheme extends InheritedTheme {
-  /// Applies the given theme [data] to [child].
   const SliderTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Specifies the color and shape values for descendant slider widgets.
   final SliderThemeData data;
 
-  /// Returns the data from the closest [SliderTheme] instance that encloses
-  /// the given context.
-  ///
-  /// Defaults to the ambient [ThemeData.sliderTheme] if there is no
-  /// [SliderTheme] in the given build context.
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// class Launch extends StatefulWidget {
-  ///   const Launch({super.key});
-  ///
-  ///   @override
-  ///   State createState() => LaunchState();
-  /// }
-  ///
-  /// class LaunchState extends State<Launch> {
-  ///   double _rocketThrust = 0;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return SliderTheme(
-  ///       data: SliderTheme.of(context).copyWith(activeTrackColor: const Color(0xff804040)),
-  ///       child: Slider(
-  ///         onChanged: (double value) { setState(() { _rocketThrust = value; }); },
-  ///         value: _rocketThrust,
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  ///  * [SliderThemeData], which describes the actual configuration of a slider
-  ///    theme.
   static SliderThemeData of(BuildContext context) {
     final SliderTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<SliderTheme>();
     return inheritedTheme != null ? inheritedTheme.data : Theme.of(context).sliderTheme;
@@ -109,157 +37,24 @@ class SliderTheme extends InheritedTheme {
   bool updateShouldNotify(SliderTheme oldWidget) => data != oldWidget.data;
 }
 
-/// Describes the conditions under which the value indicator on a [Slider]
-/// will be shown. Used with [SliderThemeData.showValueIndicator].
-///
-/// See also:
-///
-///  * [Slider], a Material Design slider widget.
-///  * [SliderThemeData], which describes the actual configuration of a slider
-///    theme.
 enum ShowValueIndicator {
-  /// The value indicator will only be shown for discrete sliders (sliders
-  /// where [Slider.divisions] is non-null).
   onlyForDiscrete,
 
-  /// The value indicator will only be shown for continuous sliders (sliders
-  /// where [Slider.divisions] is null).
   onlyForContinuous,
 
-  /// The value indicator will be shown for all types of sliders.
   always,
 
-  /// The value indicator will never be shown.
   never,
 }
 
-/// Identifier for a thumb.
-///
-/// There are 2 thumbs in a [RangeSlider], [start] and [end].
-///
-/// For [TextDirection.ltr], the [start] thumb is the left-most thumb and the
-/// [end] thumb is the right-most thumb. For [TextDirection.rtl] the [start]
-/// thumb is the right-most thumb, and the [end] thumb is the left-most thumb.
 enum Thumb {
-  /// Left-most thumb for [TextDirection.ltr], otherwise, right-most thumb.
   start,
 
-  /// Right-most thumb for [TextDirection.ltr], otherwise, left-most thumb.
   end,
 }
 
-/// Holds the color, shape, and typography values for a Material Design slider
-/// theme.
-///
-/// Use this class to configure a [SliderTheme] widget, or to set the
-/// [ThemeData.sliderTheme] for a [Theme] widget.
-///
-/// To obtain the current ambient slider theme, use [SliderTheme.of].
-///
-/// This theme is for both the [Slider] and the [RangeSlider]. The properties
-/// that are only for the [Slider] are: [tickMarkShape], [thumbShape],
-/// [trackShape], and [valueIndicatorShape]. The properties that are only for
-/// the [RangeSlider] are [rangeTickMarkShape], [rangeThumbShape],
-/// [rangeTrackShape], [rangeValueIndicatorShape],
-/// [overlappingShapeStrokeColor], [minThumbSeparation], and [thumbSelector].
-/// All other properties are used by both the [Slider] and the [RangeSlider].
-///
-/// The parts of a slider are:
-///
-///  * The "thumb", which is a shape that slides horizontally when the user
-///    drags it.
-///  * The "track", which is the line that the slider thumb slides along.
-///  * The "tick marks", which are regularly spaced marks that are drawn when
-///    using discrete divisions.
-///  * The "value indicator", which appears when the user is dragging the thumb
-///    to indicate the value being selected.
-///  * The "overlay", which appears around the thumb, and is shown when the
-///    thumb is pressed, focused, or hovered. It is painted underneath the
-///    thumb, so it must extend beyond the bounds of the thumb itself to
-///    actually be visible.
-///  * The "active" side of the slider is the side between the thumb and the
-///    minimum value.
-///  * The "inactive" side of the slider is the side between the thumb and the
-///    maximum value.
-///  * The [Slider] is disabled when it is not accepting user input. See
-///    [Slider] for details on when this happens.
-///
-/// The thumb, track, tick marks, value indicator, and overlay can be customized
-/// by creating subclasses of [SliderTrackShape],
-/// [SliderComponentShape], and/or [SliderTickMarkShape]. See
-/// [RoundSliderThumbShape], [RectangularSliderTrackShape],
-/// [RoundSliderTickMarkShape], [RectangularSliderValueIndicatorShape], and
-/// [RoundSliderOverlayShape] for examples.
-///
-/// The track painting can be skipped by specifying 0 for [trackHeight].
-/// The thumb painting can be skipped by specifying
-/// [SliderComponentShape.noThumb] for [SliderThemeData.thumbShape].
-/// The overlay painting can be skipped by specifying
-/// [SliderComponentShape.noOverlay] for [SliderThemeData.overlayShape].
-/// The tick mark painting can be skipped by specifying
-/// [SliderTickMarkShape.noTickMark] for [SliderThemeData.tickMarkShape].
-/// The value indicator painting can be skipped by specifying the
-/// appropriate [ShowValueIndicator] for [SliderThemeData.showValueIndicator].
-///
-/// See also:
-///
-///  * [SliderTheme] widget, which can override the slider theme of its
-///    children.
-///  * [Theme] widget, which performs a similar function to [SliderTheme],
-///    but for overall themes.
-///  * [ThemeData], which has a default [SliderThemeData].
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
-///  * [SliderTrackShape], which can be used to create custom shapes for the
-///    [Slider]'s track.
-///  * [SliderTickMarkShape], which can be used to create custom shapes for the
-///    [Slider]'s tick marks.
-///  * [RangeSliderThumbShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s thumb.
-///  * [RangeSliderValueIndicatorShape], which can be used to create custom
-///    shapes for the [RangeSlider]'s value indicator.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [RangeSliderTickMarkShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s tick marks.
 @immutable
 class SliderThemeData with Diagnosticable {
-  /// Create a [SliderThemeData] given a set of exact values.
-  ///
-  /// This will rarely be used directly. It is used by [lerp] to
-  /// create intermediate themes based on two themes.
-  ///
-  /// The simplest way to create a SliderThemeData is to use
-  /// [copyWith] on the one you get from [SliderTheme.of], or create an
-  /// entirely new one with [SliderThemeData.fromPrimaryColors].
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// class Blissful extends StatefulWidget {
-  ///   const Blissful({super.key});
-  ///
-  ///   @override
-  ///   State createState() => BlissfulState();
-  /// }
-  ///
-  /// class BlissfulState extends State<Blissful> {
-  ///   double _bliss = 0;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return SliderTheme(
-  ///       data: SliderTheme.of(context).copyWith(activeTrackColor: const Color(0xff404080)),
-  ///       child: Slider(
-  ///         onChanged: (double value) { setState(() { _bliss = value; }); },
-  ///         value: _bliss,
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
   const SliderThemeData({
     this.trackHeight,
     this.activeTrackColor,
@@ -294,15 +89,6 @@ class SliderThemeData with Diagnosticable {
     this.allowedInteraction,
   });
 
-  /// Generates a SliderThemeData from three main colors.
-  ///
-  /// Usually these are the primary, dark and light colors from
-  /// a [ThemeData].
-  ///
-  /// The opacities of these colors will be overridden with the Material Design
-  /// defaults when assigning them to the slider theme component colors.
-  ///
-  /// This is used to generate the default slider theme for a [ThemeData].
   factory SliderThemeData.fromPrimaryColors({
     required Color primaryColor,
     required Color primaryColorDark,
@@ -358,231 +144,69 @@ class SliderThemeData with Diagnosticable {
     );
   }
 
-  /// The height of the [Slider] track.
   final double? trackHeight;
 
-  /// The color of the [Slider] track between the [Slider.min] position and the
-  /// current thumb position.
   final Color? activeTrackColor;
 
-  /// The color of the [Slider] track between the current thumb position and the
-  /// [Slider.max] position.
   final Color? inactiveTrackColor;
 
-  /// The color of the [Slider] track between the current thumb position and the
-  /// [Slider.secondaryTrackValue] position.
   final Color? secondaryActiveTrackColor;
 
-  /// The color of the [Slider] track between the [Slider.min] position and the
-  /// current thumb position when the [Slider] is disabled.
   final Color? disabledActiveTrackColor;
 
-  /// The color of the [Slider] track between the current thumb position and the
-  /// [Slider.secondaryTrackValue] position when the [Slider] is disabled.
   final Color? disabledSecondaryActiveTrackColor;
 
-  /// The color of the [Slider] track between the current thumb position and the
-  /// [Slider.max] position when the [Slider] is disabled.
   final Color? disabledInactiveTrackColor;
 
-  /// The color of the track's tick marks that are drawn between the [Slider.min]
-  /// position and the current thumb position.
   final Color? activeTickMarkColor;
 
-  /// The color of the track's tick marks that are drawn between the current
-  /// thumb position and the [Slider.max] position.
   final Color? inactiveTickMarkColor;
 
-  /// The color of the track's tick marks that are drawn between the [Slider.min]
-  /// position and the current thumb position when the [Slider] is disabled.
   final Color? disabledActiveTickMarkColor;
 
-  /// The color of the track's tick marks that are drawn between the current
-  /// thumb position and the [Slider.max] position when the [Slider] is
-  /// disabled.
   final Color? disabledInactiveTickMarkColor;
 
-  /// The color given to the [thumbShape] to draw itself with.
   final Color? thumbColor;
 
-  /// The color given to the perimeter of the top [rangeThumbShape] when the
-  /// thumbs are overlapping and the top [rangeValueIndicatorShape] when the
-  /// value indicators are overlapping.
   final Color? overlappingShapeStrokeColor;
 
-  /// The color given to the [thumbShape] to draw itself with when the
-  /// [Slider] is disabled.
   final Color? disabledThumbColor;
 
-  /// The color of the overlay drawn around the slider thumb when it is
-  /// pressed, focused, or hovered.
-  ///
-  /// This is typically a semi-transparent color.
   final Color? overlayColor;
 
-  /// The color given to the [valueIndicatorShape] to draw itself with.
   final Color? valueIndicatorColor;
 
 
-  /// The shape that will be used to draw the [Slider]'s overlay.
-  ///
-  /// Both the [overlayColor] and a non default [overlayShape] may be specified.
-  /// The default [overlayShape] refers to the [overlayColor].
-  ///
-  /// The default value is [RoundSliderOverlayShape].
   final SliderComponentShape? overlayShape;
 
-  /// The shape that will be used to draw the [Slider]'s tick marks.
-  ///
-  /// The [SliderTickMarkShape.getPreferredSize] is used to help determine the
-  /// location of each tick mark on the track. The slider's minimum size will
-  /// be at least this big.
-  ///
-  /// The default value is [RoundSliderTickMarkShape].
-  ///
-  /// See also:
-  ///
-  ///  * [RoundRangeSliderTickMarkShape], which is the default tick mark
-  ///    shape for the range slider.
   final SliderTickMarkShape? tickMarkShape;
 
-  /// The shape that will be used to draw the [Slider]'s thumb.
-  ///
-  /// The default value is [RoundSliderThumbShape].
-  ///
-  /// See also:
-  ///
-  ///  * [RoundRangeSliderThumbShape], which is the default thumb shape for
-  ///    the [RangeSlider].
   final SliderComponentShape? thumbShape;
 
-  /// The shape that will be used to draw the [Slider]'s track.
-  ///
-  /// The [SliderTrackShape.getPreferredRect] method is used to map
-  /// slider-relative gesture coordinates to the correct thumb position on the
-  /// track. It is also used to horizontally position tick marks, when the
-  /// slider is discrete.
-  ///
-  /// The default value is [RoundedRectSliderTrackShape].
-  ///
-  /// See also:
-  ///
-  ///  * [RoundedRectRangeSliderTrackShape], which is the default track
-  ///    shape for the [RangeSlider].
   final SliderTrackShape? trackShape;
 
-  /// The shape that will be used to draw the [Slider]'s value
-  /// indicator.
-  ///
-  /// The default value is [PaddleSliderValueIndicatorShape].
-  ///
-  /// See also:
-  ///
-  ///  * [PaddleRangeSliderValueIndicatorShape], which is the default value
-  ///    indicator shape for the [RangeSlider].
   final SliderComponentShape? valueIndicatorShape;
 
-  /// The shape that will be used to draw the [RangeSlider]'s tick marks.
-  ///
-  /// The [RangeSliderTickMarkShape.getPreferredSize] is used to help determine
-  /// the location of each tick mark on the track. The slider's minimum size
-  /// will be at least this big.
-  ///
-  /// The default value is [RoundRangeSliderTickMarkShape].
-  ///
-  /// See also:
-  ///
-  ///  * [RoundSliderTickMarkShape], which is the default tick mark shape
-  ///    for the [Slider].
   final RangeSliderTickMarkShape? rangeTickMarkShape;
 
-  /// The shape that will be used for the [RangeSlider]'s thumbs.
-  ///
-  /// By default the same shape is used for both thumbs, but strokes the top
-  /// thumb when it overlaps the bottom thumb. The top thumb is always the last
-  /// selected thumb.
-  ///
-  /// The default value is [RoundRangeSliderThumbShape].
-  ///
-  /// See also:
-  ///
-  ///  * [RoundSliderThumbShape], which is the default thumb shape for the
-  ///    [Slider].
   final RangeSliderThumbShape? rangeThumbShape;
 
-  /// The shape that will be used to draw the [RangeSlider]'s track.
-  ///
-  /// The [SliderTrackShape.getPreferredRect] method is used to map
-  /// slider-relative gesture coordinates to the correct thumb position on the
-  /// track. It is also used to horizontally position the tick marks, when the
-  /// slider is discrete.
-  ///
-  /// The default value is [RoundedRectRangeSliderTrackShape].
-  ///
-  /// See also:
-  ///
-  ///  * [RoundedRectSliderTrackShape], which is the default track
-  ///    shape for the [Slider].
   final RangeSliderTrackShape? rangeTrackShape;
 
-  /// The shape that will be used for the [RangeSlider]'s value indicators.
-  ///
-  /// The default shape uses the same value indicator for each thumb, but
-  /// strokes the top value indicator when it overlaps the bottom value
-  /// indicator. The top indicator corresponds to the top thumb, which is always
-  /// the most recently selected thumb.
-  ///
-  /// The default value is [PaddleRangeSliderValueIndicatorShape].
-  ///
-  /// See also:
-  ///
-  ///  * [PaddleSliderValueIndicatorShape], which is the default value
-  ///    indicator shape for the [Slider].
   final RangeSliderValueIndicatorShape? rangeValueIndicatorShape;
 
-  /// Whether the value indicator should be shown for different types of
-  /// sliders.
-  ///
-  /// By default, [showValueIndicator] is set to
-  /// [ShowValueIndicator.onlyForDiscrete]. The value indicator is only shown
-  /// when the thumb is being touched.
   final ShowValueIndicator? showValueIndicator;
 
-  /// The text style for the text on the value indicator.
   final TextStyle? valueIndicatorTextStyle;
 
-  /// Limits the thumb's separation distance.
-  ///
-  /// Use this only if you want to control the visual appearance of the thumbs
-  /// in terms of a logical pixel value. This can be done when you want a
-  /// specific look for thumbs when they are close together. To limit with the
-  /// real values, rather than logical pixels, the values can be restricted by
-  /// the parent.
   final double? minThumbSeparation;
 
-  /// Determines which thumb should be selected when the slider is interacted
-  /// with.
-  ///
-  /// If null, the default thumb selector finds the closest thumb, excluding
-  /// taps that are between the thumbs and not within any one touch target.
-  /// When the selection is within the touch target bounds of both thumbs, no
-  /// thumb is selected until the selection is moved.
-  ///
-  /// Override this for custom thumb selection.
   final RangeThumbSelector? thumbSelector;
 
-  /// {@macro flutter.material.slider.mouseCursor}
-  ///
-  /// If specified, overrides the default value of [Slider.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 
-  /// Allowed way for the user to interact with the [Slider].
-  ///
-  /// If specified, overrides the default value of [Slider.allowedInteraction].
   final SliderInteraction? allowedInteraction;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   SliderThemeData copyWith({
     double? trackHeight,
     Color? activeTrackColor,
@@ -651,9 +275,6 @@ class SliderThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two slider themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static SliderThemeData lerp(SliderThemeData a, SliderThemeData b, double t) {
     if (identical(a, b)) {
       return a;
@@ -810,99 +431,11 @@ class SliderThemeData with Diagnosticable {
   }
 }
 
-/// Base class for slider thumb, thumb overlay, and value indicator shapes.
-///
-/// Create a subclass of this if you would like a custom shape.
-///
-/// All shapes are painted to the same canvas and ordering is important.
-/// The overlay is painted first, then the value indicator, then the thumb.
-///
-/// The thumb painting can be skipped by specifying [noThumb] for
-/// [SliderThemeData.thumbShape].
-///
-/// The overlay painting can be skipped by specifying [noOverlay] for
-/// [SliderThemeData.overlayShape].
-///
-/// See also:
-///
-///  * [RoundSliderThumbShape], which is the default [Slider]'s thumb shape that
-///    paints a solid circle.
-///  * [RoundSliderOverlayShape], which is the default [Slider] and
-///    [RangeSlider]'s overlay shape that paints a transparent circle.
-///  * [PaddleSliderValueIndicatorShape], which is the default [Slider]'s value
-///    indicator shape that paints a custom path with text in it.
 abstract class SliderComponentShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const SliderComponentShape();
 
-  /// Returns the preferred size of the shape, based on the given conditions.
   Size getPreferredSize(bool isEnabled, bool isDiscrete);
 
-  /// Paints the shape, taking into account the state passed to it.
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.context}
-  /// The `context` argument is the same as the one that includes the [Slider]'s
-  /// render box.
-  /// {@endtemplate}
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.center}
-  /// The `center` argument is the offset for where this shape's center should be
-  /// painted. This offset is relative to the origin of the [context] canvas.
-  /// {@endtemplate}
-  ///
-  /// The `activationAnimation` argument is an animation triggered when the user
-  /// begins to interact with the slider. It reverses when the user stops interacting
-  /// with the slider.
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.enableAnimation}
-  /// The `enableAnimation` argument is an animation triggered when the [Slider]
-  /// is enabled, and it reverses when the slider is disabled. The [Slider] is
-  /// enabled when [Slider.onChanged] is not null.Use this to paint intermediate
-  /// frames for this shape when the slider changes enabled state.
-  /// {@endtemplate}
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.isDiscrete}
-  /// The `isDiscrete` argument is true if [Slider.divisions] is non-null. When
-  /// true, the slider will render tick marks on top of the track.
-  /// {@endtemplate}
-  ///
-  /// If the `labelPainter` argument is non-null, then [TextPainter.paint]
-  /// should be called on the `labelPainter` with the location that the label
-  /// should appear. If the `labelPainter` argument is null, then no label was
-  /// supplied to the [Slider].
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.parentBox}
-  /// The `parentBox` argument is the [RenderBox] of the [Slider]. Its attributes,
-  /// such as size, can be used to assist in painting this shape.
-  /// {@endtemplate}
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.sliderTheme}
-  /// the `sliderTheme` argument is the theme assigned to the [Slider] that this
-  /// shape belongs to.
-  /// {@endtemplate}
-  ///
-  /// The `textDirection` argument can be used to determine how any extra text
-  /// or graphics (besides the text painted by the `labelPainter`) should be
-  /// positioned. The `labelPainter` already has the [textDirection] set.
-  ///
-  /// The `value` argument is the current parametric value (from 0.0 to 1.0) of
-  /// the slider.
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.textScaleFactor}
-  /// The `textScaleFactor` argument can be used to determine whether the
-  /// component should paint larger or smaller, depending on whether
-  /// [textScaleFactor] is greater than 1 for larger, and between 0 and 1 for
-  /// smaller. It usually comes from [MediaQueryData.textScaleFactor].
-  /// {@endtemplate}
-  ///
-  /// {@template flutter.material.SliderComponentShape.paint.sizeWithOverflow}
-  /// The `sizeWithOverflow` argument can be used to determine the bounds the
-  /// drawing of the components that are outside of the regular slider bounds.
-  /// It's the size of the box, whose center is aligned with the slider's
-  /// bounds, that the value indicators must be drawn within. Typically, it is
-  /// bigger than the slider.
-  /// {@endtemplate}
   void paint(
     PaintingContext context,
     Offset center, {
@@ -918,80 +451,19 @@ abstract class SliderComponentShape {
     required Size sizeWithOverflow,
   });
 
-  /// Special instance of [SliderComponentShape] to skip the thumb drawing.
-  ///
-  /// See also:
-  ///
-  ///  * [SliderThemeData.thumbShape], which is the shape that the [Slider]
-  ///    uses when painting the thumb.
   static final SliderComponentShape noThumb = _EmptySliderComponentShape();
 
-  /// Special instance of [SliderComponentShape] to skip the overlay drawing.
-  ///
-  /// See also:
-  ///
-  ///  * [SliderThemeData.overlayShape], which is the shape that the [Slider]
-  ///    uses when painting the overlay.
   static final SliderComponentShape noOverlay = _EmptySliderComponentShape();
 }
 
-/// Base class for [Slider] tick mark shapes.
-///
-/// Create a subclass of this if you would like a custom slider tick mark shape.
-///
-/// The tick mark painting can be skipped by specifying [noTickMark] for
-/// [SliderThemeData.tickMarkShape].
-///
-/// See also:
-///
-///  * [RoundSliderTickMarkShape], which is the default [Slider]'s tick mark
-///    shape that paints a solid circle.
-///  * [SliderTrackShape], which can be used to create custom shapes for the
-///    [Slider]'s track.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
 abstract class SliderTickMarkShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const SliderTickMarkShape();
 
-  /// Returns the preferred size of the shape.
-  ///
-  /// It is used to help position the tick marks within the slider.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.sliderTheme}
-  ///
-  /// {@template flutter.material.SliderTickMarkShape.getPreferredSize.isEnabled}
-  /// The `isEnabled` argument is false when [Slider.onChanged] is null and true
-  /// otherwise. When true, the slider will respond to input.
-  /// {@endtemplate}
   Size getPreferredSize({
     required SliderThemeData sliderTheme,
     required bool isEnabled,
   });
 
-  /// Paints the slider track.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.context}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.center}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.parentBox}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.enableAnimation}
-  ///
-  /// {@macro flutter.material.SliderTickMarkShape.getPreferredSize.isEnabled}
-  ///
-  /// The `textDirection` argument can be used to determine how the tick marks
-  /// are painting depending on whether they are on an active track segment or
-  /// not. The track segment between the start of the slider and the thumb is
-  /// the active track segment. The track segment between the thumb and the end
-  /// of the slider is the inactive track segment. In LTR text direction, the
-  /// start of the slider is on the left, and in RTL text direction, the start
-  /// of the slider is on the right.
   void paint(
     PaintingContext context,
     Offset center, {
@@ -1003,54 +475,12 @@ abstract class SliderTickMarkShape {
     required TextDirection textDirection,
   });
 
-  /// Special instance of [SliderTickMarkShape] to skip the tick mark painting.
-  ///
-  /// See also:
-  ///
-  ///  * [SliderThemeData.tickMarkShape], which is the shape that the [Slider]
-  ///    uses when painting tick marks.
   static final SliderTickMarkShape noTickMark = _EmptySliderTickMarkShape();
 }
 
-/// Base class for slider track shapes.
-///
-/// The slider's thumb moves along the track. A discrete slider's tick marks
-/// are drawn after the track, but before the thumb, and are aligned with the
-/// track.
-///
-/// The [getPreferredRect] helps position the slider thumb and tick marks
-/// relative to the track.
-///
-/// See also:
-///
-///  * [RoundedRectSliderTrackShape] for the default [Slider]'s track shape that
-///    paints a stadium-like track.
-///  * [SliderTickMarkShape], which can be used to create custom shapes for the
-///    [Slider]'s tick marks.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
 abstract class SliderTrackShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const SliderTrackShape();
 
-  /// Returns the preferred bounds of the shape.
-  ///
-  /// It is used to provide horizontal boundaries for the thumb's position, and
-  /// to help position the slider thumb and tick marks relative to the track.
-  ///
-  /// The `parentBox` argument can be used to help determine the preferredRect relative to
-  /// attributes of the render box of the slider itself, such as size.
-  ///
-  /// The `offset` argument is relative to the caller's bounding box. It can be used to
-  /// convert gesture coordinates from global to slider-relative coordinates.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.SliderTickMarkShape.getPreferredSize.isEnabled}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.isDiscrete}
   Rect getPreferredRect({
     required RenderBox parentBox,
     Offset offset = Offset.zero,
@@ -1059,43 +489,6 @@ abstract class SliderTrackShape {
     bool isDiscrete,
   });
 
-  /// Paints the track shape based on the state passed to it.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.context}
-  ///
-  /// The `offset` argument the offset of the origin of the `parentBox` to the
-  /// origin of its `context` canvas. This shape must be painted relative to
-  /// this offset. See [PaintingContextCallback].
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.parentBox}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.enableAnimation}
-  ///
-  /// The `thumbCenter` argument is the offset of the center of the thumb
-  /// relative to the origin of the [PaintingContext.canvas]. It can be used as
-  /// the point that divides the track into 2 segments.
-  ///
-  /// The `secondaryOffset` argument is the offset of the secondary value
-  /// relative to the origin of the [PaintingContext.canvas].
-  ///
-  /// If not null, the track is divided into 3 segments.
-  ///
-  /// {@macro flutter.material.SliderTickMarkShape.getPreferredSize.isEnabled}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.isDiscrete}
-  ///
-  /// The `textDirection` argument can be used to determine how the track
-  /// segments are painted depending on whether they are active or not.
-  ///
-  /// {@template flutter.material.SliderTrackShape.paint.trackSegment}
-  /// The track segment between the start of the slider and the thumb is the
-  /// active track segment. The track segment between the thumb and the end of the
-  /// slider is the inactive track segment. In [TextDirection.ltr], the start of
-  /// the slider is on the left, and in [TextDirection.rtl], the start of the
-  /// slider is on the right.
-  /// {@endtemplate}
   void paint(
     PaintingContext context,
     Offset offset, {
@@ -1110,86 +503,11 @@ abstract class SliderTrackShape {
   });
 }
 
-/// Base class for [RangeSlider] thumb shapes.
-///
-/// See also:
-///
-///  * [RoundRangeSliderThumbShape] for the default [RangeSlider]'s thumb shape
-///    that paints a solid circle.
-///  * [RangeSliderTickMarkShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s tick marks.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [RangeSliderValueIndicatorShape], which can be used to create custom
-///    shapes for the [RangeSlider]'s value indicator.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
 abstract class RangeSliderThumbShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const RangeSliderThumbShape();
 
-  /// Returns the preferred size of the shape, based on the given conditions.
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.getPreferredSize.isDiscrete}
-  /// The `isDiscrete` argument is true if [RangeSlider.divisions] is non-null.
-  /// When true, the slider will render tick marks on top of the track.
-  /// {@endtemplate}
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
-  /// The `isEnabled` argument is false when [RangeSlider.onChanged] is null and
-  /// true otherwise. When true, the slider will respond to input.
-  /// {@endtemplate}
   Size getPreferredSize(bool isEnabled, bool isDiscrete);
 
-  /// Paints the thumb shape based on the state passed to it.
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.paint.context}
-  /// The `context` argument represents the [RangeSlider]'s render box.
-  /// {@endtemplate}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.center}
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.paint.activationAnimation}
-  /// The `activationAnimation` argument is an animation triggered when the user
-  /// begins to interact with the [RangeSlider]. It reverses when the user stops
-  /// interacting with the slider.
-  /// {@endtemplate}
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.paint.enableAnimation}
-  /// The `enableAnimation` argument is an animation triggered when the
-  /// [RangeSlider] is enabled, and it reverses when the slider is disabled. The
-  /// [RangeSlider] is enabled when [RangeSlider.onChanged] is not null. Use
-  /// this to paint intermediate frames for this shape when the slider changes
-  /// enabled state.
-  /// {@endtemplate}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isDiscrete}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
-  ///
-  /// If the `isOnTop` argument is true, this thumb is painted on top of the
-  /// other slider thumb because this thumb is the one that was most recently
-  /// selected.
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.paint.sliderTheme}
-  /// The `sliderTheme` argument is the theme assigned to the [RangeSlider] that
-  /// this shape belongs to.
-  /// {@endtemplate}
-  ///
-  /// The `textDirection` argument can be used to determine how the orientation
-  /// of either slider thumb should be changed, such as drawing different
-  /// shapes for the left and right thumb.
-  ///
-  /// {@template flutter.material.RangeSliderThumbShape.paint.thumb}
-  /// The `thumb` argument is the specifier for which of the two thumbs this
-  /// method should paint (start or end).
-  /// {@endtemplate}
-  ///
-  /// The `isPressed` argument can be used to give the selected thumb
-  /// additional selected or pressed state visual feedback, such as a larger
-  /// shadow.
   void paint(
     PaintingContext context,
     Offset center, {
@@ -1205,36 +523,9 @@ abstract class RangeSliderThumbShape {
   });
 }
 
-/// Base class for [RangeSlider] value indicator shapes.
-///
-/// See also:
-///
-///  * [PaddleRangeSliderValueIndicatorShape] for the default [RangeSlider]'s
-///    value indicator shape that paints a custom path with text in it.
-///  * [RangeSliderTickMarkShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s tick marks.
-///  * [RangeSliderThumbShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s thumb.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
 abstract class RangeSliderValueIndicatorShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const RangeSliderValueIndicatorShape();
 
-  /// Returns the preferred size of the shape, based on the given conditions.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isDiscrete}
-  ///
-  /// The `labelPainter` argument helps determine the width of the shape. It is
-  /// variable width because it is derived from a formatted string.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.textScaleFactor}
   Size getPreferredSize(
     bool isEnabled,
     bool isDiscrete, {
@@ -1242,10 +533,6 @@ abstract class RangeSliderValueIndicatorShape {
     required double textScaleFactor,
   });
 
-  /// Determines the best offset to keep this shape on the screen.
-  ///
-  /// Override this method when the center of the value indicator should be
-  /// shifted from the vertical center of the thumb.
   double getHorizontalShift({
     RenderBox? parentBox,
     Offset? center,
@@ -1257,43 +544,6 @@ abstract class RangeSliderValueIndicatorShape {
     return 0;
   }
 
-  /// Paints the value indicator shape based on the state passed to it.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.context}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.center}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.activationAnimation}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.enableAnimation}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isDiscrete}
-  ///
-  /// The `isOnTop` argument is the top-most value indicator between the two value
-  /// indicators, which is always the indicator for the most recently selected thumb. In
-  /// the default case, this is used to paint a stroke around the top indicator
-  /// for better visibility between the two indicators.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.textScaleFactor}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.sizeWithOverflow}
-  ///
-  /// {@template flutter.material.RangeSliderValueIndicatorShape.paint.parentBox}
-  /// The `parentBox` argument is the [RenderBox] of the [RangeSlider]. Its
-  /// attributes, such as size, can be used to assist in painting this shape.
-  /// {@endtemplate}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.sliderTheme}
-  ///
-  /// The `textDirection` argument can be used to determine how any extra text
-  /// or graphics, besides the text painted by the [labelPainter] should be
-  /// positioned. The `labelPainter` argument already has the `textDirection`
-  /// set.
-  ///
-  /// The `value` argument is the current parametric value (from 0.0 to 1.0) of
-  /// the slider.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.thumb}
   void paint(
     PaintingContext context,
     Offset center, {
@@ -1312,64 +562,14 @@ abstract class RangeSliderValueIndicatorShape {
   });
 }
 
-/// Base class for [RangeSlider] tick mark shapes.
-///
-/// This is a simplified version of [SliderComponentShape] with a
-/// [SliderThemeData] passed when getting the preferred size.
-///
-/// See also:
-///
-///  * [RoundRangeSliderTickMarkShape] for the default [RangeSlider]'s tick mark
-///    shape that paints a solid circle.
-///  * [RangeSliderThumbShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s thumb.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [RangeSliderValueIndicatorShape], which can be used to create custom
-///    shapes for the [RangeSlider]'s value indicator.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
 abstract class RangeSliderTickMarkShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const RangeSliderTickMarkShape();
 
-  /// Returns the preferred size of the shape.
-  ///
-  /// It is used to help position the tick marks within the slider.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
   Size getPreferredSize({
     required SliderThemeData sliderTheme,
     bool isEnabled,
   });
 
-  /// Paints the slider track.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.context}
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.center}
-  ///
-  /// {@macro flutter.material.RangeSliderValueIndicatorShape.paint.parentBox}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.enableAnimation}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
-  ///
-  /// The `textDirection` argument can be used to determine how the tick marks
-  /// are painted depending on whether they are on an active track segment or not.
-  ///
-  /// {@template flutter.material.RangeSliderTickMarkShape.paint.trackSegment}
-  /// The track segment between the two thumbs is the active track segment. The
-  /// track segments between the thumb and each end of the slider are the inactive
-  /// track segments. In [TextDirection.ltr], the start of the slider is on the
-  /// left, and in [TextDirection.rtl], the start of the slider is on the right.
-  /// {@endtemplate}
   void paint(
     PaintingContext context,
     Offset center, {
@@ -1383,52 +583,9 @@ abstract class RangeSliderTickMarkShape {
   });
 }
 
-/// Base class for [RangeSlider] track shapes.
-///
-/// The slider's thumbs move along the track. A discrete slider's tick marks
-/// are drawn after the track, but before the thumb, and are aligned with the
-/// track.
-///
-/// The [getPreferredRect] helps position the slider thumbs and tick marks
-/// relative to the track.
-///
-/// See also:
-///
-///  * [RoundedRectRangeSliderTrackShape] for the default [RangeSlider]'s track
-///    shape that paints a stadium-like track.
-///  * [RangeSliderTickMarkShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s tick marks.
-///  * [RangeSliderThumbShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s thumb.
-///  * [RangeSliderValueIndicatorShape], which can be used to create custom
-///    shapes for the [RangeSlider]'s value indicator.
-///  * [SliderComponentShape], which can be used to create custom shapes for
-///    the [Slider]'s thumb, overlay, and value indicator and the
-///    [RangeSlider]'s overlay.
 abstract class RangeSliderTrackShape {
-  /// This abstract const constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const RangeSliderTrackShape();
 
-  /// Returns the preferred bounds of the shape.
-  ///
-  /// It is used to provide horizontal boundaries for the position of the
-  /// thumbs, and to help position the slider thumbs and tick marks relative to
-  /// the track.
-  ///
-  /// The `parentBox` argument can be used to help determine the preferredRect
-  /// relative to attributes of the render box of the slider itself, such as
-  /// size.
-  ///
-  /// The `offset` argument is relative to the caller's bounding box. It can be
-  /// used to convert gesture coordinates from global to slider-relative
-  /// coordinates.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isDiscrete}
   Rect getPreferredRect({
     required RenderBox parentBox,
     Offset offset = Offset.zero,
@@ -1437,37 +594,6 @@ abstract class RangeSliderTrackShape {
     bool isDiscrete,
   });
 
-  /// Paints the track shape based on the state passed to it.
-  ///
-  /// {@macro flutter.material.SliderComponentShape.paint.context}
-  ///
-  /// The `offset` argument is the offset of the origin of the `parentBox` to
-  /// the origin of its `context` canvas. This shape must be painted relative
-  /// to this offset. See [PaintingContextCallback].
-  ///
-  /// {@macro flutter.material.RangeSliderValueIndicatorShape.paint.parentBox}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.sliderTheme}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.paint.enableAnimation}
-  ///
-  /// The `startThumbCenter` argument is the offset of the center of the start
-  /// thumb relative to the origin of the [PaintingContext.canvas]. It can be
-  /// used as one point that divides the track between inactive and active.
-  ///
-  /// The `endThumbCenter` argument is the offset of the center of the end
-  /// thumb relative to the origin of the [PaintingContext.canvas]. It can be
-  /// used as one point that divides the track between inactive and active.
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isEnabled}
-  ///
-  /// {@macro flutter.material.RangeSliderThumbShape.getPreferredSize.isDiscrete}
-  ///
-  /// The `textDirection` argument can be used to determine how the track
-  /// segments are painted depending on whether they are on an active track
-  /// segment or not.
-  ///
-  /// {@macro flutter.material.RangeSliderTickMarkShape.paint.trackSegment}
   void paint(
     PaintingContext context,
     Offset offset, {
@@ -1482,29 +608,7 @@ abstract class RangeSliderTrackShape {
   });
 }
 
-/// Base track shape that provides an implementation of [getPreferredRect] for
-/// default sizing.
-///
-/// The height is set from [SliderThemeData.trackHeight] and the width of the
-/// parent box less the larger of the widths of [SliderThemeData.thumbShape] and
-/// [SliderThemeData.overlayShape].
-///
-/// See also:
-///
-///  * [RectangularSliderTrackShape], which is a track shape with sharp
-///    rectangular edges
-///  * [RoundedRectSliderTrackShape], which is a track shape with round
-///    stadium-like edges.
 mixin BaseSliderTrackShape {
-  /// Returns a rect that represents the track bounds that fits within the
-  /// [Slider].
-  ///
-  /// The width is the width of the [Slider] or [RangeSlider], but padded by
-  /// the max of the overlay and thumb radius. The height is defined by the
-  /// [SliderThemeData.trackHeight].
-  ///
-  /// The [Rect] is centered both horizontally and vertically within the slider
-  /// bounds.
   Rect getPreferredRect({
     required RenderBox parentBox,
     Offset offset = Offset.zero,
@@ -1527,34 +631,7 @@ mixin BaseSliderTrackShape {
   }
 }
 
-/// A [Slider] track that's a simple rectangle.
-///
-/// It paints a solid colored rectangle, vertically centered in the
-/// `parentBox`. The track rectangle extends to the bounds of the `parentBox`,
-/// but is padded by the [RoundSliderOverlayShape] radius. The height is defined
-/// by the [SliderThemeData.trackHeight]. The color is determined by the
-/// [Slider]'s enabled state and the track segment's active state which are
-/// defined by:
-///   [SliderThemeData.activeTrackColor],
-///   [SliderThemeData.inactiveTrackColor],
-///   [SliderThemeData.disabledActiveTrackColor],
-///   [SliderThemeData.disabledInactiveTrackColor].
-///
-/// {@macro flutter.material.SliderTrackShape.paint.trackSegment}
-///
-/// ![A slider widget, consisting of 5 divisions and showing the rectangular slider track shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rectangular_slider_track_shape.png)
-///
-/// See also:
-///
-///  * [Slider], for the component that is meant to display this shape.
-///  * [SliderThemeData], where an instance of this class is set to inform the
-///    slider of the visual details of the its track.
-///  * [SliderTrackShape], which can be used to create custom shapes for the
-///    [Slider]'s track.
-///  * [RoundedRectSliderTrackShape], for a similar track with rounded edges.
 class RectangularSliderTrackShape extends SliderTrackShape with BaseSliderTrackShape {
-  /// Creates a slider track that draws 2 rectangles.
   const RectangularSliderTrackShape();
 
   @override
@@ -1637,34 +714,7 @@ class RectangularSliderTrackShape extends SliderTrackShape with BaseSliderTrackS
   }
 }
 
-/// The default shape of a [Slider]'s track.
-///
-/// It paints a solid colored rectangle with rounded edges, vertically centered
-/// in the `parentBox`. The track rectangle extends to the bounds of the
-/// `parentBox`, but is padded by the larger of [RoundSliderOverlayShape]'s
-/// radius and [RoundSliderThumbShape]'s radius. The height is defined by the
-/// [SliderThemeData.trackHeight]. The color is determined by the [Slider]'s
-/// enabled state and the track segment's active state which are defined by:
-///   [SliderThemeData.activeTrackColor],
-///   [SliderThemeData.inactiveTrackColor],
-///   [SliderThemeData.disabledActiveTrackColor],
-///   [SliderThemeData.disabledInactiveTrackColor].
-///
-/// {@macro flutter.material.SliderTrackShape.paint.trackSegment}
-///
-/// ![A slider widget, consisting of 5 divisions and showing the rounded rect slider track shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rounded_rect_slider_track_shape.png)
-///
-/// See also:
-///
-///  * [Slider], for the component that is meant to display this shape.
-///  * [SliderThemeData], where an instance of this class is set to inform the
-///    slider of the visual details of the its track.
-///  * [SliderTrackShape], which can be used to create custom shapes for the
-///    [Slider]'s track.
-///  * [RectangularSliderTrackShape], for a similar track with sharp edges.
 class RoundedRectSliderTrackShape extends SliderTrackShape with BaseSliderTrackShape {
-  /// Create a slider track that draws two rectangles with rounded outer edges.
   const RoundedRectSliderTrackShape();
 
   @override
@@ -1781,26 +831,7 @@ class RoundedRectSliderTrackShape extends SliderTrackShape with BaseSliderTrackS
 }
 
 
-/// Base range slider track shape that provides an implementation of [getPreferredRect] for
-/// default sizing.
-///
-/// The height is set from [SliderThemeData.trackHeight] and the width of the
-/// parent box less the larger of the widths of [SliderThemeData.rangeThumbShape] and
-/// [SliderThemeData.overlayShape].
-///
-/// See also:
-///
-///  * [RectangularRangeSliderTrackShape], which is a track shape with sharp
-///    rectangular edges
 mixin BaseRangeSliderTrackShape {
-  /// Returns a rect that represents the track bounds that fits within the
-  /// [Slider].
-  ///
-  /// The width is the width of the [RangeSlider], but padded by the max
-  /// of the overlay and thumb radius. The height is defined by the  [SliderThemeData.trackHeight].
-  ///
-  /// The [Rect] is centered both horizontally and vertically within the slider
-  /// bounds.
   Rect getPreferredRect({
     required RenderBox parentBox,
     Offset offset = Offset.zero,
@@ -1826,38 +857,7 @@ mixin BaseRangeSliderTrackShape {
   }
 }
 
-/// A [RangeSlider] track that's a simple rectangle.
-///
-/// It paints a solid colored rectangle, vertically centered in the
-/// `parentBox`. The track rectangle extends to the bounds of the `parentBox`,
-/// but is padded by the [RoundSliderOverlayShape] radius. The height is
-/// defined by the [SliderThemeData.trackHeight]. The color is determined by the
-/// [Slider]'s enabled state and the track segment's active state which are
-/// defined by:
-///   [SliderThemeData.activeTrackColor],
-///   [SliderThemeData.inactiveTrackColor],
-///   [SliderThemeData.disabledActiveTrackColor],
-///   [SliderThemeData.disabledInactiveTrackColor].
-///
-/// {@macro flutter.material.RangeSliderTickMarkShape.paint.trackSegment}
-///
-/// ![A range slider widget, consisting of 5 divisions and showing the rectangular range slider track shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rectangular_range_slider_track_shape.png)
-///
-/// See also:
-///
-///  * [RangeSlider], for the component that is meant to display this shape.
-///  * [SliderThemeData], where an instance of this class is set to inform the
-///    slider of the visual details of the its track.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [RoundedRectRangeSliderTrackShape], for a similar track with rounded
-///    edges.
 class RectangularRangeSliderTrackShape extends RangeSliderTrackShape with BaseRangeSliderTrackShape {
-  /// Create a slider track with rectangular outer edges.
-  ///
-  /// The middle track segment is the selected range and is active, and the two
-  /// outer track segments are inactive.
   const RectangularRangeSliderTrackShape();
 
   @override
@@ -1919,38 +919,7 @@ class RectangularRangeSliderTrackShape extends RangeSliderTrackShape with BaseRa
   }
 }
 
-/// The default shape of a [RangeSlider]'s track.
-///
-/// It paints a solid colored rectangle with rounded edges, vertically centered
-/// in the `parentBox`. The track rectangle extends to the bounds of the
-/// `parentBox`, but is padded by the larger of [RoundSliderOverlayShape]'s
-/// radius and [RoundRangeSliderThumbShape]'s radius. The height is defined by
-/// the [SliderThemeData.trackHeight]. The color is determined by the
-/// [RangeSlider]'s enabled state and the track segment's active state which are
-/// defined by:
-///   [SliderThemeData.activeTrackColor],
-///   [SliderThemeData.inactiveTrackColor],
-///   [SliderThemeData.disabledActiveTrackColor],
-///   [SliderThemeData.disabledInactiveTrackColor].
-///
-/// {@macro flutter.material.RangeSliderTickMarkShape.paint.trackSegment}
-///
-/// ![A range slider widget, consisting of 5 divisions and showing the rounded rect range slider track shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rounded_rect_range_slider_track_shape.png)
-///
-/// See also:
-///
-///  * [RangeSlider], for the component that is meant to display this shape.
-///  * [SliderThemeData], where an instance of this class is set to inform the
-///    slider of the visual details of the its track.
-///  * [RangeSliderTrackShape], which can be used to create custom shapes for
-///    the [RangeSlider]'s track.
-///  * [RectangularRangeSliderTrackShape], for a similar track with sharp edges.
 class RoundedRectRangeSliderTrackShape extends RangeSliderTrackShape with BaseRangeSliderTrackShape {
-  /// Create a slider track with rounded outer edges.
-  ///
-  /// The middle track segment is the selected range and is active, and the two
-  /// outer track segments are inactive.
   const RoundedRectRangeSliderTrackShape();
 
   @override
@@ -2050,36 +1019,11 @@ class RoundedRectRangeSliderTrackShape extends RangeSliderTrackShape with BaseRa
   }
 }
 
-/// The default shape of each [Slider] tick mark.
-///
-/// Tick marks are only displayed if the slider is discrete, which can be done
-/// by setting the [Slider.divisions] to an integer value.
-///
-/// It paints a solid circle, centered in the on the track.
-/// The color is determined by the [Slider]'s enabled state and track's active
-/// states. These colors are defined in:
-///   [SliderThemeData.activeTrackColor],
-///   [SliderThemeData.inactiveTrackColor],
-///   [SliderThemeData.disabledActiveTrackColor],
-///   [SliderThemeData.disabledInactiveTrackColor].
-///
-/// ![A slider widget, consisting of 5 divisions and showing the round slider tick mark shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rounded_slider_tick_mark_shape.png)
-///
-/// See also:
-///
-///  * [Slider], which includes tick marks defined by this shape.
-///  * [SliderTheme], which can be used to configure the tick mark shape of all
-///    sliders in a widget subtree.
 class RoundSliderTickMarkShape extends SliderTickMarkShape {
-  /// Create a slider tick mark that draws a circle.
   const RoundSliderTickMarkShape({
     this.tickMarkRadius,
   });
 
-  /// The preferred radius of the round tick mark.
-  ///
-  /// If it is not provided, then 1/4 of the [SliderThemeData.trackHeight] is used.
   final double? tickMarkRadius;
 
   @override
@@ -2136,36 +1080,11 @@ class RoundSliderTickMarkShape extends SliderTickMarkShape {
   }
 }
 
-/// The default shape of each [RangeSlider] tick mark.
-///
-/// Tick marks are only displayed if the slider is discrete, which can be done
-/// by setting the [RangeSlider.divisions] to an integer value.
-///
-/// It paints a solid circle, centered on the track.
-/// The color is determined by the [Slider]'s enabled state and track's active
-/// states. These colors are defined in:
-///   [SliderThemeData.activeTrackColor],
-///   [SliderThemeData.inactiveTrackColor],
-///   [SliderThemeData.disabledActiveTrackColor],
-///   [SliderThemeData.disabledInactiveTrackColor].
-///
-/// ![A slider widget, consisting of 5 divisions and showing the round range slider tick mark shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/round_range_slider_tick_mark_shape.png )
-///
-/// See also:
-///
-///  * [RangeSlider], which includes tick marks defined by this shape.
-///  * [SliderTheme], which can be used to configure the tick mark shape of all
-///    sliders in a widget subtree.
 class RoundRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
-  /// Create a range slider tick mark that draws a circle.
   const RoundRangeSliderTickMarkShape({
     this.tickMarkRadius,
   });
 
-  /// The preferred radius of the round tick mark.
-  ///
-  /// If it is not provided, then 1/4 of the [SliderThemeData.trackHeight] is used.
   final double? tickMarkRadius;
 
   @override
@@ -2216,13 +1135,6 @@ class RoundRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
   }
 }
 
-/// A special version of [SliderTickMarkShape] that has a zero size and paints
-/// nothing.
-///
-/// This class is used to create a special instance of a [SliderTickMarkShape]
-/// that will not paint any tick mark shape. A static reference is stored in
-/// [SliderTickMarkShape.noTickMark]. When this value is specified for
-/// [SliderThemeData.tickMarkShape], the tick mark painting is skipped.
 class _EmptySliderTickMarkShape extends SliderTickMarkShape {
   @override
   Size getPreferredSize({
@@ -2247,15 +1159,6 @@ class _EmptySliderTickMarkShape extends SliderTickMarkShape {
   }
 }
 
-/// A special version of [SliderComponentShape] that has a zero size and paints
-/// nothing.
-///
-/// This class is used to create a special instance of a [SliderComponentShape]
-/// that will not paint any component shape. A static reference is stored in
-/// [SliderTickMarkShape.noThumb] and [SliderTickMarkShape.noOverlay]. When this value
-/// is specified for [SliderThemeData.thumbShape], the thumb painting is
-/// skipped. When this value is specified for [SliderThemeData.overlayShape],
-/// the overlay painting is skipped.
 class _EmptySliderComponentShape extends SliderComponentShape {
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
@@ -2279,20 +1182,7 @@ class _EmptySliderComponentShape extends SliderComponentShape {
   }
 }
 
-/// The default shape of a [Slider]'s thumb.
-///
-/// There is a shadow for the resting, pressed, hovered, and focused state.
-///
-/// ![A slider widget, consisting of 5 divisions and showing the round slider thumb shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/round_slider_thumb_shape.png)
-///
-/// See also:
-///
-///  * [Slider], which includes a thumb defined by this shape.
-///  * [SliderTheme], which can be used to configure the thumb shape of all
-///    sliders in a widget subtree.
 class RoundSliderThumbShape extends SliderComponentShape {
-  /// Create a slider thumb that draws a circle.
   const RoundSliderThumbShape({
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
@@ -2300,33 +1190,13 @@ class RoundSliderThumbShape extends SliderComponentShape {
     this.pressedElevation = 6.0,
   });
 
-  /// The preferred radius of the round thumb shape when the slider is enabled.
-  ///
-  /// If it is not provided, then the Material Design default of 10 is used.
   final double enabledThumbRadius;
 
-  /// The preferred radius of the round thumb shape when the slider is disabled.
-  ///
-  /// If no disabledRadius is provided, then it is equal to the
-  /// [enabledThumbRadius]
   final double? disabledThumbRadius;
   double get _disabledThumbRadius => disabledThumbRadius ?? enabledThumbRadius;
 
-  /// The resting elevation adds shadow to the unpressed thumb.
-  ///
-  /// The default is 1.
-  ///
-  /// Use 0 for no shadow. The higher the value, the larger the shadow. For
-  /// example, a value of 12 will create a very large shadow.
-  ///
   final double elevation;
 
-  /// The pressed elevation adds shadow to the pressed thumb.
-  ///
-  /// The default is 6.
-  ///
-  /// Use 0 for no shadow. The higher the value, the larger the shadow. For
-  /// example, a value of 12 will create a very large shadow.
   final double pressedElevation;
 
   @override
@@ -2395,20 +1265,7 @@ class RoundSliderThumbShape extends SliderComponentShape {
   }
 }
 
-/// The default shape of a [RangeSlider]'s thumbs.
-///
-/// There is a shadow for the resting and pressed state.
-///
-/// ![A slider widget, consisting of 5 divisions and showing the round range slider thumb shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/round_range_slider_thumb_shape.png)
-///
-/// See also:
-///
-///  * [RangeSlider], which includes thumbs defined by this shape.
-///  * [SliderTheme], which can be used to configure the thumb shapes of all
-///    range sliders in a widget subtree.
 class RoundRangeSliderThumbShape extends RangeSliderThumbShape {
-  /// Create a slider thumb that draws a circle.
   const RoundRangeSliderThumbShape({
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
@@ -2416,26 +1273,13 @@ class RoundRangeSliderThumbShape extends RangeSliderThumbShape {
     this.pressedElevation = 6.0,
   });
 
-  /// The preferred radius of the round thumb shape when the slider is enabled.
-  ///
-  /// If it is not provided, then the Material Design default of 10 is used.
   final double enabledThumbRadius;
 
-  /// The preferred radius of the round thumb shape when the slider is disabled.
-  ///
-  /// If no disabledRadius is provided, then it is equal to the
-  /// [enabledThumbRadius].
   final double? disabledThumbRadius;
   double get _disabledThumbRadius => disabledThumbRadius ?? enabledThumbRadius;
 
-  /// The resting elevation adds shadow to the unpressed thumb.
-  ///
-  /// The default is 1.
   final double elevation;
 
-  /// The pressed elevation adds shadow to the pressed thumb.
-  ///
-  /// The default is 6.
   final double pressedElevation;
 
   @override
@@ -2511,29 +1355,9 @@ class RoundRangeSliderThumbShape extends RangeSliderThumbShape {
   }
 }
 
-/// The default shape of a [Slider]'s thumb overlay.
-///
-/// The shape of the overlay is a circle with the same center as the thumb, but
-/// with a larger radius. It animates to full size when the thumb is pressed,
-/// and animates back down to size 0 when it is released. It is painted behind
-/// the thumb, and is expected to extend beyond the bounds of the thumb so that
-/// it is visible.
-///
-/// The overlay color is defined by [SliderThemeData.overlayColor].
-///
-/// See also:
-///
-///  * [Slider], which includes an overlay defined by this shape.
-///  * [SliderTheme], which can be used to configure the overlay shape of all
-///    sliders in a widget subtree.
 class RoundSliderOverlayShape extends SliderComponentShape {
-  /// Create a slider thumb overlay that draws a circle.
   const RoundSliderOverlayShape({ this.overlayRadius = 24.0 });
 
-  /// The preferred radius of the round thumb shape when enabled.
-  ///
-  /// If it is not provided, then half of the [SliderThemeData.trackHeight] is
-  /// used.
   final double overlayRadius;
 
   @override
@@ -2571,18 +1395,7 @@ class RoundSliderOverlayShape extends SliderComponentShape {
   }
 }
 
-/// The default shape of a [Slider]'s value indicator.
-///
-/// ![A slider widget, consisting of 5 divisions and showing the rectangular slider value indicator shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rectangular_slider_value_indicator_shape.png)
-///
-/// See also:
-///
-///  * [Slider], which includes a value indicator defined by this shape.
-///  * [SliderTheme], which can be used to configure the slider value indicator
-///    of all sliders in a widget subtree.
 class RectangularSliderValueIndicatorShape extends SliderComponentShape {
-  /// Create a slider value indicator that resembles a rectangular tooltip.
   const RectangularSliderValueIndicatorShape();
 
   static const _RectangularSliderValueIndicatorPathPainter _pathPainter = _RectangularSliderValueIndicatorPathPainter();
@@ -2629,19 +1442,8 @@ class RectangularSliderValueIndicatorShape extends SliderComponentShape {
   }
 }
 
-/// The default shape of a [RangeSlider]'s value indicators.
-///
-/// ![A slider widget, consisting of 5 divisions and showing the rectangular range slider value indicator shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/rectangular_range_slider_value_indicator_shape.png)
-///
-/// See also:
-///
-///  * [RangeSlider], which includes value indicators defined by this shape.
-///  * [SliderTheme], which can be used to configure the range slider value
-///    indicator of all sliders in a widget subtree.
 class RectangularRangeSliderValueIndicatorShape
     extends RangeSliderValueIndicatorShape {
-  /// Create a range slider value indicator that resembles a rectangular tooltip.
   const RectangularRangeSliderValueIndicatorShape();
 
   static const _RectangularSliderValueIndicatorPathPainter _pathPainter = _RectangularSliderValueIndicatorPathPainter();
@@ -2742,8 +1544,6 @@ class _RectangularSliderValueIndicatorPathPainter {
 
     const double edgePadding = 8.0;
     final double rectangleWidth = _upperRectangleWidth(labelPainter, scale, textScaleFactor);
-    /// Value indicator draws on the Overlay and by using the global Offset
-    /// we are making sure we use the bounds of the Overlay instead of the Slider.
     final Offset globalCenter = parentBox.localToGlobal(center);
 
     // The rectangle must be shifted towards the center so that it minimizes the
@@ -2835,19 +1635,7 @@ class _RectangularSliderValueIndicatorPathPainter {
   }
 }
 
-/// A variant shape of a [Slider]'s value indicator . The value indicator is in
-/// the shape of an upside-down pear.
-///
-/// ![A slider widget, consisting of 5 divisions and showing the paddle slider value indicator shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/paddle_slider_value_indicator_shape.png)
-///
-/// See also:
-///
-///  * [Slider], which includes a value indicator defined by this shape.
-///  * [SliderTheme], which can be used to configure the slider value indicator
-///    of all sliders in a widget subtree.
 class PaddleSliderValueIndicatorShape extends SliderComponentShape {
-  /// Create a slider value indicator in the shape of an upside-down pear.
   const PaddleSliderValueIndicatorShape();
 
   static const _PaddleSliderValueIndicatorPathPainter _pathPainter = _PaddleSliderValueIndicatorPathPainter();
@@ -2897,19 +1685,7 @@ class PaddleSliderValueIndicatorShape extends SliderComponentShape {
   }
 }
 
-/// A variant shape of a [RangeSlider]'s value indicators. The value indicator
-/// is in the shape of an upside-down pear.
-///
-/// ![A slider widget, consisting of 5 divisions and showing the paddle range slider value indicator shape.]
-/// (https://flutter.github.io/assets-for-api-docs/assets/material/paddle_range_slider_value_indicator_shape.png)
-///
-/// See also:
-///
-///  * [RangeSlider], which includes value indicators defined by this shape.
-///  * [SliderTheme], which can be used to configure the range slider value
-///    indicator of all sliders in a widget subtree.
 class PaddleRangeSliderValueIndicatorShape extends RangeSliderValueIndicatorShape {
-  /// Create a slider value indicator in the shape of an upside-down pear.
   const PaddleRangeSliderValueIndicatorShape();
 
   static const _PaddleSliderValueIndicatorPathPainter _pathPainter = _PaddleSliderValueIndicatorPathPainter();
@@ -3253,21 +2029,8 @@ class _PaddleSliderValueIndicatorPathPainter {
   }
 }
 
-/// A callback that formats a numeric value from a [Slider] or [RangeSlider] widget.
-///
-/// See also:
-///
-///  * [Slider.semanticFormatterCallback], which shows an example use case.
-///  * [RangeSlider.semanticFormatterCallback], which shows an example use case.
 typedef SemanticFormatterCallback = String Function(double value);
 
-/// Decides which thumbs (if any) should be selected.
-///
-/// The default finds the closest thumb, but if the thumbs are close to each
-/// other, it waits for movement defined by [dx] to determine the selected
-/// thumb.
-///
-/// Override [SliderThemeData.thumbSelector] for custom thumb selection.
 typedef RangeThumbSelector = Thumb? Function(
   TextDirection textDirection,
   RangeValues values,
@@ -3277,26 +2040,12 @@ typedef RangeThumbSelector = Thumb? Function(
   double dx,
 );
 
-/// Object for representing range slider thumb values.
-///
-/// This object is passed into [RangeSlider.values] to set its values, and it
-/// is emitted in [RangeSlider.onChanged], [RangeSlider.onChangeStart], and
-/// [RangeSlider.onChangeEnd] when the values change.
 @immutable
 class RangeValues {
-  /// Creates pair of start and end values.
   const RangeValues(this.start, this.end);
 
-  /// The value of the start thumb.
-  ///
-  /// For LTR text direction, the start is the left thumb, and for RTL text
-  /// direction, the start is the right thumb.
   final double start;
 
-  /// The value of the end thumb.
-  ///
-  /// For LTR text direction, the end is the right thumb, and for RTL text
-  /// direction, the end is the left thumb.
   final double end;
 
   @override
@@ -3318,26 +2067,12 @@ class RangeValues {
   }
 }
 
-/// Object for setting range slider label values that appear in the value
-/// indicator for each thumb.
-///
-/// Used in combination with [SliderThemeData.showValueIndicator] to display
-/// labels above the thumbs.
 @immutable
 class RangeLabels {
-  /// Creates pair of start and end labels.
   const RangeLabels(this.start, this.end);
 
-  /// The label of the start thumb.
-  ///
-  /// For LTR text direction, the start is the left thumb, and for RTL text
-  /// direction, the start is the right thumb.
   final String start;
 
-  /// The label of the end thumb.
-  ///
-  /// For LTR text direction, the end is the right thumb, and for RTL text
-  /// direction, the end is the left thumb.
   final String end;
 
   @override
@@ -3371,15 +2106,7 @@ void _debugDrawShadow(Canvas canvas, Path path, double elevation) {
   }
 }
 
-/// The default shape of a Material 3 [Slider]'s value indicator.
-///
-/// See also:
-///
-///  * [Slider], which includes a value indicator defined by this shape.
-///  * [SliderTheme], which can be used to configure the slider value indicator
-///    of all sliders in a widget subtree.
 class DropSliderValueIndicatorShape extends SliderComponentShape {
-  /// Create a slider value indicator that resembles a drop shape.
   const DropSliderValueIndicatorShape();
 
   static const _DropSliderValueIndicatorPathPainter _pathPainter = _DropSliderValueIndicatorPathPainter();
@@ -3459,8 +2186,6 @@ class _DropSliderValueIndicatorPathPainter {
 
     const double edgePadding = 8.0;
     final double rectangleWidth = _upperRectangleWidth(labelPainter, scale);
-    /// Value indicator draws on the Overlay and by using the global Offset
-    /// we are making sure we use the bounds of the Overlay instead of the Slider.
     final Offset globalCenter = parentBox.localToGlobal(center);
 
     // The rectangle must be shifted towards the center so that it minimizes the

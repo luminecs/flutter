@@ -18,8 +18,6 @@ Future<void> main() async {
   await postProcess();
 }
 
-/// Post-processes an APIs documentation zip file to modify the footer and version
-/// strings for commits promoted to either beta or stable channels.
 Future<void> postProcess() async {
   final String revision = await gitRevision(fullLength: true);
   print('Docs revision being processed: $revision');
@@ -67,8 +65,6 @@ Future<void> postProcess() async {
   createFooter(footerFile, version);
 }
 
-/// Gets the git revision of the current checkout. [fullLength] if true will return
-/// the full commit hash, if false it will return the first 10 characters only.
 Future<String> gitRevision({
   bool fullLength = false,
   @visibleForTesting platform.Platform platform = const platform.LocalPlatform(),
@@ -87,9 +83,6 @@ Future<String> gitRevision({
   return gitRevision.length > kGitRevisionLength ? gitRevision.substring(0, kGitRevisionLength) : gitRevision;
 }
 
-/// Wrapper function to run a subprocess checking exit code and printing stderr and stdout.
-/// [executable] is a string with the script/binary to execute, [args] is the list of flags/arguments
-/// and [workingDirectory] is as string to the working directory where the subprocess will be run.
 Future<void> runProcessWithValidations(
   List<String> command,
   String workingDirectory, {
@@ -110,10 +103,6 @@ Future<void> runProcessWithValidations(
   }
 }
 
-/// Get the name of the release branch.
-///
-/// On LUCI builds, the git HEAD is detached, so first check for the env
-/// variable "LUCI_BRANCH"; if it is not set, fall back to calling git.
 Future<String> getBranchName({
   @visibleForTesting platform.Platform platform = const platform.LocalPlatform(),
   @visibleForTesting ProcessManager processManager = const LocalProcessManager(),
@@ -131,9 +120,6 @@ Future<String> getBranchName({
   return gitBranchMatch == null ? '' : gitBranchMatch.group(1)!.split('...').first;
 }
 
-/// Updates the footer of the api documentation with the correct branch and versions.
-/// [footerPath] is the path to the location of the footer js file and [version] is a
-/// string with the version calculated by the flutter tool.
 Future<void> createFooter(File footerFile, String version,
     {@visibleForTesting String? timestampParam,
     @visibleForTesting String? branchParam,

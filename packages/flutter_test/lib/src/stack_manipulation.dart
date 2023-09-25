@@ -6,14 +6,6 @@
 
 import 'package:flutter/foundation.dart';
 
-/// Report call site for `expect()` call. Returns the number of frames that
-/// should be elided if a stack were to be modified to hide the expect call, or
-/// zero if no such call was found.
-///
-/// If the head of the stack trace consists of a failure as a result of calling
-/// the test_widgets [expect] function, this will fill the given
-/// FlutterErrorBuilder with the precise file and line number that called that
-/// function.
 int reportExpectCall(StackTrace stack, List<DiagnosticsNode> information) {
   final RegExp line0 = RegExp(r'^#0 +fail \(.+\)$');
   final RegExp line1 = RegExp(r'^#1 +_expect \(.+\)$');

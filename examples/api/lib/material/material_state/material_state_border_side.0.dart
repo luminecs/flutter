@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [MaterialStateBorderSide].
 
 void main() => runApp(const MaterialStateBorderSideExampleApp());
 

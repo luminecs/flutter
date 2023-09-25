@@ -92,10 +92,6 @@ Future<bool> get isRunningOnBot => botDetector.isRunningOnBot;
 // reporting for all Flutter and Dart related tooling
 Analytics get analytics => context.get<Analytics>()!;
 
-/// Currently active implementation of the file system.
-///
-/// By default it uses local disk-based implementation. Override this in tests
-/// with [MemoryFileSystem].
 FileSystem get fs => ErrorHandlingFileSystem(
   delegate: context.get<FileSystem>() ?? localFileSystem,
   platform: platform,
@@ -108,7 +104,6 @@ FileSystemUtils get fsUtils => context.get<FileSystemUtils>() ?? FileSystemUtils
 
 const ProcessManager _kLocalProcessManager = LocalProcessManager();
 
-/// The active process manager.
 ProcessManager get processManager => context.get<ProcessManager>() ?? _kLocalProcessManager;
 ProcessUtils get processUtils => context.get<ProcessUtils>()!;
 
@@ -124,18 +119,11 @@ final OutputPreferences _default = OutputPreferences(
 );
 OutputPreferences get outputPreferences => context.get<OutputPreferences>() ?? _default;
 
-/// The current system clock instance.
 SystemClock get systemClock => context.get<SystemClock>() ?? _systemClock;
 SystemClock _systemClock = const SystemClock();
 
 ProcessInfo get processInfo => context.get<ProcessInfo>()!;
 
-/// Display an error level message to the user. Commands should use this if they
-/// fail in some way.
-///
-/// Set [emphasis] to true to make the output bold if it's supported.
-/// Set [color] to a [TerminalColor] to color the output, if the logger
-/// supports it. The [color] defaults to [TerminalColor.red].
 void printError(
     String message, {
       StackTrace? stackTrace,
@@ -156,12 +144,6 @@ void printError(
   );
 }
 
-/// Display a warning level message to the user. Commands should use this if they
-/// have important warnings to convey that aren't fatal.
-///
-/// Set [emphasis] to true to make the output bold if it's supported.
-/// Set [color] to a [TerminalColor] to color the output, if the logger
-/// supports it. The [color] defaults to [TerminalColor.cyan].
 void printWarning(
     String message, {
       bool? emphasis,
@@ -180,15 +162,6 @@ void printWarning(
   );
 }
 
-/// Display normal output of the command. This should be used for things like
-/// progress messages, success messages, or just normal command output.
-///
-/// Set `emphasis` to true to make the output bold if it's supported.
-///
-/// Set `newline` to false to skip the trailing linefeed.
-///
-/// If `indent` is provided, each line of the message will be prepended by the
-/// specified number of whitespaces.
 void printStatus(
     String message, {
       bool? emphasis,
@@ -210,24 +183,12 @@ void printStatus(
 }
 
 
-/// Display the [message] inside a box.
-///
-/// For example, this is the generated output:
-///
-///   ┌─ [title] ─┐
-///   │ [message] │
-///   └───────────┘
-///
-/// If a terminal is attached, the lines in [message] are automatically wrapped based on
-/// the available columns.
 void printBox(String message, {
   String? title,
 }) {
   logger.printBox(message, title: title);
 }
 
-/// Use this for verbose tracing output. Users can turn this output on in order
-/// to help diagnose issues with the toolchain or with their setup.
 void printTrace(String message) => logger.printTrace(message);
 
 AnsiTerminal get terminal {
@@ -240,7 +201,6 @@ final AnsiTerminal _defaultAnsiTerminal = AnsiTerminal(
   now: DateTime.now(),
 );
 
-/// The global Stdio wrapper.
 Stdio get stdio => context.get<Stdio>() ?? (_stdioInstance ??= Stdio());
 Stdio? _stdioInstance;
 
@@ -252,13 +212,8 @@ PlistParser get plistParser => context.get<PlistParser>() ?? (
     ));
 PlistParser? _plistInstance;
 
-/// The global template renderer.
 TemplateRenderer get templateRenderer => context.get<TemplateRenderer>()!;
 
-/// Global [ShutdownHooks] that should be run before the tool process exits.
-///
-/// This is depended on by [localFileSystem] which is called before any
-/// [Context] is set up, and thus this cannot be a Context getter.
 final ShutdownHooks shutdownHooks = ShutdownHooks();
 
 // Unless we're in a test of this class's signal handling features, we must
@@ -271,7 +226,6 @@ LocalFileSystem get localFileSystem => _instance ??= LocalFileSystem(
   shutdownHooks,
 );
 
-/// Gradle utils in the current [AppContext].
 GradleUtils? get gradleUtils => context.get<GradleUtils>();
 
 CocoaPods? get cocoaPods => context.get<CocoaPods>();
@@ -294,8 +248,4 @@ final RegExp kVMServiceMessageRegExp = RegExp(r'The Dart VM service is listening
 // overridden in other clients.
 NonNullSafeBuilds get nonNullSafeBuilds => context.get<NonNullSafeBuilds>() ?? NonNullSafeBuilds.notAllowed;
 
-/// Contains information about the JRE/JDK to use for Java-dependent operations.
-///
-/// A value of [null] indicates that no installation of java could be found on
-/// the host machine.
 Java? get java => context.get<Java>();

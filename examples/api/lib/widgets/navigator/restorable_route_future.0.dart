@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [RestorableRouteFuture].
 
 void main() => runApp(const RestorableRouteFutureExampleApp());
 

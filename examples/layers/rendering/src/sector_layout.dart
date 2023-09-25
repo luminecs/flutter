@@ -75,18 +75,6 @@ class SectorParentData extends ParentData {
   double theta = 0.0;
 }
 
-/// Base class for [RenderObject]s that live in a polar coordinate space.
-///
-/// In a polar coordinate system each point on a plane is determined by a
-/// distance from a reference point ("radius") and an angle from a reference
-/// direction ("theta").
-///
-/// See also:
-///
-///  * <https://en.wikipedia.org/wiki/Polar_coordinate_system>, which defines
-///    the polar coordinate space.
-///  * [RenderBox], which is the base class for [RenderObject]s that live in a
-///    Cartesian coordinate space.
 abstract class RenderSector extends RenderObject {
 
   @override
@@ -606,26 +594,9 @@ class RenderSolidColor extends RenderDecoratedSector {
   }
 }
 
-/// The result of performing a hit test on [RenderSector]s.
 class SectorHitTestResult extends HitTestResult {
-  /// Creates an empty hit test result for hit testing on [RenderSector].
   SectorHitTestResult() : super();
 
-  /// Wraps `result` to create a [HitTestResult] that implements the
-  /// [SectorHitTestResult] protocol for hit testing on [RenderSector]s.
-  ///
-  /// This method is used by [RenderObject]s that adapt between the
-  /// [RenderSector]-world and the non-[RenderSector]-world to convert a (subtype of)
-  /// [HitTestResult] to a [SectorHitTestResult] for hit testing on [RenderSector]s.
-  ///
-  /// The [HitTestEntry]s added to the returned [SectorHitTestResult] are also
-  /// added to the wrapped `result` (both share the same underlying data
-  /// structure to store [HitTestEntry]s).
-  ///
-  /// See also:
-  ///
-  ///  * [HitTestResult.wrap], which turns a [SectorHitTestResult] back into a
-  ///    generic [HitTestResult].
   SectorHitTestResult.wrap(super.result) : super.wrap();
 
   // TODO(goderbauer): Add convenience methods to transform hit test positions
@@ -633,19 +604,13 @@ class SectorHitTestResult extends HitTestResult {
   //    children (e.g. RenderSectorTransform analogs to RenderTransform).
 }
 
-/// A hit test entry used by [RenderSector].
 class SectorHitTestEntry extends HitTestEntry {
-  /// Creates a box hit test entry.
   SectorHitTestEntry(RenderSector super.target, { required this.radius,  required this.theta });
 
   @override
   RenderSector get target => super.target as RenderSector;
 
-  /// The radius component of the hit test position in the local coordinates of
-  /// [target].
   final double radius;
 
-  /// The theta component of the hit test position in the local coordinates of
-  /// [target].
   final double theta;
 }

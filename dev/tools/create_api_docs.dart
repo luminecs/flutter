@@ -75,19 +75,6 @@ const Map<String, PlatformDocsSection> kPlatformDocs = <String, PlatformDocsSect
   ),
 };
 
-/// This script will generate documentation for the packages in `packages/` and
-/// write the documentation to the output directory specified on the command
-/// line.
-///
-/// This script also updates the index.html file so that it can be placed at the
-/// root of api.flutter.dev. The files are kept inside of
-/// api.flutter.dev/flutter, so we need to manipulate paths a bit. See
-/// https://github.com/flutter/flutter/issues/3900 for more info.
-///
-/// This will only work on UNIX systems, not Windows. It requires that 'git',
-/// 'zip', and 'tar' be in the PATH. It requires that 'flutter' has been run
-/// previously. It uses the version of Dart downloaded by the 'flutter' tool in
-/// this repository and will fail if that is absent.
 Future<void> main(List<String> arguments) async {
   const FileSystem filesystem = LocalFileSystem();
   const ProcessManager processManager = LocalProcessManager();
@@ -159,15 +146,6 @@ ArgParser _createArgsParser({required String publishDefault}) {
   return parser;
 }
 
-/// A class used to configure the staging area for building the docs in.
-///
-/// The [generateConfiguration] function generates a dummy package with a
-/// pubspec. It copies any assets and customization files from the framework
-/// repo. It creates a metadata file for searches.
-///
-/// Once the docs have been generated, [generateOfflineAssetsIfNeeded] will
-/// create offline assets like Dash/Zeal docsets and an offline ZIP file of the
-/// site if the build is a CI build that is not a presubmit build.
 class Configurator {
   Configurator({
     required this.docsRoot,
@@ -178,29 +156,16 @@ class Configurator {
     required this.platform,
   });
 
-  /// The root of the directory in the Flutter repo where configuration data is
-  /// stored.
   final Directory docsRoot;
 
-  /// The root of the output area for the dartdoc docs.
-  ///
-  /// Typically this is a "doc" subdirectory under the [packageRoot].
   final Directory publishRoot;
 
-  /// The root of the staging area for creating docs.
   final Directory packageRoot;
 
-  /// The [FileSystem] object used to create [File] and [Directory] objects.
   final FileSystem filesystem;
 
-  /// The [ProcessManager] object used to invoke external processes.
-  ///
-  /// Can be replaced by tests to have a fake process manager.
   final ProcessManager processManager;
 
-  /// The [Platform] to use for this run.
-  ///
-  /// Can be replaced by tests to test behavior on different plaforms.
   final Platform platform;
 
   void generateConfiguration() {
@@ -224,7 +189,6 @@ class Configurator {
     }
   }
 
-  /// Returns import or on-disk paths for all libraries in the Flutter SDK.
   Iterable<String> _libraryRefs() sync* {
     for (final Directory dir in findPackages(filesystem)) {
       final String dirName = dir.basename;
@@ -332,10 +296,6 @@ class Configurator {
     );
   }
 
-  /// Generates an OpenSearch XML description that can be used to add a custom
-  /// search for Flutter API docs to the browser. Unfortunately, it has to know
-  /// the URL to which site to search, so we customize it here based upon the
-  /// branch name.
   void _createSearchMetadata(File templatePath, File metadataPath) {
     final String template = templatePath.readAsStringSync();
     final String branch = FlutterInformation.instance.getBranchName();
@@ -442,10 +402,6 @@ class Configurator {
   }
 }
 
-/// Runs Dartdoc inside of the given pre-prepared staging area, prepared by
-/// [Configurator.generateConfiguration].
-///
-/// Performs a sanity check of the output once the generation is complete.
 class DartdocGenerator {
   DartdocGenerator({
     required this.docsRoot,
@@ -458,34 +414,21 @@ class DartdocGenerator {
     this.verbose = false,
   });
 
-  /// The root of the directory in the Flutter repo where configuration data is
-  /// stored.
   final Directory docsRoot;
 
-  /// The root of the output area for the dartdoc docs.
-  ///
-  /// Typically this is a "doc" subdirectory under the [packageRoot].
   final Directory publishRoot;
 
-  /// The root of the staging area for creating docs.
   final Directory packageRoot;
 
-  /// The [FileSystem] object used to create [File] and [Directory] objects.
   final FileSystem filesystem;
 
-  /// The [ProcessManager] object used to invoke external processes.
-  ///
-  /// Can be replaced by tests to have a fake process manager.
   final ProcessManager processManager;
 
-  /// Whether or not dartdoc should output an index.json file of the
-  /// documentation.
   final bool useJson;
 
   // Whether or not to have dartdoc validate its own links.
   final bool validateLinks;
 
-  /// Whether or not to filter overly verbose log output from dartdoc.
   final bool verbose;
 
   Future<void> generateDartdoc() async {
@@ -690,7 +633,6 @@ class DartdocGenerator {
     }
   }
 
-  /// Runs a sanity check by running a test.
   void _sanityCheckDocs([Platform platform = const LocalPlatform()]) {
     final Directory flutterDirectory = publishRoot.childDirectory('flutter');
     final Directory widgetsDirectory = flutterDirectory.childDirectory('widgets');
@@ -752,8 +694,6 @@ class DartdocGenerator {
     }
   }
 
-  /// Creates a custom index.html because we try to maintain old
-  /// paths. Cleanup unused index.html files no longer needed.
   void _createIndexAndCleanup() {
     print('\nCreating a custom index.html in ${publishRoot.childFile('index.html').path}');
     _copyIndexToRootOfDocs();
@@ -819,11 +759,6 @@ class DartdocGenerator {
   }
 }
 
-/// Downloads and unpacks the platform specific documentation generated by the
-/// engine build.
-///
-/// Unpacks and massages the data so that it can be properly included in the
-/// output archive.
 class PlatformDocGenerator {
   PlatformDocGenerator({required this.outputDir, required this.filesystem});
 
@@ -832,8 +767,6 @@ class PlatformDocGenerator {
   final String engineRevision = FlutterInformation.instance.getEngineRevision();
   final String engineRealm = FlutterInformation.instance.getEngineRealm();
 
-  /// This downloads an archive of platform docs for the engine from the artifact
-  /// store and extracts them to the location used for Dartdoc.
   Future<void> generatePlatformDocs() async {
     final String realm = engineRealm.isNotEmpty ? '$engineRealm/' : '';
 
@@ -845,9 +778,6 @@ class PlatformDocGenerator {
     }
   }
 
-  /// Fetches the zip archive at the specified url.
-  ///
-  /// Returns null if the archive fails to download after [maxTries] attempts.
   Future<Archive?> _fetchArchive(String url, int maxTries) async {
     List<int>? responseBytes;
     for (int i = 0; i < maxTries; i++) {
@@ -895,10 +825,6 @@ class PlatformDocGenerator {
   }
 }
 
-/// Recursively copies `srcDir` to `destDir`, invoking [onFileCopied], if
-/// specified, for each source/destination file pair.
-///
-/// Creates `destDir` if needed.
 void copyDirectorySync(Directory srcDir, Directory destDir,
     {void Function(File srcFile, File destFile)? onFileCopied, required FileSystem filesystem}) {
   if (!srcDir.existsSync()) {
@@ -993,7 +919,6 @@ List<String> findPackageNames(FileSystem filesystem) {
   return findPackages(filesystem).map<String>((FileSystemEntity file) => path.basename(file.path)).toList();
 }
 
-/// Finds all packages in the Flutter SDK
 List<Directory> findPackages(FileSystem filesystem) {
   return FlutterInformation.instance
       .getFlutterRoot()
@@ -1016,7 +941,6 @@ List<Directory> findPackages(FileSystem filesystem) {
       .toList();
 }
 
-/// An exception class used to indicate problems when collecting information.
 class FlutterInformationException implements Exception {
   FlutterInformationException(this.message);
   final String message;
@@ -1027,12 +951,6 @@ class FlutterInformationException implements Exception {
   }
 }
 
-/// A singleton used to consolidate the way in which information about the
-/// Flutter repo and environment is collected.
-///
-/// Collects the information once, and caches it for any later access.
-///
-/// The singleton instance can be overridden by tests by setting [instance].
 class FlutterInformation {
   FlutterInformation({
     this.platform = const LocalPlatform(),
@@ -1051,27 +969,14 @@ class FlutterInformation {
   @visibleForTesting
   static set instance(FlutterInformation? value) => _instance = value;
 
-  /// The path to the Dart binary in the Flutter repo.
-  ///
-  /// This is probably a shell script.
   File getDartBinaryPath() {
     return getFlutterRoot().childDirectory('bin').childFile('dart');
   }
 
-  /// The path to the Dart binary in the Flutter repo.
-  ///
-  /// This is probably a shell script.
   File getFlutterBinaryPath() {
     return getFlutterRoot().childDirectory('bin').childFile('flutter');
   }
 
-  /// The path to the Flutter repo root directory.
-  ///
-  /// If the environment variable `FLUTTER_ROOT` is set, will use that instead
-  /// of looking for it.
-  ///
-  /// Otherwise, uses the output of `flutter --version --machine` to find the
-  /// Flutter root.
   Directory getFlutterRoot() {
     if (platform.environment['FLUTTER_ROOT'] != null) {
       return filesystem.directory(platform.environment['FLUTTER_ROOT']);
@@ -1079,25 +984,18 @@ class FlutterInformation {
     return getFlutterInformation()['flutterRoot']! as Directory;
   }
 
-  /// Gets the semver version of the Flutter framework in the repo.
   Version getFlutterVersion() => getFlutterInformation()['frameworkVersion']! as Version;
 
-  /// Gets the git hash of the engine used by the Flutter framework in the repo.
   String getEngineRevision() => getFlutterInformation()['engineRevision']! as String;
 
-  /// Gets the value stored in bin/internal/engine.realm used by the Flutter
-  /// framework repo.
   String getEngineRealm() => getFlutterInformation()['engineRealm']! as String;
 
-  /// Gets the git hash of the Flutter framework in the repo.
   String getFlutterRevision() => getFlutterInformation()['flutterGitRevision']! as String;
 
-  /// Gets the name of the current branch in the Flutter framework in the repo.
   String getBranchName() => getFlutterInformation()['branchName']! as String;
 
   Map<String, Object>? _cachedFlutterInformation;
 
-  /// Gets a Map of various kinds of information about the Flutter repo.
   Map<String, Object> getFlutterInformation() {
     if (_cachedFlutterInformation != null) {
       return _cachedFlutterInformation!;

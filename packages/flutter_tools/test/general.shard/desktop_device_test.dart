@@ -380,7 +380,6 @@ FakeDesktopDevice setUpDesktopDevice({
   );
 }
 
-/// A trivial subclass of DesktopDevice for testing the shared functionality.
 class FakeDesktopDevice extends DesktopDevice {
   FakeDesktopDevice({
     required ProcessManager processManager,
@@ -398,10 +397,8 @@ class FakeDesktopDevice extends DesktopDevice {
       operatingSystemUtils: operatingSystemUtils,
   );
 
-  /// The [mainPath] last passed to [buildForDevice].
   String? lastBuiltMainPath;
 
-  /// The [buildInfo] last passed to [buildForDevice].
   BuildInfo? lastBuildInfo;
 
   final bool nullExecutablePathForDevice;

@@ -7,18 +7,7 @@ import 'proxy_box.dart';
 import 'proxy_sliver.dart';
 import 'sliver.dart';
 
-/// Paints a [Decoration] either before or after its child paints.
-///
-/// If the child has infinite scroll extent, then the [Decoration] paints itself up to the
-/// bottom cache extent.
 class RenderDecoratedSliver extends RenderProxySliver {
-  /// Creates a decorated sliver.
-  ///
-  /// The [decoration], [position], and [configuration] arguments must not be
-  /// null. By default the decoration paints behind the child.
-  ///
-  /// The [ImageConfiguration] will be passed to the decoration (with the size
-  /// filled in) to let it resolve images.
   RenderDecoratedSliver({
     required Decoration decoration,
     DecorationPosition position = DecorationPosition.background,
@@ -27,9 +16,6 @@ class RenderDecoratedSliver extends RenderProxySliver {
        _position = position,
        _configuration = configuration;
 
-  /// What decoration to paint.
-  ///
-  /// Commonly a [BoxDecoration].
   Decoration get decoration => _decoration;
   Decoration _decoration;
   set decoration(Decoration value) {
@@ -42,7 +28,6 @@ class RenderDecoratedSliver extends RenderProxySliver {
     markNeedsPaint();
   }
 
-  /// Whether to paint the box decoration behind or in front of the child.
   DecorationPosition get position => _position;
   DecorationPosition _position;
   set position(DecorationPosition value) {
@@ -53,12 +38,6 @@ class RenderDecoratedSliver extends RenderProxySliver {
     markNeedsPaint();
   }
 
-  /// The settings to pass to the decoration when painting, so that it can
-  /// resolve images appropriately. See [ImageProvider.resolve] and
-  /// [BoxPainter.paint].
-  ///
-  /// The [ImageConfiguration.textDirection] field is also used by
-  /// direction-sensitive [Decoration]s for painting and hit-testing.
   ImageConfiguration get configuration => _configuration;
   ImageConfiguration _configuration;
   set configuration(ImageConfiguration value) {

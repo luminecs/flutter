@@ -66,9 +66,6 @@ enum ExitStatus {
   killed,
 }
 
-/// [FlutterCommand]s' subclasses' [FlutterCommand.runCommand] can optionally
-/// provide a [FlutterCommandResult] to furnish additional information for
-/// analytics.
 class FlutterCommandResult {
   const FlutterCommandResult(
     this.exitStatus, {
@@ -76,41 +73,28 @@ class FlutterCommandResult {
     this.endTimeOverride,
   });
 
-  /// A command that succeeded. It is used to log the result of a command invocation.
   factory FlutterCommandResult.success() {
     return const FlutterCommandResult(ExitStatus.success);
   }
 
-  /// A command that exited with a warning. It is used to log the result of a command invocation.
   factory FlutterCommandResult.warning() {
     return const FlutterCommandResult(ExitStatus.warning);
   }
 
-  /// A command that failed. It is used to log the result of a command invocation.
   factory FlutterCommandResult.fail() {
     return const FlutterCommandResult(ExitStatus.fail);
   }
 
   final ExitStatus exitStatus;
 
-  /// Optional data that can be appended to the timing event.
-  /// https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#timingLabel
-  /// Do not add PII.
   final List<String?>? timingLabelParts;
 
-  /// Optional epoch time when the command's non-interactive wait time is
-  /// complete during the command's execution. Use to measure user perceivable
-  /// latency without measuring user interaction time.
-  ///
-  /// [FlutterCommand] will automatically measure and report the command's
-  /// complete time if not overridden.
   final DateTime? endTimeOverride;
 
   @override
   String toString() => exitStatus.name;
 }
 
-/// Common flutter command line options.
 abstract final class FlutterOptions {
   static const String kFrontendServerStarterPath = 'frontend-server-starter-path';
   static const String kExtraFrontEndOptions = 'extra-front-end-options';
@@ -144,7 +128,6 @@ abstract final class FlutterOptions {
   static const String kWebWasmFlag = 'wasm';
 }
 
-/// flutter command categories for usage.
 abstract final class FlutterCommandCategory {
   static const String sdk = 'Flutter SDK';
   static const String project = 'Project';
@@ -152,24 +135,16 @@ abstract final class FlutterCommandCategory {
 }
 
 abstract class FlutterCommand extends Command<void> {
-  /// The currently executing command (or sub-command).
-  ///
-  /// Will be `null` until the top-most command has begun execution.
   static FlutterCommand? get current => context.get<FlutterCommand>();
 
-  /// The option name for a custom VM Service port.
   static const String vmServicePortOption = 'vm-service-port';
 
-  /// The option name for a custom VM Service port.
   static const String observatoryPortOption = 'observatory-port';
 
-  /// The option name for a custom DevTools server address.
   static const String kDevToolsServerAddress = 'devtools-server-address';
 
-  /// The flag name for whether to launch the DevTools or not.
   static const String kEnableDevTools = 'devtools';
 
-  /// The flag name for whether or not to use ipv6.
   static const String ipv6Flag = 'ipv6';
 
   @override
@@ -183,7 +158,6 @@ abstract class FlutterCommand extends Command<void> {
 
   bool _requiresPubspecYaml = false;
 
-  /// Whether this command uses the 'target' option.
   bool _usesTargetOption = false;
 
   bool _usesPubOption = false;
@@ -202,9 +176,6 @@ abstract class FlutterCommand extends Command<void> {
 
   bool get deprecated => false;
 
-  /// When the command runs and this is true, trigger an async process to
-  /// discover devices from discoverers that support wireless devices for an
-  /// extended amount of time and refresh the device cache with the results.
   bool get refreshWirelessDevices => false;
 
   @override
@@ -327,25 +298,15 @@ abstract class FlutterCommand extends Command<void> {
     return bundle.defaultMainPath;
   }
 
-  /// Path to the Dart's package config file.
-  ///
-  /// This can be overridden by some of its subclasses.
   String? get packagesPath => stringArg(FlutterGlobalOptions.kPackagesOption, global: true);
 
-  /// Whether flutter is being run from our CI.
   bool get usingCISystem => boolArg(FlutterGlobalOptions.kContinuousIntegrationFlag, global: true);
 
-  /// The value of the `--filesystem-scheme` argument.
-  ///
-  /// This can be overridden by some of its subclasses.
   String? get fileSystemScheme =>
     argParser.options.containsKey(FlutterOptions.kFileSystemScheme)
           ? stringArg(FlutterOptions.kFileSystemScheme)
           : null;
 
-  /// The values of the `--filesystem-root` argument.
-  ///
-  /// This can be overridden by some of its subclasses.
   List<String>? get fileSystemRoots =>
     argParser.options.containsKey(FlutterOptions.kFileSystemRoot)
           ? stringsArg(FlutterOptions.kFileSystemRoot)
@@ -359,10 +320,6 @@ abstract class FlutterCommand extends Command<void> {
     _usesPubOption = true;
   }
 
-  /// Adds flags for using a specific filesystem root and scheme.
-  ///
-  /// The `hide` argument indicates whether or not to hide these options when
-  /// the user asks for help.
   void usesFilesystemOptions({ required bool hide }) {
     argParser
       ..addOption('output-dill',
@@ -384,7 +341,6 @@ abstract class FlutterCommand extends Command<void> {
       );
   }
 
-  /// Adds options for connecting to the Dart VM Service port.
   void usesPortOptions({ required bool verboseHelp }) {
     argParser.addOption(vmServicePortOption,
         help: '(deprecated; use host-vmservice-port instead) '
@@ -415,7 +371,6 @@ abstract class FlutterCommand extends Command<void> {
     _usesPortOption = true;
   }
 
-  /// Add option values for output directory of artifacts
   void usesOutputDir() {
     // TODO(eliasyishak): this feature has been added to [BuildWebCommand] and
     //  [BuildAarCommand]
@@ -542,13 +497,6 @@ abstract class FlutterCommand extends Command<void> {
     return null;
   }
 
-  /// Gets the vmservice port provided to in the 'vm-service-port' or
-  /// 'host-vmservice-port option.
-  ///
-  /// Only one of "host-vmservice-port" and "vm-service-port" may be
-  /// specified.
-  ///
-  /// If no port is set, returns null.
   int? get hostVmservicePort {
     if (!_usesPortOption || !_hostVmServicePortProvided) {
       return null;
@@ -568,9 +516,6 @@ abstract class FlutterCommand extends Command<void> {
     return _tryParseHostVmservicePort();
   }
 
-  /// Gets the vmservice port provided to in the 'device-vmservice-port' option.
-  ///
-  /// If no port is set, returns null.
   int? get deviceVmservicePort {
     final String? devicePort = stringArg('device-vmservice-port');
     if (!_usesPortOption || devicePort == null) {
@@ -709,10 +654,8 @@ abstract class FlutterCommand extends Command<void> {
     );
   }
 
-  /// Whether it is safe for this command to use a cached pub invocation.
   bool get cachePubGet => true;
 
-  /// Whether this command should report null safety analytics.
   bool get reportNullSafety => false;
 
   late final Duration? deviceDiscoveryTimeout = () {
@@ -862,8 +805,6 @@ abstract class FlutterCommand extends Command<void> {
     );
   }
 
-  /// Enables support for the hidden options --extra-front-end-options and
-  /// --extra-gen-snapshot-options.
   void usesExtraDartFlagOptions({ required bool verboseHelp }) {
     argParser.addMultiOption(FlutterOptions.kExtraFrontEndOptions,
       aliases: <String>[ kExtraFrontEndOptions ], // supported for historical reasons
@@ -983,7 +924,6 @@ abstract class FlutterCommand extends Command<void> {
     );
   }
 
-  /// Adds build options common to all of the desktop build commands.
   void addCommonDesktopBuildOptions({ required bool verboseHelp }) {
     addBuildModeFlags(verboseHelp: verboseHelp);
     addBuildPerformanceFile(hide: !verboseHelp);
@@ -1003,10 +943,6 @@ abstract class FlutterCommand extends Command<void> {
     usesBuildNameOption();
   }
 
-  /// The build mode that this command will use if no build mode is
-  /// explicitly specified.
-  ///
-  /// Use [getBuildMode] to obtain the actual effective build mode.
   BuildMode defaultBuildMode = BuildMode.debug;
 
   BuildMode getBuildMode() {
@@ -1116,12 +1052,6 @@ abstract class FlutterCommand extends Command<void> {
     );
   }
 
-  /// Compute the [BuildInfo] for the current flutter command.
-  /// Commands that build multiple build modes can pass in a [forcedBuildMode]
-  /// to be used instead of parsing flags.
-  ///
-  /// Throws a [ToolExit] if the current set of options is not compatible with
-  /// each other.
   Future<BuildInfo> getBuildInfo({ BuildMode? forcedBuildMode, File? forcedTargetFile }) async {
     final bool trackWidgetCreation = argParser.options.containsKey('track-widget-creation') &&
       boolArg('track-widget-creation');
@@ -1295,8 +1225,6 @@ abstract class FlutterCommand extends Command<void> {
     applicationPackages ??= ApplicationPackageFactory.instance;
   }
 
-  /// The path to send to Google Analytics. Return null here to disable
-  /// tracking of the command.
   Future<String?> get usagePath async {
     if (parent is FlutterCommand) {
       final FlutterCommand? commandParent = parent as FlutterCommand?;
@@ -1308,15 +1236,8 @@ abstract class FlutterCommand extends Command<void> {
     }
   }
 
-  /// Additional usage values to be sent with the usage ping.
   Future<CustomDimensions> get usageValues async => const CustomDimensions();
 
-  /// Runs this command.
-  ///
-  /// Rather than overriding this method, subclasses should override
-  /// [verifyThenRunCommand] to perform any verification
-  /// and [runCommand] to execute the command
-  /// so that this method can record and report the overall time to analytics.
   @override
   Future<void> run() {
     final DateTime startTime = globals.systemClock.now();
@@ -1423,14 +1344,6 @@ abstract class FlutterCommand extends Command<void> {
     return dartDefineConfigJsonMap;
   }
 
-  /// Parse a property line from an env file.
-  /// Supposed property structure should be:
-  ///   key=value
-  ///
-  /// Where: key is a string without spaces and value is a string.
-  /// Value can also contain '=' char.
-  ///
-  /// Returns a record of key and value as strings.
   MapEntry<String, String> _parseProperty(String line) {
     if (DotEnvRegex.multiLineBlock.hasMatch(line)) {
       throwToolExit('Multi-line value is not supported: $line');
@@ -1470,18 +1383,6 @@ abstract class FlutterCommand extends Command<void> {
     return MapEntry<String, String>(key, value);
   }
 
-  /// Converts an .env file string to its equivalent JSON string.
-  ///
-  /// For example, the .env file string
-  ///   key=value # comment
-  ///   complexKey="foo#bar=baz"
-  /// would be converted to a JSON string equivalent to:
-  ///   {
-  ///     "key": "value",
-  ///     "complexKey": "foo#bar=baz"
-  ///   }
-  ///
-  /// Multiline values are not supported.
   String convertEnvFileToJsonRaw(String configRaw) {
     final List<String> lines = configRaw
         .split('\n')
@@ -1499,7 +1400,6 @@ abstract class FlutterCommand extends Command<void> {
     return jsonEncode(propertyMap);
   }
 
-  /// Updates dart-defines based on [webRenderer].
   @visibleForTesting
   static List<String> updateDartDefines(List<String> dartDefines, WebRendererMode webRenderer) {
     final Set<String> dartDefinesSet = dartDefines.toSet();
@@ -1525,10 +1425,6 @@ abstract class FlutterCommand extends Command<void> {
     globals.signals.addHandler(io.ProcessSignal.sigint, handler);
   }
 
-  /// Logs data about this command.
-  ///
-  /// For example, the command path (e.g. `build/apk`) and the result,
-  /// as well as the time spent running it.
   void _sendPostUsage(
     String commandPath,
     FlutterCommandResult commandResult,
@@ -1560,13 +1456,6 @@ abstract class FlutterCommand extends Command<void> {
     );
   }
 
-  /// Perform validation then call [runCommand] to execute the command.
-  /// Return a [Future] that completes with an exit code
-  /// indicating whether execution was successful.
-  ///
-  /// Subclasses should override this method to perform verification
-  /// then call this method to execute the command
-  /// rather than calling [runCommand] directly.
   @mustCallSuper
   Future<FlutterCommandResult> verifyThenRunCommand(String? commandPath) async {
     if (argParser.options.containsKey(FlutterOptions.kNullSafety) &&
@@ -1662,21 +1551,10 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and 
     ).send();
   }
 
-  /// The set of development artifacts required for this command.
-  ///
-  /// Defaults to an empty set. Including [DevelopmentArtifact.universal] is
-  /// not required as it is always updated.
   Future<Set<DevelopmentArtifact>> get requiredArtifacts async => const <DevelopmentArtifact>{};
 
-  /// Subclasses must implement this to execute the command.
-  /// Optionally provide a [FlutterCommandResult] to send more details about the
-  /// execution for analytics.
   Future<FlutterCommandResult> runCommand();
 
-  /// Find and return all target [Device]s based upon currently connected
-  /// devices and criteria entered by the user on the command line.
-  /// If no device can be found that meets specified criteria,
-  /// then print an error message and return null.
   Future<List<Device>?> findAllTargetDevices({
     bool includeDevicesUnsupportedByProject = false,
   }) async {
@@ -1686,13 +1564,6 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and 
     );
   }
 
-  /// Find and return the target [Device] based upon currently connected
-  /// devices and criteria entered by the user on the command line.
-  /// If a device cannot be found that meets specified criteria,
-  /// then print an error message and return null.
-  ///
-  /// If [includeDevicesUnsupportedByProject] is true, the tool does not filter
-  /// the list by the current project support list.
   Future<Device?> findTargetDevice({
     bool includeDevicesUnsupportedByProject = false,
   }) async {
@@ -1759,10 +1630,6 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and 
 
   ApplicationPackageFactory? applicationPackages;
 
-  /// Gets the parsed command-line flag named [name] as a `bool`.
-  ///
-  /// If no flag named [name] was added to the [ArgParser], an [ArgumentError]
-  /// will be thrown.
   bool boolArg(String name, {bool global = false}) {
     if (global) {
       return globalResults![name] as bool;
@@ -1770,10 +1637,6 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and 
     return argResults![name] as bool;
   }
 
-  /// Gets the parsed command-line option named [name] as a `String`.
-  ///
-  /// If no option named [name] was added to the [ArgParser], an [ArgumentError]
-  /// will be thrown.
   String? stringArg(String name, {bool global = false}) {
     if (global) {
       return globalResults![name] as String?;
@@ -1781,7 +1644,6 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and 
     return argResults![name] as String?;
   }
 
-  /// Gets the parsed command-line option named [name] as `List<String>`.
   List<String> stringsArg(String name, {bool global = false}) {
     if (global) {
       return globalResults![name] as List<String>;
@@ -1790,8 +1652,6 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and 
   }
 }
 
-/// A mixin which applies an implementation of [requiredArtifacts] that only
-/// downloads artifacts corresponding to potentially connected devices.
 mixin DeviceBasedDevelopmentArtifacts on FlutterCommand {
   @override
   Future<Set<DevelopmentArtifact>> get requiredArtifacts async {
@@ -1857,13 +1717,8 @@ DevelopmentArtifact? artifactFromTargetPlatform(TargetPlatform targetPlatform) {
   }
 }
 
-/// Returns true if s is either null, empty or is solely made of whitespace characters (as defined by String.trim).
 bool _isBlank(String s) => s.trim().isEmpty;
 
-/// Whether the tool should allow non-null safe builds.
-///
-/// The Dart SDK no longer supports non-null safe builds, so this value in the
-/// tool's context should always be [NonNullSafeBuilds.notAllowed].
 enum NonNullSafeBuilds {
   allowed,
   notAllowed,

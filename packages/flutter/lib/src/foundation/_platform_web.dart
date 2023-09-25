@@ -10,7 +10,6 @@ import 'platform.dart' as platform;
 
 export 'platform.dart' show TargetPlatform;
 
-/// The web implementation of [platform.defaultTargetPlatform].
 platform.TargetPlatform get defaultTargetPlatform {
   // To get a better guess at the targetPlatform we need to be able to reference
   // the window, but that won't be available until we fix the platforms

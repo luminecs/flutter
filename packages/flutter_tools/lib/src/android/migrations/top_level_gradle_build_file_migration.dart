@@ -18,7 +18,6 @@ tasks.register("clean", Delete) {
 }
 ''';
 
-/// Migrate the Gradle "clean" task to use modern, lazy declaration style.
 class TopLevelGradleBuildFileMigration extends ProjectMigrator {
   TopLevelGradleBuildFileMigration(
     AndroidProject project,

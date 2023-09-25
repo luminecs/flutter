@@ -97,9 +97,6 @@ class FlutterWebPlatform extends PlatformPlugin {
   final AsyncMemoizer<void> _closeMemo = AsyncMemoizer<void>();
   final String _root;
 
-  /// Allows only one test suite (typically one test file) to be loaded and run
-  /// at any given point in time. Loading more than one file at a time is known
-  /// to lead to flaky tests.
   final Pool _suiteLock = Pool(1);
 
   BrowserManager? _browserManager;
@@ -153,7 +150,6 @@ class FlutterWebPlatform extends PlatformPlugin {
 
   bool get _closed => _closeMemo.hasRun;
 
-  /// Uri of the test package.
   Uri get testUri => _flutterToolPackageConfig['test']!.packageUriRoot;
 
   WebRendererMode get _rendererMode  {
@@ -172,7 +168,6 @@ class FlutterWebPlatform extends PlatformPlugin {
   final shelf.Server _server;
   Uri get url => _server.url;
 
-  /// The ahem text file.
   File get _ahem => _fileSystem.file(_fileSystem.path.join(
     Cache.flutterRoot!,
     'packages',
@@ -181,7 +176,6 @@ class FlutterWebPlatform extends PlatformPlugin {
     'Ahem.ttf',
   ));
 
-  /// The require js binary.
   File get _requireJs => _fileSystem.file(_fileSystem.path.join(
         _artifacts!.getArtifactPath(Artifact.engineDartSdkPath, platform: TargetPlatform.web_javascript),
         'lib',
@@ -190,7 +184,6 @@ class FlutterWebPlatform extends PlatformPlugin {
         'require.js',
       ));
 
-  /// The ddc to dart stack trace mapper.
   File get _stackTraceMapper => _fileSystem.file(_fileSystem.path.join(
     _artifacts!.getArtifactPath(Artifact.engineDartSdkPath, platform: TargetPlatform.web_javascript),
     'lib',
@@ -205,7 +198,6 @@ class FlutterWebPlatform extends PlatformPlugin {
   File get _dartSdkSourcemaps => _fileSystem.file(
     _artifacts!.getHostArtifact(kDartSdkJsMapArtifactMap[_rendererMode]![_nullSafetyMode]!));
 
-  /// The precompiled test javascript.
   File get _testDartJs => _fileSystem.file(_fileSystem.path.join(
     testUri.toFilePath(),
     'dart.js',
@@ -375,8 +367,6 @@ class FlutterWebPlatform extends PlatformPlugin {
     }
   }
 
-  /// Serves a local build of CanvasKit, replacing the CDN build, which can
-  /// cause test flakiness due to reliance on network.
   shelf.Response _localCanvasKitHandler(shelf.Request request) {
     final String fullPath = _fileSystem.path.fromUri(request.url);
     if (!fullPath.startsWith('canvaskit/')) {
@@ -469,9 +459,6 @@ class FlutterWebPlatform extends PlatformPlugin {
     return suite;
   }
 
-  /// Returns the [BrowserManager] for [runtime], which should be a browser.
-  ///
-  /// If no browser manager is running yet, starts one.
   Future<BrowserManager> _launchBrowser(Runtime browser) {
     if (_browserManager != null) {
       throw StateError('Another browser is currently running.');
@@ -517,21 +504,12 @@ class FlutterWebPlatform extends PlatformPlugin {
 }
 
 class OneOffHandler {
-  /// A map from URL paths to handlers.
   final Map<String, shelf.Handler> _handlers = <String, shelf.Handler>{};
 
-  /// The counter of handlers that have been activated.
   int _counter = 0;
 
-  /// The actual [shelf.Handler] that dispatches requests.
   shelf.Handler get handler => _onRequest;
 
-  /// Creates a new one-off handler that forwards to [handler].
-  ///
-  /// Returns a string that's the URL path for hitting this handler, relative to
-  /// the URL for the one-off handler itself.
-  ///
-  /// [handler] will be unmounted as soon as it receives a request.
   String create(shelf.Handler handler) {
     final String path = _counter.toString();
     _handlers[path] = handler;
@@ -539,7 +517,6 @@ class OneOffHandler {
     return path;
   }
 
-  /// Dispatches [request] to the appropriate handler.
   FutureOr<shelf.Response> _onRequest(shelf.Request request) {
     final List<String> components = request.url.path.split('/');
     if (components.isEmpty) {
@@ -556,8 +533,6 @@ class OneOffHandler {
 }
 
 class BrowserManager {
-  /// Creates a new BrowserManager that communicates with [browser] over
-  /// [webSocket].
   BrowserManager._(this._browser, this._runtime, WebSocketChannel webSocket) {
     // The duration should be short enough that the debugging console is open as
     // soon as the user is done setting breakpoints, but long enough that a test
@@ -593,41 +568,22 @@ class BrowserManager {
     _channel.stream.listen(_onMessage, onDone: close);
   }
 
-  /// The browser instance that this is connected to via [_channel].
   final Chromium _browser;
   final Runtime _runtime;
 
-  /// The channel used to communicate with the browser.
-  ///
-  /// This is connected to a page running `static/host.dart`.
   late MultiChannel<dynamic> _channel;
 
-  /// The ID of the next suite to be loaded.
-  ///
-  /// This is used to ensure that the suites can be referred to consistently
-  /// across the client and server.
   int _suiteID = 0;
 
-  /// Whether the channel to the browser has closed.
   bool _closed = false;
 
-  /// The completer for [_BrowserEnvironment.displayPause].
-  ///
-  /// This will be `null` as long as the browser isn't displaying a pause
-  /// screen.
   CancelableCompleter<dynamic>? _pauseCompleter;
 
-  /// The controller for [_BrowserEnvironment.onRestart].
   final StreamController<dynamic> _onRestartController =
       StreamController<dynamic>.broadcast();
 
-  /// The environment to attach to each suite.
   late Future<_BrowserEnvironment> _environment;
 
-  /// Controllers for every suite in this browser.
-  ///
-  /// These are used to mark suites as debugging or not based on the browser's
-  /// pings.
   final Set<RunnerSuiteController> _controllers = <RunnerSuiteController>{};
 
   // A timer that's reset whenever we receive a message from the browser.
@@ -638,21 +594,6 @@ class BrowserManager {
 
   final AsyncMemoizer<dynamic> _closeMemoizer = AsyncMemoizer<dynamic>();
 
-  /// Starts the browser identified by [runtime] and has it connect to [url].
-  ///
-  /// [url] should serve a page that establishes a WebSocket connection with
-  /// this process. That connection, once established, should be emitted via
-  /// [future]. If [debug] is true, starts the browser in debug mode, with its
-  /// debugger interfaces on and detected.
-  ///
-  /// The browser will start in headless mode if [headless] is true.
-  ///
-  /// Add arbitrary browser flags via [webBrowserFlags].
-  ///
-  /// The [settings] indicate how to invoke this browser's executable.
-  ///
-  /// Returns the browser manager, or throws an [ApplicationException] if a
-  /// connection fails to be established.
   static Future<BrowserManager> start(
     ChromiumLauncher chromiumLauncher,
     Runtime runtime,
@@ -700,20 +641,11 @@ class BrowserManager {
     return completer.future;
   }
 
-  /// Loads [_BrowserEnvironment].
   Future<_BrowserEnvironment> _loadBrowserEnvironment() async {
     return _BrowserEnvironment(
         this, null, _browser.chromeConnection.url, _onRestartController.stream);
   }
 
-  /// Tells the browser to load a test suite from the URL [url].
-  ///
-  /// [url] should be an HTML page with a reference to the JS-compiled test
-  /// suite. [path] is the path of the original test suite file, which is used
-  /// for reporting. [suiteConfig] is the configuration for the test suite.
-  ///
-  /// If [mapper] is passed, it's used to map stack traces for errors coming
-  /// from this test suite.
   Future<RunnerSuite> load(
     String path,
     Uri url,
@@ -770,7 +702,6 @@ class BrowserManager {
     }
   }
 
-  /// An implementation of [Environment.displayPause].
   CancelableOperation<dynamic> _displayPause() {
     if (_pauseCompleter != null) {
       return _pauseCompleter!.operation;
@@ -787,7 +718,6 @@ class BrowserManager {
     return _pauseCompleter!.operation;
   }
 
-  /// The callback for handling messages received from the host page.
   void _onMessage(dynamic message) {
     assert(message is Map<String, dynamic>);
     if (message is Map<String, dynamic>) {
@@ -808,8 +738,6 @@ class BrowserManager {
     }
   }
 
-  /// Closes the manager and releases any resources it owns, including closing
-  /// the browser.
   Future<dynamic> close() {
     return _closeMemoizer.runOnce(() {
       _closed = true;
@@ -824,9 +752,6 @@ class BrowserManager {
   }
 }
 
-/// An implementation of [Environment] for the browser.
-///
-/// All methods forward directly to [BrowserManager].
 class _BrowserEnvironment implements Environment {
   _BrowserEnvironment(
     this._manager,

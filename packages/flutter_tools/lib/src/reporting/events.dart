@@ -4,10 +4,6 @@
 
 part of 'reporting.dart';
 
-/// A generic usage even that does not involve custom dimensions.
-///
-/// If sending values for custom dimensions is required, extend this class as
-/// below.
 class UsageEvent {
   UsageEvent(this.category, this.parameter, {
     this.label,
@@ -26,13 +22,6 @@ class UsageEvent {
   }
 }
 
-/// A usage event related to hot reload/restart.
-///
-/// On a successful hot reload, we collect stats that help understand scale of
-/// the update. For example, [syncedLibraryCount]/[finalLibraryCount] indicates
-/// how many libraries were affected by the hot reload request. Relation of
-/// [invalidatedSourcesCount] to [syncedLibraryCount] should help understand
-/// sync/transfer "overhead" of updating this number of source files.
 class HotEvent extends UsageEvent {
   HotEvent(String parameter, {
     required this.targetPlatform,
@@ -102,7 +91,6 @@ class HotEvent extends UsageEvent {
   }
 }
 
-/// An event that reports the result of a [DoctorValidator]
 class DoctorResultEvent extends UsageEvent {
   DoctorResultEvent({
     required this.validator,
@@ -138,7 +126,6 @@ class DoctorResultEvent extends UsageEvent {
   }
 }
 
-/// An event that reports on the result of a pub invocation.
 class PubResultEvent extends UsageEvent {
   PubResultEvent({
     required String context,
@@ -147,7 +134,6 @@ class PubResultEvent extends UsageEvent {
   }) : super('pub-result', context, label: result, flutterUsage: usage);
 }
 
-/// An event that reports something about a build.
 class BuildEvent extends UsageEvent {
   BuildEvent(String label, {
     String? command,
@@ -187,7 +173,6 @@ class BuildEvent extends UsageEvent {
   }
 }
 
-/// An event that reports the result of a top-level command.
 class CommandResultEvent extends UsageEvent {
   CommandResultEvent(super.commandPath, super.result)
       : super(flutterUsage: globals.flutterUsage);
@@ -219,10 +204,8 @@ class CommandResultEvent extends UsageEvent {
   }
 }
 
-/// An event that reports on changes in the configuration of analytics.
 class AnalyticsConfigEvent extends UsageEvent {
   AnalyticsConfigEvent({
-    /// Whether analytics reporting is being enabled (true) or disabled (false).
     required bool enabled,
   }) : super(
     'analytics',
@@ -232,7 +215,6 @@ class AnalyticsConfigEvent extends UsageEvent {
   );
 }
 
-/// An event that reports when the code size measurement is run via `--analyze-size`.
 class CodeSizeEvent extends UsageEvent {
   CodeSizeEvent(String platform, {
     required Usage flutterUsage,
@@ -243,16 +225,10 @@ class CodeSizeEvent extends UsageEvent {
   );
 }
 
-/// An event for tracking the usage of specific error handling fallbacks.
 class ErrorHandlingEvent extends UsageEvent {
   ErrorHandlingEvent(String parameter) : super('error-handling', parameter, flutterUsage: globals.flutterUsage);
 }
 
-/// Emit various null safety analytic events.
-///
-/// 1. The current null safety runtime mode.
-/// 2. The number of packages that are migrated, along with the total number of packages
-/// 3. The main packages language version.
 class NullSafetyAnalysisEvent implements UsageEvent {
   NullSafetyAnalysisEvent(
     this.packageConfig,
@@ -261,7 +237,6 @@ class NullSafetyAnalysisEvent implements UsageEvent {
     this.flutterUsage,
   );
 
-  /// The category for analytics events related to null safety.
   static const String kNullSafetyCategory = 'null-safety';
 
   final PackageConfig packageConfig;

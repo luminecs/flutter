@@ -22,13 +22,6 @@ String flutterMacOSFrameworkDir(BuildMode mode, FileSystem fileSystem,
       .normalize(fileSystem.path.dirname(flutterMacOSFramework));
 }
 
-/// Writes or rewrites Xcode property files with the specified information.
-///
-/// useMacOSConfig: Optional parameter that controls whether we use the macOS
-/// project file instead. Defaults to false.
-///
-/// targetOverride: Optional parameter, if null or unspecified the default value
-/// from xcode_backend.sh is used 'lib/main.dart'.
 Future<void> updateGeneratedXcodeProperties({
   required FlutterProject project,
   required BuildInfo buildInfo,
@@ -59,9 +52,6 @@ Future<void> updateGeneratedXcodeProperties({
   );
 }
 
-/// Generate a xcconfig file to inherit FLUTTER_ build settings
-/// for Xcode targets that need them.
-/// See [XcodeBasedProject.generatedXcodePropertiesFile].
 void _updateGeneratedXcodePropertiesFile({
   required FlutterProject project,
   required List<String> xcodeBuildSettings,
@@ -79,9 +69,6 @@ void _updateGeneratedXcodePropertiesFile({
   generatedXcodePropertiesFile.writeAsStringSync(localsBuffer.toString());
 }
 
-/// Generate a script to export all the FLUTTER_ environment variables needed
-/// as flags for Flutter tools.
-/// See [XcodeBasedProject.generatedEnvironmentVariableExportScript].
 void _updateGeneratedEnvironmentVariablesScript({
   required FlutterProject project,
   required List<String> xcodeBuildSettings,
@@ -105,7 +92,6 @@ void _updateGeneratedEnvironmentVariablesScript({
   globals.os.chmod(generatedModuleBuildPhaseScript, '755');
 }
 
-/// Build name parsed and validated from build info and manifest. Used for CFBundleShortVersionString.
 String? parsedBuildName({
   required FlutterManifest manifest,
   BuildInfo? buildInfo,
@@ -114,7 +100,6 @@ String? parsedBuildName({
   return validatedBuildNameForPlatform(TargetPlatform.ios, buildNameToParse, globals.logger);
 }
 
-/// Build number parsed and validated from build info and manifest. Used for CFBundleVersion.
 String? parsedBuildNumber({
   required FlutterManifest manifest,
   BuildInfo? buildInfo,
@@ -138,7 +123,6 @@ String? parsedBuildNumber({
   );
 }
 
-/// List of lines of build settings. Example: 'FLUTTER_BUILD_DIR=build'
 Future<List<String>> _xcodeBuildSettingsLines({
   required FlutterProject project,
   required BuildInfo buildInfo,

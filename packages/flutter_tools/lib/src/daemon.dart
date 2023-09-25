@@ -13,32 +13,21 @@ import 'base/logger.dart';
 import 'base/utils.dart';
 import 'convert.dart';
 
-/// A single message passed through the [DaemonConnection].
 class DaemonMessage {
   DaemonMessage(this.data, [this.binary]);
 
-  /// Content of the JSON message in the message.
   final Map<String, Object?> data;
 
-  /// Stream of the binary content of the message.
-  ///
-  /// Must be listened to if binary data is present.
   final Stream<List<int>>? binary;
 }
 
-/// Data of an event passed through the [DaemonConnection].
 class DaemonEventData {
   DaemonEventData(this.eventName, this.data, [this.binary]);
 
-  /// The name of the event.
   final String eventName;
 
-  /// The data of the event.
   final Object? data;
 
-  /// Stream of the binary content of the event.
-  ///
-  /// Must be listened to if binary data is present.
   final Stream<List<int>>? binary;
 }
 
@@ -49,16 +38,6 @@ enum _InputStreamParseState {
   binary,
 }
 
-/// Converts a binary stream to a stream of [DaemonMessage].
-///
-/// The daemon JSON-RPC protocol is defined as follows: every single line of
-/// text that starts with `[{` and ends with `}]` will be parsed as a JSON
-/// message. The array should contain only one single object which contains the
-/// message data.
-///
-/// If the JSON object contains the key [_binaryLengthKey] with an integer
-/// value (will be referred to as N), the following N bytes after the newline
-/// character will contain the binary part of the message.
 @visibleForTesting
 class DaemonInputStreamConverter {
   DaemonInputStreamConverter(this.inputStream) {
@@ -84,16 +63,12 @@ class DaemonInputStreamConverter {
   Stream<DaemonMessage> get convertedStream => _controller.stream;
 
   // Internal states
-  /// The current parse state, whether we are expecting JSON or binary data.
   _InputStreamParseState state = _InputStreamParseState.json;
 
-  /// The binary stream that is being transferred.
   late StreamController<List<int>> currentBinaryStream;
 
-  /// Remaining length in bytes that have to be sent to the binary stream.
   int remainingBinaryLength = 0;
 
-  /// Buffer to hold the current line of input data.
   final BytesBuilder bytesBuilder = BytesBuilder(copy: false);
 
   // Processes a single chunk received in the input stream.
@@ -118,7 +93,6 @@ class DaemonInputStreamConverter {
     }
   }
 
-  /// Processes a chunk in JSON mode, and returns the number of bytes processed.
   int _processChunkInJsonMode(List<int> chunk, int start) {
     const int LF = 10; // The '\n' character
 
@@ -166,7 +140,6 @@ class DaemonInputStreamConverter {
   }
 }
 
-/// A stream that a [DaemonConnection] uses to communicate with each other.
 class DaemonStreams {
   DaemonStreams(
     Stream<List<int>> rawInputStream,
@@ -177,15 +150,12 @@ class DaemonStreams {
     inputStream = DaemonInputStreamConverter(rawInputStream).convertedStream,
     _logger = logger;
 
-  /// Creates a [DaemonStreams] that uses stdin and stdout as the underlying streams.
   DaemonStreams.fromStdio(Stdio stdio, { required Logger logger })
     : this(stdio.stdin, stdio.stdout, logger: logger);
 
-  /// Creates a [DaemonStreams] that uses [Socket] as the underlying streams.
   DaemonStreams.fromSocket(Socket socket, { required Logger logger })
     : this(socket, socket, logger: logger);
 
-  /// Connects to a server and creates a [DaemonStreams] from the connection as the underlying streams.
   factory DaemonStreams.connect(String host, int port, { required Logger logger }) {
     final Future<Socket> socketFuture = Socket.connect(host, port);
     final StreamController<List<int>> inputStreamController = StreamController<List<int>>();
@@ -206,10 +176,8 @@ class DaemonStreams {
   final StreamSink<List<int>> _outputSink;
   final Logger _logger;
 
-  /// Stream that contains input to the [DaemonConnection].
   final Stream<DaemonMessage> inputStream;
 
-  /// Outputs a message through the connection.
   void send(Map<String, Object?> message, [ List<int>? binary ]) {
     try {
       if (binary != null) {
@@ -230,13 +198,11 @@ class DaemonStreams {
     }
   }
 
-  /// Cleans up any resources used.
   Future<void> dispose() async {
     unawaited(_outputSink.close());
   }
 }
 
-/// Connection between a flutter daemon and a client.
 class DaemonConnection {
   DaemonConnection({
     required DaemonStreams daemonStreams,
@@ -266,18 +232,13 @@ class DaemonConnection {
   final StreamController<DaemonEventData> _events = StreamController<DaemonEventData>.broadcast();
   final StreamController<DaemonMessage> _incomingCommands = StreamController<DaemonMessage>();
 
-  /// A stream that contains all the incoming requests.
   Stream<DaemonMessage> get incomingCommands => _incomingCommands.stream;
 
-  /// Listens to the event with the event name [eventToListen].
   Stream<DaemonEventData> listenToEvent(String eventToListen) {
     return _events.stream
       .where((DaemonEventData event) => event.eventName == eventToListen);
   }
 
-  /// Sends a request to the other end of the connection.
-  ///
-  /// Returns a [Future] that resolves with the content.
   Future<Object?> sendRequest(String method, [Object? params, List<int>? binary]) async {
     final String id = '${++_outgoingRequestId}';
     final Completer<Object?> completer = Completer<Object?>();
@@ -292,7 +253,6 @@ class DaemonConnection {
     return completer.future;
   }
 
-  /// Sends a response to the other end of the connection.
   void sendResponse(Object id, [Object? result]) {
     _daemonStreams.send(<String, Object?>{
       'id': id,
@@ -300,7 +260,6 @@ class DaemonConnection {
     });
   }
 
-  /// Sends an error response to the other end of the connection.
   void sendErrorResponse(Object id, Object? error, StackTrace trace) {
     _daemonStreams.send(<String, Object?>{
       'id': id,
@@ -309,7 +268,6 @@ class DaemonConnection {
     });
   }
 
-  /// Sends an event to the client.
   void sendEvent(String name, [ Object? params, List<int>? binary ]) {
     _daemonStreams.send(<String, Object?>{
       'event': name,
@@ -317,19 +275,6 @@ class DaemonConnection {
     }, binary);
   }
 
-  /// Handles the input from the stream.
-  ///
-  /// There are three kinds of data: Request, Response, Event.
-  ///
-  /// Request:
-  /// {"id": <Object>. "method": <String>, "params": <optional, Object?>}
-  ///
-  /// Response:
-  /// {"id": <Object>. "result": <optional, Object?>} for a successful response.
-  /// {"id": <Object>. "error": <Object>, "stackTrace": <String>} for an error response.
-  ///
-  /// Event:
-  /// {"event": <String>. "params": <optional, Object?>}
   void _handleMessage(DaemonMessage message) {
     final Map<String, Object?> data = message.data;
     if (data['id'] != null) {
@@ -368,7 +313,6 @@ class DaemonConnection {
     }
   }
 
-  /// Cleans up any resources used in the connection.
   Future<void> dispose() async {
     await _commandSubscription.cancel();
     await _daemonStreams.dispose();

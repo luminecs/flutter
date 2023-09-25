@@ -7,7 +7,6 @@ import 'dart:io';
 
 final TokenLogger tokenLogger = TokenLogger();
 
-/// Class to keep track of used tokens and versions.
 class TokenLogger {
   TokenLogger();
 
@@ -19,7 +18,6 @@ class TokenLogger {
     _versionMap = versionMap;
   }
 
-  /// Map of all tokens to their values.
   late Map<String, dynamic> _allTokens;
 
   // Map of versions to their token files.
@@ -34,7 +32,6 @@ class TokenLogger {
     _usedTokens.clear();
   }
 
-  /// Logs a token.
   void log(String token) {
     if (!_allTokens.containsKey(token)) {
       print('\x1B[31m' 'Token unavailable: $token' '\x1B[0m');
@@ -43,7 +40,6 @@ class TokenLogger {
     _usedTokens.add(token);
   }
 
-  /// Prints version usage to the console.
   void printVersionUsage({required bool verbose}) {
     final String versionsString = 'Versions used: ${_versionMap.keys.join(', ')}';
     print(versionsString);
@@ -60,7 +56,6 @@ class TokenLogger {
     }
   }
 
-  /// Prints tokens usage to the console.
   void printTokensUsage({required bool verbose}) {
     final Set<String> allTokensSet = _allTokens.keys.toSet();
 
@@ -78,7 +73,6 @@ class TokenLogger {
     print('Tokens used: ${_usedTokens.length}/${_allTokens.length}');
   }
 
-  /// Dumps version and tokens usage to a file.
   void dumpToFile(String path) {
     final File file = File(path);
     file.createSync(recursive: true);

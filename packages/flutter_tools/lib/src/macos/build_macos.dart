@@ -21,17 +21,8 @@ import 'migrations/flutter_application_migration.dart';
 import 'migrations/macos_deployment_target_migration.dart';
 import 'migrations/remove_macos_framework_link_and_embedding_migration.dart';
 
-/// When run in -quiet mode, Xcode should only print from the underlying tasks to stdout.
-/// Passing this regexp to trace moves the stdout output to stderr.
-///
-/// Filter out xcodebuild logging unrelated to macOS builds:
-/// ```
-/// xcodebuild[2096:1927385] Requested but did not find extension point with identifier Xcode.IDEKit.ExtensionPointIdentifierToBundleIdentifier for extension Xcode.DebuggerFoundation.AppExtensionToBundleIdentifierMap.watchOS of plug-in com.apple.dt.IDEWatchSupportCore
-/// note: Using new build system
-/// ```
 final RegExp _filteredOutput = RegExp(r'^((?!Requested but did not find extension point with identifier|note\:).)*$');
 
-/// Builds the macOS project through xcodebuild.
 // TODO(zanderso): refactor to share code with the existing iOS code.
 Future<void> buildMacOS({
   required FlutterProject flutterProject,

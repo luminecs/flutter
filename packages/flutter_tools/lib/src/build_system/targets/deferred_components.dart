@@ -12,10 +12,7 @@ import '../build_system.dart';
 import '../depfile.dart';
 import 'android.dart';
 
-/// Creates a [DeferredComponentsGenSnapshotValidator], runs the checks, and displays the validator
-/// output to the developer if changes are recommended.
 class DeferredComponentsGenSnapshotValidatorTarget extends Target {
-  /// Create an [AndroidAotDeferredComponentsBundle] implementation for a given [targetPlatform] and [buildMode].
   DeferredComponentsGenSnapshotValidatorTarget({
     required this.deferredComponentsDependencies,
     required this.nonDeferredComponentsDependencies,
@@ -23,19 +20,13 @@ class DeferredComponentsGenSnapshotValidatorTarget extends Target {
     this.exitOnFail = true,
   });
 
-  /// The [AndroidAotDeferredComponentsBundle] derived target instances this rule depends on.
   final List<AndroidAotDeferredComponentsBundle> deferredComponentsDependencies;
   final List<Target> nonDeferredComponentsDependencies;
 
-  /// The title of the [DeferredComponentsGenSnapshotValidator] that is
-  /// displayed to the developer when logging results.
   final String? title;
 
-  /// Whether to exit the tool if a recommended change is found by the
-  /// [DeferredComponentsGenSnapshotValidator].
   final bool exitOnFail;
 
-  /// The abis to validate.
   List<String> get _abis {
     final List<String> abis = <String>[];
     for (final AndroidAotDeferredComponentsBundle target in deferredComponentsDependencies) {

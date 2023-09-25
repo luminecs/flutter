@@ -13,24 +13,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines the color and border properties of [ToggleButtons] widgets.
-///
-/// Used by [ToggleButtonsTheme] to control the color and border properties
-/// of toggle buttons in a widget subtree.
-///
-/// To obtain the current [ToggleButtonsTheme], use [ToggleButtonsTheme.of].
-///
-/// Values specified here are used for [ToggleButtons] properties that are not
-/// given an explicit non-null value.
-///
-/// See also:
-///
-///  * [ToggleButtonsTheme], which describes the actual configuration of a
-///    toggle buttons theme.
 @immutable
 class ToggleButtonsThemeData with Diagnosticable {
-  /// Creates the set of color and border properties used to configure
-  /// [ToggleButtons].
   const ToggleButtonsThemeData({
     this.textStyle,
     this.constraints,
@@ -49,69 +33,36 @@ class ToggleButtonsThemeData with Diagnosticable {
     this.borderWidth,
   });
 
-  /// The default text style for [ToggleButtons.children].
-  ///
-  /// [TextStyle.color] will be ignored and substituted by [color],
-  /// [selectedColor] or [disabledColor] depending on whether the buttons
-  /// are active, selected, or disabled.
   final TextStyle? textStyle;
 
-  /// Defines the button's size.
-  ///
-  /// Typically used to constrain the button's minimum size.
   final BoxConstraints? constraints;
 
-  /// The color for descendant [Text] and [Icon] widgets if the toggle button
-  /// is enabled.
   final Color? color;
 
-  /// The color for descendant [Text] and [Icon] widgets if the toggle button
-  /// is selected.
   final Color? selectedColor;
 
-  /// The color for descendant [Text] and [Icon] widgets if the toggle button
-  /// is disabled.
   final Color? disabledColor;
 
-  /// The fill color for selected toggle buttons.
   final Color? fillColor;
 
-  /// The color to use for filling the button when the button has input focus.
   final Color? focusColor;
 
-  /// The highlight color for the toggle button's [InkWell].
   final Color? highlightColor;
 
-  /// The splash color for the toggle button's [InkWell].
   final Color? splashColor;
 
-  /// The color to use for filling the toggle button when the button has a
-  /// pointer hovering over it.
   final Color? hoverColor;
 
-  /// The border color to display when the toggle button is enabled.
   final Color? borderColor;
 
-  /// The border color to display when the toggle button is selected.
   final Color? selectedBorderColor;
 
-  /// The border color to display when the toggle button is disabled.
   final Color? disabledBorderColor;
 
-  /// The width of the border surrounding each toggle button.
-  ///
-  /// This applies to both the greater surrounding border, as well as the
-  /// borders dividing each toggle button.
-  ///
-  /// To render a hairline border (one physical pixel), set borderWidth to 0.0.
-  /// See [BorderSide.width] for more details on hairline borders.
   final double? borderWidth;
 
-  /// The radii of the border's corners.
   final BorderRadius? borderRadius;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   ToggleButtonsThemeData copyWith({
     TextStyle? textStyle,
     BoxConstraints? constraints,
@@ -148,7 +99,6 @@ class ToggleButtonsThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two toggle buttons themes.
   static ToggleButtonsThemeData? lerp(ToggleButtonsThemeData? a, ToggleButtonsThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -238,33 +188,15 @@ class ToggleButtonsThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines color and border parameters for
-/// [ToggleButtons] in this widget's subtree.
-///
-/// Values specified here are used for [ToggleButtons] properties that are not
-/// given an explicit non-null value.
 class ToggleButtonsTheme extends InheritedTheme {
-  /// Creates a toggle buttons theme that controls the color and border
-  /// parameters for [ToggleButtons].
   const ToggleButtonsTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Specifies the color and border values for descendant [ToggleButtons] widgets.
   final ToggleButtonsThemeData data;
 
-  /// The closest instance of this class that encloses the given context.
-  ///
-  /// If there is no enclosing [ToggleButtonsTheme] widget, then
-  /// [ThemeData.toggleButtonsTheme] is used.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// ToggleButtonsThemeData theme = ToggleButtonsTheme.of(context);
-  /// ```
   static ToggleButtonsThemeData of(BuildContext context) {
     final ToggleButtonsTheme? toggleButtonsTheme = context.dependOnInheritedWidgetOfExactType<ToggleButtonsTheme>();
     return toggleButtonsTheme?.data ?? Theme.of(context).toggleButtonsTheme;

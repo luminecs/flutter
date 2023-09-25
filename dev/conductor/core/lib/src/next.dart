@@ -17,12 +17,6 @@ import 'state.dart' as state_import;
 const String kStateOption = 'state-file';
 const String kYesFlag = 'yes';
 
-/// Command to proceed from one [pb.ReleasePhase] to the next.
-///
-/// After `conductor start`, the rest of the release steps are initiated by the
-/// user via `conductor next`. Thus this command's behavior is conditional upon
-/// which phase of the release the user is currently in. This is implemented
-/// with a switch case statement.
 class NextCommand extends Command<void> {
   NextCommand({
     required this.checkouts,
@@ -71,10 +65,6 @@ class NextCommand extends Command<void> {
   }
 }
 
-/// Utility class for proceeding to the next step in a release.
-///
-/// Any calls to functions that cause side effects are wrapped in methods to
-/// allow overriding in unit tests.
 class NextContext extends Context {
   const NextContext({
     required this.autoAccept,
@@ -352,16 +342,6 @@ class NextContext extends Context {
     updateState(state, stdio.logs);
   }
 
-  /// Push the working branch to the user's mirror.
-  ///
-  /// [repository] represents the actual Git repository on disk, and is used to
-  /// call `git push`, while [pbRepository] represents the user-specified
-  /// configuration for the repository, and is used to read the name of the
-  /// working branch and the mirror's remote name.
-  ///
-  /// May throw either a [ConductorException] if the user already has a branch
-  /// of the same name on their mirror, or a [GitException] for any other
-  /// failures from the underlying git process call.
   @visibleForTesting
   Future<void> pushWorkingBranch(Repository repository, pb.Repository pbRepository) async {
     try {

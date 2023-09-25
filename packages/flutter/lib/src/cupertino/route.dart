@@ -25,22 +25,8 @@ const int _kMaxDroppedSwipePageForwardAnimationTime = 800; // Milliseconds.
 // user releases a page mid swipe.
 const int _kMaxPageBackAnimationTime = 300; // Milliseconds.
 
-/// Barrier color used for a barrier visible during transitions for Cupertino
-/// page routes.
-///
-/// This barrier color is only used for full-screen page routes with
-/// `fullscreenDialog: false`.
-///
-/// By default, `fullscreenDialog` Cupertino route transitions have no
-/// `barrierColor`, and [CupertinoDialogRoute]s and [CupertinoModalPopupRoute]s
-/// have a `barrierColor` defined by [kCupertinoModalBarrierColor].
-///
-/// A relatively rigorous eyeball estimation.
 const Color _kCupertinoPageTransitionBarrierColor = Color(0x18000000);
 
-/// Barrier color for a Cupertino modal barrier.
-///
-/// Extracted from https://developer.apple.com/design/resources/.
 const Color kCupertinoModalBarrierColor = CupertinoDynamicColor.withBrightness(
   color: Color(0x33000000),
   darkColor: Color(0x7A000000),
@@ -67,52 +53,14 @@ final Animatable<Offset> _kBottomUpTween = Tween<Offset>(
   end: Offset.zero,
 );
 
-/// A mixin that replaces the entire screen with an iOS transition for a
-/// [PageRoute].
-///
-/// {@template flutter.cupertino.cupertinoRouteTransitionMixin}
-/// The page slides in from the right and exits in reverse. The page also shifts
-/// to the left in parallax when another page enters to cover it.
-///
-/// The page slides in from the bottom and exits in reverse with no parallax
-/// effect for fullscreen dialogs.
-/// {@endtemplate}
-///
-/// See also:
-///
-///  * [MaterialRouteTransitionMixin], which is a mixin that provides
-///    platform-appropriate transitions for a [PageRoute].
-///  * [CupertinoPageRoute], which is a [PageRoute] that leverages this mixin.
 mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
-  /// Builds the primary contents of the route.
   @protected
   Widget buildContent(BuildContext context);
 
-  /// {@template flutter.cupertino.CupertinoRouteTransitionMixin.title}
-  /// A title string for this route.
-  ///
-  /// Used to auto-populate [CupertinoNavigationBar] and
-  /// [CupertinoSliverNavigationBar]'s `middle`/`largeTitle` widgets when
-  /// one is not manually supplied.
-  /// {@endtemplate}
   String? get title;
 
   ValueNotifier<String?>? _previousTitle;
 
-  /// The title string of the previous [CupertinoPageRoute].
-  ///
-  /// The [ValueListenable]'s value is readable after the route is installed
-  /// onto a [Navigator]. The [ValueListenable] will also notify its listeners
-  /// if the value changes (such as by replacing the previous route).
-  ///
-  /// The [ValueListenable] itself will be null before the route is installed.
-  /// Its content value will be null if the previous route has no title or
-  /// is not a [CupertinoPageRoute].
-  ///
-  /// See also:
-  ///
-  ///  * [ValueListenableBuilder], which can be used to listen and rebuild
-  ///    widgets based on a ValueListenable.
   ValueListenable<String?> get previousTitle {
     assert(
       _previousTitle != null,
@@ -156,37 +104,12 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
     return nextRoute is CupertinoRouteTransitionMixin && !nextRoute.fullscreenDialog;
   }
 
-  /// True if an iOS-style back swipe pop gesture is currently underway for [route].
-  ///
-  /// This just check the route's [NavigatorState.userGestureInProgress].
-  ///
-  /// See also:
-  ///
-  ///  * [popGestureEnabled], which returns true if a user-triggered pop gesture
-  ///    would be allowed.
   static bool isPopGestureInProgress(PageRoute<dynamic> route) {
     return route.navigator!.userGestureInProgress;
   }
 
-  /// True if an iOS-style back swipe pop gesture is currently underway for this route.
-  ///
-  /// See also:
-  ///
-  ///  * [isPopGestureInProgress], which returns true if a Cupertino pop gesture
-  ///    is currently underway for specific route.
-  ///  * [popGestureEnabled], which returns true if a user-triggered pop gesture
-  ///    would be allowed.
   bool get popGestureInProgress => isPopGestureInProgress(this);
 
-  /// Whether a pop gesture can be started by the user.
-  ///
-  /// Returns true if the user can edge-swipe to a previous route.
-  ///
-  /// Returns false once [isPopGestureInProgress] is true, but
-  /// [isPopGestureInProgress] can only become true if [popGestureEnabled] was
-  /// true first.
-  ///
-  /// This should only be used between frames, not during build.
   bool get popGestureEnabled => _isPopGestureEnabled(this);
 
   static bool _isPopGestureEnabled<T>(PageRoute<T> route) {
@@ -251,20 +174,6 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
     );
   }
 
-  /// Returns a [CupertinoFullscreenDialogTransition] if [route] is a full
-  /// screen dialog, otherwise a [CupertinoPageTransition] is returned.
-  ///
-  /// Used by [CupertinoPageRoute.buildTransitions].
-  ///
-  /// This method can be applied to any [PageRoute], not just
-  /// [CupertinoPageRoute]. It's typically used to provide a Cupertino style
-  /// horizontal transition for material widgets when the target platform
-  /// is [TargetPlatform.iOS].
-  ///
-  /// See also:
-  ///
-  ///  * [CupertinoPageTransitionsBuilder], which uses this method to define a
-  ///    [PageTransitionsBuilder] for the [PageTransitionsTheme].
   static Widget buildPageTransitions<T>(
     PageRoute<T> route,
     BuildContext context,
@@ -305,37 +214,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
   }
 }
 
-/// A modal route that replaces the entire screen with an iOS transition.
-///
-/// {@macro flutter.cupertino.cupertinoRouteTransitionMixin}
-///
-/// By default, when a modal route is replaced by another, the previous route
-/// remains in memory. To free all the resources when this is not necessary, set
-/// [maintainState] to false.
-///
-/// The type `T` specifies the return type of the route which can be supplied as
-/// the route is popped from the stack via [Navigator.pop] when an optional
-/// `result` can be provided.
-///
-/// If `barrierDismissible` is true, then pressing the escape key on the keyboard
-/// will cause the current route to be popped with null as the value.
-///
-/// See also:
-///
-///  * [CupertinoRouteTransitionMixin], for a mixin that provides iOS transition
-///    for this modal route.
-///  * [MaterialPageRoute], for an adaptive [PageRoute] that uses a
-///    platform-appropriate transition.
-///  * [CupertinoPageScaffold], for applications that have one page with a fixed
-///    navigation bar on top.
-///  * [CupertinoTabScaffold], for applications that have a tab bar at the
-///    bottom with multiple pages.
-///  * [CupertinoPage], for a [Page] version of this class.
 class CupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMixin<T> {
-  /// Creates a page route for use in an iOS designed app.
-  ///
-  /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
-  /// be null.
   CupertinoPageRoute({
     required this.builder,
     this.title,
@@ -348,7 +227,6 @@ class CupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMi
     assert(opaque);
   }
 
-  /// Builds the primary contents of the route.
   final WidgetBuilder builder;
 
   @override
@@ -394,24 +272,7 @@ class _PageBasedCupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTr
   String get debugLabel => '${super.debugLabel}(${_page.name})';
 }
 
-/// A page that creates a cupertino style [PageRoute].
-///
-/// {@macro flutter.cupertino.cupertinoRouteTransitionMixin}
-///
-/// By default, when a created modal route is replaced by another, the previous
-/// route remains in memory. To free all the resources when this is not
-/// necessary, set [maintainState] to false.
-///
-/// The type `T` specifies the return type of the route which can be supplied as
-/// the route is popped from the stack via [Navigator.transitionDelegate] by
-/// providing the optional `result` argument to the
-/// [RouteTransitionRecord.markForPop] in the [TransitionDelegate.resolve].
-///
-/// See also:
-///
-///  * [CupertinoPageRoute], for a [PageRoute] version of this class.
 class CupertinoPage<T> extends Page<T> {
-  /// Creates a cupertino page.
   const CupertinoPage({
     required this.child,
     this.maintainState = true,
@@ -424,19 +285,14 @@ class CupertinoPage<T> extends Page<T> {
     super.restorationId,
   });
 
-  /// The content to be shown in the [Route] created by this page.
   final Widget child;
 
-  /// {@macro flutter.cupertino.CupertinoRouteTransitionMixin.title}
   final String? title;
 
-  /// {@macro flutter.widgets.ModalRoute.maintainState}
   final bool maintainState;
 
-  /// {@macro flutter.widgets.PageRoute.fullscreenDialog}
   final bool fullscreenDialog;
 
-  /// {@macro flutter.widgets.TransitionRoute.allowSnapshotting}
   final bool allowSnapshotting;
 
   @override
@@ -445,19 +301,7 @@ class CupertinoPage<T> extends Page<T> {
   }
 }
 
-/// Provides an iOS-style page transition animation.
-///
-/// The page slides in from the right and exits in reverse. It also shifts to the left in
-/// a parallax motion when another page enters to cover it.
 class CupertinoPageTransition extends StatelessWidget {
-  /// Creates an iOS-style page transition.
-  ///
-  ///  * `primaryRouteAnimation` is a linear route animation from 0.0 to 1.0
-  ///    when this screen is being pushed.
-  ///  * `secondaryRouteAnimation` is a linear route animation from 0.0 to 1.0
-  ///    when another screen is being pushed on top of this one.
-  ///  * `linearTransition` is whether to perform the transitions linearly.
-  ///    Used to precisely track back gesture drags.
   CupertinoPageTransition({
     super.key,
     required Animation<double> primaryRouteAnimation,
@@ -497,7 +341,6 @@ class CupertinoPageTransition extends StatelessWidget {
   final Animation<Offset> _secondaryPositionAnimation;
   final Animation<Decoration> _primaryShadowAnimation;
 
-  /// The widget below this widget in the tree.
   final Widget child;
 
   @override
@@ -520,19 +363,7 @@ class CupertinoPageTransition extends StatelessWidget {
   }
 }
 
-/// An iOS-style transition used for summoning fullscreen dialogs.
-///
-/// For example, used when creating a new calendar event by bringing in the next
-/// screen from the bottom.
 class CupertinoFullscreenDialogTransition extends StatelessWidget {
-  /// Creates an iOS-style transition used for summoning fullscreen dialogs.
-  ///
-  ///  * `primaryRouteAnimation` is a linear route animation from 0.0 to 1.0
-  ///    when this screen is being pushed.
-  ///  * `secondaryRouteAnimation` is a linear route animation from 0.0 to 1.0
-  ///    when another screen is being pushed on top of this one.
-  ///  * `linearTransition` is whether to perform the secondary transition linearly.
-  ///    Used to precisely track back gesture drags.
   CupertinoFullscreenDialogTransition({
     super.key,
     required Animation<double> primaryRouteAnimation,
@@ -560,7 +391,6 @@ class CupertinoFullscreenDialogTransition extends StatelessWidget {
   // When this page is becoming covered by another page.
   final Animation<Offset> _secondaryPositionAnimation;
 
-  /// The widget below this widget in the tree.
   final Widget child;
 
   @override
@@ -579,17 +409,6 @@ class CupertinoFullscreenDialogTransition extends StatelessWidget {
   }
 }
 
-/// This is the widget side of [_CupertinoBackGestureController].
-///
-/// This widget provides a gesture recognizer which, when it determines the
-/// route can be closed with a back gesture, creates the controller and
-/// feeds it the input from the gesture recognizer.
-///
-/// The gesture data is converted from absolute coordinates to logical
-/// coordinates by this widget.
-///
-/// The type `T` specifies the return type of the route with which this gesture
-/// detector is associated.
 class _CupertinoBackGestureDetector<T> extends StatefulWidget {
   const _CupertinoBackGestureDetector({
     super.key,
@@ -699,20 +518,7 @@ class _CupertinoBackGestureDetectorState<T> extends State<_CupertinoBackGestureD
   }
 }
 
-/// A controller for an iOS-style back gesture.
-///
-/// This is created by a [CupertinoPageRoute] in response from a gesture caught
-/// by a [_CupertinoBackGestureDetector] widget, which then also feeds it input
-/// from the gesture. It controls the animation controller owned by the route,
-/// based on the input provided by the gesture detector.
-///
-/// This class works entirely in logical coordinates (0.0 is new page dismissed,
-/// 1.0 is new page on top).
-///
-/// The type `T` specifies the return type of the route with which this gesture
-/// detector controller is associated.
 class _CupertinoBackGestureController<T> {
-  /// Creates a controller for an iOS-style back gesture.
   _CupertinoBackGestureController({
     required this.navigator,
     required this.controller,
@@ -723,14 +529,10 @@ class _CupertinoBackGestureController<T> {
   final AnimationController controller;
   final NavigatorState navigator;
 
-  /// The drag gesture has changed by [fractionalDelta]. The total range of the
-  /// drag should be 0.0 to 1.0.
   void dragUpdate(double delta) {
     controller.value -= delta;
   }
 
-  /// The drag gesture has ended with a horizontal motion of
-  /// [fractionalVelocity] as a fraction of screen width per second.
   void dragEnd(double velocity) {
     // Fling in the appropriate direction.
     //
@@ -897,7 +699,6 @@ class _CupertinoEdgeShadowDecoration extends Decoration {
   }
 }
 
-/// A [BoxPainter] used to draw the page transition shadow using gradients.
 class _CupertinoEdgeShadowPainter extends BoxPainter {
   _CupertinoEdgeShadowPainter(
     this._decoration,
@@ -967,43 +768,7 @@ class _CupertinoEdgeShadowPainter extends BoxPainter {
   }
 }
 
-/// A route that shows a modal iOS-style popup that slides up from the
-/// bottom of the screen.
-///
-/// Such a popup is an alternative to a menu or a dialog and prevents the user
-/// from interacting with the rest of the app.
-///
-/// It is used internally by [showCupertinoModalPopup] or can be directly pushed
-/// onto the [Navigator] stack to enable state restoration. See
-/// [showCupertinoModalPopup] for a state restoration app example.
-///
-/// The `barrierColor` argument determines the [Color] of the barrier underneath
-/// the popup. When unspecified, the barrier color defaults to a light opacity
-/// black scrim based on iOS's dialog screens. To correctly have iOS resolve
-/// to the appropriate modal colors, pass in
-/// `CupertinoDynamicColor.resolve(kCupertinoModalBarrierColor, context)`.
-///
-/// The `barrierDismissible` argument determines whether clicking outside the
-/// popup results in dismissal. It is `true` by default.
-///
-/// The `semanticsDismissible` argument is used to determine whether the
-/// semantics of the modal barrier are included in the semantics tree.
-///
-/// The `routeSettings` argument is used to provide [RouteSettings] to the
-/// created Route.
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// See also:
-///
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
-///  * [CupertinoActionSheet], which is the widget usually returned by the
-///    `builder` argument.
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/views/action-sheets/>
 class CupertinoModalPopupRoute<T> extends PopupRoute<T> {
-  /// A route that shows a modal iOS-style popup that slides up from the
-  /// bottom of the screen.
   CupertinoModalPopupRoute({
     required this.builder,
     this.barrierLabel = 'Dismiss',
@@ -1016,14 +781,6 @@ class CupertinoModalPopupRoute<T> extends PopupRoute<T> {
   }) : _barrierDismissible = barrierDismissible,
        _semanticsDismissible = semanticsDismissible;
 
-  /// A builder that builds the widget tree for the [CupertinoModalPopupRoute].
-  ///
-  /// The [builder] argument typically builds a [CupertinoActionSheet] widget.
-  ///
-  /// Content below the widget is dimmed with a [ModalBarrier]. The widget built
-  /// by the [builder] does not share a context with the route it was originally
-  /// built from. Use a [StatefulBuilder] or a custom [StatefulWidget] if the
-  /// widget needs to update dynamically.
   final WidgetBuilder builder;
 
   final bool _barrierDismissible;
@@ -1049,7 +806,6 @@ class CupertinoModalPopupRoute<T> extends PopupRoute<T> {
 
   late Tween<Offset> _offsetTween;
 
-  /// {@macro flutter.widgets.DisplayFeatureSubScreen.anchorPoint}
   final Offset? anchorPoint;
 
   @override
@@ -1093,70 +849,6 @@ class CupertinoModalPopupRoute<T> extends PopupRoute<T> {
   }
 }
 
-/// Shows a modal iOS-style popup that slides up from the bottom of the screen.
-///
-/// Such a popup is an alternative to a menu or a dialog and prevents the user
-/// from interacting with the rest of the app.
-///
-/// The `context` argument is used to look up the [Navigator] for the popup.
-/// It is only used when the method is called. Its corresponding widget can be
-/// safely removed from the tree before the popup is closed.
-///
-/// The `barrierColor` argument determines the [Color] of the barrier underneath
-/// the popup. When unspecified, the barrier color defaults to a light opacity
-/// black scrim based on iOS's dialog screens.
-///
-/// The `barrierDismissible` argument determines whether clicking outside the
-/// popup results in dismissal. It is `true` by default.
-///
-/// The `useRootNavigator` argument is used to determine whether to push the
-/// popup to the [Navigator] furthest from or nearest to the given `context`. It
-/// is `true` by default.
-///
-/// The `semanticsDismissible` argument is used to determine whether the
-/// semantics of the modal barrier are included in the semantics tree.
-///
-/// The `routeSettings` argument is used to provide [RouteSettings] to the
-/// created Route.
-///
-/// The `builder` argument typically builds a [CupertinoActionSheet] widget.
-/// Content below the widget is dimmed with a [ModalBarrier]. The widget built
-/// by the `builder` does not share a context with the location that
-/// [showCupertinoModalPopup] is originally called from. Use a
-/// [StatefulBuilder] or a custom [StatefulWidget] if the widget needs to
-/// update dynamically.
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// Returns a `Future` that resolves to the value that was passed to
-/// [Navigator.pop] when the popup was closed.
-///
-/// ### State Restoration in Modals
-///
-/// Using this method will not enable state restoration for the modal. In order
-/// to enable state restoration for a modal, use [Navigator.restorablePush]
-/// or [Navigator.restorablePushNamed] with [CupertinoModalPopupRoute].
-///
-/// For more information about state restoration, see [RestorationManager].
-///
-/// {@tool dartpad}
-/// This sample demonstrates how to create a restorable Cupertino modal route.
-/// This is accomplished by enabling state restoration by specifying
-/// [CupertinoApp.restorationScopeId] and using [Navigator.restorablePush] to
-/// push [CupertinoModalPopupRoute] when the [CupertinoButton] is tapped.
-///
-/// {@macro flutter.widgets.RestorationManager}
-///
-/// ** See code in examples/api/lib/cupertino/route/show_cupertino_modal_popup.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
-///  * [CupertinoActionSheet], which is the widget usually returned by the
-///    `builder` argument to [showCupertinoModalPopup].
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/views/action-sheets/>
 Future<T?> showCupertinoModalPopup<T>({
   required BuildContext context,
   required WidgetBuilder builder,
@@ -1207,62 +899,6 @@ Widget _buildCupertinoDialogTransitions(BuildContext context, Animation<double> 
   );
 }
 
-/// Displays an iOS-style dialog above the current contents of the app, with
-/// iOS-style entrance and exit animations, modal barrier color, and modal
-/// barrier behavior (by default, the dialog is not dismissible with a tap on
-/// the barrier).
-///
-/// This function takes a `builder` which typically builds a [CupertinoAlertDialog]
-/// widget. Content below the dialog is dimmed with a [ModalBarrier]. The widget
-/// returned by the `builder` does not share a context with the location that
-/// [showCupertinoDialog] is originally called from. Use a [StatefulBuilder] or
-/// a custom [StatefulWidget] if the dialog needs to update dynamically.
-///
-/// The `context` argument is used to look up the [Navigator] for the dialog.
-/// It is only used when the method is called. Its corresponding widget can
-/// be safely removed from the tree before the dialog is closed.
-///
-/// The `useRootNavigator` argument is used to determine whether to push the
-/// dialog to the [Navigator] furthest from or nearest to the given `context`.
-/// By default, `useRootNavigator` is `true` and the dialog route created by
-/// this method is pushed to the root navigator.
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// If the application has multiple [Navigator] objects, it may be necessary to
-/// call `Navigator.of(context, rootNavigator: true).pop(result)` to close the
-/// dialog rather than just `Navigator.pop(context, result)`.
-///
-/// Returns a [Future] that resolves to the value (if any) that was passed to
-/// [Navigator.pop] when the dialog was closed.
-///
-/// ### State Restoration in Dialogs
-///
-/// Using this method will not enable state restoration for the dialog. In order
-/// to enable state restoration for a dialog, use [Navigator.restorablePush]
-/// or [Navigator.restorablePushNamed] with [CupertinoDialogRoute].
-///
-/// For more information about state restoration, see [RestorationManager].
-///
-/// {@tool dartpad}
-/// This sample demonstrates how to create a restorable Cupertino dialog. This is
-/// accomplished by enabling state restoration by specifying
-/// [CupertinoApp.restorationScopeId] and using [Navigator.restorablePush] to
-/// push [CupertinoDialogRoute] when the [CupertinoButton] is tapped.
-///
-/// {@macro flutter.widgets.RestorationManager}
-///
-/// ** See code in examples/api/lib/cupertino/route/show_cupertino_dialog.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoAlertDialog], an iOS-style alert dialog.
-///  * [showDialog], which displays a Material-style dialog.
-///  * [showGeneralDialog], which allows for customization of the dialog popup.
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
-///  * <https://developer.apple.com/ios/human-interface-guidelines/views/alerts/>
 Future<T?> showCupertinoDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
@@ -1284,45 +920,7 @@ Future<T?> showCupertinoDialog<T>({
   ));
 }
 
-/// A dialog route that shows an iOS-style dialog.
-///
-/// It is used internally by [showCupertinoDialog] or can be directly pushed
-/// onto the [Navigator] stack to enable state restoration. See
-/// [showCupertinoDialog] for a state restoration app example.
-///
-/// This function takes a `builder` which typically builds a [Dialog] widget.
-/// Content below the dialog is dimmed with a [ModalBarrier]. The widget
-/// returned by the `builder` does not share a context with the location that
-/// `showDialog` is originally called from. Use a [StatefulBuilder] or a
-/// custom [StatefulWidget] if the dialog needs to update dynamically.
-///
-/// The `context` argument is used to look up
-/// [CupertinoLocalizations.modalBarrierDismissLabel], which provides the
-/// modal with a localized accessibility label that will be used for the
-/// modal's barrier. However, a custom `barrierLabel` can be passed in as well.
-///
-/// The `barrierDismissible` argument is used to indicate whether tapping on the
-/// barrier will dismiss the dialog. It is `true` by default and cannot be `null`.
-///
-/// The `barrierColor` argument is used to specify the color of the modal
-/// barrier that darkens everything below the dialog. If `null`, then
-/// [CupertinoDynamicColor.resolve] is used to compute the modal color.
-///
-/// The `settings` argument define the settings for this route. See
-/// [RouteSettings] for details.
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// See also:
-///
-///  * [showCupertinoDialog], which is a way to display
-///     an iOS-style dialog.
-///  * [showGeneralDialog], which allows for customization of the dialog popup.
-///  * [showDialog], which displays a Material dialog.
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
 class CupertinoDialogRoute<T> extends RawDialogRoute<T> {
-  /// A dialog route that shows an iOS-style dialog.
   CupertinoDialogRoute({
     required WidgetBuilder builder,
     required BuildContext context,

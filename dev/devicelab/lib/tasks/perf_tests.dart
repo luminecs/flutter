@@ -17,9 +17,6 @@ import '../framework/host_agent.dart';
 import '../framework/task_result.dart';
 import '../framework/utils.dart';
 
-/// Must match flutter_driver/lib/src/common.dart.
-///
-/// Redefined here to avoid taking a dependency on flutter_driver.
 String _testOutputDirectory(String testDirectory) {
   return Platform.environment['FLUTTER_TEST_OUTPUTS_DIR'] ?? '$testDirectory/build';
 }
@@ -767,11 +764,6 @@ Map<String, dynamic> _average(List<Map<String, dynamic>> results, int iterations
   return tally;
 }
 
-/// Opens the file at testDirectory + 'android/app/src/main/AndroidManifest.xml'
-/// and adds the following entry to the application.
-/// <meta-data
-///   android:name="io.flutter.embedding.android.ImpellerBackend"
-///   android:value="opengles" />
 void _addOpenGLESToManifest(String testDirectory) {
   final String manifestPath = path.join(
       testDirectory, 'android', 'app', 'src', 'main', 'AndroidManifest.xml');
@@ -824,7 +816,6 @@ Future<void> _resetManifest(String testDirectory) async {
   await exec('git', <String>['checkout', file.path]);
 }
 
-/// Measure application startup performance.
 class StartupTest {
   const StartupTest(
     this.testDirectory, {
@@ -996,7 +987,6 @@ class StartupTest {
   }
 }
 
-/// A one-off test to verify that devtools starts in profile mode.
 class DevtoolsStartupTest {
   const DevtoolsStartupTest(this.testDirectory);
 
@@ -1098,13 +1088,8 @@ class DevtoolsStartupTest {
   }
 }
 
-/// A callback function to be used to mock the flutter drive command in PerfTests.
-///
-/// The `options` contains all the arguments in the `flutter drive` command in PerfTests.
 typedef FlutterDriveCallback = void Function(List<String> options);
 
-/// Measures application runtime performance, specifically per-frame
-/// performance.
 class PerfTest {
   const PerfTest(
     this.testDirectory,
@@ -1144,69 +1129,31 @@ class PerfTest {
     this.forceOpenGLES,
   }) : saveTraceFile = false, timelineFileName = null, _resultFilename = resultFilename;
 
-  /// The directory where the app under test is defined.
   final String testDirectory;
-  /// The main entry-point file of the application, as run on the device.
   final String testTarget;
   // The prefix name of the filename such as `<timelineFileName>.timeline_summary.json`.
   final String? timelineFileName;
   String get traceFilename => '$timelineFileName.timeline';
   String get resultFilename => _resultFilename ?? '$timelineFileName.timeline_summary';
   final String? _resultFilename;
-  /// The test file to run on the host.
   final String? testDriver;
-  /// Whether to collect CPU and GPU metrics.
   final bool measureCpuGpu;
-  /// Whether to collect memory metrics.
   final bool measureMemory;
-  /// Whether to summarize total GC time on the UI thread from the timeline.
   final bool measureTotalGCTime;
-  /// Whether to collect full timeline, meaning if `--trace-startup` flag is needed.
   final bool needsFullTimeline;
-  /// Whether to save the trace timeline file `*.timeline.json`.
   final bool saveTraceFile;
-  /// The device to test on.
-  ///
-  /// If null, the device is selected depending on the current environment.
   final Device? device;
 
-  /// The function called instead of the actually `flutter drive`.
-  ///
-  /// If it is not `null`, `flutter drive` will not happen in the PerfTests.
   final FlutterDriveCallback? flutterDriveCallback;
 
-  /// Whether the perf test should enable Impeller.
   final bool? enableImpeller;
 
-  /// Whether the perf test force Impeller's OpenGLES backend.
   final bool? forceOpenGLES;
 
-  /// Number of seconds to time out the test after, allowing debug callbacks to run.
   final int? timeoutSeconds;
 
-  /// The keys of the values that need to be reported.
-  ///
-  /// If it's `null`, then report:
-  /// ```Dart
-  /// <String>[
-  ///   'average_frame_build_time_millis',
-  ///   'worst_frame_build_time_millis',
-  ///   '90th_percentile_frame_build_time_millis',
-  ///   '99th_percentile_frame_build_time_millis',
-  ///   'average_frame_rasterizer_time_millis',
-  ///   'worst_frame_rasterizer_time_millis',
-  ///   '90th_percentile_frame_rasterizer_time_millis',
-  ///   '99th_percentile_frame_rasterizer_time_millis',
-  ///   'average_vsync_transitions_missed',
-  ///   '90th_percentile_vsync_transitions_missed',
-  ///   '99th_percentile_vsync_transitions_missed',
-  ///   if (measureCpuGpu) 'average_cpu_usage',
-  ///   if (measureCpuGpu) 'average_gpu_usage',
-  /// ]
-  /// ```
   final List<String>? benchmarkScoreKeys;
 
-  /// Additional flags for `--dart-define` to control the test
   final String dartDefine;
 
   Future<TaskResult> run() {
@@ -1360,8 +1307,6 @@ const List<String> _kCommonScoreKeys = <String>[
   'old_gen_gc_count',
 ];
 
-/// Measures how long it takes to compile a Flutter app to JavaScript and how
-/// big the compiled code is.
 class WebCompileTest {
   const WebCompileTest();
 
@@ -1395,10 +1340,6 @@ class WebCompileTest {
     return TaskResult.success(metrics, benchmarkScoreKeys: metrics.keys.toList());
   }
 
-  /// Run a single web compile test and return its metrics.
-  ///
-  /// Run a single web compile test for the app under [directory], and store
-  /// its metrics with prefix [metric].
   static Future<Map<String, int>> runSingleBuildTest({
     required String directory,
     required String metric,
@@ -1439,11 +1380,8 @@ class WebCompileTest {
     });
   }
 
-  /// Obtains the size and gzipped size of both [dartBundleFile] and [buildDir].
   static Future<Map<String, int>> getSize({
-    /// Mapping of metric key name to file system path for directories to measure
     Map<String, String> directories = const <String, String>{},
-    /// Mapping of metric key name to file system path for files to measure
     Map<String, String> files = const <String, String>{},
     required String metric,
   }) async {
@@ -1493,8 +1431,6 @@ class WebCompileTest {
   }
 }
 
-/// Measures how long it takes to compile a Flutter app and how big the compiled
-/// code is.
 class CompileTest {
   const CompileTest(this.testDirectory, { this.reportPackageContentSizes = false });
 
@@ -1793,7 +1729,6 @@ class CompileTest {
   }
 }
 
-/// Measure application memory usage.
 class MemoryTest {
   MemoryTest(this.project, this.test, this.package);
 
@@ -1801,14 +1736,10 @@ class MemoryTest {
   final String test;
   final String package;
 
-  /// Completes when the log line specified in the last call to
-  /// [prepareForNextMessage] is seen by `adb logcat`.
   Future<void>? get receivedNextMessage => _receivedNextMessage?.future;
   Completer<void>? _receivedNextMessage;
   String? _nextMessage;
 
-  /// Prepares the [receivedNextMessage] future such that it will complete
-  /// when `adb logcat` sees a log line with the given `message`.
   void prepareForNextMessage(String message) {
     _nextMessage = message;
     _receivedNextMessage = Completer<void>();
@@ -1871,9 +1802,6 @@ class MemoryTest {
     });
   }
 
-  /// Starts the app specified by [test] on the [device].
-  ///
-  /// The [run] method will terminate it by its package name ([package]).
   Future<void> launchApp() async {
     prepareForNextMessage('READY');
     print('launching $project$test on device...');
@@ -1888,12 +1816,6 @@ class MemoryTest {
     await receivedNextMessage;
   }
 
-  /// To change the behavior of the test, override this.
-  ///
-  /// Make sure to call recordStart() and recordEnd() once each in that order.
-  ///
-  /// By default it just launches the app, records memory usage, taps the device,
-  /// awaits a DONE notification, and records memory usage again.
   Future<void> useMemory() async {
     await launchApp();
     await recordStart();
@@ -2056,7 +1978,6 @@ class ReportedDurationTest {
   }
 }
 
-/// Holds simple statistics of an odd-lengthed list of integers.
 class ListStatistics {
   factory ListStatistics(Iterable<int> data) {
     assert(data.isNotEmpty);
@@ -2106,7 +2027,6 @@ class _UnzipListEntry {
   final String path;
 }
 
-/// Wait for up to 1 hour for the file to appear.
 Future<File> waitForFile(String path) async {
   for (int i = 0; i < 180; i += 1) {
     final File file = File(path);

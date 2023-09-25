@@ -6,22 +6,6 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 
-/// Scans the dartdoc HTML output in the provided `htmlOutputPath` for
-/// unresolved dartdoc directives (`{@foo x y}`).
-///
-/// Dartdoc usually replaces those directives with other content. However,
-/// if the directive is misspelled (or contains other errors) it is placed
-/// verbatim into the HTML output. That's not desirable and this check verifies
-/// that no directives appear verbatim in the output by checking that the
-/// string `{@` does not appear in the HTML output outside of <code> sections.
-///
-/// The string `{@` is allowed in <code> sections, because those may contain
-/// sample code where the sequence is perfectly legal, e.g. for required named
-/// parameters of a method:
-///
-/// ```
-/// void foo({@required int bar});
-/// ```
 void checkForUnresolvedDirectives(String htmlOutputPath) {
   final Directory dartDocDir = Directory(htmlOutputPath);
   if (!dartDocDir.existsSync()) {

@@ -12,12 +12,6 @@ import '../localizations/gen_l10n.dart';
 import '../localizations/localizations_utils.dart';
 import '../runner/flutter_command.dart';
 
-/// A command to generate localizations source files for a Flutter project.
-///
-/// It generates Dart localization source files from arb files.
-///
-/// For a more comprehensive tutorial on the tool, please see the
-/// [internationalization user guide](flutter.dev/go/i18n-user-guide).
 class GenerateLocalizationsCommand extends FlutterCommand {
   GenerateLocalizationsCommand({
     required FileSystem fileSystem,

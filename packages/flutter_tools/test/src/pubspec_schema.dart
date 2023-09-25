@@ -8,7 +8,6 @@ import 'package:yaml/yaml.dart';
 
 import 'common.dart';
 
-/// Check if the pubspec.yaml file under the `projectDir` is valid for a plugin project.
 void validatePubspecForPlugin({
   required String projectDir,
   String? pluginClass,

@@ -13,8 +13,6 @@ import '../framework/task_result.dart';
 import '../framework/utils.dart';
 import '../microbenchmarks.dart';
 
-/// Creates a device lab task that runs benchmarks in
-/// `dev/benchmarks/microbenchmarks` reports results to the dashboard.
 TaskFunction createMicrobenchmarkTask({
   bool? enableImpeller,
   Map<String, String> environment = const <String, String>{},

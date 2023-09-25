@@ -192,7 +192,6 @@ void main() {
       return const CompilerOutput('lib/foo.dill', 0, <Uri>[]);
     };
 
-    /// This output can change based on the host platform.
     final List<List<int>> expectedEncoded = await osUtils.gzipLevel1Stream(
       Stream<List<int>>.value(<int>[1, 2, 3, 4, 5]),
     ).toList();

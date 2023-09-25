@@ -23,7 +23,6 @@ import 'package:flutter_tools/src/project.dart';
 import 'package:flutter_tools/src/version.dart';
 import 'package:test/fake.dart';
 
-/// Environment with DYLD_LIBRARY_PATH=/path/to/libraries
 class FakeDyldEnvironmentArtifact extends ArtifactSet {
   FakeDyldEnvironmentArtifact() : super(DevelopmentArtifact.iOS);
   @override
@@ -42,7 +41,6 @@ class FakeDyldEnvironmentArtifact extends ArtifactSet {
   }
 }
 
-/// A fake process implementation which can be provided all necessary values.
 class FakeProcess implements Process {
   FakeProcess({
     this.pid = 1,
@@ -74,7 +72,6 @@ class FakeProcess implements Process {
   }
 }
 
-/// An IOSink that completes a future with the first line written to it.
 class CompleterIOSink extends MemoryIOSink {
   CompleterIOSink({
     this.throwOnAdd = false,
@@ -100,7 +97,6 @@ class CompleterIOSink extends MemoryIOSink {
   }
 }
 
-/// An IOSink that collects whatever is written to it.
 class MemoryIOSink implements IOSink {
   @override
   Encoding encoding = utf8;
@@ -224,7 +220,6 @@ class MemoryStdout extends MemoryIOSink implements io.Stdout {
   int? _terminalLines;
 }
 
-/// A Stdio that collects stdout and supports simulated stdin.
 class FakeStdio extends Stdio {
   final MemoryStdout _stdout = MemoryStdout()..terminalColumns = 80;
   final MemoryIOSink _stderr = MemoryIOSink();
@@ -347,7 +342,6 @@ class FakeFlutterVersion implements FlutterVersion {
   bool get didFetchTagsAndUpdate => _didFetchTagsAndUpdate;
   bool _didFetchTagsAndUpdate = false;
 
-  /// Will be returned by [fetchTagsAndGetVersion] if not null.
   final FlutterVersion? nextFlutterVersion;
 
   @override

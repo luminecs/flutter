@@ -11,7 +11,6 @@ import 'terminal.dart';
 const String fire = '🔥';
 const int maxLineWidth = 84;
 
-/// Encapsulates the help text construction and printing.
 class CommandHelp {
   CommandHelp({
     required Logger logger,
@@ -196,7 +195,6 @@ class CommandHelp {
   }
 }
 
-/// Encapsulates printing help text for a single option.
 class CommandHelpOption {
   CommandHelpOption(
     this.key,
@@ -219,11 +217,8 @@ class CommandHelpOption {
 
   final OutputPreferences _outputPreferences;
 
-  /// The key associated with this command.
   final String key;
-  /// A description of what this command does.
   final String description;
-  /// Text shown in parenthesis to give the context.
   final String inParenthesis;
 
   bool get _hasTextInParenthesis => inParenthesis.isNotEmpty;

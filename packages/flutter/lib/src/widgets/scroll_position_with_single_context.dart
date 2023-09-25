@@ -16,38 +16,7 @@ import 'scroll_notification.dart';
 import 'scroll_physics.dart';
 import 'scroll_position.dart';
 
-/// A scroll position that manages scroll activities for a single
-/// [ScrollContext].
-///
-/// This class is a concrete subclass of [ScrollPosition] logic that handles a
-/// single [ScrollContext], such as a [Scrollable]. An instance of this class
-/// manages [ScrollActivity] instances, which change what content is visible in
-/// the [Scrollable]'s [Viewport].
-///
-/// {@macro flutter.widgets.scrollPosition.listening}
-///
-/// See also:
-///
-///  * [ScrollPosition], which defines the underlying model for a position
-///    within a [Scrollable] but is agnostic as to how that position is
-///    changed.
-///  * [ScrollView] and its subclasses such as [ListView], which use
-///    [ScrollPositionWithSingleContext] to manage their scroll position.
-///  * [ScrollController], which can manipulate one or more [ScrollPosition]s,
-///    and which uses [ScrollPositionWithSingleContext] as its default class for
-///    scroll positions.
 class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollActivityDelegate {
-  /// Create a [ScrollPosition] object that manages its behavior using
-  /// [ScrollActivity] objects.
-  ///
-  /// The `initialPixels` argument can be null, but in that case it is
-  /// imperative that the value be set, using [correctPixels], as soon as
-  /// [applyNewDimensions] is invoked, before calling the inherited
-  /// implementation of that method.
-  ///
-  /// If [keepScrollOffset] is true (the default), the current scroll offset is
-  /// saved with [PageStorage] and restored it if this scroll position's scrollable
-  /// is recreated.
   ScrollPositionWithSingleContext({
     required super.physics,
     required super.context,
@@ -67,8 +36,6 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
     assert(activity != null);
   }
 
-  /// Velocity from a previous activity temporarily held by [hold] to potentially
-  /// transfer to a next activity.
   double _heldPreviousVelocity = 0.0;
 
   @override
@@ -129,15 +96,6 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
     beginActivity(IdleScrollActivity(this));
   }
 
-  /// Start a physics-driven simulation that settles the [pixels] position,
-  /// starting at a particular velocity.
-  ///
-  /// This method defers to [ScrollPhysics.createBallisticSimulation], which
-  /// typically provides a bounce simulation when the current position is out of
-  /// bounds and a friction simulation when the position is in bounds but has a
-  /// non-zero velocity.
-  ///
-  /// The velocity should be in logical pixels per second.
   @override
   void goBallistic(double velocity) {
     assert(hasPixels);
@@ -158,9 +116,6 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
   ScrollDirection get userScrollDirection => _userScrollDirection;
   ScrollDirection _userScrollDirection = ScrollDirection.idle;
 
-  /// Set [userScrollDirection] to the given value.
-  ///
-  /// If this changes the value, then a [UserScrollNotification] is dispatched.
   @protected
   @visibleForTesting
   void updateUserScrollDirection(ScrollDirection value) {

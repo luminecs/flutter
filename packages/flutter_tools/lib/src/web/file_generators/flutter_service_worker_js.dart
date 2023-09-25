@@ -5,13 +5,9 @@
 import '../../base/utils.dart';
 import '../../globals.dart' as globals;
 
-/// The caching strategy for the generated service worker.
 enum ServiceWorkerStrategy implements CliEnum {
-  /// Download the app shell eagerly and all other assets lazily.
-  /// Prefer the offline cached version.
   offlineFirst,
 
-  /// Do not generate a service worker,
   none;
 
   @override
@@ -39,12 +35,6 @@ enum ServiceWorkerStrategy implements CliEnum {
       };
 }
 
-/// Generate a service worker with an app-specific cache name a map of
-/// resource files.
-///
-/// The tool embeds file hashes directly into the worker so that the byte for byte
-/// invalidation will automatically reactivate workers whenever a new
-/// version is deployed.
 String generateServiceWorker(
   String fileGeneratorsPath,
   Map<String, String> resources,

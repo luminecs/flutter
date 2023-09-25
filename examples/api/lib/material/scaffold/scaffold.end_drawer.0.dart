@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Scaffold.endDrawer].
 
 void main() => runApp(const EndDrawerExampleApp());
 

@@ -11,8 +11,6 @@ import 'package:flutter_tools/src/cache.dart';
 import 'package:flutter_tools/src/debug_adapters/server.dart';
 import 'package:flutter_tools/src/globals.dart' as globals;
 
-/// Enable to run from local source when running out-of-process (useful in
-/// development to avoid having to keep rebuilding the flutter tool).
 const bool _runFromSource = false;
 
 abstract class DapTestServer {
@@ -22,11 +20,6 @@ abstract class DapTestServer {
   void Function(String message)? onStderrOutput;
 }
 
-/// An instance of a DAP server running in-process (to aid debugging).
-///
-/// All communication still goes over the socket to ensure all messages are
-/// serialized and deserialized but it's not quite the same running out of
-/// process.
 class InProcessDapTestServer extends DapTestServer {
   InProcessDapTestServer._(List<String> args) {
     _server = DapServer(
@@ -64,11 +57,6 @@ class InProcessDapTestServer extends DapTestServer {
   }
 }
 
-/// An instance of a DAP server running out-of-process.
-///
-/// This is how an editor will usually consume DAP so is a more accurate test
-/// but will be a little more difficult to debug tests as the debugger will not
-/// be attached to the process.
 class OutOfProcessDapTestServer extends DapTestServer {
   OutOfProcessDapTestServer._(
     this._process,

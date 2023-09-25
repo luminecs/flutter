@@ -17,26 +17,8 @@ import 'theme.dart';
 import 'tooltip_theme.dart';
 import 'tooltip_visibility.dart';
 
-/// Signature for when a tooltip is triggered.
 typedef TooltipTriggeredCallback = void Function();
 
-/// A special [MouseRegion] that when nested, only the first [_ExclusiveMouseRegion]
-/// to be hit in hit-testing order will be added to the BoxHitTestResult (i.e.,
-/// child over parent, last sibling over first sibling).
-///
-/// The [onEnter] method will be called when a mouse pointer enters this
-/// [MouseRegion], and there is no other [_ExclusiveMouseRegion]s obstructing
-/// this [_ExclusiveMouseRegion] from receiving the events. This includes the
-/// case where the mouse cursor stays within the paint bounds of an outer
-/// [_ExclusiveMouseRegion], but moves outside of the bounds of the inner
-/// [_ExclusiveMouseRegion] that was initially blocking the outer widget.
-///
-/// Likewise, [onExit] is called when the a mouse pointer moves out of the paint
-/// bounds of this widget, or moves into another [_ExclusiveMouseRegion] that
-/// overlaps this widget in hit-testing order.
-///
-/// This widget doesn't affect [MouseRegion]s that aren't [_ExclusiveMouseRegion]s,
-/// or other [HitTestTarget]s in the tree.
 class _ExclusiveMouseRegion extends MouseRegion {
   const _ExclusiveMouseRegion({
     super.onEnter,
@@ -84,81 +66,7 @@ class _RenderExclusiveMouseRegion extends RenderMouseRegion {
   }
 }
 
-/// A Material Design tooltip.
-///
-/// Tooltips provide text labels which help explain the function of a button or
-/// other user interface action. Wrap the button in a [Tooltip] widget and provide
-/// a message which will be shown when the widget is long pressed.
-///
-/// Many widgets, such as [IconButton], [FloatingActionButton], and
-/// [PopupMenuButton] have a `tooltip` property that, when non-null, causes the
-/// widget to include a [Tooltip] in its build.
-///
-/// Tooltips improve the accessibility of visual widgets by proving a textual
-/// representation of the widget, which, for example, can be vocalized by a
-/// screen reader.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=EeEfD5fI-5Q}
-///
-/// {@tool dartpad}
-/// This example show a basic [Tooltip] which has a [Text] as child.
-/// [message] contains your label to be shown by the tooltip when
-/// the child that Tooltip wraps is hovered over on web or desktop. On mobile,
-/// the tooltip is shown when the widget is long pressed.
-///
-/// ** See code in examples/api/lib/material/tooltip/tooltip.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example covers most of the attributes available in Tooltip.
-/// `decoration` has been used to give a gradient and borderRadius to Tooltip.
-/// `height` has been used to set a specific height of the Tooltip.
-/// `preferBelow` is false, the tooltip will prefer showing above [Tooltip]'s child widget.
-/// However, it may show the tooltip below if there's not enough space
-/// above the widget.
-/// `textStyle` has been used to set the font size of the 'message'.
-/// `showDuration` accepts a Duration to continue showing the message after the long
-/// press has been released or the mouse pointer exits the child widget.
-/// `waitDuration` accepts a Duration for which a mouse pointer has to hover over the child
-/// widget before the tooltip is shown.
-///
-/// ** See code in examples/api/lib/material/tooltip/tooltip.1.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows a rich [Tooltip] that specifies the [richMessage]
-/// parameter instead of the [message] parameter (only one of these may be
-/// non-null. Any [InlineSpan] can be specified for the [richMessage] attribute,
-/// including [WidgetSpan].
-///
-/// ** See code in examples/api/lib/material/tooltip/tooltip.2.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows how [Tooltip] can be shown manually with [TooltipTriggerMode.manual]
-/// by calling the [TooltipState.ensureTooltipVisible] function.
-///
-/// ** See code in examples/api/lib/material/tooltip/tooltip.3.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * <https://material.io/design/components/tooltips.html>
-///  * [TooltipTheme] or [ThemeData.tooltipTheme]
-///  * [TooltipVisibility]
 class Tooltip extends StatefulWidget {
-  /// Creates a tooltip.
-  ///
-  /// By default, tooltips should adhere to the
-  /// [Material specification](https://material.io/design/components/tooltips.html#spec).
-  /// If the optional constructor parameters are not defined, the values
-  /// provided by [TooltipTheme.of] will be used if a [TooltipTheme] is present
-  /// or specified in [ThemeData].
-  ///
-  /// All parameters that are defined in the constructor will
-  /// override the default values _and_ the values in [TooltipTheme.of].
-  ///
-  /// Only one of [message] and [richMessage] may be non-null.
   const Tooltip({
     super.key,
     this.message,
@@ -186,146 +94,42 @@ class Tooltip extends StatefulWidget {
           '`textStyle` directly to the `richMessage` InlineSpan.',
         );
 
-  /// The text to display in the tooltip.
-  ///
-  /// Only one of [message] and [richMessage] may be non-null.
   final String? message;
 
-  /// The rich text to display in the tooltip.
-  ///
-  /// Only one of [message] and [richMessage] may be non-null.
   final InlineSpan? richMessage;
 
-  /// The height of the tooltip's [child].
-  ///
-  /// If the [child] is null, then this is the tooltip's intrinsic height.
   final double? height;
 
-  /// The amount of space by which to inset the tooltip's [child].
-  ///
-  /// On mobile, defaults to 16.0 logical pixels horizontally and 4.0 vertically.
-  /// On desktop, defaults to 8.0 logical pixels horizontally and 4.0 vertically.
   final EdgeInsetsGeometry? padding;
 
-  /// The empty space that surrounds the tooltip.
-  ///
-  /// Defines the tooltip's outer [Container.margin]. By default, a
-  /// long tooltip will span the width of its window. If long enough,
-  /// a tooltip might also span the window's height. This property allows
-  /// one to define how much space the tooltip must be inset from the edges
-  /// of their display window.
-  ///
-  /// If this property is null, then [TooltipThemeData.margin] is used.
-  /// If [TooltipThemeData.margin] is also null, the default margin is
-  /// 0.0 logical pixels on all sides.
   final EdgeInsetsGeometry? margin;
 
-  /// The vertical gap between the widget and the displayed tooltip.
-  ///
-  /// When [preferBelow] is set to true and tooltips have sufficient space to
-  /// display themselves, this property defines how much vertical space
-  /// tooltips will position themselves under their corresponding widgets.
-  /// Otherwise, tooltips will position themselves above their corresponding
-  /// widgets with the given offset.
   final double? verticalOffset;
 
-  /// Whether the tooltip defaults to being displayed below the widget.
-  ///
-  /// Defaults to true. If there is insufficient space to display the tooltip in
-  /// the preferred direction, the tooltip will be displayed in the opposite
-  /// direction.
   final bool? preferBelow;
 
-  /// Whether the tooltip's [message] or [richMessage] should be excluded from
-  /// the semantics tree.
-  ///
-  /// Defaults to false. A tooltip will add a [Semantics] label that is set to
-  /// [Tooltip.message] if non-null, or the plain text value of
-  /// [Tooltip.richMessage] otherwise. Set this property to true if the app is
-  /// going to provide its own custom semantics label.
   final bool? excludeFromSemantics;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget? child;
 
-  /// Specifies the tooltip's shape and background color.
-  ///
-  /// The tooltip shape defaults to a rounded rectangle with a border radius of
-  /// 4.0. Tooltips will also default to an opacity of 90% and with the color
-  /// [Colors.grey]\[700\] if [ThemeData.brightness] is [Brightness.dark], and
-  /// [Colors.white] if it is [Brightness.light].
   final Decoration? decoration;
 
-  /// The style to use for the message of the tooltip.
-  ///
-  /// If null, the message's [TextStyle] will be determined based on
-  /// [ThemeData]. If [ThemeData.brightness] is set to [Brightness.dark],
-  /// [TextTheme.bodyMedium] of [ThemeData.textTheme] will be used with
-  /// [Colors.white]. Otherwise, if [ThemeData.brightness] is set to
-  /// [Brightness.light], [TextTheme.bodyMedium] of [ThemeData.textTheme] will be
-  /// used with [Colors.black].
   final TextStyle? textStyle;
 
-  /// How the message of the tooltip is aligned horizontally.
-  ///
-  /// If this property is null, then [TooltipThemeData.textAlign] is used.
-  /// If [TooltipThemeData.textAlign] is also null, the default value is
-  /// [TextAlign.start].
   final TextAlign? textAlign;
 
-  /// The length of time that a pointer must hover over a tooltip's widget
-  /// before the tooltip will be shown.
-  ///
-  /// Defaults to 0 milliseconds (tooltips are shown immediately upon hover).
   final Duration? waitDuration;
 
-  /// The length of time that the tooltip will be shown after a long press is
-  /// released (if triggerMode is [TooltipTriggerMode.longPress]) or a tap is
-  /// released (if triggerMode is [TooltipTriggerMode.tap]) or mouse pointer
-  /// exits the widget.
-  ///
-  /// Defaults to 1.5 seconds for long press and tap released or 0.1 seconds
-  /// for mouse pointer exits the widget.
   final Duration? showDuration;
 
-  /// The [TooltipTriggerMode] that will show the tooltip.
-  ///
-  /// If this property is null, then [TooltipThemeData.triggerMode] is used.
-  /// If [TooltipThemeData.triggerMode] is also null, the default mode is
-  /// [TooltipTriggerMode.longPress].
-  ///
-  /// This property does not affect mouse devices. Setting [triggerMode] to
-  /// [TooltipTriggerMode.manual] will not prevent the tooltip from showing when
-  /// the mouse cursor hovers over it.
   final TooltipTriggerMode? triggerMode;
 
-  /// Whether the tooltip should provide acoustic and/or haptic feedback.
-  ///
-  /// For example, on Android a tap will produce a clicking sound and a
-  /// long-press will produce a short vibration, when feedback is enabled.
-  ///
-  /// When null, the default value is true.
-  ///
-  /// See also:
-  ///
-  ///  * [Feedback], for providing platform-specific feedback to certain actions.
   final bool? enableFeedback;
 
-  /// Called when the Tooltip is triggered.
-  ///
-  /// The tooltip is triggered after a tap when [triggerMode] is [TooltipTriggerMode.tap]
-  /// or after a long press when [triggerMode] is [TooltipTriggerMode.longPress].
   final TooltipTriggeredCallback? onTriggered;
 
   static final List<TooltipState> _openedTooltips = <TooltipState>[];
 
-  /// Dismiss all of the tooltips that are currently shown on the screen,
-  /// including those with mouse cursors currently hovering over them.
-  ///
-  /// This method returns true if it successfully dismisses the tooltips. It
-  /// returns false if there is no tooltip shown on the screen.
   static bool dismissAllToolTips() {
     if (_openedTooltips.isNotEmpty) {
       // Avoid concurrent modification.
@@ -371,10 +175,6 @@ class Tooltip extends StatefulWidget {
   }
 }
 
-/// Contains the state for a [Tooltip].
-///
-/// This class can be used to programmatically show the Tooltip, see the
-/// [ensureTooltipVisible] method.
 class TooltipState extends State<Tooltip> with SingleTickerProviderStateMixin {
   static const double _defaultVerticalOffset = 24.0;
   static const bool _defaultPreferBelow = true;
@@ -401,9 +201,6 @@ class TooltipState extends State<Tooltip> with SingleTickerProviderStateMixin {
   TooltipTriggerMode get _triggerMode => widget.triggerMode ?? _tooltipTheme.triggerMode ?? _defaultTriggerMode;
   bool get _enableFeedback => widget.enableFeedback ?? _tooltipTheme.enableFeedback ?? _defaultEnableFeedback;
 
-  /// The plain text message for this tooltip.
-  ///
-  /// This value will either come from [widget.message] or [widget.richMessage].
   String get _tooltipMessage => widget.message ?? widget.richMessage!.toPlainText();
 
   Timer? _timer;
@@ -647,14 +444,6 @@ class TooltipState extends State<Tooltip> with SingleTickerProviderStateMixin {
     }
   }
 
-  /// Shows the tooltip if it is not already visible.
-  ///
-  /// After made visible by this method, The tooltip does not automatically
-  /// dismiss after `waitDuration`, until the user dismisses/re-triggers it, or
-  /// [Tooltip.dismissAllToolTips] is called.
-  ///
-  /// Returns `false` when the tooltip shouldn't be shown or when the tooltip
-  /// was already visible.
   bool ensureTooltipVisible() {
     if (!_visible) {
       return false;
@@ -816,28 +605,17 @@ class TooltipState extends State<Tooltip> with SingleTickerProviderStateMixin {
   }
 }
 
-/// A delegate for computing the layout of a tooltip to be displayed above or
-/// below a target specified in the global coordinate system.
 class _TooltipPositionDelegate extends SingleChildLayoutDelegate {
-  /// Creates a delegate for computing the layout of a tooltip.
   _TooltipPositionDelegate({
     required this.target,
     required this.verticalOffset,
     required this.preferBelow,
   });
 
-  /// The offset of the target the tooltip is positioned near in the global
-  /// coordinate system.
   final Offset target;
 
-  /// The amount of vertical distance between the target and the displayed
-  /// tooltip.
   final double verticalOffset;
 
-  /// Whether the tooltip is displayed below its widget by default.
-  ///
-  /// If there is insufficient space to display the tooltip in the preferred
-  /// direction, the tooltip will be displayed in the opposite direction.
   final bool preferBelow;
 
   @override

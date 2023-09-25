@@ -13,29 +13,18 @@ import 'template.dart';
 import 'version.dart';
 
 enum FlutterProjectType implements CliEnum {
-  /// This is the default project with the user-managed host code.
-  /// It is different than the "module" template in that it exposes and doesn't
-  /// manage the platform code.
   app,
 
-  /// A List/Detail app template that follows community best practices.
   skeleton,
 
-  /// The is a project that has managed platform host code. It is an application with
-  /// ephemeral .ios and .android directories that can be updated automatically.
   module,
 
-  /// This is a Flutter Dart package project. It doesn't have any native
-  /// components, only Dart.
   package,
 
-  /// This is a Dart package project with external builds for native components.
   packageFfi,
 
-  /// This is a native plugin project.
   plugin,
 
-  /// This is an FFI native plugin project.
   pluginFfi;
 
   @override
@@ -84,7 +73,6 @@ enum FlutterProjectType implements CliEnum {
   }
 }
 
-  /// Verifies the expected yaml keys are present in the file.
   bool _validateMetadataMap(YamlMap map, Map<String, Type> validations, Logger logger) {
     bool isValid = true;
     for (final MapEntry<String, Object> entry in validations.entries) {
@@ -103,9 +91,7 @@ enum FlutterProjectType implements CliEnum {
     return isValid;
   }
 
-/// A wrapper around the `.metadata` file.
 class FlutterProjectMetadata {
-  /// Creates a MigrateConfig by parsing an existing .migrate_config yaml file.
   FlutterProjectMetadata(this.file, Logger logger) : _logger = logger,
                                                      migrateConfig = MigrateConfig() {
     if (!file.existsSync()) {
@@ -142,7 +128,6 @@ class FlutterProjectMetadata {
     }
   }
 
-  /// Creates a FlutterProjectMetadata by explicitly providing all values.
   FlutterProjectMetadata.explicit({
     required this.file,
     required String? versionRevision,
@@ -155,7 +140,6 @@ class FlutterProjectMetadata {
        _versionRevision = versionRevision,
        _projectType = projectType;
 
-  /// The name of the config file.
   static const String kFileName = '.metadata';
 
   String? _versionRevision;
@@ -167,17 +151,12 @@ class FlutterProjectMetadata {
   FlutterProjectType? _projectType;
   FlutterProjectType? get projectType => _projectType;
 
-  /// Metadata and configuration for the migrate command.
   MigrateConfig migrateConfig;
 
   final Logger _logger;
 
   final File file;
 
-  /// Writes the .migrate_config file in the provided project directory's platform subdirectory.
-  ///
-  /// We write the file manually instead of with a template because this
-  /// needs to be able to write the .migrate_config file into legacy apps.
   void writeFile({File? outputFile}) {
     outputFile = outputFile ?? file;
     outputFile
@@ -221,7 +200,6 @@ ${migrateConfig.getOutputFileString()}''';
     );
   }
 
-  /// Finds the fallback revision to use when no base revision is found in the migrate config.
   String getFallbackBaseRevision(Logger logger, FlutterVersion flutterVersion) {
     // Use the .metadata file if it exists.
     if (versionRevision != null) {
@@ -231,37 +209,23 @@ ${migrateConfig.getOutputFileString()}''';
   }
 }
 
-/// Represents the migrate command metadata section of a .metadata file.
-///
-/// This file tracks the flutter sdk git hashes of the last successful migration ('base') and
-/// the version the project was created with.
-///
-/// Each platform tracks a different set of revisions because flutter create can be
-/// used to add support for new platforms, so the base and create revision may not always be the same.
 class MigrateConfig {
   MigrateConfig({
     Map<SupportedPlatform, MigratePlatformConfig>? platformConfigs,
     this.unmanagedFiles = kDefaultUnmanagedFiles
   }) : platformConfigs = platformConfigs ?? <SupportedPlatform, MigratePlatformConfig>{};
 
-  /// A mapping of the files that are unmanaged by default for each platform.
   static const List<String> kDefaultUnmanagedFiles = <String>[
     'lib/main.dart',
     'ios/Runner.xcodeproj/project.pbxproj',
   ];
 
-  /// The metadata for each platform supported by the project.
   final Map<SupportedPlatform, MigratePlatformConfig> platformConfigs;
 
-  /// A list of paths relative to this file the migrate tool should ignore.
-  ///
-  /// These files are typically user-owned files that should not be changed.
   List<String> unmanagedFiles;
 
   bool get isEmpty => platformConfigs.isEmpty && (unmanagedFiles.isEmpty || unmanagedFiles == kDefaultUnmanagedFiles);
 
-  /// Parses the project for all supported platforms and populates the [MigrateConfig]
-  /// to reflect the project.
   void populate({
     List<SupportedPlatform>? platforms,
     required Directory projectDirectory,
@@ -287,7 +251,6 @@ class MigrateConfig {
     }
   }
 
-  /// Returns the string that should be written to the .metadata file.
   String getOutputFileString() {
     String unmanagedFilesString = '';
     for (final String path in unmanagedFiles) {
@@ -315,7 +278,6 @@ migration:
 ''';
   }
 
-  /// Parses and validates the `migration` section of the .metadata file.
   void parseYaml(YamlMap map, Logger logger) {
     final Object? platformsYaml = map['platforms'];
     if (_validateMetadataMap(map, <String, Type>{'platforms': YamlList}, logger)) {
@@ -350,7 +312,6 @@ migration:
   }
 }
 
-/// Holds the revisions for a single platform for use by the flutter migrate command.
 class MigratePlatformConfig {
   MigratePlatformConfig({
     required this.platform,
@@ -358,17 +319,10 @@ class MigratePlatformConfig {
     this.baseRevision
   });
 
-  /// The platform this config describes.
   SupportedPlatform platform;
 
-  /// The Flutter SDK revision this platform was created by.
-  ///
-  /// Null if the initial create git revision is unknown.
   final String? createRevision;
 
-  /// The Flutter SDK revision this platform was last migrated by.
-  ///
-  /// Null if the project was never migrated or the revision is unknown.
   String? baseRevision;
 
   bool equals(MigratePlatformConfig other) {

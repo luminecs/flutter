@@ -5,9 +5,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
-/// Count the number of libraries that import globals.dart in lib and test.
-///
-/// This must be run from the flutter_tools project root directory.
 void main() {
   final Directory sources = Directory(path.join(Directory.current.path, 'lib'));
   final Directory tests = Directory(path.join(Directory.current.path, 'test'));

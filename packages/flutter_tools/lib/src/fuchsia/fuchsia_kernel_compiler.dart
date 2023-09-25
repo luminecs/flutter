@@ -11,13 +11,7 @@ import '../build_info.dart';
 import '../globals.dart' as globals;
 import '../project.dart';
 
-/// This is a simple wrapper around the custom kernel compiler from the Fuchsia
-/// SDK.
 class FuchsiaKernelCompiler {
-  /// Compiles the [fuchsiaProject] with entry point [target] to a collection of
-  /// .dilp files (consisting of the app split along package: boundaries, but
-  /// the Flutter tool should make no use of that fact), and a manifest that
-  /// refers to them.
   Future<void> build({
     required FuchsiaProject fuchsiaProject,
     required String target, // E.g., lib/main.dart
@@ -94,7 +88,6 @@ class FuchsiaKernelCompiler {
     }
   }
 
-  /// Provide flags that are affected by [BuildInfo]
   @visibleForTesting
   static List<String> getBuildInfoFlags({
     required BuildInfo buildInfo,

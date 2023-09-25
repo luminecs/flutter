@@ -16,10 +16,8 @@ import 'image_stream.dart';
 // Method signature for _loadAsync decode callbacks.
 typedef _SimpleDecoderCallback = Future<ui.Codec> Function(ui.ImmutableBuffer buffer);
 
-/// The dart:io implementation of [image_provider.NetworkImage].
 @immutable
 class NetworkImage extends image_provider.ImageProvider<image_provider.NetworkImage> implements image_provider.NetworkImage {
-  /// Creates an object that fetches the image at the given URL.
   const NetworkImage(this.url, { this.scale = 1.0, this.headers });
 
   @override

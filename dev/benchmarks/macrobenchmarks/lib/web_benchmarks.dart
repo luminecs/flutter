@@ -39,10 +39,6 @@ typedef RecorderFactory = Recorder Function();
 const bool isCanvasKit = bool.fromEnvironment('FLUTTER_WEB_USE_SKIA');
 const bool isSkwasm = bool.fromEnvironment('FLUTTER_WEB_USE_SKWASM');
 
-/// List of all benchmarks that run in the devicelab.
-///
-/// When adding a new benchmark, add it to this map. Make sure that the name
-/// of your benchmark is unique.
 final Map<String, RecorderFactory> benchmarks = <String, RecorderFactory>{
   // Benchmarks the overhead of the benchmark harness itself.
   BenchRawRecorder.benchmarkName: () => BenchRawRecorder(),
@@ -208,7 +204,6 @@ void _fallbackToManual(String error) {
   }
 }
 
-/// Visualizes results on the Web page for manual inspection.
 void _printResultsToScreen(Profile profile) {
   web.document.body!.remove();
   web.document.body = web.document.createElement('body') as web.HTMLBodyElement;
@@ -221,7 +216,6 @@ void _printResultsToScreen(Profile profile) {
   });
 }
 
-/// Draws timeseries data and statistics on a canvas.
 class TimeseriesVisualization {
   TimeseriesVisualization(this._timeseries) {
     _stats = _timeseries.computeStats();
@@ -255,14 +249,10 @@ class TimeseriesVisualization {
   // Used to normalize benchmark values to chart height.
   late double _maxValueChartRange;
 
-  /// Converts a sample value to vertical canvas coordinates.
-  ///
-  /// This does not work for horizontal coordinates.
   double _normalized(double value) {
     return _kCanvasHeight * value / _maxValueChartRange;
   }
 
-  /// A utility for drawing lines.
   void drawLine(num x1, num y1, num x2, num y2) {
     _ctx.beginPath();
     _ctx.moveTo(x1.toDouble(), y1.toDouble());
@@ -270,7 +260,6 @@ class TimeseriesVisualization {
     _ctx.stroke();
   }
 
-  /// Renders the timeseries into a `<canvas>` and returns the canvas element.
   web.HTMLCanvasElement render() {
     _ctx.translate(0, _kCanvasHeight * web.window.devicePixelRatio);
     _ctx.scale(1, -web.window.devicePixelRatio);
@@ -322,26 +311,11 @@ class TimeseriesVisualization {
   }
 }
 
-/// Implements the client REST API for the local benchmark server.
-///
-/// The local server is optional. If it is not available the benchmark UI must
-/// implement a manual fallback. This allows debugging benchmarks using plain
-/// `flutter run`.
 class LocalBenchmarkServerClient {
-  /// This value is returned by [requestNextBenchmark].
   static const String kManualFallback = '__manual_fallback__';
 
-  /// Whether we fell back to manual mode.
-  ///
-  /// This happens when you run benchmarks using plain `flutter run` rather than
-  /// devicelab test harness. The test harness spins up a special server that
-  /// provides API for automatically picking the next benchmark to run.
   bool isInManualMode = false;
 
-  /// Asks the local server for the name of the next benchmark to run.
-  ///
-  /// Returns [kManualFallback] if local server is not available (uses 404 as a
-  /// signal).
   Future<String> requestNextBenchmark() async {
     final web.XMLHttpRequest request = await _requestXhr(
       '/next-benchmark',
@@ -368,11 +342,6 @@ class LocalBenchmarkServerClient {
     }
   }
 
-  /// Asks the local server to begin tracing performance.
-  ///
-  /// This uses the chrome://tracing tracer, which is not available from within
-  /// the page itself, and therefore must be controlled from outside using the
-  /// DevTools Protocol.
   Future<void> startPerformanceTracing(String benchmarkName) async {
     _checkNotManualMode();
     await _requestXhr(
@@ -382,7 +351,6 @@ class LocalBenchmarkServerClient {
     );
   }
 
-  /// Stops the performance tracing session started by [startPerformanceTracing].
   Future<void> stopPerformanceTracing() async {
     _checkNotManualMode();
     await _requestXhr(
@@ -392,8 +360,6 @@ class LocalBenchmarkServerClient {
     );
   }
 
-  /// Sends the profile data collected by the benchmark to the local benchmark
-  /// server.
   Future<void> sendProfileData(Profile profile) async {
     _checkNotManualMode();
     final web.XMLHttpRequest request = await _requestXhr(
@@ -410,9 +376,6 @@ class LocalBenchmarkServerClient {
     }
   }
 
-  /// Reports an error to the benchmark server.
-  ///
-  /// The server will halt the devicelab task and log the error.
   Future<void> reportError(dynamic error, StackTrace stackTrace) async {
     _checkNotManualMode();
     await _requestXhr(
@@ -426,7 +389,6 @@ class LocalBenchmarkServerClient {
     );
   }
 
-  /// Reports a message about the demo to the benchmark server.
   Future<void> printToConsole(String report) async {
     _checkNotManualMode();
     await _requestXhr(
@@ -437,8 +399,6 @@ class LocalBenchmarkServerClient {
     );
   }
 
-  /// This is the same as calling [html.HttpRequest.request] but it doesn't
-  /// crash on 404, which we use to detect `flutter run`.
   Future<web.XMLHttpRequest> _requestXhr(
     String url, {
     String? method,

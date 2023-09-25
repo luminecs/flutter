@@ -17,12 +17,6 @@ import 'common.dart';
 import 'icon_tree_shaker.dart';
 import 'shader_compiler.dart';
 
-/// Prepares the asset bundle in the format expected by flutter.gradle.
-///
-/// The vm_snapshot_data, isolate_snapshot_data, and kernel_blob.bin are
-/// expected to be in the root output directory.
-///
-/// All assets and manifests are included from flutter_assets/**.
 abstract class AndroidAssetBundle extends Target {
   const AndroidAssetBundle();
 
@@ -81,8 +75,6 @@ abstract class AndroidAssetBundle extends Target {
   ];
 }
 
-/// An implementation of [AndroidAssetBundle] that includes dependencies on vm
-/// and isolate data.
 class DebugAndroidApplication extends AndroidAssetBundle {
   const DebugAndroidApplication();
 
@@ -105,7 +97,6 @@ class DebugAndroidApplication extends AndroidAssetBundle {
   ];
 }
 
-/// An implementation of [AndroidAssetBundle] that only includes assets.
 class AotAndroidAssetBundle extends AndroidAssetBundle {
   const AotAndroidAssetBundle();
 
@@ -113,7 +104,6 @@ class AotAndroidAssetBundle extends AndroidAssetBundle {
   String get name => 'aot_android_asset_bundle';
 }
 
-/// Build a profile android application's Dart artifacts.
 class ProfileAndroidApplication extends CopyFlutterAotBundle {
   const ProfileAndroidApplication();
 
@@ -127,7 +117,6 @@ class ProfileAndroidApplication extends CopyFlutterAotBundle {
   ];
 }
 
-/// Build a release android application's Dart artifacts.
 class ReleaseAndroidApplication extends CopyFlutterAotBundle {
   const ReleaseAndroidApplication();
 
@@ -141,22 +130,9 @@ class ReleaseAndroidApplication extends CopyFlutterAotBundle {
   ];
 }
 
-/// Generate an ELF binary from a dart kernel file in release mode.
-///
-/// This rule implementation outputs the generated so to a unique location
-/// based on the Android ABI. This allows concurrent invocations of gen_snapshot
-/// to run simultaneously.
-///
-/// The name of an instance of this rule would be 'android_aot_profile_android-x64'
-/// and is relied upon by flutter.gradle to match the correct rule.
-///
-/// It will produce an 'app.so` in the build directory under a folder named with
-/// the matching Android ABI.
 class AndroidAot extends AotElfBase {
-  /// Create an [AndroidAot] implementation for a given [targetPlatform] and [buildMode].
   const AndroidAot(this.targetPlatform, this.buildMode);
 
-  /// The name of the produced Android ABI.
   String get _androidAbiName {
     return getAndroidArchForName(getNameForTargetPlatform(targetPlatform)).archName;
   }
@@ -165,12 +141,8 @@ class AndroidAot extends AotElfBase {
   String get name => 'android_aot_${buildMode.cliName}_'
     '${getNameForTargetPlatform(targetPlatform)}';
 
-  /// The specific Android ABI we are building for.
   final TargetPlatform targetPlatform;
 
-  /// The selected build mode.
-  ///
-  /// Build mode is restricted to [BuildMode.profile] or [BuildMode.release] for AOT builds.
   final BuildMode buildMode;
 
   @override
@@ -275,15 +247,11 @@ const AndroidAot androidArmRelease = AndroidAot(TargetPlatform.android_arm,  Bui
 const AndroidAot androidArm64Release = AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
 const AndroidAot androidx64Release = AndroidAot(TargetPlatform.android_x64, BuildMode.release);
 
-/// A rule paired with [AndroidAot] that copies the produced so file and manifest.json (if present) into the output directory.
 class AndroidAotBundle extends Target {
-  /// Create an [AndroidAotBundle] implementation for a given [targetPlatform] and [buildMode].
   const AndroidAotBundle(this.dependency);
 
-  /// The [AndroidAot] instance this bundle rule depends on.
   final AndroidAot dependency;
 
-  /// The name of the produced Android ABI.
   String get _androidAbiName {
     return getAndroidArchForName(getNameForTargetPlatform(dependency.targetPlatform)).archName;
   }
@@ -294,9 +262,6 @@ class AndroidAotBundle extends Target {
 
   TargetPlatform get targetPlatform => dependency.targetPlatform;
 
-  /// The selected build mode.
-  ///
-  /// This is restricted to [BuildMode.profile] or [BuildMode.release].
   BuildMode get buildMode => dependency.buildMode;
 
   @override
@@ -359,17 +324,12 @@ const AndroidAotBundle androidx64ReleaseBundle = AndroidAotBundle(androidx64Rele
 
 // Rule that copies split aot library files to the intermediate dirs of each deferred component.
 class AndroidAotDeferredComponentsBundle extends Target {
-  /// Create an [AndroidAotDeferredComponentsBundle] implementation for a given [targetPlatform] and [buildMode].
-  ///
-  /// If [components] is not provided, it will be read from the pubspec.yaml manifest.
   AndroidAotDeferredComponentsBundle(this.dependency, {List<DeferredComponent>? components}) : _components = components;
 
-  /// The [AndroidAotBundle] instance this bundle rule depends on.
   final AndroidAotBundle dependency;
 
   List<DeferredComponent>? _components;
 
-  /// The name of the produced Android ABI.
   String get _androidAbiName {
     return getAndroidArchForName(getNameForTargetPlatform(dependency.targetPlatform)).archName;
   }
@@ -433,7 +393,6 @@ Target androidArmReleaseDeferredComponentsBundle = AndroidAotDeferredComponentsB
 Target androidArm64ReleaseDeferredComponentsBundle = AndroidAotDeferredComponentsBundle(androidArm64ReleaseBundle);
 Target androidx64ReleaseDeferredComponentsBundle = AndroidAotDeferredComponentsBundle(androidx64ReleaseBundle);
 
-/// A set of all target names that build deferred component apps.
 Set<String> deferredComponentsTargets = <String>{
   androidArmProfileDeferredComponentsBundle.name,
   androidArm64ProfileDeferredComponentsBundle.name,
@@ -443,12 +402,6 @@ Set<String> deferredComponentsTargets = <String>{
   androidx64ReleaseDeferredComponentsBundle.name,
 };
 
-/// Utility method to copy and rename the required .so shared libs from the build output
-/// to the correct component intermediate directory.
-///
-/// The [DeferredComponent]s passed to this method must have had loading units assigned.
-/// Assigned components are components that have determined which loading units contains
-/// the dart libraries it has via the DeferredComponent.assignLoadingUnits method.
 Depfile copyDeferredComponentSoFiles(
   Environment env,
   List<DeferredComponent> components,

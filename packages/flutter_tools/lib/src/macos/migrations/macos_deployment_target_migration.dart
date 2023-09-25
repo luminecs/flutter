@@ -6,7 +6,6 @@ import '../../base/file_system.dart';
 import '../../base/project_migrator.dart';
 import '../../xcode_project.dart';
 
-/// Update the minimum macOS deployment version to the minimum allowed by Xcode without causing a warning.
 class MacOSDeploymentTargetMigration extends ProjectMigrator {
   MacOSDeploymentTargetMigration(
     MacOSProject project,

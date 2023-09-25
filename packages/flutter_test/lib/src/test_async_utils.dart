@@ -15,50 +15,11 @@ class _AsyncScope {
 // Examples can assume:
 // late WidgetTester tester;
 
-/// Utility class for all the async APIs in the `flutter_test` library.
-///
-/// This class provides checking for asynchronous APIs, allowing the library to
-/// verify that all the asynchronous APIs are properly `await`ed before calling
-/// another.
-///
-/// For example, it prevents this kind of code:
-///
-/// ```dart
-/// tester.pump(); // forgot to call "await"!
-/// tester.pump();
-/// ```
-///
-/// ...by detecting, in the second call to `pump`, that it should actually be:
-///
-/// ```dart
-/// await tester.pump();
-/// await tester.pump();
-/// ```
-///
-/// It does this while still allowing nested calls, e.g. so that you can
-/// call [expect] from inside callbacks.
-///
-/// You can use this in your own test functions, if you have some asynchronous
-/// functions that must be used with "await". Wrap the contents of the function
-/// in a call to TestAsyncUtils.guard(), as follows:
-///
-/// ```dart
-/// Future<void> myTestFunction() => TestAsyncUtils.guard(() async {
-///   // ...
-/// });
-/// ```
 abstract final class TestAsyncUtils {
   static const String _className = 'TestAsyncUtils';
 
   static final List<_AsyncScope> _scopeStack = <_AsyncScope>[];
 
-  /// Calls the given callback in a new async scope. The callback argument is
-  /// the asynchronous body of the calling method. The calling method is said to
-  /// be "guarded". Nested calls to guarded methods from within the body of this
-  /// one are fine, but calls to other guarded methods from outside the body of
-  /// this one before this one has finished will throw an exception.
-  ///
-  /// This method first calls [guardSync].
   static Future<T> guard<T>(Future<T> Function() body) {
     guardSync();
     final Zone zone = Zone.current.fork(
@@ -133,11 +94,6 @@ abstract final class TestAsyncUtils {
     return null;
   }
 
-  /// Verifies that there are no guarded methods currently pending (see [guard]).
-  ///
-  /// If a guarded method is currently pending, and this is not a call nested
-  /// from inside that method's body (directly or indirectly), then this method
-  /// will throw a detailed exception.
   static void guardSync() {
     if (_scopeStack.isEmpty) {
       // No scopes open, so we must be fine.
@@ -273,9 +229,6 @@ abstract final class TestAsyncUtils {
     throw FlutterError.fromParts(information);
   }
 
-  /// Verifies that there are no guarded methods currently pending (see [guard]).
-  ///
-  /// This is used at the end of tests to ensure that nothing leaks out of the test.
   static void verifyAllScopesClosed() {
     if (_scopeStack.isNotEmpty) {
       final List<DiagnosticsNode> information = <DiagnosticsNode>[

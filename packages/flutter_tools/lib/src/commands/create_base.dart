@@ -31,8 +31,6 @@ const List<String> _kAvailablePlatforms = <String>[
   'web',
 ];
 
-/// A list of all possible create platforms, even those that may not be enabled
-/// with the current config.
 const List<String> kAllCreatePlatforms = <String>[
   'ios',
   'android',
@@ -47,7 +45,6 @@ const String _kDefaultPlatformArgumentHelp =
     'Platform folders (e.g. android/) will be generated in the target project. '
     'Adding desktop platforms requires the corresponding desktop config setting to be enabled.';
 
-/// Common behavior for `flutter create` commands.
 abstract class CreateBase extends FlutterCommand {
   CreateBase({
     required bool verboseHelp,
@@ -130,15 +127,9 @@ abstract class CreateBase extends FlutterCommand {
     );
   }
 
-  /// Pattern for a Windows file system drive (e.g. "D:").
-  ///
-  /// `dart:io` does not recognize strings matching this pattern as absolute
-  /// paths, as they have no top level back-slash; however, users often specify
-  /// this
   @visibleForTesting
   static final RegExp kWindowsDrivePattern = RegExp(r'^[a-zA-Z]:$');
 
-  /// The output directory of the command.
   @protected
   @visibleForTesting
   Directory get projectDir {
@@ -154,15 +145,11 @@ abstract class CreateBase extends FlutterCommand {
     return globals.fs.directory(argResults!.rest.first);
   }
 
-  /// The normalized absolute path of [projectDir].
   @protected
   String get projectDirPath {
     return globals.fs.path.normalize(projectDir.absolute.path);
   }
 
-  /// Adds a `--platforms` argument.
-  ///
-  /// The help message of the argument is replaced with `customHelp` if `customHelp` is not null.
   @protected
   void addPlatformsOptions({String? customHelp}) {
     argParser.addMultiOption('platforms',
@@ -177,7 +164,6 @@ abstract class CreateBase extends FlutterCommand {
     );
   }
 
-  /// Throw with exit code 2 if the output directory is invalid.
   @protected
   void validateOutputDirectoryArg() {
     final List<String>? rest = argResults?.rest;
@@ -200,20 +186,9 @@ abstract class CreateBase extends FlutterCommand {
     }
   }
 
-  /// Gets the flutter root directory.
   @protected
   String get flutterRoot => Cache.flutterRoot!;
 
-  /// Determines the project type in an existing flutter project.
-  ///
-  /// If it has a .metadata file with the project_type in it, use that.
-  /// If it has an android dir and an android/app dir, it's a legacy app
-  /// If it has an ios dir and an ios/Flutter dir, it's a legacy app
-  /// Otherwise, we don't presume to know what type of project it could be, since
-  /// many of the files could be missing, and we can't really tell definitively.
-  ///
-  /// Throws assertion if [projectDir] does not exist or empty.
-  /// Returns null if no project type can be determined.
   @protected
   FlutterProjectType? determineTemplateType() {
     assert(projectDir.existsSync() && projectDir.listSync().isNotEmpty);
@@ -246,10 +221,6 @@ abstract class CreateBase extends FlutterCommand {
     return null;
   }
 
-  /// Determines the organization.
-  ///
-  /// If `--org` is specified in the command, returns that directly.
-  /// If `--org` is not specified, returns the organization from the existing project.
   @protected
   Future<String> getOrganization() async {
     String? organization = stringArg('org');
@@ -270,7 +241,6 @@ abstract class CreateBase extends FlutterCommand {
     return organization;
   }
 
-  /// Throws with exit 2 if the project directory is illegal.
   @protected
   void validateProjectDir({bool overwrite = false}) {
     if (globals.fs.path.isWithin(flutterRoot, projectDirPath)) {
@@ -319,9 +289,6 @@ abstract class CreateBase extends FlutterCommand {
     }
   }
 
-  /// Gets the project name based.
-  ///
-  /// Use the current directory path name if the `--project-name` is not specified explicitly.
   @protected
   String get projectName {
     final String projectName =
@@ -335,7 +302,6 @@ abstract class CreateBase extends FlutterCommand {
     return projectName;
   }
 
-  /// Creates a template to use for [renderTemplate].
   @protected
   Map<String, Object?> createTemplateContext({
     required String organization,
@@ -432,10 +398,6 @@ abstract class CreateBase extends FlutterCommand {
     };
   }
 
-  /// Renders the template, generate files into `directory`.
-  ///
-  /// `templateName` should match one of directory names under flutter_tools/template/.
-  /// If `overwrite` is true, overwrites existing files, `overwrite` defaults to `false`.
   @protected
   Future<int> renderTemplate(
     String templateName,
@@ -459,11 +421,6 @@ abstract class CreateBase extends FlutterCommand {
     );
   }
 
-  /// Merges named templates into a single template, output to `directory`.
-  ///
-  /// `names` should match directory names under flutter_tools/template/.
-  ///
-  /// If `overwrite` is true, overwrites existing files, `overwrite` defaults to `false`.
   @protected
   Future<int> renderMerged(
     List<String> names,
@@ -488,9 +445,6 @@ abstract class CreateBase extends FlutterCommand {
     );
   }
 
-  /// Generate application project in the `directory` using `templateContext`.
-  ///
-  /// If `overwrite` is true, overwrites existing files, `overwrite` defaults to `false`.
   @protected
   Future<int> generateApp(
     List<String> templateNames,
@@ -593,10 +547,6 @@ abstract class CreateBase extends FlutterCommand {
     return generatedCount;
   }
 
-  /// Creates an android identifier.
-  ///
-  /// Android application ID is specified in: https://developer.android.com/studio/build/application-id
-  /// All characters must be alphanumeric or an underscore [a-zA-Z0-9_].
   static String createAndroidIdentifier(String organization, String name) {
     String tmpIdentifier = '$organization.$name';
     final RegExp disallowed = RegExp(r'[^\w\.]');
@@ -622,9 +572,6 @@ abstract class CreateBase extends FlutterCommand {
     return prefixedSegments.join('.');
   }
 
-  /// Creates a Windows package name.
-  ///
-  /// Package names must be a globally unique, commonly a GUID.
   static String createWindowsIdentifier(String organization, String name) {
     return const Uuid().v4().toUpperCase();
   }
@@ -634,7 +581,6 @@ abstract class CreateBase extends FlutterCommand {
     return camelizedName[0].toUpperCase() + camelizedName.substring(1);
   }
 
-  /// Create a UTI (https://en.wikipedia.org/wiki/Uniform_Type_Identifier) from a base name
   static String createUTIIdentifier(String organization, String name) {
     name = camelCase(name);
     String tmpIdentifier = '$organization.$name';
@@ -778,7 +724,6 @@ const Set<String> _packageDependencies = <String>{
   'meta',
 };
 
-/// Whether [name] is a valid Pub package.
 @visibleForTesting
 bool isValidPackageName(String name) {
   final Match? match = _identifierRegExp.matchAsPrefix(name);
@@ -787,9 +732,6 @@ bool isValidPackageName(String name) {
       !_keywords.contains(name);
 }
 
-/// Returns a potential valid name from the given [name].
-///
-/// If a valid name cannot be found, returns `null`.
 @visibleForTesting
 String? potentialValidPackageName(String name){
   String newName = name.toLowerCase();

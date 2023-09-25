@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FocusScope].
 
 void main() => runApp(const FocusScopeExampleApp());
 
@@ -19,9 +18,6 @@ class FocusScopeExampleApp extends StatelessWidget {
   }
 }
 
-/// A demonstration pane.
-///
-/// This is just a separate widget to simplify the example.
 class Pane extends StatelessWidget {
   const Pane({
     super.key,

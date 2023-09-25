@@ -18,10 +18,6 @@ const List<String> kSentinelStr = <String>[
   '==== sentinel #3 ====',
 ];
 
-/// Tests that Choreographer#doFrame finishes during application startup.
-/// This test fails if the application hangs during this period.
-/// https://ui.perfetto.dev/#!/?s=da6628c3a92456ae8fa3f345d0186e781da77e90fc8a64d073e9fee11d1e65
-/// Regression test for https://github.com/flutter/flutter/issues/98973
 TaskFunction androidChoreographerDoFrameTest({
   Map<String, String>? environment,
 }) {

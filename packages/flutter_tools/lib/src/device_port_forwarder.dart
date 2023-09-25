@@ -17,7 +17,6 @@ class ForwardedPort {
   @override
   String toString() => 'ForwardedPort HOST:$hostPort to DEVICE:$devicePort';
 
-  /// Kill subprocess (if present) used in forwarding.
   void dispose() {
     if (context != null) {
       context!.kill();
@@ -25,21 +24,13 @@ class ForwardedPort {
   }
 }
 
-/// Forward ports from the host machine to the device.
 abstract class DevicePortForwarder {
-  /// Returns a Future that completes with the current list of forwarded
-  /// ports for this device.
   List<ForwardedPort> get forwardedPorts;
 
-  /// Forward [hostPort] on the host to [devicePort] on the device.
-  /// If [hostPort] is null or zero, will auto select a host port.
-  /// Returns a Future that completes with the host port.
   Future<int> forward(int devicePort, { int? hostPort });
 
-  /// Stops forwarding [forwardedPort].
   Future<void> unforward(ForwardedPort forwardedPort);
 
-  /// Cleanup allocated resources, like [forwardedPorts].
   Future<void> dispose();
 }
 

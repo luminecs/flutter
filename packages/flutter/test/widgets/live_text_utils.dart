@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// A mock class to control the return result of Live Text input functions.
 class LiveTextInputTester {
   LiveTextInputTester() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, _handler);
@@ -33,7 +32,6 @@ class LiveTextInputTester {
   }
 }
 
-/// A function to find the live text button.
 Finder findLiveTextButton() => find.byWidgetPredicate((Widget widget) =>
   widget is CustomPaint &&
   '${widget.painter?.runtimeType}' == '_LiveTextIconPainter',

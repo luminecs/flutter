@@ -7,22 +7,15 @@ import 'package:flutter/services.dart';
 
 import 'binding.dart';
 
-/// Processes text input events that were not handled by the framework.
 abstract class TestTextInputKeyHandler {
-  /// Process key down event that was not handled by the framework.
   Future<void> handleKeyDownEvent(LogicalKeyboardKey key);
 
-  /// Process key up event that was not handled by the framework.
   Future<void> handleKeyUpEvent(LogicalKeyboardKey key);
 }
 
-/// MacOS specific key input handler. This class translates standard macOS text editing shortcuts
-/// into appropriate selectors similarly to what NSTextInputContext does in Flutter Engine.
 class MacOSTestTextInputKeyHandler extends TestTextInputKeyHandler {
-  /// Create a new macOS specific text input handler.
   MacOSTestTextInputKeyHandler(this.client);
 
-  /// ClientId of TextInput
   final int client;
 
   Future<void> _sendSelectors(List<String> selectors) async {

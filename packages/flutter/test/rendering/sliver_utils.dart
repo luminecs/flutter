@@ -21,7 +21,6 @@ class RenderMockSliverToBoxAdapter extends RenderSliverToBoxAdapter {
 }
 
 class MockSliverToBoxAdapter extends SingleChildRenderObjectWidget {
-  /// Creates a sliver that contains a single box widget.
   const MockSliverToBoxAdapter({
     super.key,
     super.child,

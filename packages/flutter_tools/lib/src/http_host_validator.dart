@@ -10,7 +10,6 @@ import 'base/platform.dart';
 import 'doctor_validator.dart';
 import 'features.dart';
 
-/// Common Flutter HTTP hosts.
 const String kCloudHost = 'https://storage.googleapis.com/';
 const String kCocoaPods = 'https://cocoapods.org/';
 const String kGitHub = 'https://github.com/';
@@ -45,7 +44,6 @@ class HttpHostValidator extends DoctorValidator {
     return 'Attempting to reach ${_activeHosts.map((Uri url) => url.host).join(", ")}...';
   }
 
-  /// Make a head request to the HTTP host for checking availability
   Future<String?> _checkHostAvailability(Uri host) async {
     try {
       assert(!_activeHosts.contains(host));

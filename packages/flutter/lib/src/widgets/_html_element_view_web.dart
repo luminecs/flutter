@@ -12,10 +12,7 @@ import 'package:flutter/services.dart';
 import 'framework.dart';
 import 'platform_view.dart';
 
-/// The platform-specific implementation of [HtmlElementView].
 extension HtmlElementViewImpl on HtmlElementView {
-  /// Creates an [HtmlElementView] that renders a DOM element with the given
-  /// [tagName].
   static HtmlElementView createFromTagName({
     Key? key,
     required String tagName,
@@ -30,13 +27,6 @@ extension HtmlElementViewImpl on HtmlElementView {
     );
   }
 
-  /// The implementation of [HtmlElementView.build].
-  ///
-  /// This is not expected to be invoked in non-web environments. It throws if
-  /// that happens.
-  ///
-  /// The implementation on Flutter Web builds an HTML platform view and handles
-  /// its lifecycle.
   Widget buildImpl(BuildContext context) {
     return PlatformViewLink(
       viewType: viewType,
@@ -51,7 +41,6 @@ extension HtmlElementViewImpl on HtmlElementView {
     );
   }
 
-  /// Creates the controller and kicks off its initialization.
   _HtmlElementViewController _createController(
     PlatformViewCreationParams params,
   ) {
@@ -89,9 +78,6 @@ class _HtmlElementViewController extends PlatformViewController {
   @override
   final int viewId;
 
-  /// The unique identifier for the HTML view type to be embedded by this widget.
-  ///
-  /// A PlatformViewFactory for this type must have been registered.
   final String viewType;
 
   final dynamic creationParams;
@@ -128,9 +114,6 @@ class _HtmlElementViewController extends PlatformViewController {
   }
 }
 
-/// Overrides the [ui_web.PlatformViewRegistry] used by [HtmlElementView].
-///
-/// This is used for testing view factory registration.
 @visibleForTesting
 ui_web.PlatformViewRegistry? debugOverridePlatformViewRegistry;
 ui_web.PlatformViewRegistry get _platformViewsRegistry => debugOverridePlatformViewRegistry ?? ui_web.platformViewRegistry;

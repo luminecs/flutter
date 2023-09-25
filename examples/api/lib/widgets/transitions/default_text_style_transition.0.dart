@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [DefaultTextStyleTransition].
 
 void main() => runApp(const DefaultTextStyleTransitionExampleApp());
 
@@ -26,8 +25,6 @@ class DefaultTextStyleTransitionExample extends StatefulWidget {
   State<DefaultTextStyleTransitionExample> createState() => _DefaultTextStyleTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _DefaultTextStyleTransitionExampleState extends State<DefaultTextStyleTransitionExample>
     with TickerProviderStateMixin {
   late AnimationController _controller;

@@ -17,26 +17,16 @@ import '../project.dart';
 import 'github_template.dart';
 import 'reporting.dart';
 
-/// Tells crash backend that the error is from the Flutter CLI.
 const String _kProductId = 'Flutter_Tools';
 
-/// Tells crash backend that this is a Dart error as opposed to, say, Java.
 const String _kDartTypeId = 'DartError';
 
-/// Crash backend host.
 const String _kCrashServerHost = 'clients2.google.com';
 
-/// Path to the crash servlet.
 const String _kCrashEndpointPath = '/cr/report';
 
-/// The field corresponding to the multipart/form-data file attachment where
-/// crash backend expects to find the Dart stack trace.
 const String _kStackTraceFileField = 'DartError';
 
-/// The name of the file attached as [_kStackTraceFileField].
-///
-/// The precise value is not important. It is ignored by the crash back end, but
-/// it must be supplied in the request.
 const String _kStackTraceFilename = 'stacktrace_file';
 
 class CrashDetails {
@@ -53,7 +43,6 @@ class CrashDetails {
   final DoctorText doctorText;
 }
 
-/// Reports information about the crash to the user.
 class CrashReporter {
   CrashReporter({
     required FileSystem fileSystem,
@@ -67,7 +56,6 @@ class CrashReporter {
   final Logger _logger;
   final FlutterProjectFactory _flutterProjectFactory;
 
-  /// Prints instructions for filing a bug about the crash.
   Future<void> informUser(CrashDetails details, File crashFile) async {
     _logger.printError('A crash report has been written to ${crashFile.path}');
     _logger.printStatus('This crash may already be reported. Check GitHub for similar crashes.', emphasis: true);
@@ -95,13 +83,6 @@ class CrashReporter {
   }
 }
 
-/// Sends crash reports to Google.
-///
-/// To override the behavior of this class, define a
-/// `FLUTTER_CRASH_SERVER_BASE_URL` environment variable that points to a custom
-/// crash reporting server. This is useful if your development environment is
-/// behind a firewall and unable to send crash reports to Google, or when you
-/// wish to use your own server for collecting crash reports from Flutter Tools.
 class CrashReportSender {
   CrashReportSender({
     http.Client? client,
@@ -137,9 +118,6 @@ class CrashReportSender {
     );
   }
 
-  /// Sends one crash report.
-  ///
-  /// The report is populated from data in [error] and [stackTrace].
   Future<void> sendReport({
     required Object error,
     required StackTrace stackTrace,

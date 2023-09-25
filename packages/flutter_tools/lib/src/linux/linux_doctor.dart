@@ -9,12 +9,7 @@ import '../base/user_messages.dart';
 import '../base/version.dart';
 import '../doctor_validator.dart';
 
-/// A combination of version description and parsed version number.
 class _VersionInfo {
-  /// Constructs a VersionInfo from a version description string.
-  ///
-  /// This should contain a version number. For example:
-  ///     "clang version 9.0.1-6+build1"
   _VersionInfo(this.description) {
     final String? versionString = RegExp(r'[0-9]+\.[0-9]+(?:\.[0-9]+)?').firstMatch(description)?.group(0);
     number = Version.parse(versionString);
@@ -27,7 +22,6 @@ class _VersionInfo {
   Version? number;
 }
 
-/// A validator that checks for Clang and Make build dependencies.
 class LinuxDoctorValidator extends DoctorValidator {
   LinuxDoctorValidator({
     required ProcessManager processManager,
@@ -158,10 +152,6 @@ class LinuxDoctorValidator extends DoctorValidator {
     return ValidationResult(validationType, messages);
   }
 
-  /// Returns the installed version of [binary], or null if it's not installed.
-  ///
-  /// Requires tha [binary] take a '--version' flag, and print a version of the
-  /// form x.y.z somewhere on the first line of output.
   Future<_VersionInfo?> _getBinaryVersion(String binary) async {
     ProcessResult? result;
     try {
@@ -181,7 +171,6 @@ class LinuxDoctorValidator extends DoctorValidator {
     return _VersionInfo(firstLine);
   }
 
-  /// Checks that [library] is available via pkg-config.
   Future<bool> _libraryIsPresent(String library) async {
     ProcessResult? result;
     try {

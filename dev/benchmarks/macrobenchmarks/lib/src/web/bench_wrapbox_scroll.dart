@@ -8,9 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'recorder.dart';
 
-/// Creates a [Wrap] inside a ListView.
-///
-/// Tests large number of DOM nodes since image breaks up large canvas.
 class BenchWrapBoxScroll extends WidgetRecorder {
   BenchWrapBoxScroll() : super(name: benchmarkName);
 

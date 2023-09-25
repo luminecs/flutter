@@ -45,9 +45,6 @@ void main() {
     fs = MemoryFileSystem(style: style);
   });
 
-  /// Converts posix-style paths to the style associated with [fs].
-  ///
-  /// This allows us to deal in posix-style paths in the tests.
   String fix(String path) {
     if (path.startsWith('/')) {
       path = '${fs.style.drive}$path';

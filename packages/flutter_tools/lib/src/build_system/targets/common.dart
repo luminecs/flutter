@@ -23,7 +23,6 @@ import 'localizations.dart';
 import 'native_assets.dart';
 import 'shader_compiler.dart';
 
-/// Copies the pre-built flutter bundle.
 // This is a one-off rule for implementing build bundle in terms of assemble.
 class CopyFlutterBundle extends Target {
   const CopyFlutterBundle();
@@ -91,7 +90,6 @@ class CopyFlutterBundle extends Target {
   ];
 }
 
-/// Copies the pre-built flutter bundle for release mode.
 class ReleaseCopyFlutterBundle extends CopyFlutterBundle {
   const ReleaseCopyFlutterBundle();
 
@@ -113,12 +111,6 @@ class ReleaseCopyFlutterBundle extends CopyFlutterBundle {
   List<Target> get dependencies => const <Target>[];
 }
 
-/// Generate a snapshot of the dart code used in the program.
-///
-/// This target depends on the `.dart_tool/package_config.json` file
-/// even though it is not listed as an input. Pub inserts a timestamp into
-/// the file which causes unnecessary rebuilds, so instead a subset of the contents
-/// are used an input instead.
 class KernelSnapshot extends Target {
   const KernelSnapshot();
 
@@ -272,7 +264,6 @@ class KernelSnapshot extends Target {
   }
 }
 
-/// Supports compiling a dart kernel file to an ELF binary.
 abstract class AotElfBase extends Target {
   const AotElfBase();
 
@@ -330,7 +321,6 @@ abstract class AotElfBase extends Target {
   }
 }
 
-/// Generate an ELF binary from a dart kernel file in profile mode.
 class AotElfProfile extends AotElfBase {
   const AotElfProfile(this.targetPlatform);
 
@@ -362,7 +352,6 @@ class AotElfProfile extends AotElfBase {
   final TargetPlatform targetPlatform;
 }
 
-/// Generate an ELF binary from a dart kernel file in release mode.
 class AotElfRelease extends AotElfBase {
   const AotElfRelease(this.targetPlatform);
 
@@ -394,7 +383,6 @@ class AotElfRelease extends AotElfBase {
   final TargetPlatform targetPlatform;
 }
 
-/// Copies the pre-built flutter aot bundle.
 // This is a one-off rule for implementing build aot in terms of assemble.
 abstract class CopyFlutterAotBundle extends Target {
   const CopyFlutterAotBundle();
@@ -419,12 +407,7 @@ abstract class CopyFlutterAotBundle extends Target {
   }
 }
 
-/// Lipo CLI tool wrapper shared by iOS and macOS builds.
 abstract final class Lipo {
-  /// Create a "fat" binary by combining multiple architecture-specific ones.
-  /// `skipMissingInputs` can be changed to `true` to first check whether
-  /// the expected input paths exist and ignore the command if they don't.
-  /// Otherwise, `lipo` would fail if the given paths didn't exist.
   static Future<void> create(
     Environment environment,
     List<DarwinArch> darwinArchs, {

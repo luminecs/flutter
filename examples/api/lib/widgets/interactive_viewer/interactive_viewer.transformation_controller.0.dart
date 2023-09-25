@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [InteractiveViewer.transformationController].
 
 void main() => runApp(const TransformationControllerExampleApp());
 
@@ -26,8 +25,6 @@ class TransformationControllerExample extends StatefulWidget {
   State<TransformationControllerExample> createState() => _TransformationControllerExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _TransformationControllerExampleState extends State<TransformationControllerExample>
     with TickerProviderStateMixin {
   final TransformationController _transformationController = TransformationController();

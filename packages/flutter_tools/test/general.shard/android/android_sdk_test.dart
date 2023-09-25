@@ -344,7 +344,6 @@ void main() {
   });
 }
 
-/// A broken SDK installation.
 Directory createBrokenSdkDirectory({
   bool withAndroidN = false,
   bool withSdkManager = true,

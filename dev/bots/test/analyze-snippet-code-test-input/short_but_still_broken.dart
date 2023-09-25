@@ -8,12 +8,6 @@
 // Examples can assume:
 // int x = ''; // error (invalid_assignment)
 
-/// ```dart
-/// print(x);
-/// ```
 String? bar;
 
-/// error: empty dart block
-/// ```dart
-/// ```
 String? foo;

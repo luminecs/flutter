@@ -30,26 +30,6 @@ import '../runner/flutter_command.dart' show FlutterCommandCategory, FlutterComm
 import '../web/web_device.dart';
 import 'run.dart';
 
-/// Runs integration (a.k.a. end-to-end) tests.
-///
-/// An integration test is a program that runs in a separate process from your
-/// Flutter application. It connects to the application and acts like a user,
-/// performing taps, scrolls, reading out widget properties and verifying their
-/// correctness.
-///
-/// This command takes a target Flutter application that you would like to test
-/// as the `--target` option (defaults to `lib/main.dart`). It then looks for a
-/// corresponding test file within the `test_driver` directory. The test file is
-/// expected to have the same name but contain the `_test.dart` suffix. The
-/// `_test.dart` file would generally be a Dart program that uses
-/// `package:flutter_driver` and exercises your application. Most commonly it
-/// is a test written using `package:test`, but you are free to use something
-/// else.
-///
-/// The app and the test are launched simultaneously. Once the test completes
-/// the application is stopped and the command exits. If all these steps are
-/// successful the exit code will be `0`. Otherwise, you will see a non-zero
-/// exit code.
 class DriveCommand extends RunCommandBase {
   DriveCommand({
     bool verboseHelp = false,
@@ -150,7 +130,6 @@ class DriveCommand extends RunCommandBase {
 
   final Signals signals;
 
-  /// The [ProcessSignal]s that will lead to a screenshot being taken (if the option is provided).
   final Set<ProcessSignal> signalsToHandle;
 
   // `pub` must always be run due to the test script running from source,

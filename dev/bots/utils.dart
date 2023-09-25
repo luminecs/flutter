@@ -235,7 +235,6 @@ void _printLoudly(String message) {
 
 int _portCounter = 8080;
 
-/// Finds the next available local port.
 Future<int> findAvailablePortAndPossiblyCauseFlakyTests() async {
   while (!await _isPortAvailable(_portCounter)) {
     _portCounter += 1;

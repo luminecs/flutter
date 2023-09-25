@@ -23,37 +23,17 @@ const TextStyle _kTextStyle = TextStyle(
   height: 1.0,
 );
 
-/// Where to show a [Banner].
-///
-/// The start and end locations are relative to the ambient [Directionality]
-/// (which can be overridden by [Banner.layoutDirection]).
 enum BannerLocation {
-  /// Show the banner in the top-right corner when the ambient [Directionality]
-  /// (or [Banner.layoutDirection]) is [TextDirection.rtl] and in the top-left
-  /// corner when the ambient [Directionality] is [TextDirection.ltr].
   topStart,
 
-  /// Show the banner in the top-left corner when the ambient [Directionality]
-  /// (or [Banner.layoutDirection]) is [TextDirection.rtl] and in the top-right
-  /// corner when the ambient [Directionality] is [TextDirection.ltr].
   topEnd,
 
-  /// Show the banner in the bottom-right corner when the ambient
-  /// [Directionality] (or [Banner.layoutDirection]) is [TextDirection.rtl] and
-  /// in the bottom-left corner when the ambient [Directionality] is
-  /// [TextDirection.ltr].
   bottomStart,
 
-  /// Show the banner in the bottom-left corner when the ambient
-  /// [Directionality] (or [Banner.layoutDirection]) is [TextDirection.rtl] and
-  /// in the bottom-right corner when the ambient [Directionality] is
-  /// [TextDirection.ltr].
   bottomEnd,
 }
 
-/// Paints a [Banner].
 class BannerPainter extends CustomPainter {
-  /// Creates a banner painter.
   BannerPainter({
     required this.message,
     required this.textDirection,
@@ -63,44 +43,16 @@ class BannerPainter extends CustomPainter {
     this.textStyle = _kTextStyle,
   }) : super(repaint: PaintingBinding.instance.systemFonts);
 
-  /// The message to show in the banner.
   final String message;
 
-  /// The directionality of the text.
-  ///
-  /// This value is used to disambiguate how to render bidirectional text. For
-  /// example, if the message is an English phrase followed by a Hebrew phrase,
-  /// in a [TextDirection.ltr] context the English phrase will be on the left
-  /// and the Hebrew phrase to its right, while in a [TextDirection.rtl]
-  /// context, the English phrase will be on the right and the Hebrew phrase on
-  /// its left.
-  ///
-  /// See also:
-  ///
-  ///  * [layoutDirection], which controls the interpretation of values in
-  ///    [location].
   final TextDirection textDirection;
 
-  /// Where to show the banner (e.g., the upper right corner).
   final BannerLocation location;
 
-  /// The directionality of the layout.
-  ///
-  /// This value is used to interpret the [location] of the banner.
-  ///
-  /// See also:
-  ///
-  ///  * [textDirection], which controls the reading direction of the [message].
   final TextDirection layoutDirection;
 
-  /// The color to paint behind the [message].
-  ///
-  /// Defaults to a dark red.
   final Color color;
 
-  /// The text style to use for the [message].
-  ///
-  /// Defaults to bold, white text.
   final TextStyle textStyle;
 
   static const BoxShadow _shadow = BoxShadow(
@@ -113,9 +65,6 @@ class BannerPainter extends CustomPainter {
   late Paint _paintShadow;
   late Paint _paintBanner;
 
-  /// Release resources held by this painter.
-  ///
-  /// After calling this method, this object is no longer usable.
   void dispose() {
     _textPainter?.dispose();
     _textPainter = null;
@@ -222,17 +171,7 @@ class BannerPainter extends CustomPainter {
   }
 }
 
-/// Displays a diagonal message above the corner of another widget.
-///
-/// Useful for showing the execution mode of an app (e.g., that asserts are
-/// enabled.)
-///
-/// See also:
-///
-///  * [CheckedModeBanner], which the [WidgetsApp] widget includes by default in
-///    debug mode, to show a banner that says "DEBUG".
 class Banner extends StatelessWidget {
-  /// Creates a banner.
   const Banner({
     super.key,
     this.child,
@@ -244,48 +183,18 @@ class Banner extends StatelessWidget {
     this.textStyle = _kTextStyle,
   });
 
-  /// The widget to show behind the banner.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget? child;
 
-  /// The message to show in the banner.
   final String message;
 
-  /// The directionality of the text.
-  ///
-  /// This is used to disambiguate how to render bidirectional text. For
-  /// example, if the message is an English phrase followed by a Hebrew phrase,
-  /// in a [TextDirection.ltr] context the English phrase will be on the left
-  /// and the Hebrew phrase to its right, while in a [TextDirection.rtl]
-  /// context, the English phrase will be on the right and the Hebrew phrase on
-  /// its left.
-  ///
-  /// Defaults to the ambient [Directionality], if any.
-  ///
-  /// See also:
-  ///
-  ///  * [layoutDirection], which controls the interpretation of the [location].
   final TextDirection? textDirection;
 
-  /// Where to show the banner (e.g., the upper right corner).
   final BannerLocation location;
 
-  /// The directionality of the layout.
-  ///
-  /// This is used to resolve the [location] values.
-  ///
-  /// Defaults to the ambient [Directionality], if any.
-  ///
-  /// See also:
-  ///
-  ///  * [textDirection], which controls the reading direction of the [message].
   final TextDirection? layoutDirection;
 
-  /// The color of the banner.
   final Color color;
 
-  /// The style of the text shown on the banner.
   final TextStyle textStyle;
 
   @override
@@ -316,20 +225,12 @@ class Banner extends StatelessWidget {
   }
 }
 
-/// Displays a [Banner] saying "DEBUG" when running in debug mode.
-/// [MaterialApp] builds one of these by default.
-///
-/// Does nothing in release mode.
 class CheckedModeBanner extends StatelessWidget {
-  /// Creates a const debug mode banner.
   const CheckedModeBanner({
     super.key,
     required this.child,
   });
 
-  /// The widget to show behind the banner.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
   @override

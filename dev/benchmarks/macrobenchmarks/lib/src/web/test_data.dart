@@ -10,7 +10,6 @@ import 'dart:ui';
 // Using constant seed for reproducibility.
 final math.Random _random = math.Random(0);
 
-/// Random words used by benchmarks that contain text.
 final List<String> lipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing '
   'elit. Vivamus ut ligula a neque mattis posuere. Sed suscipit lobortis '
   'sodales. Morbi sed neque molestie, hendrerit odio ac, aliquam velit. '
@@ -29,8 +28,6 @@ final List<String> lipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing 
   'lectus. Donec vitae nibh mauris. Morbi posuere sem id eros tristique tempus. '
   'Vivamus lacinia sapien neque, eu semper purus gravida ut.'.split(' ');
 
-/// Generates strings and builds pre-laid out paragraphs to be used by
-/// benchmarks.
 List<Paragraph> generateLaidOutParagraphs({
   required int paragraphCount,
   required int minWordCountPerParagraph,

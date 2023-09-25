@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ListTile.selected].
 
 void main() => runApp(const ListTileApp());
 

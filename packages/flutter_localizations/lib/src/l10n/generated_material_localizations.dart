@@ -20,11 +20,7 @@ import '../material_localizations.dart';
 // bottom of this file, and used by the [_MaterialLocalizationsDelegate.load]
 // method defined in `flutter_localizations/lib/src/material_localizations.dart`.
 
-/// The translations for Afrikaans (`af`).
 class MaterialLocalizationAf extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Afrikaans.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationAf({
     super.localeName = 'af',
     required super.fullYearFormat,
@@ -510,11 +506,7 @@ class MaterialLocalizationAf extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Bekyk lisensies';
 }
 
-/// The translations for Amharic (`am`).
 class MaterialLocalizationAm extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Amharic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationAm({
     super.localeName = 'am',
     required super.fullYearFormat,
@@ -1000,11 +992,7 @@ class MaterialLocalizationAm extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ፈቃዶችን ይመልከቱ';
 }
 
-/// The translations for Arabic (`ar`).
 class MaterialLocalizationAr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Arabic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationAr({
     super.localeName = 'ar',
     required super.fullYearFormat,
@@ -1490,11 +1478,7 @@ class MaterialLocalizationAr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'الاطّلاع على التراخيص';
 }
 
-/// The translations for Assamese (`as`).
 class MaterialLocalizationAs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Assamese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationAs({
     super.localeName = 'as',
     required super.fullYearFormat,
@@ -1980,11 +1964,7 @@ class MaterialLocalizationAs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'অনুজ্ঞাপত্ৰসমূহ চাওক';
 }
 
-/// The translations for Azerbaijani (`az`).
 class MaterialLocalizationAz extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Azerbaijani.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationAz({
     super.localeName = 'az',
     required super.fullYearFormat,
@@ -2470,11 +2450,7 @@ class MaterialLocalizationAz extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Lisenziyalara baxın';
 }
 
-/// The translations for Belarusian (`be`).
 class MaterialLocalizationBe extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Belarusian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationBe({
     super.localeName = 'be',
     required super.fullYearFormat,
@@ -2960,11 +2936,7 @@ class MaterialLocalizationBe extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Праглядзець ліцэнзіі';
 }
 
-/// The translations for Bulgarian (`bg`).
 class MaterialLocalizationBg extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Bulgarian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationBg({
     super.localeName = 'bg',
     required super.fullYearFormat,
@@ -3450,11 +3422,7 @@ class MaterialLocalizationBg extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Преглед на лицензите';
 }
 
-/// The translations for Bengali Bangla (`bn`).
 class MaterialLocalizationBn extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Bengali Bangla.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationBn({
     super.localeName = 'bn',
     required super.fullYearFormat,
@@ -3940,11 +3908,7 @@ class MaterialLocalizationBn extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'লাইসেন্স দেখুন';
 }
 
-/// The translations for Bosnian (`bs`).
 class MaterialLocalizationBs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Bosnian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationBs({
     super.localeName = 'bs',
     required super.fullYearFormat,
@@ -4430,11 +4394,7 @@ class MaterialLocalizationBs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Prikaži licence';
 }
 
-/// The translations for Catalan Valencian (`ca`).
 class MaterialLocalizationCa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Catalan Valencian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationCa({
     super.localeName = 'ca',
     required super.fullYearFormat,
@@ -4920,11 +4880,7 @@ class MaterialLocalizationCa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Mostra les llicències';
 }
 
-/// The translations for Czech (`cs`).
 class MaterialLocalizationCs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Czech.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationCs({
     super.localeName = 'cs',
     required super.fullYearFormat,
@@ -5410,11 +5366,7 @@ class MaterialLocalizationCs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Zobrazit licence';
 }
 
-/// The translations for Welsh (`cy`).
 class MaterialLocalizationCy extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Welsh.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationCy({
     super.localeName = 'cy',
     required super.fullYearFormat,
@@ -5900,11 +5852,7 @@ class MaterialLocalizationCy extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Gweld trwyddedau';
 }
 
-/// The translations for Danish (`da`).
 class MaterialLocalizationDa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Danish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationDa({
     super.localeName = 'da',
     required super.fullYearFormat,
@@ -6390,11 +6338,7 @@ class MaterialLocalizationDa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Se licenser';
 }
 
-/// The translations for German (`de`).
 class MaterialLocalizationDe extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for German.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationDe({
     super.localeName = 'de',
     required super.fullYearFormat,
@@ -6880,11 +6824,7 @@ class MaterialLocalizationDe extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Lizenzen ansehen';
 }
 
-/// The translations for German, as used in Switzerland (`de_CH`).
 class MaterialLocalizationDeCh extends MaterialLocalizationDe {
-  /// Create an instance of the translation bundle for German, as used in Switzerland.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationDeCh({
     super.localeName = 'de_CH',
     required super.fullYearFormat,
@@ -6944,11 +6884,7 @@ class MaterialLocalizationDeCh extends MaterialLocalizationDe {
   String get modalBarrierDismissLabel => 'Schliessen';
 }
 
-/// The translations for Modern Greek (`el`).
 class MaterialLocalizationEl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Modern Greek.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEl({
     super.localeName = 'el',
     required super.fullYearFormat,
@@ -7434,11 +7370,7 @@ class MaterialLocalizationEl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Προβολή αδειών';
 }
 
-/// The translations for English (`en`).
 class MaterialLocalizationEn extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for English.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEn({
     super.localeName = 'en',
     required super.fullYearFormat,
@@ -7924,11 +7856,7 @@ class MaterialLocalizationEn extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'View licenses';
 }
 
-/// The translations for English, as used in Australia (`en_AU`).
 class MaterialLocalizationEnAu extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Australia.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnAu({
     super.localeName = 'en_AU',
     required super.fullYearFormat,
@@ -8021,11 +7949,7 @@ class MaterialLocalizationEnAu extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in Canada (`en_CA`).
 class MaterialLocalizationEnCa extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Canada.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnCa({
     super.localeName = 'en_CA',
     required super.fullYearFormat,
@@ -8130,11 +8054,7 @@ class MaterialLocalizationEnCa extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in the United Kingdom (`en_GB`).
 class MaterialLocalizationEnGb extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in the United Kingdom.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnGb({
     super.localeName = 'en_GB',
     required super.fullYearFormat,
@@ -8230,11 +8150,7 @@ class MaterialLocalizationEnGb extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in Ireland (`en_IE`).
 class MaterialLocalizationEnIe extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Ireland.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnIe({
     super.localeName = 'en_IE',
     required super.fullYearFormat,
@@ -8330,11 +8246,7 @@ class MaterialLocalizationEnIe extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in India (`en_IN`).
 class MaterialLocalizationEnIn extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in India.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnIn({
     super.localeName = 'en_IN',
     required super.fullYearFormat,
@@ -8427,11 +8339,7 @@ class MaterialLocalizationEnIn extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in New Zealand (`en_NZ`).
 class MaterialLocalizationEnNz extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in New Zealand.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnNz({
     super.localeName = 'en_NZ',
     required super.fullYearFormat,
@@ -8524,11 +8432,7 @@ class MaterialLocalizationEnNz extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in Singapore (`en_SG`).
 class MaterialLocalizationEnSg extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in Singapore.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnSg({
     super.localeName = 'en_SG',
     required super.fullYearFormat,
@@ -8621,11 +8525,7 @@ class MaterialLocalizationEnSg extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for English, as used in South Africa (`en_ZA`).
 class MaterialLocalizationEnZa extends MaterialLocalizationEn {
-  /// Create an instance of the translation bundle for English, as used in South Africa.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEnZa({
     super.localeName = 'en_ZA',
     required super.fullYearFormat,
@@ -8721,11 +8621,7 @@ class MaterialLocalizationEnZa extends MaterialLocalizationEn {
   String get reorderItemRight => 'Move to the right';
 }
 
-/// The translations for Spanish Castilian (`es`).
 class MaterialLocalizationEs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Spanish Castilian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEs({
     super.localeName = 'es',
     required super.fullYearFormat,
@@ -9211,11 +9107,7 @@ class MaterialLocalizationEs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Ver licencias';
 }
 
-/// The translations for Spanish Castilian, as used in Latin America and the Caribbean (`es_419`).
 class MaterialLocalizationEs419 extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Latin America and the Caribbean.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEs419({
     super.localeName = 'es_419',
     required super.fullYearFormat,
@@ -9401,11 +9293,7 @@ class MaterialLocalizationEs419 extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Argentina (`es_AR`).
 class MaterialLocalizationEsAr extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Argentina.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsAr({
     super.localeName = 'es_AR',
     required super.fullYearFormat,
@@ -9591,11 +9479,7 @@ class MaterialLocalizationEsAr extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Bolivia (`es_BO`).
 class MaterialLocalizationEsBo extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Bolivia.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsBo({
     super.localeName = 'es_BO',
     required super.fullYearFormat,
@@ -9781,11 +9665,7 @@ class MaterialLocalizationEsBo extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Chile (`es_CL`).
 class MaterialLocalizationEsCl extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Chile.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsCl({
     super.localeName = 'es_CL',
     required super.fullYearFormat,
@@ -9971,11 +9851,7 @@ class MaterialLocalizationEsCl extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Colombia (`es_CO`).
 class MaterialLocalizationEsCo extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Colombia.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsCo({
     super.localeName = 'es_CO',
     required super.fullYearFormat,
@@ -10161,11 +10037,7 @@ class MaterialLocalizationEsCo extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Costa Rica (`es_CR`).
 class MaterialLocalizationEsCr extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Costa Rica.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsCr({
     super.localeName = 'es_CR',
     required super.fullYearFormat,
@@ -10351,11 +10223,7 @@ class MaterialLocalizationEsCr extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in the Dominican Republic (`es_DO`).
 class MaterialLocalizationEsDo extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in the Dominican Republic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsDo({
     super.localeName = 'es_DO',
     required super.fullYearFormat,
@@ -10541,11 +10409,7 @@ class MaterialLocalizationEsDo extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Ecuador (`es_EC`).
 class MaterialLocalizationEsEc extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Ecuador.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsEc({
     super.localeName = 'es_EC',
     required super.fullYearFormat,
@@ -10731,11 +10595,7 @@ class MaterialLocalizationEsEc extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Guatemala (`es_GT`).
 class MaterialLocalizationEsGt extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Guatemala.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsGt({
     super.localeName = 'es_GT',
     required super.fullYearFormat,
@@ -10921,11 +10781,7 @@ class MaterialLocalizationEsGt extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Honduras (`es_HN`).
 class MaterialLocalizationEsHn extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Honduras.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsHn({
     super.localeName = 'es_HN',
     required super.fullYearFormat,
@@ -11111,11 +10967,7 @@ class MaterialLocalizationEsHn extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Mexico (`es_MX`).
 class MaterialLocalizationEsMx extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Mexico.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsMx({
     super.localeName = 'es_MX',
     required super.fullYearFormat,
@@ -11301,11 +11153,7 @@ class MaterialLocalizationEsMx extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Nicaragua (`es_NI`).
 class MaterialLocalizationEsNi extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Nicaragua.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsNi({
     super.localeName = 'es_NI',
     required super.fullYearFormat,
@@ -11491,11 +11339,7 @@ class MaterialLocalizationEsNi extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Panama (`es_PA`).
 class MaterialLocalizationEsPa extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Panama.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsPa({
     super.localeName = 'es_PA',
     required super.fullYearFormat,
@@ -11681,11 +11525,7 @@ class MaterialLocalizationEsPa extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Peru (`es_PE`).
 class MaterialLocalizationEsPe extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Peru.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsPe({
     super.localeName = 'es_PE',
     required super.fullYearFormat,
@@ -11871,11 +11711,7 @@ class MaterialLocalizationEsPe extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Puerto Rico (`es_PR`).
 class MaterialLocalizationEsPr extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Puerto Rico.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsPr({
     super.localeName = 'es_PR',
     required super.fullYearFormat,
@@ -12061,11 +11897,7 @@ class MaterialLocalizationEsPr extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Paraguay (`es_PY`).
 class MaterialLocalizationEsPy extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Paraguay.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsPy({
     super.localeName = 'es_PY',
     required super.fullYearFormat,
@@ -12251,11 +12083,7 @@ class MaterialLocalizationEsPy extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in El Salvador (`es_SV`).
 class MaterialLocalizationEsSv extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in El Salvador.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsSv({
     super.localeName = 'es_SV',
     required super.fullYearFormat,
@@ -12441,11 +12269,7 @@ class MaterialLocalizationEsSv extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in the United States (`es_US`).
 class MaterialLocalizationEsUs extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in the United States.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsUs({
     super.localeName = 'es_US',
     required super.fullYearFormat,
@@ -12634,11 +12458,7 @@ class MaterialLocalizationEsUs extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Uruguay (`es_UY`).
 class MaterialLocalizationEsUy extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Uruguay.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsUy({
     super.localeName = 'es_UY',
     required super.fullYearFormat,
@@ -12824,11 +12644,7 @@ class MaterialLocalizationEsUy extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Spanish Castilian, as used in Venezuela (`es_VE`).
 class MaterialLocalizationEsVe extends MaterialLocalizationEs {
-  /// Create an instance of the translation bundle for Spanish Castilian, as used in Venezuela.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEsVe({
     super.localeName = 'es_VE',
     required super.fullYearFormat,
@@ -13014,11 +12830,7 @@ class MaterialLocalizationEsVe extends MaterialLocalizationEs {
   String get collapsedIconTapHint => 'Expandir';
 }
 
-/// The translations for Estonian (`et`).
 class MaterialLocalizationEt extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Estonian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEt({
     super.localeName = 'et',
     required super.fullYearFormat,
@@ -13504,11 +13316,7 @@ class MaterialLocalizationEt extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Kuva litsentsid';
 }
 
-/// The translations for Basque (`eu`).
 class MaterialLocalizationEu extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Basque.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationEu({
     super.localeName = 'eu',
     required super.fullYearFormat,
@@ -13994,11 +13802,7 @@ class MaterialLocalizationEu extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Ikusi lizentziak';
 }
 
-/// The translations for Persian (`fa`).
 class MaterialLocalizationFa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Persian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationFa({
     super.localeName = 'fa',
     required super.fullYearFormat,
@@ -14484,11 +14288,7 @@ class MaterialLocalizationFa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'مشاهده پروانه‌ها';
 }
 
-/// The translations for Finnish (`fi`).
 class MaterialLocalizationFi extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Finnish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationFi({
     super.localeName = 'fi',
     required super.fullYearFormat,
@@ -14974,11 +14774,7 @@ class MaterialLocalizationFi extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Näytä käyttöoikeudet';
 }
 
-/// The translations for Filipino Pilipino (`fil`).
 class MaterialLocalizationFil extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Filipino Pilipino.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationFil({
     super.localeName = 'fil',
     required super.fullYearFormat,
@@ -15464,11 +15260,7 @@ class MaterialLocalizationFil extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Tingnan ang mga lisensya';
 }
 
-/// The translations for French (`fr`).
 class MaterialLocalizationFr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for French.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationFr({
     super.localeName = 'fr',
     required super.fullYearFormat,
@@ -15954,11 +15746,7 @@ class MaterialLocalizationFr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Afficher les licences';
 }
 
-/// The translations for French, as used in Canada (`fr_CA`).
 class MaterialLocalizationFrCa extends MaterialLocalizationFr {
-  /// Create an instance of the translation bundle for French, as used in Canada.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationFrCa({
     super.localeName = 'fr_CA',
     required super.fullYearFormat,
@@ -16111,11 +15899,7 @@ class MaterialLocalizationFrCa extends MaterialLocalizationFr {
   TimeOfDayFormat get timeOfDayFormatRaw => TimeOfDayFormat.frenchCanadian;
 }
 
-/// The translations for Galician (`gl`).
 class MaterialLocalizationGl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Galician.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationGl({
     super.localeName = 'gl',
     required super.fullYearFormat,
@@ -16601,11 +16385,7 @@ class MaterialLocalizationGl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Ver licenzas';
 }
 
-/// The translations for Swiss German Alemannic Alsatian (`gsw`).
 class MaterialLocalizationGsw extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Swiss German Alemannic Alsatian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationGsw({
     super.localeName = 'gsw',
     required super.fullYearFormat,
@@ -17091,11 +16871,7 @@ class MaterialLocalizationGsw extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Lizenzen ansehen';
 }
 
-/// The translations for Gujarati (`gu`).
 class MaterialLocalizationGu extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Gujarati.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationGu({
     super.localeName = 'gu',
     required super.fullYearFormat,
@@ -17581,11 +17357,7 @@ class MaterialLocalizationGu extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'લાઇસન્સ જુઓ';
 }
 
-/// The translations for Hebrew (`he`).
 class MaterialLocalizationHe extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Hebrew.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationHe({
     super.localeName = 'he',
     required super.fullYearFormat,
@@ -18071,11 +17843,7 @@ class MaterialLocalizationHe extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'לעיון ברישיונות';
 }
 
-/// The translations for Hindi (`hi`).
 class MaterialLocalizationHi extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Hindi.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationHi({
     super.localeName = 'hi',
     required super.fullYearFormat,
@@ -18561,11 +18329,7 @@ class MaterialLocalizationHi extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'लाइसेंस देखें';
 }
 
-/// The translations for Croatian (`hr`).
 class MaterialLocalizationHr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Croatian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationHr({
     super.localeName = 'hr',
     required super.fullYearFormat,
@@ -19051,11 +18815,7 @@ class MaterialLocalizationHr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Prikaži licence';
 }
 
-/// The translations for Hungarian (`hu`).
 class MaterialLocalizationHu extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Hungarian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationHu({
     super.localeName = 'hu',
     required super.fullYearFormat,
@@ -19541,11 +19301,7 @@ class MaterialLocalizationHu extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Licencek megtekintése';
 }
 
-/// The translations for Armenian (`hy`).
 class MaterialLocalizationHy extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Armenian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationHy({
     super.localeName = 'hy',
     required super.fullYearFormat,
@@ -20031,11 +19787,7 @@ class MaterialLocalizationHy extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Դիտել լիցենզիաները';
 }
 
-/// The translations for Indonesian (`id`).
 class MaterialLocalizationId extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Indonesian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationId({
     super.localeName = 'id',
     required super.fullYearFormat,
@@ -20521,11 +20273,7 @@ class MaterialLocalizationId extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Lihat lisensi';
 }
 
-/// The translations for Icelandic (`is`).
 class MaterialLocalizationIs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Icelandic.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationIs({
     super.localeName = 'is',
     required super.fullYearFormat,
@@ -21011,11 +20759,7 @@ class MaterialLocalizationIs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Skoða leyfi';
 }
 
-/// The translations for Italian (`it`).
 class MaterialLocalizationIt extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Italian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationIt({
     super.localeName = 'it',
     required super.fullYearFormat,
@@ -21501,11 +21245,7 @@ class MaterialLocalizationIt extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Visualizza licenze';
 }
 
-/// The translations for Japanese (`ja`).
 class MaterialLocalizationJa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Japanese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationJa({
     super.localeName = 'ja',
     required super.fullYearFormat,
@@ -21991,11 +21731,7 @@ class MaterialLocalizationJa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ライセンスを表示';
 }
 
-/// The translations for Georgian (`ka`).
 class MaterialLocalizationKa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Georgian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationKa({
     super.localeName = 'ka',
     required super.fullYearFormat,
@@ -22481,11 +22217,7 @@ class MaterialLocalizationKa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ლიცენზიების ნახვა';
 }
 
-/// The translations for Kazakh (`kk`).
 class MaterialLocalizationKk extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Kazakh.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationKk({
     super.localeName = 'kk',
     required super.fullYearFormat,
@@ -22971,11 +22703,7 @@ class MaterialLocalizationKk extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Лицензияларды көру';
 }
 
-/// The translations for Khmer Central Khmer (`km`).
 class MaterialLocalizationKm extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Khmer Central Khmer.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationKm({
     super.localeName = 'km',
     required super.fullYearFormat,
@@ -23461,11 +23189,7 @@ class MaterialLocalizationKm extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'មើលអាជ្ញាបណ្ណ';
 }
 
-/// The translations for Kannada (`kn`).
 class MaterialLocalizationKn extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Kannada.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationKn({
     super.localeName = 'kn',
     required super.fullYearFormat,
@@ -23951,11 +23675,7 @@ class MaterialLocalizationKn extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => '\u{caa}\u{cb0}\u{cb5}\u{cbe}\u{ca8}\u{c97}\u{cbf}\u{c97}\u{cb3}\u{ca8}\u{ccd}\u{ca8}\u{cc1}\u{20}\u{cb5}\u{cbf}\u{cd5}\u{c95}\u{ccd}\u{cb7}\u{cbf}\u{cb8}\u{cbf}';
 }
 
-/// The translations for Korean (`ko`).
 class MaterialLocalizationKo extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Korean.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationKo({
     super.localeName = 'ko',
     required super.fullYearFormat,
@@ -24441,11 +24161,7 @@ class MaterialLocalizationKo extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => '라이선스 보기';
 }
 
-/// The translations for Kirghiz Kyrgyz (`ky`).
 class MaterialLocalizationKy extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Kirghiz Kyrgyz.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationKy({
     super.localeName = 'ky',
     required super.fullYearFormat,
@@ -24931,11 +24647,7 @@ class MaterialLocalizationKy extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Уруксаттамаларды көрүү';
 }
 
-/// The translations for Lao (`lo`).
 class MaterialLocalizationLo extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Lao.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationLo({
     super.localeName = 'lo',
     required super.fullYearFormat,
@@ -25421,11 +25133,7 @@ class MaterialLocalizationLo extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ເບິ່ງໃບອະນຸຍາດ';
 }
 
-/// The translations for Lithuanian (`lt`).
 class MaterialLocalizationLt extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Lithuanian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationLt({
     super.localeName = 'lt',
     required super.fullYearFormat,
@@ -25911,11 +25619,7 @@ class MaterialLocalizationLt extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Peržiūrėti licencijas';
 }
 
-/// The translations for Latvian (`lv`).
 class MaterialLocalizationLv extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Latvian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationLv({
     super.localeName = 'lv',
     required super.fullYearFormat,
@@ -26401,11 +26105,7 @@ class MaterialLocalizationLv extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Skatīt licences';
 }
 
-/// The translations for Macedonian (`mk`).
 class MaterialLocalizationMk extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Macedonian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationMk({
     super.localeName = 'mk',
     required super.fullYearFormat,
@@ -26891,11 +26591,7 @@ class MaterialLocalizationMk extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Прикажи ги лиценците';
 }
 
-/// The translations for Malayalam (`ml`).
 class MaterialLocalizationMl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Malayalam.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationMl({
     super.localeName = 'ml',
     required super.fullYearFormat,
@@ -27381,11 +27077,7 @@ class MaterialLocalizationMl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ലൈസൻസുകൾ കാണുക';
 }
 
-/// The translations for Mongolian (`mn`).
 class MaterialLocalizationMn extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Mongolian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationMn({
     super.localeName = 'mn',
     required super.fullYearFormat,
@@ -27871,11 +27563,7 @@ class MaterialLocalizationMn extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Лиценз харах';
 }
 
-/// The translations for Marathi (`mr`).
 class MaterialLocalizationMr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Marathi.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationMr({
     super.localeName = 'mr',
     required super.fullYearFormat,
@@ -28361,11 +28049,7 @@ class MaterialLocalizationMr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'परवाने पहा';
 }
 
-/// The translations for Malay (`ms`).
 class MaterialLocalizationMs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Malay.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationMs({
     super.localeName = 'ms',
     required super.fullYearFormat,
@@ -28851,11 +28535,7 @@ class MaterialLocalizationMs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Lihat lesen';
 }
 
-/// The translations for Burmese (`my`).
 class MaterialLocalizationMy extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Burmese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationMy({
     super.localeName = 'my',
     required super.fullYearFormat,
@@ -29341,11 +29021,7 @@ class MaterialLocalizationMy extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'လိုင်စင်များကြည့်ရန်';
 }
 
-/// The translations for Norwegian Bokmål (`nb`).
 class MaterialLocalizationNb extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Norwegian Bokmål.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationNb({
     super.localeName = 'nb',
     required super.fullYearFormat,
@@ -29831,11 +29507,7 @@ class MaterialLocalizationNb extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Se lisenser';
 }
 
-/// The translations for Nepali (`ne`).
 class MaterialLocalizationNe extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Nepali.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationNe({
     super.localeName = 'ne',
     required super.fullYearFormat,
@@ -30321,11 +29993,7 @@ class MaterialLocalizationNe extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'लाइसेन्सहरू हेर्नुहोस्';
 }
 
-/// The translations for Dutch Flemish (`nl`).
 class MaterialLocalizationNl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Dutch Flemish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationNl({
     super.localeName = 'nl',
     required super.fullYearFormat,
@@ -30811,11 +30479,7 @@ class MaterialLocalizationNl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Licenties bekijken';
 }
 
-/// The translations for Norwegian (`no`).
 class MaterialLocalizationNo extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Norwegian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationNo({
     super.localeName = 'no',
     required super.fullYearFormat,
@@ -31301,11 +30965,7 @@ class MaterialLocalizationNo extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Se lisenser';
 }
 
-/// The translations for Oriya (`or`).
 class MaterialLocalizationOr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Oriya.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationOr({
     super.localeName = 'or',
     required super.fullYearFormat,
@@ -31791,11 +31451,7 @@ class MaterialLocalizationOr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ଲାଇସେନ୍ସ ଦେଖନ୍ତୁ';
 }
 
-/// The translations for Panjabi Punjabi (`pa`).
 class MaterialLocalizationPa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Panjabi Punjabi.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationPa({
     super.localeName = 'pa',
     required super.fullYearFormat,
@@ -32281,11 +31937,7 @@ class MaterialLocalizationPa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ਲਾਇਸੰਸ ਦੇਖੋ';
 }
 
-/// The translations for Polish (`pl`).
 class MaterialLocalizationPl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Polish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationPl({
     super.localeName = 'pl',
     required super.fullYearFormat,
@@ -32771,11 +32423,7 @@ class MaterialLocalizationPl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Wyświetl licencje';
 }
 
-/// The translations for Pushto Pashto (`ps`).
 class MaterialLocalizationPs extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Pushto Pashto.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationPs({
     super.localeName = 'ps',
     required super.fullYearFormat,
@@ -33261,11 +32909,7 @@ class MaterialLocalizationPs extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'لیدلس وګورئ';
 }
 
-/// The translations for Portuguese (`pt`).
 class MaterialLocalizationPt extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Portuguese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationPt({
     super.localeName = 'pt',
     required super.fullYearFormat,
@@ -33751,11 +33395,7 @@ class MaterialLocalizationPt extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Acessar licenças';
 }
 
-/// The translations for Portuguese, as used in Portugal (`pt_PT`).
 class MaterialLocalizationPtPt extends MaterialLocalizationPt {
-  /// Create an instance of the translation bundle for Portuguese, as used in Portugal.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationPtPt({
     super.localeName = 'pt_PT',
     required super.fullYearFormat,
@@ -33926,11 +33566,7 @@ class MaterialLocalizationPtPt extends MaterialLocalizationPt {
   String get remainingTextFieldCharacterCountOther => r'Restam $remainingCount carateres';
 }
 
-/// The translations for Romanian Moldavian Moldovan (`ro`).
 class MaterialLocalizationRo extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Romanian Moldavian Moldovan.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationRo({
     super.localeName = 'ro',
     required super.fullYearFormat,
@@ -34416,11 +34052,7 @@ class MaterialLocalizationRo extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Vedeți licențele';
 }
 
-/// The translations for Russian (`ru`).
 class MaterialLocalizationRu extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Russian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationRu({
     super.localeName = 'ru',
     required super.fullYearFormat,
@@ -34906,11 +34538,7 @@ class MaterialLocalizationRu extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Посмотреть лицензии';
 }
 
-/// The translations for Sinhala Sinhalese (`si`).
 class MaterialLocalizationSi extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Sinhala Sinhalese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSi({
     super.localeName = 'si',
     required super.fullYearFormat,
@@ -35396,11 +35024,7 @@ class MaterialLocalizationSi extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'බලපත්‍ර බලන්න';
 }
 
-/// The translations for Slovak (`sk`).
 class MaterialLocalizationSk extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Slovak.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSk({
     super.localeName = 'sk',
     required super.fullYearFormat,
@@ -35886,11 +35510,7 @@ class MaterialLocalizationSk extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Zobraziť licencie';
 }
 
-/// The translations for Slovenian (`sl`).
 class MaterialLocalizationSl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Slovenian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSl({
     super.localeName = 'sl',
     required super.fullYearFormat,
@@ -36376,11 +35996,7 @@ class MaterialLocalizationSl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Prikaži licence';
 }
 
-/// The translations for Albanian (`sq`).
 class MaterialLocalizationSq extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Albanian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSq({
     super.localeName = 'sq',
     required super.fullYearFormat,
@@ -36866,11 +36482,7 @@ class MaterialLocalizationSq extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Shiko licencat';
 }
 
-/// The translations for Serbian (`sr`).
 class MaterialLocalizationSr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Serbian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSr({
     super.localeName = 'sr',
     required super.fullYearFormat,
@@ -37356,11 +36968,7 @@ class MaterialLocalizationSr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Прикажи лиценце';
 }
 
-/// The translations for Serbian, using the Cyrillic script (`sr_Cyrl`).
 class MaterialLocalizationSrCyrl extends MaterialLocalizationSr {
-  /// Create an instance of the translation bundle for Serbian, using the Cyrillic script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSrCyrl({
     super.localeName = 'sr_Cyrl',
     required super.fullYearFormat,
@@ -37375,11 +36983,7 @@ class MaterialLocalizationSrCyrl extends MaterialLocalizationSr {
   });
 }
 
-/// The translations for Serbian, using the Latin script (`sr_Latn`).
 class MaterialLocalizationSrLatn extends MaterialLocalizationSr {
-  /// Create an instance of the translation bundle for Serbian, using the Latin script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSrLatn({
     super.localeName = 'sr_Latn',
     required super.fullYearFormat,
@@ -37694,11 +37298,7 @@ class MaterialLocalizationSrLatn extends MaterialLocalizationSr {
   String get viewLicensesButtonLabel => 'Prikaži licence';
 }
 
-/// The translations for Swedish (`sv`).
 class MaterialLocalizationSv extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Swedish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSv({
     super.localeName = 'sv',
     required super.fullYearFormat,
@@ -38184,11 +37784,7 @@ class MaterialLocalizationSv extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Visa licenser';
 }
 
-/// The translations for Swahili (`sw`).
 class MaterialLocalizationSw extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Swahili.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationSw({
     super.localeName = 'sw',
     required super.fullYearFormat,
@@ -38674,11 +38270,7 @@ class MaterialLocalizationSw extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Angalia leseni';
 }
 
-/// The translations for Tamil (`ta`).
 class MaterialLocalizationTa extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Tamil.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationTa({
     super.localeName = 'ta',
     required super.fullYearFormat,
@@ -39164,11 +38756,7 @@ class MaterialLocalizationTa extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'உரிமங்களைக் காட்டு';
 }
 
-/// The translations for Telugu (`te`).
 class MaterialLocalizationTe extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Telugu.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationTe({
     super.localeName = 'te',
     required super.fullYearFormat,
@@ -39654,11 +39242,7 @@ class MaterialLocalizationTe extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'లైసెన్స్‌లను చూడండి';
 }
 
-/// The translations for Thai (`th`).
 class MaterialLocalizationTh extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Thai.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationTh({
     super.localeName = 'th',
     required super.fullYearFormat,
@@ -40144,11 +39728,7 @@ class MaterialLocalizationTh extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'ดูใบอนุญาต';
 }
 
-/// The translations for Tagalog (`tl`).
 class MaterialLocalizationTl extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Tagalog.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationTl({
     super.localeName = 'tl',
     required super.fullYearFormat,
@@ -40634,11 +40214,7 @@ class MaterialLocalizationTl extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Tingnan ang mga lisensya';
 }
 
-/// The translations for Turkish (`tr`).
 class MaterialLocalizationTr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Turkish.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationTr({
     super.localeName = 'tr',
     required super.fullYearFormat,
@@ -41124,11 +40700,7 @@ class MaterialLocalizationTr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Lisansları göster';
 }
 
-/// The translations for Ukrainian (`uk`).
 class MaterialLocalizationUk extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Ukrainian.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationUk({
     super.localeName = 'uk',
     required super.fullYearFormat,
@@ -41614,11 +41186,7 @@ class MaterialLocalizationUk extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Переглянути ліцензії';
 }
 
-/// The translations for Urdu (`ur`).
 class MaterialLocalizationUr extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Urdu.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationUr({
     super.localeName = 'ur',
     required super.fullYearFormat,
@@ -42104,11 +41672,7 @@ class MaterialLocalizationUr extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'لائسنسز دیکھیں';
 }
 
-/// The translations for Uzbek (`uz`).
 class MaterialLocalizationUz extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Uzbek.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationUz({
     super.localeName = 'uz',
     required super.fullYearFormat,
@@ -42594,11 +42158,7 @@ class MaterialLocalizationUz extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Litsenziyalarni koʻrish';
 }
 
-/// The translations for Vietnamese (`vi`).
 class MaterialLocalizationVi extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Vietnamese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationVi({
     super.localeName = 'vi',
     required super.fullYearFormat,
@@ -43084,11 +42644,7 @@ class MaterialLocalizationVi extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Xem giấy phép';
 }
 
-/// The translations for Chinese (`zh`).
 class MaterialLocalizationZh extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Chinese.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationZh({
     super.localeName = 'zh',
     required super.fullYearFormat,
@@ -43574,11 +43130,7 @@ class MaterialLocalizationZh extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => '查看许可';
 }
 
-/// The translations for Chinese, using the Han script (`zh_Hans`).
 class MaterialLocalizationZhHans extends MaterialLocalizationZh {
-  /// Create an instance of the translation bundle for Chinese, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationZhHans({
     super.localeName = 'zh_Hans',
     required super.fullYearFormat,
@@ -43593,11 +43145,7 @@ class MaterialLocalizationZhHans extends MaterialLocalizationZh {
   });
 }
 
-/// The translations for Chinese, using the Han script (`zh_Hant`).
 class MaterialLocalizationZhHant extends MaterialLocalizationZh {
-  /// Create an instance of the translation bundle for Chinese, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationZhHant({
     super.localeName = 'zh_Hant',
     required super.fullYearFormat,
@@ -43960,11 +43508,7 @@ class MaterialLocalizationZhHant extends MaterialLocalizationZh {
   String get viewLicensesButtonLabel => '查看授權';
 }
 
-/// The translations for Chinese, as used in Hong Kong, using the Han script (`zh_Hant_HK`).
 class MaterialLocalizationZhHantHk extends MaterialLocalizationZhHant {
-  /// Create an instance of the translation bundle for Chinese, as used in Hong Kong, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationZhHantHk({
     super.localeName = 'zh_Hant_HK',
     required super.fullYearFormat,
@@ -43979,11 +43523,7 @@ class MaterialLocalizationZhHantHk extends MaterialLocalizationZhHant {
   });
 }
 
-/// The translations for Chinese, as used in Taiwan, using the Han script (`zh_Hant_TW`).
 class MaterialLocalizationZhHantTw extends MaterialLocalizationZhHant {
-  /// Create an instance of the translation bundle for Chinese, as used in Taiwan, using the Han script.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationZhHantTw({
     super.localeName = 'zh_Hant_TW',
     required super.fullYearFormat,
@@ -44109,11 +43649,7 @@ class MaterialLocalizationZhHantTw extends MaterialLocalizationZhHant {
   String get remainingTextFieldCharacterCountOther => r'還可輸入 $remainingCount 個字元';
 }
 
-/// The translations for Zulu (`zu`).
 class MaterialLocalizationZu extends GlobalMaterialLocalizations {
-  /// Create an instance of the translation bundle for Zulu.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalMaterialLocalizations].
   const MaterialLocalizationZu({
     super.localeName = 'zu',
     required super.fullYearFormat,
@@ -44599,17 +44135,6 @@ class MaterialLocalizationZu extends GlobalMaterialLocalizations {
   String get viewLicensesButtonLabel => 'Buka amalayisense';
 }
 
-/// The set of supported languages, as language code strings.
-///
-/// The [GlobalMaterialLocalizations.delegate] can generate localizations for
-/// any [Locale] with a language code from this set, regardless of the region.
-/// Some regions have specific support (e.g. `de` covers all forms of German,
-/// but there is support for `de-CH` specifically to override some of the
-/// translations for Switzerland).
-///
-/// See also:
-///
-///  * [getMaterialTranslation], whose documentation describes these values.
 final Set<String> kMaterialSupportedLanguages = HashSet<String>.from(const <String>[
   'af', // Afrikaans
   'am', // Amharic
@@ -44692,99 +44217,6 @@ final Set<String> kMaterialSupportedLanguages = HashSet<String>.from(const <Stri
   'zu', // Zulu
 ]);
 
-/// Creates a [GlobalMaterialLocalizations] instance for the given `locale`.
-///
-/// All of the function's arguments except `locale` will be passed to the [
-/// GlobalMaterialLocalizations] constructor. (The `localeName` argument of that
-/// constructor is specified by the actual subclass constructor by this
-/// function.)
-///
-/// The following locales are supported by this package:
-///
-/// {@template flutter.localizations.material.languages}
-///  * `af` - Afrikaans
-///  * `am` - Amharic
-///  * `ar` - Arabic
-///  * `as` - Assamese
-///  * `az` - Azerbaijani
-///  * `be` - Belarusian
-///  * `bg` - Bulgarian
-///  * `bn` - Bengali Bangla
-///  * `bs` - Bosnian
-///  * `ca` - Catalan Valencian
-///  * `cs` - Czech
-///  * `cy` - Welsh
-///  * `da` - Danish
-///  * `de` - German (plus one country variation)
-///  * `el` - Modern Greek
-///  * `en` - English (plus 8 country variations)
-///  * `es` - Spanish Castilian (plus 20 country variations)
-///  * `et` - Estonian
-///  * `eu` - Basque
-///  * `fa` - Persian
-///  * `fi` - Finnish
-///  * `fil` - Filipino Pilipino
-///  * `fr` - French (plus one country variation)
-///  * `gl` - Galician
-///  * `gsw` - Swiss German Alemannic Alsatian
-///  * `gu` - Gujarati
-///  * `he` - Hebrew
-///  * `hi` - Hindi
-///  * `hr` - Croatian
-///  * `hu` - Hungarian
-///  * `hy` - Armenian
-///  * `id` - Indonesian
-///  * `is` - Icelandic
-///  * `it` - Italian
-///  * `ja` - Japanese
-///  * `ka` - Georgian
-///  * `kk` - Kazakh
-///  * `km` - Khmer Central Khmer
-///  * `kn` - Kannada
-///  * `ko` - Korean
-///  * `ky` - Kirghiz Kyrgyz
-///  * `lo` - Lao
-///  * `lt` - Lithuanian
-///  * `lv` - Latvian
-///  * `mk` - Macedonian
-///  * `ml` - Malayalam
-///  * `mn` - Mongolian
-///  * `mr` - Marathi
-///  * `ms` - Malay
-///  * `my` - Burmese
-///  * `nb` - Norwegian Bokmål
-///  * `ne` - Nepali
-///  * `nl` - Dutch Flemish
-///  * `no` - Norwegian
-///  * `or` - Oriya
-///  * `pa` - Panjabi Punjabi
-///  * `pl` - Polish
-///  * `ps` - Pushto Pashto
-///  * `pt` - Portuguese (plus one country variation)
-///  * `ro` - Romanian Moldavian Moldovan
-///  * `ru` - Russian
-///  * `si` - Sinhala Sinhalese
-///  * `sk` - Slovak
-///  * `sl` - Slovenian
-///  * `sq` - Albanian
-///  * `sr` - Serbian (plus 2 scripts)
-///  * `sv` - Swedish
-///  * `sw` - Swahili
-///  * `ta` - Tamil
-///  * `te` - Telugu
-///  * `th` - Thai
-///  * `tl` - Tagalog
-///  * `tr` - Turkish
-///  * `uk` - Ukrainian
-///  * `ur` - Urdu
-///  * `uz` - Uzbek
-///  * `vi` - Vietnamese
-///  * `zh` - Chinese (plus 2 country variations and 2 scripts)
-///  * `zu` - Zulu
-/// {@endtemplate}
-///
-/// Generally speaking, this method is only intended to be used by
-/// [GlobalMaterialLocalizations.delegate].
 GlobalMaterialLocalizations? getMaterialTranslation(
   Locale locale,
   intl.DateFormat fullYearFormat,

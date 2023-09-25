@@ -520,10 +520,6 @@ class CustomBugInstructions extends UserMessages {
   String get flutterToolBugInstructions => kCustomBugInstructions;
 }
 
-/// A fake [CrashReporter] that waits for a [Future] to complete.
-///
-/// Used to exacerbate a race between the success and failure paths of
-/// [runner.run]. See https://github.com/flutter/flutter/issues/56406.
 class WaitingCrashReporter implements CrashReporter {
   WaitingCrashReporter(Future<void> future) : _future = future;
 
@@ -537,8 +533,6 @@ class WaitingCrashReporter implements CrashReporter {
   }
 }
 
-/// A fake [Analytics] that will be used to test
-/// the --disable-analytics flag
 class FakeAnalytics extends Fake implements Analytics {
 
   FakeAnalytics({bool fakeTelemetryStatusOverride = true})

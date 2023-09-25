@@ -19,7 +19,6 @@ int sortFilesByPath (File a, File b) {
   return a.path.compareTo(b.path);
 }
 
-/// Simple data class to hold parsed locale. Does not promise validity of any data.
 @immutable
 class LocaleInfo implements Comparable<LocaleInfo> {
   const LocaleInfo({
@@ -30,14 +29,6 @@ class LocaleInfo implements Comparable<LocaleInfo> {
     required this.originalString,
   });
 
-  /// Simple parser. Expects the locale string to be in the form of 'language_script_COUNTRY'
-  /// where the language is 2 characters, script is 4 characters with the first uppercase,
-  /// and country is 2-3 characters and all uppercase.
-  ///
-  /// 'language_COUNTRY' or 'language_script' are also valid. Missing fields will be null.
-  ///
-  /// When `deriveScriptCode` is true, if [scriptCode] was unspecified, it will
-  /// be derived from the [languageCode] and [countryCode] if possible.
   factory LocaleInfo.fromString(String locale, { bool deriveScriptCode = false }) {
     final List<String> codes = locale.split('_'); // [language, script, country]
     assert(codes.isNotEmpty && codes.length < 4);
@@ -57,12 +48,6 @@ class LocaleInfo implements Comparable<LocaleInfo> {
     assert(countryCode == null || countryCode.isNotEmpty);
     assert(scriptCode == null || scriptCode.isNotEmpty);
 
-    /// Adds scriptCodes to locales where we are able to assume it to provide
-    /// finer granularity when resolving locales.
-    ///
-    /// The basis of the assumptions here are based off of known usage of scripts
-    /// across various countries. For example, we know Taiwan uses traditional (Hant)
-    /// script, so it is safe to apply (Hant) to Taiwanese languages.
     if (deriveScriptCode && scriptCode == null) {
       switch (languageCode) {
         case 'zh': {
@@ -173,9 +158,6 @@ final Map<String, String> _scripts = <String, String>{};
 const String kProvincePrefix = ', Province of ';
 const String kParentheticalPrefix = ' (';
 
-/// Prepares the data for the [describeLocale] method below.
-///
-/// The data is obtained from the official IANA registry.
 void precacheLanguageAndRegionTags() {
   final List<Map<String, List<String>>> sections =
       languageSubtagRegistry.split('%%').skip(1).map<Map<String, List<String>>>(_parseSection).toList();
@@ -243,28 +225,6 @@ String describeLocale(String tag) {
   return output;
 }
 
-/// Return the input string as a Dart-parsable string.
-///
-/// ```
-/// foo => 'foo'
-/// foo "bar" => 'foo "bar"'
-/// foo 'bar' => "foo 'bar'"
-/// foo 'bar' "baz" => '''foo 'bar' "baz"'''
-/// ```
-///
-/// This function is used by tools that take in a JSON-formatted file to
-/// generate Dart code. For this reason, characters with special meaning
-/// in JSON files are escaped. For example, the backspace character (\b)
-/// has to be properly escaped by this function so that the generated
-/// Dart code correctly represents this character:
-/// ```
-/// foo\bar => 'foo\\bar'
-/// foo\nbar => 'foo\\nbar'
-/// foo\\nbar => 'foo\\\\nbar'
-/// foo\\bar => 'foo\\\\bar'
-/// foo\ bar => 'foo\\ bar'
-/// foo$bar = 'foo\$bar'
-/// ```
 String generateString(String value) {
   const String backslash = '__BACKSLASH__';
   assert(
@@ -292,25 +252,6 @@ String generateString(String value) {
   return value;
 }
 
-/// Given a list of normal strings or interpolated variables, concatenate them
-/// into a single dart string to be returned. An example of a normal string
-/// would be "'Hello world!'" and an example of a interpolated variable would be
-/// "'$placeholder'".
-///
-/// Each of the strings in [expressions] should be a raw string, which, if it
-/// were to be added to a dart file, would be a properly formatted dart string
-/// with escapes and/or interpolation. The purpose of this function is to
-/// concatenate these dart strings into a single dart string which can be
-/// returned in the generated localization files.
-///
-/// The following rules describe the kinds of string expressions that can be
-/// handled:
-/// 1. If [expressions] is empty, return the empty string "''".
-/// 2. If [expressions] has only one [String] which is an interpolated variable,
-///    it is converted to the variable itself e.g. ["'$expr'"] -> "expr".
-/// 3. If one string in [expressions] is an interpolation and the next begins
-///    with an alphanumeric character, then the former interpolation should be
-///    wrapped in braces e.g. ["'$expr1'", "'another'"] -> "'${expr1}another'".
 String generateReturnExpr(List<String> expressions, { bool isSingleStringVar = false }) {
   if (expressions.isEmpty) {
     return "''";
@@ -333,7 +274,6 @@ String generateReturnExpr(List<String> expressions, { bool isSingleStringVar = f
   }
 }
 
-/// Typed configuration from the localizations config file.
 class LocalizationOptions {
   LocalizationOptions({
     required this.arbDir,
@@ -367,113 +307,46 @@ class LocalizationOptions {
        suppressWarnings = suppressWarnings ?? false,
        relaxSyntax = relaxSyntax ?? false;
 
-  /// The `--arb-dir` argument.
-  ///
-  /// The directory where all input localization files should reside.
   final String arbDir;
 
-  /// The `--output-dir` argument.
-  ///
-  /// The directory where all output localization files should be generated.
   final String? outputDir;
 
 
-  /// The `--template-arb-file` argument.
-  ///
-  /// This path is relative to [arbDirectory].
   final String templateArbFile;
 
-  /// The `--output-localization-file` argument.
-  ///
-  /// This path is relative to [arbDir].
   final String outputLocalizationFile;
 
-  /// The `--untranslated-messages-file` argument.
-  ///
-  /// This path is relative to [arbDir].
   final String? untranslatedMessagesFile;
 
-  /// The `--output-class` argument.
   final String outputClass;
 
-  /// The `--preferred-supported-locales` argument.
   final List<String>? preferredSupportedLocales;
 
-  /// The `--header` argument.
-  ///
-  /// The header to prepend to the generated Dart localizations.
   final String? header;
 
-  /// The `--header-file` argument.
-  ///
-  /// A file containing the header to prepend to the generated
-  /// Dart localizations.
   final String? headerFile;
 
-  /// The `--use-deferred-loading` argument.
-  ///
-  /// Whether to generate the Dart localization file with locales imported
-  /// as deferred.
   final bool useDeferredLoading;
 
-  /// The `--gen-inputs-and-outputs-list` argument.
-  ///
-  /// This path is relative to [arbDir].
   final String? genInputsAndOutputsList;
 
-  /// The `--synthetic-package` argument.
-  ///
-  /// Whether to generate the Dart localization files in a synthetic package
-  /// or in a custom directory.
   final bool syntheticPackage;
 
-  /// The `--project-dir` argument.
-  ///
-  /// This path is relative to [arbDir].
   final String? projectDir;
 
-  /// The `required-resource-attributes` argument.
-  ///
-  /// Whether to require all resource ids to contain a corresponding
-  /// resource attribute.
   final bool requiredResourceAttributes;
 
-  /// The `nullable-getter` argument.
-  ///
-  /// Whether or not the localizations class getter is nullable.
   final bool nullableGetter;
 
-  /// The `format` argument.
-  ///
-  /// Whether or not to format the generated files.
   final bool format;
 
-  /// The `use-escaping` argument.
-  ///
-  /// Whether or not the ICU escaping syntax is used.
   final bool useEscaping;
 
-  /// The `suppress-warnings` argument.
-  ///
-  /// Whether or not to suppress warnings.
   final bool suppressWarnings;
 
-  /// The `relax-syntax` argument.
-  ///
-  /// Whether or not to relax the syntax. When specified, the syntax will be
-  /// relaxed so that the special character "{" is treated as a string if it is
-  /// not followed by a valid placeholder and "}" is treated as a string if it
-  /// does not close any previous "{" that is treated as a special character.
-  /// This was added in for backward compatibility and is not recommended
-  /// as it may mask errors.
   final bool relaxSyntax;
 }
 
-/// Parse the localizations configuration options from [file].
-///
-/// Throws [Exception] if any of the contents are invalid. Returns a
-/// [LocalizationOptions] with all fields as `null` if the config file exists
-/// but is empty.
 LocalizationOptions parseLocalizationsOptionsFromYAML({
   required File file,
   required Logger logger,
@@ -514,7 +387,6 @@ LocalizationOptions parseLocalizationsOptionsFromYAML({
   );
 }
 
-/// Parse the localizations configuration from [FlutterCommand].
 LocalizationOptions parseLocalizationsOptionsFromCommand({
   required FlutterCommand command,
   required String defaultArbDir,

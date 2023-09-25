@@ -5,17 +5,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' hide Border;
 
-/// Border specification for [Table] widgets.
-///
-/// This is like [Border], with the addition of two sides: the inner horizontal
-/// borders between rows and the inner vertical borders between columns.
-///
-/// The sides are represented by [BorderSide] objects.
 @immutable
 class TableBorder {
-  /// Creates a border for a table.
-  ///
-  /// All the sides of the border default to [BorderSide.none].
   const TableBorder({
     this.top = BorderSide.none,
     this.right = BorderSide.none,
@@ -26,9 +17,6 @@ class TableBorder {
     this.borderRadius = BorderRadius.zero,
   });
 
-  /// A uniform border with all sides the same color and width.
-  ///
-  /// The sides default to black solid borders, one logical pixel wide.
   factory TableBorder.all({
     Color color = const Color(0xFF000000),
     double width = 1.0,
@@ -39,8 +27,6 @@ class TableBorder {
     return TableBorder(top: side, right: side, bottom: side, left: side, horizontalInside: side, verticalInside: side, borderRadius: borderRadius);
   }
 
-  /// Creates a border for a table where all the interior sides use the same
-  /// styling and all the exterior sides use the same styling.
   factory TableBorder.symmetric({
     BorderSide inside = BorderSide.none,
     BorderSide outside = BorderSide.none,
@@ -55,39 +41,24 @@ class TableBorder {
     );
   }
 
-  /// The top side of this border.
   final BorderSide top;
 
-  /// The right side of this border.
   final BorderSide right;
 
-  /// The bottom side of this border.
   final BorderSide bottom;
 
-  /// The left side of this border.
   final BorderSide left;
 
-  /// The horizontal interior sides of this border.
   final BorderSide horizontalInside;
 
-  /// The vertical interior sides of this border.
   final BorderSide verticalInside;
 
-  /// The [BorderRadius] to use when painting the corners of this border.
-  ///
-  /// It is also applied to [DataTable]'s [Material].
   final BorderRadius borderRadius;
 
-  /// The widths of the sides of this border represented as an [EdgeInsets].
-  ///
-  /// This can be used, for example, with a [Padding] widget to inset a box by
-  /// the size of these borders.
   EdgeInsets get dimensions {
     return EdgeInsets.fromLTRB(left.width, top.width, right.width, bottom.width);
   }
 
-  /// Whether all the sides of the border (outside and inside) are identical.
-  /// Uniform borders are typically more efficient to paint.
   bool get isUniform {
 
     final Color topColor = top.color;
@@ -120,21 +91,6 @@ class TableBorder {
     return true;
   }
 
-  /// Creates a copy of this border but with the widths scaled by the factor `t`.
-  ///
-  /// The `t` argument represents the multiplicand, or the position on the
-  /// timeline for an interpolation from nothing to `this`, with 0.0 meaning
-  /// that the object returned should be the nil variant of this object, 1.0
-  /// meaning that no change should be applied, returning `this` (or something
-  /// equivalent to `this`), and other values meaning that the object should be
-  /// multiplied by `t`. Negative values are treated like zero.
-  ///
-  /// Values for `t` are usually obtained from an [Animation<double>], such as
-  /// an [AnimationController].
-  ///
-  /// See also:
-  ///
-  ///  * [BorderSide.scale], which is used to implement this method.
   TableBorder scale(double t) {
     return TableBorder(
       top: top.scale(t),
@@ -146,12 +102,6 @@ class TableBorder {
     );
   }
 
-  /// Linearly interpolate between two table borders.
-  ///
-  /// If a border is null, it is treated as having only [BorderSide.none]
-  /// borders.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static TableBorder? lerp(TableBorder? a, TableBorder? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -172,32 +122,6 @@ class TableBorder {
     );
   }
 
-  /// Paints the border around the given [Rect] on the given [Canvas], with the
-  /// given rows and columns.
-  ///
-  /// Uniform borders are more efficient to paint than more complex borders.
-  ///
-  /// The `rows` argument specifies the vertical positions between the rows,
-  /// relative to the given rectangle. For example, if the table contained two
-  /// rows of height 100.0 each, then `rows` would contain a single value,
-  /// 100.0, which is the vertical position between the two rows (relative to
-  /// the top edge of `rect`).
-  ///
-  /// The `columns` argument specifies the horizontal positions between the
-  /// columns, relative to the given rectangle. For example, if the table
-  /// contained two columns of height 100.0 each, then `columns` would contain a
-  /// single value, 100.0, which is the vertical position between the two
-  /// columns (relative to the left edge of `rect`).
-  ///
-  /// The [verticalInside] border is only drawn if there are at least two
-  /// columns. The [horizontalInside] border is only drawn if there are at least
-  /// two rows. The horizontal borders are drawn after the vertical borders.
-  ///
-  /// The outer borders (in the order [top], [right], [bottom], [left], with
-  /// [left] above the others) are painted after the inner borders.
-  ///
-  /// The paint order is particularly notable in the case of
-  /// partially-transparent borders.
   void paint(
     Canvas canvas,
     Rect rect, {

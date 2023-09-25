@@ -5,7 +5,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// A result of running a single task.
 class TaskResult {
   TaskResult.buildOnly()
       : succeeded = true,
@@ -14,7 +13,6 @@ class TaskResult {
         benchmarkScoreKeys = null,
         message = 'No tests run';
 
-  /// Constructs a successful result.
   TaskResult.success(this.data, {
     this.benchmarkScoreKeys = const <String>[],
     this.detailFiles = const <String>[],
@@ -35,7 +33,6 @@ class TaskResult {
     }
   }
 
-  /// Constructs a successful result using JSON data stored in a file.
   factory TaskResult.successFromFile(File file, {
     List<String> benchmarkScoreKeys = const <String>[],
     List<String> detailFiles = const <String>[],
@@ -47,7 +44,6 @@ class TaskResult {
     );
   }
 
-  /// Constructs a [TaskResult] from JSON.
   factory TaskResult.fromJson(Map<String, dynamic> json) {
     final bool success = json['success'] as bool;
     if (success) {
@@ -63,48 +59,24 @@ class TaskResult {
     return TaskResult.failure(json['reason'] as String?);
   }
 
-  /// Constructs an unsuccessful result.
   TaskResult.failure(this.message)
       : succeeded = false,
         data = null,
         detailFiles = null,
         benchmarkScoreKeys = null;
 
-  /// Whether the task succeeded.
   final bool succeeded;
 
-  /// Task-specific JSON data
   final Map<String, dynamic>? data;
 
-  /// Files containing detail on the run (e.g. timeline trace files)
   final List<String>? detailFiles;
 
-  /// Keys in [data] that store scores that will be submitted to Cocoon.
-  ///
-  /// Each key is also part of a benchmark's name tracked by Cocoon.
   final List<String>? benchmarkScoreKeys;
 
-  /// Whether the task failed.
   bool get failed => !succeeded;
 
-  /// Explains the result in a human-readable format.
   final String? message;
 
-  /// Serializes this task result to JSON format.
-  ///
-  /// The JSON format is as follows:
-  ///
-  ///     {
-  ///       "success": true|false,
-  ///       "data": arbitrary JSON data valid only for successful results,
-  ///       "detailFiles": list of filenames containing detail on the run
-  ///       "benchmarkScoreKeys": [
-  ///         contains keys into "data" that represent benchmarks scores, which
-  ///         can be uploaded, for example. to golem, valid only for successful
-  ///         results
-  ///       ],
-  ///       "reason": failure reason string valid only for unsuccessful results
-  ///     }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{
       'success': succeeded,

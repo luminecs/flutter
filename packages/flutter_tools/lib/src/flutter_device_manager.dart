@@ -34,7 +34,6 @@ import 'web/web_device.dart';
 import 'windows/windows_device.dart';
 import 'windows/windows_workflow.dart';
 
-/// A provider for all of the device discovery instances.
 class FlutterDeviceManager extends DeviceManager {
   FlutterDeviceManager({
     required super.logger,

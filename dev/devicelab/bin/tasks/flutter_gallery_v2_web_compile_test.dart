@@ -15,14 +15,11 @@ Future<void> main() async {
   await task(const NewGalleryWebCompileTest().run);
 }
 
-/// Measures the time to compile the New Flutter Gallery to JavaScript
-/// and the size of the compiled code.
 class NewGalleryWebCompileTest {
   const NewGalleryWebCompileTest();
 
   String get metricKeyPrefix => 'new_gallery';
 
-  /// Runs the test.
   Future<TaskResult> run() async {
     final Directory galleryParentDir =
         Directory.systemTemp.createTempSync('flutter_gallery_v2_web_compile.');

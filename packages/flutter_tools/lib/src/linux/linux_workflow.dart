@@ -6,10 +6,6 @@ import '../base/platform.dart';
 import '../doctor_validator.dart';
 import '../features.dart';
 
-/// The windows-specific implementation of a [Workflow].
-///
-/// This workflow requires the flutter-desktop-embedding as a sibling
-/// repository to the flutter repo.
 class LinuxWorkflow implements Workflow {
   const LinuxWorkflow({
     required Platform platform,

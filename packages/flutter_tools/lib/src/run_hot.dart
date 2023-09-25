@@ -36,31 +36,20 @@ ProjectFileInvalidator get projectFileInvalidator => context.get<ProjectFileInva
 HotRunnerConfig? get hotRunnerConfig => context.get<HotRunnerConfig>();
 
 class HotRunnerConfig {
-  /// Should the hot runner assume that the minimal Dart dependencies do not change?
   bool stableDartDependencies = false;
 
-  /// Whether the hot runner should scan for modified files asynchronously.
   bool asyncScanning = false;
 
-  /// A hook for implementations to perform any necessary initialization prior
-  /// to a hot restart. Should return true if the hot restart should continue.
   Future<bool?> setupHotRestart() async {
     return true;
   }
 
-  /// A hook for implementations to perform any necessary initialization prior
-  /// to a hot reload. Should return true if the hot restart should continue.
   Future<bool?> setupHotReload() async {
     return true;
   }
 
-  /// A hook for implementations to perform any necessary cleanup after the
-  /// devfs sync is complete. At this point the flutter_tools no longer needs to
-  /// access the source files and assets.
   void updateDevFSComplete() {}
 
-  /// A hook for implementations to perform any necessary operations right
-  /// before the runner is about to be shut down.
   Future<void> runPreShutdownOperations() async {
     return;
   }
@@ -111,20 +100,8 @@ class HotRunner extends ResidentRunner {
   final bool hostIsIde;
   final bool multidexEnabled;
 
-  /// When performing a hot restart, the tool needs to upload a new main.dart.dill to
-  /// each attached device's devfs. Replacing the existing file is not safe and does
-  /// not work at all on the windows embedder, because the old dill file will still be
-  /// memory-mapped by the embedder. To work around this issue, the tool will alternate
-  /// names for the uploaded dill, sometimes inserting `.swap`. Since the active dill will
-  /// never be replaced, there is no risk of writing the file while the embedder is attempting
-  /// to read from it. This also avoids filling up the devfs, if a incrementing counter was
-  /// used instead.
-  ///
-  /// This is only used for hot restart, incremental dills uploaded as part of the hot
-  /// reload process do not have this issue.
   bool _swap = false;
 
-  /// Whether the resident runner has correctly attached to the running application.
   bool _didAttach = false;
 
   final Map<String, List<int>> benchmarkData = <String, List<int>>{};
@@ -707,8 +684,6 @@ class HotRunner extends ResidentRunner {
     );
   }
 
-  /// Returns [true] if the reload was successful.
-  /// Prints errors if [printErrors] is [true].
   static bool validateReloadReport(
     vm_service.ReloadReport? reloadReport, {
     bool printErrors = true,
@@ -1434,7 +1409,6 @@ String _describePausedIsolates(int pausedIsolatesFound, String serviceEventKind)
   return message.toString();
 }
 
-/// The result of an invalidation check from [ProjectFileInvalidator].
 class InvalidationResult {
   const InvalidationResult({
     this.uris,
@@ -1445,8 +1419,6 @@ class InvalidationResult {
   final PackageConfig? packageConfig;
 }
 
-/// The [ProjectFileInvalidator] track the dependencies for a running
-/// application to determine when they are dirty.
 class ProjectFileInvalidator {
   ProjectFileInvalidator({
     required FileSystem fileSystem,
@@ -1570,7 +1542,6 @@ class ProjectFileInvalidator {
   }
 }
 
-/// Additional serialization logic for a hot reload response.
 class ReloadReportContents {
   factory ReloadReportContents.fromReloadReport(vm_service.ReloadReport report) {
     final List<ReasonForCancelling> reasons = <ReasonForCancelling>[];
@@ -1604,10 +1575,6 @@ class ReloadReportContents {
   final vm_service.ReloadReport report;
 }
 
-/// A serialization class for hot reload rejection reasons.
-///
-/// Injects an additional error message that a hot restart will
-/// resolve the issue.
 class ReasonForCancelling {
   ReasonForCancelling({
     this.message,

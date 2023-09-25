@@ -7,23 +7,8 @@ import 'package:meta/meta.dart';
 import 'constants.dart';
 import 'object.dart';
 
-/// A object representation of a frame from a stack trace.
-///
-/// {@tool snippet}
-///
-/// This example creates a traversable list of parsed [StackFrame] objects from
-/// the current [StackTrace].
-///
-/// ```dart
-/// final List<StackFrame> currentFrames = StackFrame.fromStackTrace(StackTrace.current);
-/// ```
-/// {@end-tool}
 @immutable
 class StackFrame {
-  /// Creates a new StackFrame instance.
-  ///
-  /// The [className] may be the empty string if there is no class (e.g. for a
-  /// top level library method).
   const StackFrame({
     required this.number,
     required this.column,
@@ -37,7 +22,6 @@ class StackFrame {
     required this.source,
   });
 
-  /// A stack frame representing an asynchronous suspension.
   static const StackFrame asynchronousSuspension = StackFrame(
     number: -1,
     column: -1,
@@ -49,7 +33,6 @@ class StackFrame {
     source: '<asynchronous suspension>',
   );
 
-  /// A stack frame representing a Dart elided stack overflow frame.
   static const StackFrame stackOverFlowElision = StackFrame(
     number: -1,
     column: -1,
@@ -61,14 +44,10 @@ class StackFrame {
     source: '...',
   );
 
-  /// Parses a list of [StackFrame]s from a [StackTrace] object.
-  ///
-  /// This is normally useful with [StackTrace.current].
   static List<StackFrame> fromStackTrace(StackTrace stack) {
     return fromStackString(stack.toString());
   }
 
-  /// Parses a list of [StackFrame]s from the [StackTrace.toString] method.
   static List<StackFrame> fromStackString(String stack) {
     return stack
         .trim()
@@ -85,9 +64,6 @@ class StackFrame {
         .toList();
   }
 
-  /// Parses a single [StackFrame] from a line of a [StackTrace].
-  ///
-  /// Returns null if format is not as expected.
   static StackFrame? _tryParseWebFrame(String line) {
     if (kDebugMode) {
       return _tryParseWebDebugFrame(line);
@@ -96,9 +72,6 @@ class StackFrame {
     }
   }
 
-  /// Parses a single [StackFrame] from a line of a [StackTrace].
-  ///
-  /// Returns null if format is not as expected.
   static StackFrame? _tryParseWebDebugFrame(String line) {
     // This RegExp is only partially correct for flutter run/test differences.
     // https://github.com/flutter/flutter/issues/52685
@@ -181,9 +154,6 @@ class StackFrame {
     );
   }
 
-  /// Parses a single [StackFrame] from a single line of a [StackTrace].
-  ///
-  /// Returns null if format is not as expected.
   static StackFrame? fromStackTraceLine(String line) {
     if (line == '<asynchronous suspension>') {
       return asynchronousSuspension;
@@ -250,50 +220,24 @@ class StackFrame {
     );
   }
 
-  /// The original source of this stack frame.
   final String source;
 
-  /// The zero-indexed frame number.
-  ///
-  /// This value may be -1 to indicate an unknown frame number.
   final int number;
 
-  /// The scheme of the package for this frame, e.g. "dart" for
-  /// dart:core/errors_patch.dart or "package" for
-  /// package:flutter/src/widgets/text.dart.
-  ///
-  /// The path property refers to the source file.
   final String packageScheme;
 
-  /// The package for this frame, e.g. "core" for
-  /// dart:core/errors_patch.dart or "flutter" for
-  /// package:flutter/src/widgets/text.dart.
   final String package;
 
-  /// The path of the file for this frame, e.g. "errors_patch.dart" for
-  /// dart:core/errors_patch.dart or "src/widgets/text.dart" for
-  /// package:flutter/src/widgets/text.dart.
   final String packagePath;
 
-  /// The source line number.
   final int line;
 
-  /// The source column number.
   final int column;
 
-  /// The class name, if any, for this frame.
-  ///
-  /// This may be null for top level methods in a library or anonymous closure
-  /// methods.
   final String className;
 
-  /// The method name for this frame.
-  ///
-  /// This will be an empty string if the stack frame is from the default
-  /// constructor.
   final String method;
 
-  /// Whether or not this was thrown from a constructor.
   final bool isConstructor;
 
   @override

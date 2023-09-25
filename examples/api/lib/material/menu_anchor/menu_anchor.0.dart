@@ -5,14 +5,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [MenuAnchor].
 
 void main() => runApp(const MenuApp());
 
-/// An enhanced enum to define the available menus and their shortcuts.
-///
-/// Using an enum for menu definition is not required, but this illustrates how
-/// they could be used for simple menu systems.
 enum MenuEntry {
   about('About'),
   showMessage('Show Message', SingleActivator(LogicalKeyboardKey.keyS, control: true)),

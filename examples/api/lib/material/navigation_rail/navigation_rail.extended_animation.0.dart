@@ -6,7 +6,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigationRail.extendedAnimation].
 
 void main() => runApp(const ExtendedAnimationExampleApp());
 

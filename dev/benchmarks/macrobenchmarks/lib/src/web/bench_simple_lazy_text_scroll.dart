@@ -9,10 +9,6 @@ import 'package:flutter/widgets.dart';
 import 'recorder.dart';
 import 'test_data.dart';
 
-/// Creates several list views containing text items, then continuously scrolls
-/// them up and down.
-///
-/// Measures our ability to lazily render virtually infinitely big content.
 class BenchSimpleLazyTextScroll extends WidgetRecorder {
   BenchSimpleLazyTextScroll() : super(name: benchmarkName);
 

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AboutListTile].
 
 void main() => runApp(const AboutListTileExampleApp());
 

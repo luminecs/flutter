@@ -20,7 +20,6 @@ import '../web/bootstrap.dart';
 import '../web/memory_fs.dart';
 import 'test_config.dart';
 
-/// A web compiler for the test runner.
 class WebTestCompiler {
   WebTestCompiler({
     required FileSystem fileSystem,

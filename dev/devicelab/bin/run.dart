@@ -12,9 +12,6 @@ import 'package:flutter_devicelab/framework/task_result.dart';
 import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:path/path.dart' as path;
 
-/// Runs tasks.
-///
-/// The tasks are chosen depending on the command-line options.
 Future<void> main(List<String> rawArgs) async {
   // This is populated by a callback in the ArgParser.
   final List<String> taskNames = <String>[];
@@ -30,49 +27,28 @@ Future<void> main(List<String> rawArgs) async {
     exit(1);
   }
 
-  /// Suppresses standard output, prints only standard error output.
   final bool silent = (args['silent'] as bool?) ?? false;
 
-  /// The build of the local engine to use.
-  ///
-  /// Required for A/B test mode.
   final String? localEngine = args['local-engine'] as String?;
 
-  /// The build of the local engine to use as the host platform.
-  ///
-  /// Required if [localEngine] is set.
   final String? localEngineHost = args['local-engine-host'] as String?;
 
-  /// The build of the local Web SDK to use.
-  ///
-  /// Required for A/B test mode.
   final String? localWebSdk = args['local-web-sdk'] as String?;
 
-  /// The path to the engine "src/" directory.
   final String? localEngineSrcPath = args['local-engine-src-path'] as String?;
 
-  /// The device-id to run test on.
   final String? deviceId = args['device-id'] as String?;
 
-  /// Whether to exit on first test failure.
   final bool exitOnFirstTestFailure = (args['exit'] as bool?) ?? false;
 
-  /// Whether to tell tasks to clean up after themselves.
   final bool terminateStrayDartProcesses = (args['terminate-stray-dart-processes'] as bool?) ?? false;
 
-  /// The git branch being tested on.
   final String? gitBranch = args['git-branch'] as String?;
 
-  /// Name of the LUCI builder this test is currently running on.
-  ///
-  /// This is only passed on CI runs for Cocoon to be able to uniquely identify
-  /// this test run.
   final String? luciBuilder = args['luci-builder'] as String?;
 
-  /// Path to write test results to.
   final String? resultsPath = args['results-file'] as String?;
 
-  /// Use an emulator for this test if it is an android test.
   final bool useEmulator = (args['use-emulator'] as bool?) ?? false;
 
   if (args.wasParsed('list')) {

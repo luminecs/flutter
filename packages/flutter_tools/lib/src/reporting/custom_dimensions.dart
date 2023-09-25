@@ -4,10 +4,6 @@
 
 part of 'reporting.dart';
 
-/// The collection of custom dimensions understood by the analytics backend.
-/// When adding to this list, first ensure that the custom dimension is
-/// defined in the backend, or will be defined shortly after the relevant PR
-/// lands.
 @immutable
 class CustomDimensions {
   const CustomDimensions({
@@ -129,7 +125,6 @@ class CustomDimensions {
   final String? commandRunIOSInterfaceType; // cd57
   final bool? commandRunIsTest; // cd58
 
-  /// Convert to a map that will be used to upload to the analytics backend.
   Map<String, String> toMap() => <String, String>{
       if (sessionHostOsDetails != null) CustomDimensionsEnum.sessionHostOsDetails.cdKey: sessionHostOsDetails.toString(),
       if (sessionChannelName != null) CustomDimensionsEnum.sessionChannelName.cdKey: sessionChannelName.toString(),
@@ -190,8 +185,6 @@ class CustomDimensions {
       if (commandRunIsTest != null) CustomDimensionsEnum.commandRunIsTest.cdKey: commandRunIsTest.toString(),
     };
 
-  /// Merge the values of two [CustomDimensions] into one. If a value is defined
-  /// in both instances, the value in [other] will override the value in this.
   CustomDimensions merge(CustomDimensions? other) {
     if (other == null) {
       return this;
@@ -340,11 +333,6 @@ class CustomDimensions {
   int get hashCode => Object.hashAll(toMap().values);
 }
 
-/// List of all fields used in CustomDimensions.
-///
-/// The index of this enum is used to calculate the key of the fields. Always
-/// append to this list when adding new fields, and do not remove or reorder
-/// any elements.
 enum CustomDimensionsEnum {
   sessionHostOsDetails,  // cd1
   sessionChannelName,  // cd2

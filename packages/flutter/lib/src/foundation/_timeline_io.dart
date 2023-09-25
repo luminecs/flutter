@@ -4,8 +4,4 @@
 
 import 'dart:developer';
 
-/// Returns the current timestamp in microseconds from a monotonically
-/// increasing clock.
-///
-/// This is the Dart VM implementation.
 double get performanceTimestamp => Timeline.now.toDouble();

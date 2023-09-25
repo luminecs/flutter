@@ -12,22 +12,7 @@ import 'logger.dart';
 import 'platform.dart';
 import 'utils.dart';
 
-/// A class to abstract configuration files.
 class Config {
-  /// Constructs a new [Config] object from a file called [name] in the
-  /// current user's configuration directory as determined by the [Platform]
-  /// and [FileSystem].
-  ///
-  /// The configuration directory defaults to $XDG_CONFIG_HOME on Linux and
-  /// macOS, but falls back to the home directory if a file named
-  /// `.flutter_$name` already exists there. On other platforms the
-  /// configuration file will always be a file named `.flutter_$name` in the
-  /// home directory.
-  ///
-  /// Uses some good default behaviours:
-  /// - deletes the file if it's not valid JSON
-  /// - reports an empty config in that case
-  /// - logs and catches any exceptions
   factory Config(
     String name, {
     required FileSystem fileSystem,
@@ -42,13 +27,6 @@ class Config {
     );
   }
 
-  /// Similar to the default config constructor, but with some different
-  /// behaviours:
-  /// - will not delete the config if it's not valid JSON
-  /// - will log but also rethrow any exceptions while loading the JSON, so
-  ///   you can actually detect whether something went wrong
-  ///
-  /// Useful if you want some more control.
   factory Config.managed(
     String name, {
     required FileSystem fileSystem,
@@ -77,10 +55,6 @@ class Config {
     return Config.createForTesting(file, logger, managed: managed);
   }
 
-  /// Constructs a new [Config] object from a file called [name] in
-  /// the given [Directory].
-  ///
-  /// Defaults to [BufferLogger], [MemoryFileSystem], and [name]=test.
   factory Config.test({
     String name = 'test',
     Directory? directory,
@@ -95,7 +69,6 @@ class Config {
     );
   }
 
-  /// Test only access to the Config constructor.
   @visibleForTesting
   Config.createForTesting(File file, Logger logger, {bool managed = false}) : _file = file, _logger = logger {
     if (!_file.existsSync()) {
@@ -136,23 +109,13 @@ class Config {
     }
   }
 
-  /// The default directory name for Flutter's configs.
 
-  /// Configs will be written to the user's config path. If there is already a
-  /// file with the name `.${kConfigDir}_$name` in the user's home path, that
-  /// file will be used instead.
   static const String kConfigDir = 'flutter';
 
-  /// Environment variable specified in the XDG Base Directory
-  /// [specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)
-  /// to specify the user's configuration directory.
   static const String kXdgConfigHome = 'XDG_CONFIG_HOME';
 
-  /// Fallback directory in the user's home directory if `XDG_CONFIG_HOME` is
-  /// not defined.
   static const String kXdgConfigFallback = '.config';
 
-  /// The default name for the Flutter config file.
   static const String kFlutterSettings = 'settings';
 
   final Logger _logger;

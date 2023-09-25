@@ -8,7 +8,6 @@
 
 import 'stock_strings.dart';
 
-/// The translations for English (`en`).
 class StockStringsEn extends StockStrings {
   StockStringsEn([super.locale = 'en']);
 
@@ -22,7 +21,6 @@ class StockStringsEn extends StockStrings {
   String get portfolio => 'PORTFOLIO';
 }
 
-/// The translations for English, as used in the United States (`en_US`).
 class StockStringsEnUs extends StockStringsEn {
   StockStringsEnUs(): super('en_US');
 

@@ -17,7 +17,6 @@ import '../base/utils.dart';
 import '../cache.dart';
 import '../globals.dart' as globals;
 
-/// Common behavior for `flutter analyze` and `flutter analyze --watch`
 abstract class AnalyzeBase {
   AnalyzeBase(this.argResults, {
     required this.repoPackages,
@@ -30,7 +29,6 @@ abstract class AnalyzeBase {
     required this.suppressAnalytics,
   });
 
-  /// The parsed argument results for execution.
   final ArgResults argResults;
   @protected
   final List<Directory> repoPackages;
@@ -52,7 +50,6 @@ abstract class AnalyzeBase {
   @protected
   String get flutterRoot => globals.fs.path.absolute(Cache.flutterRoot!);
 
-  /// Called by [AnalyzeCommand] to start the analysis process.
   Future<void> analyze();
 
   void dumpErrors(Iterable<String> errors) {
@@ -92,7 +89,6 @@ abstract class AnalyzeBase {
   bool get isBenchmarking => argResults['benchmark'] as bool;
   String? get protocolTrafficLog => argResults['protocol-traffic-log'] as String?;
 
-  /// Generate an analysis summary for both [AnalyzeOnce], [AnalyzeContinuously].
   static String generateErrorsMessage({
     required int issueCount,
     int? issueDiff,
@@ -172,7 +168,6 @@ class PackageDependency {
 }
 
 class PackageDependencyTracker {
-  /// Packages whose source is defined in the vended SDK.
   static const List<String> _vendedSdkPackages = <String>['analyzer', 'front_end', 'kernel'];
 
   // This is a map from package names to objects that track the paths
@@ -183,7 +178,6 @@ class PackageDependencyTracker {
     return packages.putIfAbsent(packageName, () => PackageDependency());
   }
 
-  /// Read the .packages file in [directory] and add referenced packages to [dependencies].
   void addDependenciesFromPackagesFileIn(Directory directory) {
     final String dotPackagesPath = globals.fs.path.join(directory.path, '.packages');
     final File dotPackages = globals.fs.file(dotPackagesPath);
@@ -290,7 +284,6 @@ class PackageDependencyTracker {
   }
 }
 
-/// Find directories or files from argResults.rest.
 Set<String> findDirectories(ArgResults argResults, FileSystem fileSystem) {
   final Set<String> items = Set<String>.of(argResults.rest
       .map<String>((String path) => fileSystem.path.canonicalize(path)));

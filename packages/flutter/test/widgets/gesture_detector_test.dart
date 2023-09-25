@@ -1049,7 +1049,6 @@ class _EmptySemanticsGestureDelegate extends SemanticsGestureDelegate {
   }
 }
 
-/// A [TestVariant] that runs tests multiple times with different buttons.
 class ButtonVariant extends TestVariant<int> {
   const ButtonVariant({
     required this.values,

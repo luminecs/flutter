@@ -14,10 +14,8 @@ import 'convert.dart';
 import 'globals.dart' as globals;
 import 'web/compile.dart';
 
-/// Whether icon font subsetting is enabled by default.
 const bool kIconTreeShakerEnabledDefault = true;
 
-/// Information about a build to be performed or used.
 class BuildInfo {
   const BuildInfo(
     this.mode,
@@ -56,140 +54,57 @@ class BuildInfo {
 
   final BuildMode mode;
 
-  /// The null safety mode the application should be run in.
-  ///
-  /// If not provided, defaults to [NullSafetyMode.autodetect].
   final NullSafetyMode nullSafetyMode;
 
-  /// Whether the build should subset icon fonts.
   final bool treeShakeIcons;
 
-  /// Represents a custom Android product flavor or an Xcode scheme, null for
-  /// using the default.
-  ///
-  /// If not null, the Gradle build task will be `assembleFlavorMode` (e.g.
-  /// `assemblePaidRelease`), and the Xcode build configuration will be
-  /// Mode-Flavor (e.g. Release-Paid).
   final String? flavor;
 
-  /// The path to the package configuration file to use for compilation.
-  ///
-  /// This is used by package:package_config to locate the actual package_config.json
-  /// file. If not provided, defaults to `.dart_tool/package_config.json`.
   final String packagesPath;
 
   final List<String> fileSystemRoots;
   final String? fileSystemScheme;
 
-  /// Whether the build should track widget creation locations.
   final bool trackWidgetCreation;
 
-  /// If provided, the frontend server will be started in JIT mode from this
-  /// file.
   final String? frontendServerStarterPath;
 
-  /// Extra command-line options for front-end.
   final List<String> extraFrontEndOptions;
 
-  /// Extra command-line options for gen_snapshot.
   final List<String> extraGenSnapshotOptions;
 
-  /// Internal version number (not displayed to users).
-  /// Each build must have a unique number to differentiate it from previous builds.
-  /// It is used to determine whether one build is more recent than another, with higher numbers indicating more recent build.
-  /// On Android it is used as versionCode.
-  /// On Xcode builds it is used as CFBundleVersion.
-  /// On Windows it is used as the build suffix for the product and file versions.
   final String? buildNumber;
 
-  /// A "x.y.z" string used as the version number shown to users.
-  /// For each new version of your app, you will provide a version number to differentiate it from previous versions.
-  /// On Android it is used as versionName.
-  /// On Xcode builds it is used as CFBundleShortVersionString.
-  /// On Windows it is used as the major, minor, and patch parts of the product and file versions.
   final String? buildName;
 
-  /// An optional directory path to save debugging information from dwarf stack
-  /// traces. If null, stack trace information is not stripped from the
-  /// executable.
   final String? splitDebugInfoPath;
 
-  /// Whether to apply dart source code obfuscation.
   final bool dartObfuscation;
 
-  /// An optional path to a JSON containing object SkSL shaders.
-  ///
-  /// Currently this is only supported for Android builds.
   final String? bundleSkSLPath;
 
-  /// Additional constant values to be made available in the Dart program.
-  ///
-  /// These values can be used with the const `fromEnvironment` constructors of
-  /// [bool], [String], [int], and [double].
   final List<String> dartDefines;
 
-  /// A list of Dart experiments.
   final List<String> dartExperiments;
 
-  /// When compiling to web, which web renderer mode we are using (html, canvaskit, auto)
   final WebRendererMode webRenderer;
 
-  /// The name of a file where flutter assemble will output performance
-  /// information in a JSON format.
-  ///
-  /// This is not considered a build input and will not force assemble to
-  /// rerun tasks.
   final String? performanceMeasurementFile;
 
-  /// Configure a constant pool file.
-  /// Additional constant values to be made available in the Dart program.
-  ///
-  /// These values can be used with the const `fromEnvironment` constructors of
-  ///  [String] the key and field are json values
-  /// json value
-  ///
-  /// An additional field `dartDefineConfigJsonMap` is provided to represent the native JSON value of the configuration file
-  ///
   final Map<String, Object?> dartDefineConfigJsonMap;
 
-  /// If provided, an output directory where one or more v8-style heap snapshots
-  /// will be written for code size profiling.
   final String? codeSizeDirectory;
 
-  /// Whether to enable the Gradle daemon when performing an Android build.
-  ///
-  /// Starting the daemon is the default behavior of the gradle wrapper script created
-  /// in a Flutter project. Setting this value to false will cause the tool to pass
-  /// `--no-daemon` to the gradle wrapper script, preventing it from spawning a daemon
-  /// process.
-  ///
-  /// For one-off builds or CI systems, preventing the daemon from spawning will
-  /// reduce system resource usage, at the cost of any subsequent builds starting
-  /// up slightly slower.
-  ///
-  /// The Gradle daemon may also be disabled in the Android application's properties file.
   final bool androidGradleDaemon;
 
-  /// Additional key value pairs that are passed directly to the gradle project via the `-P`
-  /// flag.
   final List<String> androidProjectArgs;
 
-  /// The package configuration for the loaded application.
-  ///
-  /// This is captured once during startup, but the actual package configuration
-  /// may change during a 'flutter run` workflow.
   final PackageConfig packageConfig;
 
-  /// The kernel file that the resident compiler will be initialized with.
-  ///
-  /// If this is null, it will be initialized from the default cached location.
   final String? initializeFromDill;
 
-  /// If set, assumes that the file passed in [initializeFromDill] is up to date
-  /// and skips the check and potential invalidation of files.
   final bool assumeInitializeFromDillUpToDate;
 
-  /// If set, builds native assets with `build.dart` from all packages.
   final bool buildNativeAssets;
 
   static const BuildInfo debug = BuildInfo(BuildMode.debug, null, trackWidgetCreation: true, treeShakeIcons: false);
@@ -197,27 +112,12 @@ class BuildInfo {
   static const BuildInfo jitRelease = BuildInfo(BuildMode.jitRelease, null, treeShakeIcons: kIconTreeShakerEnabledDefault);
   static const BuildInfo release = BuildInfo(BuildMode.release, null, treeShakeIcons: kIconTreeShakerEnabledDefault);
 
-  /// Returns whether a debug build is requested.
-  ///
-  /// Exactly one of [isDebug], [isProfile], or [isRelease] is true.
   bool get isDebug => mode == BuildMode.debug;
 
-  /// Returns whether a profile build is requested.
-  ///
-  /// Exactly one of [isDebug], [isProfile], [isJitRelease],
-  /// or [isRelease] is true.
   bool get isProfile => mode == BuildMode.profile;
 
-  /// Returns whether a release build is requested.
-  ///
-  /// Exactly one of [isDebug], [isProfile], [isJitRelease],
-  /// or [isRelease] is true.
   bool get isRelease => mode == BuildMode.release;
 
-  /// Returns whether a JIT release build is requested.
-  ///
-  /// Exactly one of [isDebug], [isProfile], [isJitRelease],
-  /// or [isRelease] is true.
   bool get isJitRelease => mode == BuildMode.jitRelease;
 
   bool get usesAot => isAotBuildMode(mode);
@@ -226,18 +126,10 @@ class BuildInfo {
   String get modeName => mode.cliName;
   String get friendlyModeName => getFriendlyModeName(mode);
 
-  /// the flavor name in the output apk files is lower-cased (see Flutter Gradle Plugin),
-  /// so the lower cased flavor name is used to compute the output file name
   String? get lowerCasedFlavor => flavor?.toLowerCase();
 
-  /// the flavor name in the output bundle files has the first character lower-cased,
-  /// so the uncapitalized flavor name is used to compute the output file name
   String? get uncapitalizedFlavor => _uncapitalize(flavor);
 
-  /// Convert to a structured string encoded structure appropriate for usage
-  /// in build system [Environment.defines].
-  ///
-  /// Fields that are `null` are excluded from this configuration.
   Map<String, String> toBuildSystemEnvironment() {
     // packagesPath and performanceMeasurementFile are not passed into
     // the Environment map.
@@ -272,10 +164,6 @@ class BuildInfo {
   }
 
 
-  /// Convert to a structured string encoded structure appropriate for usage as
-  /// environment variables or to embed in other scripts.
-  ///
-  /// Fields that are `null` are excluded from this configuration.
   Map<String, String> toEnvironmentConfig() {
     final Map<String, String> map = <String, String>{};
     dartDefineConfigJsonMap.forEach((String key, Object? value) {
@@ -315,8 +203,6 @@ class BuildInfo {
     return environmentMap;
   }
 
-  /// Convert this config to a series of project level arguments to be passed
-  /// on the command line to gradle.
   List<String> toGradleConfig() {
     // PACKAGE_CONFIG not currently supported.
     final List<String> result = <String>[
@@ -355,7 +241,6 @@ class BuildInfo {
   }
 }
 
-/// Information about an Android build to be performed or used.
 class AndroidBuildInfo {
   const AndroidBuildInfo(
     this.buildInfo, {
@@ -372,35 +257,22 @@ class AndroidBuildInfo {
   // The build info containing the mode and flavor.
   final BuildInfo buildInfo;
 
-  /// Whether to split the shared library per ABI.
-  ///
-  /// When this is false, multiple ABIs will be contained within one primary
-  /// build artifact. When this is true, multiple build artifacts (one per ABI)
-  /// will be produced.
   final bool splitPerAbi;
 
-  /// The target platforms for the build.
   final Iterable<AndroidArch> targetArchs;
 
-  /// Whether to bootstrap an empty application.
   final bool fastStart;
 
-  /// Whether to enable multidex support for apps with more than 64k methods.
   final bool multidexEnabled;
 }
 
-/// A summary of the compilation strategy used for Dart.
 enum BuildMode {
-  /// Built in JIT mode with no optimizations, enabled asserts, and a VM service.
   debug,
 
-  /// Built in AOT mode with some optimizations and a VM service.
   profile,
 
-  /// Built in AOT mode with all optimizations and no VM service.
   release,
 
-  /// Built in JIT mode with all optimizations and no VM service.
   jitRelease;
 
   factory BuildMode.fromCliName(String value) => values.singleWhere(
@@ -418,16 +290,10 @@ enum BuildMode {
     jitRelease,
   };
 
-  /// Whether this mode is considered release.
-  ///
-  /// Useful for determining whether we should enable/disable asserts or
-  /// other development features.
   bool get isRelease => releaseModes.contains(this);
 
-  /// Whether this mode is using the JIT runtime.
   bool get isJit => jitModes.contains(this);
 
-  /// Whether this mode is using the precompiled runtime.
   bool get isPrecompiled => !isJit;
 
   String get cliName => snakeCase(name);
@@ -436,7 +302,6 @@ enum BuildMode {
   String toString() => cliName;
 }
 
-/// Environment type of the target device.
 enum EnvironmentType {
   physical,
   simulator,
@@ -605,7 +470,6 @@ enum TargetPlatform {
   }
 }
 
-/// iOS and macOS target device architecture.
 //
 // TODO(cbracken): split TargetPlatform.ios into ios_armv7, ios_arm64.
 enum DarwinArch {
@@ -613,12 +477,6 @@ enum DarwinArch {
   arm64,
   x86_64;
 
-  /// Returns the Dart SDK's name for the specified target architecture.
-  ///
-  /// When building for Darwin platforms, the tool invokes architecture-specific
-  /// variants of `gen_snapshot`, one for each target architecture. The output
-  /// instructions are then built into architecture-specific binaries, which are
-  /// merged into a universal binary using the `lipo` tool.
   String get dartName {
     return switch (this) {
       DarwinArch.armv7 => 'armv7',
@@ -654,7 +512,6 @@ enum AndroidArch {
   }
 }
 
-/// The default set of iOS device architectures to build for.
 List<DarwinArch> defaultIOSArchsForEnvironment(
   EnvironmentType environmentType,
   Artifacts artifacts,
@@ -680,7 +537,6 @@ List<DarwinArch> defaultIOSArchsForEnvironment(
   ];
 }
 
-/// The default set of macOS device architectures to build for.
 List<DarwinArch> defaultMacOSArchsForEnvironment(Artifacts artifacts) {
   // Handle single-arch local engines.
   final LocalEngineInfo? localEngineInfo = artifacts.localEngineInfo;
@@ -833,7 +689,6 @@ FileSystemEntity getWebPlatformBinariesDirectory(Artifacts artifacts, WebRendere
   return artifacts.getHostArtifact(HostArtifact.webPlatformKernelFolder);
 }
 
-/// Returns the top-level build output directory.
 String getBuildDirectory([Config? config, FileSystem? fileSystem]) {
   // TODO(johnmccutchan): Stop calling this function as part of setting
   // up command line argument processing.
@@ -848,38 +703,31 @@ String getBuildDirectory([Config? config, FileSystem? fileSystem]) {
   return buildDir;
 }
 
-/// Returns the Android build output directory.
 String getAndroidBuildDirectory() {
   // TODO(cbracken): move to android subdir.
   return getBuildDirectory();
 }
 
-/// Returns the AOT build output directory.
 String getAotBuildDirectory() {
   return globals.fs.path.join(getBuildDirectory(), 'aot');
 }
 
-/// Returns the asset build output directory.
 String getAssetBuildDirectory() {
   return globals.fs.path.join(getBuildDirectory(), 'flutter_assets');
 }
 
-/// Returns the iOS build output directory.
 String getIosBuildDirectory() {
   return globals.fs.path.join(getBuildDirectory(), 'ios');
 }
 
-/// Returns the macOS build output directory.
 String getMacOSBuildDirectory() {
   return globals.fs.path.join(getBuildDirectory(), 'macos');
 }
 
-/// Returns the web build output directory.
 String getWebBuildDirectory([bool isWasm = false]) {
   return globals.fs.path.join(getBuildDirectory(), isWasm ? 'web_wasm' : 'web');
 }
 
-/// Returns the Linux build output directory.
 String getLinuxBuildDirectory([TargetPlatform? targetPlatform]) {
   final String arch = (targetPlatform == null) ?
       _getCurrentHostPlatformArchName() :
@@ -888,126 +736,64 @@ String getLinuxBuildDirectory([TargetPlatform? targetPlatform]) {
   return globals.fs.path.join(getBuildDirectory(), subDirs);
 }
 
-/// Returns the Windows build output directory.
 String getWindowsBuildDirectory(TargetPlatform targetPlatform) {
   final String arch = targetPlatform.simpleName;
   return globals.fs.path.join(getBuildDirectory(), 'windows', arch);
 }
 
-/// Returns the Fuchsia build output directory.
 String getFuchsiaBuildDirectory() {
   return globals.fs.path.join(getBuildDirectory(), 'fuchsia');
 }
 
-/// Defines specified via the `--dart-define` command-line option.
-///
-/// These values are URI-encoded and then combined into a comma-separated string.
 const String kDartDefines = 'DartDefines';
 
-/// The define to pass a [BuildMode].
 const String kBuildMode = 'BuildMode';
 
-/// The define to pass whether we compile 64-bit android-arm code.
 const String kTargetPlatform = 'TargetPlatform';
 
-/// The define to control what target file is used.
 const String kTargetFile = 'TargetFile';
 
-/// Whether to enable or disable track widget creation.
 const String kTrackWidgetCreation = 'TrackWidgetCreation';
 
-/// If provided, the frontend server will be started in JIT mode from this file.
 const String kFrontendServerStarterPath = 'FrontendServerStarterPath';
 
-/// Additional configuration passed to the dart front end.
-///
-/// This is expected to be a comma separated list of strings.
 const String kExtraFrontEndOptions = 'ExtraFrontEndOptions';
 
-/// Additional configuration passed to gen_snapshot.
-///
-/// This is expected to be a comma separated list of strings.
 const String kExtraGenSnapshotOptions = 'ExtraGenSnapshotOptions';
 
-/// Whether the build should run gen_snapshot as a split aot build for deferred
-/// components.
 const String kDeferredComponents = 'DeferredComponents';
 
-/// Whether to strip source code information out of release builds and where to save it.
 const String kSplitDebugInfo = 'SplitDebugInfo';
 
-/// Alternative scheme for file URIs.
-///
-/// May be used along with [kFileSystemRoots] to support a multi-root
-/// filesystem.
 const String kFileSystemScheme = 'FileSystemScheme';
 
-/// Additional filesystem roots.
-///
-/// If provided, must be used along with [kFileSystemScheme].
 const String kFileSystemRoots = 'FileSystemRoots';
 
-/// The define to control what iOS architectures are built for.
-///
-/// This is expected to be a space-delimited list of architectures. If not
-/// provided, defaults to arm64.
 const String kIosArchs = 'IosArchs';
 
-/// The define to control what macOS architectures are built for.
-///
-/// This is expected to be a space-delimited list of architectures. If not
-/// provided, defaults to x86_64.
-///
-/// Supported values are x86_64 and arm64.
 const String kDarwinArchs = 'DarwinArchs';
 
-/// Path to the SDK root to be used as the isysroot.
 const String kSdkRoot = 'SdkRoot';
 
-/// Whether to enable Dart obfuscation and where to save the symbol map.
 const String kDartObfuscation = 'DartObfuscation';
 
-/// An output directory where one or more code-size measurements may be written.
 const String kCodeSizeDirectory = 'CodeSizeDirectory';
 
-/// SHA identifier of the Apple developer code signing identity.
-///
-/// Same as EXPANDED_CODE_SIGN_IDENTITY Xcode build setting.
-/// Also discoverable via `security find-identity -p codesigning`.
 const String kCodesignIdentity = 'CodesignIdentity';
 
-/// The build define controlling whether icon fonts should be stripped down to
-/// only the glyphs used by the application.
 const String kIconTreeShakerFlag = 'TreeShakeIcons';
 
-/// The input key for an SkSL bundle path.
 const String kBundleSkSLPath = 'BundleSkSLPath';
 
-/// The define to pass build name
 const String kBuildName = 'BuildName';
 
-/// The define to pass build number
 const String kBuildNumber = 'BuildNumber';
 
-/// The action Xcode is taking.
-///
-/// Will be "build" when building and "install" when archiving.
 const String kXcodeAction = 'Action';
 
 final Converter<String, String> _defineEncoder = utf8.encoder.fuse(base64.encoder);
 final Converter<String, String> _defineDecoder = base64.decoder.fuse(utf8.decoder);
 
-/// Encode a List of dart defines in a base64 string.
-///
-/// This encoding does not include `,`, which is used to distinguish
-/// the individual entries, nor does it include `%` which is often a
-/// control character on windows command lines.
-///
-/// When decoding this string, it can be safely split on commas, since any
-/// user provided commands will still be encoded.
-///
-/// If the presence of the `/` character ends up being an issue, this can
-/// be changed to use base32 instead.
 String encodeDartDefines(List<String> defines) {
   return defines.map(_defineEncoder.convert).join(',');
 }
@@ -1022,7 +808,6 @@ List<String> decodeCommaSeparated(Map<String, String> environmentDefines, String
     .toList();
 }
 
-/// Dart defines are encoded inside [environmentDefines] as a comma-separated list.
 List<String> decodeDartDefines(Map<String, String> environmentDefines, String key) {
   if (!environmentDefines.containsKey(key) || environmentDefines[key]!.isEmpty) {
     return <String>[];
@@ -1034,11 +819,9 @@ List<String> decodeDartDefines(Map<String, String> environmentDefines, String ke
     .toList();
 }
 
-/// The null safety runtime mode the app should be built in.
 enum NullSafetyMode {
   sound,
   unsound,
-  /// The null safety mode was not detected. Only supported for 'flutter test'.
   autodetect,
 }
 

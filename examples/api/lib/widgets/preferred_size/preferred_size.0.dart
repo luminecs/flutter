@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [PreferredSize].
 
 void main() => runApp(const PreferredSizeExampleApp());
 

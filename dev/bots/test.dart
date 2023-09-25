@@ -68,12 +68,6 @@ import 'utils.dart';
 
 typedef ShardRunner = Future<void> Function();
 
-/// A function used to validate the output of a test.
-///
-/// If the output matches expectations, the function shall return null.
-///
-/// If the output does not match expectations, the function shall return an
-/// appropriate error message.
 typedef OutputChecker = String? Function(CommandResult);
 
 final String exe = Platform.isWindows ? '.exe' : '';
@@ -100,46 +94,17 @@ String get platformFolderName {
 }
 final String flutterTester = path.join(flutterRoot, 'bin', 'cache', 'artifacts', 'engine', platformFolderName, 'flutter_tester$exe');
 
-/// The arguments to pass to `flutter test` (typically the local engine
-/// configuration) -- prefilled with the arguments passed to test.dart.
 final List<String> flutterTestArgs = <String>[];
 
-/// Environment variables to override the local engine when running `pub test`,
-/// if such flags are provided to `test.dart`.
 final Map<String,String> localEngineEnv = <String, String>{};
 
 const String kShardKey = 'SHARD';
 const String kSubshardKey = 'SUBSHARD';
 
-/// The number of Cirrus jobs that run Web tests in parallel.
-///
-/// The default is 8 shards. Typically .cirrus.yml would define the
-/// WEB_SHARD_COUNT environment variable rather than relying on the default.
-///
-/// WARNING: if you change this number, also change .cirrus.yml
-/// and make sure it runs _all_ shards.
-///
-/// The last shard also runs the Web plugin tests.
 int get webShardCount => Platform.environment.containsKey('WEB_SHARD_COUNT')
   ? int.parse(Platform.environment['WEB_SHARD_COUNT']!)
   : 8;
 
-/// Tests that we don't run on Web.
-///
-/// In general avoid adding new tests here. If a test cannot run on the web
-/// because it fails at runtime, such as when a piece of functionality is not
-/// implemented or not implementable on the web, prefer using `skip` in the
-/// test code. Only add tests here that cannot be skipped using `skip`. For
-/// example:
-///
-///  * Test code cannot be compiled because it uses Dart VM-specific
-///    functionality. In this case `skip` doesn't help because the code cannot
-///    reach the point where it can even run the skipping logic.
-///  * Migrations. It is OK to put tests here that need to be temporarily
-///    disabled in certain modes because of some migration or initial bringup.
-///
-/// The key in the map is the renderer type that the list applies to. The value
-/// is the list of tests known to fail for that renderer.
 //
 // TODO(yjbanov): we're getting rid of this as part of https://github.com/flutter/flutter/projects/60
 const Map<String, List<String>> kWebTestFileKnownFailures = <String, List<String>>{
@@ -204,16 +169,6 @@ String get shuffleSeed {
   return _shuffleSeed!;
 }
 
-/// When you call this, you can pass additional arguments to pass custom
-/// arguments to flutter test. For example, you might want to call this
-/// script with the parameter --local-engine=host_debug_unopt to
-/// use your own build of the engine.
-///
-/// To run the tool_tests part, run it with SHARD=tool_tests
-///
-/// Examples:
-/// SHARD=tool_tests bin/cache/dart-sdk/bin/dart dev/bots/test.dart
-/// bin/cache/dart-sdk/bin/dart dev/bots/test.dart --local-engine=host_debug_unopt --local-engine-host=host_debug_unopt
 Future<void> main(List<String> args) async {
   try {
     printProgress('STARTING ANALYSIS');
@@ -284,8 +239,6 @@ final String _luciBotId = Platform.environment['SWARMING_BOT_ID'] ?? '';
 final bool _runningInDartHHHBot =
     _luciBotId.startsWith('luci-dart-') || _luciBotId.startsWith('dart-tests-');
 
-/// Verify the Flutter Engine is the revision in
-/// bin/cache/internal/engine.version.
 Future<void> _validateEngineHash() async {
   if (_runningInDartHHHBot) {
     // The Dart HHH bots intentionally modify the local artifact cache
@@ -530,13 +483,6 @@ Future<void> runForbiddenFromReleaseTests() async {
   );
 }
 
-/// Verifies that APK, and IPA (if on macOS), and native desktop builds the
-/// examples apps without crashing. It does not actually launch the apps. That
-/// happens later in the devicelab. This is just a smoke-test. In particular,
-/// this will verify we can build when there are spaces in the path name for the
-/// Flutter SDK and target app.
-///
-/// Also does some checking about types included in hello_world.
 Future<void> _runBuildTests() async {
   final List<Directory> exampleDirectories = Directory(path.join(flutterRoot, 'examples')).listSync()
     // API example builds will be tested in a separate shard.
@@ -1156,7 +1102,6 @@ Future<void> _runWebUnitTests(String webRenderer) async {
   await selectSubshard(subshards);
 }
 
-/// Coarse-grained integration tests running on the Web.
 Future<void> _runWebLongRunningTests() async {
   final String engineVersion = File(engineVersionFile).readAsStringSync().trim();
   final String engineRealm = File(engineRealmFile).readAsStringSync().trim();
@@ -1298,7 +1243,6 @@ Future<void> _runWebLongRunningTests() async {
   await _stopChromeDriver();
 }
 
-/// Runs one of the `dev/integration_tests/web_e2e_tests` tests.
 Future<void> _runWebE2eTest(
   String name, {
   required String buildMode,
@@ -1420,16 +1364,6 @@ Future<void> _runWebTreeshakeTest() async {
   }
 }
 
-/// Returns the commit hash of the flutter/packages repository that's rolled in.
-///
-/// The flutter/packages repository is a downstream dependency, it is only used
-/// by flutter/flutter for testing purposes, to assure stable tests for a given
-/// flutter commit the flutter/packages commit hash to test against is coded in
-/// the bin/internal/flutter_packages.version file.
-///
-/// The `filesystem` parameter specified filesystem to read the packages version file from.
-/// The `packagesVersionFile` parameter allows specifying an alternative path for the
-/// packages version file, when null [flutterPackagesVersionFile] is used.
 Future<String> getFlutterPackagesVersion({
   fs.FileSystem fileSystem = const LocalFileSystem(),
   String? packagesVersionFile,
@@ -1439,7 +1373,6 @@ Future<String> getFlutterPackagesVersion({
   return versionFileContents.trim();
 }
 
-/// Executes the test suite for the flutter/packages repo.
 Future<void> _runFlutterPackagesTests() async {
   Future<void> runAnalyze() async {
     printProgress('${green}Running analysis for flutter/packages$reset');
@@ -1504,11 +1437,6 @@ Future<void> _runFlutterPackagesTests() async {
   });
 }
 
-/// Runs the skp_generator from the flutter/tests repo.
-///
-/// See also the customer_tests shard.
-///
-/// Generated SKPs are ditched, this just verifies that it can run without failure.
 Future<void> _runSkpGeneratorTests() async {
   printProgress('${green}Running skp_generator from flutter/tests$reset');
   final Directory checkout = Directory.systemTemp.createTempSync('flutter_skp_generator.');
@@ -1585,15 +1513,6 @@ Future<void> _stopChromeDriver() async {
   _chromeDriver!.process.kill();
 }
 
-/// Exercises the old gallery in a browser for a long period of time, looking
-/// for memory leaks and dangling pointers.
-///
-/// This is not a performance test.
-///
-/// If [canvasKit] is set to true, runs the test in CanvasKit mode.
-///
-/// The test is written using `package:integration_test` (despite the "e2e" in
-/// the name, which is there for historic reasons).
 Future<void> _runGalleryE2eWebTest(String buildMode, { bool canvasKit = false }) async {
   printProgress('${green}Running flutter_gallery integration test in --$buildMode using ${canvasKit ? 'CanvasKit' : 'HTML'} renderer.$reset');
   final String testAppDirectory = path.join(flutterRoot, 'dev', 'integration_tests', 'flutter_gallery');
@@ -1670,7 +1589,6 @@ Future<void> _runWebStackTraceTest(String buildMode, String entrypoint) async {
   }
 }
 
-/// Run a web integration test in release mode.
 Future<void> _runWebReleaseTest(String target, {
   List<String> additionalArguments = const<String>[],
 }) async {
@@ -1718,9 +1636,6 @@ Future<void> _runWebReleaseTest(String target, {
   }
 }
 
-/// Debug mode is special because `flutter build web` doesn't build in debug mode.
-///
-/// Instead, we use `flutter run --debug` and sniff out the standard output.
 Future<void> _runWebDebugTest(String target, {
   List<String> additionalArguments = const<String>[],
 }) async {
@@ -1956,8 +1871,6 @@ Future<void> _runFlutterTest(String workingDirectory, {
   }
 }
 
-/// This will force the next run of the Flutter tool (if it uses the provided
-/// environment) to have asserts enabled, by setting an environment variable.
 void adjustEnvironmentToEnableFlutterAsserts(Map<String, String> environment) {
   // If an existing env variable exists append to it, but only if
   // it doesn't appear to already include enable-asserts.
@@ -1983,11 +1896,6 @@ CiProviders? get ciProvider {
   return null;
 }
 
-/// Checks the given file's contents to determine if they match the allowed
-/// pattern for version strings.
-///
-/// Returns null if the contents are good. Returns a string if they are bad.
-/// The string is an error message.
 Future<String?> verifyVersion(File file) async {
   final RegExp pattern = RegExp(
     r'^(\d+)\.(\d+)\.(\d+)((-\d+\.\d+)?\.pre(\.\d+)?)?$');
@@ -2004,16 +1912,6 @@ Future<String?> verifyVersion(File file) async {
   return null;
 }
 
-/// Parse (one-)index/total-named subshards from environment variable SUBSHARD
-/// and equally distribute [tests] between them.
-/// Subshard format is "{index}_{total number of shards}".
-/// The scheduler can change the number of total shards without needing an additional
-/// commit in this repository.
-///
-/// Examples:
-/// 1_3
-/// 2_3
-/// 3_3
 List<T> _selectIndexOfTotalSubshard<T>(List<T> tests, {String subshardKey = kSubshardKey}) {
   // Example: "1_3" means the first (one-indexed) shard of three total shards.
   final String? subshardName = Platform.environment[subshardKey];

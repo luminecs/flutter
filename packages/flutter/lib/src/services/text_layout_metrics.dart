@@ -10,15 +10,8 @@ export 'dart:ui' show TextPosition, TextRange;
 
 export 'text_editing.dart' show TextSelection;
 
-/// A read-only interface for accessing visual information about the
-/// implementing text.
 abstract class TextLayoutMetrics {
   // TODO(gspencergoog): replace when we expose this ICU information.
-  /// Check if the given code unit is a white space or separator
-  /// character.
-  ///
-  /// Includes newline characters from ASCII and separators from the
-  /// [unicode separator category](https://www.compart.com/en/unicode/category/Zs)
   static bool isWhitespace(int codeUnit) {
     switch (codeUnit) {
       case 0x9: // horizontal tab
@@ -54,10 +47,6 @@ abstract class TextLayoutMetrics {
     return true;
   }
 
-  /// Check if the given code unit is a line terminator character.
-  ///
-  /// Includes newline characters from ASCII
-  /// (https://www.unicode.org/standard/reports/tr13/tr13-5.html).
   static bool isLineTerminator(int codeUnit) {
     switch (codeUnit) {
       case 0x0A: // line feed
@@ -73,27 +62,11 @@ abstract class TextLayoutMetrics {
     }
   }
 
-  /// {@template flutter.services.TextLayoutMetrics.getLineAtOffset}
-  /// Return a [TextSelection] containing the line of the given [TextPosition].
-  /// {@endtemplate}
   TextSelection getLineAtOffset(TextPosition position);
 
-  /// {@macro flutter.painting.TextPainter.getWordBoundary}
   TextRange getWordBoundary(TextPosition position);
 
-  /// {@template flutter.services.TextLayoutMetrics.getTextPositionAbove}
-  /// Returns the TextPosition above the given offset into the text.
-  ///
-  /// If the offset is already on the first line, the given offset will be
-  /// returned.
-  /// {@endtemplate}
   TextPosition getTextPositionAbove(TextPosition position);
 
-  /// {@template flutter.services.TextLayoutMetrics.getTextPositionBelow}
-  /// Returns the TextPosition below the given offset into the text.
-  ///
-  /// If the offset is already on the last line, the given offset will be
-  /// returned.
-  /// {@endtemplate}
   TextPosition getTextPositionBelow(TextPosition position);
 }

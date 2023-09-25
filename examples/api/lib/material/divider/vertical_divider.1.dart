@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Divider].
 
 void main() => runApp(const VerticalDividerExampleApp());
 

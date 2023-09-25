@@ -32,10 +32,6 @@ String _noMatchingDeviceMessage(String deviceId) => 'No supported devices found 
 String flutterSpecifiedDeviceDevModeDisabled(String deviceName) => 'To use '
     "'$deviceName' for development, enable Developer Mode in Settings → Privacy & Security.";
 
-/// This class handles functionality of finding and selecting target devices.
-///
-/// Target devices are devices that are supported and selectable to run
-/// a flutter application on.
 class TargetDevices {
   factory TargetDevices({
     required Platform platform,
@@ -130,22 +126,6 @@ class TargetDevices {
     Duration? deviceDiscoveryTimeout,
   }) {}
 
-  /// Find and return all target [Device]s based upon criteria entered by the
-  /// user on the command line.
-  ///
-  /// When the user has specified `all` devices, return all devices meeting criteria.
-  ///
-  /// When the user has specified a device id/name, attempt to find an exact or
-  /// partial match. If an exact match or a single partial match is found,
-  /// return it immediately.
-  ///
-  /// When multiple devices are found and there is a terminal attached to
-  /// stdin, allow the user to select which device to use. When a terminal
-  /// with stdin is not available, print a list of available devices and
-  /// return null.
-  ///
-  /// When no devices meet user specifications, print a list of unsupported
-  /// devices and return null.
   Future<List<Device>?> findAllTargetDevices({
     Duration? deviceDiscoveryTimeout,
     bool includeDevicesUnsupportedByProject = false,
@@ -191,8 +171,6 @@ class TargetDevices {
     return allDevices;
   }
 
-  /// When no supported devices are found, display a message and list of
-  /// unsupported devices found.
   Future<List<Device>?> _handleNoDevices() async {
     // Get connected devices from cache, including unsupported ones.
     final List<Device> unsupportedDevices = await _deviceManager.getAllDevices(
@@ -220,15 +198,6 @@ class TargetDevices {
     return null;
   }
 
-  /// Determine which device to use when multiple found.
-  ///
-  /// If user has not specified a device id/name, attempt to prioritize
-  /// ephemeral devices. If a single ephemeral device is found, return it
-  /// immediately.
-  ///
-  /// Otherwise, prompt the user to select a device if there is a terminal
-  /// with stdin. If there is not a terminal, display the list of devices with
-  /// instructions to use a device selection flag.
   Future<List<Device>?> _handleMultipleDevices(
     List<Device> attachedDevices,
     List<Device> wirelessDevices,
@@ -247,9 +216,6 @@ class TargetDevices {
     }
   }
 
-  /// Display a list of found devices. When the user has not specified the
-  /// device id/name, display devices unsupported by the project as well and
-  /// give instructions to use a device selection flag.
   Future<List<Device>?> _printMultipleDevices(
     List<Device> attachedDevices,
     List<Device> wirelessDevices,
@@ -289,8 +255,6 @@ class TargetDevices {
     return null;
   }
 
-  /// Display a list of selectable devices, prompt the user to choose one, and
-  /// wait for the user to select a valid option.
   Future<List<Device>?> _selectFromMultipleDevices(
     List<Device> attachedDevices,
     List<Device> wirelessDevices,
@@ -437,24 +401,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     return null;
   }
 
-  /// Find and return all target [Device]s based upon criteria entered by the
-  /// user on the command line.
-  ///
-  /// When the user has specified `all` devices, return all devices meeting criteria.
-  ///
-  /// When the user has specified a device id/name, attempt to find an exact or
-  /// partial match. If an exact match or a single partial match is found and
-  /// the device is connected, return it immediately. If an exact match or a
-  /// single partial match is found and the device is not connected and it's
-  /// an iOS device, wait for it to connect.
-  ///
-  /// When multiple devices are found and there is a terminal attached to
-  /// stdin, allow the user to select which device to use. When a terminal
-  /// with stdin is not available, print a list of available devices and
-  /// return null.
-  ///
-  /// When no devices meet user specifications, print a list of unsupported
-  /// devices and return null.
   @override
   Future<List<Device>?> findAllTargetDevices({
     Duration? deviceDiscoveryTimeout,
@@ -546,12 +492,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     return _handleRemainingDevices(attachedDevices, futureWirelessDevices);
   }
 
-  /// When no supported attached devices are found, wait for wireless devices
-  /// to load.
-  ///
-  /// If no wireless devices are found, continue to `_handleNoDevices`.
-  ///
-  /// If wireless devices are found, continue to `_handleMultipleDevices`.
   Future<List<Device>?> _handleNoAttachedDevices(
     List<Device> attachedDevices,
     Future<List<Device>> futureWirelessDevices,
@@ -577,8 +517,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     return allDevices;
   }
 
-  /// Wait for wireless devices to load and then return all attached and
-  /// wireless devices.
   Future<List<Device>?> _handleAllDevices(
     List<Device> devices,
     Future<List<Device>> futureWirelessDevices,
@@ -588,15 +526,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     return devices + wirelessDevices;
   }
 
-  /// Determine which device to use when one or more are found.
-  ///
-  /// If user has not specified a device id/name, attempt to prioritize
-  /// ephemeral devices. If a single ephemeral device is found, return it
-  /// immediately.
-  ///
-  /// Otherwise, prompt the user to select a device if there is a terminal
-  /// with stdin. If there is not a terminal, display the list of devices with
-  /// instructions to use a device selection flag.
   Future<List<Device>?> _handleRemainingDevices(
     List<Device> attachedDevices,
     Future<List<Device>> futureWirelessDevices,
@@ -628,14 +557,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     );
   }
 
-  /// Display a list of selectable attached devices and prompt the user to
-  /// choose one.
-  ///
-  /// Also, display a message about waiting for wireless devices to load. Once
-  /// wireless devices have loaded, update waiting message, device list, and
-  /// selection options.
-  ///
-  /// Wait for the user to select a device.
   Future<List<Device>?> _selectFromDevicesAndCheckForWireless(
     List<Device> attachedDevices,
     Future<List<Device>> futureWirelessDevices,
@@ -713,7 +634,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     return <Device>[chosenDevice];
   }
 
-  /// Reprint list of attached devices before printing list of wireless devices.
   Future<void> _verbosePrintWirelessDevices(
     List<Device> attachedDevices,
     List<Device> wirelessDevices,
@@ -733,8 +653,6 @@ class TargetDevicesWithExtendedWirelessDeviceDiscovery extends TargetDevices {
     }
   }
 
-  /// Clear [numLinesToClear] lines from terminal. Print message and list of
-  /// wireless devices.
   Future<void> _printWirelessDevices(
     List<Device> wirelessDevices,
     int numLinesToClear,
@@ -761,11 +679,6 @@ class TargetDeviceSelection {
   final Logger _logger;
   int invalidAttempts = 0;
 
-  /// Prompt user to select a device and wait until they select a valid device.
-  ///
-  /// If the user selects `q`, exit the tool.
-  ///
-  /// If the user selects an invalid number, reprompt them and continue waiting.
   Future<Device> userSelectDevice() async {
     Device? chosenDevice;
     while (chosenDevice == null) {
@@ -782,10 +695,6 @@ class TargetDeviceSelection {
     return chosenDevice;
   }
 
-  /// Prompt user to select a device and wait until they select a valid
-  /// character.
-  ///
-  /// Only allow input of a number or `q`.
   @visibleForTesting
   Future<String> readUserInput() async {
     final RegExp pattern = RegExp(r'\d+$|q', caseSensitive: false);

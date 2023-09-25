@@ -7,13 +7,9 @@ import 'dart:math';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:integration_test/integration_test_driver_extended.dart' as test;
 
-/// Browser screen dimensions for the FlutterDriver test.
 const int _kScreenshotWidth = 1024;
 const int _kScreenshotHeight = 1024;
 
-/// Convenience wrapper around [test.integrationDriver].
-///
-/// Adds the capability to take test screenshots.
 Future<void> runTestWithScreenshots({
   int browserWidth = _kScreenshotWidth,
   int browserHeight = _kScreenshotHeight,

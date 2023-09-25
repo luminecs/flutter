@@ -149,12 +149,6 @@ Future<TestStepResult> basicStandardMessageToUnknownChannel() async {
   return _basicMessageToUnknownChannel<dynamic>('Standard', channel);
 }
 
-/// Sends the specified message to the platform, doing a
-/// receive message/send reply/receive reply echo handshake initiated by the
-/// platform, then expecting a reply echo to the original message.
-///
-/// Fails, if an error occurs, or if any message seen is not deeply equal to
-/// the original message.
 Future<TestStepResult> _basicMessageHandshake<T>(
   String description,
   BasicMessageChannel<T?> channel,
@@ -182,7 +176,6 @@ Future<TestStepResult> _basicMessageHandshake<T>(
   );
 }
 
-/// Sends a message on a channel that no one listens on.
 Future<TestStepResult> _basicMessageToUnknownChannel<T>(
   String description,
   BasicMessageChannel<T?> channel,

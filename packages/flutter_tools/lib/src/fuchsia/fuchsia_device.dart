@@ -33,10 +33,8 @@ import 'fuchsia_sdk.dart';
 import 'fuchsia_workflow.dart';
 import 'pkgctl.dart';
 
-/// The [FuchsiaDeviceTools] instance.
 FuchsiaDeviceTools get fuchsiaDeviceTools => context.get<FuchsiaDeviceTools>()!;
 
-/// Fuchsia device-side tools.
 class FuchsiaDeviceTools {
   late final FuchsiaPkgctl pkgctl = FuchsiaPkgctl();
   late final FuchsiaFfx ffx = FuchsiaFfx();
@@ -64,7 +62,6 @@ Future<void> _kDefaultDartDevelopmentServiceStarter(
   );
 }
 
-/// Read the log for a particular device.
 class _FuchsiaLogReader extends DeviceLogReader {
   _FuchsiaLogReader(this._device, this._systemClock, [this._app]);
 
@@ -151,7 +148,6 @@ class _FuchsiaLogSink implements EventSink<String> {
   }
 }
 
-/// Device discovery for Fuchsia devices.
 class FuchsiaDevices extends PollingDeviceDiscovery {
   FuchsiaDevices({
     required Platform platform,
@@ -254,11 +250,6 @@ class FuchsiaDevice extends Device {
 
   late final Future<bool> isSession = _initIsSession();
 
-  /// Determine if the Fuchsia device is running a session based build.
-  ///
-  /// If the device is running a session based build, `ffx session` should be
-  /// used to launch apps. Fuchsia flutter apps cannot currently be launched
-  /// without a session.
   Future<bool> _initIsSession() async {
     return await globals.fuchsiaSdk?.fuchsiaFfx.sessionShow() != null;
   }
@@ -595,11 +586,8 @@ class FuchsiaDevice extends Device {
   @override
   void clearLogs() {}
 
-  /// [true] if the current host address is IPv6.
   late final bool ipv6 = isIPv6Address(id);
 
-  /// Return the address that the device should use to communicate with the
-  /// host.
   late final Future<String> hostAddress = () async {
     final RunResult result = await shell(r'echo $SSH_CONNECTION');
     void fail() {
@@ -620,7 +608,6 @@ class FuchsiaDevice extends Device {
     return addr;
   }();
 
-  /// List the ports currently running a dart vmService.
   Future<List<int>> servicePorts() async {
     const String findCommand = 'find /hub -name vmservice-port';
     final RunResult findResult = await shell(findCommand);
@@ -657,7 +644,6 @@ class FuchsiaDevice extends Device {
     return ports;
   }
 
-  /// Run `command` on the Fuchsia device shell.
   Future<RunResult> shell(String command) async {
     final File? sshConfig = globals.fuchsiaArtifacts?.sshConfig;
     if (sshConfig == null) {
@@ -673,7 +659,6 @@ class FuchsiaDevice extends Device {
     ]);
   }
 
-  /// Transfer the file [origin] from the device to [destination].
   Future<RunResult> scp(String origin, String destination) async {
     final File? sshConfig = globals.fuchsiaArtifacts!.sshConfig;
     if (sshConfig == null) {
@@ -689,10 +674,6 @@ class FuchsiaDevice extends Device {
     ]);
   }
 
-  /// Finds the first port running a VM matching `isolateName` from the
-  /// provided set of `ports`.
-  ///
-  /// Returns null if no isolate port can be found.
   Future<int> findIsolatePort(String isolateName, List<int> ports) async {
     for (final int port in ports) {
       try {

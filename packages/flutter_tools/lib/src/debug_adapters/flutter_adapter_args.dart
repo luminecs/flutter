@@ -4,11 +4,6 @@
 
 import 'package:dds/dap.dart';
 
-/// An implementation of [AttachRequestArguments] that includes all fields used by the Flutter debug adapter.
-///
-/// This class represents the data passed from the client editor to the debug
-/// adapter in attachRequest, which is a request to attach to/debug a running
-/// application.
 class FlutterAttachRequestArguments
     extends DartCommonLaunchAttachRequestArguments
     implements AttachRequestArguments {
@@ -45,38 +40,16 @@ class FlutterAttachRequestArguments
   static FlutterAttachRequestArguments fromJson(Map<String, Object?> obj) =>
       FlutterAttachRequestArguments.fromMap(obj);
 
-  /// Arguments to be passed to the tool that will run [program] (for example, the VM or Flutter tool).
   final List<String>? toolArgs;
 
-  /// An optional tool to run instead of "flutter".
-  ///
-  /// In combination with [customToolReplacesArgs] allows invoking a custom
-  /// tool instead of "flutter" to launch scripts/tests. The custom tool must be
-  /// completely compatible with the tool/command it is replacing.
-  ///
-  /// This field should be a full absolute path if the tool may not be available
-  /// in `PATH`.
   final String? customTool;
 
-  /// The number of arguments to delete from the beginning of the argument list
-  /// when invoking [customTool].
-  ///
-  /// For example, setting [customTool] to `flutter_test_wrapper` and
-  /// `customToolReplacesArgs` to `1` for a test run would invoke
-  /// `flutter_test_wrapper foo_test.dart` instead of `flutter test foo_test.dart`.
   final int? customToolReplacesArgs;
 
-  /// The VM Service URI of the running Flutter app to connect to.
-  ///
-  /// Only one of this or [vmServiceInfoFile] (or neither) can be supplied.
   final String? vmServiceUri;
 
-  /// The VM Service info file to extract the VM Service URI from to attach to.
-  ///
-  /// Only one of this or [vmServiceUri] (or neither) can be supplied.
   final String? vmServiceInfoFile;
 
-  /// The program/Flutter app to be run.
   final String? program;
 
   @override
@@ -90,11 +63,6 @@ class FlutterAttachRequestArguments
       };
 }
 
-/// An implementation of [LaunchRequestArguments] that includes all fields used by the Flutter debug adapter.
-///
-/// This class represents the data passed from the client editor to the debug
-/// adapter in launchRequest, which is a request to start debugging an
-/// application.
 class FlutterLaunchRequestArguments
     extends DartCommonLaunchAttachRequestArguments
     implements LaunchRequestArguments {
@@ -128,35 +96,17 @@ class FlutterLaunchRequestArguments
         customToolReplacesArgs = obj['customToolReplacesArgs'] as int?,
         super.fromMap();
 
-  /// If noDebug is true the launch request should launch the program without enabling debugging.
   @override
   final bool? noDebug;
 
-  /// The program/Flutter app to be run.
   final String? program;
 
-  /// Arguments to be passed to [program].
   final List<String>? args;
 
-  /// Arguments to be passed to the tool that will run [program] (for example, the VM or Flutter tool).
   final List<String>? toolArgs;
 
-  /// An optional tool to run instead of "flutter".
-  ///
-  /// In combination with [customToolReplacesArgs] allows invoking a custom
-  /// tool instead of "flutter" to launch scripts/tests. The custom tool must be
-  /// completely compatible with the tool/command it is replacing.
-  ///
-  /// This field should be a full absolute path if the tool may not be available
-  /// in `PATH`.
   final String? customTool;
 
-  /// The number of arguments to delete from the beginning of the argument list
-  /// when invoking [customTool].
-  ///
-  /// For example, setting [customTool] to `flutter_test_wrapper` and
-  /// `customToolReplacesArgs` to `1` for a test run would invoke
-  /// `flutter_test_wrapper foo_test.dart` instead of `flutter test foo_test.dart`.
   final int? customToolReplacesArgs;
 
   @override

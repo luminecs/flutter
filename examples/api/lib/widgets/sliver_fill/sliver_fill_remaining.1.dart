@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SliverFillRemaining].
 
 void main() => runApp(const SliverFillRemainingExampleApp());
 

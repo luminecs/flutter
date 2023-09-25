@@ -9,25 +9,15 @@ import 'desktop_text_selection_toolbar.dart';
 import 'desktop_text_selection_toolbar_button.dart';
 import 'localizations.dart';
 
-/// MacOS Cupertino styled text selection handle controls.
-///
-/// Specifically does not manage the toolbar, which is left to
-/// [EditableText.contextMenuBuilder].
 class _CupertinoDesktopTextSelectionHandleControls extends CupertinoDesktopTextSelectionControls with TextSelectionHandleControls {
 }
 
-/// Desktop Cupertino styled text selection controls.
-///
-/// The [cupertinoDesktopTextSelectionControls] global variable has a
-/// suitable instance of this class.
 class CupertinoDesktopTextSelectionControls extends TextSelectionControls {
-  /// Desktop has no text selection handles.
   @override
   Size getHandleSize(double textLineHeight) {
     return Size.zero;
   }
 
-  /// Builder for the MacOS-style copy/paste text selection toolbar.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -57,13 +47,11 @@ class CupertinoDesktopTextSelectionControls extends TextSelectionControls {
     );
   }
 
-  /// Builds the text selection handles, but desktop has none.
   @override
   Widget buildHandle(BuildContext context, TextSelectionHandleType type, double textLineHeight, [VoidCallback? onTap]) {
     return const SizedBox.shrink();
   }
 
-  /// Gets the position for the text selection handles, but desktop has none.
   @override
   Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight) {
     return Offset.zero;
@@ -84,11 +72,9 @@ class CupertinoDesktopTextSelectionControls extends TextSelectionControls {
 // deleted, when users should migrate back to
 // cupertinoDesktopTextSelectionControls.
 // See https://github.com/flutter/flutter/pull/124262
-/// Text selection handle controls that follow MacOS design conventions.
 final TextSelectionControls cupertinoDesktopTextSelectionHandleControls =
     _CupertinoDesktopTextSelectionHandleControls();
 
-/// Text selection controls that follows MacOS design conventions.
 final TextSelectionControls cupertinoDesktopTextSelectionControls =
     CupertinoDesktopTextSelectionControls();
 

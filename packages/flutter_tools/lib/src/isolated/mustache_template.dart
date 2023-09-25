@@ -6,7 +6,6 @@ import 'package:mustache_template/mustache_template.dart';
 
 import '../base/template.dart';
 
-/// An indirection around mustache use to allow google3 to use a different dependency.
 class MustacheTemplateRenderer extends TemplateRenderer {
   const MustacheTemplateRenderer();
 

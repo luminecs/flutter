@@ -251,12 +251,6 @@ void main() {
   });
 }
 
-/// Override `HttpClient()` to throw an error.
-///
-/// This ensures that these tests never cause a call to the [HttpClient]
-/// constructor.
-///
-/// Regression test for <https://github.com/flutter/flutter/issues/129532>.
 class _FakeHttpOverrides extends HttpOverrides {
   static int createHttpClientCalls = 0;
 

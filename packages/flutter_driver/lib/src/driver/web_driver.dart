@@ -20,14 +20,7 @@ import 'common.dart';
 import 'driver.dart';
 import 'timeline.dart';
 
-/// An implementation of the Flutter Driver using the WebDriver.
-///
-/// Example of how to test WebFlutterDriver:
-///   1. Launch WebDriver binary: ./chromedriver --port=4444
-///   2. Run test script: flutter drive --target=test_driver/scroll_perf_web.dart -d web-server --release
 class WebFlutterDriver extends FlutterDriver {
-  /// Creates a driver that uses a connection provided by the given
-  /// [_connection].
   WebFlutterDriver.connectedTo(
     this._connection, {
     bool printCommunication = false,
@@ -45,10 +38,8 @@ class WebFlutterDriver extends FlutterDriver {
   DateTime _startTime;
   static int _nextDriverId = 0;
 
-  /// The unique ID of this driver instance.
   final int _driverId;
 
-  /// Start time for tracing.
   @visibleForTesting
   DateTime get startTime => _startTime;
 
@@ -61,26 +52,14 @@ class WebFlutterDriver extends FlutterDriver {
   @override
   async_io.WebDriver get webDriver => _connection._driver;
 
-  /// Whether to print communication between host and app to `stdout`.
   final bool _printCommunication;
 
-  /// Whether to log communication between host and app to `flutter_driver_commands.log`.
   final bool _logCommunicationToFile;
 
-  /// Logs are written here when _logCommunicationToFile is true.
   late final String _logFilePathName;
 
-  /// Getter for file pathname where logs are written when _logCommunicationToFile is true
   String get logFilePathName => _logFilePathName;
 
-  /// Creates a driver that uses a connection provided by the given
-  /// [hostUrl] which would fallback to environment variable VM_SERVICE_URL.
-  /// Driver also depends on environment variables DRIVER_SESSION_ID,
-  /// BROWSER_SUPPORTS_TIMELINE, DRIVER_SESSION_URI, DRIVER_SESSION_SPEC,
-  /// DRIVER_SESSION_CAPABILITIES and ANDROID_CHROME_ON_EMULATOR for
-  /// configurations.
-  ///
-  /// See [FlutterDriver.connect] for more documentation.
   static Future<FlutterDriver> connectWeb({
     String? hostUrl,
     bool printCommunication = false,
@@ -245,7 +224,6 @@ class WebFlutterDriver extends FlutterDriver {
     _startTime = DateTime.now();
   }
 
-  /// Checks whether browser supports Timeline related operations.
   void _checkBrowserSupportsTimeline() {
     if (!_connection.supportsTimelineAction) {
       throw UnsupportedError('Timeline action is not supported by current testing browser');
@@ -253,19 +231,13 @@ class WebFlutterDriver extends FlutterDriver {
   }
 }
 
-/// Encapsulates connection information to an instance of a Flutter Web application.
 class FlutterWebConnection {
-  /// Creates a FlutterWebConnection with WebDriver
-  /// and whether the WebDriver supports timeline action.
   FlutterWebConnection(this._driver, this.supportsTimelineAction);
 
   final async_io.WebDriver _driver;
 
-  /// Whether the connected WebDriver supports timeline action for Flutter Web Driver.
   bool supportsTimelineAction;
 
-  /// Starts WebDriver with the given [settings] and
-  /// establishes the connection to Flutter Web application.
   static Future<FlutterWebConnection> connect(
       String url,
       Map<String, dynamic> settings,
@@ -292,7 +264,6 @@ class FlutterWebConnection {
     return FlutterWebConnection(driver, settings['support-timeline-action'] as bool);
   }
 
-  /// Sends command via WebDriver to Flutter web application.
   Future<dynamic> sendCommand(String script, Duration? duration) async {
     // This code should not be reachable before the VM service extension is
     // initialized. The VM service extension is expected to initialize both
@@ -343,19 +314,15 @@ class FlutterWebConnection {
     }
   }
 
-  /// Gets performance log from WebDriver.
   Stream<async_io.LogEntry> get logs => _driver.logs.get(async_io.LogType.performance);
 
-  /// Takes screenshot via WebDriver.
   Future<List<int>> screenshot()  => _driver.captureScreenshotAsList();
 
-  /// Closes the WebDriver.
   Future<void> close() async {
     await _driver.quit(closeSession: false);
   }
 }
 
-/// Waits until extension is installed.
 Future<void> waitUntilExtensionInstalled(async_io.WebDriver driver, Duration? timeout) async {
   await waitFor<void>(() =>
       driver.execute(r'return typeof(window.$flutterDriver)', <String>[]),

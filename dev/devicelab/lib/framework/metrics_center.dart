@@ -8,9 +8,6 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:metrics_center/metrics_center.dart';
 
-/// Authenticate and connect to gcloud storage.
-///
-/// It supports both token and credential authentications.
 Future<FlutterDestination> connectFlutterDestination() async {
   const String kTokenPath = 'TOKEN_PATH';
   const String kGcpProject = 'GCP_PROJECT';
@@ -29,31 +26,6 @@ Future<FlutterDestination> connectFlutterDestination() async {
   );
 }
 
-/// Parse results and append additional benchmark tags into Metric Points.
-///
-/// An example of `resultsJson`:
-///   {
-///     "CommitBranch": "master",
-///     "CommitSha": "abc",
-///     "BuilderName": "test",
-///     "ResultData": {
-///       "average_frame_build_time_millis": 0.4550425531914895,
-///       "90th_percentile_frame_build_time_millis": 0.473
-///     },
-///     "BenchmarkScoreKeys": [
-///       "average_frame_build_time_millis",
-///       "90th_percentile_frame_build_time_millis"
-///     ]
-///   }
-///
-/// An example of `benchmarkTags`:
-///   {
-///     "arch": "intel",
-///     "device_type": "Moto G Play",
-///     "device_version": "android-25",
-///     "host_type": "linux",
-///     "host_version": "debian-10.11"
-///   }
 List<MetricPoint> parse(Map<String, dynamic> resultsJson, Map<String, dynamic> benchmarkTags, String taskName) {
   print('Results to upload to skia perf: $resultsJson');
   print('Benchmark tags to upload to skia perf: $benchmarkTags');
@@ -85,15 +57,6 @@ List<MetricPoint> parse(Map<String, dynamic> resultsJson, Map<String, dynamic> b
   return metricPoints;
 }
 
-/// Upload metrics to GCS bucket used by Skia Perf.
-///
-/// Skia Perf picks up all available files under the folder, and
-/// is robust to duplicate entries.
-///
-/// Files will be named based on `taskName`, such as
-/// `complex_layout_scroll_perf__timeline_summary_values.json`.
-/// If no `taskName` is specified, data will be saved to
-/// `default_values.json`.
 Future<void> upload(
   FlutterDestination metricsDestination,
   List<MetricPoint> metricPoints,
@@ -110,12 +73,6 @@ Future<void> upload(
   );
 }
 
-/// Upload JSON results to skia perf.
-///
-/// Flutter infrastructure's workflow is:
-/// 1. Run DeviceLab test, writing results to a known path
-/// 2. Request service account token from luci auth (valid for at least 3 minutes)
-/// 3. Upload results from (1) to skia perf.
 Future<void> uploadToSkiaPerf(String? resultsPath, String? commitTime, String? taskName, String? benchmarkTags) async {
   int commitTimeSinceEpoch;
   if (resultsPath == null) {
@@ -141,17 +98,6 @@ Future<void> uploadToSkiaPerf(String? resultsPath, String? commitTime, String? t
   );
 }
 
-/// Create metric file name based on `taskName`, `arch`, `host type`, and `device type`.
-///
-/// Same `taskName` may run on different platforms. Considering host/device tags to
-/// use different metric file names.
-///
-/// This affects only the metric file name which contains metric data, and does not affect
-/// real host/device tags.
-///
-/// For example:
-///   Old file name: `backdrop_filter_perf__timeline_summary`
-///   New file name: `backdrop_filter_perf__timeline_summary_intel_linux_motoG4`
 String metricFileName(
   String taskName,
   Map<String, dynamic> benchmarkTagsMap,
@@ -175,7 +121,6 @@ String metricFileName(
   return fileName.toString();
 }
 
-/// Format `fileName` removing non letter and number characters.
 String _fileNameFormat(String fileName) {
   return fileName.replaceAll(RegExp('[^a-zA-Z0-9]'), '');
 }

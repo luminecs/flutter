@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FadeTransition].
 
 void main() => runApp(const FadeTransitionExampleApp());
 
@@ -26,8 +25,6 @@ class FadeTransitionExample extends StatefulWidget {
   State<FadeTransitionExample> createState() => _FadeTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _FadeTransitionExampleState extends State<FadeTransitionExample> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),

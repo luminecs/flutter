@@ -5,7 +5,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AlertDialog].
 
 void main() => runApp(const AdaptiveAlertDialogApp());
 

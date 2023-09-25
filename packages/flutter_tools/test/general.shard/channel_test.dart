@@ -350,8 +350,6 @@ void main() {
         VersionCheckStamp.flutterVersionCheckStampFile,
       );
 
-      /// Create a bogus "leftover" version check file to make sure it gets
-      /// removed when the channel changes. The content doesn't matter.
       versionCheckFile.createSync(recursive: true);
       versionCheckFile.writeAsStringSync('''
         {

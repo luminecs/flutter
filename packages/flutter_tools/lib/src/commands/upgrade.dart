@@ -250,9 +250,6 @@ class UpgradeCommandRunner {
     }
   }
 
-  /// Returns the remote HEAD flutter version.
-  ///
-  /// Exits tool if HEAD isn't pointing to a branch, or there is no upstream.
   Future<FlutterVersion> fetchLatestVersion({
     required FlutterVersion localVersion,
   }) async {
@@ -308,11 +305,6 @@ class UpgradeCommandRunner {
     );
   }
 
-  /// Attempts a hard reset to the given revision.
-  ///
-  /// This is a reset instead of fast forward because if we are on a release
-  /// branch with cherry picks, there may not be a direct fast-forward route
-  /// to the next release.
   Future<void> attemptReset(String newRevision) async {
     try {
       await globals.processUtils.run(
@@ -325,7 +317,6 @@ class UpgradeCommandRunner {
     }
   }
 
-  /// Update the user's packages.
   Future<void> updatePackages(FlutterVersion flutterVersion) async {
     globals.printStatus('');
     globals.printStatus(flutterVersion.toString());
@@ -340,7 +331,6 @@ class UpgradeCommandRunner {
     }
   }
 
-  /// Run flutter doctor in case requirements have changed.
   Future<void> runDoctor() async {
     globals.printStatus('');
     globals.printStatus('Running flutter doctor...');
@@ -354,11 +344,6 @@ class UpgradeCommandRunner {
   }
 }
 
-/// Update the engine repository and precache all artifacts.
-///
-/// Check for and download any engine and pkg/ updates. We run the 'flutter'
-/// shell script reentrantly here so that it will download the updated
-/// Dart and so forth if necessary.
 Future<void> precacheArtifacts([String? workingDirectory]) async {
   globals.printStatus('');
   globals.printStatus('Upgrading engine...');

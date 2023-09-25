@@ -8,20 +8,6 @@ import '../debug_adapters/server.dart';
 import '../globals.dart' as globals;
 import '../runner/flutter_command.dart';
 
-/// This command will start up a Debug Adapter that communicates using the Debug Adapter Protocol (DAP).
-///
-/// This is for use by editors and IDEs that have DAP clients to launch and
-/// debug Flutter apps/tests. It extends the standard Dart DAP implementation
-/// from DDS with Flutter-specific functionality (such as Hot Restart).
-///
-/// The server is intended to be single-use. It should live only for the
-/// duration of a single debug session in the editor, and terminate when the
-/// user stops debugging. If a user starts multiple debug sessions
-/// simultaneously it is expected that the editor will start multiple debug
-/// adapters.
-///
-/// The DAP specification can be found at
-/// https://microsoft.github.io/debug-adapter-protocol/.
 class DebugAdapterCommand extends FlutterCommand {
   DebugAdapterCommand({ bool verboseHelp = false}) : hidden = !verboseHelp {
     usesIpv6Flag(verboseHelp: verboseHelp);

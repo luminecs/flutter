@@ -6,7 +6,6 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart' as web;
 
-/// Defines a new property on an Object.
 @JS('Object.defineProperty')
 external void objectDefineProperty(JSAny o, String symbol, JSAny desc);
 

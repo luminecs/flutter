@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ReorderableListView.buildDefaultDragHandles].
 
 void main() => runApp(const ReorderableApp());
 

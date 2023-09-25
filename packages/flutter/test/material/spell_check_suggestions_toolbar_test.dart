@@ -16,7 +16,6 @@ const double _kTestToolbarOverlap = 10;
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  /// Builds test button items for each of the suggestions provided.
   List<ContextMenuButtonItem> buildSuggestionButtons(List<String> suggestions) {
     final List<ContextMenuButtonItem> buttonItems = <ContextMenuButtonItem>[];
 
@@ -38,8 +37,6 @@ void main() {
     return buttonItems;
   }
 
-  /// Finds the container of the [SpellCheckSuggestionsToolbar] so that
-  /// the position of the toolbar itself may be determined.
   Finder findSpellCheckSuggestionsToolbar() {
     return find.descendant(
       of: find.byType(MaterialApp),

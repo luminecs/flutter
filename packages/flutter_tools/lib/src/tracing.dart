@@ -36,7 +36,6 @@ class Tracing {
     await vmService.service.clearVMTimeline();
   }
 
-  /// Stops tracing; optionally wait for first frame.
   Future<Map<String, Object?>> stopTracingAndDownloadTimeline({
     bool awaitFirstFrame = false,
   }) async {
@@ -120,8 +119,6 @@ class Tracing {
   }
 }
 
-/// Download the startup trace information from the given VM Service client and
-/// store it to `$output/start_up_info.json`.
 Future<void> downloadStartupTrace(FlutterVmService vmService, {
   bool awaitFirstFrame = true,
   required Logger logger,

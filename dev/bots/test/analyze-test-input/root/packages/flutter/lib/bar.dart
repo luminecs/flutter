@@ -16,6 +16,3 @@ class Foo {
   @_debugOnly
   final Map<String, String>? bar = kDebugMode ? null : <String, String>{};
 }
-
-/// Simply avoid this
-/// and simply do that.

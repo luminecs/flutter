@@ -10,12 +10,6 @@ import 'diagnostics.dart';
 
 const bool _kMemoryAllocations = bool.fromEnvironment('flutter.memory_allocations');
 
-/// If true, Flutter objects dispatch the memory allocation events.
-///
-/// By default, the constant is true for debug mode and false
-/// for profile and release modes.
-/// To enable the dispatching for release mode, pass the compilation flag
-/// `--dart-define=flutter.memory_allocations=true`.
 const bool kFlutterMemoryAllocationsEnabled = _kMemoryAllocations || kDebugMode;
 
 const String _dartUiLibrary = 'dart:ui';
@@ -26,50 +20,27 @@ class _FieldNames {
   static const String className = 'className';
 }
 
-/// A lifecycle event of an object.
 abstract class ObjectEvent{
-  /// Creates an instance of [ObjectEvent].
   ObjectEvent({
     required this.object,
   });
 
-  /// Reference to the object.
-  ///
-  /// The reference should not be stored in any
-  /// long living place as it will prevent garbage collection.
   final Object object;
 
-  /// The representation of the event in a form, acceptable by a
-  /// pure dart library, that cannot depend on Flutter.
-  ///
-  /// The method enables code like:
-  /// ```dart
-  /// void myDartMethod(Map<Object, Map<String, Object>> event) {}
-  /// MemoryAllocations.instance
-  ///   .addListener((ObjectEvent event) => myDartMethod(event.toMap()));
-  /// ```
   Map<Object, Map<String, Object>> toMap();
 }
 
-/// A listener of [ObjectEvent].
 typedef ObjectEventListener = void Function(ObjectEvent);
 
-/// An event that describes creation of an object.
 class ObjectCreated extends ObjectEvent {
-  /// Creates an instance of [ObjectCreated].
   ObjectCreated({
     required this.library,
     required this.className,
     required super.object,
   });
 
-  /// Name of the instrumented library.
-  ///
-  /// The format of this parameter should be a library Uri.
-  /// For example: `'package:flutter/rendering.dart'`.
   final String library;
 
-  /// Name of the instrumented class.
   final String className;
 
   @override
@@ -82,9 +53,7 @@ class ObjectCreated extends ObjectEvent {
   }
 }
 
-/// An event that describes disposal of an object.
 class ObjectDisposed extends ObjectEvent {
-  /// Creates an instance of [ObjectDisposed].
   ObjectDisposed({
     required super.object,
   });
@@ -97,40 +66,13 @@ class ObjectDisposed extends ObjectEvent {
   }
 }
 
-/// An interface for listening to object lifecycle events.
-///
-/// If [kFlutterMemoryAllocationsEnabled] is true,
-/// [MemoryAllocations] listens to creation and disposal events
-/// for disposable objects in Flutter Framework.
-/// To dispatch events for other objects, invoke
-/// [MemoryAllocations.dispatchObjectEvent].
-///
-/// Use this class with condition `kFlutterMemoryAllocationsEnabled`,
-/// to make sure not to increase size of the application by the code
-/// of the class, if memory allocations are disabled.
-///
-/// The class is optimized for massive event flow and small number of
-/// added or removed listeners.
 class MemoryAllocations {
   MemoryAllocations._();
 
-  /// The shared instance of [MemoryAllocations].
-  ///
-  /// Only call this when [kFlutterMemoryAllocationsEnabled] is true.
   static final MemoryAllocations instance = MemoryAllocations._();
 
-  /// List of listeners.
-  ///
-  /// The elements are nullable, because the listeners should be removable
-  /// while iterating through the list.
   List<ObjectEventListener?>? _listeners;
 
-  /// Register a listener that is called every time an object event is
-  /// dispatched.
-  ///
-  /// Listeners can be removed with [removeListener].
-  ///
-  /// Only call this when [kFlutterMemoryAllocationsEnabled] is true.
   void addListener(ObjectEventListener listener){
     if (!kFlutterMemoryAllocationsEnabled) {
       return;
@@ -142,21 +84,10 @@ class MemoryAllocations {
     _listeners!.add(listener);
   }
 
-  /// Number of active notification loops.
-  ///
-  /// When equal to zero, we can delete listeners from the list,
-  /// otherwise should null them.
   int _activeDispatchLoops = 0;
 
-  /// If true, listeners were nulled by [removeListener].
   bool _listenersContainNulls = false;
 
-  /// Stop calling the given listener every time an object event is
-  /// dispatched.
-  ///
-  /// Listeners can be added with [addListener].
-  ///
-  /// Only call this when [kFlutterMemoryAllocationsEnabled] is true.
   void removeListener(ObjectEventListener listener){
     if (!kFlutterMemoryAllocationsEnabled) {
       return;
@@ -198,11 +129,6 @@ class MemoryAllocations {
     }
   }
 
-  /// Return true if there are listeners.
-  ///
-  /// If there is no listeners, the app can save on creating the event object.
-  ///
-  /// Only call this when [kFlutterMemoryAllocationsEnabled] is true.
   bool get hasListeners {
     if (!kFlutterMemoryAllocationsEnabled) {
       return false;
@@ -213,18 +139,6 @@ class MemoryAllocations {
     return _listeners?.isNotEmpty ?? false;
   }
 
-  /// Dispatch a new object event to listeners.
-  ///
-  /// Exceptions thrown by listeners will be caught and reported using
-  /// [FlutterError.reportError].
-  ///
-  /// Listeners added during an event dispatching, will start being invoked
-  /// for next events, but will be skipped for this event.
-  ///
-  /// Listeners, removed during an event dispatching, will not be invoked
-  /// after the removal.
-  ///
-  /// Only call this when [kFlutterMemoryAllocationsEnabled] is true.
   void dispatchObjectEvent(ObjectEvent event) {
     if (!kFlutterMemoryAllocationsEnabled) {
       return;
@@ -261,9 +175,6 @@ class MemoryAllocations {
     _tryDefragmentListeners();
   }
 
-  /// Create [ObjectCreated] and invoke [dispatchObjectEvent] if there are listeners.
-  ///
-  /// This method is more efficient than [dispatchObjectEvent] if the event object is not created yet.
   void dispatchObjectCreated({
     required String library,
     required String className,
@@ -279,9 +190,6 @@ class MemoryAllocations {
     ));
   }
 
-  /// Create [ObjectDisposed] and invoke [dispatchObjectEvent] if there are listeners.
-  ///
-  /// This method is more efficient than [dispatchObjectEvent] if the event object is not created yet.
   void dispatchObjectDisposed({required Object object}) {
     if (!hasListeners) {
       return;

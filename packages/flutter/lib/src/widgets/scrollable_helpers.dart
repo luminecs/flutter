@@ -20,15 +20,8 @@ import 'scrollable.dart';
 
 export 'package:flutter/physics.dart' show Tolerance;
 
-/// Describes the aspects of a Scrollable widget to inform inherited widgets
-/// like [ScrollBehavior] for decorating or enumerate the properties of combined
-/// Scrollables, such as [TwoDimensionalScrollable].
-///
-/// Decorations like [GlowingOverscrollIndicator]s and [Scrollbar]s require
-/// information about the Scrollable in order to be initialized.
 @immutable
 class ScrollableDetails {
-  /// Creates a set of details describing the [Scrollable].
   const ScrollableDetails({
     required this.direction,
     this.controller,
@@ -43,7 +36,6 @@ class ScrollableDetails {
     Clip? decorationClipBehavior,
   }) : decorationClipBehavior = clipBehavior ?? decorationClipBehavior;
 
-  /// A constructor specific to a [Scrollable] with an [Axis.vertical].
   const ScrollableDetails.vertical({
     bool reverse = false,
     this.controller,
@@ -51,7 +43,6 @@ class ScrollableDetails {
     this.decorationClipBehavior,
   }) : direction = reverse ? AxisDirection.up : AxisDirection.down;
 
-  /// A constructor specific to a [Scrollable] with an [Axis.horizontal].
   const ScrollableDetails.horizontal({
     bool reverse = false,
     this.controller,
@@ -59,28 +50,14 @@ class ScrollableDetails {
     this.decorationClipBehavior,
   }) : direction = reverse ? AxisDirection.left : AxisDirection.right;
 
-  /// {@macro flutter.widgets.Scrollable.axisDirection}
   final AxisDirection direction;
 
-  /// {@macro flutter.widgets.Scrollable.controller}
   final ScrollController? controller;
 
-  /// {@macro flutter.widgets.Scrollable.physics}
   final ScrollPhysics? physics;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// This can be used by [MaterialScrollBehavior] to clip a
-  /// [StretchingOverscrollIndicator].
-  ///
-  /// This [Clip] does not affect the [Viewport.clipBehavior], but is rather
-  /// passed from the same value by [Scrollable] so that decorators like
-  /// [StretchingOverscrollIndicator] honor the same clip.
-  ///
-  /// Defaults to null.
   final Clip? decorationClipBehavior;
 
-  /// Deprecated getter for [decorationClipBehavior].
   @Deprecated(
     'Migrate to decorationClipBehavior. '
     'This property was deprecated so that its application is clearer. This clip '
@@ -89,8 +66,6 @@ class ScrollableDetails {
   )
   Clip? get clipBehavior => decorationClipBehavior;
 
-  /// Copy the current [ScrollableDetails] with the given values replacing the
-  /// current values.
   ScrollableDetails copyWith({
     AxisDirection? direction,
     ScrollController? controller,
@@ -145,41 +120,21 @@ class ScrollableDetails {
   }
 }
 
-/// An auto scroller that scrolls the [scrollable] if a drag gesture drags close
-/// to its edge.
-///
-/// The scroll velocity is controlled by the [velocityScalar]:
-///
-/// velocity = <distance of overscroll> * [velocityScalar].
 class EdgeDraggingAutoScroller {
-  /// Creates a auto scroller that scrolls the [scrollable].
   EdgeDraggingAutoScroller(
     this.scrollable, {
     this.onScrollViewScrolled,
     required this.velocityScalar,
   });
 
-  /// The [Scrollable] this auto scroller is scrolling.
   final ScrollableState scrollable;
 
-  /// Called when a scroll view is scrolled.
-  ///
-  /// The scroll view may be scrolled multiple times in a row until the drag
-  /// target no longer triggers the auto scroll. This callback will be called
-  /// in between each scroll.
   final VoidCallback? onScrollViewScrolled;
 
-  /// {@template flutter.widgets.EdgeDraggingAutoScroller.velocityScalar}
-  /// The velocity scalar per pixel over scroll.
-  ///
-  /// It represents how the velocity scale with the over scroll distance. The
-  /// auto-scroll velocity = <distance of overscroll> * velocityScalar.
-  /// {@endtemplate}
   final double velocityScalar;
 
   late Rect _dragTargetRelatedToScrollOrigin;
 
-  /// Whether the auto scroll is in progress.
   bool get scrolling => _scrolling;
   bool _scrolling = false;
 
@@ -204,13 +159,6 @@ class EdgeDraggingAutoScroller {
   AxisDirection get _axisDirection => scrollable.axisDirection;
   Axis get _scrollDirection => axisDirectionToAxis(_axisDirection);
 
-  /// Starts the auto scroll if the [dragTarget] is close to the edge.
-  ///
-  /// The scroll starts to scroll the [scrollable] if the target rect is close
-  /// to the edge of the [scrollable]; otherwise, it remains stationary.
-  ///
-  /// If the scrollable is already scrolling, calling this method updates the
-  /// previous dragTarget to the new value and continues scrolling if necessary.
   void startAutoScrollIfNecessary(Rect dragTarget) {
     final Offset deltaToOrigin = scrollable.deltaToScrollOrigin;
     _dragTargetRelatedToScrollOrigin = dragTarget.translate(deltaToOrigin.dx, deltaToOrigin.dy);
@@ -222,7 +170,6 @@ class EdgeDraggingAutoScroller {
     _scroll();
   }
 
-  /// Stop any ongoing auto scrolling.
   void stopAutoScroll() {
     _scrolling = false;
   }
@@ -290,100 +237,36 @@ class EdgeDraggingAutoScroller {
   }
 }
 
-/// A typedef for a function that can calculate the offset for a type of scroll
-/// increment given a [ScrollIncrementDetails].
-///
-/// This function is used as the type for [Scrollable.incrementCalculator],
-/// which is called from a [ScrollAction].
 typedef ScrollIncrementCalculator = double Function(ScrollIncrementDetails details);
 
-/// Describes the type of scroll increment that will be performed by a
-/// [ScrollAction] on a [Scrollable].
-///
-/// This is used to configure a [ScrollIncrementDetails] object to pass to a
-/// [ScrollIncrementCalculator] function on a [Scrollable].
-///
-/// {@template flutter.widgets.ScrollIncrementType.intent}
-/// This indicates the *intent* of the scroll, not necessarily the size. Not all
-/// scrollable areas will have the concept of a "line" or "page", but they can
-/// respond to the different standard key bindings that cause scrolling, which
-/// are bound to keys that people use to indicate a "line" scroll (e.g.
-/// control-arrowDown keys) or a "page" scroll (e.g. pageDown key). It is
-/// recommended that at least the relative magnitudes of the scrolls match
-/// expectations.
-/// {@endtemplate}
 enum ScrollIncrementType {
-  /// Indicates that the [ScrollIncrementCalculator] should return the scroll
-  /// distance it should move when the user requests to scroll by a "line".
-  ///
-  /// The distance a "line" scrolls refers to what should happen when the key
-  /// binding for "scroll down/up by a line" is triggered. It's up to the
-  /// [ScrollIncrementCalculator] function to decide what that means for a
-  /// particular scrollable.
   line,
 
-  /// Indicates that the [ScrollIncrementCalculator] should return the scroll
-  /// distance it should move when the user requests to scroll by a "page".
-  ///
-  /// The distance a "page" scrolls refers to what should happen when the key
-  /// binding for "scroll down/up by a page" is triggered. It's up to the
-  /// [ScrollIncrementCalculator] function to decide what that means for a
-  /// particular scrollable.
   page,
 }
 
-/// A details object that describes the type of scroll increment being requested
-/// of a [ScrollIncrementCalculator] function, as well as the current metrics
-/// for the scrollable.
 class ScrollIncrementDetails {
-  /// A const constructor for a [ScrollIncrementDetails].
   const ScrollIncrementDetails({
     required this.type,
     required this.metrics,
   });
 
-  /// The type of scroll this is (e.g. line, page, etc.).
-  ///
-  /// {@macro flutter.widgets.ScrollIncrementType.intent}
   final ScrollIncrementType type;
 
-  /// The current metrics of the scrollable that is being scrolled.
   final ScrollMetrics metrics;
 }
 
-/// An [Intent] that represents scrolling the nearest scrollable by an amount
-/// appropriate for the [type] specified.
-///
-/// The actual amount of the scroll is determined by the
-/// [Scrollable.incrementCalculator], or by its defaults if that is not
-/// specified.
 class ScrollIntent extends Intent {
-  /// Creates a const [ScrollIntent] that requests scrolling in the given
-  /// [direction], with the given [type].
   const ScrollIntent({
     required this.direction,
     this.type = ScrollIncrementType.line,
   });
 
-  /// The direction in which to scroll the scrollable containing the focused
-  /// widget.
   final AxisDirection direction;
 
-  /// The type of scrolling that is intended.
   final ScrollIncrementType type;
 }
 
-/// An [Action] that scrolls the relevant [Scrollable] by the amount configured
-/// in the [ScrollIntent] given to it.
-///
-/// If a Scrollable cannot be found above the given [BuildContext], the
-/// [PrimaryScrollController] will be considered for default handling of
-/// [ScrollAction]s.
-///
-/// If [Scrollable.incrementCalculator] is null for the scrollable, the default
-/// for a [ScrollIntent.type] set to [ScrollIncrementType.page] is 80% of the
-/// size of the scroll window, and for [ScrollIncrementType.line], 50 logical
-/// pixels.
 class ScrollAction extends ContextAction<ScrollIntent> {
   @override
   bool isEnabled(ScrollIntent intent, [BuildContext? context]) {
@@ -397,13 +280,6 @@ class ScrollAction extends ContextAction<ScrollIntent> {
     return (primaryScrollController != null) && (primaryScrollController.hasClients);
   }
 
-  /// Returns the scroll increment for a single scroll request, for use when
-  /// scrolling using a hardware keyboard.
-  ///
-  /// Must not be called when the position is null, or when any of the position
-  /// metrics (pixels, viewportDimension, maxScrollExtent, minScrollExtent) are
-  /// null. The widget must have already been laid out so that the position
-  /// fields are valid.
   static double _calculateScrollIncrement(ScrollableState state, { ScrollIncrementType type = ScrollIncrementType.line }) {
     assert(state.position.hasPixels);
     assert(state.resolvedPhysics == null || state.resolvedPhysics!.shouldAcceptUserOffset(state.position));
@@ -423,8 +299,6 @@ class ScrollAction extends ContextAction<ScrollIntent> {
     }
   }
 
-  /// Find out how much of an increment to move by, taking the different
-  /// directions into account.
   static double getDirectionalIncrement(ScrollableState state, ScrollIntent intent) {
     final double increment = _calculateScrollIncrement(state, type: intent.type);
     switch (intent.direction) {

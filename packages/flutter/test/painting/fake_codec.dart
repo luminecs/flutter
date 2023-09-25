@@ -6,11 +6,6 @@ import 'dart:ui' as ui show Codec, FrameInfo, instantiateImageCodec;
 
 import 'package:flutter/foundation.dart';
 
-/// A [ui.Codec] implementation for testing that pre-fetches all the image
-/// frames, and provides synchronous [getNextFrame] implementation.
-///
-/// This is useful for running in the test Zone, where it is tricky to receive
-/// callbacks originating from the IO thread.
 class FakeCodec implements ui.Codec {
   FakeCodec._(this._frameCount, this._repetitionCount, this._frameInfos);
 
@@ -20,9 +15,6 @@ class FakeCodec implements ui.Codec {
   int _nextFrame = 0;
   int _numFramesAsked = 0;
 
-  /// Creates a FakeCodec from encoded image data.
-  ///
-  /// Only call this method outside of the test zone.
   static Future<FakeCodec> fromData(Uint8List data) async {
     final ui.Codec codec = await ui.instantiateImageCodec(data);
     final int frameCount = codec.frameCount;

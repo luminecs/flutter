@@ -98,7 +98,6 @@ class CreateCommand extends CreateBase {
     platform: globals.platform,
   );
 
-  /// The hostname for the Flutter docs for the current channel.
   String get _snippetsHost => globals.flutterVersion.channel == 'stable'
         ? 'api.flutter.dev'
         : 'master-api.flutter.dev';
@@ -118,7 +117,6 @@ class CreateCommand extends CreateBase {
     return utf8.decode(data);
   }
 
-  /// Fetches the samples index file from the Flutter docs website.
   Future<String?> _fetchSamplesIndexFromServer() async {
     final Uri snippetsUri = Uri.https(_snippetsHost, 'snippets/index.json');
     final List<int>? data = await _net.fetchUrl(snippetsUri, maxAttempts: 2);
@@ -128,8 +126,6 @@ class CreateCommand extends CreateBase {
     return utf8.decode(data);
   }
 
-  /// Fetches the samples index file from the server and writes it to
-  /// [outputFilePath].
   Future<void> _writeSamplesJson(String outputFilePath) async {
     try {
       final File outputFile = globals.fs.file(outputFilePath);

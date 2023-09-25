@@ -5,30 +5,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
-/// An [Invocation] and the [stack] trace that led to it.
-///
-/// Used by [TestRecordingCanvas] to trace canvas calls.
 class RecordedInvocation {
-  /// Create a record for an invocation list.
   const RecordedInvocation(this.invocation, { required this.stack });
 
-  /// The method that was called and its arguments.
-  ///
-  /// The arguments preserve identity, but not value. Thus, if two invocations
-  /// were made with the same [Paint] object, but with that object configured
-  /// differently each time, then they will both have the same object as their
-  /// argument, and inspecting that object will return the object's current
-  /// values (mostly likely those passed to the second call).
   final Invocation invocation;
 
-  /// The stack trace at the time of the method call.
   final StackTrace stack;
 
   @override
   String toString() => _describeInvocation(invocation);
 
-  /// Converts [stack] to a string using the [FlutterError.defaultStackFilter]
-  /// logic.
   String stackToString({ String indent = '' }) {
     return indent + FlutterError.defaultStackFilter(
       stack.toString().trimRight().split('\n'),
@@ -39,27 +25,7 @@ class RecordedInvocation {
 // Examples can assume:
 // late WidgetTester tester;
 
-/// A [Canvas] for tests that records its method calls.
-///
-/// This class can be used in conjunction with [TestRecordingPaintingContext]
-/// to record the [Canvas] method calls made by a renderer. For example:
-///
-/// ```dart
-/// RenderBox box = tester.renderObject(find.text('ABC'));
-/// TestRecordingCanvas canvas = TestRecordingCanvas();
-/// TestRecordingPaintingContext context = TestRecordingPaintingContext(canvas);
-/// box.paint(context, Offset.zero);
-/// // Now test the expected canvas.invocations.
-/// ```
-///
-/// In some cases it may be useful to define a subclass that overrides the
-/// [Canvas] methods the test is checking and squirrels away the parameters
-/// that the test requires.
-///
-/// For simple tests, consider using the [paints] matcher, which overlays a
-/// pattern matching API over [TestRecordingCanvas].
 class TestRecordingCanvas implements Canvas {
-  /// All of the method calls on this canvas.
   final List<RecordedInvocation> invocations = <RecordedInvocation>[];
 
   int _saveCount = 0;
@@ -92,9 +58,7 @@ class TestRecordingCanvas implements Canvas {
   }
 }
 
-/// A [PaintingContext] for tests that use [TestRecordingCanvas].
 class TestRecordingPaintingContext extends ClipContext implements PaintingContext {
-  /// Creates a [PaintingContext] for tests that use [TestRecordingCanvas].
   TestRecordingPaintingContext(this.canvas);
 
   final List<OpacityLayer> _createdLayers = <OpacityLayer>[];
@@ -178,7 +142,6 @@ class TestRecordingPaintingContext extends ClipContext implements PaintingContex
     return layer;
   }
 
-  /// Releases allocated resources.
   @mustCallSuper
   void dispose() {
     for (final OpacityLayer layer in _createdLayers) {

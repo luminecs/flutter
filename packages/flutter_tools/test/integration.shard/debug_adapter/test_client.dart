@@ -9,11 +9,6 @@ import 'package:flutter_tools/src/debug_adapters/flutter_adapter_args.dart';
 
 import 'test_server.dart';
 
-/// A helper class to simplify acting as a client for interacting with the
-/// [DapTestServer] in tests.
-///
-/// Methods on this class should map directly to protocol methods. Additional
-/// helpers are available in [DapTestClientExtension].
 class DapTestClient {
   DapTestClient._(
     this._channel,
@@ -53,78 +48,59 @@ class DapTestClient {
   int _seq = 1;
   late final Future<Uri?> vmServiceUri;
 
-  /// Returns a stream of [OutputEventBody] events.
   Stream<OutputEventBody> get outputEvents => events('output')
       .map((Event e) => OutputEventBody.fromJson(e.body! as Map<String, Object?>));
 
-  /// Returns a stream of [StoppedEventBody] events.
   Stream<StoppedEventBody> get stoppedEvents => events('stopped')
       .map((Event e) => StoppedEventBody.fromJson(e.body! as Map<String, Object?>));
 
-  /// Returns a stream of the string output from [OutputEventBody] events.
   Stream<String> get output => outputEvents.map((OutputEventBody output) => output.output);
 
-  /// Returns a stream of the string output from [OutputEventBody] events with the category 'stdout'.
   Stream<String> get stdoutOutput => outputEvents
       .where((OutputEventBody output) => output.category == 'stdout')
       .map((OutputEventBody output) => output.output);
 
-  /// Sends a custom request to the server and waits for a response.
   Future<Response> custom(String name, [Object? args]) async {
     return sendRequest(args, overrideCommand: name);
   }
 
-  /// Returns a Future that completes with the next [event] event.
   Future<Event> event(String event) => _eventController.stream.firstWhere(
       (Event e) => e.event == event,
       orElse: () => throw Exception('Did not receive $event event before stream closed'));
 
-  /// Returns a stream for [event] events.
   Stream<Event> events(String event) {
     return _eventController.stream.where((Event e) => e.event == event);
   }
 
-  /// Returns a stream of progress events.
   Stream<Event> progressEvents() {
     const Set<String> progressEvents = <String>{'progressStart', 'progressUpdate', 'progressEnd'};
     return _eventController.stream.where((Event e) => progressEvents.contains(e.event));
   }
 
-  /// Returns a stream of custom 'dart.serviceExtensionAdded' events.
   Stream<Map<String, Object?>> get serviceExtensionAddedEvents =>
       events('dart.serviceExtensionAdded')
           .map((Event e) => e.body! as Map<String, Object?>);
 
-  /// Returns a stream of custom 'flutter.serviceExtensionStateChanged' events.
   Stream<Map<String, Object?>> get serviceExtensionStateChangedEvents =>
       events('flutter.serviceExtensionStateChanged')
           .map((Event e) => e.body! as Map<String, Object?>);
 
-  /// Returns a stream of 'dart.testNotification' custom events from the
-  /// package:test JSON reporter.
   Stream<Map<String, Object?>> get testNotificationEvents =>
       events('dart.testNotification')
           .map((Event e) => e.body! as Map<String, Object?>);
 
-  /// Sends a custom request to the debug adapter to trigger a Hot Reload.
   Future<Response> hotReload() {
     return custom('hotReload');
   }
 
-  /// Sends a custom request with custom syntax convention to the debug adapter to trigger a Hot Reload.
   Future<Response> customSyntaxHotReload() {
     return custom(r'$/hotReload');
   }
 
-  /// Sends a custom request to the debug adapter to trigger a Hot Restart.
   Future<Response> hotRestart() {
     return custom('hotRestart');
   }
 
-  /// Send an initialize request to the server.
-  ///
-  /// This occurs before the request to start running/debugging a script and is
-  /// used to exchange capabilities and send breakpoints and other settings.
   Future<Response> initialize({
     String exceptionPauseMode = 'None',
     bool? supportsRunInTerminalRequest,
@@ -147,7 +123,6 @@ class DapTestClient {
     return responses[1] as Response; // Return the initialize response.
   }
 
-  /// Send a launchRequest to the server, asking it to start a Flutter app.
   Future<Response> launch({
     String? program,
     List<String>? args,
@@ -186,7 +161,6 @@ class DapTestClient {
     );
   }
 
-  /// Send an attachRequest to the server, asking it to attach to an already-running Flutter app.
   Future<Response> attach({
     List<String>? toolArgs,
     String? vmServiceUri,
@@ -218,10 +192,6 @@ class DapTestClient {
     );
   }
 
-  /// Sends an arbitrary request to the server.
-  ///
-  /// Returns a Future that completes when the server returns a corresponding
-  /// response.
   Future<Response> sendRequest(Object? arguments,
       {bool allowFailure = false, String? overrideCommand}) {
     final String command = overrideCommand ?? commandTypes[arguments.runtimeType]!;
@@ -234,20 +204,14 @@ class DapTestClient {
     return completer.future;
   }
 
-  /// Returns a Future that completes with the next serviceExtensionAdded
-  /// event for [extension].
   Future<Map<String, Object?>> serviceExtensionAdded(String extension) => serviceExtensionAddedEvents.firstWhere(
       (Map<String, Object?> body) => body['extensionRPC'] == extension,
       orElse: () => throw Exception('Did not receive $extension extension added event before stream closed'));
 
-  /// Returns a Future that completes with the next serviceExtensionStateChanged
-  /// event for [extension].
   Future<Map<String, Object?>> serviceExtensionStateChanged(String extension) => serviceExtensionStateChangedEvents.firstWhere(
       (Map<String, Object?> body) => body['extension'] == extension,
       orElse: () => throw Exception('Did not receive $extension extension state changed event before stream closed'));
 
-  /// Initializes the debug adapter and launches [program]/[cwd] or calls the
-  /// custom [launch] method.
   Future<void> start({
     String? program,
     String? cwd,
@@ -267,8 +231,6 @@ class DapTestClient {
 
   Future<Response> terminate() => sendRequest(TerminateArguments());
 
-  /// Handles an incoming message from the server, completing the relevant request
-  /// of raising the appropriate event.
   Future<void> _handleMessage(Object? message) async {
     if (message is Response) {
       final _OutgoingRequest? pendingRequest = _pendingRequests.remove(message.requestSeq);
@@ -293,8 +255,6 @@ class DapTestClient {
     }
   }
 
-  /// Creates a [DapTestClient] that connects the server listening on
-  /// [host]:[port].
   static Future<DapTestClient> connect(
     DapTestServer server, {
     bool captureVmServiceTraffic = false,
@@ -306,7 +266,6 @@ class DapTestClient {
   }
 }
 
-/// Useful events produced by the debug adapter during a debug session.
 class TestEvents {
   TestEvents({
     required this.output,
@@ -325,20 +284,7 @@ class _OutgoingRequest {
   final bool allowFailure;
 }
 
-/// Additional helper method for tests to simplify interaction with [DapTestClient].
-///
-/// Unlike the methods on [DapTestClient] these methods might not map directly
-/// onto protocol methods. They may call multiple protocol methods and/or
-/// simplify assertion specific conditions/results.
 extension DapTestClientExtension on DapTestClient {
-  /// Collects all output events until the program terminates.
-  ///
-  /// These results include all events in the order they are received, including
-  /// console, stdout and stderr.
-  ///
-  /// Only one of [start] or [launch] may be provided. Use [start] to customise
-  /// the whole start of the session (including initialise) or [launch] to only
-  /// customise the [launchRequest].
   Future<List<OutputEventBody>> collectAllOutput({
     String? program,
     String? cwd,
@@ -377,14 +323,6 @@ extension DapTestClientExtension on DapTestClient {
         : output;
   }
 
-  /// Collects all output and test events until the program terminates.
-  ///
-  /// These results include all events in the order they are received, including
-  /// console, stdout, stderr and test notifications from the test JSON reporter.
-  ///
-  /// Only one of [start] or [launch] may be provided. Use [start] to customise
-  /// the whole start of the session (including initialise) or [launch] to only
-  /// customise the [launchRequest].
   Future<TestEvents> collectTestOutput({
     String? program,
     String? cwd,
@@ -411,7 +349,6 @@ extension DapTestClientExtension on DapTestClient {
     );
   }
 
-  /// Sets a breakpoint at [line] in [file].
   Future<void> setBreakpoint(String filePath, int line) async {
     await sendRequest(
       SetBreakpointsArguments(
@@ -423,14 +360,9 @@ extension DapTestClientExtension on DapTestClient {
     );
   }
 
-  /// Sends a continue request for the given thread.
-  ///
-  /// Returns a Future that completes when the server returns a corresponding
-  /// response.
   Future<Response> continue_(int threadId) =>
       sendRequest(ContinueArguments(threadId: threadId));
 
-  /// Clears breakpoints in [file].
   Future<void> clearBreakpoints(String filePath) async {
     await sendRequest(
       SetBreakpointsArguments(

@@ -12,56 +12,7 @@ import 'framework.dart';
 import 'lookup_boundary.dart';
 import 'media_query.dart';
 
-/// Bootstraps a render tree that is rendered into the provided [FlutterView].
-///
-/// The content rendered into that view is determined by the provided [child].
-/// Descendants within the same [LookupBoundary] can look up the view they are
-/// rendered into via [View.of] and [View.maybeOf].
-///
-/// The provided [child] is wrapped in a [MediaQuery] constructed from the given
-/// [view].
-///
-/// For most use cases, using [MediaQuery.of] is a more appropriate way of
-/// obtaining the information that a [FlutterView] exposes. For example, using
-/// [MediaQuery] will expose the _logical_ device size ([MediaQueryData.size])
-/// rather than the physical size ([FlutterView.physicalSize]). Similarly, while
-/// [FlutterView.padding] conveys the information from the operating system, the
-/// [MediaQueryData.padding] further adjusts this information to be aware of the
-/// context of the widget; e.g. the [Scaffold] widget adjusts the values for its
-/// various children.
-///
-/// Each [FlutterView] can be associated with at most one [View] widget in the
-/// widget tree. Two or more [View] widgets configured with the same
-/// [FlutterView] must never exist within the same widget tree at the same time.
-/// This limitation is enforced by a [GlobalObjectKey] that derives its identity
-/// from the [view] provided to this widget.
-///
-/// Since the [View] widget bootstraps its own independent render tree, neither
-/// it nor any of its descendants will insert a [RenderObject] into an existing
-/// render tree. Therefore, the [View] widget can only be used in those parts of
-/// the widget tree where it is not required to participate in the construction
-/// of the surrounding render tree. In other words, the widget may only be used
-/// in a non-rendering zone of the widget tree (see [WidgetsBinding] for a
-/// definition of rendering and non-rendering zones).
-///
-/// In practical terms, the widget is typically used at the root of the widget
-/// tree outside of any other [View] widget, as a child of a [ViewCollection]
-/// widget, or in the [ViewAnchor.view] slot of a [ViewAnchor] widget. It is not
-/// required to be a direct child, though, since other non-[RenderObjectWidget]s
-/// (e.g. [InheritedWidget]s, [Builder]s, or [StatefulWidget]s/[StatelessWidget]
-/// that only produce non-[RenderObjectWidget]s) are allowed to be present
-/// between those widgets and the [View] widget.
-///
-/// See also:
-///
-///  * [Element.debugExpectsRenderObjectForSlot], which defines whether a [View]
-///    widget is allowed in a given child slot.
 class View extends StatelessWidget {
-  /// Create a [View] widget to bootstrap a render tree that is rendered into
-  /// the provided [FlutterView].
-  ///
-  /// The content rendered into that [view] is determined by the given [child]
-  /// widget.
   View({
     super.key,
     required this.view,
@@ -83,54 +34,17 @@ class View extends StatelessWidget {
        assert((deprecatedDoNotUseWillBeRemovedWithoutNoticePipelineOwner == null) == (deprecatedDoNotUseWillBeRemovedWithoutNoticeRenderView == null)),
        assert(deprecatedDoNotUseWillBeRemovedWithoutNoticeRenderView == null || deprecatedDoNotUseWillBeRemovedWithoutNoticeRenderView.flutterView == view);
 
-  /// The [FlutterView] into which [child] is drawn.
   final FlutterView view;
 
-  /// The widget below this widget in the tree, which will be drawn into the
-  /// [view].
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
   final PipelineOwner? _deprecatedPipelineOwner;
   final RenderView? _deprecatedRenderView;
 
-  /// Returns the [FlutterView] that the provided `context` will render into.
-  ///
-  /// Returns null if the `context` is not associated with a [FlutterView].
-  ///
-  /// The method creates a dependency on the `context`, which will be informed
-  /// when the identity of the [FlutterView] changes (i.e. the `context` is
-  /// moved to render into a different [FlutterView] then before). The context
-  /// will not be informed when the _properties_ on the [FlutterView] itself
-  /// change their values. To access the property values of a [FlutterView] it
-  /// is best practise to use [MediaQuery.maybeOf] instead, which will ensure
-  /// that the `context` is informed when the view properties change.
-  ///
-  /// See also:
-  ///
-  ///  * [View.of], which throws instead of returning null if no [FlutterView]
-  ///    is found.
   static FlutterView? maybeOf(BuildContext context) {
     return LookupBoundary.dependOnInheritedWidgetOfExactType<_ViewScope>(context)?.view;
   }
 
-  /// Returns the [FlutterView] that the provided `context` will render into.
-  ///
-  /// Throws if the `context` is not associated with a [FlutterView].
-  ///
-  /// The method creates a dependency on the `context`, which will be informed
-  /// when the identity of the [FlutterView] changes (i.e. the `context` is
-  /// moved to render into a different [FlutterView] then before). The context
-  /// will not be informed when the _properties_ on the [FlutterView] itself
-  /// change their values. To access the property values of a [FlutterView] it
-  /// is best practise to use [MediaQuery.of] instead, which will ensure that
-  /// the `context` is informed when the view properties change.
-  ///
-  /// See also:
-  ///
-  ///  * [View.maybeOf], which throws instead of returning null if no
-  ///    [FlutterView] is found.
   static FlutterView of(BuildContext context) {
     final FlutterView? result = maybeOf(context);
     assert(() {
@@ -157,12 +71,6 @@ class View extends StatelessWidget {
     return result!;
   }
 
-  /// Returns the [PipelineOwner] parent to which a child [View] should attach
-  /// its [PipelineOwner] to.
-  ///
-  /// If `context` has a [View] ancestor, it returns the [PipelineOwner]
-  /// responsible for managing the render tree of that view. If there is no
-  /// [View] ancestor, [RendererBinding.rootPipelineOwner] is returned instead.
   static PipelineOwner pipelineOwnerOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_PipelineOwnerScope>()?.pipelineOwner
         ?? RendererBinding.instance.rootPipelineOwner;
@@ -190,33 +98,9 @@ class View extends StatelessWidget {
   }
 }
 
-/// A builder for the content [Widget] of a [_RawView].
-///
-/// The widget returned by the builder defines the content that is drawn into
-/// the [FlutterView] configured on the [_RawView].
-///
-/// The builder is given the [PipelineOwner] that the [_RawView] uses to manage
-/// its render tree. Typical builder implementations make that pipeline owner
-/// available as an attachment point for potential child views.
-///
-/// Used by [_RawView.builder].
 typedef _RawViewContentBuilder = Widget Function(BuildContext context, PipelineOwner owner);
 
-/// The workhorse behind the [View] widget that actually bootstraps a render
-/// tree.
-///
-/// It instantiates the [RenderView] as the root of that render tree and adds it
-/// to the [RendererBinding] via [RendererBinding.addRenderView]. It also owns
-/// the [PipelineOwner] that manages this render tree and adds it as a child to
-/// the surrounding parent [PipelineOwner] obtained with [View.pipelineOwnerOf].
-/// This ensures that the render tree bootstrapped by this widget participates
-/// properly in frame production and hit testing.
 class _RawView extends RenderObjectWidget {
-  /// Create a [RawView] widget to bootstrap a render tree that is rendered into
-  /// the provided [FlutterView].
-  ///
-  /// The content rendered into that [view] is determined by the [Widget]
-  /// returned by [builder].
   _RawView({
     required this.view,
     required PipelineOwner? deprecatedPipelineOwner,
@@ -228,14 +112,8 @@ class _RawView extends RenderObjectWidget {
        // TODO(goderbauer): Replace this with GlobalObjectKey(view) when the deprecated properties are removed.
        super(key: _DeprecatedRawViewKey(view, deprecatedPipelineOwner, deprecatedRenderView));
 
-  /// The [FlutterView] into which the [Widget] returned by [builder] is drawn.
   final FlutterView view;
 
-  /// Determines the content [Widget] that is drawn into the [view].
-  ///
-  /// The [builder] is given the [PipelineOwner] responsible for the render tree
-  /// bootstrapped by this widget and typically makes it available as an
-  /// attachment point for potential child views.
   final _RawViewContentBuilder builder;
 
   final PipelineOwner? _deprecatedPipelineOwner;
@@ -454,84 +332,21 @@ class _MultiChildComponentWidget extends Widget {
   Element createElement() => _MultiChildComponentElement(this);
 }
 
-/// A collection of sibling [View]s.
-///
-/// This widget can only be used in places were a [View] widget is allowed, i.e.
-/// in a non-rendering zone of the widget tree. In practical terms, it can be
-/// used at the root of the widget tree outside of any [View] widget, as a child
-/// to a another [ViewCollection], or in the [ViewAnchor.view] slot of a
-/// [ViewAnchor] widget. It is not required to be a direct child of those
-/// widgets; other non-[RenderObjectWidget]s may appear in between the two (such
-/// as an [InheritedWidget]).
-///
-/// Similarly, the [views] children of this widget must be [View]s, but they
-/// may be wrapped in additional non-[RenderObjectWidget]s (e.g.
-/// [InheritedWidget]s).
-///
-/// See also:
-///
-///  * [WidgetsBinding] for an explanation of rendering and non-rendering zones.
 class ViewCollection extends _MultiChildComponentWidget {
-  /// Creates a [ViewCollection] widget.
-  ///
-  /// The provided list of [views] must contain at least one widget.
   const ViewCollection({super.key, required super.views}) : assert(views.length > 0);
 
-  /// The [View] descendants of this widget.
-  ///
-  /// The [View]s may be wrapped in other non-[RenderObjectWidget]s (e.g.
-  /// [InheritedWidget]s). However, no [RenderObjectWidget] is allowed to appear
-  /// between the [ViewCollection] and the next [View] widget.
   List<Widget> get views => _views;
 }
 
-/// Decorates a [child] widget with a side [View].
-///
-/// This widget must have a [View] ancestor, into which the [child] widget
-/// is rendered.
-///
-/// Typically, a [View] or [ViewCollection] widget is used in the [view] slot to
-/// define the content of the side view(s). Those widgets may be wrapped in
-/// other non-[RenderObjectWidget]s (e.g. [InheritedWidget]s). However, no
-/// [RenderObjectWidget] is allowed to appear between the [ViewAnchor] and the
-/// next [View] widget in the [view] slot. The widgets in the [view] slot have
-/// access to all [InheritedWidget]s above the [ViewAnchor] in the tree.
-///
-/// In technical terms, the [ViewAnchor] can only be used in a rendering zone of
-/// the widget tree and the [view] slot marks the start of a new non-rendering
-/// zone (see [WidgetsBinding] for a definition of these zones). Typically,
-/// it is occupied by a [View] widget, which will start a new rendering zone.
-///
-/// {@template flutter.widgets.ViewAnchor}
-/// An example use case for this widget is a tooltip for a button. The tooltip
-/// should be able to extend beyond the bounds of the main view. For this, the
-/// tooltip can be implemented as a separate [View], which is anchored to the
-/// button in the main view by wrapping that button with a [ViewAnchor]. In this
-/// example, the [view] slot is configured with the tooltip [View] and the
-/// [child] is the button widget rendered into the surrounding view.
-/// {@endtemplate}
 class ViewAnchor extends StatelessWidget {
-  /// Creates a [ViewAnchor] widget.
   const ViewAnchor({
     super.key,
     this.view,
     required this.child,
   });
 
-  /// The widget that defines the view anchored to this widget.
-  ///
-  /// Typically, a [View] or [ViewCollection] widget is used, which may be
-  /// wrapped in other non-[RenderObjectWidget]s (e.g. [InheritedWidget]s).
-  ///
-  /// {@macro flutter.widgets.ViewAnchor}
   final Widget? view;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// It is rendered into the surrounding view, not in the view defined by
-  /// [view].
-  ///
-  /// {@macro flutter.widgets.ViewAnchor}
   final Widget child;
 
   @override

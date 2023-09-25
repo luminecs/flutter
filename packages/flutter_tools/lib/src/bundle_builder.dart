@@ -21,12 +21,7 @@ import 'devfs.dart';
 import 'globals.dart' as globals;
 import 'project.dart';
 
-/// Provides a `build` method that builds the bundle.
 class BundleBuilder {
-  /// Builds the bundle for the given target platform.
-  ///
-  /// The default `mainPath` is `lib/main.dart`.
-  /// The default  `manifestPath` is `pubspec.yaml`
   Future<void> build({
     required TargetPlatform platform,
     required BuildInfo buildInfo,

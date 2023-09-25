@@ -25,7 +25,6 @@ final BufferLogger logger = BufferLogger.test(
 final ProcessUtils processUtils = ProcessUtils(processManager: processManager, logger: logger);
 final String flutterBin = fileSystem.path.join(getFlutterRoot(), 'bin', platform.isWindows ? 'flutter.bat' : 'flutter');
 
-/// A test for flutter upgrade & downgrade that checks out a parallel flutter repo.
 void main() {
   late Directory parentDirectory;
 

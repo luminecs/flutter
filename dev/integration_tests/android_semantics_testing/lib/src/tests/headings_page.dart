@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'headings_constants.dart';
 export 'headings_constants.dart';
 
-/// A test page with an app bar and some body text for testing heading flags.
 class HeadingsPage extends StatelessWidget {
   const HeadingsPage({super.key});
 

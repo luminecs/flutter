@@ -17,9 +17,6 @@ import '../convert.dart' show utf8;
 
 const String _developmentTeamBuildSettingName = 'DEVELOPMENT_TEAM';
 
-/// User message when no development certificates are found in the keychain.
-///
-/// The user likely never did any iOS development.
 const String noCertificatesInstruction = '''
 ════════════════════════════════════════════════════════════════════════════════
 No valid code signing certificates were found
@@ -36,9 +33,6 @@ For more information, please visit:
 
 Or run on an iOS simulator without code signing
 ════════════════════════════════════════════════════════════════════════════════''';
-/// User message when there are no provisioning profile for the current app bundle identifier.
-///
-/// The user did iOS development but never on this project and/or device.
 const String noProvisioningProfileInstruction = '''
 ════════════════════════════════════════════════════════════════════════════════
 No Provisioning Profile was found for your project's Bundle Identifier or your\u0020
@@ -54,9 +48,6 @@ For more information, please visit:
 
 Or run on an iOS simulator without code signing
 ════════════════════════════════════════════════════════════════════════════════''';
-/// Fallback error message for signing issues.
-///
-/// Couldn't auto sign the app but can likely solved by retracing the signing flow in Xcode.
 const String noDevelopmentTeamInstruction = '''
 ════════════════════════════════════════════════════════════════════════════════
 Building a deployable iOS app requires a selected Development Team with a\u0020
@@ -87,15 +78,6 @@ final RegExp _securityFindIdentityDeveloperIdentityExtractionPattern =
 final RegExp _securityFindIdentityCertificateCnExtractionPattern = RegExp(r'.*\(([a-zA-Z0-9]+)\)');
 final RegExp _certificateOrganizationalUnitExtractionPattern = RegExp(r'OU=([a-zA-Z0-9]+)');
 
-/// Given a [BuildableIOSApp], this will try to find valid development code
-/// signing identities in the user's keychain prompting a choice if multiple
-/// are found.
-///
-/// Returns a set of build configuration settings that uses the selected
-/// signing identities.
-///
-/// Will return null if none are found, if the user cancels or if the Xcode
-/// project has a development team set in the project's build settings.
 Future<Map<String, String>?> getCodeSigningIdentityDevelopmentTeamBuildSetting({
   required Map<String, String> buildSettings,
   required ProcessManager processManager,
@@ -151,7 +133,6 @@ Future<String?> getCodeSigningIdentityDevelopmentTeam({
       terminal: terminal,
     );
 
-/// Set [shouldExitOnNoCerts] to show instructions for how to add a cert when none are found, then [toolExit].
 Future<String?> _getCodeSigningIdentityDevelopmentTeam({
   required ProcessManager processManager,
   required Platform platform,
@@ -245,7 +226,6 @@ Future<String?> _getCodeSigningIdentityDevelopmentTeam({
   return _certificateOrganizationalUnitExtractionPattern.firstMatch(opensslOutput)?.group(1);
 }
 
-/// Set [shouldExitOnNoCerts] to show instructions for how to add a cert when none are found, then [toolExit].
 Future<String?> _chooseSigningIdentity(
   List<String> validCodeSigningIdentities,
   Logger logger,
@@ -316,5 +296,4 @@ Future<String?> _chooseSigningIdentity(
   return null;
 }
 
-/// Returns true if s is a not empty string.
 bool _isNotEmpty(String? s) => s != null && s.isNotEmpty;

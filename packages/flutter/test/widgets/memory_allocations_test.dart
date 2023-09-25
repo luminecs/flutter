@@ -124,7 +124,6 @@ class _EventStats {
   int disposals = 0;
 }
 
-/// Create and dispose Flutter objects to fire memory allocation events.
 Future<_EventStats> _activateFlutterObjectsAndReturnCountOfEvents() async {
   final _EventStats result = _EventStats();
 

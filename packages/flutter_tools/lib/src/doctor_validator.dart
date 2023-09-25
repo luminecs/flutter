@@ -14,20 +14,15 @@ class ValidatorTask {
   final Future<ValidationResult> result;
 }
 
-/// A series of tools and required install steps for a target platform (iOS or Android).
 abstract class Workflow {
   const Workflow();
 
-  /// Whether the workflow applies to this platform (as in, should we ever try and use it).
   bool get appliesToHostPlatform;
 
-  /// Are we functional enough to list devices?
   bool get canListDevices;
 
-  /// Could this thing launch *something*? It may still have minor issues.
   bool get canLaunchDevices;
 
-  /// Are we functional enough to list emulators?
   bool get canListEmulators;
 }
 
@@ -48,23 +43,17 @@ enum ValidationMessageType {
 abstract class DoctorValidator {
   const DoctorValidator(this.title);
 
-  /// This is displayed in the CLI.
   final String title;
 
   String get slowWarning => 'This is taking an unexpectedly long time...';
 
   static const Duration _slowWarningDuration = Duration(seconds: 10);
 
-  /// Duration before the spinner should display [slowWarning].
   Duration get slowWarningDuration => _slowWarningDuration;
 
   Future<ValidationResult> validate();
 }
 
-/// A validator that runs other [DoctorValidator]s and combines their output
-/// into a single [ValidationResult]. It uses the title of the first validator
-/// passed to the constructor and reports the statusInfo of the first validator
-/// that provides one. Other titles and statusInfo strings are discarded.
 class GroupedValidator extends DoctorValidator {
   GroupedValidator(this.subValidators) : super(subValidators[0].title);
 
@@ -72,11 +61,6 @@ class GroupedValidator extends DoctorValidator {
 
   List<ValidationResult> _subResults = <ValidationResult>[];
 
-  /// Sub-validator results.
-  ///
-  /// To avoid losing information when results are merged, the sub-results are
-  /// cached on this field when they are available. The results are in the same
-  /// order as the sub-validator list.
   List<ValidationResult> get subResults => _subResults;
 
   @override
@@ -139,8 +123,6 @@ class GroupedValidator extends DoctorValidator {
 
 @immutable
 class ValidationResult {
-  /// [ValidationResult.type] should only equal [ValidationResult.success]
-  /// if no [messages] are hints or errors.
   const ValidationResult(this.type, this.messages, { this.statusInfo });
 
   factory ValidationResult.crash(Object error, [StackTrace? stackTrace]) {
@@ -189,7 +171,6 @@ class ValidationResult {
     }
   }
 
-  /// The string representation of the type.
   String get typeStr {
     switch (type) {
       case ValidationType.crash:
@@ -211,31 +192,16 @@ class ValidationResult {
   }
 }
 
-/// A status line for the flutter doctor validation to display.
-///
-/// The [message] is required and represents either an informational statement
-/// about the particular doctor validation that passed, or more context
-/// on the cause and/or solution to the validation failure.
 @immutable
 class ValidationMessage {
-  /// Create a validation message with information for a passing validator.
-  ///
-  /// By default this is not displayed unless the doctor is run in
-  /// verbose mode.
-  ///
-  /// The [contextUrl] may be supplied to link to external resources. This
-  /// is displayed after the informative message in verbose modes.
   const ValidationMessage(this.message, { this.contextUrl, String? piiStrippedMessage })
       : type = ValidationMessageType.information, piiStrippedMessage = piiStrippedMessage ?? message;
 
-  /// Create a validation message with information for a failing validator.
   const ValidationMessage.error(this.message, { String? piiStrippedMessage })
     : type = ValidationMessageType.error,
       piiStrippedMessage = piiStrippedMessage ?? message,
       contextUrl = null;
 
-  /// Create a validation message with information for a partially failing
-  /// validator.
   const ValidationMessage.hint(this.message, { String? piiStrippedMessage })
     : type = ValidationMessageType.hint,
       piiStrippedMessage = piiStrippedMessage ?? message,
@@ -244,7 +210,6 @@ class ValidationMessage {
   final ValidationMessageType type;
   final String? contextUrl;
   final String message;
-  /// Optional message with PII stripped, to show instead of [message].
   final String piiStrippedMessage;
 
   bool get isError => type == ValidationMessageType.error;

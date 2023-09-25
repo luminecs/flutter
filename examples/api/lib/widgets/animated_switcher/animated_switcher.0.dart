@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AnimatedSwitcher].
 
 void main() => runApp(const AnimatedSwitcherExampleApp());
 

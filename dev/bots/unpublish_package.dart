@@ -2,13 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// This script removes published archives from the cloud storage and the
-/// corresponding JSON metadata file that the website uses to determine what
-/// releases are available.
-///
-/// If asked to remove a release that is currently the release on that channel,
-/// it will replace that release with the next most recent release on that
-/// channel.
 library;
 
 import 'dart:async';
@@ -25,8 +18,6 @@ const String releaseFolder = '/releases';
 const String gsReleaseFolder = '$gsBase$releaseFolder';
 const String baseUrl = 'https://storage.googleapis.com/flutter_infra_release';
 
-/// Exception class for when a process fails to run, so we can catch
-/// it and provide something more readable than a stack trace.
 class UnpublishException implements Exception {
   UnpublishException(this.message, [this.result]);
 
@@ -98,14 +89,7 @@ PublishedPlatform fromPublishedPlatform(String name) {
   }
 }
 
-/// A helper class for classes that want to run a process, optionally have the
-/// stderr and stdout reported as the process runs, and capture the stdout
-/// properly without dropping any.
 class ProcessRunner {
-  /// Creates a [ProcessRunner].
-  ///
-  /// The [processManager], [subprocessOutput], and [platform] arguments must
-  /// not be null.
   ProcessRunner({
     this.processManager = const LocalProcessManager(),
     this.subprocessOutput = true,
@@ -115,30 +99,16 @@ class ProcessRunner {
     environment = Map<String, String>.from(platform.environment);
   }
 
-  /// The platform to use for a starting environment.
   final Platform platform;
 
-  /// Set [subprocessOutput] to show output as processes run. Stdout from the
-  /// process will be printed to stdout, and stderr printed to stderr.
   final bool subprocessOutput;
 
-  /// Set the [processManager] in order to inject a test instance to perform
-  /// testing.
   final ProcessManager processManager;
 
-  /// Sets the default directory used when `workingDirectory` is not specified
-  /// to [runProcess].
   final Directory? defaultWorkingDirectory;
 
-  /// The environment to run processes with.
   late Map<String, String> environment;
 
-  /// Run the command and arguments in `commandLine` as a sub-process from
-  /// `workingDirectory` if set, or the [defaultWorkingDirectory] if not. Uses
-  /// [Directory.current] if [defaultWorkingDirectory] is not set.
-  ///
-  /// Set `failOk` if [runProcess] should not throw an exception when the
-  /// command completes with a non-zero exit code.
   Future<String> runProcess(
     List<String> commandLine, {
     Directory? workingDirectory,
@@ -230,7 +200,6 @@ class ArchiveUnpublisher {
   final ProcessRunner _processRunner;
   static String getMetadataFilename(PublishedPlatform platform) => 'releases_${getPublishedPlatform(platform)}.json';
 
-  /// Remove the archive from Google Storage.
   Future<void> unpublishArchive() async {
     final Map<String, dynamic> jsonData = await _loadMetadata();
     final List<Map<String, String>> releases = (jsonData['releases'] as List<dynamic>).map<Map<String, String>>((dynamic entry) {
@@ -384,7 +353,6 @@ void _printBanner(String message) {
   print('\n');
 }
 
-/// Prepares a flutter git repo to be removed from the published cloud storage.
 Future<void> main(List<String> rawArguments) async {
   final List<String> allowedChannelValues = Channel.values.map<String>((Channel channel) => getChannelName(channel)).toList();
   final List<String> allowedPlatformNames = PublishedPlatform.values.map<String>((PublishedPlatform platform) => getPublishedPlatform(platform)).toList();

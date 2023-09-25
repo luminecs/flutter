@@ -7,7 +7,6 @@ import 'package:flutter_tools/src/convert.dart';
 import '../src/common.dart';
 import 'test_utils.dart';
 
-/// Checks that all active template files are defined in the template_manifest.json file.
 void main() {
   testWithoutContext('Check template manifest is up to date', () {
     final Map<String, Object?> manifest = json.decode(

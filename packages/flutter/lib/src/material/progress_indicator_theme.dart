@@ -13,22 +13,7 @@ import 'theme.dart';
 // late BuildContext context;
 
 @immutable
-/// Defines the visual properties of [ProgressIndicator] widgets.
-///
-/// Used by [ProgressIndicatorTheme] to control the visual properties of
-/// progress indicators in a widget subtree.
-///
-/// To obtain this configuration, use [ProgressIndicatorTheme.of] to access
-/// the closest ancestor [ProgressIndicatorTheme] of the current [BuildContext].
-///
-/// See also:
-///
-///  * [ProgressIndicatorTheme], an [InheritedWidget] that propagates the
-///    theme down its subtree.
-///  * [ThemeData.progressIndicatorTheme], which describes the defaults for
-///    any progress indicators as part of the application's [ThemeData].
 class ProgressIndicatorThemeData with Diagnosticable {
-  /// Creates the set of properties used to configure [ProgressIndicator] widgets.
   const ProgressIndicatorThemeData({
     this.color,
     this.linearTrackColor,
@@ -37,33 +22,16 @@ class ProgressIndicatorThemeData with Diagnosticable {
     this.refreshBackgroundColor,
   });
 
-  /// The color of the [ProgressIndicator]'s indicator.
-  ///
-  /// If null, then it will use [ColorScheme.primary] of the ambient
-  /// [ThemeData.colorScheme].
-  ///
-  /// See also:
-  ///
-  ///  * [ProgressIndicator.color], which specifies the indicator color for a
-  ///    specific progress indicator.
-  ///  * [ProgressIndicator.valueColor], which specifies the indicator color
-  ///    a an animated color.
   final Color? color;
 
-  /// {@macro flutter.material.LinearProgressIndicator.trackColor}
   final Color? linearTrackColor;
 
-  /// {@macro flutter.material.LinearProgressIndicator.minHeight}
   final double? linearMinHeight;
 
-  /// {@macro flutter.material.CircularProgressIndicator.trackColor}
   final Color? circularTrackColor;
 
-  /// {@macro flutter.material.RefreshProgressIndicator.backgroundColor}
   final Color? refreshBackgroundColor;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   ProgressIndicatorThemeData copyWith({
     Color? color,
     Color? linearTrackColor,
@@ -80,9 +48,6 @@ class ProgressIndicatorThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two progress indicator themes.
-  ///
-  /// If both arguments are null, then null is returned.
   static ProgressIndicatorThemeData? lerp(ProgressIndicatorThemeData? a, ProgressIndicatorThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -132,46 +97,15 @@ class ProgressIndicatorThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines the configuration for
-/// [ProgressIndicator]s in this widget's subtree.
-///
-/// Values specified here are used for [ProgressIndicator] properties that are not
-/// given an explicit non-null value.
-///
-/// {@tool snippet}
-///
-/// Here is an example of a progress indicator theme that applies a red indicator
-/// color.
-///
-/// ```dart
-/// const ProgressIndicatorTheme(
-///   data: ProgressIndicatorThemeData(
-///     color: Colors.red,
-///   ),
-///   child: LinearProgressIndicator()
-/// )
-/// ```
-/// {@end-tool}
 class ProgressIndicatorTheme extends InheritedTheme {
-  /// Creates a theme that controls the configurations for [ProgressIndicator]
-  /// widgets.
   const ProgressIndicatorTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties for descendant [ProgressIndicator] widgets.
   final ProgressIndicatorThemeData data;
 
-  /// Returns the [data] from the closest [ProgressIndicatorTheme] ancestor. If
-  /// there is no ancestor, it returns [ThemeData.progressIndicatorTheme].
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// ProgressIndicatorThemeData theme = ProgressIndicatorTheme.of(context);
-  /// ```
   static ProgressIndicatorThemeData of(BuildContext context) {
     final ProgressIndicatorTheme? progressIndicatorTheme = context.dependOnInheritedWidgetOfExactType<ProgressIndicatorTheme>();
     return progressIndicatorTheme?.data ?? Theme.of(context).progressIndicatorTheme;

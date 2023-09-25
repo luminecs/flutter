@@ -1945,7 +1945,6 @@ void main() {
     expect(rail.size.width, equals(300.0));
   });
 
-  /// Regression test for https://github.com/flutter/flutter/issues/65657
   testWidgetsWithLeakTracking('Extended rail transition does not jump from the beginning', (WidgetTester tester) async {
     bool extended = false;
     late StateSetter stateSetter;
@@ -5167,7 +5166,6 @@ void main() {
       expect(rail.size.width, equals(300.0));
     });
 
-    /// Regression test for https://github.com/flutter/flutter/issues/65657
     testWidgetsWithLeakTracking('Extended rail transition does not jump from the beginning', (WidgetTester tester) async {
       bool extended = false;
       late StateSetter stateSetter;

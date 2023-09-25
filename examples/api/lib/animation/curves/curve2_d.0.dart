@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Curve2D].
 
 void main() => runApp(const Curve2DExampleApp());
 

@@ -1226,7 +1226,6 @@ void main() {
   });
 }
 
-/// A [Stdio] that will throw an exception if any of its methods are called.
 class _UnimplementedStdio extends Fake implements Stdio {
   _UnimplementedStdio();
 

@@ -5,7 +5,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [CupertinoContextMenu].
 
 void main() => runApp(const ContextMenuApp());
 

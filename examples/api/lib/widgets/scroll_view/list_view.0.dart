@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ListTile] selection in a [ListView] or [GridView].
 
 void main() => runApp(const ListViewExampleApp());
 

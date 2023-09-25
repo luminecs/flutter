@@ -12,16 +12,12 @@ import '../globals.dart' as globals;
 abstract class LinuxApp extends ApplicationPackage {
   LinuxApp({required String projectBundleId}) : super(id: projectBundleId);
 
-  /// Creates a new [LinuxApp] from a linux sub project.
   factory LinuxApp.fromLinuxProject(LinuxProject project) {
     return BuildableLinuxApp(
       project: project,
     );
   }
 
-  /// Creates a new [LinuxApp] from an existing executable.
-  ///
-  /// `applicationBinary` is the path to the executable.
   factory LinuxApp.fromPrebuiltApp(FileSystemEntity applicationBinary) {
     return PrebuiltLinuxApp(
       executable: applicationBinary.path,

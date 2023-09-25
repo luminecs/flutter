@@ -30,14 +30,10 @@ const int _kRightClickButton = 2;
 
 typedef _WebSelectionCallBack = void Function(web.HTMLElement, web.MouseEvent);
 
-/// Function signature for `ui_web.platformViewRegistry.registerViewFactory`.
 @visibleForTesting
 typedef RegisterViewFactory = void Function(String, Object Function(int viewId), {bool isVisible});
 
-/// See `_platform_selectable_region_context_menu_io.dart` for full
-/// documentation.
 class PlatformSelectableRegionContextMenu extends StatelessWidget {
-  /// See `_platform_selectable_region_context_menu_io.dart`.
   PlatformSelectableRegionContextMenu({
     required this.child,
     super.key,
@@ -47,16 +43,13 @@ class PlatformSelectableRegionContextMenu extends StatelessWidget {
     }
   }
 
-  /// See `_platform_selectable_region_context_menu_io.dart`.
   final Widget child;
 
-  /// See `_platform_selectable_region_context_menu_io.dart`.
   // ignore: use_setters_to_change_properties
   static void attach(SelectionContainerDelegate client) {
     _activeClient = client;
   }
 
-  /// See `_platform_selectable_region_context_menu_io.dart`.
   static void detach(SelectionContainerDelegate client) {
     if (_activeClient != client) {
       _activeClient = null;
@@ -71,9 +64,6 @@ class PlatformSelectableRegionContextMenu extends StatelessWidget {
   static RegisterViewFactory get _registerViewFactory =>
       debugOverrideRegisterViewFactory ?? ui_web.platformViewRegistry.registerViewFactory;
 
-  /// Override this to provide a custom implementation of [ui_web.platformViewRegistry.registerViewFactory].
-  ///
-  /// This should only be used for testing.
   // See `_platform_selectable_region_context_menu_io.dart`.
   @visibleForTesting
   static RegisterViewFactory? debugOverrideRegisterViewFactory;

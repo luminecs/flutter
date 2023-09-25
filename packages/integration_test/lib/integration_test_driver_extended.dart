@@ -12,37 +12,6 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 import 'common.dart';
 
-/// Adaptor to run an integration test using `flutter drive`.
-///
-/// To an integration test `<test_name>.dart` using `flutter drive`, put a file named
-/// `<test_name>_test.dart` in the app's `test_driver` directory:
-///
-/// ```dart
-/// import 'dart:async';
-///
-/// import 'package:flutter_driver/flutter_driver.dart';
-/// import 'package:integration_test/integration_test_driver_extended.dart';
-///
-/// Future<void> main() async {
-///   final FlutterDriver driver = await FlutterDriver.connect();
-///   await integrationDriver(
-///     driver: driver,
-///     onScreenshot: (String name, List<int> image, [Map<String, Object?>? args]) async {
-///       return true;
-///     },
-///   );
-/// }
-/// ```
-///
-/// ## Parameters:
-///
-/// `driver` A custom driver. Defaults to `FlutterDriver.connect()`.
-///
-/// `onScreenshot` can be used to process the screenshots taken during the test.
-/// An example could be that this callback compares the byte array against a baseline image,
-/// and it returns `true` if both images are equal.
-///
-/// As a result, returning `false` from `onScreenshot` will make the test fail.
 Future<void> integrationDriver(
     {FlutterDriver? driver, ScreenshotCallback? onScreenshot}) async {
   driver ??= await FlutterDriver.connect();

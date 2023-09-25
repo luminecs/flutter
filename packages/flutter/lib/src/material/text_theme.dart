@@ -7,84 +7,8 @@ import 'package:flutter/painting.dart';
 
 import 'typography.dart';
 
-/// Material design text theme.
-///
-/// Definitions for the various typographical styles found in Material Design
-/// (e.g., labelLarge, bodySmall). Rather than creating a [TextTheme] directly,
-/// you can obtain an instance as [Typography.black] or [Typography.white].
-///
-/// To obtain the current text theme, call [Theme.of] with the current
-/// [BuildContext] and read the [ThemeData.textTheme] property.
-///
-/// The names of the TextTheme properties match this table from the
-/// [Material Design spec](https://m3.material.io/styles/typography/tokens).
-///
-/// ![](https://lh3.googleusercontent.com/Yvngs5mQSjXa_9T4X3JDucO62c5hdZHPDa7qeRH6DsJQvGr_q7EBrTkhkPiQd9OeR1v_Uk38Cjd9nUpP3nevDyHpKWuXSfQ1Gq78bOnBN7sr=s0)
-///
-/// The Material Design typography scheme was significantly changed in the
-/// current (2021) version of the specification
-/// ([https://m3.material.io/styles/typography/tokens](https://m3.material.io/styles/typography/tokens)).
-///
-/// The names of the 2018 TextTheme properties match this table from the
-/// [Material Design spec](https://material.io/design/typography/the-type-system.html#type-scale)
-/// with two exceptions: the styles called H1-H6 in the spec are
-/// headline1-headline6 in the API, and body1,body2 are called
-/// bodyText1 and bodyText2.
-///
-/// The 2018 spec has thirteen text styles:
-///
-/// | NAME       | SIZE |  WEIGHT |  SPACING |             |
-/// |------------|------|---------|----------|-------------|
-/// | headline1  | 96.0 | light   | -1.5     |             |
-/// | headline2  | 60.0 | light   | -0.5     |             |
-/// | headline3  | 48.0 | regular |  0.0     |             |
-/// | headline4  | 34.0 | regular |  0.25    |             |
-/// | headline5  | 24.0 | regular |  0.0     |             |
-/// | headline6  | 20.0 | medium  |  0.15    |             |
-/// | subtitle1  | 16.0 | regular |  0.15    |             |
-/// | subtitle2  | 14.0 | medium  |  0.1     |             |
-/// | body1      | 16.0 | regular |  0.5     | (bodyText1) |
-/// | body2      | 14.0 | regular |  0.25    | (bodyText2) |
-/// | button     | 14.0 | medium  |  1.25    |             |
-/// | caption    | 12.0 | regular |  0.4     |             |
-/// | overline   | 10.0 | regular |  1.5     |             |
-///
-/// ...where "light" is `FontWeight.w300`, "regular" is `FontWeight.w400` and
-/// "medium" is `FontWeight.w500`.
-///
-/// By default, text styles are initialized to match the 2018 Material Design
-/// specification as listed above. To provide backwards compatibility, the 2014
-/// specification is also available.
-///
-/// To explicitly configure a [Theme] for the 2018 sizes, weights, and letter
-/// spacings, you can initialize its [ThemeData.typography] value using
-/// [Typography.material2018]. The [Typography] constructor defaults to this
-/// configuration. To configure a [Theme] for the 2014 sizes, weights, and letter
-/// spacings, initialize its [ThemeData.typography] value using
-/// [Typography.material2014].
-///
-/// See also:
-///
-///  * [Typography], the class that generates [TextTheme]s appropriate for a platform.
-///  * [Theme], for other aspects of a Material Design application that can be
-///    globally adjusted, such as the color scheme.
-///  * <https://material.io/design/typography/>
 @immutable
 class TextTheme with Diagnosticable {
-  /// Creates a text theme that uses the given values.
-  ///
-  /// Rather than creating a new text theme, consider using [Typography.black]
-  /// or [Typography.white], which implement the typography styles in the
-  /// Material Design specification:
-  ///
-  /// <https://material.io/design/typography/#type-scale>
-  ///
-  /// If you do decide to create your own text theme, consider using one of
-  /// those predefined themes as a starting point for [copyWith] or [apply].
-  ///
-  /// The 2018 styles cannot be mixed with the 2021 styles. Only one or the
-  /// other is allowed in this constructor. The 2018 styles are deprecated and
-  /// will eventually be removed.
   const TextTheme({
     TextStyle? displayLarge,
     TextStyle? displayMedium,
@@ -189,237 +113,114 @@ class TextTheme with Diagnosticable {
        labelLarge = labelLarge ?? button,
        labelSmall = labelSmall ?? overline;
 
-  /// Largest of the display styles.
-  ///
-  /// As the largest text on the screen, display styles are reserved for short,
-  /// important text or numerals. They work best on large screens.
   final TextStyle? displayLarge;
 
-  /// Middle size of the display styles.
-  ///
-  /// As the largest text on the screen, display styles are reserved for short,
-  /// important text or numerals. They work best on large screens.
   final TextStyle? displayMedium;
 
-  /// Smallest of the display styles.
-  ///
-  /// As the largest text on the screen, display styles are reserved for short,
-  /// important text or numerals. They work best on large screens.
   final TextStyle? displaySmall;
 
-  /// Largest of the headline styles.
-  ///
-  /// Headline styles are smaller than display styles. They're best-suited for
-  /// short, high-emphasis text on smaller screens.
   final TextStyle? headlineLarge;
 
-  /// Middle size of the headline styles.
-  ///
-  /// Headline styles are smaller than display styles. They're best-suited for
-  /// short, high-emphasis text on smaller screens.
   final TextStyle? headlineMedium;
 
-  /// Smallest of the headline styles.
-  ///
-  /// Headline styles are smaller than display styles. They're best-suited for
-  /// short, high-emphasis text on smaller screens.
   final TextStyle? headlineSmall;
 
-  /// Largest of the title styles.
-  ///
-  /// Titles are smaller than headline styles and should be used for shorter,
-  /// medium-emphasis text.
   final TextStyle? titleLarge;
 
-  /// Middle size of the title styles.
-  ///
-  /// Titles are smaller than headline styles and should be used for shorter,
-  /// medium-emphasis text.
   final TextStyle? titleMedium;
 
-  /// Smallest of the title styles.
-  ///
-  /// Titles are smaller than headline styles and should be used for shorter,
-  /// medium-emphasis text.
   final TextStyle? titleSmall;
 
-  /// Largest of the body styles.
-  ///
-  /// Body styles are used for longer passages of text.
   final TextStyle? bodyLarge;
 
-  /// Middle size of the body styles.
-  ///
-  /// Body styles are used for longer passages of text.
-  ///
-  /// The default text style for [Material].
   final TextStyle? bodyMedium;
 
-  /// Smallest of the body styles.
-  ///
-  /// Body styles are used for longer passages of text.
   final TextStyle? bodySmall;
 
-  /// Largest of the label styles.
-  ///
-  /// Label styles are smaller, utilitarian styles, used for areas of the UI
-  /// such as text inside of components or very small supporting text in the
-  /// content body, like captions.
-  ///
-  /// Used for text on [ElevatedButton], [TextButton] and [OutlinedButton].
   final TextStyle? labelLarge;
 
-  /// Middle size of the label styles.
-  ///
-  /// Label styles are smaller, utilitarian styles, used for areas of the UI
-  /// such as text inside of components or very small supporting text in the
-  /// content body, like captions.
   final TextStyle? labelMedium;
 
-  /// Smallest of the label styles.
-  ///
-  /// Label styles are smaller, utilitarian styles, used for areas of the UI
-  /// such as text inside of components or very small supporting text in the
-  /// content body, like captions.
   final TextStyle? labelSmall;
 
-  /// Extremely large text.
   @Deprecated(
     'Use displayLarge instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get headline1 => displayLarge;
 
-  /// Very, very large text.
-  ///
-  /// Used for the date in the dialog shown by [showDatePicker].
   @Deprecated(
     'Use displayMedium instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get headline2 => displayMedium;
 
-  /// Very large text.
   @Deprecated(
     'Use displaySmall instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get headline3 => displaySmall;
 
-  /// Large text.
   @Deprecated(
     'Use headlineMedium instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get headline4 => headlineMedium;
 
-  /// Used for large text in dialogs (e.g., the month and year in the dialog
-  /// shown by [showDatePicker]).
   @Deprecated(
     'Use headlineSmall instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get headline5 => headlineSmall;
 
-  /// Used for the primary text in app bars and dialogs (e.g., [AppBar.title]
-  /// and [AlertDialog.title]).
   @Deprecated(
     'Use titleLarge instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get headline6 => titleLarge;
 
-  /// Used for the primary text in lists (e.g., [ListTile.title]).
   @Deprecated(
     'Use titleMedium instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get subtitle1 => titleMedium;
 
-  /// For medium emphasis text that's a little smaller than [titleMedium].
   @Deprecated(
     'Use titleSmall instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get subtitle2 => titleSmall;
 
-  /// Used for emphasizing text that would otherwise be [bodyMedium].
   @Deprecated(
     'Use bodyLarge instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get bodyText1 => bodyLarge;
 
-  /// The default text style for [Material].
   @Deprecated(
     'Use bodyMedium instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get bodyText2 => bodyMedium;
 
-  /// Used for auxiliary text associated with images.
   @Deprecated(
     'Use bodySmall instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get caption => bodySmall;
 
-  /// Used for text on [ElevatedButton], [TextButton] and [OutlinedButton].
   @Deprecated(
     'Use labelLarge instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get button => labelLarge;
 
-  /// The smallest style.
-  ///
-  /// Typically used for captions or to introduce a (larger) headline.
   @Deprecated(
     'Use labelSmall instead. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
   )
   TextStyle? get overline => labelSmall;
 
-  /// Creates a copy of this text theme but with the given fields replaced with
-  /// the new values.
-  ///
-  /// Consider using [Typography.black] or [Typography.white], which implement
-  /// the typography styles in the Material Design specification, as a starting
-  /// point.
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// /// A Widget that sets the ambient theme's title text color for its
-  /// /// descendants, while leaving other ambient theme attributes alone.
-  /// class TitleColorThemeCopy extends StatelessWidget {
-  ///   const TitleColorThemeCopy({super.key, required this.titleColor, required this.child});
-  ///
-  ///   final Color titleColor;
-  ///   final Widget child;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     final ThemeData theme = Theme.of(context);
-  ///     return Theme(
-  ///       data: theme.copyWith(
-  ///         textTheme: theme.textTheme.copyWith(
-  ///           titleLarge: theme.textTheme.titleLarge!.copyWith(
-  ///             color: titleColor,
-  ///           ),
-  ///         ),
-  ///       ),
-  ///       child: child,
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  ///  * [merge] is used instead of [copyWith] when you want to merge all
-  ///    of the fields of a TextTheme instead of individual fields.
   TextTheme copyWith({
     TextStyle? displayLarge,
     TextStyle? displayMedium,
@@ -530,57 +331,6 @@ class TextTheme with Diagnosticable {
     );
   }
 
-  /// Creates a new [TextTheme] where each text style from this object has been
-  /// merged with the matching text style from the `other` object.
-  ///
-  /// The merging is done by calling [TextStyle.merge] on each respective pair
-  /// of text styles from this and the [other] text themes and is subject to
-  /// the value of [TextStyle.inherit] flag. For more details, see the
-  /// documentation on [TextStyle.merge] and [TextStyle.inherit].
-  ///
-  /// If this theme, or the `other` theme has members that are null, then the
-  /// non-null one (if any) is used. If the `other` theme is itself null, then
-  /// this [TextTheme] is returned unchanged. If values in both are set, then
-  /// the values are merged using [TextStyle.merge].
-  ///
-  /// This is particularly useful if one [TextTheme] defines one set of
-  /// properties and another defines a different set, e.g. having colors
-  /// defined in one text theme and font sizes in another, or when one
-  /// [TextTheme] has only some fields defined, and you want to define the rest
-  /// by merging it with a default theme.
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// /// A Widget that sets the ambient theme's title text color for its
-  /// /// descendants, while leaving other ambient theme attributes alone.
-  /// class TitleColorTheme extends StatelessWidget {
-  ///   const TitleColorTheme({super.key, required this.child, required this.titleColor});
-  ///
-  ///   final Color titleColor;
-  ///   final Widget child;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     ThemeData theme = Theme.of(context);
-  ///     // This partialTheme is incomplete: it only has the title style
-  ///     // defined. Just replacing theme.textTheme with partialTheme would
-  ///     // set the title, but everything else would be null. This isn't very
-  ///     // useful, so merge it with the existing theme to keep all of the
-  ///     // preexisting definitions for the other styles.
-  ///     final TextTheme partialTheme = TextTheme(titleLarge: TextStyle(color: titleColor));
-  ///     theme = theme.copyWith(textTheme: theme.textTheme.merge(partialTheme));
-  ///     return Theme(data: theme, child: child);
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  ///  * [copyWith] is used instead of [merge] when you wish to override
-  ///    individual fields in the [TextTheme] instead of merging all of the
-  ///    fields of two [TextTheme]s.
   TextTheme merge(TextTheme? other) {
     if (other == null) {
       return this;
@@ -604,16 +354,6 @@ class TextTheme with Diagnosticable {
     );
   }
 
-  /// Creates a copy of this text theme but with the given field replaced in
-  /// each of the individual text styles.
-  ///
-  /// The `displayColor` is applied to [displayLarge], [displayMedium],
-  /// [displaySmall], [headlineLarge], [headlineMedium], and [bodySmall]. The
-  /// `bodyColor` is applied to the remaining text styles.
-  ///
-  /// Consider using [Typography.black] or [Typography.white], which implement
-  /// the typography styles in the Material Design specification, as a starting
-  /// point.
   TextTheme apply({
     String? fontFamily,
     List<String>? fontFamilyFallback,
@@ -795,9 +535,6 @@ class TextTheme with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two text themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static TextTheme lerp(TextTheme? a, TextTheme? b, double t) {
     if (identical(a, b) && a != null) {
       return a;

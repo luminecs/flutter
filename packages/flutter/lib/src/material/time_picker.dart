@@ -46,36 +46,13 @@ const double _kTimePickerInnerDialOffset = 28;
 const double _kTimePickerDialMinRadius = 50;
 const double _kTimePickerDialPadding = 28;
 
-/// Interactive input mode of the time picker dialog.
-///
-/// In [TimePickerEntryMode.dial] mode, a clock dial is displayed and the user
-/// taps or drags the time they wish to select. In TimePickerEntryMode.input]
-/// mode, [TextField]s are displayed and the user types in the time they wish to
-/// select.
-///
-/// See also:
-///
-/// * [showTimePicker], a function that shows a [TimePickerDialog] and returns
-///   the selected time as a [Future].
 enum TimePickerEntryMode {
-  /// User picks time from a clock dial.
-  ///
-  /// Can switch to [input] by activating a mode button in the dialog.
   dial,
 
-  /// User can input the time by typing it into text fields.
-  ///
-  /// Can switch to [dial] by activating a mode button in the dialog.
   input,
 
-  /// User can only pick time from a clock dial.
-  ///
-  /// There is no user interface to switch to another mode.
   dialOnly,
 
-  /// User can only input the time by typing it into text fields.
-  ///
-  /// There is no user interface to switch to another mode.
   inputOnly
 }
 
@@ -357,9 +334,6 @@ class _HourMinuteControl extends StatelessWidget {
   }
 }
 
-/// Displays the hour fragment.
-///
-/// When tapped changes time picker dial mode to [_HourMinuteMode.hour].
 class _HourControl extends StatelessWidget {
   const _HourControl();
 
@@ -424,9 +398,6 @@ class _HourControl extends StatelessWidget {
   }
 }
 
-/// A passive fragment showing a string value.
-///
-/// Used to display the appropriate separator between the input fields.
 class _StringFragment extends StatelessWidget {
   const _StringFragment({ required this.timeOfDayFormat });
 
@@ -487,9 +458,6 @@ class _StringFragment extends StatelessWidget {
   }
 }
 
-/// Displays the minute fragment.
-///
-/// When tapped changes time picker dial mode to [_HourMinuteMode.minute].
 class _MinuteControl extends StatelessWidget {
   const _MinuteControl();
 
@@ -528,8 +496,6 @@ class _MinuteControl extends StatelessWidget {
   }
 }
 
-/// Displays the am/pm fragment and provides controls for switching between am
-/// and pm.
 class _DayPeriodControl extends StatelessWidget {
   const _DayPeriodControl({ this.onPeriodChanged });
 
@@ -719,7 +685,6 @@ class _AmPmButton extends StatelessWidget {
   }
 }
 
-/// A widget to pad the area around the [_DayPeriodControl]'s inner [Material].
 class _DayPeriodInputPadding extends SingleChildRenderObjectWidget {
   const _DayPeriodInputPadding({
     required Widget super.child,
@@ -876,17 +841,12 @@ class _TappableLabel {
     required this.onTap,
   });
 
-  /// The value this label is displaying.
   final int value;
 
-  /// This value is part of the "inner" ring of values on the dial, used for 24
-  /// hour input.
   final bool inner;
 
-  /// Paints the text of the label.
   final TextPainter painter;
 
-  /// Called when a tap gesture is detected on the label.
   final VoidCallback onTap;
 }
 
@@ -1594,16 +1554,12 @@ class _TimePickerInput extends StatefulWidget {
     this.restorationId,
   });
 
-  /// The time initially selected when the dialog is shown.
   final TimeOfDay initialSelectedTime;
 
-  /// Optionally provide your own validation error text.
   final String? errorInvalidText;
 
-  /// Optionally provide your own hour label text.
   final String? hourLabelText;
 
-  /// Optionally provide your own minute label text.
   final String? minuteLabelText;
 
   final String helpText;
@@ -1612,13 +1568,6 @@ class _TimePickerInput extends StatefulWidget {
 
   final bool? autofocusMinute;
 
-  /// Restoration ID to save and restore the state of the time picker input
-  /// widget.
-  ///
-  /// If it is non-null, the widget will persist and restore its state
-  ///
-  /// The state of this widget is persisted in a [RestorationBucket] claimed
-  /// from the surrounding [RestorationScope] using the provided restoration ID.
   final String? restorationId;
 
   @override
@@ -2095,19 +2044,9 @@ class _HourMinuteTextFieldState extends State<_HourMinuteTextField> with Restora
   }
 }
 
-/// Signature for when the time picker entry mode is changed.
 typedef EntryModeChangeCallback = void Function(TimePickerEntryMode);
 
-/// A Material Design time picker designed to appear inside a popup dialog.
-///
-/// Pass this widget to [showDialog]. The value returned by [showDialog] is the
-/// selected [TimeOfDay] if the user taps the "OK" button, or null if the user
-/// taps the "CANCEL" button. The selected time is reported by calling
-/// [Navigator.pop].
-///
-/// Use [showTimePicker] to show a dialog already containing a [TimePickerDialog].
 class TimePickerDialog extends StatefulWidget {
-  /// Creates a Material Design time picker.
   const TimePickerDialog({
     super.key,
     required this.initialTime,
@@ -2123,62 +2062,26 @@ class TimePickerDialog extends StatefulWidget {
     this.onEntryModeChanged,
   });
 
-  /// The time initially selected when the dialog is shown.
   final TimeOfDay initialTime;
 
-  /// Optionally provide your own text for the cancel button.
-  ///
-  /// If null, the button uses [MaterialLocalizations.cancelButtonLabel].
   final String? cancelText;
 
-  /// Optionally provide your own text for the confirm button.
-  ///
-  /// If null, the button uses [MaterialLocalizations.okButtonLabel].
   final String? confirmText;
 
-  /// Optionally provide your own help text to the header of the time picker.
   final String? helpText;
 
-  /// Optionally provide your own validation error text.
   final String? errorInvalidText;
 
-  /// Optionally provide your own hour label text.
   final String? hourLabelText;
 
-  /// Optionally provide your own minute label text.
   final String? minuteLabelText;
 
-  /// Restoration ID to save and restore the state of the [TimePickerDialog].
-  ///
-  /// If it is non-null, the time picker will persist and restore the
-  /// dialog's state.
-  ///
-  /// The state of this widget is persisted in a [RestorationBucket] claimed
-  /// from the surrounding [RestorationScope] using the provided restoration ID.
-  ///
-  /// See also:
-  ///
-  ///  * [RestorationManager], which explains how state restoration works in
-  ///    Flutter.
   final String? restorationId;
 
-  /// The entry mode for the picker. Whether it's text input or a dial.
   final TimePickerEntryMode initialEntryMode;
 
-  /// The optional [orientation] parameter sets the [Orientation] to use when
-  /// displaying the dialog.
-  ///
-  /// By default, the orientation is derived from the [MediaQueryData.size] of
-  /// the ambient [MediaQuery]. If the aspect of the size is tall, then
-  /// [Orientation.portrait] is used, if the size is wide, then
-  /// [Orientation.landscape] is used.
-  ///
-  /// Use this parameter to override the default and force the dialog to appear
-  /// in either portrait or landscape mode regardless of the aspect of the
-  /// [MediaQueryData.size].
   final Orientation? orientation;
 
-  /// Callback called when the selected entry mode is changed.
   final EntryModeChangeCallback? onEntryModeChanged;
 
   @override
@@ -2486,9 +2389,7 @@ class _TimePickerDialogState extends State<TimePickerDialog> with RestorationMix
 // this as a public API for embedding time pickers into other non-dialog
 // widgets, once we're sure we want to support that.
 
-/// A Time Picker widget that can be embedded into another widget.
 class _TimePicker extends StatefulWidget {
-  /// Creates a const Material Design time picker.
   const _TimePicker({
     required this.time,
     required this.onTimeChanged,
@@ -2504,70 +2405,28 @@ class _TimePicker extends StatefulWidget {
     this.onEntryModeChanged,
   });
 
-  /// Optionally provide your own text for the help text at the top of the
-  /// control.
-  ///
-  /// If null, the widget uses [MaterialLocalizations.timePickerDialHelpText]
-  /// when the [entryMode] is [TimePickerEntryMode.dial], and
-  /// [MaterialLocalizations.timePickerInputHelpText] when the [entryMode] is
-  /// [TimePickerEntryMode.input].
   final String? helpText;
 
-  /// Optionally provide your own text for the cancel button.
-  ///
-  /// If null, the button uses [MaterialLocalizations.cancelButtonLabel].
   final String? cancelText;
 
-  /// Optionally provide your own text for the confirm button.
-  ///
-  /// If null, the button uses [MaterialLocalizations.okButtonLabel].
   final String? confirmText;
 
-  /// Optionally provide your own validation error text.
   final String? errorInvalidText;
 
-  /// Optionally provide your own hour label text.
   final String? hourLabelText;
 
-  /// Optionally provide your own minute label text.
   final String? minuteLabelText;
 
-  /// Restoration ID to save and restore the state of the [TimePickerDialog].
-  ///
-  /// If it is non-null, the time picker will persist and restore the
-  /// dialog's state.
-  ///
-  /// The state of this widget is persisted in a [RestorationBucket] claimed
-  /// from the surrounding [RestorationScope] using the provided restoration ID.
-  ///
-  /// See also:
-  ///
-  ///  * [RestorationManager], which explains how state restoration works in
-  ///    Flutter.
   final String? restorationId;
 
-  /// The initial entry mode for the picker. Whether it's text input or a dial.
   final TimePickerEntryMode entryMode;
 
-  /// The currently selected time of day.
   final TimeOfDay time;
 
   final ValueChanged<TimeOfDay>? onTimeChanged;
 
-  /// The optional [orientation] parameter sets the [Orientation] to use when
-  /// displaying the dialog.
-  ///
-  /// By default, the orientation is derived from the [MediaQueryData.size] of
-  /// the ambient [MediaQuery]. If the aspect of the size is tall, then
-  /// [Orientation.portrait] is used, if the size is wide, then
-  /// [Orientation.landscape] is used.
-  ///
-  /// Use this parameter to override the default and force the dialog to appear
-  /// in either portrait or landscape mode regardless of the aspect of the
-  /// [MediaQueryData.size].
   final Orientation? orientation;
 
-  /// Callback called when the selected entry mode is changed.
   final EntryModeChangeCallback? onEntryModeChanged;
 
   @override
@@ -2877,98 +2736,6 @@ class _TimePickerState extends State<_TimePicker> with RestorationMixin {
   }
 }
 
-/// Shows a dialog containing a Material Design time picker.
-///
-/// The returned Future resolves to the time selected by the user when the user
-/// closes the dialog. If the user cancels the dialog, null is returned.
-///
-/// {@tool snippet} Show a dialog with [initialTime] equal to the current time.
-///
-/// ```dart
-/// Future<TimeOfDay?> selectedTime = showTimePicker(
-///   initialTime: TimeOfDay.now(),
-///   context: context,
-/// );
-/// ```
-/// {@end-tool}
-///
-/// The [context], [barrierDismissible], [barrierColor], [barrierLabel],
-/// [useRootNavigator] and [routeSettings] arguments are passed to [showDialog],
-/// the documentation for which discusses how it is used.
-///
-/// The [builder] parameter can be used to wrap the dialog widget to add
-/// inherited widgets like [Localizations.override], [Directionality], or
-/// [MediaQuery].
-///
-/// The `initialEntryMode` parameter can be used to determine the initial time
-/// entry selection of the picker (either a clock dial or text input).
-///
-/// Optional strings for the [helpText], [cancelText], [errorInvalidText],
-/// [hourLabelText], [minuteLabelText] and [confirmText] can be provided to
-/// override the default values.
-///
-/// The optional [orientation] parameter sets the [Orientation] to use when
-/// displaying the dialog. By default, the orientation is derived from the
-/// [MediaQueryData.size] of the ambient [MediaQuery]: wide sizes use the
-/// landscape orientation, and tall sizes use the portrait orientation. Use this
-/// parameter to override the default and force the dialog to appear in either
-/// portrait or landscape mode.
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// By default, the time picker gets its colors from the overall theme's
-/// [ColorScheme]. The time picker can be further customized by providing a
-/// [TimePickerThemeData] to the overall theme.
-///
-/// {@tool snippet} Show a dialog with the text direction overridden to be
-/// [TextDirection.rtl].
-///
-/// ```dart
-/// Future<TimeOfDay?> selectedTimeRTL = showTimePicker(
-///   context: context,
-///   initialTime: TimeOfDay.now(),
-///   builder: (BuildContext context, Widget? child) {
-///     return Directionality(
-///       textDirection: TextDirection.rtl,
-///       child: child!,
-///     );
-///   },
-/// );
-/// ```
-/// {@end-tool}
-///
-/// {@tool snippet} Show a dialog with time unconditionally displayed in 24 hour
-/// format.
-///
-/// ```dart
-/// Future<TimeOfDay?> selectedTime24Hour = showTimePicker(
-///   context: context,
-///   initialTime: const TimeOfDay(hour: 10, minute: 47),
-///   builder: (BuildContext context, Widget? child) {
-///     return MediaQuery(
-///       data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-///       child: child!,
-///     );
-///   },
-/// );
-/// ```
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example illustrates how to open a time picker, and allows exploring
-/// some of the variations in the types of time pickers that may be shown.
-///
-/// ** See code in examples/api/lib/material/time_picker/show_time_picker.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-/// * [showDatePicker], which shows a dialog that contains a Material Design
-///   date picker.
-/// * [TimePickerThemeData], which allows you to customize the colors,
-///   typography, and shape of the time picker.
-/// * [DisplayFeatureSubScreen], which documents the specifics of how
-///   [DisplayFeature]s can split the screen into sub-screens.
 Future<TimeOfDay?> showTimePicker({
   required BuildContext context,
   required TimeOfDay initialTime,

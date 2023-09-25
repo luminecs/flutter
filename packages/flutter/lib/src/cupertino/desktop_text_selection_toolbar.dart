@@ -42,34 +42,13 @@ const CupertinoDynamicColor _kToolbarBackgroundColor =
   darkColor: Color(0xB2303030),
 );
 
-/// A macOS-style text selection toolbar.
-///
-/// Typically displays buttons for text manipulation, e.g. copying and pasting
-/// text.
-///
-/// Tries to position itself as closely as possible to [anchor] while remaining
-/// fully inside the viewport.
-///
-/// See also:
-///
-///  * [CupertinoAdaptiveTextSelectionToolbar], where this is used to build the
-///    toolbar for desktop platforms.
-///  * [AdaptiveTextSelectionToolbar], where this is used to build the toolbar on
-///    macOS.
-///  * [DesktopTextSelectionToolbar], which is similar but builds a
-///    Material-style desktop toolbar.
 class CupertinoDesktopTextSelectionToolbar extends StatelessWidget {
-  /// Creates a const instance of CupertinoTextSelectionToolbar.
   const CupertinoDesktopTextSelectionToolbar({
     super.key,
     required this.anchor,
     required this.children,
   }) : assert(children.length > 0);
 
-  /// Creates a 5x5 matrix that increases saturation when used with [ColorFilter.matrix].
-  ///
-  /// The numbers were taken from this comment:
-  /// [Cupertino blurs should boost saturation](https://github.com/flutter/flutter/issues/29483#issuecomment-477334981).
   static List<double> _matrixWithSaturation(double saturation) {
     final double r = 0.213 * (1 - saturation);
     final double g = 0.715 * (1 - saturation);
@@ -83,14 +62,8 @@ class CupertinoDesktopTextSelectionToolbar extends StatelessWidget {
     ];
   }
 
-  /// {@macro flutter.material.DesktopTextSelectionToolbar.anchor}
   final Offset anchor;
 
-  /// {@macro flutter.material.TextSelectionToolbar.children}
-  ///
-  /// See also:
-  ///   * [CupertinoDesktopTextSelectionToolbarButton], which builds a default
-  ///     macOS-style text selection toolbar text button.
   final List<Widget> children;
 
   // Builds a toolbar just like the default Mac toolbar, with the right color

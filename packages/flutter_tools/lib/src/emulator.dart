@@ -20,7 +20,6 @@ import 'ios/ios_emulators.dart';
 
 EmulatorManager? get emulatorManager => context.get<EmulatorManager>();
 
-/// A class to get all available emulators.
 class EmulatorManager {
   EmulatorManager({
     required Java? java,
@@ -82,7 +81,6 @@ class EmulatorManager {
     return _emulatorDiscoverers.where((EmulatorDiscovery discoverer) => discoverer.supportsPlatform);
   }
 
-  /// Return the list of all available emulators.
   Future<List<Emulator>> getAllAvailableEmulators() async {
     final List<Emulator> emulators = <Emulator>[];
     await Future.forEach<EmulatorDiscovery>(_platformDiscoverers, (EmulatorDiscovery discoverer) async {
@@ -91,7 +89,6 @@ class EmulatorManager {
     return emulators;
   }
 
-  /// Return the list of all available emulators.
   Future<CreateEmulatorResult> createEmulator({ String? name }) async {
     if (name == null || name.isEmpty) {
       const String autoName = 'flutter_emulator';
@@ -239,20 +236,16 @@ class EmulatorManager {
     return null;
   }
 
-  /// Whether we're capable of listing any emulators given the current environment configuration.
   bool get canListAnything {
     return _platformDiscoverers.any((EmulatorDiscovery discoverer) => discoverer.canListAnything);
   }
 }
 
-/// An abstract class to discover and enumerate a specific type of emulators.
 abstract class EmulatorDiscovery {
   bool get supportsPlatform;
 
-  /// Whether this emulator discovery is capable of listing any emulators.
   bool get canListAnything;
 
-  /// Whether this emulator discovery is capable of launching new emulators.
   bool get canLaunchAnything;
 
   Future<List<Emulator>> get emulators;

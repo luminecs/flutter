@@ -8,7 +8,6 @@
 // in `flutter/dev/integration_tests/web/web`.
 // @see https://github.com/flutter/flutter/tree/master/dev/integration_tests/web/web
 
-/// index_with_flutterjs_entrypoint_loaded.html
 String indexHtmlFlutterJsCallback = _generateFlutterJsIndexHtml('''
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -26,7 +25,6 @@ String indexHtmlFlutterJsCallback = _generateFlutterJsIndexHtml('''
     });
 ''');
 
-/// index_with_flutterjs_short.html
 String indexHtmlFlutterJsPromisesShort = _generateFlutterJsIndexHtml('''
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -40,7 +38,6 @@ String indexHtmlFlutterJsPromisesShort = _generateFlutterJsIndexHtml('''
     });
 ''');
 
-/// index_with_flutterjs.html
 String indexHtmlFlutterJsPromisesFull = _generateFlutterJsIndexHtml('''
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -56,7 +53,6 @@ String indexHtmlFlutterJsPromisesFull = _generateFlutterJsIndexHtml('''
     });
 ''');
 
-/// index_without_flutterjs.html
 String indexHtmlNoFlutterJs = '''
 <!DOCTYPE HTML>
 <!-- Copyright 2014 The Flutter Authors. All rights reserved.

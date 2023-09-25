@@ -1326,14 +1326,12 @@ void main() {
   testWidgetsWithLeakTracking('didUpdateDependencies is not called on a State that never rebuilds', (WidgetTester tester) async {
     final GlobalKey<DependentState> key = GlobalKey<DependentState>();
 
-    /// Initial build - should call didChangeDependencies, not deactivate
     await tester.pumpWidget(Inherited(1, child: DependentStatefulWidget(key: key)));
     final DependentState state = key.currentState!;
     expect(key.currentState, isNotNull);
     expect(state.didChangeDependenciesCount, 1);
     expect(state.deactivatedCount, 0);
 
-    /// Rebuild with updated value - should call didChangeDependencies
     await tester.pumpWidget(Inherited(2, child: DependentStatefulWidget(key: key)));
     expect(key.currentState, isNotNull);
     expect(state.didChangeDependenciesCount, 2);

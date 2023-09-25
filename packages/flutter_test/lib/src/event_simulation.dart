@@ -36,8 +36,6 @@ String? _keyLabel(LogicalKeyboardKey key) {
   return null;
 }
 
-/// A class that serves as a namespace for a bunch of keyboard-key generation
-/// utilities.
 abstract final class KeyEventSimulator {
   // Look up a synonym key, and just return the left version of it.
   static LogicalKeyboardKey _getKeySynonym(LogicalKeyboardKey origKey) {
@@ -223,7 +221,6 @@ abstract final class KeyEventSimulator {
     return result!;
   }
 
-  /// Get a raw key data map given a [LogicalKeyboardKey] and a platform.
   static Map<String, dynamic> getKeyData(
     LogicalKeyboardKey key, {
     required String platform,
@@ -707,22 +704,6 @@ abstract final class KeyEventSimulator {
 
   static String get _defaultPlatform => kIsWeb ? 'web' : Platform.operatingSystem;
 
-  /// Simulates sending a hardware key down event.
-  ///
-  /// This only simulates key presses coming from a physical keyboard, not from a
-  /// soft keyboard.
-  ///
-  /// Specify `platform` as one of the platforms allowed in
-  /// [Platform.operatingSystem] to make the event appear to be from that type of
-  /// system. Defaults to the operating system that the test is running on.
-  ///
-  /// Keys that are down when the test completes are cleared after each test.
-  ///
-  /// Returns true if the key event was handled by the framework.
-  ///
-  /// See also:
-  ///
-  ///  * [simulateKeyUpEvent] to simulate the corresponding key up event.
   static Future<bool> simulateKeyDownEvent(
     LogicalKeyboardKey key, {
     String? platform,
@@ -754,20 +735,6 @@ abstract final class KeyEventSimulator {
     }
   }
 
-  /// Simulates sending a hardware key up event through the system channel.
-  ///
-  /// This only simulates key presses coming from a physical keyboard, not from a
-  /// soft keyboard.
-  ///
-  /// Specify `platform` as one of the platforms allowed in
-  /// [Platform.operatingSystem] to make the event appear to be from that type of
-  /// system. Defaults to the operating system that the test is running on.
-  ///
-  /// Returns true if the key event was handled by the framework.
-  ///
-  /// See also:
-  ///
-  ///  * [simulateKeyDownEvent] to simulate the corresponding key down event.
   static Future<bool> simulateKeyUpEvent(
     LogicalKeyboardKey key, {
     String? platform,
@@ -798,20 +765,6 @@ abstract final class KeyEventSimulator {
     }
   }
 
-  /// Simulates sending a hardware key repeat event through the system channel.
-  ///
-  /// This only simulates key presses coming from a physical keyboard, not from a
-  /// soft keyboard.
-  ///
-  /// Specify `platform` as one of the platforms allowed in
-  /// [Platform.operatingSystem] to make the event appear to be from that type of
-  /// system. Defaults to the operating system that the test is running on.
-  ///
-  /// Returns true if the key event was handled by the framework.
-  ///
-  /// See also:
-  ///
-  ///  * [simulateKeyDownEvent] to simulate the corresponding key down event.
   static Future<bool> simulateKeyRepeatEvent(
     LogicalKeyboardKey key, {
     String? platform,
@@ -844,26 +797,6 @@ abstract final class KeyEventSimulator {
   }
 }
 
-/// Simulates sending a hardware key down event through the system channel.
-///
-/// It is intended for use in writing tests.
-///
-/// This only simulates key presses coming from a physical keyboard, not from a
-/// soft keyboard, and it can only simulate keys that appear in the key maps
-/// such as [kAndroidToLogicalKey], [kMacOsToPhysicalKey], etc.
-///
-/// Specify `platform` as one of the platforms allowed in
-/// [Platform.operatingSystem] to make the event appear to be from that type of
-/// system. Defaults to the operating system that the test is running on.
-///
-/// Keys that are down when the test completes are cleared after each test.
-///
-/// Returns true if the key event was handled by the framework.
-///
-/// See also:
-///
-///  * [simulateKeyUpEvent] and [simulateKeyRepeatEvent] to simulate the
-///    corresponding key up and repeat event.
 Future<bool> simulateKeyDownEvent(
   LogicalKeyboardKey key, {
   String? platform,
@@ -878,24 +811,6 @@ Future<bool> simulateKeyDownEvent(
   return handled;
 }
 
-/// Simulates sending a hardware key up event through the system channel.
-///
-/// It is intended for use in writing tests.
-///
-/// This only simulates key presses coming from a physical keyboard, not from a
-/// soft keyboard, and it can only simulate keys that appear in the key maps
-/// such as [kAndroidToLogicalKey], [kMacOsToPhysicalKey], etc.
-///
-/// Specify `platform` as one of the platforms allowed in
-/// [Platform.operatingSystem] to make the event appear to be from that type of
-/// system. Defaults to the operating system that the test is running on.
-///
-/// Returns true if the key event was handled by the framework.
-///
-/// See also:
-///
-///  * [simulateKeyDownEvent] and [simulateKeyRepeatEvent] to simulate the
-///    corresponding key down and repeat event.
 Future<bool> simulateKeyUpEvent(
   LogicalKeyboardKey key, {
   String? platform,
@@ -909,21 +824,6 @@ Future<bool> simulateKeyUpEvent(
   return handled;
 }
 
-/// Simulates sending a hardware key repeat event through the system channel.
-///
-/// This only simulates key presses coming from a physical keyboard, not from a
-/// soft keyboard.
-///
-/// Specify `platform` as one of the platforms allowed in
-/// [Platform.operatingSystem] to make the event appear to be from that type of
-/// system. Defaults to the operating system that the test is running on.
-///
-/// Returns true if the key event was handled by the framework.
-///
-/// See also:
-///
-///  - [simulateKeyDownEvent] and [simulateKeyUpEvent] to simulate the
-///    corresponding key down and up event.
 Future<bool> simulateKeyRepeatEvent(
   LogicalKeyboardKey key, {
   String? platform,
@@ -933,19 +833,12 @@ Future<bool> simulateKeyRepeatEvent(
   return KeyEventSimulator.simulateKeyRepeatEvent(key, platform: platform, physicalKey: physicalKey, character: character);
 }
 
-/// A [TestVariant] that runs tests with transit modes set to different values
-/// of [KeyDataTransitMode].
 class KeySimulatorTransitModeVariant extends TestVariant<KeyDataTransitMode> {
-  /// Creates a [KeySimulatorTransitModeVariant] that tests the given [values].
   const KeySimulatorTransitModeVariant(this.values);
 
-  /// Creates a [KeySimulatorTransitModeVariant] for each value option of
-  /// [KeyDataTransitMode].
   KeySimulatorTransitModeVariant.all()
     : this(KeyDataTransitMode.values.toSet());
 
-  /// Creates a [KeySimulatorTransitModeVariant] that only contains
-  /// [KeyDataTransitMode.keyDataThenRawKeyData].
   KeySimulatorTransitModeVariant.keyDataThenRawKeyData()
     : this(<KeyDataTransitMode>{KeyDataTransitMode.keyDataThenRawKeyData});
 

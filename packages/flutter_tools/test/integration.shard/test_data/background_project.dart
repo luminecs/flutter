@@ -5,7 +5,6 @@
 import '../test_utils.dart';
 import 'project.dart';
 
-/// Spawns a background isolate that prints a debug message.
 class BackgroundProject extends Project {
 
   @override

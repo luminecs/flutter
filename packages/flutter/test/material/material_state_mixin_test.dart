@@ -12,8 +12,6 @@ const Key key = Key('testContainer');
 const Color trueColor = Colors.red;
 const Color falseColor = Colors.green;
 
-/// Mock widget which plays the role of a button -- it can emit notifications
-/// that [MaterialState] values are now in or out of play.
 class _InnerWidget extends StatefulWidget {
   const _InnerWidget({required this.onValueChanged, required this.controller});
   final ValueChanged<bool> onValueChanged;
@@ -40,15 +38,10 @@ class _MyWidget extends StatefulWidget {
     required this.materialState,
   });
 
-  /// Wrapper around `MaterialStateMixin.isPressed/isHovered/isFocused/etc`.
   final bool Function(_MyWidgetState state) evaluator;
 
-  /// Stream passed down to the child [_InnerWidget] to begin the process.
-  /// This plays the role of an actual user interaction in the wild, but allows
-  /// us to engage the system without mocking pointers/hovers etc.
   final StreamController<bool> controller;
 
-  /// The value we're watching in the given test.
   final MaterialState materialState;
 
   @override

@@ -45,7 +45,6 @@ class TestFileReporterResults {
     required this.errors,
   });
 
-  /// Intended to parse the output file of `dart test --file-reporter json:file_name
   factory TestFileReporterResults.fromFile(File metrics) {
     if (!metrics.existsSync()) {
       throw Exception('${metrics.path} does not exist');

@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Quad, Vector3;
 
-/// Flutter code sample for [InteractiveViewer.builder].
 
 void main() => runApp(const IVBuilderExampleApp());
 

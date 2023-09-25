@@ -29,7 +29,6 @@ final List<String> baseApkFiles = <String> [
   'AndroidManifest.xml',
 ];
 
-/// Runs the given [testFunction] on a freshly generated Flutter project.
 Future<void> runProjectTest(Future<void> Function(FlutterProject project) testFunction) async {
   final Directory tempDir = Directory.systemTemp.createTempSync('flutter_devicelab_gradle_plugin_test.');
   final FlutterProject project = await FlutterProject.create(tempDir, 'hello');
@@ -41,7 +40,6 @@ Future<void> runProjectTest(Future<void> Function(FlutterProject project) testFu
   }
 }
 
-/// Runs the given [testFunction] on a freshly generated Flutter plugin project.
 Future<void> runPluginProjectTest(Future<void> Function(FlutterPluginProject pluginProject) testFunction) async {
   final Directory tempDir = Directory.systemTemp.createTempSync('flutter_devicelab_gradle_plugin_test.');
   final FlutterPluginProject pluginProject = await FlutterPluginProject.create(tempDir, 'aaa');
@@ -53,7 +51,6 @@ Future<void> runPluginProjectTest(Future<void> Function(FlutterPluginProject plu
   }
 }
 
-/// Runs the given [testFunction] on a freshly generated Flutter module project.
 Future<void> runModuleProjectTest(Future<void> Function(FlutterModuleProject moduleProject) testFunction) async {
   final Directory tempDir = Directory.systemTemp.createTempSync('flutter_devicelab_gradle_module_test.');
   final FlutterModuleProject moduleProject = await FlutterModuleProject.create(tempDir, 'hello_module');
@@ -65,7 +62,6 @@ Future<void> runModuleProjectTest(Future<void> Function(FlutterModuleProject mod
   }
 }
 
-/// Returns the list of files inside an Android Package Kit.
 Future<Iterable<String>> getFilesInApk(String apk) async {
   if (!File(apk).existsSync()) {
     throw TaskResult.failure(
@@ -80,12 +76,10 @@ Future<Iterable<String>> getFilesInApk(String apk) async {
   );
   return files.split('\n').map((String file) => file.substring(1).trim());
 }
-/// Returns the list of files inside an Android App Bundle.
 Future<Iterable<String>> getFilesInAppBundle(String bundle) {
   return getFilesInApk(bundle);
 }
 
-/// Returns the list of files inside an Android Archive.
 Future<Iterable<String>> getFilesInAar(String aar) {
   return getFilesInApk(aar);
 }
@@ -102,7 +96,6 @@ bool hasMultipleOccurrences(String text, Pattern pattern) {
   return text.indexOf(pattern) != text.lastIndexOf(pattern);
 }
 
-/// The Android home directory.
 String get _androidHome {
   final String? androidHome = Platform.environment['ANDROID_HOME'] ??
       Platform.environment['ANDROID_SDK_ROOT'];
@@ -112,7 +105,6 @@ String get _androidHome {
   return androidHome;
 }
 
-/// Executes an APK analyzer subcommand.
 Future<String> _evalApkAnalyzer(
   List<String> args, {
   bool printStdout = false,
@@ -157,11 +149,9 @@ Future<String> _evalApkAnalyzer(
   );
 }
 
-/// Utility class to analyze the content inside an APK using the APK analyzer.
 class ApkExtractor {
   ApkExtractor(this.apkFile);
 
-  /// The APK.
   final File apkFile;
 
   bool _extracted = false;
@@ -194,21 +184,17 @@ class ApkExtractor {
     _extracted = true;
   }
 
-  /// Returns true if the APK contains a given class.
   Future<bool> containsClass(String className) async {
     await _extractDex();
     return _classes.contains(className);
   }
 
-  /// Returns true if the APK contains a given method.
-  /// For example: io.flutter.plugins.googlemaps.GoogleMapController void onFlutterViewAttached(android.view.View)
   Future<bool> containsMethod(String methodName) async {
     await _extractDex();
     return _methods.contains(methodName);
   }
 }
 
-/// Gets the content of the `AndroidManifest.xml`.
 Future<String> getAndroidManifest(String apk) async {
   return _evalApkAnalyzer(
     <String>[
@@ -220,7 +206,6 @@ Future<String> getAndroidManifest(String apk) async {
   );
 }
 
-/// Checks that the classes are contained in the APK, throws otherwise.
 Future<void> checkApkContainsClasses(File apk, List<String> classes) async {
   final ApkExtractor extractor = ApkExtractor(apk);
   for (final String className in classes) {
@@ -230,7 +215,6 @@ Future<void> checkApkContainsClasses(File apk, List<String> classes) async {
   }
 }
 
-/// Checks that the methods are defined in the APK, throws otherwise.
 Future<void> checkApkContainsMethods(File apk, List<String> methods) async {
   final ApkExtractor extractor = ApkExtractor(apk);
   for (final String method in methods) {
@@ -274,9 +258,6 @@ android {
     ''');
   }
 
-  /// Adds a plugin to the pubspec.
-  /// In pubspec, each dependency is expressed as key, value pair joined by a colon `:`.
-  /// such as `plugin_a`:`^0.0.1` or `plugin_a`:`\npath: /some/path`.
   void addPlugin(String plugin, { String value = '' }) {
     final File pubspec = File(path.join(rootPath, 'pubspec.yaml'));
     String content = pubspec.readAsStringSync();
@@ -466,7 +447,6 @@ Future<ProcessResult> _resultOfGradleTask({
   );
 }
 
-/// Returns [null] if target matches [expectedTarget], otherwise returns an error message.
 String? validateSnapshotDependency(FlutterProject project, String expectedTarget) {
   final File snapshotBlob = File(
       path.join(project.rootPath, 'build', 'app', 'intermediates',

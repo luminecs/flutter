@@ -25,7 +25,6 @@ import '../vmservice.dart';
 import 'font_config_manager.dart';
 import 'test_device.dart';
 
-/// Implementation of [TestDevice] with the Flutter Tester over a [Process].
 class FlutterTesterTestDevice extends TestDevice {
   FlutterTesterTestDevice({
     required this.id,
@@ -48,7 +47,6 @@ class FlutterTesterTestDevice extends TestDevice {
         _gotProcessVmServiceUri = enableVmService
             ? Completer<Uri?>() : (Completer<Uri?>()..complete());
 
-  /// Used for logging to identify the test that is currently being executed.
   final int id;
   final Platform platform;
   final FileSystem fileSystem;
@@ -73,10 +71,6 @@ class FlutterTesterTestDevice extends TestDevice {
   HttpServer? _server;
   DevtoolsLauncher? _devToolsLauncher;
 
-  /// Starts the device.
-  ///
-  /// [entrypointPath] is the path to the entrypoint file which must be compiled
-  /// as a dill.
   @override
   Future<StreamChannel<String>> start(String entrypointPath) async {
     assert(!_exitCode.isCompleted);
@@ -301,9 +295,6 @@ class FlutterTesterTestDevice extends TestDevice {
     logger.printStatus('The Flutter DevTools debugger and profiler is available at: $devToolsUri');
   }
 
-  /// Binds an [HttpServer] serving from `host` on `port`.
-  ///
-  /// Only intended to be overridden in tests.
   @protected
   @visibleForTesting
   Future<HttpServer> bind(InternetAddress? host, int port) => HttpServer.bind(host, port);

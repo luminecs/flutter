@@ -122,7 +122,6 @@ void main() {
       ..writeAsStringSync('''
 // Some license
 
-/// @dart = 2.9
 ''');
 
     expect(determineLanguageVersion(file, null, flutterRoot), testCurrentLanguageVersion);

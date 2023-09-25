@@ -4,11 +4,6 @@
 
 import 'package:meta/meta.dart' show immutable;
 
-/// Data class that represents a range of versions in their String
-/// representation.
-///
-/// Both the [versionMin] and [versionMax] are inclusive versions, and undefined
-/// values represent an unknown minimum/maximum version.
 @immutable
 class VersionRange{
   const VersionRange(

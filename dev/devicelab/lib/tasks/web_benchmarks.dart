@@ -16,7 +16,6 @@ import '../framework/browser.dart';
 import '../framework/task_result.dart';
 import '../framework/utils.dart';
 
-/// The port number used by the local benchmark server.
 const int benchmarkServerPort = 9999;
 const int chromeDebugPort = 10000;
 

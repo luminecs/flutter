@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ScaffoldState.showBottomSheet].
 
 void main() => runApp(const ShowBottomSheetExampleApp());
 

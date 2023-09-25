@@ -13,11 +13,6 @@ import '../globals.dart' as globals;
 import '../macos/native_assets_host.dart';
 import '../native_assets.dart';
 
-/// Dry run the native builds.
-///
-/// This does not build native assets, it only simulates what the final paths
-/// of all assets will be so that this can be embedded in the kernel file and
-/// the Xcode project.
 Future<Uri?> dryRunNativeAssetsIOS({
   required NativeAssetsBuildRunner buildRunner,
   required Uri projectUri,
@@ -61,7 +56,6 @@ Future<Iterable<Asset>> dryRunNativeAssetsIOSInternal(
   return assetTargetLocations;
 }
 
-/// Builds native assets.
 Future<List<Uri>> buildNativeAssetsIOS({
   required NativeAssetsBuildRunner buildRunner,
   required List<DarwinArch> darwinArchs,
@@ -129,7 +123,6 @@ IOSSdk _getIOSSdk(EnvironmentType environmentType) {
   }
 }
 
-/// Extract the [Target] from a [DarwinArch].
 Target _getNativeTarget(DarwinArch darwinArch) {
   switch (darwinArch) {
     case DarwinArch.armv7:

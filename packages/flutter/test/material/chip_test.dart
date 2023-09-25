@@ -67,7 +67,6 @@ double getAvatarDrawerProgress(WidgetTester tester) => getRenderChip(tester)?.av
 // ignore: avoid_dynamic_calls
 double getDeleteDrawerProgress(WidgetTester tester) => getRenderChip(tester)?.deleteDrawerAnimation?.value as double;
 
-/// Adds the basic requirements for a Chip.
 Widget wrapForChip({
   required Widget child,
   TextDirection textDirection = TextDirection.ltr,
@@ -87,10 +86,6 @@ Widget wrapForChip({
   );
 }
 
-/// Tests that a [Chip] that has its size constrained by its parent is
-/// further constraining the size of its child, the label widget.
-/// Optionally, adding an avatar or delete icon to the chip should not
-/// cause the chip or label to exceed its constrained height.
 Future<void> testConstrainedLabel(
   WidgetTester tester, {
   CircleAvatar? avatar,

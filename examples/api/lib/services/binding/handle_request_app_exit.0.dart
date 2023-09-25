@@ -7,7 +7,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [ServicesBinding.handleRequestAppExit].
 
 void main() {
   runApp(const ApplicationExitExample());

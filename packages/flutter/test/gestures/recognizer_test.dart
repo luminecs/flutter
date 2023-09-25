@@ -193,8 +193,6 @@ class TestGestureRecognizer extends GestureRecognizer {
   void rejectGesture(int pointer) { }
 }
 
-/// Gesture recognizer that adds itself to the gesture arena but never
-/// resolves itself.
 class IndefiniteGestureRecognizer extends GestureRecognizer {
   @override
   void addAllowedPointer(PointerDownEvent event) {
@@ -211,8 +209,6 @@ class IndefiniteGestureRecognizer extends GestureRecognizer {
   String get debugDescription => 'Unresolving';
 }
 
-/// Gesture recognizer that resolves with [resolution] when it handles an event
-/// on the primary pointer of type [T]
 class TestPrimaryPointerGestureRecognizer<T extends PointerEvent> extends PrimaryPointerGestureRecognizer {
   TestPrimaryPointerGestureRecognizer(
     this.resolution, {

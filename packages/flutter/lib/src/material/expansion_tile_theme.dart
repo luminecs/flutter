@@ -10,35 +10,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Used with [ExpansionTileTheme] to define default property values for
-/// descendant [ExpansionTile] widgets.
-///
-/// Descendant widgets obtain the current [ExpansionTileThemeData] object
-/// using `ExpansionTileTheme.of(context)`. Instances of
-/// [ExpansionTileThemeData] can be customized with
-/// [ExpansionTileThemeData.copyWith].
-///
-/// A [ExpansionTileThemeData] is often specified as part of the
-/// overall [Theme] with [ThemeData.expansionTileTheme].
-///
-/// All [ExpansionTileThemeData] properties are `null` by default.
-/// When a theme property is null, the [ExpansionTile]  will provide its own
-/// default based on the overall [Theme]'s textTheme and
-/// colorScheme. See the individual [ExpansionTile] properties for details.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
-///  * [ExpansionTileTheme] which overrides the default [ExpansionTileTheme]
-///    of its [ExpansionTile] descendants.
-///  * [ThemeData.textTheme], text with a color that contrasts with the card
-///    and canvas colors.
-///  * [ThemeData.colorScheme], the thirteen colors that most Material widget
-///    default colors are based on.
 @immutable
 class ExpansionTileThemeData with Diagnosticable {
-  /// Creates a [ExpansionTileThemeData].
   const ExpansionTileThemeData ({
     this.backgroundColor,
     this.collapsedBackgroundColor,
@@ -54,44 +27,30 @@ class ExpansionTileThemeData with Diagnosticable {
     this.clipBehavior,
   });
 
-  /// Overrides the default value of [ExpansionTile.backgroundColor].
   final Color? backgroundColor;
 
-  /// Overrides the default value of [ExpansionTile.collapsedBackgroundColor].
   final Color? collapsedBackgroundColor;
 
-  /// Overrides the default value of [ExpansionTile.tilePadding].
   final EdgeInsetsGeometry? tilePadding;
 
-  /// Overrides the default value of [ExpansionTile.expandedAlignment].
   final AlignmentGeometry? expandedAlignment;
 
-  /// Overrides the default value of [ExpansionTile.childrenPadding].
   final EdgeInsetsGeometry? childrenPadding;
 
-  /// Overrides the default value of [ExpansionTile.iconColor].
   final Color? iconColor;
 
-  /// Overrides the default value of [ExpansionTile.collapsedIconColor].
   final Color? collapsedIconColor;
 
-  /// Overrides the default value of [ExpansionTile.textColor].
   final Color? textColor;
 
-  /// Overrides the default value of [ExpansionTile.collapsedTextColor].
   final Color? collapsedTextColor;
 
-  /// Overrides the default value of [ExpansionTile.shape].
   final ShapeBorder? shape;
 
-  /// Overrides the default value of [ExpansionTile.collapsedShape].
   final ShapeBorder? collapsedShape;
 
-  /// Overrides the default value of [ExpansionTile.clipBehavior].
   final Clip? clipBehavior;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   ExpansionTileThemeData copyWith({
     Color? backgroundColor,
     Color? collapsedBackgroundColor,
@@ -122,7 +81,6 @@ class ExpansionTileThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between ExpansionTileThemeData objects.
   static ExpansionTileThemeData? lerp(ExpansionTileThemeData? a, ExpansionTileThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -201,35 +159,15 @@ class ExpansionTileThemeData with Diagnosticable {
   }
 }
 
-/// Overrides the default [ExpansionTileTheme] of its [ExpansionTile] descendants.
-///
-/// See also:
-///
-///  * [ExpansionTileThemeData], which is used to configure this theme.
-///  * [ThemeData.expansionTileTheme], which can be used to override the default
-///    [ExpansionTileTheme] for [ExpansionTile]s below the overall [Theme].
 class ExpansionTileTheme extends InheritedTheme {
-  /// Applies the given theme [data] to [child].
   const ExpansionTileTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Specifies color, alignment, and text style values for
-  /// descendant [ExpansionTile] widgets.
   final ExpansionTileThemeData data;
 
-  /// The closest instance of this class that encloses the given context.
-  ///
-  /// If there is no enclosing [ExpansionTileTheme] widget, then
-  /// [ThemeData.expansionTileTheme] is used.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// ExpansionTileThemeData theme = ExpansionTileTheme.of(context);
-  /// ```
   static ExpansionTileThemeData of(BuildContext context) {
     final ExpansionTileTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<ExpansionTileTheme>();
     return inheritedTheme?.data ?? Theme.of(context).expansionTileTheme;

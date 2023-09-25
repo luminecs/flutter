@@ -29,7 +29,6 @@ class AsymmetricView extends StatelessWidget {
       double width = .59 * MediaQuery.of(context).size.width;
       Widget column;
       if (index.isEven) {
-        /// Even cases
         final int bottom = _evenCasesIndex(index);
         column = TwoProductCardColumn(
           bottom: products![bottom],
@@ -39,7 +38,6 @@ class AsymmetricView extends StatelessWidget {
         );
         width += 32.0;
       } else {
-        /// Odd cases
         column = OneProductCardColumn(
           product: products![_oddCasesIndex(index)],
         );

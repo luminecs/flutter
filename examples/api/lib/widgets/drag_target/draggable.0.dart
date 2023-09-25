@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Draggable].
 
 void main() => runApp(const DraggableExampleApp());
 

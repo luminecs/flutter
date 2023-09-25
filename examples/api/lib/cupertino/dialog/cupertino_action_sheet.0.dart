@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoActionSheet].
 
 void main() => runApp(const ActionSheetApp());
 
@@ -32,8 +31,6 @@ class ActionSheetExample extends StatelessWidget {
         message: const Text('Message'),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
-            /// This parameter indicates the action would be a default
-            /// default behavior, turns the action's text to bold text.
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
@@ -47,9 +44,6 @@ class ActionSheetExample extends StatelessWidget {
             child: const Text('Action'),
           ),
           CupertinoActionSheetAction(
-            /// This parameter indicates the action would perform
-            /// a destructive action such as delete or exit and turns
-            /// the action's text color to red.
             isDestructiveAction: true,
             onPressed: () {
               Navigator.pop(context);

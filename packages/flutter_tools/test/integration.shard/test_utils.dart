@@ -12,18 +12,12 @@ import 'package:vm_service/vm_service.dart';
 import '../src/common.dart';
 import 'test_driver.dart';
 
-/// The [FileSystem] for the integration test environment.
 const FileSystem fileSystem = LocalFileSystem();
 
-/// The [Platform] for the integration test environment.
 const Platform platform = LocalPlatform();
 
-/// The [ProcessManager] for the integration test environment.
 const ProcessManager processManager = LocalProcessManager();
 
-/// Creates a temporary directory but resolves any symlinks to return the real
-/// underlying path to avoid issues with breakpoints/hot reload.
-/// https://github.com/flutter/flutter/pull/21741
 Directory createResolvedTempDirectorySync(String prefix) {
   assert(prefix.endsWith('.'));
   final Directory tempDirectory = fileSystem.systemTempDirectory.createTempSync('flutter_$prefix');
@@ -128,11 +122,6 @@ abstract final class AppleTestUtils {
   }
 }
 
-/// Matcher to be used for [ProcessResult] returned
-/// from a process run
-///
-/// The default for [exitCode] will be 0 while
-/// [stdoutPattern] and [stderrPattern] are both optional
 class ProcessResultMatcher extends Matcher {
   const ProcessResultMatcher({
     this.exitCode = 0,
@@ -140,13 +129,10 @@ class ProcessResultMatcher extends Matcher {
     this.stderrPattern,
   });
 
-  /// The expected exit code to get returned from a process run
   final int exitCode;
 
-  /// Substring to find in the process's stdout
   final Pattern? stdoutPattern;
 
-  /// Substring to find in the process's stderr
   final Pattern? stderrPattern;
 
   @override

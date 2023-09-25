@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [InteractiveViewer].
 
 void main() => runApp(const InteractiveViewerExampleApp());
 

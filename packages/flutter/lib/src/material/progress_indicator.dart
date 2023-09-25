@@ -18,29 +18,7 @@ const int _kIndeterminateCircularDuration = 1333 * 2222;
 
 enum _ActivityIndicatorType { material, adaptive }
 
-/// A base class for Material Design progress indicators.
-///
-/// This widget cannot be instantiated directly. For a linear progress
-/// indicator, see [LinearProgressIndicator]. For a circular progress indicator,
-/// see [CircularProgressIndicator].
-///
-/// See also:
-///
-///  * <https://material.io/components/progress-indicators>
 abstract class ProgressIndicator extends StatefulWidget {
-  /// Creates a progress indicator.
-  ///
-  /// {@template flutter.material.ProgressIndicator.ProgressIndicator}
-  /// The [value] argument can either be null for an indeterminate
-  /// progress indicator, or a non-null value between 0.0 and 1.0 for a
-  /// determinate progress indicator.
-  ///
-  /// ## Accessibility
-  ///
-  /// The [semanticsLabel] can be used to identify the purpose of this progress
-  /// bar for screen reading software. The [semanticsValue] property may be used
-  /// for determinate progress indicators to indicate how much progress has been made.
-  /// {@endtemplate}
   const ProgressIndicator({
     super.key,
     this.value,
@@ -51,61 +29,16 @@ abstract class ProgressIndicator extends StatefulWidget {
     this.semanticsValue,
   });
 
-  /// If non-null, the value of this progress indicator.
-  ///
-  /// A value of 0.0 means no progress and 1.0 means that progress is complete.
-  /// The value will be clamped to be in the range 0.0-1.0.
-  ///
-  /// If null, this progress indicator is indeterminate, which means the
-  /// indicator displays a predetermined animation that does not indicate how
-  /// much actual progress is being made.
   final double? value;
 
-  /// The progress indicator's background color.
-  ///
-  /// It is up to the subclass to implement this in whatever way makes sense
-  /// for the given use case. See the subclass documentation for details.
   final Color? backgroundColor;
 
-  /// {@template flutter.progress_indicator.ProgressIndicator.color}
-  /// The progress indicator's color.
-  ///
-  /// This is only used if [ProgressIndicator.valueColor] is null.
-  /// If [ProgressIndicator.color] is also null, then the ambient
-  /// [ProgressIndicatorThemeData.color] will be used. If that
-  /// is null then the current theme's [ColorScheme.primary] will
-  /// be used by default.
-  /// {@endtemplate}
   final Color? color;
 
-  /// The progress indicator's color as an animated value.
-  ///
-  /// If null, the progress indicator is rendered with [color]. If that is null,
-  /// then it will use the ambient [ProgressIndicatorThemeData.color]. If that
-  /// is also null then it defaults to the current theme's [ColorScheme.primary].
   final Animation<Color?>? valueColor;
 
-  /// {@template flutter.progress_indicator.ProgressIndicator.semanticsLabel}
-  /// The [SemanticsProperties.label] for this progress indicator.
-  ///
-  /// This value indicates the purpose of the progress bar, and will be
-  /// read out by screen readers to indicate the purpose of this progress
-  /// indicator.
-  /// {@endtemplate}
   final String? semanticsLabel;
 
-  /// {@template flutter.progress_indicator.ProgressIndicator.semanticsValue}
-  /// The [SemanticsProperties.value] for this progress indicator.
-  ///
-  /// This will be used in conjunction with the [semanticsLabel] by
-  /// screen reading software to identify the widget, and is primarily
-  /// intended for use with determinate progress indicators to announce
-  /// how far along they are.
-  ///
-  /// For determinate progress indicators, this will be defaulted to
-  /// [ProgressIndicator.value] expressed as a percentage, i.e. `0.1` will
-  /// become '10%'.
-  /// {@endtemplate}
   final String? semanticsValue;
 
   Color _getValueColor(BuildContext context, {Color? defaultColor}) {
@@ -233,52 +166,7 @@ class _LinearProgressIndicatorPainter extends CustomPainter {
   }
 }
 
-/// A Material Design linear progress indicator, also known as a progress bar.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=O-rhXZLtpv0}
-///
-/// A widget that shows progress along a line. There are two kinds of linear
-/// progress indicators:
-///
-///  * _Determinate_. Determinate progress indicators have a specific value at
-///    each point in time, and the value should increase monotonically from 0.0
-///    to 1.0, at which time the indicator is complete. To create a determinate
-///    progress indicator, use a non-null [value] between 0.0 and 1.0.
-///  * _Indeterminate_. Indeterminate progress indicators do not have a specific
-///    value at each point in time and instead indicate that progress is being
-///    made without indicating how much progress remains. To create an
-///    indeterminate progress indicator, use a null [value].
-///
-/// The indicator line is displayed with [valueColor], an animated value. To
-/// specify a constant color value use: `AlwaysStoppedAnimation<Color>(color)`.
-///
-/// The minimum height of the indicator can be specified using [minHeight].
-/// The indicator can be made taller by wrapping the widget with a [SizedBox].
-///
-/// {@tool dartpad}
-/// This example shows a [LinearProgressIndicator] with a changing value.
-///
-/// ** See code in examples/api/lib/material/progress_indicator/linear_progress_indicator.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This sample shows the creation of a [LinearProgressIndicator] with a changing value.
-/// When toggling the switch, [LinearProgressIndicator] uses a determinate value.
-/// As described in: https://m3.material.io/components/progress-indicators/overview
-///
-/// ** See code in examples/api/lib/material/progress_indicator/linear_progress_indicator.1.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CircularProgressIndicator], which shows progress along a circular arc.
-///  * [RefreshIndicator], which automatically displays a [CircularProgressIndicator]
-///    when the underlying vertical scrollable is overscrolled.
-///  * <https://material.io/design/components/progress-indicators.html#linear-progress-indicators>
 class LinearProgressIndicator extends ProgressIndicator {
-  /// Creates a linear progress indicator.
-  ///
-  /// {@macro flutter.material.ProgressIndicator.ProgressIndicator}
   const LinearProgressIndicator({
     super.key,
     super.value,
@@ -291,30 +179,11 @@ class LinearProgressIndicator extends ProgressIndicator {
     this.borderRadius = BorderRadius.zero,
   }) : assert(minHeight == null || minHeight > 0);
 
-  /// {@template flutter.material.LinearProgressIndicator.trackColor}
-  /// Color of the track being filled by the linear indicator.
-  ///
-  /// If [LinearProgressIndicator.backgroundColor] is null then the
-  /// ambient [ProgressIndicatorThemeData.linearTrackColor] will be used.
-  /// If that is null, then the ambient theme's [ColorScheme.background]
-  /// will be used to draw the track.
-  /// {@endtemplate}
   @override
   Color? get backgroundColor => super.backgroundColor;
 
-  /// {@template flutter.material.LinearProgressIndicator.minHeight}
-  /// The minimum height of the line used to draw the linear indicator.
-  ///
-  /// If [LinearProgressIndicator.minHeight] is null then it will use the
-  /// ambient [ProgressIndicatorThemeData.linearMinHeight]. If that is null
-  /// it will use 4dp.
-  /// {@endtemplate}
   final double? minHeight;
 
-  /// The border radius of both the indicator and the track.
-  ///
-  /// By default it is [BorderRadius.zero], which produces a rectangular shape
-  /// with a rectangular indicator.
   final BorderRadiusGeometry borderRadius;
 
   @override
@@ -511,50 +380,7 @@ class _CircularProgressIndicatorPainter extends CustomPainter {
   }
 }
 
-/// A Material Design circular progress indicator, which spins to indicate that
-/// the application is busy.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=O-rhXZLtpv0}
-///
-/// A widget that shows progress along a circle. There are two kinds of circular
-/// progress indicators:
-///
-///  * _Determinate_. Determinate progress indicators have a specific value at
-///    each point in time, and the value should increase monotonically from 0.0
-///    to 1.0, at which time the indicator is complete. To create a determinate
-///    progress indicator, use a non-null [value] between 0.0 and 1.0.
-///  * _Indeterminate_. Indeterminate progress indicators do not have a specific
-///    value at each point in time and instead indicate that progress is being
-///    made without indicating how much progress remains. To create an
-///    indeterminate progress indicator, use a null [value].
-///
-/// The indicator arc is displayed with [valueColor], an animated value. To
-/// specify a constant color use: `AlwaysStoppedAnimation<Color>(color)`.
-///
-/// {@tool dartpad}
-/// This example shows a [CircularProgressIndicator] with a changing value.
-///
-/// ** See code in examples/api/lib/material/progress_indicator/circular_progress_indicator.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This sample shows the creation of a [CircularProgressIndicator] with a changing value.
-/// When toggling the switch, [CircularProgressIndicator] uses a determinate value.
-/// As described in: https://m3.material.io/components/progress-indicators/overview
-///
-/// ** See code in examples/api/lib/material/progress_indicator/circular_progress_indicator.1.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [LinearProgressIndicator], which displays progress along a line.
-///  * [RefreshIndicator], which automatically displays a [CircularProgressIndicator]
-///    when the underlying vertical scrollable is overscrolled.
-///  * <https://material.io/design/components/progress-indicators.html#circular-progress-indicators>
 class CircularProgressIndicator extends ProgressIndicator {
-  /// Creates a circular progress indicator.
-  ///
-  /// {@macro flutter.material.ProgressIndicator.ProgressIndicator}
   const CircularProgressIndicator({
     super.key,
     super.value,
@@ -568,14 +394,6 @@ class CircularProgressIndicator extends ProgressIndicator {
     this.strokeCap,
   }) : _indicatorType = _ActivityIndicatorType.material;
 
-  /// Creates an adaptive progress indicator that is a
-  /// [CupertinoActivityIndicator] in iOS and [CircularProgressIndicator] in
-  /// material theme/non-iOS.
-  ///
-  /// The [value], [valueColor], [strokeWidth], [semanticsLabel], and
-  /// [semanticsValue] will be ignored in iOS.
-  ///
-  /// {@macro flutter.material.ProgressIndicator.ProgressIndicator}
   const CircularProgressIndicator.adaptive({
     super.key,
     super.value,
@@ -590,66 +408,19 @@ class CircularProgressIndicator extends ProgressIndicator {
 
   final _ActivityIndicatorType _indicatorType;
 
-  /// {@template flutter.material.CircularProgressIndicator.trackColor}
-  /// Color of the circular track being filled by the circular indicator.
-  ///
-  /// If [CircularProgressIndicator.backgroundColor] is null then the
-  /// ambient [ProgressIndicatorThemeData.circularTrackColor] will be used.
-  /// If that is null, then the track will not be painted.
-  /// {@endtemplate}
   @override
   Color? get backgroundColor => super.backgroundColor;
 
-  /// The width of the line used to draw the circle.
   final double strokeWidth;
 
-  /// The relative position of the stroke on a [CircularProgressIndicator].
-  ///
-  /// Values typically range from -1.0 ([strokeAlignInside], inside stroke)
-  /// to 1.0 ([strokeAlignOutside], outside stroke),
-  /// without any bound constraints (e.g., a value of -2.0 is not typical, but allowed).
-  /// A value of 0 ([strokeAlignCenter], default) will center the border
-  /// on the edge of the widget.
   final double strokeAlign;
 
-  /// The progress indicator's line ending.
-  ///
-  /// This determines the shape of the stroke ends of the progress indicator.
-  /// By default, [strokeCap] is null.
-  /// When [value] is null (indeterminate), the stroke ends are set to
-  /// [StrokeCap.square]. When [value] is not null, the stroke
-  /// ends are set to [StrokeCap.butt].
-  ///
-  /// Setting [strokeCap] to [StrokeCap.round] will result in a rounded end.
-  /// Setting [strokeCap] to [StrokeCap.butt] with [value] == null will result
-  /// in a slightly different indeterminate animation; the indicator completely
-  /// disappears and reappears on its minimum value.
-  /// Setting [strokeCap] to [StrokeCap.square] with [value] != null will
-  /// result in a different display of [value]. The indicator will start
-  /// drawing from slightly less than the start, and end slightly after
-  /// the end. This will produce an alternative result, as the
-  /// default behavior, for example, that a [value] of 0.5 starts at 90 degrees
-  /// and ends at 270 degrees. With [StrokeCap.square], it could start 85
-  /// degrees and end at 275 degrees.
   final StrokeCap? strokeCap;
 
-  /// The indicator stroke is drawn fully inside of the indicator path.
-  ///
-  /// This is a constant for use with [strokeAlign].
   static const double strokeAlignInside = -1.0;
 
-  /// The indicator stroke is drawn on the center of the indicator path,
-  /// with half of the [strokeWidth] on the inside, and the other half
-  /// on the outside of the path.
-  ///
-  /// This is a constant for use with [strokeAlign].
-  ///
-  /// This is the default value for [strokeAlign].
   static const double strokeAlignCenter = 0.0;
 
-  /// The indicator stroke is drawn on the outside of the indicator path.
-  ///
-  /// This is a constant for use with [strokeAlign].
   static const double strokeAlignOutside = 1.0;
 
   @override
@@ -834,26 +605,7 @@ class _RefreshProgressIndicatorPainter extends _CircularProgressIndicatorPainter
   }
 }
 
-/// An indicator for the progress of refreshing the contents of a widget.
-///
-/// Typically used for swipe-to-refresh interactions. See [RefreshIndicator] for
-/// a complete implementation of swipe-to-refresh driven by a [Scrollable]
-/// widget.
-///
-/// The indicator arc is displayed with [valueColor], an animated value. To
-/// specify a constant color use: `AlwaysStoppedAnimation<Color>(color)`.
-///
-/// See also:
-///
-///  * [RefreshIndicator], which automatically displays a [CircularProgressIndicator]
-///    when the underlying vertical scrollable is overscrolled.
 class RefreshProgressIndicator extends CircularProgressIndicator {
-  /// Creates a refresh progress indicator.
-  ///
-  /// Rather than creating a refresh progress indicator directly, consider using
-  /// a [RefreshIndicator] together with a [Scrollable] widget.
-  ///
-  /// {@macro flutter.material.ProgressIndicator.ProgressIndicator}
   const RefreshProgressIndicator({
     super.key,
     super.value,
@@ -867,17 +619,8 @@ class RefreshProgressIndicator extends CircularProgressIndicator {
     super.strokeCap,
   });
 
-  /// Default stroke width.
   static const double defaultStrokeWidth = 2.5;
 
-  /// {@template flutter.material.RefreshProgressIndicator.backgroundColor}
-  /// Background color of that fills the circle under the refresh indicator.
-  ///
-  /// If [RefreshIndicator.backgroundColor] is null then the
-  /// ambient [ProgressIndicatorThemeData.refreshBackgroundColor] will be used.
-  /// If that is null, then the ambient theme's [ThemeData.canvasColor]
-  /// will be used.
-  /// {@endtemplate}
   @override
   Color? get backgroundColor => super.backgroundColor;
 
@@ -888,7 +631,6 @@ class RefreshProgressIndicator extends CircularProgressIndicator {
 class _RefreshProgressIndicatorState extends _CircularProgressIndicatorState {
   static const double _indicatorSize = 41.0;
 
-  /// Interval for arrow head to fully grow.
   static const double _strokeHeadInterval = 0.33;
 
   late final Animatable<double> _convertTween = CurveTween(

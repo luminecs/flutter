@@ -87,9 +87,7 @@ void main() {
     skip: kIsWeb, // [intended] shaders are not yet supported for web.
   );
 
-  /////////////
   // Goldens //
-  /////////////
 
   testWidgetsWithLeakTracking('Material2 - InkSparkle renders with sparkles when top left of button is tapped', (WidgetTester tester) async {
     await _runTest(tester, 'top_left', 0.2);

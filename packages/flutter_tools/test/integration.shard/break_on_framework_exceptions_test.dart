@@ -605,14 +605,6 @@ void main() {
   });
 }
 
-/// A debugging wrapper to help diagnose tests that are already timing out.
-///
-/// When these tests are timed out by package:test (after 15 minutes), there
-/// is no hint in logs as to where the test got stuck. By passing async calls
-/// to this function with a [duration] less than that configured in
-/// package:test can be set and a helpful message used to help debugging.
-///
-/// See https://github.com/flutter/flutter/issues/125241 for more context.
 Future<void> _timeoutAfter({
   required String message,
   Duration duration = const Duration(minutes: 10),

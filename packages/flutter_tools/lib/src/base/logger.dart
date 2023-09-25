@@ -15,77 +15,33 @@ import 'utils.dart';
 
 const int kDefaultStatusPadding = 59;
 
-/// A factory for generating [Stopwatch] instances for [Status] instances.
 class StopwatchFactory {
-  /// const constructor so that subclasses may be const.
   const StopwatchFactory();
 
-  /// Create a new [Stopwatch] instance.
-  ///
-  /// The optional [name] parameter is useful in tests when there are multiple
-  /// instances being created.
   Stopwatch createStopwatch([String name = '']) => Stopwatch();
 }
 
 typedef VoidCallback = void Function();
 
 abstract class Logger {
-  /// Whether or not this logger should print [printTrace] messages.
   bool get isVerbose => false;
 
-  /// If true, silences the logger output.
   bool quiet = false;
 
-  /// If true, this logger supports ANSI sequences and animations are enabled.
   bool get supportsColor;
 
-  /// If true, this logger is connected to a terminal.
   bool get hasTerminal;
 
-  /// If true, then [printError] has been called at least once for this logger
-  /// since the last time it was set to false.
   bool hadErrorOutput = false;
 
-  /// If true, then [printWarning] has been called at least once with its
-  /// "fatal" argument true for this logger
-  /// since the last time it was reset to false.
   bool hadWarningOutput = false;
 
-  /// Causes [checkForFatalLogs] to call [throwToolExit] when it is called if
-  /// [hadWarningOutput] is true.
   bool fatalWarnings = false;
 
-  /// Returns the terminal attached to this logger.
   Terminal get terminal;
 
   OutputPreferences get _outputPreferences;
 
-  /// Display an error `message` to the user. Commands should use this if they
-  /// fail in some way. Errors are typically followed shortly by a call to
-  /// [throwToolExit] to terminate the run.
-  ///
-  /// The `message` argument is printed to the stderr in [TerminalColor.red] by
-  /// default.
-  ///
-  /// The `stackTrace` argument is the stack trace that will be printed if
-  /// supplied.
-  ///
-  /// The `emphasis` argument will cause the output message be printed in bold text.
-  ///
-  /// The `color` argument will print the message in the supplied color instead
-  /// of the default of red. Colors will not be printed if the output terminal
-  /// doesn't support them.
-  ///
-  /// The `indent` argument specifies the number of spaces to indent the overall
-  /// message. If wrapping is enabled in [outputPreferences], then the wrapped
-  /// lines will be indented as well.
-  ///
-  /// If `hangingIndent` is specified, then any wrapped lines will be indented
-  /// by this much more than the first line, if wrapping is enabled in
-  /// [outputPreferences].
-  ///
-  /// If `wrap` is specified, then it overrides the
-  /// `outputPreferences.wrapText` setting.
   void printError(
     String message, {
     StackTrace? stackTrace,
@@ -96,28 +52,6 @@ abstract class Logger {
     bool? wrap,
   });
 
-  /// Display a warning `message` to the user. Commands should use this if they
-  /// important information to convey to the user that is not fatal.
-  ///
-  /// The `message` argument is printed to the stderr in [TerminalColor.cyan] by
-  /// default.
-  ///
-  /// The `emphasis` argument will cause the output message be printed in bold text.
-  ///
-  /// The `color` argument will print the message in the supplied color instead
-  /// of the default of cyan. Colors will not be printed if the output terminal
-  /// doesn't support them.
-  ///
-  /// The `indent` argument specifies the number of spaces to indent the overall
-  /// message. If wrapping is enabled in [outputPreferences], then the wrapped
-  /// lines will be indented as well.
-  ///
-  /// If `hangingIndent` is specified, then any wrapped lines will be indented
-  /// by this much more than the first line, if wrapping is enabled in
-  /// [outputPreferences].
-  ///
-  /// If `wrap` is specified, then it overrides the
-  /// `outputPreferences.wrapText` setting.
   void printWarning(
     String message, {
     bool? emphasis,
@@ -128,34 +62,6 @@ abstract class Logger {
     bool fatal = true,
   });
 
-  /// Display normal output of the command. This should be used for things like
-  /// progress messages, success messages, or just normal command output.
-  ///
-  /// The `message` argument is printed to the stdout.
-  ///
-  /// The `stackTrace` argument is the stack trace that will be printed if
-  /// supplied.
-  ///
-  /// If the `emphasis` argument is true, it will cause the output message be
-  /// printed in bold text. Defaults to false.
-  ///
-  /// The `color` argument will print the message in the supplied color instead
-  /// of the default of red. Colors will not be printed if the output terminal
-  /// doesn't support them.
-  ///
-  /// If `newline` is true, then a newline will be added after printing the
-  /// status. Defaults to true.
-  ///
-  /// The `indent` argument specifies the number of spaces to indent the overall
-  /// message. If wrapping is enabled in [outputPreferences], then the wrapped
-  /// lines will be indented as well.
-  ///
-  /// If `hangingIndent` is specified, then any wrapped lines will be indented
-  /// by this much more than the first line, if wrapping is enabled in
-  /// [outputPreferences].
-  ///
-  /// If `wrap` is specified, then it overrides the
-  /// `outputPreferences.wrapText` setting.
   void printStatus(
     String message, {
     bool? emphasis,
@@ -166,54 +72,19 @@ abstract class Logger {
     bool? wrap,
   });
 
-  /// Display the [message] inside a box.
-  ///
-  /// For example, this is the generated output:
-  ///
-  ///   ┌─ [title] ─┐
-  ///   │ [message] │
-  ///   └───────────┘
-  ///
-  /// If a terminal is attached, the lines in [message] are automatically wrapped based on
-  /// the available columns.
-  ///
-  /// Use this utility only to highlight a message in the logs.
-  ///
-  /// This is particularly useful when the message can be easily missed because of clutter
-  /// generated by other commands invoked by the tool.
-  ///
-  /// One common use case is to provide actionable steps in a Flutter app when a Gradle
-  /// error is printed.
-  ///
-  /// In the future, this output can be integrated with an IDE like VS Code to display a
-  /// notification, and allow the user to trigger an action. e.g. run a migration.
   void printBox(
     String message, {
     String? title,
   });
 
-  /// Use this for verbose tracing output. Users can turn this output on in order
-  /// to help diagnose issues with the toolchain or with their setup.
   void printTrace(String message);
 
-  /// Start an indeterminate progress display.
-  ///
-  /// The `message` argument is the message to display to the user.
-  ///
-  /// The `progressId` argument provides an ID that can be used to identify
-  /// this type of progress (e.g. `hot.reload`, `hot.restart`).
-  ///
-  /// The `progressIndicatorPadding` can optionally be used to specify the width
-  /// of the space into which the `message` is placed before the progress
-  /// indicator, if any. It is ignored if the message is longer.
   Status startProgress(
     String message, {
     String? progressId,
     int progressIndicatorPadding = kDefaultStatusPadding,
   });
 
-  /// A [SilentStatus] or an [AnonymousSpinnerStatus] (depending on whether the
-  /// terminal is fancy enough), already started.
   Status startSpinner({
     VoidCallback? onFinish,
     Duration? timeout,
@@ -221,20 +92,10 @@ abstract class Logger {
     TerminalColor? warningColor,
   });
 
-  /// Send an event to be emitted.
-  ///
-  /// Only surfaces a value in machine modes, Loggers may ignore this message in
-  /// non-machine modes.
   void sendEvent(String name, [Map<String, dynamic>? args]) { }
 
-  /// Clears all output.
   void clear();
 
-  /// If [fatalWarnings] is set, causes the logger to check if
-  /// [hadWarningOutput] is true, and then to call [throwToolExit] if so.
-  ///
-  /// The [fatalWarnings] flag can be set from the command line with the
-  /// "--fatal-warnings" option on commands that support it.
   void checkForFatalLogs() {
     if (fatalWarnings && (hadWarningOutput || hadErrorOutput)) {
       throwToolExit('Logger received ${hadErrorOutput ? 'error' : 'warning'} output '
@@ -243,9 +104,6 @@ abstract class Logger {
   }
 }
 
-/// A [Logger] that forwards all methods to another logger.
-///
-/// Classes can derive from this to add functionality to an existing [Logger].
 class DelegatingLogger implements Logger {
   @visibleForTesting
   @protected
@@ -401,10 +259,6 @@ class DelegatingLogger implements Logger {
   void checkForFatalLogs() => _delegate.checkForFatalLogs();
 }
 
-/// If [logger] is a [DelegatingLogger], walks the delegate chain and returns
-/// the first delegate with the matching type.
-///
-/// Throws a [StateError] if no matching delegate is found.
 @override
 T asLogger<T extends Logger>(Logger logger) {
   final Logger original = logger;
@@ -637,19 +491,6 @@ class StdoutLogger extends Logger {
 
 typedef _Writer = void Function(String message);
 
-/// Wraps the message in a box, and writes the bytes by calling [write].
-///
-///  Example output:
-///
-///   ┌─ [title] ─┐
-///   │ [message] │
-///   └───────────┘
-///
-/// When [title] is provided, the box will have a title above it.
-///
-/// The box width never exceeds [wrapColumn].
-///
-/// If [wrapColumn] is not provided, the default value is 100.
 void _generateBox({
   required String message,
   required int wrapColumn,
@@ -706,14 +547,6 @@ int _getColumnSize(String line) {
   return line.replaceAll(_ansiEscapePattern, '').length;
 }
 
-/// A [StdoutLogger] which replaces Unicode characters that cannot be printed to
-/// the Windows console with alternative symbols.
-///
-/// By default, Windows uses either "Consolas" or "Lucida Console" as fonts to
-/// render text in the console. Both fonts only have a limited character set.
-/// Unicode characters, that are not available in either of the two default
-/// fonts, should be replaced by this class with printable symbols. Otherwise,
-/// they will show up as the unrepresentable character symbol '�'.
 class WindowsStdoutLogger extends StdoutLogger {
   WindowsStdoutLogger({
     required super.terminal,
@@ -748,7 +581,6 @@ class BufferLogger extends Logger {
        _stopwatchFactory = stopwatchFactory,
        _verbose = verbose;
 
-  /// Create a [BufferLogger] with test preferences.
   BufferLogger.test({
     Terminal? terminal,
     OutputPreferences? outputPreferences,
@@ -1127,22 +959,6 @@ enum _LogType { error, warning, status, trace }
 
 typedef SlowWarningCallback = String Function();
 
-/// A [Status] class begins when start is called, and may produce progress
-/// information asynchronously.
-///
-/// The [SilentStatus] class never has any output.
-///
-/// The [SpinnerStatus] subclass shows a message with a spinner, and replaces it
-/// with timing information when stopped. When canceled, the information isn't
-/// shown. In either case, a newline is printed.
-///
-/// The [AnonymousSpinnerStatus] subclass just shows a spinner.
-///
-/// The [SummaryStatus] subclass shows only a static message (without an
-/// indicator), then updates it when the operation ends.
-///
-/// Generally, consider `logger.startProgress` instead of directly creating
-/// a [Status] or one of its subclasses.
 abstract class Status {
   Status({
     this.onFinish,
@@ -1167,26 +983,21 @@ abstract class Status {
   @visibleForTesting
   bool get seemsSlow => timeout != null && _stopwatch.elapsed > timeout!;
 
-  /// Call to start spinning.
   void start() {
     assert(!_stopwatch.isRunning);
     _stopwatch.start();
   }
 
-  /// Call to stop spinning after success.
   void stop() {
     finish();
   }
 
-  /// Call to cancel the spinner after failure or cancellation.
   void cancel() {
     finish();
   }
 
-  /// Call to clear the current line but not end the progress.
   void pause() { }
 
-  /// Call to resume after a pause.
   void resume() { }
 
   @protected
@@ -1197,7 +1008,6 @@ abstract class Status {
   }
 }
 
-/// A [Status] that shows nothing.
 class SilentStatus extends Status {
   SilentStatus({
     required super.stopwatch,
@@ -1212,8 +1022,6 @@ class SilentStatus extends Status {
 
 const int _kTimePadding = 8; // should fit "99,999ms"
 
-/// Constructor writes [message] to [stdout]. On [cancel] or [stop], will call
-/// [onFinish]. On [stop], will additionally print out summary information.
 class SummaryStatus extends Status {
   SummaryStatus({
     this.message = '',
@@ -1272,9 +1080,6 @@ class SummaryStatus extends Status {
   }
 }
 
-/// A kind of animated [Status] that has no message.
-///
-/// Call [pause] before outputting any text while this is running.
 class AnonymousSpinnerStatus extends Status {
   AnonymousSpinnerStatus({
     super.onFinish,
@@ -1425,15 +1230,6 @@ class AnonymousSpinnerStatus extends Status {
   }
 }
 
-/// An animated version of [Status].
-///
-/// The constructor writes [message] to [stdout] with padding, then starts an
-/// indeterminate progress indicator animation.
-///
-/// On [cancel] or [stop], will call [onFinish]. On [stop], will
-/// additionally print out summary information.
-///
-/// Call [pause] before outputting any text while this is running.
 class SpinnerStatus extends AnonymousSpinnerStatus {
   SpinnerStatus({
     required this.message,

@@ -10,8 +10,6 @@ import 'logical_key_data.dart';
 import 'physical_key_data.dart';
 import 'utils.dart';
 
-/// Generates the key mapping for Windows, based on the information in the key
-/// data structure given to it.
 class WindowsCodeGenerator extends PlatformCodeGenerator {
   WindowsCodeGenerator(
     super.keyData,
@@ -19,7 +17,6 @@ class WindowsCodeGenerator extends PlatformCodeGenerator {
     String scancodeToLogical,
   ) : _scancodeToLogical = parseMapOfString(scancodeToLogical);
 
-  /// This generates the map of Windows scan codes to physical keys.
   String get _windowsScanCodeMap {
     final OutputLines<int> lines = OutputLines<int>('Windows scancode map');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -31,7 +28,6 @@ class WindowsCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map of Windows key codes to logical keys.
   String get _windowsLogicalKeyCodeMap {
     final OutputLines<int> lines = OutputLines<int>('Windows logical map');
     for (final LogicalKeyEntry entry in logicalData.entries) {
@@ -46,11 +42,6 @@ class WindowsCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map from scan code to logical keys.
-  ///
-  /// Normally logical keys should only be derived from key codes, but since some
-  /// key codes are either 0 or ambiguous (multiple keys using the same key
-  /// code), these keys are resolved by scan codes.
   String get _scanCodeToLogicalMap {
     final OutputLines<int> lines = OutputLines<int>('Windows scancode to logical map');
     _scancodeToLogical.forEach((String scanCodeName, String logicalName) {
@@ -64,7 +55,6 @@ class WindowsCodeGenerator extends PlatformCodeGenerator {
   }
   final Map<String, String> _scancodeToLogical;
 
-  /// This generates the mask values for the part of a key code that defines its plane.
   String get _maskConstants {
     final StringBuffer buffer = StringBuffer();
     const List<MaskConstant> maskConstants = <MaskConstant>[

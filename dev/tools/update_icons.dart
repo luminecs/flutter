@@ -524,20 +524,17 @@ class Icon {
 
   String get fullDeclaration => '''
 
-  /// $dartDoc.
   $declaration
 ''';
 
   String platformAdaptiveDeclaration(String fullFlutterId, Icon iOSIcon) => '''
 
-  /// Platform-adaptive icon for $dartDoc and ${iOSIcon.dartDoc}.;
   IconData get $fullFlutterId => !_isCupertino() ? $className.$flutterId : $className.${iOSIcon.flutterId};
 ''';
 
   @override
   String toString() => id;
 
-  /// Analogous to [String.compareTo]
   int _compareTo(Icon b) {
     if (shortId == b.shortId) {
       // Sort a regular icon before its variants.
@@ -550,7 +547,6 @@ class Icon {
     return string.replaceAll(RegExp('$toReplace\$'), '');
   }
 
-  /// See [shortId].
   void _generateShortId() {
     shortId = id;
     for (final String styleSuffix in possibleStyleSuffixes) {
@@ -561,7 +557,6 @@ class Icon {
     }
   }
 
-  /// See [flutterId].
   void _generateFlutterId() {
     flutterId = id;
     // Exact identifier rewrites.

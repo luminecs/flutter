@@ -8,9 +8,6 @@ import 'base/logger.dart';
 import 'build_info.dart';
 import 'cmake_project.dart';
 
-/// Extracts the `BINARY_NAME` from a project's CMake file.
-///
-/// Returns `null` if it cannot be found.
 String? getCmakeExecutableName(CmakeBasedProject project) {
   if (!project.cmakeFile.existsSync()) {
     return null;
@@ -52,8 +49,6 @@ Version _determineVersion(CmakeBasedProject project, BuildInfo buildInfo, Logger
   }
 }
 
-/// Attempts to map a Dart version's build identifier (the part after a +) into
-/// a single integer. Returns null for complex build identifiers like `foo` or `1.2`.
 int? _tryDetermineBuildVersion(Version version) {
   if (version.build.isEmpty) {
     return 0;
@@ -67,9 +62,6 @@ int? _tryDetermineBuildVersion(Version version) {
   return buildIdentifier is int ? buildIdentifier : null;
 }
 
-/// Writes a generated CMake configuration file for [project], including
-/// variables expected by the build template and an environment variable list
-/// for calling back into Flutter.
 void writeGeneratedCmakeConfig(
   String flutterRoot,
   CmakeBasedProject project,

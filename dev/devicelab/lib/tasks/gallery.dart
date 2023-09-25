@@ -14,9 +14,6 @@ import 'build_test_task.dart';
 
 final Directory galleryDirectory = dir('${flutterDirectory.path}/dev/integration_tests/flutter_gallery');
 
-/// Temp function during gallery tests transition to build+test model.
-///
-/// https://github.com/flutter/flutter/issues/103542
 TaskFunction createGalleryTransitionBuildTest(List<String> args, {bool semanticsEnabled = false}) {
   return GalleryTransitionBuildTest(args, semanticsEnabled: semanticsEnabled).call;
 }

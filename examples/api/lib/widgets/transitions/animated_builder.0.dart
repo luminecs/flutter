@@ -6,7 +6,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AnimatedBuilder].
 
 void main() => runApp(const AnimatedBuilderExampleApp());
 
@@ -28,8 +27,6 @@ class AnimatedBuilderExample extends StatefulWidget {
   State<AnimatedBuilderExample> createState() => _AnimatedBuilderExampleState();
 }
 
-/// AnimationControllers can be created with `vsync: this` because of
-/// TickerProviderStateMixin.
 class _AnimatedBuilderExampleState extends State<AnimatedBuilderExample> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 10),

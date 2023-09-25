@@ -149,10 +149,6 @@ class _OpenUpwardsPageTransition extends StatelessWidget {
 // Zooms and fades a new page in, zooming out the previous page. This transition
 // is designed to match the Android Q activity transition.
 class _ZoomPageTransition extends StatelessWidget {
-  /// Creates a [_ZoomPageTransition].
-  ///
-  /// The [animation] and [secondaryAnimation] arguments are required and must
-  /// not be null.
   const _ZoomPageTransition({
     required this.animation,
     required this.secondaryAnimation,
@@ -177,49 +173,14 @@ class _ZoomPageTransition extends StatelessWidget {
   ];
   static final TweenSequence<double> _scaleCurveSequence = TweenSequence<double>(fastOutExtraSlowInTweenSequenceItems);
 
-  /// The animation that drives the [child]'s entrance and exit.
-  ///
-  /// See also:
-  ///
-  ///  * [TransitionRoute.animation], which is the value given to this property
-  ///    when the [_ZoomPageTransition] is used as a page transition.
   final Animation<double> animation;
 
-  /// The animation that transitions [child] when new content is pushed on top
-  /// of it.
-  ///
-  /// See also:
-  ///
-  ///  * [TransitionRoute.secondaryAnimation], which is the value given to this
-  ///    property when the [_ZoomPageTransition] is used as a page transition.
   final Animation<double> secondaryAnimation;
 
-  /// Whether the [SnapshotWidget] will be used.
-  ///
-  /// When this value is true, performance is improved by disabling animations
-  /// on both the outgoing and incoming route. This also implies that ink-splashes
-  /// or similar animations will not animate during the transition.
-  ///
-  /// See also:
-  ///
-  ///  * [TransitionRoute.allowSnapshotting], which defines whether the route
-  ///    transition will prefer to animate a snapshot of the entering and exiting
-  ///    routes.
   final bool allowSnapshotting;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// This widget will transition in and out as driven by [animation] and
-  /// [secondaryAnimation].
   final Widget? child;
 
-  /// Whether to enable snapshotting on the entering route during the
-  /// transition animation.
-  ///
-  /// If not specified, defaults to true.
-  /// If false, the route snapshotting will not be applied to the route being
-  /// animating into, e.g. when transitioning from route A to route B, B will
-  /// not be snapshotted.
   final bool allowEnterRouteSnapshotting;
 
   @override
@@ -492,35 +453,9 @@ class _ZoomExitTransitionState extends State<_ZoomExitTransition> with _ZoomTran
   }
 }
 
-/// Used by [PageTransitionsTheme] to define a [MaterialPageRoute] page
-/// transition animation.
-///
-/// Apps can configure the map of builders for [ThemeData.pageTransitionsTheme]
-/// to customize the default [MaterialPageRoute] page transition animation
-/// for different platforms.
-///
-/// See also:
-///
-///  * [FadeUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android O.
-///  * [OpenUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android P.
-///  * [ZoomPageTransitionsBuilder], which defines the default page transition
-///    that's similar to the one provided in Android Q.
-///  * [CupertinoPageTransitionsBuilder], which defines a horizontal page
-///    transition that matches native iOS page transitions.
 abstract class PageTransitionsBuilder {
-  /// Abstract const constructor. This constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const PageTransitionsBuilder();
 
-  /// Wraps the child with one or more transition widgets which define how [route]
-  /// arrives on and leaves the screen.
-  ///
-  /// The [MaterialPageRoute.buildTransitions] method looks up the
-  /// current [PageTransitionsTheme] with `Theme.of(context).pageTransitionsTheme`
-  /// and delegates to this method with a [PageTransitionsBuilder] based
-  /// on the theme's [ThemeData.platform].
   Widget buildTransitions<T>(
     PageRoute<T> route,
     BuildContext context,
@@ -530,23 +465,7 @@ abstract class PageTransitionsBuilder {
   );
 }
 
-/// Used by [PageTransitionsTheme] to define a vertically fading
-/// [MaterialPageRoute] page transition animation that looks like
-/// the default page transition used on Android O.
-///
-/// The animation fades the new page in while translating it upwards,
-/// starting from about 25% below the top of the screen.
-///
-/// See also:
-///
-///  * [OpenUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android P.
-///  * [ZoomPageTransitionsBuilder], which defines the default page transition
-///    that's similar to the one provided in Android Q.
-///  * [CupertinoPageTransitionsBuilder], which defines a horizontal page
-///    transition that matches native iOS page transitions.
 class FadeUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
-  /// Constructs a page transition animation that slides the page up.
   const FadeUpwardsPageTransitionsBuilder();
 
   @override
@@ -561,21 +480,7 @@ class FadeUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
-/// Used by [PageTransitionsTheme] to define a vertical [MaterialPageRoute] page
-/// transition animation that looks like the default page transition
-/// used on Android P.
-///
-/// See also:
-///
-///  * [FadeUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android O.
-///  * [ZoomPageTransitionsBuilder], which defines the default page transition
-///    that's similar to the one provided in Android Q.
-///  * [CupertinoPageTransitionsBuilder], which defines a horizontal page
-///    transition that matches native iOS page transitions.
 class OpenUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
-  /// Constructs a page transition animation that matches the transition used on
-  /// Android P.
   const OpenUpwardsPageTransitionsBuilder();
 
   @override
@@ -594,59 +499,14 @@ class OpenUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
-/// Used by [PageTransitionsTheme] to define a zooming [MaterialPageRoute] page
-/// transition animation that looks like the default page transition used on
-/// Android Q.
-///
-/// See also:
-///
-///  * [FadeUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android O.
-///  * [OpenUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android P.
-///  * [CupertinoPageTransitionsBuilder], which defines a horizontal page
-///    transition that matches native iOS page transitions.
 class ZoomPageTransitionsBuilder extends PageTransitionsBuilder {
-  /// Constructs a page transition animation that matches the transition used on
-  /// Android Q.
   const ZoomPageTransitionsBuilder({
     this.allowSnapshotting = true,
     this.allowEnterRouteSnapshotting = true,
   });
 
-  /// Whether zoom page transitions will prefer to animate a snapshot of the entering
-  /// and exiting routes.
-  ///
-  /// If not specified, defaults to true.
-  ///
-  /// When this value is true, zoom page transitions will snapshot the entering and
-  /// exiting routes. These snapshots are then animated in place of the underlying
-  /// widgets to improve performance of the transition.
-  ///
-  /// Generally this means that animations that occur on the entering/exiting route
-  /// while the route animation plays may appear frozen - unless they are a hero
-  /// animation or something that is drawn in a separate overlay.
-  ///
-  /// {@tool dartpad}
-  /// This example shows a [MaterialApp] that disables snapshotting for the zoom
-  /// transitions on Android.
-  ///
-  /// ** See code in examples/api/lib/material/page_transitions_theme/page_transitions_theme.1.dart **
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  ///  * [PageRoute.allowSnapshotting], which enables or disables snapshotting
-  ///    on a per route basis.
   final bool allowSnapshotting;
 
-  /// Whether to enable snapshotting on the entering route during the
-  /// transition animation.
-  ///
-  /// If not specified, defaults to true.
-  /// If false, the route snapshotting will not be applied to the route being
-  /// animating into, e.g. when transitioning from route A to route B, B will
-  /// not be snapshotted.
   final bool allowEnterRouteSnapshotting;
 
   @override
@@ -667,19 +527,7 @@ class ZoomPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
-/// Used by [PageTransitionsTheme] to define a horizontal [MaterialPageRoute]
-/// page transition animation that matches native iOS page transitions.
-///
-/// See also:
-///
-///  * [FadeUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android O.
-///  * [OpenUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android P.
-///  * [ZoomPageTransitionsBuilder], which defines the default page transition
-///    that's similar to the one provided in Android Q.
 class CupertinoPageTransitionsBuilder extends PageTransitionsBuilder {
-  /// Constructs a page transition animation that matches the iOS transition.
   const CupertinoPageTransitionsBuilder();
 
   @override
@@ -694,41 +542,8 @@ class CupertinoPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
-/// Defines the page transition animations used by [MaterialPageRoute]
-/// for different [TargetPlatform]s.
-///
-/// The [MaterialPageRoute.buildTransitions] method looks up the
-/// current [PageTransitionsTheme] with `Theme.of(context).pageTransitionsTheme`
-/// and delegates to [buildTransitions].
-///
-/// If a builder with a matching platform is not found, then the
-/// [ZoomPageTransitionsBuilder] is used.
-///
-/// {@tool dartpad}
-/// This example shows a [MaterialApp] that defines a custom [PageTransitionsTheme].
-///
-/// ** See code in examples/api/lib/material/page_transitions_theme/page_transitions_theme.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [ThemeData.pageTransitionsTheme], which defines the default page
-///    transitions for the overall theme.
-///  * [FadeUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android O.
-///  * [OpenUpwardsPageTransitionsBuilder], which defines a page transition
-///    that's similar to the one provided by Android P.
-///  * [ZoomPageTransitionsBuilder], which defines the default page transition
-///    that's similar to the one provided by Android Q.
-///  * [CupertinoPageTransitionsBuilder], which defines a horizontal page
-///    transition that matches native iOS page transitions.
 @immutable
 class PageTransitionsTheme with Diagnosticable {
-  /// Constructs an object that selects a transition based on the platform.
-  ///
-  /// By default the list of builders is: [ZoomPageTransitionsBuilder]
-  /// for [TargetPlatform.android], and [CupertinoPageTransitionsBuilder] for
-  /// [TargetPlatform.iOS] and [TargetPlatform.macOS].
   const PageTransitionsTheme({ Map<TargetPlatform, PageTransitionsBuilder> builders = _defaultBuilders }) : _builders = builders;
 
   static const Map<TargetPlatform, PageTransitionsBuilder> _defaultBuilders = <TargetPlatform, PageTransitionsBuilder>{
@@ -737,15 +552,9 @@ class PageTransitionsTheme with Diagnosticable {
     TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
   };
 
-  /// The [PageTransitionsBuilder]s supported by this theme.
   Map<TargetPlatform, PageTransitionsBuilder> get builders => _builders;
   final Map<TargetPlatform, PageTransitionsBuilder> _builders;
 
-  /// Delegates to the builder for the current [ThemeData.platform].
-  /// If a builder for the current platform is not found, then the
-  /// [ZoomPageTransitionsBuilder] is used.
-  ///
-  /// [MaterialPageRoute.buildTransitions] delegates to this method.
   Widget buildTransitions<T>(
     PageRoute<T> route,
     BuildContext context,

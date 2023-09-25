@@ -18,7 +18,6 @@ import '../../convert.dart';
 import '../../devfs.dart';
 import '../build_system.dart';
 
-/// A wrapper around [SceneImporter] to support hot reload of 3D models.
 class DevelopmentSceneImporter {
   DevelopmentSceneImporter({
     required SceneImporter sceneImporter,
@@ -33,8 +32,6 @@ class DevelopmentSceneImporter {
   final Pool _compilationPool = Pool(4);
   final math.Random _random;
 
-  /// Recompile the input ipscene and return a devfs content that should be
-  /// synced to the attached device in its place.
   Future<DevFSContent?> reimportScene(DevFSContent inputScene) async {
     final File output = _fileSystem.systemTempDirectory.childFile('${_random.nextDouble()}.temp');
     late File inputFile;
@@ -70,7 +67,6 @@ class DevelopmentSceneImporter {
   }
 }
 
-/// A class the wraps the functionality of the Impeller Scene importer scenec.
 class SceneImporter {
   SceneImporter({
     required ProcessManager processManager,
@@ -87,23 +83,12 @@ class SceneImporter {
   final FileSystem _fs;
   final Artifacts _artifacts;
 
-  /// The [Source] inputs that targets using this should depend on.
-  ///
-  /// See [Target.inputs].
   static const List<Source> inputs = <Source>[
     Source.pattern(
         '{FLUTTER_ROOT}/packages/flutter_tools/lib/src/build_system/targets/scene_importer.dart'),
     Source.hostArtifact(HostArtifact.scenec),
   ];
 
-  /// Calls scenec, which transforms the [input] 3D model into an imported
-  /// ipscene at [outputPath].
-  ///
-  /// All parameters are required.
-  ///
-  /// If the scene importer subprocess fails, it will print the stdout and
-  /// stderr to the log and throw a [SceneImporterException]. Otherwise, it
-  /// will return true.
   Future<bool> importScene({
     required File input,
     required String outputPath,

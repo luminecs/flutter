@@ -73,35 +73,13 @@ export 'package:flutter/services.dart' show Brightness;
 // Examples can assume:
 // late BuildContext context;
 
-/// An interface that defines custom additions to a [ThemeData] object.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=8-szcYzFVao}
-///
-/// Typically used for custom colors. To use, subclass [ThemeExtension],
-/// define a number of fields (e.g. [Color]s), and implement the [copyWith] and
-/// [lerp] methods. The latter will ensure smooth transitions of properties when
-/// switching themes.
-///
-/// {@tool dartpad}
-/// This sample shows how to create and use a subclass of [ThemeExtension] that
-/// defines two colors.
-///
-/// ** See code in examples/api/lib/material/theme/theme_extension.1.dart **
-/// {@end-tool}
 abstract class ThemeExtension<T extends ThemeExtension<T>> {
-  /// Enable const constructor for subclasses.
   const ThemeExtension();
 
-  /// The extension's type.
   Object get type => T;
 
-  /// Creates a copy of this theme extension with the given fields
-  /// replaced by the non-null parameter values.
   ThemeExtension<T> copyWith();
 
-  /// Linearly interpolate with another [ThemeExtension] object.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   ThemeExtension<T> lerp(covariant ThemeExtension<T>? other, double t);
 }
 
@@ -122,118 +100,15 @@ const Color _kLightThemeSplashColor = Color(0x66C8C8C8);
 const Color _kDarkThemeHighlightColor = Color(0x40CCCCCC);
 const Color _kDarkThemeSplashColor = Color(0x40CCCCCC);
 
-/// Configures the tap target and layout size of certain Material widgets.
-///
-/// Changing the value in [ThemeData.materialTapTargetSize] will affect the
-/// accessibility experience.
-///
-/// Some of the impacted widgets include:
-///
-///   * [FloatingActionButton], only the mini tap target size is increased.
-///   * [MaterialButton]
-///   * [OutlinedButton]
-///   * [TextButton]
-///   * [ElevatedButton]
-///   * [IconButton]
-///   * The time picker widget ([showTimePicker])
-///   * [SnackBar]
-///   * [Chip]
-///   * [RawChip]
-///   * [InputChip]
-///   * [ChoiceChip]
-///   * [FilterChip]
-///   * [ActionChip]
-///   * [Radio]
-///   * [Switch]
-///   * [Checkbox]
 enum MaterialTapTargetSize {
-  /// Expands the minimum tap target size to 48px by 48px.
-  ///
-  /// This is the default value of [ThemeData.materialTapTargetSize] and the
-  /// recommended size to conform to Android accessibility scanner
-  /// recommendations.
   padded,
 
-  /// Shrinks the tap target size to the minimum provided by the Material
-  /// specification.
   shrinkWrap,
 }
 
-/// Defines the configuration of the overall visual [Theme] for a [MaterialApp]
-/// or a widget subtree within the app.
-///
-/// The [MaterialApp] theme property can be used to configure the appearance
-/// of the entire app. Widget subtrees within an app can override the app's
-/// theme by including a [Theme] widget at the top of the subtree.
-///
-/// Widgets whose appearance should align with the overall theme can obtain the
-/// current theme's configuration with [Theme.of]. Material components typically
-/// depend exclusively on the [colorScheme] and [textTheme]. These properties
-/// are guaranteed to have non-null values.
-///
-/// The static [Theme.of] method finds the [ThemeData] value specified for the
-/// nearest [BuildContext] ancestor. This lookup is inexpensive, essentially
-/// just a single HashMap access. It can sometimes be a little confusing
-/// because [Theme.of] can not see a [Theme] widget that is defined in the
-/// current build method's context. To overcome that, create a new custom widget
-/// for the subtree that appears below the new [Theme], or insert a widget
-/// that creates a new BuildContext, like [Builder].
-///
-/// {@tool dartpad}
-/// This example demonstrates how a typical [MaterialApp] specifies
-/// and uses a custom [Theme]. The theme's [ColorScheme] is based on a
-/// single "seed" color and configures itself to match the platform's
-/// current light or dark color configuration. The theme overrides the
-/// default configuration of [FloatingActionButton] to show how to
-/// customize the appearance a class of components.
-///
-/// ** See code in examples/api/lib/material/theme_data/theme_data.0.dart **
-/// {@end-tool}
-///
-/// See <https://material.io/design/color/> for
-/// more discussion on how to pick the right colors.
 
 @immutable
 class ThemeData with Diagnosticable {
-  /// Create a [ThemeData] that's used to configure a [Theme].
-  ///
-  /// The [colorScheme] and [textTheme] are used by the Material components to
-  /// compute default values for visual properties. The API documentation for
-  /// each component widget explains exactly how the defaults are computed.
-  ///
-  /// When providing a [ColorScheme], apps can either provide one directly
-  /// with the [colorScheme] parameter, or have one generated for them by
-  /// using the [colorSchemeSeed] and [brightness] parameters. A generated
-  /// color scheme will be based on the tones of [colorSchemeSeed] and all of
-  /// its contrasting color will meet accessibility guidelines for readability.
-  /// (See [ColorScheme.fromSeed] for more details.)
-  ///
-  /// If the app wants to customize a generated color scheme, it can use
-  /// [ColorScheme.fromSeed] directly and then [ColorScheme.copyWith] on the
-  /// result to override any colors that need to be replaced. The result of
-  /// this can be used as the [colorScheme] directly.
-  ///
-  /// For historical reasons, instead of using a [colorSchemeSeed] or
-  /// [colorScheme], you can provide either a [primaryColor] or [primarySwatch]
-  /// to construct the [colorScheme], but the results will not be as complete
-  /// as when using generation from a seed color.
-  ///
-  /// If [colorSchemeSeed] is non-null then [colorScheme], [primaryColor] and
-  /// [primarySwatch] must all be null.
-  ///
-  /// The [textTheme] [TextStyle] colors are black if the color scheme's
-  /// brightness is [Brightness.light], and white for [Brightness.dark].
-  ///
-  /// To override the appearance of specific components, provide
-  /// a component theme parameter like [sliderTheme], [toggleButtonsTheme],
-  /// or [bottomNavigationBarTheme].
-  ///
-  /// See also:
-  ///
-  ///  * [ThemeData.from], which creates a ThemeData from a [ColorScheme].
-  ///  * [ThemeData.light], which creates a light blue theme.
-  ///  * [ThemeData.dark], which creates dark theme with a teal secondary [ColorScheme] color.
-  ///  * [ColorScheme.fromSeed], which is used to create a [ColorScheme] from a seed color.
   factory ThemeData({
     // For the sanity of the reader, make sure these properties are in the same
     // order in every place that they are separated by section comments (e.g.
@@ -639,13 +514,6 @@ class ThemeData with Diagnosticable {
     );
   }
 
-  /// Create a [ThemeData] given a set of exact values. Most values must be
-  /// specified. They all must also be non-null except for
-  /// [cupertinoOverrideTheme], and deprecated members.
-  ///
-  /// This will rarely be used directly. It is used by [lerp] to
-  /// create intermediate themes based on two themes created with the
-  /// [ThemeData] constructor.
   const ThemeData.raw({
     // For the sanity of the reader, make sure these properties are in the same
     // order in every place that they are separated by section comments (e.g.
@@ -781,32 +649,6 @@ class ThemeData with Diagnosticable {
        assert(errorColor != null),
        assert(backgroundColor != null);
 
-  /// Create a [ThemeData] based on the colors in the given [colorScheme] and
-  /// text styles of the optional [textTheme].
-  ///
-  /// If [colorScheme].brightness is [Brightness.dark] then
-  /// [ThemeData.applyElevationOverlayColor] will be set to true to support
-  /// the Material dark theme method for indicating elevation by applying
-  /// a semi-transparent onSurface color on top of the surface color.
-  ///
-  /// This is the recommended method to theme your application. As we move
-  /// forward we will be converting all the widget implementations to only use
-  /// colors or colors derived from those in [ColorScheme].
-  ///
-  /// {@tool snippet}
-  /// This example will set up an application to use the baseline Material
-  /// Design light and dark themes.
-  ///
-  /// ```dart
-  /// MaterialApp(
-  ///   theme: ThemeData.from(colorScheme: const ColorScheme.light()),
-  ///   darkTheme: ThemeData.from(colorScheme: const ColorScheme.dark()),
-  /// )
-  /// ```
-  /// {@end-tool}
-  ///
-  /// See <https://material.io/design/color/> for
-  /// more discussion on how to pick the right colors.
   factory ThemeData.from({
     required ColorScheme colorScheme,
     TextTheme? textTheme,
@@ -837,40 +679,18 @@ class ThemeData with Diagnosticable {
     );
   }
 
-  /// A default light theme.
-  ///
-  /// This theme does not contain text geometry. Instead, it is expected that
-  /// this theme is localized using text geometry using [ThemeData.localize].
   factory ThemeData.light({bool? useMaterial3}) => ThemeData(
     brightness: Brightness.light,
     useMaterial3: useMaterial3,
   );
 
-  /// A default dark theme.
-  ///
-  /// This theme does not contain text geometry. Instead, it is expected that
-  /// this theme is localized using text geometry using [ThemeData.localize].
   factory ThemeData.dark({bool? useMaterial3}) => ThemeData(
     brightness: Brightness.dark,
     useMaterial3: useMaterial3,
   );
 
-  /// The default color theme. Same as [ThemeData.light].
-  ///
-  /// This is used by [Theme.of] when no theme has been specified.
-  ///
-  /// This theme does not contain text geometry. Instead, it is expected that
-  /// this theme is localized using text geometry using [ThemeData.localize].
-  ///
-  /// Most applications would use [Theme.of], which provides correct localized
-  /// text geometry.
   factory ThemeData.fallback({bool? useMaterial3}) => ThemeData.light(useMaterial3: useMaterial3);
 
-  /// The overall theme brightness.
-  ///
-  /// The default [TextStyle] color for the [textTheme] is black if the
-  /// theme is constructed with [Brightness.light] and white if the
-  /// theme is constructed with [Brightness.dark].
   Brightness get brightness => colorScheme.brightness;
 
   // For the sanity of the reader, make sure these properties are in the same
@@ -880,265 +700,32 @@ class ThemeData with Diagnosticable {
 
   // GENERAL CONFIGURATION
 
-  /// Apply a semi-transparent overlay color on Material surfaces to indicate
-  /// elevation for dark themes.
-  ///
-  /// If [useMaterial3] is true, then this flag is ignored as there is a new
-  /// [Material.surfaceTintColor] used to create an overlay for Material 3.
-  /// This flag is meant only for the Material 2 elevation overlay for dark
-  /// themes.
-  ///
-  /// Material drop shadows can be difficult to see in a dark theme, so the
-  /// elevation of a surface should be portrayed with an "overlay" in addition
-  /// to the shadow. As the elevation of the component increases, the
-  /// overlay increases in opacity. [applyElevationOverlayColor] turns the
-  /// application of this overlay on or off for dark themes.
-  ///
-  /// If true and [brightness] is [Brightness.dark], a
-  /// semi-transparent version of [ColorScheme.onSurface] will be
-  /// applied on top of [Material] widgets that have a [ColorScheme.surface]
-  /// color. The level of transparency is based on [Material.elevation] as
-  /// per the Material Dark theme specification.
-  ///
-  /// If false the surface color will be used unmodified.
-  ///
-  /// Defaults to false in order to maintain backwards compatibility with
-  /// apps that were built before the Material Dark theme specification
-  /// was published. New apps should set this to true for any themes
-  /// where [brightness] is [Brightness.dark].
-  ///
-  /// See also:
-  ///
-  ///  * [Material.elevation], which effects the level of transparency of the
-  ///    overlay color.
-  ///  * [ElevationOverlay.applyOverlay], which is used by [Material] to apply
-  ///    the overlay color to its surface color.
-  ///  * <https://material.io/design/color/dark-theme.html>, which specifies how
-  ///    the overlay should be applied.
   final bool applyElevationOverlayColor;
 
-  /// Components of the [CupertinoThemeData] to override from the Material
-  /// [ThemeData] adaptation.
-  ///
-  /// By default, [cupertinoOverrideTheme] is null and Cupertino widgets
-  /// descendant to the Material [Theme] will adhere to a [CupertinoTheme]
-  /// derived from the Material [ThemeData]. e.g. [ThemeData]'s [ColorScheme]
-  /// will also inform the [CupertinoThemeData]'s `primaryColor` etc.
-  ///
-  /// This cascading effect for individual attributes of the [CupertinoThemeData]
-  /// can be overridden using attributes of this [cupertinoOverrideTheme].
   final NoDefaultCupertinoThemeData? cupertinoOverrideTheme;
 
-  /// Arbitrary additions to this theme.
-  ///
-  /// To define extensions, pass an [Iterable] containing one or more [ThemeExtension]
-  /// subclasses to [ThemeData.new] or [copyWith].
-  ///
-  /// To obtain an extension, use [extension].
-  ///
-  /// {@tool dartpad}
-  /// This sample shows how to create and use a subclass of [ThemeExtension] that
-  /// defines two colors.
-  ///
-  /// ** See code in examples/api/lib/material/theme/theme_extension.1.dart **
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  /// * [extension], a convenience function for obtaining a specific extension.
   final Map<Object, ThemeExtension<dynamic>> extensions;
 
-  /// Used to obtain a particular [ThemeExtension] from [extensions].
-  ///
-  /// Obtain with `Theme.of(context).extension<MyThemeExtension>()`.
-  ///
-  /// See [extensions] for an interactive example.
   T? extension<T>() => extensions[T] as T?;
 
-  /// The default [InputDecoration] values for [InputDecorator], [TextField],
-  /// and [TextFormField] are based on this theme.
-  ///
-  /// See [InputDecoration.applyDefaults].
   final InputDecorationTheme inputDecorationTheme;
 
-  /// Configures the hit test size of certain Material widgets.
-  ///
-  /// Defaults to a [platform]-appropriate size: [MaterialTapTargetSize.padded]
-  /// on mobile platforms, [MaterialTapTargetSize.shrinkWrap] on desktop
-  /// platforms.
   final MaterialTapTargetSize materialTapTargetSize;
 
-  /// Default [MaterialPageRoute] transitions per [TargetPlatform].
-  ///
-  /// [MaterialPageRoute.buildTransitions] delegates to a [platform] specific
-  /// [PageTransitionsBuilder]. If a matching builder is not found, a builder
-  /// whose platform is null is used.
   final PageTransitionsTheme pageTransitionsTheme;
 
-  /// The platform the material widgets should adapt to target.
-  ///
-  /// Defaults to the current platform, as exposed by [defaultTargetPlatform].
-  /// This should be used in order to style UI elements according to platform
-  /// conventions.
-  ///
-  /// Widgets from the material library should use this getter (via [Theme.of])
-  /// to determine the current platform for the purpose of emulating the
-  /// platform behavior (e.g. scrolling or haptic effects). Widgets and render
-  /// objects at lower layers that try to emulate the underlying platform
-  /// can depend on [defaultTargetPlatform] directly, or may require
-  /// that the target platform be provided as an argument. The
-  /// [dart:io.Platform] object should only be used directly when it's critical
-  /// to actually know the current platform, without any overrides possible (for
-  /// example, when a system API is about to be called).
-  ///
-  /// In a test environment, the platform returned is [TargetPlatform.android]
-  /// regardless of the host platform. (Android was chosen because the tests
-  /// were originally written assuming Android-like behavior, and we added
-  /// platform adaptations for other platforms later). Tests can check behavior
-  /// for other platforms by setting the [platform] of the [Theme] explicitly to
-  /// another [TargetPlatform] value, or by setting
-  /// [debugDefaultTargetPlatformOverride].
-  ///
-  /// Determines the defaults for [typography] and [materialTapTargetSize].
   final TargetPlatform platform;
 
-  /// A theme for customizing the colors, thickness, and shape of [Scrollbar]s.
   final ScrollbarThemeData scrollbarTheme;
 
-  /// Defines the appearance of ink splashes produces by [InkWell]
-  /// and [InkResponse].
-  ///
-  /// See also:
-  ///
-  ///  * [InkSplash.splashFactory], which defines the default splash.
-  ///  * [InkRipple.splashFactory], which defines a splash that spreads out
-  ///    more aggressively than the default.
-  ///  * [InkSparkle.splashFactory], which defines a more aggressive and organic
-  ///    splash with sparkle effects.
   final InteractiveInkFeatureFactory splashFactory;
 
-  /// A temporary flag that can be used to opt-out of Material 3 features.
-  ///
-  /// This flag is _true_ by default. If false, then components will
-  /// continue to use the colors, typography and other features of
-  /// Material 2.
-  ///
-  /// In the long run this flag will be deprecated and eventually
-  /// only Material 3 will be supported. We recommend that applications
-  /// migrate to Material 3 as soon as that's practical. Until that migration
-  /// is complete, this flag can be set to false.
-  ///
-  /// ## Defaults
-  ///
-  /// If a [ThemeData] is _constructed_ with [useMaterial3] set to true, then
-  /// some properties will get updated defaults. However, the
-  /// [ThemeData.copyWith] method with [useMaterial3] set to true will _not_
-  /// change any of these properties in the resulting [ThemeData].
-  ///
-  /// <style>table,td,th { border-collapse: collapse; padding: 0.45em; } td { border: 1px solid }</style>
-  ///
-  /// | Property        | Material 3 default             | Material 2 default             |
-  /// | :-------------- | :----------------------------- | :----------------------------- |
-  /// | [colorScheme]   | M3 baseline light color scheme | M2 baseline light color scheme |
-  /// | [typography]    | [Typography.material2021]      | [Typography.material2014]      |
-  /// | [splashFactory] | [InkSparkle]* or [InkRipple]   | [InkSplash]                    |
-  ///
-  /// \* if the target platform is Android and the app is not
-  /// running on the web, otherwise it will fallback to [InkRipple].
-  ///
-  /// If [brightness] is [Brightness.dark] then the default color scheme will
-  /// be either the M3 baseline dark color scheme or the M2 baseline dark color
-  /// scheme depending on [useMaterial3].
-  ///
-  /// ## Affected widgets
-  ///
-  /// This flag affects styles and components.
-  ///
-  /// ### Styles
-  ///   * Color: [ColorScheme], [Material] (see table above)
-  ///   * Shape: (see components below)
-  ///   * Typography: [Typography] (see table above)
-  ///
-  /// ### Components
-  ///   * Badges: [Badge]
-  ///   * Bottom app bar: [BottomAppBar]
-  ///   * Bottom sheets: [BottomSheet]
-  ///   * Buttons
-  ///     - Common buttons: [ElevatedButton], [FilledButton], [FilledButton.tonal], [OutlinedButton], [TextButton]
-  ///     - FAB: [FloatingActionButton], [FloatingActionButton.extended]
-  ///     - Icon buttons: [IconButton], [IconButton.filled] (*new*), [IconButton.filledTonal], [IconButton.outlined]
-  ///     - Segmented buttons: [SegmentedButton] (replacing [ToggleButtons])
-  ///   * Cards: [Card]
-  ///   * Checkbox: [Checkbox], [CheckboxListTile]
-  ///   * Chips:
-  ///     - [ActionChip] (used for Assist and Suggestion chips),
-  ///     - [FilterChip], [ChoiceChip] (used for single selection filter chips),
-  ///     - [InputChip]
-  ///   * Date pickers: [showDatePicker], [showDateRangePicker], [DatePickerDialog], [DateRangePickerDialog], [InputDatePickerFormField]
-  ///   * Dialogs: [AlertDialog], [Dialog.fullscreen]
-  ///   * Divider: [Divider], [VerticalDivider]
-  ///   * Lists: [ListTile]
-  ///   * Menus: [MenuAnchor], [DropdownMenu], [MenuBar]
-  ///   * Navigation bar: [NavigationBar] (replacing [BottomNavigationBar])
-  ///   * Navigation drawer: [NavigationDrawer] (replacing [Drawer])
-  ///   * Navigation rail: [NavigationRail]
-  ///   * Progress indicators: [CircularProgressIndicator], [LinearProgressIndicator]
-  ///   * Radio button: [Radio], [RadioListTile]
-  ///   * Search: [SearchBar], [SearchAnchor],
-  ///   * Snack bar: [SnackBar]
-  ///   * Slider: [Slider], [RangeSlider]
-  ///   * Switch: [Switch], [SwitchListTile]
-  ///   * Tabs: [TabBar], [TabBar.secondary]
-  ///   * TextFields: [TextField] together with its [InputDecoration]
-  ///   * Time pickers: [showTimePicker], [TimePickerDialog]
-  ///   * Top app bar: [AppBar], [SliverAppBar], [SliverAppBar.medium], [SliverAppBar.large]
-  ///
-  /// In addition, this flag enables features introduced in Android 12.
-  ///   * Stretch overscroll: [MaterialScrollBehavior]
-  ///   * Ripple: `splashFactory` (see table above)
-  ///
-  /// See also:
-  ///
-  ///   * [Material 3 specification](https://m3.material.io/).
   final bool useMaterial3;
 
-  /// The density value for specifying the compactness of various UI components.
-  ///
-  /// {@template flutter.material.themedata.visualDensity}
-  /// Density, in the context of a UI, is the vertical and horizontal
-  /// "compactness" of the elements in the UI. It is unitless, since it means
-  /// different things to different UI elements. For buttons, it affects the
-  /// spacing around the centered label of the button. For lists, it affects the
-  /// distance between baselines of entries in the list.
-  ///
-  /// Typically, density values are integral, but any value in range may be
-  /// used. The range includes values from [VisualDensity.minimumDensity] (which
-  /// is -4), to [VisualDensity.maximumDensity] (which is 4), inclusive, where
-  /// negative values indicate a denser, more compact, UI, and positive values
-  /// indicate a less dense, more expanded, UI. If a component doesn't support
-  /// the value given, it will clamp to the nearest supported value.
-  ///
-  /// The default for visual densities is zero for both vertical and horizontal
-  /// densities, which corresponds to the default visual density of components
-  /// in the Material Design specification.
-  ///
-  /// As a rule of thumb, a change of 1 or -1 in density corresponds to 4
-  /// logical pixels. However, this is not a strict relationship since
-  /// components interpret the density values appropriately for their needs.
-  ///
-  /// A larger value translates to a spacing increase (less dense), and a
-  /// smaller value translates to a spacing decrease (more dense).
-  ///
-  /// In Material Design 3, the [visualDensity] does not override the value of
-  /// [IconButton.visualDensity] which defaults to [VisualDensity.standard]
-  /// for all platforms. To override the default value of [IconButton.visualDensity],
-  /// use [ThemeData.iconButtonTheme] instead.
-  /// {@endtemplate}
   final VisualDensity visualDensity;
 
   // COLOR
 
-  /// The default color of the [BottomAppBar].
     @Deprecated(
       'Use BottomAppBarTheme.color instead. '
       'This feature was deprecated after v3.3.0-0.6.pre.',
@@ -1146,79 +733,41 @@ class ThemeData with Diagnosticable {
   Color get bottomAppBarColor => _bottomAppBarColor!;
   final Color? _bottomAppBarColor;
 
-  /// The default color of [MaterialType.canvas] [Material].
   final Color canvasColor;
 
-  /// The color of [Material] when it is used as a [Card].
   final Color cardColor;
 
-  /// {@macro flutter.material.color_scheme.ColorScheme}
-  ///
-  /// This property was added much later than the theme's set of highly specific
-  /// colors, like [cardColor], [canvasColor] etc. New components can be defined
-  /// exclusively in terms of [colorScheme]. Existing components will gradually
-  /// migrate to it, to the extent that is possible without significant
-  /// backwards compatibility breaks.
   final ColorScheme colorScheme;
 
-  /// The background color of [Dialog] elements.
   final Color dialogBackgroundColor;
 
-  /// The color used for widgets that are inoperative, regardless of
-  /// their state. For example, a disabled checkbox (which may be
-  /// checked or unchecked).
   final Color disabledColor;
 
-  /// The color of [Divider]s and [PopupMenuDivider]s, also used
-  /// between [ListTile]s, between rows in [DataTable]s, and so forth.
-  ///
-  /// To create an appropriate [BorderSide] that uses this color, consider
-  /// [Divider.createBorderSide].
   final Color dividerColor;
 
-  /// The focus color used indicate that a component has the input focus.
   final Color focusColor;
 
-  /// The highlight color used during ink splash animations or to
-  /// indicate an item in a menu is selected.
   final Color highlightColor;
 
-  /// The color to use for hint text or placeholder text, e.g. in
-  /// [TextField] fields.
   final Color hintColor;
 
-  /// The hover color used to indicate when a pointer is hovering over a
-  /// component.
   final Color hoverColor;
 
-  /// The color of the selected tab indicator in a tab bar.
   final Color indicatorColor;
 
-  /// The background color for major parts of the app (toolbars, tab bars, etc)
-  ///
-  /// The theme's [colorScheme] property contains [ColorScheme.primary], as
-  /// well as a color that contrasts well with the primary color called
-  /// [ColorScheme.onPrimary]. It might be simpler to just configure an app's
-  /// visuals in terms of the theme's [colorScheme].
   final Color primaryColor;
 
-  /// A darker version of the [primaryColor].
   final Color primaryColorDark;
 
-  /// A lighter version of the [primaryColor].
   final Color primaryColorLight;
 
-  /// The default color of the [Material] that underlies the [Scaffold]. The
-  /// background color for a typical material app or a page within the app.
   final Color scaffoldBackgroundColor;
 
-  /// The color of the header of a [PaginatedDataTable] when there are selected rows.
   // According to the spec for data tables:
   // https://material.io/archive/guidelines/components/data-tables.html#data-tables-tables-within-cards
   // ...this should be the "50-value of secondary app color".
   final Color secondaryHeaderColor;
 
-  /// The color used to highlight selected rows.
   @Deprecated(
     'No longer used by the framework, please remove any reference to it. '
     'This feature was deprecated after v3.1.0-0.0.pre.',
@@ -1226,218 +775,120 @@ class ThemeData with Diagnosticable {
   Color get selectedRowColor => _selectedRowColor!;
   final Color? _selectedRowColor;
 
-  /// The color that the [Material] widget uses to draw elevation shadows.
-  ///
-  /// Defaults to fully opaque black.
-  ///
-  /// Shadows can be difficult to see in a dark theme, so the elevation of a
-  /// surface should be rendered with an "overlay" in addition to the shadow.
-  /// As the elevation of the component increases, the overlay increases in
-  /// opacity. The [applyElevationOverlayColor] property turns the elevation
-  /// overlay on or off for dark themes.
   final Color shadowColor;
 
-  /// The color of ink splashes.
-  ///
-  /// See also:
-  ///  * [splashFactory], which defines the appearance of the splash.
   final Color splashColor;
 
-  /// The color used for widgets in their inactive (but enabled)
-  /// state. For example, an unchecked checkbox. See also [disabledColor].
   final Color unselectedWidgetColor;
 
   // TYPOGRAPHY & ICONOGRAPHY
 
-  /// An icon theme that contrasts with the card and canvas colors.
   final IconThemeData iconTheme;
 
-  /// An icon theme that contrasts with the primary color.
   final IconThemeData primaryIconTheme;
 
-  /// A text theme that contrasts with the primary color.
   final TextTheme primaryTextTheme;
 
-  /// Text with a color that contrasts with the card and canvas colors.
   final TextTheme textTheme;
 
-  /// The color and geometry [TextTheme] values used to configure [textTheme].
-  ///
-  /// Defaults to a [platform]-appropriate typography.
   final Typography typography;
 
   // COMPONENT THEMES
 
-  /// A theme for customizing icons of [BackButtonIcon], [CloseButtonIcon],
-  /// [DrawerButtonIcon], or [EndDrawerButtonIcon].
   final ActionIconThemeData? actionIconTheme;
 
-  /// A theme for customizing the color, elevation, brightness, iconTheme and
-  /// textTheme of [AppBar]s.
   final AppBarTheme appBarTheme;
 
-  /// A theme for customizing the color of [Badge]s.
   final BadgeThemeData badgeTheme;
 
-  /// A theme for customizing the color and text style of a [MaterialBanner].
   final MaterialBannerThemeData bannerTheme;
 
-  /// A theme for customizing the shape, elevation, and color of a [BottomAppBar].
   final BottomAppBarTheme bottomAppBarTheme;
 
-  /// A theme for customizing the appearance and layout of [BottomNavigationBar]
-  /// widgets.
   final BottomNavigationBarThemeData bottomNavigationBarTheme;
 
-  /// A theme for customizing the color, elevation, and shape of a bottom sheet.
   final BottomSheetThemeData bottomSheetTheme;
 
-  /// A theme for customizing the appearance and layout of [ButtonBar] widgets.
   final ButtonBarThemeData buttonBarTheme;
 
-  /// Defines the default configuration of button widgets, like [DropdownButton]
-  /// and [ButtonBar].
   final ButtonThemeData buttonTheme;
 
-  /// The colors and styles used to render [Card].
-  ///
-  /// This is the value returned from [CardTheme.of].
   final CardTheme cardTheme;
 
-  /// A theme for customizing the appearance and layout of [Checkbox] widgets.
   final CheckboxThemeData checkboxTheme;
 
-  /// The colors and styles used to render [Chip]s.
-  ///
-  /// This is the value returned from [ChipTheme.of].
   final ChipThemeData chipTheme;
 
-  /// A theme for customizing the appearance and layout of [DataTable]
-  /// widgets.
   final DataTableThemeData dataTableTheme;
 
-  /// A theme for customizing the appearance and layout of [DatePickerDialog]
-  /// widgets.
   final DatePickerThemeData datePickerTheme;
 
-  /// A theme for customizing the shape of a dialog.
   final DialogTheme dialogTheme;
 
-  /// A theme for customizing the color, thickness, and indents of [Divider]s,
-  /// [VerticalDivider]s, etc.
   final DividerThemeData dividerTheme;
 
-  /// A theme for customizing the appearance and layout of [Drawer] widgets.
   final DrawerThemeData drawerTheme;
 
-  /// A theme for customizing the appearance and layout of [DropdownMenu] widgets.
   final DropdownMenuThemeData dropdownMenuTheme;
 
-  /// A theme for customizing the appearance and internal layout of
-  /// [ElevatedButton]s.
   final ElevatedButtonThemeData elevatedButtonTheme;
 
-  /// A theme for customizing the visual properties of [ExpansionTile]s.
   final ExpansionTileThemeData expansionTileTheme;
 
-  /// A theme for customizing the appearance and internal layout of
-  /// [FilledButton]s.
   final FilledButtonThemeData filledButtonTheme;
 
-  /// A theme for customizing the shape, elevation, and color of a
-  /// [FloatingActionButton].
   final FloatingActionButtonThemeData floatingActionButtonTheme;
 
-  /// A theme for customizing the appearance and internal layout of
-  /// [IconButton]s.
   final IconButtonThemeData iconButtonTheme;
 
-  /// A theme for customizing the appearance of [ListTile] widgets.
   final ListTileThemeData listTileTheme;
 
-  /// A theme for customizing the color, shape, elevation, and other [MenuStyle]
-  /// aspects of the menu bar created by the [MenuBar] widget.
   final MenuBarThemeData menuBarTheme;
 
-  /// A theme for customizing the color, shape, elevation, and text style of
-  /// cascading menu buttons created by [SubmenuButton] or [MenuItemButton].
   final MenuButtonThemeData menuButtonTheme;
 
-  /// A theme for customizing the color, shape, elevation, and other [MenuStyle]
-  /// attributes of menus created by the [SubmenuButton] widget.
   final MenuThemeData menuTheme;
 
-  /// A theme for customizing the background color, text style, and icon themes
-  /// of a [NavigationBar].
   final NavigationBarThemeData navigationBarTheme;
 
-  /// A theme for customizing the background color, text style, and icon themes
-  /// of a [NavigationDrawer].
   final NavigationDrawerThemeData navigationDrawerTheme;
 
-  /// A theme for customizing the background color, elevation, text style, and
-  /// icon themes of a [NavigationRail].
   final NavigationRailThemeData navigationRailTheme;
 
-  /// A theme for customizing the appearance and internal layout of
-  /// [OutlinedButton]s.
   final OutlinedButtonThemeData outlinedButtonTheme;
 
-  /// A theme for customizing the color, shape, elevation, and text style of
-  /// popup menus.
   final PopupMenuThemeData popupMenuTheme;
 
-  /// A theme for customizing the appearance and layout of [ProgressIndicator] widgets.
   final ProgressIndicatorThemeData progressIndicatorTheme;
 
-  /// A theme for customizing the appearance and layout of [Radio] widgets.
   final RadioThemeData radioTheme;
 
-  /// A theme for customizing the appearance and layout of [SearchBar] widgets.
   final SearchBarThemeData searchBarTheme;
 
-  /// A theme for customizing the appearance and layout of search views created by [SearchAnchor] widgets.
   final SearchViewThemeData searchViewTheme;
 
-  /// A theme for customizing the appearance and layout of [SegmentedButton] widgets.
   final SegmentedButtonThemeData segmentedButtonTheme;
 
-  /// The colors and shapes used to render [Slider].
-  ///
-  /// This is the value returned from [SliderTheme.of].
   final SliderThemeData sliderTheme;
 
-  /// A theme for customizing colors, shape, elevation, and behavior of a [SnackBar].
   final SnackBarThemeData snackBarTheme;
 
-  /// A theme for customizing the appearance and layout of [Switch] widgets.
   final SwitchThemeData switchTheme;
 
-  /// A theme for customizing the size, shape, and color of the tab bar indicator.
   final TabBarTheme tabBarTheme;
 
-  /// A theme for customizing the appearance and internal layout of
-  /// [TextButton]s.
   final TextButtonThemeData textButtonTheme;
 
-  /// A theme for customizing the appearance and layout of [TextField] widgets.
   final TextSelectionThemeData textSelectionTheme;
 
-  /// A theme for customizing the appearance and layout of time picker widgets.
   final TimePickerThemeData timePickerTheme;
 
-  /// Defines the default configuration of [ToggleButtons] widgets.
   final ToggleButtonsThemeData toggleButtonsTheme;
 
-  /// A theme for customizing the visual properties of [Tooltip]s.
-  ///
-  /// This is the value returned from [TooltipTheme.of].
   final TooltipThemeData tooltipTheme;
 
   // DEPRECATED (newest deprecations at the bottom)
 
-  /// Obsolete property that was used for input validation errors, e.g. in
-  /// [TextField] fields. Use [ColorScheme.error] instead.
   @Deprecated(
     'Use colorScheme.error instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -1445,8 +896,6 @@ class ThemeData with Diagnosticable {
   Color get errorColor => _errorColor!;
   final Color? _errorColor;
 
-  /// Obsolete property that was unused by the framework.
-  /// Use [ColorScheme.background] instead.
   @Deprecated(
     'Use colorScheme.background instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -1454,8 +903,6 @@ class ThemeData with Diagnosticable {
   Color get backgroundColor => _backgroundColor!;
   final Color? _backgroundColor;
 
-  /// The color used to highlight the active states of toggleable widgets like
-  /// [Switch], [Radio], and [Checkbox].
   @Deprecated(
     'No longer used by the framework, please remove any reference to it. '
     'For more information, consult the migration guide at '
@@ -1470,11 +917,7 @@ class ThemeData with Diagnosticable {
   // copies of ThemeData in memory comfortably) and not too small (most apps
   // shouldn't have more than 5 theme/localization pairs).
   static const int _localizedThemeDataCacheSize = 5;
-  /// Caches localized themes to speed up the [localize] method.
 
-  /// Creates a copy of this theme but with the given fields replaced with the new values.
-  ///
-  /// The [brightness] value is applied to the [colorScheme].
   ThemeData copyWith({
     // For the sanity of the reader, make sure these properties are in the same
     // order in every place that they are separated by section comments (e.g.
@@ -1710,13 +1153,6 @@ class ThemeData with Diagnosticable {
   static final _FifoCache<_IdentityThemeDataCacheKey, ThemeData> _localizedThemeDataCache =
       _FifoCache<_IdentityThemeDataCacheKey, ThemeData>(_localizedThemeDataCacheSize);
 
-  /// Returns a new theme built by merging the text geometry provided by the
-  /// [localTextGeometry] theme with the [baseTheme].
-  ///
-  /// For those text styles in the [baseTheme] whose [TextStyle.inherit] is set
-  /// to true, the returned theme's text styles inherit the geometric properties
-  /// of [localTextGeometry]. The resulting text styles' [TextStyle.inherit] is
-  /// set to those provided by [localTextGeometry].
   static ThemeData localize(ThemeData baseTheme, TextTheme localTextGeometry) {
     // WARNING: this method memoizes the result in a cache based on the
     // previously seen baseTheme and localTextGeometry. Memoization is safe
@@ -1742,11 +1178,6 @@ class ThemeData with Diagnosticable {
     );
   }
 
-  /// Determines whether the given [Color] is [Brightness.light] or
-  /// [Brightness.dark].
-  ///
-  /// This compares the luminosity of the given color to a threshold value that
-  /// matches the Material Design specification.
   static Brightness estimateBrightnessForColor(Color color) {
     final double relativeLuminance = color.computeLuminance();
 
@@ -1763,11 +1194,6 @@ class ThemeData with Diagnosticable {
     return Brightness.dark;
   }
 
-  /// Linearly interpolate between two [extensions].
-  ///
-  /// Includes all theme extensions in [a] and [b].
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static Map<Object, ThemeExtension<dynamic>> _lerpThemeExtensions(ThemeData a, ThemeData b, double t) {
     // Lerp [a].
     final Map<Object, ThemeExtension<dynamic>> newExtensions = a.extensions.map((Object id, ThemeExtension<dynamic> extensionA) {
@@ -1782,8 +1208,6 @@ class ThemeData with Diagnosticable {
     return newExtensions;
   }
 
-  /// Convert the [extensionsIterable] passed to [ThemeData.new] or [copyWith]
-  /// to the stored [extensions] map, where each entry's key consists of the extension's type.
   static Map<Object, ThemeExtension<dynamic>> _themeExtensionIterableToMap(Iterable<ThemeExtension<dynamic>> extensionsIterable) {
     return Map<Object, ThemeExtension<dynamic>>.unmodifiable(<Object, ThemeExtension<dynamic>>{
       // Strangely, the cast is necessary for tests to run.
@@ -1791,9 +1215,6 @@ class ThemeData with Diagnosticable {
     });
   }
 
-  /// Linearly interpolate between two themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static ThemeData lerp(ThemeData a, ThemeData b, double t) {
     if (identical(a, b)) {
       return a;
@@ -2209,38 +1630,11 @@ class ThemeData with Diagnosticable {
   }
 }
 
-/// A [CupertinoThemeData] that defers unspecified theme attributes to an
-/// upstream Material [ThemeData].
-///
-/// This type of [CupertinoThemeData] is used by the Material [Theme] to
-/// harmonize the [CupertinoTheme] with the material theme's colors and text
-/// styles.
-///
-/// In the most basic case, [ThemeData]'s `cupertinoOverrideTheme` is null and
-/// descendant Cupertino widgets' styling is derived from the Material theme.
-///
-/// To override individual parts of the Material-derived Cupertino styling,
-/// `cupertinoOverrideTheme`'s construction parameters can be used.
-///
-/// To completely decouple the Cupertino styling from Material theme derivation,
-/// another [CupertinoTheme] widget can be inserted as a descendant of the
-/// Material [Theme]. On a [MaterialApp], this can be done using the `builder`
-/// parameter on the constructor.
-///
-/// See also:
-///
-///  * [CupertinoThemeData], whose null constructor parameters default to
-///    reasonable iOS styling defaults rather than harmonizing with a Material
-///    theme.
-///  * [Theme], widget which inserts a [CupertinoTheme] with this
-///    [MaterialBasedCupertinoThemeData].
 // This class subclasses CupertinoThemeData rather than composes one because it
 // _is_ a CupertinoThemeData with partially altered behavior. e.g. its textTheme
 // is from the superclass and based on the primaryColor but the primaryColor
 // comes from the Material theme unless overridden.
 class MaterialBasedCupertinoThemeData extends CupertinoThemeData {
-  /// Create a [MaterialBasedCupertinoThemeData] based on a Material [ThemeData]
-  /// and its `cupertinoOverrideTheme`.
   MaterialBasedCupertinoThemeData({
     required ThemeData materialTheme,
   }) : this._(
@@ -2279,16 +1673,6 @@ class MaterialBasedCupertinoThemeData extends CupertinoThemeData {
   @override
   Color get scaffoldBackgroundColor => _cupertinoOverrideTheme.scaffoldBackgroundColor ?? _materialTheme.scaffoldBackgroundColor;
 
-  /// Copies the [ThemeData]'s `cupertinoOverrideTheme`.
-  ///
-  /// Only the specified override attributes of the [ThemeData]'s
-  /// `cupertinoOverrideTheme` and the newly specified parameters are in the
-  /// returned [CupertinoThemeData]. No derived attributes from iOS defaults or
-  /// from cascaded Material theme attributes are copied.
-  ///
-  /// This [copyWith] cannot change the base Material [ThemeData]. To change the
-  /// base Material [ThemeData], create a new Material [Theme] and use
-  /// [ThemeData.copyWith] on the Material [ThemeData] instead.
   @override
   MaterialBasedCupertinoThemeData copyWith({
     Brightness? brightness,
@@ -2346,27 +1730,13 @@ class _IdentityThemeDataCacheKey {
   }
 }
 
-/// Cache of objects of limited size that uses the first in first out eviction
-/// strategy (a.k.a least recently inserted).
-///
-/// The key that was inserted before all other keys is evicted first, i.e. the
-/// one inserted least recently.
 class _FifoCache<K, V> {
   _FifoCache(this._maximumSize) : assert(_maximumSize > 0);
 
-  /// In Dart the map literal uses a linked hash-map implementation, whose keys
-  /// are stored such that [Map.keys] returns them in the order they were
-  /// inserted.
   final Map<K, V> _cache = <K, V>{};
 
-  /// Maximum number of entries to store in the cache.
-  ///
-  /// Once this many entries have been cached, the entry inserted least recently
-  /// is evicted when adding a new entry.
   final int _maximumSize;
 
-  /// Returns the previously cached value for the given key, if available;
-  /// if not, calls the given callback to obtain it first.
   V putIfAbsent(K key, V Function() loader) {
     assert(key != null);
     final V? result = _cache[key];
@@ -2380,47 +1750,8 @@ class _FifoCache<K, V> {
   }
 }
 
-/// Defines the visual density of user interface components.
-///
-/// Density, in the context of a UI, is the vertical and horizontal
-/// "compactness" of the components in the UI. It is unitless, since it means
-/// different things to different UI components.
-///
-/// The default for visual densities is zero for both vertical and horizontal
-/// densities, which corresponds to the default visual density of components in
-/// the Material Design specification. It does not affect text sizes, icon
-/// sizes, or padding values.
-///
-/// For example, for buttons, it affects the spacing around the child of the
-/// button. For lists, it affects the distance between baselines of entries in
-/// the list. For chips, it only affects the vertical size, not the horizontal
-/// size.
-///
-/// Here are some examples of widgets that respond to density changes:
-///
-///  * [Checkbox]
-///  * [Chip]
-///  * [ElevatedButton]
-///  * [IconButton]
-///  * [InputDecorator] (which gives density support to [TextField], etc.)
-///  * [ListTile]
-///  * [MaterialButton]
-///  * [OutlinedButton]
-///  * [Radio]
-///  * [RawMaterialButton]
-///  * [TextButton]
-///
-/// See also:
-///
-///  * [ThemeData.visualDensity], where this property is used to specify the base
-///    horizontal density of Material components.
-///  * [Material design guidance on density](https://material.io/design/layout/applying-density.html).
 @immutable
 class VisualDensity with Diagnosticable {
-  /// A const constructor for [VisualDensity].
-  ///
-  /// The [horizontal] and [vertical] arguments must be in the interval between
-  /// [minimumDensity] and [maximumDensity], inclusive.
   const VisualDensity({
     this.horizontal = 0.0,
     this.vertical = 0.0,
@@ -2430,63 +1761,18 @@ class VisualDensity with Diagnosticable {
        assert(horizontal <= maximumDensity),
        assert(horizontal >= minimumDensity);
 
-  /// The minimum allowed density.
   static const double minimumDensity = -4.0;
 
-  /// The maximum allowed density.
   static const double maximumDensity = 4.0;
 
-  /// The default profile for [VisualDensity] in [ThemeData].
-  ///
-  /// This default value represents a visual density that is less dense than
-  /// either [comfortable] or [compact], and corresponds to density values of
-  /// zero in both axes.
   static const VisualDensity standard = VisualDensity();
 
-  /// The profile for a "comfortable" interpretation of [VisualDensity].
-  ///
-  /// Individual components will interpret the density value independently,
-  /// making themselves more visually dense than [standard] and less dense than
-  /// [compact] to different degrees based on the Material Design specification
-  /// of the "comfortable" setting for their particular use case.
-  ///
-  /// It corresponds to a density value of -1 in both axes.
   static const VisualDensity comfortable = VisualDensity(horizontal: -1.0, vertical: -1.0);
 
-  /// The profile for a "compact" interpretation of [VisualDensity].
-  ///
-  /// Individual components will interpret the density value independently,
-  /// making themselves more visually dense than [standard] and [comfortable] to
-  /// different degrees based on the Material Design specification of the
-  /// "comfortable" setting for their particular use case.
-  ///
-  /// It corresponds to a density value of -2 in both axes.
   static const VisualDensity compact = VisualDensity(horizontal: -2.0, vertical: -2.0);
 
-  /// Returns a [VisualDensity] that is adaptive based on the current platform
-  /// on which the framework is executing, from [defaultTargetPlatform].
-  ///
-  /// When [defaultTargetPlatform] is a desktop platform, this returns
-  /// [compact], and for other platforms, it returns a default-constructed
-  /// [VisualDensity].
-  ///
-  /// See also:
-  ///
-  /// * [defaultDensityForPlatform] which returns a [VisualDensity] that is
-  ///   adaptive based on the platform given to it.
-  /// * [defaultTargetPlatform] which returns the platform on which the
-  ///   framework is currently executing.
   static VisualDensity get adaptivePlatformDensity => defaultDensityForPlatform(defaultTargetPlatform);
 
-  /// Returns a [VisualDensity] that is adaptive based on the given [platform].
-  ///
-  /// For desktop platforms, this returns [compact], and for other platforms, it
-  /// returns a default-constructed [VisualDensity].
-  ///
-  /// See also:
-  ///
-  /// * [adaptivePlatformDensity] which returns a [VisualDensity] that is
-  ///   adaptive based on [defaultTargetPlatform].
   static VisualDensity defaultDensityForPlatform(TargetPlatform platform) {
     switch (platform) {
       case TargetPlatform.android:
@@ -2501,8 +1787,6 @@ class VisualDensity with Diagnosticable {
     return VisualDensity.standard;
   }
 
-  /// Copy the current [VisualDensity] with the given values replacing the
-  /// current values.
   VisualDensity copyWith({
     double? horizontal,
     double? vertical,
@@ -2513,45 +1797,10 @@ class VisualDensity with Diagnosticable {
     );
   }
 
-  /// The horizontal visual density of UI components.
-  ///
-  /// This property affects only the horizontal spacing between and within
-  /// components, to allow for different UI visual densities. It does not affect
-  /// text sizes, icon sizes, or padding values. The default value is 0.0,
-  /// corresponding to the metrics specified in the Material Design
-  /// specification. The value can range from [minimumDensity] to
-  /// [maximumDensity], inclusive.
-  ///
-  /// See also:
-  ///
-  ///  * [ThemeData.visualDensity], where this property is used to specify the base
-  ///    horizontal density of Material components.
-  ///  * [Material design guidance on density](https://material.io/design/layout/applying-density.html).
   final double horizontal;
 
-  /// The vertical visual density of UI components.
-  ///
-  /// This property affects only the vertical spacing between and within
-  /// components, to allow for different UI visual densities. It does not affect
-  /// text sizes, icon sizes, or padding values. The default value is 0.0,
-  /// corresponding to the metrics specified in the Material Design
-  /// specification. The value can range from [minimumDensity] to
-  /// [maximumDensity], inclusive.
-  ///
-  /// See also:
-  ///
-  ///  * [ThemeData.visualDensity], where this property is used to specify the base
-  ///    vertical density of Material components.
-  ///  * [Material design guidance on density](https://material.io/design/layout/applying-density.html).
   final double vertical;
 
-  /// The base adjustment in logical pixels of the visual density of UI components.
-  ///
-  /// The input density values are multiplied by a constant to arrive at a base
-  /// size adjustment that fits Material Design guidelines.
-  ///
-  /// Individual components may adjust this value based upon their own
-  /// individual interpretation of density.
   Offset get baseSizeAdjustment {
     // The number of logical pixels represented by an increase or decrease in
     // density by one. The Material Design guidelines say to increment/decrement
@@ -2561,7 +1810,6 @@ class VisualDensity with Diagnosticable {
     return Offset(horizontal, vertical) * interval;
   }
 
-  /// Linearly interpolate between two densities.
   static VisualDensity lerp(VisualDensity a, VisualDensity b, double t) {
     if (identical(a, b)) {
       return a;
@@ -2572,11 +1820,6 @@ class VisualDensity with Diagnosticable {
     );
   }
 
-  /// Return a copy of [constraints] whose minimum width and height have been
-  /// updated with the [baseSizeAdjustment].
-  ///
-  /// The resulting minWidth and minHeight values are clamped to not exceed the
-  /// maxWidth and maxHeight values, respectively.
   BoxConstraints effectiveConstraints(BoxConstraints constraints) {
     assert(constraints.debugAssertIsValid());
     return constraints.copyWith(

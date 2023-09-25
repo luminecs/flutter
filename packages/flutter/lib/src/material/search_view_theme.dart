@@ -13,28 +13,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines the configuration of the search views created by the [SearchAnchor]
-/// widget.
-///
-/// Descendant widgets obtain the current [SearchViewThemeData] object using
-/// `SearchViewTheme.of(context)`.
-///
-/// Typically, a [SearchViewThemeData] is specified as part of the overall [Theme]
-/// with [ThemeData.searchViewTheme]. Otherwise, [SearchViewTheme] can be used
-/// to configure its own widget subtree.
-///
-/// All [SearchViewThemeData] properties are `null` by default. If any of these
-/// properties are null, the search view will provide its own defaults.
-///
-/// See also:
-///
-/// * [ThemeData], which describes the overall theme for the application.
-/// * [SearchBarThemeData], which describes the theme for the search bar itself in a
-///   [SearchBar] widget.
-/// * [SearchAnchor], which is used to open a search view route.
 @immutable
 class SearchViewThemeData with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.searchViewTheme].
   const SearchViewThemeData({
     this.backgroundColor,
     this.elevation,
@@ -47,35 +27,24 @@ class SearchViewThemeData with Diagnosticable {
     this.dividerColor,
   });
 
-  /// Overrides the default value of the [SearchAnchor.viewBackgroundColor].
   final Color? backgroundColor;
 
-  /// Overrides the default value of the [SearchAnchor.viewElevation].
   final double? elevation;
 
-  /// Overrides the default value of the [SearchAnchor.viewSurfaceTintColor].
   final Color? surfaceTintColor;
 
-  /// Overrides the default value of the [SearchAnchor.viewSide].
   final BorderSide? side;
 
-  /// Overrides the default value of the [SearchAnchor.viewShape].
   final OutlinedBorder? shape;
 
-  /// Overrides the default value for [SearchAnchor.headerTextStyle].
   final TextStyle? headerTextStyle;
 
-  /// Overrides the default value for [SearchAnchor.headerHintStyle].
   final TextStyle? headerHintStyle;
 
-  /// Overrides the value of size constraints for [SearchAnchor.viewConstraints].
   final BoxConstraints? constraints;
 
-  /// Overrides the value of the divider color for [SearchAnchor.dividerColor].
   final Color? dividerColor;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   SearchViewThemeData copyWith({
     Color? backgroundColor,
     double? elevation,
@@ -100,7 +69,6 @@ class SearchViewThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two [SearchViewThemeData]s.
   static SearchViewThemeData? lerp(SearchViewThemeData? a, SearchViewThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -177,36 +145,15 @@ class SearchViewThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines the configuration in this widget's
-/// descendants for search view created by the [SearchAnchor] widget.
-///
-/// A search view theme can be specified as part of the overall Material theme using
-/// [ThemeData.searchViewTheme].
-///
-/// See also:
-///
-///  * [SearchViewThemeData], which describes the actual configuration of a search view
-///    theme.
 class SearchViewTheme extends InheritedWidget {
-  /// Creates a const theme that controls the configurations for the search view
-  /// created by the [SearchAnchor] widget.
   const SearchViewTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties used for all descendant [SearchAnchor] widgets.
   final SearchViewThemeData data;
 
-  /// Returns the configuration [data] from the closest [SearchViewTheme] ancestor.
-  /// If there is no ancestor, it returns [ThemeData.searchViewTheme].
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// SearchViewThemeData theme = SearchViewTheme.of(context);
-  /// ```
   static SearchViewThemeData of(BuildContext context) {
     final SearchViewTheme? searchViewTheme = context.dependOnInheritedWidgetOfExactType<SearchViewTheme>();
     return searchViewTheme?.data ?? Theme.of(context).searchViewTheme;

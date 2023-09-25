@@ -15,35 +15,17 @@ export 'events.dart' show PointerDownEvent, PointerEvent, PointerPanZoomStartEve
 export 'recognizer.dart' show DragStartBehavior;
 export 'velocity_tracker.dart' show Velocity;
 
-/// The default conversion factor when treating mouse scrolling as scaling.
-///
-/// The value was arbitrarily chosen to feel natural for most mousewheels on
-/// all supported platforms.
 const double kDefaultMouseScrollToScaleFactor = 200;
 
-/// The default conversion factor when treating trackpad scrolling as scaling.
-///
-/// This factor matches the default [kDefaultMouseScrollToScaleFactor] of 200 to
-/// feel natural for most trackpads, and the convention that scrolling up means
-/// zooming in.
 const Offset kDefaultTrackpadScrollToScaleFactor = Offset(0, -1/kDefaultMouseScrollToScaleFactor);
 
-/// The possible states of a [ScaleGestureRecognizer].
 enum _ScaleState {
-  /// The recognizer is ready to start recognizing a gesture.
   ready,
 
-  /// The sequence of pointer events seen thus far is consistent with a scale
-  /// gesture but the gesture has not been accepted definitively.
   possible,
 
-  /// The sequence of pointer events seen thus far has been accepted
-  /// definitively as a scale gesture.
   accepted,
 
-  /// The sequence of pointer events seen thus far has been accepted
-  /// definitively as a scale gesture and the pointers established a focal point
-  /// and initial scale.
   started,
 }
 
@@ -93,52 +75,24 @@ class _PointerPanZoomData {
   String toString() => '_PointerPanZoomData(parent: $parent, _position: $_position, _pan: $_pan, _scale: $_scale, _rotation: $_rotation)';
 }
 
-/// Details for [GestureScaleStartCallback].
 class ScaleStartDetails {
-  /// Creates details for [GestureScaleStartCallback].
   ScaleStartDetails({
     this.focalPoint = Offset.zero,
     Offset? localFocalPoint,
     this.pointerCount = 0,
   }) : localFocalPoint = localFocalPoint ?? focalPoint;
 
-  /// The initial focal point of the pointers in contact with the screen.
-  ///
-  /// Reported in global coordinates.
-  ///
-  /// See also:
-  ///
-  ///  * [localFocalPoint], which is the same value reported in local
-  ///    coordinates.
   final Offset focalPoint;
 
-  /// The initial focal point of the pointers in contact with the screen.
-  ///
-  /// Reported in local coordinates. Defaults to [focalPoint] if not set in the
-  /// constructor.
-  ///
-  /// See also:
-  ///
-  ///  * [focalPoint], which is the same value reported in global
-  ///    coordinates.
   final Offset localFocalPoint;
 
-  /// The number of pointers being tracked by the gesture recognizer.
-  ///
-  /// Typically this is the number of fingers being used to pan the widget using the gesture
-  /// recognizer.
   final int pointerCount;
 
   @override
   String toString() => 'ScaleStartDetails(focalPoint: $focalPoint, localFocalPoint: $localFocalPoint, pointersCount: $pointerCount)';
 }
 
-/// Details for [GestureScaleUpdateCallback].
 class ScaleUpdateDetails {
-  /// Creates details for [GestureScaleUpdateCallback].
-  ///
-  /// The [scale], [horizontalScale], and [verticalScale] arguments must be
-  /// greater than or equal to zero.
   ScaleUpdateDetails({
     this.focalPoint = Offset.zero,
     Offset? localFocalPoint,
@@ -153,76 +107,20 @@ class ScaleUpdateDetails {
        assert(verticalScale >= 0.0),
        localFocalPoint = localFocalPoint ?? focalPoint;
 
-  /// The amount the gesture's focal point has moved in the coordinate space of
-  /// the event receiver since the previous update.
-  ///
-  /// Defaults to zero if not specified in the constructor.
   final Offset focalPointDelta;
 
-  /// The focal point of the pointers in contact with the screen.
-  ///
-  /// Reported in global coordinates.
-  ///
-  /// See also:
-  ///
-  ///  * [localFocalPoint], which is the same value reported in local
-  ///    coordinates.
   final Offset focalPoint;
 
-  /// The focal point of the pointers in contact with the screen.
-  ///
-  /// Reported in local coordinates. Defaults to [focalPoint] if not set in the
-  /// constructor.
-  ///
-  /// See also:
-  ///
-  ///  * [focalPoint], which is the same value reported in global
-  ///    coordinates.
   final Offset localFocalPoint;
 
-  /// The scale implied by the average distance between the pointers in contact
-  /// with the screen.
-  ///
-  /// This value must be greater than or equal to zero.
-  ///
-  /// See also:
-  ///
-  ///  * [horizontalScale], which is the scale along the horizontal axis.
-  ///  * [verticalScale], which is the scale along the vertical axis.
   final double scale;
 
-  /// The scale implied by the average distance along the horizontal axis
-  /// between the pointers in contact with the screen.
-  ///
-  /// This value must be greater than or equal to zero.
-  ///
-  /// See also:
-  ///
-  ///  * [scale], which is the general scale implied by the pointers.
-  ///  * [verticalScale], which is the scale along the vertical axis.
   final double horizontalScale;
 
-  /// The scale implied by the average distance along the vertical axis
-  /// between the pointers in contact with the screen.
-  ///
-  /// This value must be greater than or equal to zero.
-  ///
-  /// See also:
-  ///
-  ///  * [scale], which is the general scale implied by the pointers.
-  ///  * [horizontalScale], which is the scale along the horizontal axis.
   final double verticalScale;
 
-  /// The angle implied by the first two pointers to enter in contact with
-  /// the screen.
-  ///
-  /// Expressed in radians.
   final double rotation;
 
-  /// The number of pointers being tracked by the gesture recognizer.
-  ///
-  /// Typically this is the number of fingers being used to pan the widget using the gesture
-  /// recognizer.
   final int pointerCount;
 
   @override
@@ -237,36 +135,23 @@ class ScaleUpdateDetails {
     ' focalPointDelta: $focalPointDelta)';
 }
 
-/// Details for [GestureScaleEndCallback].
 class ScaleEndDetails {
-  /// Creates details for [GestureScaleEndCallback].
   ScaleEndDetails({ this.velocity = Velocity.zero, this.scaleVelocity = 0, this.pointerCount = 0 });
 
-  /// The velocity of the last pointer to be lifted off of the screen.
   final Velocity velocity;
 
-  /// The final velocity of the scale factor reported by the gesture.
   final double scaleVelocity;
 
-  /// The number of pointers being tracked by the gesture recognizer.
-  ///
-  /// Typically this is the number of fingers being used to pan the widget using the gesture
-  /// recognizer.
   final int pointerCount;
 
   @override
   String toString() => 'ScaleEndDetails(velocity: $velocity, scaleVelocity: $scaleVelocity, pointerCount: $pointerCount)';
 }
 
-/// Signature for when the pointers in contact with the screen have established
-/// a focal point and initial scale of 1.0.
 typedef GestureScaleStartCallback = void Function(ScaleStartDetails details);
 
-/// Signature for when the pointers in contact with the screen have indicated a
-/// new focal point and/or scale.
 typedef GestureScaleUpdateCallback = void Function(ScaleUpdateDetails details);
 
-/// Signature for when the pointers are no longer in contact with the screen.
 typedef GestureScaleEndCallback = void Function(ScaleEndDetails details);
 
 bool _isFlingGesture(Velocity velocity) {
@@ -275,15 +160,8 @@ bool _isFlingGesture(Velocity velocity) {
 }
 
 
-/// Defines a line between two pointers on screen.
-///
-/// [_LineBetweenPointers] is an abstraction of a line between two pointers in
-/// contact with the screen. Used to track the rotation of a scale gesture.
 class _LineBetweenPointers {
 
-  /// Creates a [_LineBetweenPointers]. None of the [pointerStartLocation], [pointerStartId]
-  /// [pointerEndLocation] and [pointerEndId] must be null. [pointerStartId] and [pointerEndId]
-  /// should be different.
   _LineBetweenPointers({
     this.pointerStartLocation = Offset.zero,
     this.pointerStartId = 0,
@@ -302,18 +180,7 @@ class _LineBetweenPointers {
 }
 
 
-/// Recognizes a scale gesture.
-///
-/// [ScaleGestureRecognizer] tracks the pointers in contact with the screen and
-/// calculates their focal point, indicated scale, and rotation. When a focal
-/// point is established, the recognizer calls [onStart]. As the focal point,
-/// scale, and rotation change, the recognizer calls [onUpdate]. When the
-/// pointers are no longer in contact with the screen, the recognizer calls
-/// [onEnd].
 class ScaleGestureRecognizer extends OneSequenceGestureRecognizer {
-  /// Create a gesture recognizer for interactions intended for scaling content.
-  ///
-  /// {@macro flutter.gestures.GestureRecognizer.supportedDevices}
   ScaleGestureRecognizer({
     super.debugOwner,
     super.supportedDevices,
@@ -323,75 +190,22 @@ class ScaleGestureRecognizer extends OneSequenceGestureRecognizer {
     this.trackpadScrollToScaleFactor = kDefaultTrackpadScrollToScaleFactor,
   });
 
-  /// Determines what point is used as the starting point in all calculations
-  /// involving this gesture.
-  ///
-  /// When set to [DragStartBehavior.down], the scale is calculated starting
-  /// from the position where the pointer first contacted the screen.
-  ///
-  /// When set to [DragStartBehavior.start], the scale is calculated starting
-  /// from the position where the scale gesture began. The scale gesture may
-  /// begin after the time that the pointer first contacted the screen if there
-  /// are multiple listeners competing for the gesture. In that case, the
-  /// gesture arena waits to determine whether or not the gesture is a scale
-  /// gesture before giving the gesture to this GestureRecognizer. This happens
-  /// in the case of nested GestureDetectors, for example.
-  ///
-  /// Defaults to [DragStartBehavior.down].
-  ///
-  /// See also:
-  ///
-  /// * https://flutter.dev/docs/development/ui/advanced/gestures#gesture-disambiguation,
-  ///   which provides more information about the gesture arena.
   DragStartBehavior dragStartBehavior;
 
-  /// The pointers in contact with the screen have established a focal point and
-  /// initial scale of 1.0.
-  ///
-  /// This won't be called until the gesture arena has determined that this
-  /// GestureRecognizer has won the gesture.
-  ///
-  /// See also:
-  ///
-  /// * https://flutter.dev/docs/development/ui/advanced/gestures#gesture-disambiguation,
-  ///   which provides more information about the gesture arena.
   GestureScaleStartCallback? onStart;
 
-  /// The pointers in contact with the screen have indicated a new focal point
-  /// and/or scale.
   GestureScaleUpdateCallback? onUpdate;
 
-  /// The pointers are no longer in contact with the screen.
   GestureScaleEndCallback? onEnd;
 
   _ScaleState _state = _ScaleState.ready;
 
   Matrix4? _lastTransform;
 
-  /// {@template flutter.gestures.scale.trackpadScrollCausesScale}
-  /// Whether scrolling up/down on a trackpad should cause scaling instead of
-  /// panning.
-  ///
-  /// Defaults to false.
-  /// {@endtemplate}
   bool trackpadScrollCausesScale;
 
-  /// {@template flutter.gestures.scale.trackpadScrollToScaleFactor}
-  /// A factor to control the direction and magnitude of scale when converting
-  /// trackpad scrolling.
-  ///
-  /// Incoming trackpad pan offsets will be divided by this factor to get scale
-  /// values. Increasing this offset will reduce the amount of scaling caused by
-  /// a fixed amount of trackpad scrolling.
-  ///
-  /// Defaults to [kDefaultTrackpadScrollToScaleFactor].
-  /// {@endtemplate}
   Offset trackpadScrollToScaleFactor;
 
-  /// The number of pointers being tracked by the gesture recognizer.
-  ///
-  /// Typically this is the number of fingers being used to pan the widget using the gesture
-  /// recognizer.
   int get pointerCount {
     return _pointerPanZooms.length + _pointerQueue.length;
   }
@@ -608,18 +422,14 @@ class ScaleGestureRecognizer extends OneSequenceGestureRecognizer {
     _currentVerticalSpan = count > 0 ? totalVerticalDeviation / count : 0.0;
   }
 
-  /// Updates [_initialLine] and [_currentLine] accordingly to the situation of
-  /// the registered pointers.
   void _updateLines() {
     final int count = _pointerLocations.keys.length;
     assert(_pointerQueue.length >= count);
-    /// In case of just one pointer registered, reconfigure [_initialLine]
     if (count < 2) {
       _initialLine = _currentLine;
     } else if (_initialLine != null &&
       _initialLine!.pointerStartId == _pointerQueue[0] &&
       _initialLine!.pointerEndId == _pointerQueue[1]) {
-      /// Rotation updated, set the [_currentLine]
       _currentLine = _LineBetweenPointers(
         pointerStartId: _pointerQueue[0],
         pointerStartLocation: _pointerLocations[_pointerQueue[0]]!,
@@ -627,7 +437,6 @@ class ScaleGestureRecognizer extends OneSequenceGestureRecognizer {
         pointerEndLocation: _pointerLocations[_pointerQueue[1]]!,
       );
     } else {
-      /// A new rotation process is on the way, set the [_initialLine]
       _initialLine = _LineBetweenPointers(
         pointerStartId: _pointerQueue[0],
         pointerStartLocation: _pointerLocations[_pointerQueue[0]]!,

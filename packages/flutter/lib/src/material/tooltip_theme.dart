@@ -12,23 +12,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines the visual properties of [Tooltip] widgets.
-///
-/// Used by [TooltipTheme] to control the visual properties of tooltips in a
-/// widget subtree.
-///
-/// To obtain this configuration, use [TooltipTheme.of] to access the closest
-/// ancestor [TooltipTheme] of the current [BuildContext].
-///
-/// See also:
-///
-///  * [TooltipTheme], an [InheritedWidget] that propagates the theme down its
-///    subtree.
-///  * [TooltipThemeData], which describes the actual configuration of a
-///    tooltip theme.
 @immutable
 class TooltipThemeData with Diagnosticable {
-  /// Creates the set of properties used to configure [Tooltip]s.
   const TooltipThemeData({
     this.height,
     this.padding,
@@ -45,72 +30,32 @@ class TooltipThemeData with Diagnosticable {
     this.enableFeedback,
   });
 
-  /// The height of [Tooltip.child].
   final double? height;
 
-  /// If provided, the amount of space by which to inset [Tooltip.child].
   final EdgeInsetsGeometry? padding;
 
-  /// If provided, the amount of empty space to surround the [Tooltip].
   final EdgeInsetsGeometry? margin;
 
-  /// The vertical gap between the widget and the displayed tooltip.
-  ///
-  /// When [preferBelow] is set to true and tooltips have sufficient space to
-  /// display themselves, this property defines how much vertical space
-  /// tooltips will position themselves under their corresponding widgets.
-  /// Otherwise, tooltips will position themselves above their corresponding
-  /// widgets with the given offset.
   final double? verticalOffset;
 
-  /// Whether the tooltip is displayed below its widget by default.
-  ///
-  /// If there is insufficient space to display the tooltip in the preferred
-  /// direction, the tooltip will be displayed in the opposite direction.
   final bool? preferBelow;
 
-  /// Whether the [Tooltip.message] should be excluded from the semantics
-  /// tree.
-  ///
-  /// By default, [Tooltip]s will add a [Semantics] label that is set to
-  /// [Tooltip.message]. Set this property to true if the app is going to
-  /// provide its own custom semantics label.
   final bool? excludeFromSemantics;
 
-  /// The [Tooltip]'s shape and background color.
   final Decoration? decoration;
 
-  /// The style to use for the message of [Tooltip]s.
   final TextStyle? textStyle;
 
-  /// The [TextAlign] to use for the message of [Tooltip]s.
   final TextAlign? textAlign;
 
-  /// The length of time that a pointer must hover over a tooltip's widget
-  /// before the tooltip will be shown.
   final Duration? waitDuration;
 
-  /// The length of time that the tooltip will be shown once it has appeared.
   final Duration? showDuration;
 
-  /// The [TooltipTriggerMode] that will show the tooltip.
   final TooltipTriggerMode? triggerMode;
 
-  /// Whether the tooltip should provide acoustic and/or haptic feedback.
-  ///
-  /// For example, on Android a tap will produce a clicking sound and a
-  /// long-press will produce a short vibration, when feedback is enabled.
-  ///
-  /// This value is used if [Tooltip.enableFeedback] is null.
-  /// If this value is null, the default is true.
-  ///
-  /// See also:
-  ///
-  ///   * [Feedback], for providing platform-specific feedback to certain actions.
   final bool? enableFeedback;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   TooltipThemeData copyWith({
     double? height,
     EdgeInsetsGeometry? padding,
@@ -143,11 +88,6 @@ class TooltipThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two tooltip themes.
-  ///
-  /// If both arguments are null, then null is returned.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static TooltipThemeData? lerp(TooltipThemeData? a, TooltipThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -225,61 +165,15 @@ class TooltipThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines the configuration for
-/// [Tooltip]s in this widget's subtree.
-///
-/// Values specified here are used for [Tooltip] properties that are not
-/// given an explicit non-null value.
-///
-/// {@tool snippet}
-///
-/// Here is an example of a tooltip theme that applies a blue foreground
-/// with non-rounded corners.
-///
-/// ```dart
-/// TooltipTheme(
-///   data: TooltipThemeData(
-///     decoration: BoxDecoration(
-///       color: Colors.blue.withOpacity(0.9),
-///       borderRadius: BorderRadius.zero,
-///     ),
-///   ),
-///   child: Tooltip(
-///     message: 'Example tooltip',
-///     child: IconButton(
-///       iconSize: 36.0,
-///       icon: const Icon(Icons.touch_app),
-///       onPressed: () {},
-///     ),
-///   ),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [TooltipVisibility], which can be used to visually disable descendant [Tooltip]s.
 class TooltipTheme extends InheritedTheme {
-  /// Creates a tooltip theme that controls the configurations for
-  /// [Tooltip].
   const TooltipTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties for descendant [Tooltip] widgets.
   final TooltipThemeData data;
 
-  /// Returns the [data] from the closest [TooltipTheme] ancestor. If there is
-  /// no ancestor, it returns [ThemeData.tooltipTheme]. Applications can assume
-  /// that the returned value will not be null.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// TooltipThemeData theme = TooltipTheme.of(context);
-  /// ```
   static TooltipThemeData of(BuildContext context) {
     final TooltipTheme? tooltipTheme = context.dependOnInheritedWidgetOfExactType<TooltipTheme>();
     return tooltipTheme?.data ?? Theme.of(context).tooltipTheme;
@@ -294,34 +188,10 @@ class TooltipTheme extends InheritedTheme {
   bool updateShouldNotify(TooltipTheme oldWidget) => data != oldWidget.data;
 }
 
-/// The method of interaction that will trigger a tooltip.
-/// Used in [Tooltip.triggerMode] and [TooltipThemeData.triggerMode].
-///
-/// On desktop, a tooltip will be shown as soon as a pointer hovers over
-/// the widget, regardless of the value of [Tooltip.triggerMode].
-///
-/// See also:
-///
-///   * [Tooltip.waitDuration], which defines the length of time that
-///     a pointer must hover over a tooltip's widget before the tooltip
-///     will be shown.
 enum TooltipTriggerMode {
-  /// Tooltip will only be shown by calling `ensureTooltipVisible`.
   manual,
 
-  /// Tooltip will be shown after a long press.
-  ///
-  /// See also:
-  ///
-  ///   * [GestureDetector.onLongPress], the event that is used for trigger.
-  ///   * [Feedback.forLongPress], the feedback method called when feedback is enabled.
   longPress,
 
-  /// Tooltip will be shown after a single tap.
-  ///
-  /// See also:
-  ///
-  ///   * [GestureDetector.onTap], the event that is used for trigger.
-  ///   * [Feedback.forTap], the feedback method called when feedback is enabled.
   tap,
 }

@@ -6,7 +6,6 @@ import '../base/error_handling_io.dart';
 import '../base/file_system.dart';
 import '../base/logger.dart';
 
-/// A service for creating and parsing [Depfile]s.
 class DepfileService {
   DepfileService({
     required Logger logger,
@@ -19,12 +18,6 @@ class DepfileService {
   static final RegExp _separatorExpr = RegExp(r'([^\\]) ');
   static final RegExp _escapeExpr = RegExp(r'\\(.)');
 
-  /// Given an [depfile] File, write the depfile contents.
-  ///
-  /// If both [inputs] and [outputs] are empty, ensures the file does not
-  /// exist. This can be overridden with the [writeEmpty] parameter when
-  /// both static and runtime dependencies exist and it is not desired
-  /// to force a rerun due to no depfile.
   void writeToFile(Depfile depfile, File output, {bool writeEmpty = false}) {
     if (depfile.inputs.isEmpty && depfile.outputs.isEmpty && !writeEmpty) {
       ErrorHandlingFileSystem.deleteIfExists(output);
@@ -37,9 +30,6 @@ class DepfileService {
     output.writeAsStringSync(buffer.toString());
   }
 
-  /// Parse the depfile contents from [file].
-  ///
-  /// If the syntax is invalid, returns an empty [Depfile].
   Depfile parse(File file) {
     final String contents = file.readAsStringSync();
     final List<String> colonSeparated = contents.split(': ');
@@ -53,10 +43,6 @@ class DepfileService {
   }
 
 
-  /// Parse the output of dart2js's used dependencies.
-  ///
-  /// The [file] contains a list of newline separated file URIs. The output
-  /// file must be manually specified.
   Depfile parseDart2js(File file, File output) {
     final List<File> inputs = <File>[];
     for (final String rawUri in file.readAsLinesSync()) {
@@ -108,14 +94,10 @@ class DepfileService {
   }
 }
 
-/// A class for representing depfile formats.
 class Depfile {
-  /// Create a [Depfile] from a list of [input] files and [output] files.
   const Depfile(this.inputs, this.outputs);
 
-  /// The input files for this depfile.
   final List<File> inputs;
 
-  /// The output files for this depfile.
   final List<File> outputs;
 }

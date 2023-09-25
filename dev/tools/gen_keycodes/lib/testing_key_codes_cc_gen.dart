@@ -13,12 +13,9 @@ String _toUpperCamel(String lowerCamel) {
   return lowerCamel.substring(0, 1).toUpperCase() + lowerCamel.substring(1);
 }
 
-/// Generates the common/testing/key_codes.h based on the information in the key
-/// data structure given to it.
 class KeyCodesCcGenerator extends BaseCodeGenerator {
   KeyCodesCcGenerator(super.keyData, super.logicalData);
 
-  /// Gets the generated definitions of PhysicalKeyboardKeys.
   String get _physicalDefinitions {
     final OutputLines<int> lines = OutputLines<int>('Physical Key list');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -28,7 +25,6 @@ constexpr uint64_t kPhysical${_toUpperCamel(entry.constantName)} = ${toHex(entry
     return lines.sortedJoin().trimRight();
   }
 
-  /// Gets the generated definitions of PhysicalKeyboardKeys.
   String get _logicalDefinitions {
     final OutputLines<int> lines = OutputLines<int>('Logical Key list', behavior: DeduplicateBehavior.kSkip);
     for (final LogicalKeyEntry entry in logicalData.entries) {

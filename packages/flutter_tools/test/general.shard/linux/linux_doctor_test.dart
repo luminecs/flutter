@@ -55,8 +55,6 @@ FakeCommand _pkgConfigPresentCommand(String version) {
   );
 }
 
-/// A command that returns either success or failure for a pkg-config query
-/// for [library], depending on [exists].
 FakeCommand _libraryCheckCommand(String library, {bool exists = true}) {
   return FakeCommand(
     command: <String>['pkg-config', '--exists', library],

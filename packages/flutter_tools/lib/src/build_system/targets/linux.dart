@@ -17,14 +17,12 @@ import 'desktop.dart';
 import 'icon_tree_shaker.dart';
 import 'shader_compiler.dart';
 
-/// The only files/subdirectories we care out.
 const List<String> _kLinuxArtifacts = <String>[
   'libflutter_linux_gtk.so',
 ];
 
 const String _kLinuxDepfile = 'linux_engine_sources.d';
 
-/// Copies the Linux desktop embedding files to the copy directory.
 class UnpackLinux extends Target {
   const UnpackLinux(this.targetPlatform);
 
@@ -91,7 +89,6 @@ class UnpackLinux extends Target {
   }
 }
 
-/// Creates a bundle for the Linux desktop target.
 abstract class BundleLinuxAssets extends Target {
   const BundleLinuxAssets(this.targetPlatform);
 
@@ -149,7 +146,6 @@ abstract class BundleLinuxAssets extends Target {
     );
   }
 
-  /// Return json encoded string that contains data about version for package_info
   String getVersionInfo(Map<String, String> defines) {
     final Map<String, dynamic> versionInfo =
         jsonDecode(FlutterProject.current().getVersionInfo())
@@ -167,12 +163,9 @@ abstract class BundleLinuxAssets extends Target {
   }
 }
 
-/// A wrapper for AOT compilation that copies app.so into the output directory.
 class LinuxAotBundle extends Target {
-  /// Create a [LinuxAotBundle] wrapper for [aotTarget].
   const LinuxAotBundle(this.aotTarget);
 
-  /// The [AotElfBase] subclass that produces the app.so.
   final AotElfBase aotTarget;
 
   @override

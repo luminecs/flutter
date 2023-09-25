@@ -8,7 +8,6 @@ import 'package:flutter_tools/src/build_info.dart';
 import 'package:flutter_tools/src/globals.dart' as globals;
 import 'package:flutter_tools/src/project.dart';
 
-/// A fake implementation of [AndroidBuilder].
 class FakeAndroidBuilder implements AndroidBuilder {
   @override
   Future<void> buildAar({
@@ -48,8 +47,6 @@ class FakeAndroidBuilder implements AndroidBuilder {
 
 }
 
-/// Creates a [FlutterProject] in a directory named [flutter_project]
-/// within [directoryOverride].
 class FakeFlutterProjectFactory extends FlutterProjectFactory {
   FakeFlutterProjectFactory(this.directoryOverride) :
     super(

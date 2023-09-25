@@ -15,26 +15,12 @@ import 'package:test/test.dart';
 import 'test_client.dart';
 import 'test_server.dart';
 
-/// Whether to run the DAP server in-process with the tests, or externally in
-/// another process.
-///
-/// By default tests will run the DAP server out-of-process to match the real
-/// use from editors, but this complicates debugging the adapter. Set this env
-/// variables to run the server in-process for easier debugging (this can be
-/// simplified in VS Code by using a launch config with custom CodeLens links).
 final bool useInProcessDap = Platform.environment['DAP_TEST_INTERNAL'] == 'true';
 
-/// Whether to print all protocol traffic to stdout while running tests.
-///
-/// This is useful for debugging locally or on the bots and will include both
-/// DAP traffic (between the test DAP client and the DAP server) and the VM
-/// Service traffic (wrapped in a custom 'dart.log' event).
 final bool verboseLogging = Platform.environment['DAP_TEST_VERBOSE'] == 'true';
 
 const String endOfErrorOutputMarker = '════════════════════════════════════════════════════════════════════════════════';
 
-/// Expects the lines in [actual] to match the relevant matcher in [expected],
-/// ignoring differences in line endings and trailing whitespace.
 void expectLines(
   String actual,
   List<Object> expected, {
@@ -53,8 +39,6 @@ void expectLines(
   }
 }
 
-/// Manages running a simple Flutter app to be used in tests that need to attach
-/// to an existing process.
 class SimpleFlutterRunner {
   SimpleFlutterRunner(this.process) {
     process.stdout.transform(ByteToLineTransformer()).listen(_handleStdout);
@@ -64,7 +48,6 @@ class SimpleFlutterRunner {
 
   final StreamController<String> _output = StreamController<String>.broadcast();
 
-  /// A broadcast stream of any non-JSON output from the process.
   Stream<String> get output => _output.stream;
 
   void _handleExitCode(int code) {
@@ -125,7 +108,6 @@ class SimpleFlutterRunner {
   }
 }
 
-/// A helper class containing the DAP server/client for DAP integration tests.
 class DapTestSession {
   DapTestSession._(this.server, this.client);
 
@@ -147,7 +129,6 @@ class DapTestSession {
     return DapTestSession._(server, client);
   }
 
-  /// Starts a DAP server that can be shared across tests.
   static Future<DapTestServer> _startServer({
     Logger? logger,
     List<String>? additionalArgs,

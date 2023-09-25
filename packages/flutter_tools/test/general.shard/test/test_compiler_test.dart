@@ -196,7 +196,6 @@ environment:
   });
 }
 
-/// Override the creation of the Resident Compiler to simplify testing.
 class FakeTestCompiler extends TestCompiler {
   FakeTestCompiler(
     super.buildInfo,

@@ -12,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart' show Matrix3;
 
-/// Class that makes it easy to mock common toStringDeep behavior.
 class _MockToStringDeep {
   _MockToStringDeep(String str) : _lines = <String>[] {
     final List<String> lines = str.split('\n');
@@ -29,9 +28,6 @@ class _MockToStringDeep {
 
   _MockToStringDeep.fromLines(this._lines);
 
-  /// Lines in the message to display when [toStringDeep] is called.
-  /// For correct toStringDeep behavior, each line should be terminated with a
-  /// line break.
   final List<String> _lines;
 
   String toStringDeep({ String prefixLineOne = '', String prefixOtherLines = '' }) {

@@ -18,29 +18,6 @@ const String _kCommandName = 'gen_date_localizations.dart';
 // See packages/flutter_localizations/lib/src/l10n/README for more information.
 String? currentLocale;
 
-/// This program extracts localized date symbols and patterns from the intl
-/// package for the subset of locales supported by the flutter_localizations
-/// package.
-///
-/// The extracted data is written into:
-///   packages/flutter_localizations/lib/src/l10n/generated_date_localizations.dart
-///
-/// ## Usage
-///
-/// Run this program from the root of the git repository.
-///
-/// The following outputs the generated Dart code to the console as a dry run:
-///
-/// ```
-/// dart dev/tools/localization/bin/gen_date_localizations.dart
-/// ```
-///
-/// If the data looks good, use the `--overwrite` option to overwrite the
-/// lib/src/l10n/date_localizations.dart file:
-///
-/// ```
-/// dart dev/tools/localization/bin/gen_date_localizations.dart --overwrite
-/// ```
 Future<void> main(List<String> rawArgs) async {
   checkCwdIsRepoRoot(_kCommandName);
 

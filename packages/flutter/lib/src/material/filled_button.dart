@@ -21,49 +21,7 @@ import 'theme_data.dart';
 
 enum _FilledButtonVariant { filled, tonal }
 
-/// A Material Design filled button.
-///
-/// Filled buttons have the most visual impact after the [FloatingActionButton],
-/// and should be used for important, final actions that complete a flow,
-/// like **Save**, **Join now**, or **Confirm**.
-///
-/// A filled button is a label [child] displayed on a [Material]
-/// widget. The label's [Text] and [Icon] widgets are displayed in
-/// [style]'s [ButtonStyle.foregroundColor] and the button's filled
-/// background is the [ButtonStyle.backgroundColor].
-///
-/// The filled button's default style is defined by
-/// [defaultStyleOf]. The style of this filled button can be
-/// overridden with its [style] parameter. The style of all filled
-/// buttons in a subtree can be overridden with the
-/// [FilledButtonTheme], and the style of all of the filled
-/// buttons in an app can be overridden with the [Theme]'s
-/// [ThemeData.filledButtonTheme] property.
-///
-/// The static [styleFrom] method is a convenient way to create a
-/// filled button [ButtonStyle] from simple values.
-///
-/// If [onPressed] and [onLongPress] callbacks are null, then the
-/// button will be disabled.
-///
-/// To create a 'filled tonal' button, use [FilledButton.tonal].
-///
-/// {@tool dartpad}
-/// This sample produces enabled and disabled filled and filled tonal
-/// buttons.
-///
-/// ** See code in examples/api/lib/material/filled_button/filled_button.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [ElevatedButton], a filled button whose material elevates when pressed.
-///  * [OutlinedButton], a button with an outlined border and no fill color.
-///  * [TextButton], a button with no outline or fill color.
-///  * <https://material.io/design/components/buttons.html>
-///  * <https://m3.material.io/components/buttons>
 class FilledButton extends ButtonStyleButton {
-  /// Create a FilledButton.
   const FilledButton({
     super.key,
     required super.onPressed,
@@ -78,10 +36,6 @@ class FilledButton extends ButtonStyleButton {
     required super.child,
   }) : _variant = _FilledButtonVariant.filled;
 
-  /// Create a filled button from [icon] and [label].
-  ///
-  /// The icon and label are arranged in a row with padding at the start and end
-  /// and a gap between them.
   factory FilledButton.icon({
     Key? key,
     required VoidCallback? onPressed,
@@ -97,12 +51,6 @@ class FilledButton extends ButtonStyleButton {
     required Widget label,
   }) = _FilledButtonWithIcon;
 
-  /// Create a tonal variant of FilledButton.
-  ///
-  /// A filled tonal button is an alternative middle ground between
-  /// [FilledButton] and [OutlinedButton]. They’re useful in contexts where
-  /// a lower-priority button requires slightly more emphasis than an
-  /// outline would give, such as "Next" in an onboarding flow.
   const FilledButton.tonal({
     super.key,
     required super.onPressed,
@@ -117,10 +65,6 @@ class FilledButton extends ButtonStyleButton {
     required super.child,
   }) : _variant = _FilledButtonVariant.tonal;
 
-  /// Create a filled tonal button from [icon] and [label].
-  ///
-  /// The icon and label are arranged in a row with padding at the start and end
-  /// and a gap between them.
   factory FilledButton.tonalIcon({
     Key? key,
     required VoidCallback? onPressed,
@@ -151,50 +95,6 @@ class FilledButton extends ButtonStyleButton {
     );
   }
 
-  /// A static convenience method that constructs a filled button
-  /// [ButtonStyle] given simple values.
-  ///
-  /// The [foregroundColor], and [disabledForegroundColor] colors are used to create a
-  /// [MaterialStateProperty] [ButtonStyle.foregroundColor] value. The
-  /// [backgroundColor] and [disabledBackgroundColor] are used to create a
-  /// [MaterialStateProperty] [ButtonStyle.backgroundColor] value.
-  ///
-  /// The button's elevations are defined relative to the [elevation]
-  /// parameter. The disabled elevation is the same as the parameter
-  /// value, [elevation] + 2 is used when the button is hovered
-  /// or focused, and elevation + 6 is used when the button is pressed.
-  ///
-  /// Similarly, the [enabledMouseCursor] and [disabledMouseCursor]
-  /// parameters are used to construct [ButtonStyle.mouseCursor].
-  ///
-  /// All of the other parameters are either used directly or used to
-  /// create a [MaterialStateProperty] with a single value for all
-  /// states.
-  ///
-  /// All parameters default to null, by default this method returns
-  /// a [ButtonStyle] that doesn't override anything.
-  ///
-  /// For example, to override the default text and icon colors for a
-  /// [FilledButton], as well as its overlay color, with all of the
-  /// standard opacity adjustments for the pressed, focused, and
-  /// hovered states, one could write:
-  ///
-  /// ```dart
-  /// FilledButton(
-  ///   style: FilledButton.styleFrom(foregroundColor: Colors.green),
-  ///   onPressed: () {},
-  ///   child: const Text('Filled button'),
-  /// );
-  /// ```
-  ///
-  /// or for a Filled tonal variant:
-  /// ```dart
-  /// FilledButton.tonal(
-  ///   style: FilledButton.styleFrom(foregroundColor: Colors.green),
-  ///   onPressed: () {},
-  ///   child: const Text('Filled tonal button'),
-  /// );
-  /// ```
   static ButtonStyle styleFrom({
     Color? foregroundColor,
     Color? backgroundColor,
@@ -260,124 +160,6 @@ class FilledButton extends ButtonStyleButton {
 
   final _FilledButtonVariant _variant;
 
-  /// Defines the button's default appearance.
-  ///
-  /// The button [child]'s [Text] and [Icon] widgets are rendered with
-  /// the [ButtonStyle]'s foreground color. The button's [InkWell] adds
-  /// the style's overlay color when the button is focused, hovered
-  /// or pressed. The button's background color becomes its [Material]
-  /// color.
-  ///
-  /// All of the ButtonStyle's defaults appear below. In this list
-  /// "Theme.foo" is shorthand for `Theme.of(context).foo`. Color
-  /// scheme values like "onSurface(0.38)" are shorthand for
-  /// `onSurface.withOpacity(0.38)`. [MaterialStateProperty] valued
-  /// properties that are not followed by a sublist have the same
-  /// value for all states, otherwise the values are as specified for
-  /// each state, and "others" means all other states.
-  ///
-  /// The `textScaleFactor` is the value of
-  /// `MediaQuery.textScalerOf(context).textScaleFactor` and the names of the
-  /// EdgeInsets constructors and `EdgeInsetsGeometry.lerp` have been
-  /// abbreviated for readability.
-  ///
-  /// The color of the [ButtonStyle.textStyle] is not used, the
-  /// [ButtonStyle.foregroundColor] color is used instead.
-  ///
-  /// * `textStyle` - Theme.textTheme.labelLarge
-  /// * `backgroundColor`
-  ///   * disabled - Theme.colorScheme.onSurface(0.12)
-  ///   * others - Theme.colorScheme.secondaryContainer
-  /// * `foregroundColor`
-  ///   * disabled - Theme.colorScheme.onSurface(0.38)
-  ///   * others - Theme.colorScheme.onSecondaryContainer
-  /// * `overlayColor`
-  ///   * hovered - Theme.colorScheme.onSecondaryContainer(0.08)
-  ///   * focused or pressed - Theme.colorScheme.onSecondaryContainer(0.12)
-  /// * `shadowColor` - Theme.colorScheme.shadow
-  /// * `surfaceTintColor` - null
-  /// * `elevation`
-  ///   * disabled - 0
-  ///   * default - 0
-  ///   * hovered - 1
-  ///   * focused or pressed - 0
-  /// * `padding`
-  ///   * `textScaleFactor <= 1` - horizontal(16)
-  ///   * `1 < textScaleFactor <= 2` - lerp(horizontal(16), horizontal(8))
-  ///   * `2 < textScaleFactor <= 3` - lerp(horizontal(8), horizontal(4))
-  ///   * `3 < textScaleFactor` - horizontal(4)
-  /// * `minimumSize` - Size(64, 40)
-  /// * `fixedSize` - null
-  /// * `maximumSize` - Size.infinite
-  /// * `side` - null
-  /// * `shape` - StadiumBorder()
-  /// * `mouseCursor`
-  ///   * disabled - SystemMouseCursors.basic
-  ///   * others - SystemMouseCursors.click
-  /// * `visualDensity` - Theme.visualDensity
-  /// * `tapTargetSize` - Theme.materialTapTargetSize
-  /// * `animationDuration` - kThemeChangeDuration
-  /// * `enableFeedback` - true
-  /// * `alignment` - Alignment.center
-  /// * `splashFactory` - Theme.splashFactory
-  ///
-  /// The default padding values for the [FilledButton.icon] factory are slightly different:
-  ///
-  /// * `padding`
-  ///   * `textScaleFactor <= 1` - start(12) end(16)
-  ///   * `1 < textScaleFactor <= 2` - lerp(start(12) end(16), horizontal(8))
-  ///   * `2 < textScaleFactor <= 3` - lerp(horizontal(8), horizontal(4))
-  ///   * `3 < textScaleFactor` - horizontal(4)
-  ///
-  /// The default value for `side`, which defines the appearance of the button's
-  /// outline, is null. That means that the outline is defined by the button
-  /// shape's [OutlinedBorder.side]. Typically the default value of an
-  /// [OutlinedBorder]'s side is [BorderSide.none], so an outline is not drawn.
-  ///
-  /// ## Material 3 defaults
-  ///
-  /// If [ThemeData.useMaterial3] is set to true the following defaults will
-  /// be used:
-  ///
-  /// * `textStyle` - Theme.textTheme.labelLarge
-  /// * `backgroundColor`
-  ///   * disabled - Theme.colorScheme.onSurface(0.12)
-  ///   * others - Theme.colorScheme.secondaryContainer
-  /// * `foregroundColor`
-  ///   * disabled - Theme.colorScheme.onSurface(0.38)
-  ///   * others - Theme.colorScheme.onSecondaryContainer
-  /// * `overlayColor`
-  ///   * hovered - Theme.colorScheme.onSecondaryContainer(0.08)
-  ///   * focused or pressed - Theme.colorScheme.onSecondaryContainer(0.12)
-  /// * `shadowColor` - Theme.colorScheme.shadow
-  /// * `surfaceTintColor` - Colors.transparent
-  /// * `elevation`
-  ///   * disabled - 0
-  ///   * default - 1
-  ///   * hovered - 3
-  ///   * focused or pressed - 1
-  /// * `padding`
-  ///   * `textScaleFactor <= 1` - horizontal(24)
-  ///   * `1 < textScaleFactor <= 2` - lerp(horizontal(24), horizontal(12))
-  ///   * `2 < textScaleFactor <= 3` - lerp(horizontal(12), horizontal(6))
-  ///   * `3 < textScaleFactor` - horizontal(6)
-  /// * `minimumSize` - Size(64, 40)
-  /// * `fixedSize` - null
-  /// * `maximumSize` - Size.infinite
-  /// * `side` - null
-  /// * `shape` - StadiumBorder()
-  /// * `mouseCursor`
-  ///   * disabled - SystemMouseCursors.basic
-  ///   * others - SystemMouseCursors.click
-  /// * `visualDensity` - Theme.visualDensity
-  /// * `tapTargetSize` - Theme.materialTapTargetSize
-  /// * `animationDuration` - kThemeChangeDuration
-  /// * `enableFeedback` - true
-  /// * `alignment` - Alignment.center
-  /// * `splashFactory` - Theme.splashFactory
-  ///
-  /// For the [FilledButton.icon] factory, the start (generally the left) value of
-  /// [padding] is reduced from 24 to 16.
   @override
   ButtonStyle defaultStyleOf(BuildContext context) {
     switch (_variant) {
@@ -388,8 +170,6 @@ class FilledButton extends ButtonStyleButton {
     }
   }
 
-  /// Returns the [FilledButtonThemeData.style] of the closest
-  /// [FilledButtonTheme] ancestor.
   @override
   ButtonStyle? themeStyleOf(BuildContext context) {
     return FilledButtonTheme.of(context).style;

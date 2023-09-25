@@ -9,7 +9,6 @@ import 'package:test/fake.dart';
 
 import '../src/common.dart';
 
-/// Fake [_WindowsUtils] to use for testing
 class FakeValidOperatingSystemUtils extends Fake
     implements OperatingSystemUtils {
   FakeValidOperatingSystemUtils(
@@ -19,16 +18,12 @@ class FakeValidOperatingSystemUtils extends Fake
   final String name;
 }
 
-/// The expected validation result object for
-/// a passing windows version test
 const ValidationResult validWindows10ValidationResult = ValidationResult(
   ValidationType.success,
   <ValidationMessage>[],
   statusInfo: 'Installed version of Windows is version 10 or higher',
 );
 
-/// The expected validation result object for
-/// a passing windows version test
 const ValidationResult invalidWindowsValidationResult = ValidationResult(
   ValidationType.missing,
   <ValidationMessage>[],

@@ -189,9 +189,6 @@ void main() {
     });
 
     group('structured errors', () {
-      /// Helper that runs [project] and collects the output.
-      ///
-      /// Line and column numbers are replaced with "1" to avoid fragile tests.
       Future<String> getExceptionOutput(
         Project project, {
         required bool noDebug,
@@ -696,11 +693,6 @@ The relevant error-causing widget was:
   });
 }
 
-/// Extracts the output from a set of [OutputEventBody], removing any
-/// adjacent duplicates and combining into a single string.
-///
-/// If the output event contains a [Source], the name will be shown on the
-/// following line indented and prefixed with `^ source:`.
 String _uniqueOutputLines(List<OutputEventBody> outputEvents) {
   String? lastItem;
   return outputEvents

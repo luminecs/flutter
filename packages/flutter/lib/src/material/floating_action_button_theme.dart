@@ -9,29 +9,8 @@ import 'package:flutter/rendering.dart';
 
 import 'material_state.dart';
 
-/// Defines default property values for descendant [FloatingActionButton]
-/// widgets.
-///
-/// Descendant widgets obtain the current [FloatingActionButtonThemeData] object
-/// using `Theme.of(context).floatingActionButtonTheme`. Instances of
-/// [FloatingActionButtonThemeData] can be customized with
-/// [FloatingActionButtonThemeData.copyWith].
-///
-/// Typically a [FloatingActionButtonThemeData] is specified as part of the
-/// overall [Theme] with [ThemeData.floatingActionButtonTheme].
-///
-/// All [FloatingActionButtonThemeData] properties are `null` by default.
-/// When null, the [FloatingActionButton] will use the values from [ThemeData]
-/// if they exist, otherwise it will provide its own defaults.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class FloatingActionButtonThemeData with Diagnosticable {
-  /// Creates a theme that can be used for
-  /// [ThemeData.floatingActionButtonTheme].
   const FloatingActionButtonThemeData({
     this.foregroundColor,
     this.backgroundColor,
@@ -56,89 +35,48 @@ class FloatingActionButtonThemeData with Diagnosticable {
     this.mouseCursor,
   });
 
-  /// Color to be used for the unselected, enabled [FloatingActionButton]'s
-  /// foreground.
   final Color? foregroundColor;
 
-  /// Color to be used for the unselected, enabled [FloatingActionButton]'s
-  /// background.
   final Color? backgroundColor;
 
-  /// The color to use for filling the button when the button has input focus.
   final Color? focusColor;
 
-  /// The color to use for filling the button when the button has a pointer
-  /// hovering over it.
   final Color? hoverColor;
 
-  /// The splash color for this [FloatingActionButton]'s [InkWell].
   final Color? splashColor;
 
-  /// The z-coordinate to be used for the unselected, enabled
-  /// [FloatingActionButton]'s elevation foreground.
   final double? elevation;
 
-  /// The z-coordinate at which to place this button relative to its parent when
-  /// the button has the input focus.
-  ///
-  /// This controls the size of the shadow below the floating action button.
   final double? focusElevation;
 
-  /// The z-coordinate at which to place this button relative to its parent when
-  /// the button is enabled and has a pointer hovering over it.
-  ///
-  /// This controls the size of the shadow below the floating action button.
   final double? hoverElevation;
 
-  /// The z-coordinate to be used for the disabled [FloatingActionButton]'s
-  /// elevation foreground.
   final double? disabledElevation;
 
-  /// The z-coordinate to be used for the selected, enabled
-  /// [FloatingActionButton]'s elevation foreground.
   final double? highlightElevation;
 
-  /// The shape to be used for the floating action button's [Material].
   final ShapeBorder? shape;
 
-  /// If specified, defines the feedback property for [FloatingActionButton].
-  ///
-  /// If [FloatingActionButton.enableFeedback] is provided, [enableFeedback] is
-  /// ignored.
   final bool? enableFeedback;
 
-  /// Overrides the default icon size for the [FloatingActionButton];
   final double? iconSize;
 
-  /// Overrides the default size constraints for the [FloatingActionButton].
   final BoxConstraints? sizeConstraints;
 
-  /// Overrides the default size constraints for [FloatingActionButton.small].
   final BoxConstraints? smallSizeConstraints;
 
-  /// Overrides the default size constraints for [FloatingActionButton.large].
   final BoxConstraints? largeSizeConstraints;
 
-  /// Overrides the default size constraints for [FloatingActionButton.extended].
   final BoxConstraints? extendedSizeConstraints;
 
-  /// The spacing between the icon and the label for an extended
-  /// [FloatingActionButton].
   final double? extendedIconLabelSpacing;
 
-  /// The padding for an extended [FloatingActionButton]'s content.
   final EdgeInsetsGeometry? extendedPadding;
 
-  /// The text style for an extended [FloatingActionButton]'s label.
   final TextStyle? extendedTextStyle;
 
-  /// {@macro flutter.material.RawMaterialButton.mouseCursor}
-  ///
-  /// If specified, overrides the default value of [FloatingActionButton.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   FloatingActionButtonThemeData copyWith({
     Color? foregroundColor,
     Color? backgroundColor,
@@ -187,11 +125,6 @@ class FloatingActionButtonThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two floating action button themes.
-  ///
-  /// If both arguments are null then null is returned.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static FloatingActionButtonThemeData? lerp(FloatingActionButtonThemeData? a, FloatingActionButtonThemeData? b, double t) {
     if (identical(a, b)) {
       return a;

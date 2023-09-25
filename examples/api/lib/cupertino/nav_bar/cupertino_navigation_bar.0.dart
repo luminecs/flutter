@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoNavigationBar].
 
 void main() => runApp(const NavBarApp());
 

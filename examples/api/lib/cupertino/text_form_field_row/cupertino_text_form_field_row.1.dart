@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoTextFormFieldRow].
 
 void main() => runApp(const FormSectionApp());
 

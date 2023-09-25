@@ -39,15 +39,6 @@ import 'migrations/min_sdk_version_migration.dart';
 import 'migrations/top_level_gradle_build_file_migration.dart';
 import 'multidex.dart';
 
-/// The regex to grab variant names from printBuildVariants gradle task
-///
-/// The task is defined in flutter/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
-///
-/// The expected output from the task should be similar to:
-///
-/// BuildVariant: debug
-/// BuildVariant: release
-/// BuildVariant: profile
 final RegExp _kBuildVariantRegex = RegExp('^BuildVariant: (?<$_kBuildVariantRegexGroupName>.*)\$');
 const String _kBuildVariantRegexGroupName = 'variant';
 const String _kBuildVariantTaskName = 'printBuildVariants';
@@ -56,7 +47,6 @@ String _getOutputAppLinkSettingsTaskFor(String buildVariant) {
   return _taskForBuildVariant('output', buildVariant, 'AppLinkSettings');
 }
 
-/// The directory where the APK artifact is generated.
 Directory getApkDirectory(FlutterProject project) {
   return project.isModule
     ? project.android.buildDirectory
@@ -69,7 +59,6 @@ Directory getApkDirectory(FlutterProject project) {
         .childDirectory('flutter-apk');
 }
 
-/// The directory where the app bundle artifact is generated.
 @visibleForTesting
 Directory getBundleDirectory(FlutterProject project) {
   return project.isModule
@@ -83,15 +72,12 @@ Directory getBundleDirectory(FlutterProject project) {
         .childDirectory('bundle');
 }
 
-/// The directory where the repo is generated.
-/// Only applicable to AARs.
 Directory getRepoDirectory(Directory buildDirectory) {
   return buildDirectory
     .childDirectory('outputs')
     .childDirectory('repo');
 }
 
-/// Returns the name of Gradle task that starts with [prefix].
 String _taskFor(String prefix, BuildInfo buildInfo) {
   final String buildType = camelCase(buildInfo.modeName);
   final String productFlavor = buildInfo.flavor ?? '';
@@ -103,27 +89,21 @@ String _taskForBuildVariant(String prefix, String buildVariant, [String suffix =
 }
 
 
-/// Returns the task to build an APK.
 @visibleForTesting
 String getAssembleTaskFor(BuildInfo buildInfo) {
   return _taskFor('assemble', buildInfo);
 }
 
-/// Returns the task to build an AAB.
 @visibleForTesting
 String getBundleTaskFor(BuildInfo buildInfo) {
   return _taskFor('bundle', buildInfo);
 }
 
-/// Returns the task to build an AAR.
 @visibleForTesting
 String getAarTaskFor(BuildInfo buildInfo) {
   return _taskFor('assembleAar', buildInfo);
 }
 
-/// Returns the output APK file names for a given [AndroidBuildInfo].
-///
-/// For example, when [splitPerAbi] is true, multiple APKs are created.
 Iterable<String> _apkFilesFor(AndroidBuildInfo androidBuildInfo) {
   final String buildType = camelCase(androidBuildInfo.buildInfo.modeName);
   final String productFlavor = androidBuildInfo.buildInfo.lowerCasedFlavor ?? '';
@@ -140,7 +120,6 @@ Iterable<String> _apkFilesFor(AndroidBuildInfo androidBuildInfo) {
 // The maximum time to wait before the tool retries a Gradle build.
 const Duration kMaxRetryTime = Duration(seconds: 10);
 
-/// An implementation of the [AndroidBuilder] that delegates to gradle.
 class AndroidGradleBuilder implements AndroidBuilder {
   AndroidGradleBuilder({
     required Java? java,
@@ -172,7 +151,6 @@ class AndroidGradleBuilder implements AndroidBuilder {
   final FileSystemUtils _fileSystemUtils;
   final AndroidStudio? _androidStudio;
 
-  /// Builds the AAR and POM files for the current Flutter module or plugin.
   @override
   Future<void> buildAar({
     required FlutterProject project,
@@ -209,7 +187,6 @@ class AndroidGradleBuilder implements AndroidBuilder {
     );
   }
 
-  /// Builds the APK.
   @override
   Future<void> buildApk({
     required FlutterProject project,
@@ -228,7 +205,6 @@ class AndroidGradleBuilder implements AndroidBuilder {
     );
   }
 
-  /// Builds the App Bundle.
   @override
   Future<void> buildAab({
     required FlutterProject project,
@@ -279,14 +255,6 @@ class AndroidGradleBuilder implements AndroidBuilder {
     return result;
   }
 
-  /// Builds an app.
-  ///
-  /// * [project] is typically [FlutterProject.current()].
-  /// * [androidBuildInfo] is the build configuration.
-  /// * [target] is the target dart entry point. Typically, `lib/main.dart`.
-  /// * If [isBuildingBundle] is `true`, then the output artifact is an `*.aab`,
-  ///   otherwise the output artifact is an `*.apk`.
-  /// * [maxRetries] If not `null`, this is the max number of build retries in case a retry is triggered.
   Future<void> buildGradleApp({
     required FlutterProject project,
     required AndroidBuildInfo androidBuildInfo,
@@ -627,12 +595,6 @@ class AndroidGradleBuilder implements AndroidBuilder {
     );
   }
 
-  /// Builds AAR and POM files.
-  ///
-  /// * [project] is typically [FlutterProject.current()].
-  /// * [androidBuildInfo] is the build configuration.
-  /// * [outputDir] is the destination of the artifacts,
-  /// * [buildNumber] is the build number of the output aar,
   Future<void> buildGradleAar({
     required FlutterProject project,
     required AndroidBuildInfo androidBuildInfo,
@@ -815,7 +777,6 @@ class AndroidGradleBuilder implements AndroidBuilder {
   }
 }
 
-/// Prints how to consume the AAR from a host app.
 void printHowToConsumeAar({
   required Set<String> buildModes,
   String? androidPackage = 'unknown',
@@ -895,7 +856,6 @@ void _exitWithUnsupportedProjectMessage(Usage usage, Terminal terminal) {
   );
 }
 
-/// Returns [true] if the current app uses AndroidX.
 // TODO(egarciad): https://github.com/flutter/flutter/issues/40800
 // Remove `FlutterManifest.usesAndroidX` and provide a unified `AndroidProject.usesAndroidX`.
 bool isAppUsingAndroidX(Directory androidDirectory) {
@@ -906,7 +866,6 @@ bool isAppUsingAndroidX(Directory androidDirectory) {
   return properties.readAsStringSync().contains('android.useAndroidX=true');
 }
 
-/// Returns the APK files for a given [FlutterProject] and [AndroidBuildInfo].
 @visibleForTesting
 Iterable<String> findApkFilesModule(
   FlutterProject project,
@@ -953,10 +912,6 @@ Iterable<String> findApkFilesModule(
   return apks.map((File file) => file.path);
 }
 
-/// Returns the APK files for a given [FlutterProject] and [AndroidBuildInfo].
-///
-/// The flutter.gradle plugin will copy APK outputs into:
-/// `$buildDir/app/outputs/flutter-apk/app-<abi>-<flavor-flag>-<build-mode-flag>.apk`
 @visibleForTesting
 Iterable<String> listApkPaths(
   AndroidBuildInfo androidBuildInfo,
@@ -1046,7 +1001,6 @@ File findBundleFile(FlutterProject project, BuildInfo buildInfo, Logger logger, 
   );
 }
 
-/// Throws a [ToolExit] exception and logs the event.
 Never _exitWithExpectedFileNotFound({
   required FlutterProject project,
   required String fileExtension,
@@ -1113,10 +1067,6 @@ String _getLocalArtifactVersion(String pomPath, FileSystem fileSystem) {
   throwToolExit('Error while parsing the <version> element from $pomPath');
 }
 
-/// Returns the local Maven repository for a local engine build.
-/// For example, if the engine is built locally at <home>/engine/src/out/android_release_unopt
-/// This method generates symlinks in the temp directory to the engine artifacts
-/// following the convention specified on https://maven.apache.org/pom.html#Repositories
 Directory _getLocalEngineRepo({
   required String engineOutPath,
   required AndroidBuildInfo androidBuildInfo,

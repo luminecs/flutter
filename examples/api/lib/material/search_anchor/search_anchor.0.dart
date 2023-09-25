@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SearchAnchor.bar].
 
 void main() => runApp(const SearchBarApp());
 

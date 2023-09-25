@@ -14,14 +14,7 @@ import 'framework.dart';
 import 'gesture_detector.dart';
 import 'view.dart';
 
-/// A widget that visualizes the semantics for the child.
-///
-/// This widget is useful for understand how an app presents itself to
-/// accessibility technology.
 class SemanticsDebugger extends StatefulWidget {
-  /// Creates a widget that visualizes the semantics for the child.
-  ///
-  /// [labelStyle] dictates the [TextStyle] used for the semantics labels.
   const SemanticsDebugger({
     super.key,
     required this.child,
@@ -32,12 +25,8 @@ class SemanticsDebugger extends StatefulWidget {
     ),
   });
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
-  /// The [TextStyle] to use when rendering semantics labels.
   final TextStyle labelStyle;
 
   @override
@@ -393,7 +382,6 @@ class _SemanticsDebuggerPainter extends CustomPainter {
   }
 }
 
-/// A widget ignores pointer event but still keeps semantics actions.
 class _IgnorePointerWithSemantics extends SingleChildRenderObjectWidget {
   const _IgnorePointerWithSemantics({
     super.child,

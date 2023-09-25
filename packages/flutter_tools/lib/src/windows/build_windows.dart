@@ -26,7 +26,6 @@ import 'visual_studio.dart';
 // These characters appear to be fine: @%()-+_{}[]`~
 const String _kBadCharacters = r"'#!$^&*=|,;<>?";
 
-/// Builds the Windows project using msbuild.
 Future<void> buildWindows(WindowsProject windowsProject, BuildInfo buildInfo, {
   String? target,
   VisualStudio? visualStudioOverride,
@@ -253,7 +252,6 @@ Future<void> _runBuild(
   globals.flutterUsage.sendTiming('build', 'windows-cmake-build', Duration(milliseconds: sw.elapsedMilliseconds));
 }
 
-/// Writes the generated CMake file with the configuration for the given build.
 void _writeGeneratedFlutterConfig(
   WindowsProject windowsProject,
   BuildInfo buildInfo,

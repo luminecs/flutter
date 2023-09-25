@@ -140,7 +140,6 @@ void main() {
           ],
         ),
 
-        //// Varying touch slops
         TestDragData(
           Offset(12.0, 5.0),
           Offset(0.0, 5.0),

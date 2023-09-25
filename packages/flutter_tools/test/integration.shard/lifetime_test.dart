@@ -9,9 +9,6 @@ import 'test_data/basic_project.dart';
 import 'test_driver.dart';
 import 'test_utils.dart';
 
-/// This duration is arbitrary but is ideally:
-/// a) Long enough to ensure that if the app is crashing at startup, we notice.
-/// b) As short as possible, to avoid inflating build times.
 const Duration requiredLifespan = Duration(seconds: 5);
 
 void main() {

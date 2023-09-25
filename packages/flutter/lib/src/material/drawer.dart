@@ -17,18 +17,9 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// The possible alignments of a [Drawer].
 enum DrawerAlignment {
-  /// Denotes that the [Drawer] is at the start side of the [Scaffold].
-  ///
-  /// This corresponds to the left side when the text direction is left-to-right
-  /// and the right side when the text direction is right-to-left.
   start,
 
-  /// Denotes that the [Drawer] is at the end side of the [Scaffold].
-  ///
-  /// This corresponds to the right side when the text direction is left-to-right
-  /// and the left side when the text direction is right-to-left.
   end,
 }
 
@@ -50,84 +41,7 @@ const double _kEdgeDragWidth = 20.0;
 const double _kMinFlingVelocity = 365.0;
 const Duration _kBaseSettleDuration = Duration(milliseconds: 246);
 
-/// A Material Design panel that slides in horizontally from the edge of a
-/// [Scaffold] to show navigation links in an application.
-///
-/// There is a Material 3 version of this component, [NavigationDrawer],
-/// that's preferred for applications that are configured for Material 3
-/// (see [ThemeData.useMaterial3]).
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=WRj86iHihgY}
-///
-/// Drawers are typically used with the [Scaffold.drawer] property. The child of
-/// the drawer is usually a [ListView] whose first child is a [DrawerHeader]
-/// that displays status information about the current user. The remaining
-/// drawer children are often constructed with [ListTile]s, often concluding
-/// with an [AboutListTile].
-///
-/// The [AppBar] automatically displays an appropriate [IconButton] to show the
-/// [Drawer] when a [Drawer] is available in the [Scaffold]. The [Scaffold]
-/// automatically handles the edge-swipe gesture to show the drawer.
-///
-/// {@animation 350 622 https://flutter.github.io/assets-for-api-docs/assets/material/drawer.mp4}
-///
-/// ## Updating to [NavigationDrawer]
-///
-/// There is a Material 3 version of this component, [NavigationDrawer],
-/// that's preferred for applications that are configured for Material 3
-/// (see [ThemeData.useMaterial3]). The [NavigationDrawer] widget's visual
-/// are a little bit different, see the Material 3 spec at
-/// <https://m3.material.io/components/navigation-drawer/overview> for
-/// more details. While the [Drawer] widget can have only one child, the
-/// [NavigationDrawer] widget can have a list of widgets, which typically contains
-/// [NavigationDrawerDestination] widgets and/or customized widgets like headlines
-/// and dividers.
-///
-/// {@tool dartpad}
-/// This example shows how to create a [Scaffold] that contains an [AppBar] and
-/// a [Drawer]. A user taps the "menu" icon in the [AppBar] to open the
-/// [Drawer]. The [Drawer] displays four items: A header and three menu items.
-/// The [Drawer] displays the four items using a [ListView], which allows the
-/// user to scroll through the items if need be.
-///
-/// ** See code in examples/api/lib/material/drawer/drawer.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows how to migrate the above [Drawer] to a [NavigationDrawer].
-///
-/// ** See code in examples/api/lib/material/navigation_drawer/navigation_drawer.0.dart **
-/// {@end-tool}
-///
-/// An open drawer may be closed with a swipe to close gesture, pressing the
-/// escape key, by tapping the scrim, or by calling pop route function such as
-/// [Navigator.pop]. For example a drawer item might close the drawer when tapped:
-///
-/// ```dart
-/// ListTile(
-///   leading: const Icon(Icons.change_history),
-///   title: const Text('Change history'),
-///   onTap: () {
-///     // change app state...
-///     Navigator.pop(context); // close the drawer
-///   },
-/// );
-/// ```
-///
-/// See also:
-///
-///  * [Scaffold.drawer], where one specifies a [Drawer] so that it can be
-///    shown.
-///  * [Scaffold.of], to obtain the current [ScaffoldState], which manages the
-///    display and animation of the drawer.
-///  * [ScaffoldState.openDrawer], which displays its [Drawer], if any.
-///  * <https://material.io/design/components/navigation-drawer.html>
 class Drawer extends StatelessWidget {
-  /// Creates a Material Design drawer.
-  ///
-  /// Typically used in the [Scaffold.drawer] property.
-  ///
-  /// The [elevation] must be non-negative.
   const Drawer({
     super.key,
     this.backgroundColor,
@@ -141,94 +55,22 @@ class Drawer extends StatelessWidget {
     this.clipBehavior,
   }) : assert(elevation == null || elevation >= 0.0);
 
-  /// Sets the color of the [Material] that holds all of the [Drawer]'s
-  /// contents.
-  ///
-  /// If this is null, then [DrawerThemeData.backgroundColor] is used. If that
-  /// is also null, then it falls back to [Material]'s default.
   final Color? backgroundColor;
 
-  /// The z-coordinate at which to place this drawer relative to its parent.
-  ///
-  /// This controls the size of the shadow below the drawer.
-  ///
-  /// If this is null, then [DrawerThemeData.elevation] is used. If that
-  /// is also null, then it defaults to 16.0.
   final double? elevation;
 
-  /// The color used to paint a drop shadow under the drawer's [Material],
-  /// which reflects the drawer's [elevation].
-  ///
-  /// If null and [ThemeData.useMaterial3] is true then no drop shadow will
-  /// be rendered.
-  ///
-  /// If null and [ThemeData.useMaterial3] is false then it will default to
-  /// [ThemeData.shadowColor].
-  ///
-  /// See also:
-  ///   * [Material.shadowColor], which describes how the drop shadow is painted.
-  ///   * [elevation], which affects how the drop shadow is painted.
-  ///   * [surfaceTintColor], which can be used to indicate elevation through
-  ///     tinting the background color.
   final Color? shadowColor;
 
-  /// The color used as a surface tint overlay on the drawer's background color,
-  /// which reflects the drawer's [elevation].
-  ///
-  /// If [ThemeData.useMaterial3] is false property has no effect.
-  ///
-  /// If null and [ThemeData.useMaterial3] is true then [ThemeData]'s
-  /// [ColorScheme.surfaceTint] will be used.
-  ///
-  /// To disable this feature, set [surfaceTintColor] to [Colors.transparent].
-  ///
-  /// See also:
-  ///   * [Material.surfaceTintColor], which describes how the surface tint will
-  ///     be applied to the background color of the drawer.
-  ///   * [elevation], which affects the opacity of the surface tint.
-  ///   * [shadowColor], which can be used to indicate elevation through
-  ///     a drop shadow.
   final Color? surfaceTintColor;
 
-  /// The shape of the drawer.
-  ///
-  /// Defines the drawer's [Material.shape].
-  ///
-  /// If this is null, then [DrawerThemeData.shape] is used. If that
-  /// is also null, then it falls back to [Material]'s default.
   final ShapeBorder? shape;
 
-  /// The width of the drawer.
-  ///
-  /// If this is null, then [DrawerThemeData.width] is used. If that is also
-  /// null, then it falls back to the Material spec's default (304.0).
   final double? width;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Typically a [SliverList].
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget? child;
 
-  /// The semantic label of the drawer used by accessibility frameworks to
-  /// announce screen transitions when the drawer is opened and closed.
-  ///
-  /// If this label is not provided, it will default to
-  /// [MaterialLocalizations.drawerLabel].
-  ///
-  /// See also:
-  ///
-  ///  * [SemanticsConfiguration.namesRoute], for a description of how this
-  ///    value is used.
   final String? semanticLabel;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// The [clipBehavior] argument specifies how to clip the drawer's [shape].
-  ///
-  /// If the drawer has a [shape], it defaults to [Clip.hardEdge]. Otherwise,
-  /// defaults to [Clip.none].
   final Clip? clipBehavior;
 
   @override
@@ -273,8 +115,6 @@ class Drawer extends StatelessWidget {
   }
 }
 
-/// Signature for the callback that's called when a [DrawerController] is
-/// opened or closed.
 typedef DrawerCallback = void Function(bool isOpened);
 
 class _DrawerControllerScope extends InheritedWidget {
@@ -291,26 +131,7 @@ class _DrawerControllerScope extends InheritedWidget {
   }
 }
 
-/// Provides interactive behavior for [Drawer] widgets.
-///
-/// Rarely used directly. Drawer controllers are typically created automatically
-/// by [Scaffold] widgets.
-///
-/// The drawer controller provides the ability to open and close a drawer, either
-/// via an animation or via user interaction. When closed, the drawer collapses
-/// to a translucent gesture detector that can be used to listen for edge
-/// swipes.
-///
-/// See also:
-///
-///  * [Drawer], a container with the default width of a drawer.
-///  * [Scaffold.drawer], the [Scaffold] slot for showing a drawer.
 class DrawerController extends StatefulWidget {
-  /// Creates a controller for a [Drawer].
-  ///
-  /// Rarely used directly.
-  ///
-  /// The [child] argument is typically a [Drawer].
   const DrawerController({
     GlobalKey? key,
     required this.child,
@@ -323,109 +144,26 @@ class DrawerController extends StatefulWidget {
     this.enableOpenDragGesture = true,
   }) : super(key: key);
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Typically a [Drawer].
   final Widget child;
 
-  /// The alignment of the [Drawer].
-  ///
-  /// This controls the direction in which the user should swipe to open and
-  /// close the drawer.
   final DrawerAlignment alignment;
 
-  /// Optional callback that is called when a [Drawer] is opened or closed.
   final DrawerCallback? drawerCallback;
 
-  /// {@template flutter.material.DrawerController.dragStartBehavior}
-  /// Determines the way that drag start behavior is handled.
-  ///
-  /// If set to [DragStartBehavior.start], the drag behavior used for opening
-  /// and closing a drawer will begin at the position where the drag gesture won
-  /// the arena. If set to [DragStartBehavior.down] it will begin at the position
-  /// where a down event is first detected.
-  ///
-  /// In general, setting this to [DragStartBehavior.start] will make drag
-  /// animation smoother and setting it to [DragStartBehavior.down] will make
-  /// drag behavior feel slightly more reactive.
-  ///
-  /// By default, the drag start behavior is [DragStartBehavior.start].
-  ///
-  /// See also:
-  ///
-  ///  * [DragGestureRecognizer.dragStartBehavior], which gives an example for
-  ///    the different behaviors.
-  ///
-  /// {@endtemplate}
   final DragStartBehavior dragStartBehavior;
 
-  /// The color to use for the scrim that obscures the underlying content while
-  /// a drawer is open.
-  ///
-  /// If this is null, then [DrawerThemeData.scrimColor] is used. If that
-  /// is also null, then it defaults to [Colors.black54].
   final Color? scrimColor;
 
-  /// Determines if the [Drawer] can be opened with a drag gesture.
-  ///
-  /// By default, the drag gesture is enabled.
   final bool enableOpenDragGesture;
 
-  /// The width of the area within which a horizontal swipe will open the
-  /// drawer.
-  ///
-  /// By default, the value used is 20.0 added to the padding edge of
-  /// `MediaQuery.paddingOf(context)` that corresponds to [alignment].
-  /// This ensures that the drag area for notched devices is not obscured. For
-  /// example, if [alignment] is set to [DrawerAlignment.start] and
-  /// `TextDirection.of(context)` is set to [TextDirection.ltr],
-  /// 20.0 will be added to `MediaQuery.paddingOf(context).left`.
   final double? edgeDragWidth;
 
-  /// Whether or not the drawer is opened or closed.
-  ///
-  /// This parameter is primarily used by the state restoration framework
-  /// to restore the drawer's animation controller to the open or closed state
-  /// depending on what was last saved to the target platform before the
-  /// application was killed.
   final bool isDrawerOpen;
 
-  /// The closest instance of [DrawerController] that encloses the given
-  /// context, or null if none is found.
-  ///
-  /// {@tool snippet} Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DrawerController? controller = DrawerController.maybeOf(context);
-  /// ```
-  /// {@end-tool}
-  ///
-  /// Calling this method will create a dependency on the closest
-  /// [DrawerController] in the [context], if there is one.
-  ///
-  /// See also:
-  ///
-  /// * [DrawerController.of], which is similar to this method, but asserts
-  ///   if no [DrawerController] ancestor is found.
   static DrawerController? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_DrawerControllerScope>()?.controller;
   }
 
-  /// The closest instance of [DrawerController] that encloses the given
-  /// context.
-  ///
-  /// If no instance is found, this method will assert in debug mode and throw
-  /// an exception in release mode.
-  ///
-  /// Calling this method will create a dependency on the closest
-  /// [DrawerController] in the [context].
-  ///
-  /// {@tool snippet} Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DrawerController controller = DrawerController.of(context);
-  /// ```
-  /// {@end-tool}
   static DrawerController of(BuildContext context) {
     final DrawerController? controller = maybeOf(context);
     assert(() {
@@ -450,9 +188,6 @@ class DrawerController extends StatefulWidget {
   DrawerControllerState createState() => DrawerControllerState();
 }
 
-/// State for a [DrawerController].
-///
-/// Typically used by a [Scaffold] to [open] and [close] the drawer.
 class DrawerControllerState extends State<DrawerController> with SingleTickerProviderStateMixin {
   @override
   void initState() {
@@ -617,15 +352,11 @@ class DrawerControllerState extends State<DrawerController> with SingleTickerPro
     }
   }
 
-  /// Starts an animation to open the drawer.
-  ///
-  /// Typically called by [ScaffoldState.openDrawer].
   void open() {
     _controller.fling();
     widget.drawerCallback?.call(true);
   }
 
-  /// Starts an animation to close the drawer.
   void close() {
     _controller.fling(velocity: -1.0);
     widget.drawerCallback?.call(false);

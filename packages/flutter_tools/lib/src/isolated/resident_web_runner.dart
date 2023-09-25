@@ -42,7 +42,6 @@ import '../web/web_device.dart';
 import '../web/web_runner.dart';
 import 'devfs_web.dart';
 
-/// Injectable factory to create a [ResidentWebRunner].
 class DwdsWebRunnerFactory extends WebRunnerFactory {
   @override
   ResidentRunner createWebRunner(
@@ -137,7 +136,6 @@ class ResidentWebRunner extends ResidentRunner {
   @override
   bool get debuggingEnabled => isRunningDebug && deviceIsDebuggable;
 
-  /// WebServer device is debuggable when running with --start-paused.
   bool get deviceIsDebuggable => device!.device is! WebServerDevice || debuggingOptions.startPaused;
 
   @override

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// An example xcresult bundle json with invalid issues map.
 const String kSampleResultJsonInvalidIssuesMap = r'''
 {
   "_type" : {
@@ -12,7 +11,6 @@ const String kSampleResultJsonInvalidIssuesMap = r'''
 }
 ''';
 
-/// An example xcresult bundle json that contains warnings and errors that needs to be discarded per https://github.com/flutter/flutter/issues/95354.
 const String kSampleResultJsonWithIssuesToBeDiscarded = r'''
 {
   "issues" : {
@@ -105,7 +103,6 @@ const String kSampleResultJsonWithIssuesToBeDiscarded = r'''
 }
 ''';
 
-/// An example xcresult bundle json that contains some warning and some errors.
 const String kSampleResultJsonWithIssues = r'''
 {
   "issues" : {
@@ -181,7 +178,6 @@ const String kSampleResultJsonWithIssues = r'''
 }
 ''';
 
-/// An example xcresult bundle json that contains some warning and some errors.
 const String kSampleResultJsonWithNoProvisioningProfileIssue = r'''
 {
   "issues" : {
@@ -257,7 +253,6 @@ const String kSampleResultJsonWithNoProvisioningProfileIssue = r'''
 }
 ''';
 
-/// An example xcresult bundle json that contains some warning and some errors.
 const String kSampleResultJsonWithIssuesAndInvalidUrl = r'''
 {
   "issues" : {
@@ -333,7 +328,6 @@ const String kSampleResultJsonWithIssuesAndInvalidUrl = r'''
 }
 ''';
 
-/// An example xcresult bundle json that contains no issues.
 const String kSampleResultJsonNoIssues = r'''
 {
   "issues" : {
@@ -344,7 +338,6 @@ const String kSampleResultJsonNoIssues = r'''
 }
 ''';
 
-/// An example xcresult bundle json with some provision profile issue.
 const String kSampleResultJsonWithProvisionIssue = r'''
 {
   "issues" : {
@@ -380,7 +373,6 @@ const String kSampleResultJsonWithProvisionIssue = r'''
 ''';
 
 
-/// An example xcresult bundle json that contains action issues.
 const String kSampleResultJsonWithActionIssues = r'''
 {
   "_type" : {

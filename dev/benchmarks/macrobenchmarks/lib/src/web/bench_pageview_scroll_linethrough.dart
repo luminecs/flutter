@@ -8,11 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'recorder.dart';
 
-/// Creates a [PageView] that uses a font style that can't be rendered
-/// using canvas (switching to DOM).
-///
-/// Since the whole page uses a CustomPainter this is a good representation
-/// for apps that have pictures with large number of painting commands.
 class BenchPageViewScrollLineThrough extends WidgetRecorder {
   BenchPageViewScrollLineThrough() : super(name: benchmarkName);
 

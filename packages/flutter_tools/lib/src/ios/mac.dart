@@ -42,10 +42,6 @@ import 'xcresult.dart';
 const String kConcurrentRunFailureMessage1 = 'database is locked';
 const String kConcurrentRunFailureMessage2 = 'there are two concurrent builds running';
 
-/// User message when missing platform required to use Xcode.
-///
-/// Starting with Xcode 15, the simulator is no longer downloaded with Xcode
-/// and must be downloaded and installed separately.
 @visibleForTesting
 String missingPlatformInstructions(String simulatorVersion) => '''
 ════════════════════════════════════════════════════════════════════════════════
@@ -69,7 +65,6 @@ class IMobileDevice {
       _processUtils = ProcessUtils(logger: logger, processManager: processManager),
       _processManager = processManager;
 
-  /// Create an [IMobileDevice] for testing.
   factory IMobileDevice.test({ required ProcessManager processManager }) {
     return IMobileDevice(
       // ignore: invalid_use_of_visible_for_testing_member
@@ -88,7 +83,6 @@ class IMobileDevice {
 
   late final bool isInstalled = _processManager.canRun(_idevicescreenshotPath);
 
-  /// Starts `idevicesyslog` and returns the running process.
   Future<Process> startLogger(String deviceID) {
     return _processUtils.start(
       <String>[
@@ -102,7 +96,6 @@ class IMobileDevice {
     );
   }
 
-  /// Captures a screenshot to the specified outputFile.
   Future<void> takeScreenshot(
     File outputFile,
     String deviceID,
@@ -511,8 +504,6 @@ Future<XcodeBuildResult> buildXcodeProject({
   }
 }
 
-/// Extended attributes applied by Finder can cause code signing errors. Remove them.
-/// https://developer.apple.com/library/archive/qa/qa1940/_index.html
 Future<void> removeFinderExtendedAttributes(FileSystemEntity projectDirectory, ProcessUtils processUtils, Logger logger) async {
   final bool success = await processUtils.exitsHappy(
     <String>[
@@ -596,9 +587,6 @@ Future<void> diagnoseXcodeBuildFailure(XcodeBuildResult result, Usage flutterUsa
   }
 }
 
-/// xcodebuild <buildaction> parameter (see man xcodebuild for details).
-///
-/// `clean`, `test`, `analyze`, and `install` are not supported.
 enum XcodeBuildAction { build, archive }
 
 String xcodeBuildActionToString(XcodeBuildAction action) {
@@ -622,15 +610,10 @@ class XcodeBuildResult {
   final String? output;
   final String? stdout;
   final String? stderr;
-  /// The invocation of the build that resulted in this result instance.
   final XcodeBuildExecution? xcodeBuildExecution;
-  /// Parsed information in xcresult bundle.
-  ///
-  /// Can be null if the bundle is not created during build.
   final XCResult? xcResult;
 }
 
-/// Describes an invocation of a Xcode build command.
 class XcodeBuildExecution {
   XcodeBuildExecution({
     required this.buildCommands,
@@ -639,11 +622,9 @@ class XcodeBuildExecution {
     required this.buildSettings,
   });
 
-  /// The original list of Xcode build commands used to produce this build result.
   final List<String> buildCommands;
   final String appDirectory;
   final EnvironmentType environmentType;
-  /// The build settings corresponding to the [buildCommands] invocation.
   final Map<String, String> buildSettings;
 }
 

@@ -6,38 +6,24 @@ import 'dart:io';
 
 import 'token_logger.dart';
 
-/// Base class for code generation templates.
 abstract class TokenTemplate {
   const TokenTemplate(this.blockName, this.fileName, this._tokens, {
     this.colorSchemePrefix = 'Theme.of(context).colorScheme.',
     this.textThemePrefix = 'Theme.of(context).textTheme.'
   });
 
-  /// Name of the code block that this template will generate.
-  ///
-  /// Used to identify an existing block when updating it.
   final String blockName;
 
-  /// Name of the file that will be updated with the generated code.
   final String fileName;
 
-  /// Map of token data extracted from the Material Design token database.
   final Map<String, dynamic> _tokens;
 
-  /// Optional prefix prepended to color definitions.
-  ///
-  /// Defaults to 'Theme.of(context).colorScheme.'
   final String colorSchemePrefix;
 
-  /// Optional prefix prepended to text style definitions.
-  ///
-  /// Defaults to 'Theme.of(context).textTheme.'
   final String textThemePrefix;
 
-  /// Check if a token is available.
   bool tokenAvailable(String tokenName) => _tokens.containsKey(tokenName);
 
-  /// Resolve a token while logging its usage.
   dynamic getToken(String tokenName) {
     tokenLogger.log(tokenName);
     return _tokens[tokenName];
@@ -60,11 +46,6 @@ abstract class TokenTemplate {
 
 // END GENERATED TOKEN PROPERTIES''';
 
-  /// Replace or append the contents of the file with the text from [generate].
-  ///
-  /// If the file already contains a generated text block matching the
-  /// [blockName], it will be replaced by the [generate] output. Otherwise
-  /// the content will just be appended to the end of the file.
   Future<void> updateFile() async {
     final String contents = File(fileName).readAsStringSync();
     final String beginComment = '$beginGeneratedComment - $blockName\n';
@@ -96,52 +77,16 @@ abstract class TokenTemplate {
     File(fileName).writeAsStringSync(buffer.toString());
   }
 
-  /// Provide the generated content for the template.
-  ///
-  /// This abstract method needs to be implemented by subclasses
-  /// to provide the content that [updateFile] will append to the
-  /// bottom of the file.
   String generate();
 
-  /// Generate a [ColorScheme] color name for the given token.
-  ///
-  /// If there is a value for the given token, this will return
-  /// the value prepended with [colorSchemePrefix].
-  ///
-  /// Otherwise it will return [defaultValue].
-  ///
-  /// See also:
-  ///   * [componentColor], that provides support for an optional opacity.
   String color(String colorToken, [String defaultValue = 'null']) {
     return tokenAvailable(colorToken)
       ? '$colorSchemePrefix${getToken(colorToken)}'
       : defaultValue;
   }
 
-  /// Generate a [ColorScheme] color name for the given token or a transparent
-  /// color if there is no value for the token.
-  ///
-  /// If there is a value for the given token, this will return
-  /// the value prepended with [colorSchemePrefix].
-  ///
-  /// Otherwise it will return 'Colors.transparent'.
-  ///
-  /// See also:
-  ///   * [componentColor], that provides support for an optional opacity.
   String? colorOrTransparent(String token) => color(token, 'Colors.transparent');
 
-  /// Generate a [ColorScheme] color name for the given component's color
-  /// with opacity if available.
-  ///
-  /// If there is a value for the given component's color, this will return
-  /// the value prepended with [colorSchemePrefix]. If there is also
-  /// an opacity specified for the component, then the returned value
-  /// will include this opacity calculation.
-  ///
-  /// If there is no value for the component's color, 'null' will be returned.
-  ///
-  /// See also:
-  ///   * [color], that provides support for looking up a raw color token.
   String componentColor(String componentToken) {
     final String colorToken = '$componentToken.color';
     if (!tokenAvailable(colorToken)) {
@@ -155,7 +100,6 @@ abstract class TokenTemplate {
     return value;
   }
 
-  /// Generate the opacity value for the given token.
   String? opacity(String token) {
     tokenLogger.log(token);
     return _numToString(getToken(token));
@@ -174,14 +118,10 @@ abstract class TokenTemplate {
     return getToken(value as String).toString();
   }
 
-  /// Generate an elevation value for the given component token.
   String elevation(String componentToken) {
     return getToken(getToken('$componentToken.elevation')! as String)!.toString();
   }
 
-  /// Generate a size value for the given component token.
-  ///
-  /// Non-square sizes are specified as width and height.
   String size(String componentToken) {
     final String sizeToken = '$componentToken.size';
     if (!tokenAvailable(sizeToken)) {
@@ -197,11 +137,6 @@ abstract class TokenTemplate {
     return 'const Size.square(${_numToString(getToken(sizeToken))})';
   }
 
-  /// Generate a shape constant for the given component token.
-  ///
-  /// Currently supports family:
-  ///   - "SHAPE_FAMILY_ROUNDED_CORNERS" which maps to [RoundedRectangleBorder].
-  ///   - "SHAPE_FAMILY_CIRCULAR" which maps to a [StadiumBorder].
   String shape(String componentToken, [String prefix = 'const ']) {
 
     final Map<String, dynamic> shape = getToken(getToken('$componentToken.shape') as String) as Map<String, dynamic>;
@@ -237,7 +172,6 @@ abstract class TokenTemplate {
     return '';
   }
 
-  /// Generate a [BorderSide] for the given component.
   String border(String componentToken) {
 
     if (!tokenAvailable('$componentToken.color')) {
@@ -248,7 +182,6 @@ abstract class TokenTemplate {
     return 'BorderSide(color: $borderColor${width != 1.0 ? ", width: $width" : ""})';
   }
 
-  /// Generate a [TextTheme] text style name for the given component token.
   String textStyle(String componentToken) {
 
     return '$textThemePrefix${getToken("$componentToken.text-style")}';

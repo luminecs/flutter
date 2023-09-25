@@ -17,7 +17,6 @@ import 'application_package.dart';
 import 'build_windows.dart';
 import 'windows_workflow.dart';
 
-/// A device that represents a desktop Windows target.
 class WindowsDevice extends DesktopDevice {
   WindowsDevice({
     required ProcessManager processManager,

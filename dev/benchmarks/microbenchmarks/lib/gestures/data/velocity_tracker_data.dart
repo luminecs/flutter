@@ -4,7 +4,6 @@
 
 import 'package:flutter/gestures.dart';
 
-/// Data for velocity_tracker_bench.dart
 final List<PointerEvent> velocityEventData = <PointerEvent>[
   const PointerDownEvent(
     timeStamp: Duration(milliseconds: 216690896),

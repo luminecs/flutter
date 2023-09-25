@@ -8,15 +8,7 @@ export 'dart:ui' show PointerDeviceKind;
 
 export 'events.dart' show PointerDownEvent, PointerEvent;
 
-/// A gesture recognizer that eagerly claims victory in all gesture arenas.
-///
-/// This is typically passed in [AndroidView.gestureRecognizers] in order to immediately dispatch
-/// all touch events inside the view bounds to the embedded Android view.
-/// See [AndroidView.gestureRecognizers] for more details.
 class EagerGestureRecognizer extends OneSequenceGestureRecognizer {
-  /// Create an eager gesture recognizer.
-  ///
-  /// {@macro flutter.gestures.GestureRecognizer.supportedDevices}
   EagerGestureRecognizer({
     super.supportedDevices,
     super.allowedButtonsFilter,

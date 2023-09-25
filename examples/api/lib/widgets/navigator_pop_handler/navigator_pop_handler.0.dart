@@ -4,9 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// This sample demonstrates using [NavigatorPopHandler] to handle system back
-/// gestures when there are nested [Navigator] widgets by delegating to the
-/// current [Navigator].
 
 void main() => runApp(const NavigatorPopHandlerApp());
 

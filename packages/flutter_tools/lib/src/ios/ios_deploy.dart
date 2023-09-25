@@ -57,9 +57,6 @@ class IOSDeploy {
     return environment;
   }
 
-  /// Uninstalls the specified app bundle.
-  ///
-  /// Uses ios-deploy and returns the exit code.
   Future<int> uninstallApp({
     required String deviceId,
     required String bundleId,
@@ -81,9 +78,6 @@ class IOSDeploy {
     );
   }
 
-  /// Installs the specified app bundle.
-  ///
-  /// Uses ios-deploy and returns the exit code.
   Future<int> installApp({
     required String deviceId,
     required String bundlePath,
@@ -118,10 +112,6 @@ class IOSDeploy {
     );
   }
 
-  /// Returns [IOSDeployDebugger] wrapping attached debugger logic.
-  ///
-  /// This method does not install the app. Call [IOSDeployDebugger.launchAndAttach()]
-  /// to install and attach the debugger to the specified app bundle.
   IOSDeployDebugger prepareDebuggerForLaunch({
     required String deviceId,
     required String bundlePath,
@@ -167,9 +157,6 @@ class IOSDeploy {
     );
   }
 
-  /// Installs and then runs the specified app bundle.
-  ///
-  /// Uses ios-deploy and returns the exit code.
   Future<int> launchApp({
     required String deviceId,
     required String bundlePath,
@@ -241,14 +228,12 @@ class IOSDeploy {
   String _monitorFailure(String stdout) => _monitorIOSDeployFailure(stdout, _logger);
 }
 
-/// lldb attach state flow.
 enum _IOSDeployDebuggerState {
   detached,
   launching,
   attached,
 }
 
-/// Wrapper to launch app and attach the debugger with ios-deploy.
 class IOSDeployDebugger {
   IOSDeployDebugger({
     required Logger logger,
@@ -261,9 +246,6 @@ class IOSDeployDebugger {
         _iosDeployEnv = iosDeployEnv,
         _debuggerState = _IOSDeployDebuggerState.detached;
 
-  /// Create a [IOSDeployDebugger] for testing.
-  ///
-  /// Sets the command to "ios-deploy" and environment to an empty map.
   @visibleForTesting
   factory IOSDeployDebugger.test({
     required ProcessManager processManager,
@@ -325,22 +307,14 @@ class IOSDeployDebugger {
   // Print backtrace for all threads while app is stopped.
   static const String _backTraceAll = 'thread backtrace all';
 
-  /// If this is non-null, then the app process is paused and awaiting backtrace logging.
-  ///
-  /// The future should be completed once the backtraces are logged.
   Completer<void>? _processResumeCompleter;
 
   // Process 525 exited with status = -1 (0xffffffff) lost connection
   static final RegExp _lostConnectionPattern = RegExp(r'exited with status = -1 \(0xffffffff\) lost connection');
 
-  /// Whether ios-deploy received a message matching [_lostConnectionPattern],
-  /// indicating that it lost connection to the device.
   bool get lostConnection => _lostConnection;
   bool _lostConnection = false;
 
-  /// Launch the app on the device, and attach the debugger.
-  ///
-  /// Returns whether or not the debugger successfully attached.
   Future<bool> launchAndAttach() async {
     // Return when the debugger attaches, or the ios-deploy process exits.
 
@@ -549,7 +523,6 @@ class IOSDeployDebugger {
     return success;
   }
 
-  /// Pause app, dump backtrace for debugging, and resume.
   Future<void> pauseDumpBacktraceResume() async {
     if (!debuggerAttached) {
       return;
@@ -567,15 +540,6 @@ class IOSDeployDebugger {
     _iosDeployProcess?.stdin.writeln(_processResume);
   }
 
-  /// Check what files are found in the device's iOS DeviceSupport directory.
-  ///
-  /// Expected files include Symbols (directory), Info.plist, and .finalized.
-  ///
-  /// If any of the expected files are missing or there are additional files
-  /// (such as .copying_lock or .processing_lock), this may indicate the
-  /// symbols may still be fetching or something went wrong when fetching them.
-  ///
-  /// Used for debugging test flakes: https://github.com/flutter/flutter/issues/121231
   Future<void> checkForSymbolsFiles(FileSystem fileSystem) async {
     if (symbolsDirectoryPath == null) {
       _logger.printTrace('No path provided for Symbols directory.');

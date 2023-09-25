@@ -30,8 +30,6 @@ const String frameworkVersionTag = 'frameworkVersionFromGit';
 const String dartVersionTag = 'dartSdkVersion';
 const String dartTargetArchTag = 'dartTargetArch';
 
-/// Exception class for when a process fails to run, so we can catch
-/// it and provide something more readable than a stack trace.
 class PreparePackageException implements Exception {
   PreparePackageException(this.message, [this.result]);
 
@@ -58,9 +56,6 @@ enum Branch {
   main;
 }
 
-/// A helper class for classes that want to run a process, optionally have the
-/// stderr and stdout reported as the process runs, and capture the stdout
-/// properly without dropping any.
 class ProcessRunner {
   ProcessRunner({
     ProcessManager? processManager,
@@ -71,30 +66,16 @@ class ProcessRunner {
     environment = Map<String, String>.from(platform.environment);
   }
 
-  /// The platform to use for a starting environment.
   final Platform platform;
 
-  /// Set [subprocessOutput] to show output as processes run. Stdout from the
-  /// process will be printed to stdout, and stderr printed to stderr.
   final bool subprocessOutput;
 
-  /// Set the [processManager] in order to inject a test instance to perform
-  /// testing.
   final ProcessManager processManager;
 
-  /// Sets the default directory used when `workingDirectory` is not specified
-  /// to [runProcess].
   final Directory? defaultWorkingDirectory;
 
-  /// The environment to run processes with.
   late Map<String, String> environment;
 
-  /// Run the command and arguments in `commandLine` as a sub-process from
-  /// `workingDirectory` if set, or the [defaultWorkingDirectory] if not. Uses
-  /// [Directory.current] if [defaultWorkingDirectory] is not set.
-  ///
-  /// Set `failOk` if [runProcess] should not throw an exception when the
-  /// command completes with a non-zero exit code.
   Future<String> runProcess(
     List<String> commandLine, {
     Directory? workingDirectory,
@@ -163,16 +144,7 @@ class ProcessRunner {
 
 typedef HttpReader = Future<Uint8List> Function(Uri url, {Map<String, String> headers});
 
-/// Creates a pre-populated Flutter archive from a git repo.
 class ArchiveCreator {
-  /// [tempDir] is the directory to use for creating the archive. The script
-  /// will place several GiB of data there, so it should have available space.
-  ///
-  /// The processManager argument is used to inject a mock of [ProcessManager] for
-  /// testing purposes.
-  ///
-  /// If subprocessOutput is true, then output from processes invoked during
-  /// archive creation is echoed to stderr and stdout.
   factory ArchiveCreator(
     Directory tempDir,
     Directory outputDir,
@@ -239,39 +211,23 @@ class ArchiveCreator {
     _flutter = flutterExecutable,
     _dart = dartExecutable;
 
-  /// The platform to use for the environment and determining which
-  /// platform we're running on.
   final Platform platform;
 
-  /// The branch to build the archive for. The branch must contain [revision].
   final Branch branch;
 
-  /// The git revision hash to build the archive for. This revision has
-  /// to be available in the [branch], although it doesn't have to be
-  /// at HEAD, since we clone the branch and then reset to this revision
-  /// to create the archive.
   final String revision;
 
-  /// The flutter root directory in the [tempDir].
   final Directory flutterRoot;
 
-  /// The temporary directory used to build the archive in.
   final Directory tempDir;
 
-  /// The directory to write the output file to.
   final Directory outputDir;
 
-  /// True if the creator should be strict about checking requirements or not.
-  ///
-  /// In strict mode, will insist that the [revision] be a tagged revision.
   final bool strict;
 
   final Uri _minGitUri = Uri.parse(mingitForWindowsUrl);
   final ProcessRunner _processRunner;
 
-  /// Used to tell the [ArchiveCreator] which function to use for reading
-  /// bytes from a URL. Used in tests to inject a fake reader. Defaults to
-  /// [http.readBytes].
   final HttpReader httpReader;
 
   final Map<String, String> _version = <String, String>{};
@@ -284,8 +240,6 @@ class ArchiveCreator {
         .trim().split(' ').last.replaceAll('"', '').split('_')[1];
   })();
 
-  /// Returns a default archive name when given a Git revision.
-  /// Used when an output filename is not given.
   Future<String> get _archiveName async {
     final String os = platform.operatingSystem.toLowerCase();
     // Include the intended host architecture in the file name for non-x64.
@@ -302,10 +256,6 @@ class ArchiveCreator {
     return 'flutter_$package-${branch.name}.$suffix';
   }
 
-  /// Checks out the flutter repo and prepares it for other operations.
-  ///
-  /// Returns the version for this release as obtained from the git tags, and
-  /// the dart version as obtained from `flutter --version`.
   Future<Map<String, String>> initializeRepo() async {
     await _checkoutFlutter();
     if (_version.isEmpty) {
@@ -314,7 +264,6 @@ class ArchiveCreator {
     return _version;
   }
 
-  /// Performs all of the steps needed to create an archive.
   Future<File> createArchive() async {
     assert(_version.isNotEmpty, 'Must run initializeRepo before createArchive');
     final File outputFile = File(path.join(
@@ -328,10 +277,6 @@ class ArchiveCreator {
     return outputFile;
   }
 
-  /// Validates the integrity of the release package.
-  ///
-  /// Currently only checks that macOS binaries are codesigned. Will throw a
-  /// [PreparePackageException] if the test fails.
   Future<void> _validate() async {
     // Only validate in strict mode, which means `--publish`
     if (!strict || !platform.isMacOS) {
@@ -356,19 +301,6 @@ class ArchiveCreator {
     }
   }
 
-  /// Returns the version map of this release, according the to tags in the
-  /// repo and the output of `flutter --version --machine`.
-  ///
-  /// This looks for the tag attached to [revision] and, if it doesn't find one,
-  /// git will give an error.
-  ///
-  /// If [strict] is true, the exact [revision] must be tagged to return the
-  /// version. If [strict] is not true, will look backwards in time starting at
-  /// [revision] to find the most recent version tag.
-  ///
-  /// The version found as a git tag is added to the information given by
-  /// `flutter --version --machine` with the `frameworkVersionFromGit` tag, and
-  /// returned.
   Future<Map<String, String>> _getVersion() async {
     String gitVersion;
     if (strict) {
@@ -397,8 +329,6 @@ class ArchiveCreator {
     return versionMap;
   }
 
-  /// Clone the Flutter repo and make sure that the git environment is sane
-  /// for when the user will unpack it.
   Future<void> _checkoutFlutter() async {
     // We want the user to start out the in the specified branch instead of a
     // detached head. To do that, we need to make sure the branch points at the
@@ -413,7 +343,6 @@ class ArchiveCreator {
     await _runGit(<String>['gc', '--prune=now', '--aggressive']);
   }
 
-  /// Retrieve the MinGit executable from storage and unpack it.
   Future<void> _installMinGitIfNeeded() async {
     if (!platform.isWindows) {
       return;
@@ -427,21 +356,11 @@ class ArchiveCreator {
     await _unzipArchive(gitFile, workingDirectory: minGitPath);
   }
 
-  /// Downloads an archive of every package that is present in the temporary
-  /// pub-cache from pub.dev. Stores the archives in
-  /// $flutterRoot/.pub-preload-cache.
-  ///
-  /// These archives will be installed in the user-level cache on first
-  /// following flutter command that accesses the cache.
-  ///
-  /// Precondition: all packages currently in the PUB_CACHE of [_processRunner]
-  /// are installed from pub.dev.
   Future<void> _downloadPubPackageArchives() async {
     final Pool pool = Pool(10); // Number of simultaneous downloads.
     final http.Client client = http.Client();
     final Directory preloadCache = Directory(path.join(flutterRoot.path, '.pub-preload-cache'));
     preloadCache.createSync(recursive: true);
-    /// Fetch a single package.
     Future<void> fetchPackageArchive(String name, String version) async {
       await pool.withResource(() async {
         stderr.write('Fetching package archive for $name-$version.\n');
@@ -522,8 +441,6 @@ class ArchiveCreator {
     client.close();
   }
 
-  /// Prepare the archive repo so that it has all of the caches warmed up and
-  /// is configured for the user to begin working.
   Future<void> _populateCaches() async {
     await _runFlutter(<String>['doctor']);
     await _runFlutter(<String>['update-packages']);
@@ -554,7 +471,6 @@ class ArchiveCreator {
       '--',
       '**/.packages',
     ]);
-    /// Remove package_config files and any contents in .dart_tool
     await _runGit(<String>[
       'clean',
       '-f',
@@ -569,15 +485,12 @@ class ArchiveCreator {
       throw Exception('The flutter cache was not found at ${flutterCache.path}!');
     }
 
-    /// Remove git subfolder from .pub-cache, this contains the flutter goldens
-    /// and new flutter_gallery.
     final Directory gitCache = Directory(path.join(flutterRoot.absolute.path, '.pub-cache', 'git'));
     if (gitCache.existsSync()) {
       gitCache.deleteSync(recursive: true);
     }
   }
 
-  /// Write the archive to the given output file.
   Future<void> _archiveFiles(File outputFile) async {
     if (outputFile.path.toLowerCase().endsWith('.zip')) {
       await _createZipArchive(outputFile, flutterRoot);
@@ -607,8 +520,6 @@ class ArchiveCreator {
     );
   }
 
-  /// Unpacks the given zip file into the currentDirectory (if set), or the
-  /// same directory as the archive.
   Future<String> _unzipArchive(File archive, {Directory? workingDirectory}) {
     workingDirectory ??= Directory(path.dirname(archive.absolute.path));
     List<String> commandLine;
@@ -627,7 +538,6 @@ class ArchiveCreator {
     return _processRunner.runProcess(commandLine, workingDirectory: workingDirectory);
   }
 
-  /// Create a zip archive from the directory source.
   Future<String> _createZipArchive(File output, Directory source) async {
     List<String> commandLine;
     if (platform.isWindows) {
@@ -660,7 +570,6 @@ class ArchiveCreator {
     );
   }
 
-  /// Create a tar archive from the directory source.
   Future<String> _createTarArchive(File output, Directory source) {
     return _processRunner.runProcess(<String>[
       'tar',
@@ -715,10 +624,6 @@ class ArchivePublisher {
     return digestSink.value.toString();
   }
 
-  /// Publish the archive to Google Storage.
-  ///
-  /// This method will throw if the target archive already exists on cloud
-  /// storage.
   Future<void> publishArchive([bool forceUpload = false]) async {
     final String destGsPath = '$gsReleaseFolder/$destinationArchivePath';
     if (!forceUpload) {
@@ -737,7 +642,6 @@ class ArchivePublisher {
     await _publishMetadata(gcsPath);
   }
 
-  /// Downloads and updates the metadata file without publishing it.
   Future<void> generateLocalMetadata() async {
     await _updateMetadata('$gsReleaseFolder/${getMetadataFilename(platform)}');
   }
@@ -809,7 +713,6 @@ class ArchivePublisher {
     metadataFile.writeAsStringSync(encoder.convert(jsonData));
   }
 
-  /// Publishes the metadata file to GCS.
   Future<void> _publishMetadata(String gsPath) async {
     final File metadataFile = File(
       path.join(tempDir.absolute.path, getMetadataFilename(platform)),
@@ -840,7 +743,6 @@ class ArchivePublisher {
     );
   }
 
-  /// Determine if a file exists at a given [cloudPath].
   Future<bool> _cloudPathExists(String cloudPath) async {
     try {
       await _runGsUtil(
@@ -883,13 +785,6 @@ class ArchivePublisher {
   }
 }
 
-/// Prepares a flutter git repo to be packaged up for distribution. It mainly
-/// serves to populate the .pub-preload-cache with any appropriate Dart
-/// packages, and the flutter cache in bin/cache with the appropriate
-/// dependencies and snapshots.
-///
-/// Archives contain the executables and customizations for the platform that
-/// they are created on.
 Future<void> main(List<String> rawArguments) async {
   final ArgParser argParser = ArgParser();
   argParser.addOption(

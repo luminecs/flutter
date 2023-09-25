@@ -13,8 +13,6 @@ import 'package:path/path.dart' as path;
 final String gradlew = Platform.isWindows ? 'gradlew.bat' : 'gradlew';
 final String gradlewExecutable = Platform.isWindows ? '.\\$gradlew' : './$gradlew';
 
-/// Tests that the Android app containing a Flutter module can be built when
-/// it has custom build types and flavors.
 Future<void> main() async {
   await task(() async {
 

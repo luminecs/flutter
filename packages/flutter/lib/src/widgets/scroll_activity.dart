@@ -14,127 +14,57 @@ import 'framework.dart';
 import 'scroll_metrics.dart';
 import 'scroll_notification.dart';
 
-/// A backend for a [ScrollActivity].
-///
-/// Used by subclasses of [ScrollActivity] to manipulate the scroll view that
-/// they are acting upon.
-///
-/// See also:
-///
-///  * [ScrollActivity], which uses this class as its delegate.
-///  * [ScrollPositionWithSingleContext], the main implementation of this interface.
 abstract class ScrollActivityDelegate {
-  /// The direction in which the scroll view scrolls.
   AxisDirection get axisDirection;
 
-  /// Update the scroll position to the given pixel value.
-  ///
-  /// Returns the overscroll, if any. See [ScrollPosition.setPixels] for more
-  /// information.
   double setPixels(double pixels);
 
-  /// Updates the scroll position by the given amount.
-  ///
-  /// Appropriate for when the user is directly manipulating the scroll
-  /// position, for example by dragging the scroll view. Typically applies
-  /// [ScrollPhysics.applyPhysicsToUserOffset] and other transformations that
-  /// are appropriate for user-driving scrolling.
   void applyUserOffset(double delta);
 
-  /// Terminate the current activity and start an idle activity.
   void goIdle();
 
-  /// Terminate the current activity and start a ballistic activity with the
-  /// given velocity.
   void goBallistic(double velocity);
 }
 
-/// Base class for scrolling activities like dragging and flinging.
-///
-/// See also:
-///
-///  * [ScrollPosition], which uses [ScrollActivity] objects to manage the
-///    [ScrollPosition] of a [Scrollable].
 abstract class ScrollActivity {
-  /// Initializes [delegate] for subclasses.
   ScrollActivity(this._delegate);
 
-  /// The delegate that this activity will use to actuate the scroll view.
   ScrollActivityDelegate get delegate => _delegate;
   ScrollActivityDelegate _delegate;
 
   bool _isDisposed = false;
 
-  /// Updates the activity's link to the [ScrollActivityDelegate].
-  ///
-  /// This should only be called when an activity is being moved from a defunct
-  /// (or about-to-be defunct) [ScrollActivityDelegate] object to a new one.
   void updateDelegate(ScrollActivityDelegate value) {
     assert(_delegate != value);
     _delegate = value;
   }
 
-  /// Called by the [ScrollActivityDelegate] when it has changed type (for
-  /// example, when changing from an Android-style scroll position to an
-  /// iOS-style scroll position). If this activity can differ between the two
-  /// modes, then it should tell the position to restart that activity
-  /// appropriately.
-  ///
-  /// For example, [BallisticScrollActivity]'s implementation calls
-  /// [ScrollActivityDelegate.goBallistic].
   void resetActivity() { }
 
-  /// Dispatch a [ScrollStartNotification] with the given metrics.
   void dispatchScrollStartNotification(ScrollMetrics metrics, BuildContext? context) {
     ScrollStartNotification(metrics: metrics, context: context).dispatch(context);
   }
 
-  /// Dispatch a [ScrollUpdateNotification] with the given metrics and scroll delta.
   void dispatchScrollUpdateNotification(ScrollMetrics metrics, BuildContext context, double scrollDelta) {
     ScrollUpdateNotification(metrics: metrics, context: context, scrollDelta: scrollDelta).dispatch(context);
   }
 
-  /// Dispatch an [OverscrollNotification] with the given metrics and overscroll.
   void dispatchOverscrollNotification(ScrollMetrics metrics, BuildContext context, double overscroll) {
     OverscrollNotification(metrics: metrics, context: context, overscroll: overscroll).dispatch(context);
   }
 
-  /// Dispatch a [ScrollEndNotification] with the given metrics and overscroll.
   void dispatchScrollEndNotification(ScrollMetrics metrics, BuildContext context) {
     ScrollEndNotification(metrics: metrics, context: context).dispatch(context);
   }
 
-  /// Called when the scroll view that is performing this activity changes its metrics.
   void applyNewDimensions() { }
 
-  /// Whether the scroll view should ignore pointer events while performing this
-  /// activity.
-  ///
-  /// See also:
-  ///
-  ///  * [isScrolling], which describes whether the activity is considered
-  ///    to represent user interaction or not.
   bool get shouldIgnorePointer;
 
-  /// Whether performing this activity constitutes scrolling.
-  ///
-  /// Used, for example, to determine whether the user scroll
-  /// direction (see [ScrollPosition.userScrollDirection]) is
-  /// [ScrollDirection.idle].
-  ///
-  /// See also:
-  ///
-  ///  * [shouldIgnorePointer], which controls whether pointer events
-  ///    are allowed while the activity is live.
-  ///  * [UserScrollNotification], which exposes this status.
   bool get isScrolling;
 
-  /// If applicable, the velocity at which the scroll offset is currently
-  /// independently changing (i.e. without external stimuli such as a dragging
-  /// gestures) in logical pixels per second for this activity.
   double get velocity;
 
-  /// Called when the scroll view stops performing this activity.
   @mustCallSuper
   void dispose() {
     _isDisposed = true;
@@ -144,14 +74,7 @@ abstract class ScrollActivity {
   String toString() => describeIdentity(this);
 }
 
-/// A scroll activity that does nothing.
-///
-/// When a scroll view is not scrolling, it is performing the idle activity.
-///
-/// If the [Scrollable] changes dimensions, this activity triggers a ballistic
-/// activity to restore the view.
 class IdleScrollActivity extends ScrollActivity {
-  /// Creates a scroll activity that does nothing.
   IdleScrollActivity(super.delegate);
 
   @override
@@ -169,35 +92,16 @@ class IdleScrollActivity extends ScrollActivity {
   double get velocity => 0.0;
 }
 
-/// Interface for holding a [Scrollable] stationary.
-///
-/// An object that implements this interface is returned by
-/// [ScrollPosition.hold]. It holds the scrollable stationary until an activity
-/// is started or the [cancel] method is called.
 abstract class ScrollHoldController {
-  /// Release the [Scrollable], potentially letting it go ballistic if
-  /// necessary.
   void cancel();
 }
 
-/// A scroll activity that does nothing but can be released to resume
-/// normal idle behavior.
-///
-/// This is used while the user is touching the [Scrollable] but before the
-/// touch has become a [Drag].
-///
-/// For the purposes of [ScrollNotification]s, this activity does not constitute
-/// scrolling, and does not prevent the user from interacting with the contents
-/// of the [Scrollable] (unlike when a drag has begun or there is a scroll
-/// animation underway).
 class HoldScrollActivity extends ScrollActivity implements ScrollHoldController {
-  /// Creates a scroll activity that does nothing.
   HoldScrollActivity({
     required ScrollActivityDelegate delegate,
     this.onHoldCanceled,
   }) : super(delegate);
 
-  /// Called when [dispose] is called.
   final VoidCallback? onHoldCanceled;
 
   @override
@@ -221,15 +125,7 @@ class HoldScrollActivity extends ScrollActivity implements ScrollHoldController 
   }
 }
 
-/// Scrolls a scroll view as the user drags their finger across the screen.
-///
-/// See also:
-///
-///  * [DragScrollActivity], which is the activity the scroll view performs
-///    while a drag is underway.
 class ScrollDragController implements Drag {
-  /// Creates an object that scrolls a scroll view as the user drags their
-  /// finger across the screen.
   ScrollDragController({
     required ScrollActivityDelegate delegate,
     required DragStartDetails details,
@@ -247,63 +143,36 @@ class ScrollDragController implements Drag {
        _kind = details.kind,
        _offsetSinceLastStop = motionStartDistanceThreshold == null ? null : 0.0;
 
-  /// The object that will actuate the scroll view as the user drags.
   ScrollActivityDelegate get delegate => _delegate;
   ScrollActivityDelegate _delegate;
 
-  /// Called when [dispose] is called.
   final VoidCallback? onDragCanceled;
 
-  /// Velocity that was present from a previous [ScrollActivity] when this drag
-  /// began.
   final double? carriedVelocity;
 
-  /// Amount of pixels in either direction the drag has to move by to start
-  /// scroll movement again after each time scrolling came to a stop.
   final double? motionStartDistanceThreshold;
 
   Duration? _lastNonStationaryTimestamp;
   bool _retainMomentum;
-  /// Null if already in motion or has no [motionStartDistanceThreshold].
   double? _offsetSinceLastStop;
 
-  /// Maximum amount of time interval the drag can have consecutive stationary
-  /// pointer update events before losing the momentum carried from a previous
-  /// scroll activity.
   static const Duration momentumRetainStationaryDurationThreshold =
       Duration(milliseconds: 20);
 
-  /// The minimum amount of velocity needed to apply the [carriedVelocity] at
-  /// the end of a drag. Expressed as a factor. For example with a
-  /// [carriedVelocity] of 2000, we will need a velocity of at least 1000 to
-  /// apply the [carriedVelocity] as well. If the velocity does not meet the
-  /// threshold, the [carriedVelocity] is lost. Decided by fair eyeballing
-  /// with the scroll_overlay platform test.
   static const double momentumRetainVelocityThresholdFactor = 0.5;
 
-  /// Maximum amount of time interval the drag can have consecutive stationary
-  /// pointer update events before needing to break the
-  /// [motionStartDistanceThreshold] to start motion again.
   static const Duration motionStoppedDurationThreshold =
       Duration(milliseconds: 50);
 
-  /// The drag distance past which, a [motionStartDistanceThreshold] breaking
-  /// drag is considered a deliberate fling.
   static const double _bigThresholdBreakDistance = 24.0;
 
   bool get _reversed => axisDirectionIsReversed(delegate.axisDirection);
 
-  /// Updates the controller's link to the [ScrollActivityDelegate].
-  ///
-  /// This should only be called when a controller is being moved from a defunct
-  /// (or about-to-be defunct) [ScrollActivityDelegate] object to a new one.
   void updateDelegate(ScrollActivityDelegate value) {
     assert(_delegate != value);
     _delegate = value;
   }
 
-  /// Determines whether to lose the existing incoming velocity when starting
-  /// the drag.
   void _maybeLoseMomentum(double offset, Duration? timestamp) {
     if (_retainMomentum &&
         offset == 0.0 &&
@@ -314,12 +183,6 @@ class ScrollDragController implements Drag {
     }
   }
 
-  /// If a motion start threshold exists, determine whether the threshold needs
-  /// to be broken to scroll. Also possibly apply an offset adjustment when
-  /// threshold is first broken.
-  ///
-  /// Returns `0.0` when stationary or within threshold. Returns `offset`
-  /// transparently when already in motion.
   double _adjustForScrollStartThreshold(double offset, Duration? timestamp) {
     if (timestamp == null) {
       // If we can't track time, we can't apply thresholds.
@@ -418,17 +281,13 @@ class ScrollDragController implements Drag {
     delegate.goBallistic(0.0);
   }
 
-  /// Called by the delegate when it is no longer sending events to this object.
   @mustCallSuper
   void dispose() {
     _lastDetails = null;
     onDragCanceled?.call();
   }
 
-  /// The type of input device driving the drag.
   final PointerDeviceKind? _kind;
-  /// The most recently observed [DragStartDetails], [DragUpdateDetails], or
-  /// [DragEndDetails] object.
   dynamic get lastDetails => _lastDetails;
   dynamic _lastDetails;
 
@@ -436,16 +295,7 @@ class ScrollDragController implements Drag {
   String toString() => describeIdentity(this);
 }
 
-/// The activity a scroll view performs when the user drags their finger
-/// across the screen.
-///
-/// See also:
-///
-///  * [ScrollDragController], which listens to the [Drag] and actually scrolls
-///    the scroll view.
 class DragScrollActivity extends ScrollActivity {
-  /// Creates an activity for when the user drags their finger across the
-  /// screen.
   DragScrollActivity(
     super.delegate,
     ScrollDragController controller,
@@ -508,21 +358,7 @@ class DragScrollActivity extends ScrollActivity {
   }
 }
 
-/// An activity that animates a scroll view based on a physics [Simulation].
-///
-/// A [BallisticScrollActivity] is typically used when the user lifts their
-/// finger off the screen to continue the scrolling gesture with the current velocity.
-///
-/// [BallisticScrollActivity] is also used to restore a scroll view to a valid
-/// scroll offset when the geometry of the scroll view changes. In these
-/// situations, the [Simulation] typically starts with a zero velocity.
-///
-/// See also:
-///
-///  * [DrivenScrollActivity], which animates a scroll view based on a set of
-///    animation parameters.
 class BallisticScrollActivity extends ScrollActivity {
-  /// Creates an activity that animates a scroll view based on a [simulation].
   BallisticScrollActivity(
     super.delegate,
     Simulation simulation,
@@ -556,13 +392,6 @@ class BallisticScrollActivity extends ScrollActivity {
     }
   }
 
-  /// Move the position to the given location.
-  ///
-  /// If the new position was fully applied, returns true. If there was any
-  /// overflow, returns false.
-  ///
-  /// The default implementation calls [ScrollActivityDelegate.setPixels]
-  /// and returns true if the overflow was zero.
   @protected
   bool applyMoveTo(double value) {
     return delegate.setPixels(value).abs() < precisionErrorTolerance;
@@ -602,18 +431,7 @@ class BallisticScrollActivity extends ScrollActivity {
   }
 }
 
-/// An activity that animates a scroll view based on animation parameters.
-///
-/// For example, a [DrivenScrollActivity] is used to implement
-/// [ScrollController.animateTo].
-///
-/// See also:
-///
-///  * [BallisticScrollActivity], which animates a scroll view based on a
-///    physics [Simulation].
 class DrivenScrollActivity extends ScrollActivity {
-  /// Creates an activity that animates a scroll view based on animation
-  /// parameters.
   DrivenScrollActivity(
     super.delegate, {
     required double from,
@@ -636,11 +454,6 @@ class DrivenScrollActivity extends ScrollActivity {
   late final Completer<void> _completer;
   late final AnimationController _controller;
 
-  /// A [Future] that completes when the activity stops.
-  ///
-  /// For example, this [Future] will complete if the animation reaches the end
-  /// or if the user interacts with the scroll view in way that causes the
-  /// animation to stop before it reaches the end.
   Future<void> get done => _completer.future;
 
   void _tick() {

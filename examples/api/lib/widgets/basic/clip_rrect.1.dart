@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ClipRRect].
 
 void main() => runApp(const ClipRRectApp());
 

@@ -11,26 +11,12 @@ import 'border_radius.dart';
 import 'borders.dart';
 import 'circle_border.dart';
 
-/// A rectangular border with rounded corners.
-///
-/// Typically used with [ShapeDecoration] to draw a box with a rounded
-/// rectangle.
-///
-/// This shape can interpolate to and from [CircleBorder].
-///
-/// See also:
-///
-///  * [BorderSide], which is used to describe each side of the box.
-///  * [Border], which, when used with [BoxDecoration], can also
-///    describe a rounded rectangle.
 class RoundedRectangleBorder extends OutlinedBorder {
-  /// Creates a rounded rectangle border.
   const RoundedRectangleBorder({
     super.side,
     this.borderRadius = BorderRadius.zero,
   });
 
-  /// The radii for each corner.
   final BorderRadiusGeometry borderRadius;
 
   @override
@@ -79,8 +65,6 @@ class RoundedRectangleBorder extends OutlinedBorder {
     return super.lerpTo(b, t);
   }
 
-  /// Returns a copy of this RoundedRectangleBorder with the given fields
-  /// replaced with the new values.
   @override
   RoundedRectangleBorder copyWith({ BorderSide? side, BorderRadiusGeometry? borderRadius }) {
     return RoundedRectangleBorder(

@@ -9,10 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Tuple-like test class for storing a [stream] and [eventKind].
-///
-/// Used to store the [stream] and [eventKind] that a dispatched event would be
-/// sent on.
 @immutable
 class DispatchedEventKey {
   const DispatchedEventKey({required this.stream, required this.eventKind});

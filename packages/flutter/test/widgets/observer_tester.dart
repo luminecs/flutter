@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 typedef OnObservation = void Function(Route<dynamic>? route, Route<dynamic>? previousRoute);
 
-/// A trivial observer for testing the navigator.
 class TestObserver extends NavigatorObserver {
   OnObservation? onPushed;
   OnObservation? onPopped;

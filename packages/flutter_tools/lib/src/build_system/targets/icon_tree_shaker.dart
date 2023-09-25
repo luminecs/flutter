@@ -23,16 +23,7 @@ List<Map<String, Object?>> _getList(Object? object, String errorMessage) {
   throw IconTreeShakerException._(errorMessage);
 }
 
-/// A class that wraps the functionality of the const finder package and the
-/// font subset utility to tree shake unused icons from fonts.
 class IconTreeShaker {
-  /// Creates a wrapper for icon font subsetting.
-  ///
-  /// If the `fontManifest` parameter is null, [enabled] will return false since
-  /// there are no fonts to shake.
-  ///
-  /// The constructor will validate the environment and print a warning if
-  /// font subsetting has been requested in a debug build mode.
   IconTreeShaker(
     this._environment,
     DevFSStringContent? fontManifest, {
@@ -54,7 +45,6 @@ class IconTreeShaker {
     }
   }
 
-  /// The MIME types for supported font sets.
   static const Set<String> kTtfMimeTypes = <String>{
     'font/ttf', // based on internet search
     'font/opentype',
@@ -64,9 +54,6 @@ class IconTreeShaker {
     'application/x-font-ttf', // based on running locally.
   };
 
-  /// The [Source] inputs that targets using this should depend on.
-  ///
-  /// See [Target.inputs].
   static const List<Source> inputs = <Source>[
     Source.pattern('{FLUTTER_ROOT}/packages/flutter_tools/lib/src/build_system/targets/icon_tree_shaker.dart'),
     Source.artifact(Artifact.constFinder),
@@ -84,7 +71,6 @@ class IconTreeShaker {
   final Artifacts _artifacts;
   final TargetPlatform _targetPlatform;
 
-  /// Whether font subsetting should be used for this [Environment].
   bool get enabled => _fontManifest != null
                    && _environment.defines[kIconTreeShakerFlag] == 'true'
                    && _environment.defines[kBuildMode] != 'debug';
@@ -150,13 +136,6 @@ class IconTreeShaker {
     _iconData = result;
   }
 
-  /// Calls font-subset, which transforms the [input] font file to a
-  /// subsetted version at [outputPath].
-  ///
-  /// If [enabled] is false, or the relative path is not recognized as an icon
-  /// font used in the Flutter application, this returns false.
-  /// If the font-subset subprocess fails, it will [throwToolExit].
-  /// Otherwise, it will return true.
   Future<bool> subsetFont({
     required File input,
     required String outputPath,
@@ -235,7 +214,6 @@ class IconTreeShaker {
         'by providing the --no-tree-shake-icons flag when building your app.';
   }
 
-  /// Returns a map of { fontFamily: relativePath } pairs.
   Future<Map<String, String>> _parseFontJson(
     String fontManifestData,
     Set<String> families,
@@ -364,10 +342,7 @@ class _ConstFinderResult {
   bool get hasNonConstantLocations => nonConstantLocations.isNotEmpty;
 }
 
-/// The font family name, relative path to font file, and list of code points
-/// the application is using.
 class _IconTreeShakerData {
-  /// All parameters are required.
   const _IconTreeShakerData({
     required this.family,
     required this.relativePath,
@@ -375,17 +350,12 @@ class _IconTreeShakerData {
     required this.optionalCodePoints,
   });
 
-  /// The font family name, e.g. "MaterialIcons".
   final String family;
 
-  /// The relative path to the font file.
   final String relativePath;
 
-  /// The list of code points for the font.
   final List<int> codePoints;
 
-  /// The list of code points to be optionally added, if they exist in the
-  /// input font. Otherwise, the tool will silently omit them.
   final List<int> optionalCodePoints;
 
   @override

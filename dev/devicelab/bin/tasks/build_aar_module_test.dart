@@ -12,7 +12,6 @@ import 'package:path/path.dart' as path;
 
 final String platformLineSep = Platform.isWindows ? '\r\n': '\n';
 
-/// Tests that AARs can be built on module projects.
 Future<void> main() async {
   await task(() async {
 

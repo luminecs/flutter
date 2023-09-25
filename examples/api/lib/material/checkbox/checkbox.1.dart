@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for M3 [Checkbox] with error state.
 
 void main() => runApp(const CheckboxExampleApp());
 

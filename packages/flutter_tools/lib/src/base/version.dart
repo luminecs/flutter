@@ -4,17 +4,8 @@
 
 import 'package:meta/meta.dart';
 
-/// Represents the version of some piece of software.
-///
-/// While a [Version] object has fields resembling semver, it does not
-/// necessarily represent a semver version.
 @immutable
 class Version implements Comparable<Version> {
-  /// Creates a new [Version] object.
-  ///
-  /// A null [minor] or [patch] version is logically equivalent to 0. Using null
-  /// for these parameters only affects the generation of [text], if no value
-  /// for it is provided.
   factory Version(int major, int? minor, int? patch, {String? text}) {
     if (text == null) {
       text = '$major';
@@ -29,7 +20,6 @@ class Version implements Comparable<Version> {
     return Version._(major, minor ?? 0, patch ?? 0, text);
   }
 
-  /// Public constant constructor when all fields are non-null, without default value fallbacks.
   const Version.withText(this.major, this.minor, this.patch, this._text);
 
   Version._(this.major, this.minor, this.patch, this._text) {
@@ -44,7 +34,6 @@ class Version implements Comparable<Version> {
     }
   }
 
-  /// Creates a new [Version] by parsing [text].
   static Version? parse(String? text) {
     final Match? match = versionPattern.firstMatch(text ?? '');
     if (match == null) {
@@ -61,9 +50,6 @@ class Version implements Comparable<Version> {
     }
   }
 
-  /// Returns the primary version out of a list of candidates.
-  ///
-  /// This is the highest-numbered stable version.
   static Version? primary(List<Version> versions) {
     Version? primary;
     for (final Version version in versions) {
@@ -74,26 +60,17 @@ class Version implements Comparable<Version> {
     return primary;
   }
 
-  /// The major version number: "1" in "1.2.3".
   final int major;
 
-  /// The minor version number: "2" in "1.2.3".
   final int minor;
 
-  /// The patch version number: "3" in "1.2.3".
   final int patch;
 
-  /// The original string representation of the version number.
-  ///
-  /// This preserves textual artifacts like leading zeros that may be left out
-  /// of the parsed version.
   final String _text;
 
   static final RegExp versionPattern =
       RegExp(r'^(\d+)(\.(\d+)(\.(\d+))?)?');
 
-  /// Two [Version]s are equal if their version numbers are. The version text
-  /// is ignored.
   @override
   bool operator ==(Object other) {
     return other is Version
@@ -125,13 +102,6 @@ class Version implements Comparable<Version> {
   String toString() => _text;
 }
 
-/// Returns true if [targetVersion] is within the range [min] and [max]
-/// inclusive by default.
-///
-/// [min] and [max] are evaluated by [Version.parse(text)].
-///
-/// Pass [inclusiveMin] = false for greater than and not equal to min.
-/// Pass [inclusiveMax] = false for less than and not equal to max.
 bool isWithinVersionRange(
   String targetVersion, {
   required String min,

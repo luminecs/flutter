@@ -209,7 +209,6 @@ class _${blockName}DefaultsM3 extends InputDecorationTheme {
 }
 ''';
 
-  /// Generate a [BorderSide] for the given components.
   String mergedBorder(String componentToken1, String componentToken2) {
     final String borderColor = componentColor(componentToken1)!= 'null'
         ? componentColor(componentToken1)

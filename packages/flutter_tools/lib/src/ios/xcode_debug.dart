@@ -17,8 +17,6 @@ import '../convert.dart';
 import '../macos/xcode.dart';
 import '../template.dart';
 
-/// A class to handle interacting with Xcode via OSA (Open Scripting Architecture)
-/// Scripting to debug Flutter applications.
 class XcodeDebug {
   XcodeDebug({
     required Logger logger,
@@ -35,24 +33,14 @@ class XcodeDebug {
   final Xcode _xcode;
   final FileSystem _fileSystem;
 
-  /// Process to start Xcode's debug action.
   @visibleForTesting
   Process? startDebugActionProcess;
 
-  /// Information about the project that is currently being debugged.
   @visibleForTesting
   XcodeDebugProject? currentDebuggingProject;
 
-  /// Whether the debug action has been started.
   bool get debugStarted => currentDebuggingProject != null;
 
-  /// Install, launch, and start a debug session for app through Xcode interface,
-  /// automated by OSA scripting. First checks if the project is opened in
-  /// Xcode. If it isn't, open it with the `open` command.
-  ///
-  /// The OSA script waits until the project is opened and the debug action
-  /// has started. It does not wait for the app to install, launch, or start
-  /// the debug session.
   Future<bool> debugApp({
     required XcodeDebugProject project,
     required String deviceId,
@@ -171,10 +159,6 @@ class XcodeDebug {
     }
   }
 
-  /// Kills [startDebugActionProcess] if it's still running. If [force] is true, it
-  /// will kill all Xcode app processes. Otherwise, it will stop the debug
-  /// session in Xcode. If the project is temporary, it will close the Xcode
-  /// window of the project and then delete the project.
   Future<bool> exit({
     bool force = false,
     @visibleForTesting
@@ -225,7 +209,6 @@ class XcodeDebug {
     return success;
   }
 
-  /// Kill all opened Xcode applications.
   Future<bool> _forceExitXcode() async {
     final RunResult result = await _processUtils.run(
       <String>[
@@ -321,11 +304,6 @@ class XcodeDebug {
     return false;
   }
 
-  /// Using OSA Scripting, stop the debug session in Xcode.
-  ///
-  /// If [closeXcode] is true, it will close the Xcode window that has the
-  /// project opened. If [promptToSaveOnClose] is true, it will ask the user if
-  /// they want to save any changes before it closes.
   Future<bool> stopDebuggingApp({
     required XcodeDebugProject project,
     bool closeXcode = false,
@@ -367,8 +345,6 @@ class XcodeDebug {
     return true;
   }
 
-  /// Create a temporary empty Xcode project with the application bundle
-  /// location explicitly set.
   Future<XcodeDebugProject> createXcodeProjectWithCustomBundle(
     String deviceBundlePath, {
     required TemplateRenderer templateRenderer,
@@ -447,21 +423,10 @@ class XcodeAutomationScriptDebugResult {
     );
   }
 
-  /// Whether this scheme action has completed (sucessfully or otherwise). Will
-  /// be false if still running.
   final bool? completed;
 
-  /// The status of the debug action. Potential statuses include:
-  /// `not yet started`, `‌running`, `‌cancelled`, `‌failed`, `‌error occurred`,
-  /// and `‌succeeded`.
-  ///
-  /// Only the status of `‌running` indicates the debug action has started successfully.
-  /// For example, `‌succeeded` often does not indicate success as if the action fails,
-  /// it will sometimes return `‌succeeded`.
   final String? status;
 
-  /// When [status] is `‌error occurred`, an error message is provided.
-  /// Otherwise, this will be null.
   final String? errorMessage;
 }
 
@@ -479,7 +444,5 @@ class XcodeDebugProject {
   final Directory xcodeProject;
   final bool isTemporaryProject;
 
-  /// When [verboseLogging] is true, the xcode_debug.js script will log
-  /// additional information via console.log, which is sent to stderr.
   final bool verboseLogging;
 }

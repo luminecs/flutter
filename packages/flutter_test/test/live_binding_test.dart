@@ -129,7 +129,6 @@ void main() {
   });
 }
 
-/// A widget that shows the number of times it has been tapped.
 class _ShowNumTaps extends StatefulWidget {
   @override
   _ShowNumTapsState createState() => _ShowNumTapsState();

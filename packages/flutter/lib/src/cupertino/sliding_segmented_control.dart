@@ -253,65 +253,7 @@ class _SegmentSeparatorState extends State<_SegmentSeparator> with TickerProvide
   }
 }
 
-/// An iOS 13 style segmented control.
-///
-/// Displays the widgets provided in the [Map] of [children] in a horizontal list.
-/// It allows the user to select between a number of mutually exclusive options,
-/// by tapping or dragging within the segmented control.
-///
-/// A segmented control can feature any [Widget] as one of the values in its
-/// [Map] of [children]. The type T is the type of the [Map] keys used to identify
-/// each widget and determine which widget is selected. As required by the [Map]
-/// class, keys must be of consistent types and must be comparable. The [children]
-/// argument must be an ordered [Map] such as a [LinkedHashMap], the ordering of
-/// the keys will determine the order of the widgets in the segmented control.
-///
-/// The widget calls the [onValueChanged] callback *when a valid user gesture
-/// completes on an unselected segment*. The map key associated with the newly
-/// selected widget is returned in the [onValueChanged] callback. Typically,
-/// widgets that use a segmented control will listen for the [onValueChanged]
-/// callback and rebuild the segmented control with a new [groupValue] to update
-/// which option is currently selected.
-///
-/// The [children] will be displayed in the order of the keys in the [Map],
-/// along the current [TextDirection]. Each child widget will have the same size.
-/// The height of the segmented control is determined by the height of the
-/// tallest child widget. The width of each child will be the intrinsic width of
-/// the widest child, or the available horizontal space divided by the number of
-/// [children], which ever is smaller.
-///
-/// A segmented control may optionally be created with custom colors. The
-/// [thumbColor], [backgroundColor] arguments can be used to override the
-/// segmented control's colors from its defaults.
-///
-/// {@tool dartpad}
-/// This example shows a [CupertinoSlidingSegmentedControl] with an enum type.
-///
-/// The callback provided to [onValueChanged] should update the state of
-/// the parent [StatefulWidget] using the [State.setState] method, so that
-/// the parent gets rebuilt; for example:
-///
-/// ** See code in examples/api/lib/cupertino/segmented_control/cupertino_sliding_segmented_control.0.dart **
-/// {@end-tool}
-/// See also:
-///
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/controls/segmented-controls/>
 class CupertinoSlidingSegmentedControl<T> extends StatefulWidget {
-  /// Creates an iOS-style segmented control bar.
-  ///
-  /// The [children] argument must be an ordered [Map] such as a
-  /// [LinkedHashMap]. Further, the length of the [children] list must be
-  /// greater than one.
-  ///
-  /// Each widget value in the map of [children] must have an associated key
-  /// that uniquely identifies this widget. This key is what will be returned
-  /// in the [onValueChanged] callback when a new value from the [children] map
-  /// is selected.
-  ///
-  /// The [groupValue] is the currently selected value for the segmented control.
-  /// If no [groupValue] is provided, or the [groupValue] is null, no widget will
-  /// appear as selected. The [groupValue] must be either null or one of the keys
-  /// in the [children] map.
   CupertinoSlidingSegmentedControl({
     super.key,
     required this.children,
@@ -326,82 +268,16 @@ class CupertinoSlidingSegmentedControl<T> extends StatefulWidget {
          'The groupValue must be either null or one of the keys in the children map.',
        );
 
-  /// The identifying keys and corresponding widget values in the
-  /// segmented control.
-  ///
-  /// This attribute must be an ordered [Map] such as a [LinkedHashMap]. Each
-  /// widget is typically a single-line [Text] widget or an [Icon] widget.
-  ///
-  /// The map must have more than one entry.
   final Map<T, Widget> children;
 
-  /// The identifier of the widget that is currently selected.
-  ///
-  /// This must be one of the keys in the [Map] of [children].
-  /// If this attribute is null, no widget will be initially selected.
   final T? groupValue;
 
-  /// The callback that is called when a new option is tapped.
-  ///
-  /// The segmented control passes the newly selected widget's associated key
-  /// to the callback but does not actually change state until the parent
-  /// widget rebuilds the segmented control with the new [groupValue].
-  ///
-  /// The callback provided to [onValueChanged] should update the state of
-  /// the parent [StatefulWidget] using the [State.setState] method, so that
-  /// the parent gets rebuilt; for example:
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// class SegmentedControlExample extends StatefulWidget {
-  ///   const SegmentedControlExample({super.key});
-  ///
-  ///   @override
-  ///   State createState() => SegmentedControlExampleState();
-  /// }
-  ///
-  /// class SegmentedControlExampleState extends State<SegmentedControlExample> {
-  ///   final Map<int, Widget> children = const <int, Widget>{
-  ///     0: Text('Child 1'),
-  ///     1: Text('Child 2'),
-  ///   };
-  ///
-  ///   int? currentValue;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return CupertinoSlidingSegmentedControl<int>(
-  ///       children: children,
-  ///       onValueChanged: (int? newValue) {
-  ///         setState(() {
-  ///           currentValue = newValue;
-  ///         });
-  ///       },
-  ///       groupValue: currentValue,
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
   final ValueChanged<T?> onValueChanged;
 
-  /// The color used to paint the rounded rect behind the [children] and the separators.
-  ///
-  /// The default value is [CupertinoColors.tertiarySystemFill]. The background
-  /// will not be painted if null is specified.
   final Color backgroundColor;
 
-  /// The color used to paint the interior of the thumb that appears behind the
-  /// currently selected item.
-  ///
-  /// The default value is a [CupertinoDynamicColor] that appears white in light
-  /// mode and becomes a gray color in dark mode.
   final Color thumbColor;
 
-  /// The amount of space by which to inset the [children].
-  ///
-  /// Defaults to `EdgeInsets.symmetric(vertical: 2, horizontal: 3)`.
   final EdgeInsetsGeometry padding;
 
   @override
@@ -766,7 +642,6 @@ class _SegmentedControlContainerBoxParentData extends ContainerBoxParentData<Ren
 // 4. A tap down event on the segment pointed to by the current selected
 //    index will trigger a CABasicAnimation that shrinks the thumb to 95% of its
 //    original size, even if the sliding animation is still playing. The
-///   corresponding tap up event inverts the process (eyeballed).
 //
 // 5. A tap down event on other segments will trigger a CABasicAnimation
 //    (timingFunction = default, duration = 0.47.) that fades out the content

@@ -14,16 +14,6 @@ import 'devices.dart';
 import 'task_result.dart';
 import 'utils.dart';
 
-/// Run a list of tasks.
-///
-/// For each task, an auto rerun will be triggered when task fails.
-///
-/// If the task succeeds the first time, it will be recorded as successful.
-///
-/// If the task fails first, but gets passed in the end, the
-/// test will be recorded as successful but with a flake flag.
-///
-/// If the task fails all reruns, it will be recorded as failed.
 Future<void> runTasks(
   List<String> taskNames, {
   bool exitOnFirstTestFailure = false,
@@ -97,9 +87,6 @@ Future<void> runTasks(
   }
 }
 
-/// A rerun wrapper for `runTask`.
-///
-/// This separates reruns in separate sections.
 Future<TaskResult> rerunTask(
   String taskName, {
   String? deviceId,
@@ -145,16 +132,6 @@ Future<TaskResult> rerunTask(
   return result;
 }
 
-/// Runs a task in a separate Dart VM and collects the result using the VM
-/// service protocol.
-///
-/// [taskName] is the name of the task. The corresponding task executable is
-/// expected to be found under `bin/tasks`.
-///
-/// Running the task in [silent] mode will suppress standard output from task
-/// processes and only print standard errors.
-///
-/// [taskArgs] are passed to the task executable for additional configuration.
 Future<TaskResult> runTask(
   String taskName, {
   bool terminateStrayDartProcesses = false,
@@ -302,7 +279,6 @@ class ConnectionResult {
   final IsolateRef isolate;
 }
 
-/// The cocoon client sends an invalid VM service response, we need to intercept it.
 Future<VmService> vmServiceConnectUri(String wsUri, {Log? log}) async {
   final WebSocket socket = await WebSocket.connect(wsUri);
   final StreamController<dynamic> controller = StreamController<dynamic>();

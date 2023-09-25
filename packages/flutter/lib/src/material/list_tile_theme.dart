@@ -16,34 +16,8 @@ import 'theme_data.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Used with [ListTileTheme] to define default property values for
-/// descendant [ListTile] widgets, as well as classes that build
-/// [ListTile]s, like [CheckboxListTile], [RadioListTile], and
-/// [SwitchListTile].
-///
-/// Descendant widgets obtain the current [ListTileThemeData] object
-/// using `ListTileTheme.of(context)`. Instances of
-/// [ListTileThemeData] can be customized with
-/// [ListTileThemeData.copyWith].
-///
-/// A [ListTileThemeData] is often specified as part of the
-/// overall [Theme] with [ThemeData.listTileTheme].
-///
-/// All [ListTileThemeData] properties are `null` by default.
-/// When a theme property is null, the [ListTile] will provide its own
-/// default based on the overall [Theme]'s textTheme and
-/// colorScheme. See the individual [ListTile] properties for details.
-///
-/// The [Drawer] widget specifies a list tile theme for its children that
-/// defines [style] to be [ListTileStyle.drawer].
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class ListTileThemeData with Diagnosticable {
-  /// Creates a [ListTileThemeData].
   const ListTileThemeData ({
     this.dense,
     this.shape,
@@ -66,65 +40,44 @@ class ListTileThemeData with Diagnosticable {
     this.titleAlignment,
   });
 
-  /// Overrides the default value of [ListTile.dense].
   final bool? dense;
 
-  /// Overrides the default value of [ListTile.shape].
   final ShapeBorder? shape;
 
-  /// Overrides the default value of [ListTile.style].
   final ListTileStyle? style;
 
-  /// Overrides the default value of [ListTile.selectedColor].
   final Color? selectedColor;
 
-  /// Overrides the default value of [ListTile.iconColor].
   final Color? iconColor;
 
-  /// Overrides the default value of [ListTile.textColor].
   final Color? textColor;
 
-  /// Overrides the default value of [ListTile.titleTextStyle].
   final TextStyle? titleTextStyle;
 
-  /// Overrides the default value of [ListTile.subtitleTextStyle].
   final TextStyle? subtitleTextStyle;
 
-  /// Overrides the default value of [ListTile.leadingAndTrailingTextStyle].
   final TextStyle? leadingAndTrailingTextStyle;
 
-  /// Overrides the default value of [ListTile.contentPadding].
   final EdgeInsetsGeometry? contentPadding;
 
-  /// Overrides the default value of [ListTile.tileColor].
   final Color? tileColor;
 
-  /// Overrides the default value of [ListTile.selectedTileColor].
   final Color? selectedTileColor;
 
-  /// Overrides the default value of [ListTile.horizontalTitleGap].
   final double? horizontalTitleGap;
 
-  /// Overrides the default value of [ListTile.minVerticalPadding].
   final double? minVerticalPadding;
 
-  /// Overrides the default value of [ListTile.minLeadingWidth].
   final double? minLeadingWidth;
 
-  /// Overrides the default value of [ListTile.enableFeedback].
   final bool? enableFeedback;
 
-  /// If specified, overrides the default value of [ListTile.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 
-  /// If specified, overrides the default value of [ListTile.visualDensity].
   final VisualDensity? visualDensity;
 
-  /// If specified, overrides the default value of [ListTile.titleAlignment].
   final ListTileTitleAlignment? titleAlignment;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   ListTileThemeData copyWith({
     bool? dense,
     ShapeBorder? shape,
@@ -170,7 +123,6 @@ class ListTileThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between ListTileThemeData objects.
   static ListTileThemeData? lerp(ListTileThemeData? a, ListTileThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -276,20 +228,7 @@ class ListTileThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines color and style parameters for [ListTile]s
-/// in this widget's subtree.
-///
-/// Values specified here are used for [ListTile] properties that are not given
-/// an explicit non-null value.
-///
-/// The [Drawer] widget specifies a tile theme for its children which sets
-/// [style] to [ListTileStyle.drawer].
 class ListTileTheme extends InheritedTheme {
-  /// Creates a list tile theme that defines the color and style parameters for
-  /// descendant [ListTile]s.
-  ///
-  /// Only the [data] parameter should be used. The other parameters are
-  /// redundant (are now obsolete) and will be deprecated in a future update.
   const ListTileTheme({
     super.key,
     ListTileThemeData? data,
@@ -354,7 +293,6 @@ class ListTileTheme extends InheritedTheme {
   final bool? _enableFeedback;
   final MaterialStateProperty<MouseCursor?>? _mouseCursor;
 
-  /// The configuration of this theme.
   ListTileThemeData get data {
     return _data ?? ListTileThemeData(
       dense: _dense,
@@ -374,102 +312,37 @@ class ListTileTheme extends InheritedTheme {
     );
   }
 
-  /// Overrides the default value of [ListTile.dense].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.dense] property instead.
   bool? get dense => _data != null ? _data.dense : _dense;
 
-  /// Overrides the default value of [ListTile.shape].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.shape] property instead.
   ShapeBorder? get shape => _data != null ? _data.shape : _shape;
 
-  /// Overrides the default value of [ListTile.style].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.style] property instead.
   ListTileStyle? get style => _data != null ? _data.style : _style;
 
-  /// Overrides the default value of [ListTile.selectedColor].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.selectedColor] property instead.
   Color? get selectedColor => _data != null ? _data.selectedColor : _selectedColor;
 
-  /// Overrides the default value of [ListTile.iconColor].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.iconColor] property instead.
   Color? get iconColor => _data != null ? _data.iconColor : _iconColor;
 
-  /// Overrides the default value of [ListTile.textColor].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.textColor] property instead.
   Color? get textColor => _data != null ? _data.textColor : _textColor;
 
-  /// Overrides the default value of [ListTile.contentPadding].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.contentPadding] property instead.
   EdgeInsetsGeometry? get contentPadding => _data != null ? _data.contentPadding : _contentPadding;
 
-  /// Overrides the default value of [ListTile.tileColor].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.tileColor] property instead.
   Color? get tileColor => _data != null ? _data.tileColor : _tileColor;
 
-  /// Overrides the default value of [ListTile.selectedTileColor].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.selectedTileColor] property instead.
   Color? get selectedTileColor => _data != null ? _data.selectedTileColor : _selectedTileColor;
 
-  /// Overrides the default value of [ListTile.horizontalTitleGap].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.horizontalTitleGap] property instead.
   double? get horizontalTitleGap => _data != null ? _data.horizontalTitleGap : _horizontalTitleGap;
 
-  /// Overrides the default value of [ListTile.minVerticalPadding].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.minVerticalPadding] property instead.
   double? get minVerticalPadding => _data != null ? _data.minVerticalPadding : _minVerticalPadding;
 
-  /// Overrides the default value of [ListTile.minLeadingWidth].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.minLeadingWidth] property instead.
   double? get minLeadingWidth => _data != null ? _data.minLeadingWidth : _minLeadingWidth;
 
-  /// Overrides the default value of [ListTile.enableFeedback].
-  ///
-  /// This property is obsolete: please use the [data]
-  /// [ListTileThemeData.enableFeedback] property instead.
   bool? get enableFeedback => _data != null ? _data.enableFeedback : _enableFeedback;
 
-  /// The [data] property of the closest instance of this class that
-  /// encloses the given context.
-  ///
-  /// If there is no enclosing [ListTileTheme] widget, then
-  /// [ThemeData.listTileTheme] is used (see [Theme.of]).
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// ListTileThemeData theme = ListTileTheme.of(context);
-  /// ```
   static ListTileThemeData of(BuildContext context) {
     final ListTileTheme? result = context.dependOnInheritedWidgetOfExactType<ListTileTheme>();
     return result?.data ?? Theme.of(context).listTileTheme;
   }
 
-  /// Creates a list tile theme that controls the color and style parameters for
-  /// [ListTile]s, and merges in the current list tile theme, if any.
   static Widget merge({
     Key? key,
     bool? dense,

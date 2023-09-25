@@ -32,13 +32,7 @@ const double _kMinimumWidth = 112.0;
 
 const double _kDefaultHorizontalPadding = 12.0;
 
-/// Defines a [DropdownMenu] menu button that represents one item view in the menu.
-///
-/// See also:
-///
-/// * [DropdownMenu]
 class DropdownMenuEntry<T> {
-  /// Creates an entry that is used with [DropdownMenu.dropdownMenuEntries].
   const DropdownMenuEntry({
     required this.value,
     required this.label,
@@ -49,85 +43,23 @@ class DropdownMenuEntry<T> {
     this.style,
   });
 
-  /// the value used to identify the entry.
-  ///
-  /// This value must be unique across all entries in a [DropdownMenu].
   final T value;
 
-  /// The label displayed in the center of the menu item.
   final String label;
 
-  /// Overrides the default label widget which is `Text(label)`.
-  ///
-  /// {@tool dartpad}
-  /// This sample shows how to override the default label [Text]
-  /// widget with one that forces the menu entry to appear on one line
-  /// by specifying [Text.maxLines] and [Text.overflow].
-  ///
-  /// ** See code in examples/api/lib/material/dropdown_menu/dropdown_menu_entry_label_widget.0.dart **
-  /// {@end-tool}
   final Widget? labelWidget;
 
-  /// An optional icon to display before the label.
   final Widget? leadingIcon;
 
-  /// An optional icon to display after the label.
   final Widget? trailingIcon;
 
-  /// Whether the menu item is enabled or disabled.
-  ///
-  /// The default value is true. If true, the [DropdownMenuEntry.label] will be filled
-  /// out in the text field of the [DropdownMenu] when this entry is clicked; otherwise,
-  /// this entry is disabled.
   final bool enabled;
 
-  /// Customizes this menu item's appearance.
-  ///
-  /// Null by default.
   final ButtonStyle? style;
 }
 
 
-/// A dropdown menu that can be opened from a [TextField]. The selected
-/// menu item is displayed in that field.
-///
-/// This widget is used to help people make a choice from a menu and put the
-/// selected item into the text input field. People can also filter the list based
-/// on the text input or search one item in the menu list.
-///
-/// The menu is composed of a list of [DropdownMenuEntry]s. People can provide information,
-/// such as: label, leading icon or trailing icon for each entry. The [TextField]
-/// will be updated based on the selection from the menu entries. The text field
-/// will stay empty if the selected entry is disabled.
-///
-/// The dropdown menu can be traversed by pressing the up or down key. During the
-/// process, the corresponding item will be highlighted and the text field will be updated.
-/// Disabled items will be skipped during traversal.
-///
-/// The menu can be scrollable if not all items in the list are displayed at once.
-///
-/// {@tool dartpad}
-/// This sample shows how to display outlined [DropdownMenu] and filled [DropdownMenu].
-///
-/// ** See code in examples/api/lib/material/dropdown_menu/dropdown_menu.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-/// * [MenuAnchor], which is a widget used to mark the "anchor" for a set of submenus.
-///   The [DropdownMenu] uses a [TextField] as the "anchor".
-/// * [TextField], which is a text input widget that uses an [InputDecoration].
-/// * [DropdownMenuEntry], which is used to build the [MenuItemButton] in the [DropdownMenu] list.
 class DropdownMenu<T> extends StatefulWidget {
-  /// Creates a const [DropdownMenu].
-  ///
-  /// The leading and trailing icons in the text field can be customized by using
-  /// [leadingIcon], [trailingIcon] and [selectedTrailingIcon] properties. They are
-  /// passed down to the [InputDecoration] properties, and will override values
-  /// in the [InputDecoration.prefixIcon] and [InputDecoration.suffixIcon].
-  ///
-  /// Except leading and trailing icons, the text field can be configured by the
-  /// [InputDecorationTheme] property. The menu can be configured by the [menuStyle].
   const DropdownMenu({
     super.key,
     this.enabled = true,
@@ -153,154 +85,46 @@ class DropdownMenu<T> extends StatefulWidget {
     required this.dropdownMenuEntries,
   });
 
-  /// Determine if the [DropdownMenu] is enabled.
-  ///
-  /// Defaults to true.
   final bool enabled;
 
-  /// Determine the width of the [DropdownMenu].
-  ///
-  /// If this is null, the width of the [DropdownMenu] will be the same as the width of the widest
-  /// menu item plus the width of the leading/trailing icon.
   final double? width;
 
-  /// Determine the height of the menu.
-  ///
-  /// If this is null, the menu will display as many items as possible on the screen.
   final double? menuHeight;
 
-  /// An optional Icon at the front of the text input field.
-  ///
-  /// Defaults to null. If this is not null, the menu items will have extra paddings to be aligned
-  /// with the text in the text field.
   final Widget? leadingIcon;
 
-  /// An optional icon at the end of the text field.
-  ///
-  /// Defaults to an [Icon] with [Icons.arrow_drop_down].
   final Widget? trailingIcon;
 
-  /// Optional widget that describes the input field.
-  ///
-  /// When the input field is empty and unfocused, the label is displayed on
-  /// top of the input field (i.e., at the same location on the screen where
-  /// text may be entered in the input field). When the input field receives
-  /// focus (or if the field is non-empty), the label moves above, either
-  /// vertically adjacent to, or to the center of the input field.
-  ///
-  /// Defaults to null.
   final Widget? label;
 
-  /// Text that suggests what sort of input the field accepts.
-  ///
-  /// Defaults to null;
   final String? hintText;
 
-  /// Text that provides context about the [DropdownMenu]'s value, such
-  /// as how the value will be used.
-  ///
-  /// If non-null, the text is displayed below the input field, in
-  /// the same location as [errorText]. If a non-null [errorText] value is
-  /// specified then the helper text is not shown.
-  ///
-  /// Defaults to null;
-  ///
-  /// See also:
-  ///
-  /// * [InputDecoration.helperText], which is the text that provides context about the [InputDecorator.child]'s value.
   final String? helperText;
 
-  /// Text that appears below the input field and the border to show the error message.
-  ///
-  /// If non-null, the border's color animates to red and the [helperText] is not shown.
-  ///
-  /// Defaults to null;
-  ///
-  /// See also:
-  ///
-  /// * [InputDecoration.errorText], which is the text that appears below the [InputDecorator.child] and the border.
   final String? errorText;
 
-  /// An optional icon at the end of the text field to indicate that the text
-  /// field is pressed.
-  ///
-  /// Defaults to an [Icon] with [Icons.arrow_drop_up].
   final Widget? selectedTrailingIcon;
 
-  /// Determine if the menu list can be filtered by the text input.
-  ///
-  /// Defaults to false.
   final bool enableFilter;
 
-  /// Determine if the first item that matches the text input can be highlighted.
-  ///
-  /// Defaults to true as the search function could be commonly used.
   final bool enableSearch;
 
-  /// The text style for the [TextField] of the [DropdownMenu];
-  ///
-  /// Defaults to the overall theme's [TextTheme.bodyLarge]
-  /// if the dropdown menu theme's value is null.
   final TextStyle? textStyle;
 
-  /// Defines the default appearance of [InputDecoration] to show around the text field.
-  ///
-  /// By default, shows a outlined text field.
   final InputDecorationTheme? inputDecorationTheme;
 
-  /// The [MenuStyle] that defines the visual attributes of the menu.
-  ///
-  /// The default width of the menu is set to the width of the text field.
   final MenuStyle? menuStyle;
 
-  /// Controls the text being edited or selected in the menu.
-  ///
-  /// If null, this widget will create its own [TextEditingController].
   final TextEditingController? controller;
 
-  /// The value used to for an initial selection.
-  ///
-  /// Defaults to null.
   final T? initialSelection;
 
-  /// The callback is called when a selection is made.
-  ///
-  /// Defaults to null. If null, only the text field is updated.
   final ValueChanged<T?>? onSelected;
 
-  /// Determine if the dropdown button requests focus and the on-screen virtual
-  /// keyboard is shown in response to a touch event.
-  ///
-  /// By default, on mobile platforms, tapping on the text field and opening
-  /// the menu will not cause a focus request and the virtual keyboard will not
-  /// appear. The default behavior for desktop platforms is for the dropdown to
-  /// take the focus.
-  ///
-  /// Defaults to null. Setting this field to true or false, rather than allowing
-  /// the implementation to choose based on the platform, can be useful for
-  /// applications that want to override the default behavior.
   final bool? requestFocusOnTap;
 
-  /// Descriptions of the menu items in the [DropdownMenu].
-  ///
-  /// This is a required parameter. It is recommended that at least one [DropdownMenuEntry]
-  /// is provided. If this is an empty list, the menu will be empty and only
-  /// contain space for padding.
   final List<DropdownMenuEntry<T>> dropdownMenuEntries;
 
-  /// Defines the menu text field's width to be equal to its parent's width
-  /// plus the horizontal width of the specified insets.
-  ///
-  /// If this property is null, the width of the text field will be determined
-  /// by the width of menu items or [DropdownMenu.width]. If this property is not null,
-  /// the text field's width will match the parent's width plus the specified insets.
-  /// If the value of this property is [EdgeInsets.zero], the width of the text field will be the same
-  /// as its parent's width.
-  ///
-  /// The [expandedInsets]' top and bottom are ignored, only its left and right
-  /// properties are used.
-  ///
-  /// Defaults to null.
   final EdgeInsets? expandedInsets;
 
   @override

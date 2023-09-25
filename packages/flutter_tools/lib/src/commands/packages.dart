@@ -20,7 +20,6 @@ import '../project.dart';
 import '../reporting/reporting.dart';
 import '../runner/flutter_command.dart';
 
-/// The function signature of the [print] function.
 typedef PrintFn = void Function(Object?);
 
 class PackagesCommand extends FlutterCommand {
@@ -172,7 +171,6 @@ class PackagesPassthroughCommand extends FlutterCommand {
   }
 }
 
-/// Represents the pub sub-commands that makes package-resolutions.
 class PackagesGetCommand extends FlutterCommand {
   PackagesGetCommand(this._commandName, this._description, this._context);
 
@@ -199,15 +197,6 @@ class PackagesGetCommand extends FlutterCommand {
     return '${runner!.executableName} pub $_commandName [<arguments...>]';
   }
 
-  /// An [ArgParser] that accepts all options and flags that the
-  ///
-  /// `pub get`
-  /// `pub upgrade`
-  /// `pub downgrade`
-  /// `pub add`
-  /// `pub remove`
-  ///
-  /// commands accept.
   ArgParser get _permissiveArgParser {
     final ArgParser argParser = ArgParser();
     argParser.addOption('directory', abbr: 'C');
@@ -372,8 +361,6 @@ class PackagesGetCommand extends FlutterCommand {
     return FlutterCommandResult.success();
   }
 
-  /// The pub packages usage values are incorrect since these are calculated/sent
-  /// before pub get completes. This needs to be performed after dependency resolution.
   @override
   Future<CustomDimensions> get usageValues async {
     final FlutterProject? rootProject = _rootProject;

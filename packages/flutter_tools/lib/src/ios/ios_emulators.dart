@@ -71,7 +71,6 @@ class IOSEmulator extends Emulator {
   }
 }
 
-/// Return the list of iOS Simulators (there can only be zero or one).
 List<IOSEmulator> getEmulators() {
   final String? simulatorPath = globals.xcode?.getSimulatorPath();
   if (simulatorPath == null) {

@@ -26,7 +26,6 @@ import '../migrations/cmake_native_assets_migration.dart';
 // - Error: <tool error...>
 final RegExp errorMatcher = RegExp(r'(?:(?:.*:\d+:\d+|clang):\s)?(fatal\s)?(?:error|warning):\s.*', caseSensitive: false);
 
-/// Builds the Linux project through the Makefile.
 Future<void> buildLinux(
   LinuxProject linuxProject,
   BuildInfo buildInfo, {

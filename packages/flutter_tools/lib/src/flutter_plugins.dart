@@ -112,7 +112,6 @@ const String _kFlutterPluginsDependenciesKey = 'dependencies';
 const String _kFlutterPluginsHasNativeBuildKey = 'native_build';
 const String _kFlutterPluginsSharedDarwinSource = 'shared_darwin_source';
 
-/// Filters [plugins] to those supported by [platformKey].
 List<Map<String, Object>> _filterPluginsByPlatform(List<Plugin> plugins, String platformKey) {
   final Iterable<Plugin> platformPlugins = plugins.where((Plugin p) {
     return p.platforms.containsKey(platformKey);
@@ -136,54 +135,6 @@ List<Map<String, Object>> _filterPluginsByPlatform(List<Plugin> plugins, String 
   return pluginInfo;
 }
 
-/// Writes the .flutter-plugins-dependencies file based on the list of plugins.
-/// If there aren't any plugins, then the files aren't written to disk. The resulting
-/// file looks something like this (order of keys is not guaranteed):
-/// {
-///   "info": "This is a generated file; do not edit or check into version control.",
-///   "plugins": {
-///     "ios": [
-///       {
-///         "name": "test",
-///         "path": "test_path",
-///         "dependencies": [
-///           "plugin-a",
-///           "plugin-b"
-///         ],
-///         "native_build": true
-///       }
-///     ],
-///     "android": [],
-///     "macos": [],
-///     "linux": [],
-///     "windows": [],
-///     "web": []
-///   },
-///   "dependencyGraph": [
-///     {
-///       "name": "plugin-a",
-///       "dependencies": [
-///         "plugin-b",
-///         "plugin-c"
-///       ]
-///     },
-///     {
-///       "name": "plugin-b",
-///       "dependencies": [
-///         "plugin-c"
-///       ]
-///     },
-///     {
-///       "name": "plugin-c",
-///       "dependencies": []
-///     }
-///   ],
-///   "date_created": "1970-01-01 00:00:00.000",
-///   "version": "0.0.0-unknown"
-/// }
-///
-///
-/// Finally, returns [true] if the plugins list has changed, otherwise returns [false].
 bool _writeFlutterPluginsList(FlutterProject project, List<Plugin> plugins) {
   final File pluginsFile = project.flutterPluginsDependenciesFile;
   if (plugins.isEmpty) {
@@ -209,9 +160,6 @@ bool _writeFlutterPluginsList(FlutterProject project, List<Plugin> plugins) {
 
   result['info'] =  'This is a generated file; do not edit or check into version control.';
   result[_kFlutterPluginsPluginListKey] = pluginsMap;
-  /// The dependencyGraph object is kept for backwards compatibility, but
-  /// should be removed once migration is complete.
-  /// https://github.com/flutter/flutter/issues/48918
   result['dependencyGraph'] = _createPluginLegacyDependencyGraph(plugins);
   result['date_created'] = globals.systemClock.now().toString();
   result['version'] = globals.flutterVersion.frameworkVersion;
@@ -247,10 +195,6 @@ List<Object?> _createPluginLegacyDependencyGraph(List<Plugin> plugins) {
 // TODO(franciscojma): Remove this method once deprecated.
 // https://github.com/flutter/flutter/issues/48918
 //
-/// Writes the .flutter-plugins files based on the list of plugins.
-/// If there aren't any plugins, then the files aren't written to disk.
-///
-/// Finally, returns [true] if .flutter-plugins has changed, otherwise returns [false].
 bool _writeFlutterPluginsListLegacy(FlutterProject project, List<Plugin> plugins) {
   final File pluginsFile = project.flutterPluginsFile;
   if (plugins.isEmpty) {
@@ -270,7 +214,6 @@ bool _writeFlutterPluginsListLegacy(FlutterProject project, List<Plugin> plugins
   return oldPluginFileContent != _readFileContent(pluginsFile);
 }
 
-/// Returns the contents of [File] or [null] if that file does not exist.
 String? _readFileContent(File file) {
   return file.existsSync() ? file.readAsStringSync() : null;
 }
@@ -364,8 +307,6 @@ List<Map<String, Object?>> _extractPlatformMaps(List<Plugin> plugins, String typ
   return pluginConfigs;
 }
 
-/// Returns the version of the Android embedding that the current
-/// [project] is using.
 AndroidEmbeddingVersion _getAndroidEmbeddingVersion(FlutterProject project) {
   return project.android.getEmbeddingVersion();
 }
@@ -801,12 +742,6 @@ Future<void> _writeIOSPluginRegistrant(FlutterProject project, List<Plugin> plug
   );
 }
 
-/// The relative path from a project's main CMake file to the plugin symlink
-/// directory to use in the generated plugin CMake file.
-///
-/// Because the generated file is checked in, it can't use absolute paths. It is
-/// designed to be included by the main CMakeLists.txt, so it relative to
-/// that file, rather than the generated file.
 String _cmakeRelativePluginSymlinkDirectoryPath(CmakeBasedProject project) {
   final FileSystem fileSystem = project.pluginSymlinkDirectory.fileSystem;
   final String makefileDirPath = project.cmakeFile.parent.absolute.path;
@@ -874,7 +809,6 @@ Future<void> _writeMacOSPluginRegistrant(FlutterProject project, List<Plugin> pl
   );
 }
 
-/// Filters out any plugins that don't use method channels, and thus shouldn't be added to the native generated registrants.
 List<Plugin> _filterMethodChannelPlugins(List<Plugin> plugins, String platformKey) {
   return plugins.where((Plugin element) {
     final PluginPlatform? plugin = element.platforms[platformKey];
@@ -890,9 +824,6 @@ List<Plugin> _filterMethodChannelPlugins(List<Plugin> plugins, String platformKe
   }).toList();
 }
 
-/// Filters out Dart-only and method channel plugins.
-///
-/// FFI plugins do not need native code registration, but their binaries need to be bundled.
 List<Plugin> _filterFfiPlugins(List<Plugin> plugins, String platformKey) {
   return plugins.where((Plugin element) {
     final PluginPlatform? plugin = element.platforms[platformKey];
@@ -907,7 +838,6 @@ List<Plugin> _filterFfiPlugins(List<Plugin> plugins, String platformKey) {
   }).toList();
 }
 
-/// Returns only the plugins with the given platform variant.
 List<Plugin> _filterPluginsByVariant(List<Plugin> plugins, String platformKey, PluginPlatformVariant variant) {
   return plugins.where((Plugin element) {
     final PluginPlatform? platformPlugin = element.platforms[platformKey];
@@ -969,14 +899,6 @@ Future<void> _writeWebPluginRegistrant(FlutterProject project, List<Plugin> plug
   );
 }
 
-/// For each platform that uses them, creates symlinks within the platform
-/// directory to each plugin used on that platform.
-///
-/// If |force| is true, the symlinks will be recreated, otherwise they will
-/// be created only if missing.
-///
-/// This uses [project.flutterPluginsDependenciesFile], so it should only be
-/// run after [refreshPluginsList] has been run since the last plugin change.
 void createPluginSymlinks(FlutterProject project, {bool force = false, @visibleForTesting FeatureFlags? featureFlagsOverride}) {
   final FeatureFlags localFeatureFlags = featureFlagsOverride ?? featureFlags;
   Map<String, Object?>? platformPlugins;
@@ -1003,8 +925,6 @@ void createPluginSymlinks(FlutterProject project, {bool force = false, @visibleF
   }
 }
 
-/// Handler for symlink failures which provides specific instructions for known
-/// failure cases.
 @visibleForTesting
 void handleSymlinkException(FileSystemException e, {
   required Platform platform,
@@ -1038,9 +958,6 @@ void handleSymlinkException(FileSystemException e, {
   }
 }
 
-/// Creates [symlinkDirectory] containing symlinks to each plugin listed in [platformPlugins].
-///
-/// If [force] is true, the directory will be created only if missing.
 void _createPlatformPluginSymlinks(Directory symlinkDirectory, List<Object?>? platformPlugins, {bool force = false}) {
   if (force && symlinkDirectory.existsSync()) {
     // Start fresh to avoid stale links.
@@ -1072,10 +989,6 @@ void _createPlatformPluginSymlinks(Directory symlinkDirectory, List<Object?>? pl
   }
 }
 
-/// Rewrites the `.flutter-plugins` file of [project] based on the plugin
-/// dependencies declared in `pubspec.yaml`.
-///
-/// Assumes `pub get` has been executed since last change to `pubspec.yaml`.
 Future<void> refreshPluginsList(
   FlutterProject project, {
   bool iosPlatform = false,
@@ -1100,22 +1013,6 @@ Future<void> refreshPluginsList(
   }
 }
 
-/// Injects plugins found in `pubspec.yaml` into the platform-specific projects
-/// only at build-time.
-///
-/// This method is similar to [injectPlugins], but used only for platforms where
-/// the plugin files are not required when the app is created (currently: Web).
-///
-/// This method will create files in the temporary flutter build directory
-/// specified by `destination`.
-///
-/// In the Web platform, `destination` can point to a real filesystem (`flutter build`)
-/// or an in-memory filesystem (`flutter run`).
-///
-/// This method is also used by [WebProject.ensureReadyForPlatformSpecificTooling]
-/// to inject a copy of the plugin registrant for web into .dart_tool/dartpad so
-/// dartpad can get the plugin registrant without needing to build the complete
-/// project. See: https://github.com/dart-lang/dart-services/pull/874
 Future<void> injectBuildTimePluginFiles(
   FlutterProject project, {
   required Directory destination,
@@ -1129,18 +1026,6 @@ Future<void> injectBuildTimePluginFiles(
   }
 }
 
-/// Injects plugins found in `pubspec.yaml` into the platform-specific projects.
-///
-/// The injected files are required by the flutter app as soon as possible, so
-/// it can be built.
-///
-/// Files written by this method end up in platform-specific locations that are
-/// configured by each [FlutterProject] subclass (except for the Web).
-///
-/// Web tooling uses [injectBuildTimePluginFiles] instead, which places files in the
-/// current build (temp) directory, and doesn't modify the users' working copy.
-///
-/// Assumes [refreshPluginsList] has been called since last change to `pubspec.yaml`.
 Future<void> injectPlugins(
   FlutterProject project, {
   bool androidPlatform = false,
@@ -1176,8 +1061,6 @@ Future<void> injectPlugins(
       if (plugins.isNotEmpty) {
         await globals.cocoaPods?.setupPodfile(subproject);
       }
-      /// The user may have a custom maintained Podfile that they're running `pod install`
-      /// on themselves.
       else if (subproject.podfile.existsSync() && subproject.podfileLock.existsSync()) {
         globals.cocoaPods?.addPodsDependencyToFlutterXcconfig(subproject);
       }
@@ -1185,25 +1068,10 @@ Future<void> injectPlugins(
   }
 }
 
-/// Returns whether the specified Flutter [project] has any plugin dependencies.
-///
-/// Assumes [refreshPluginsList] has been called since last change to `pubspec.yaml`.
 bool hasPlugins(FlutterProject project) {
   return _readFileContent(project.flutterPluginsFile) != null;
 }
 
-/// Resolves the platform implementation for Dart-only plugins.
-///
-///   * If there is only one dependency on a package that implements the
-///     frontend plugin for the current platform, use that.
-///   * If there is a single direct dependency on a package that implements the
-///     frontend plugin for the current platform, use that.
-///   * If there is no direct dependency on a package that implements the
-///     frontend plugin, but there is a default for the current platform,
-///     use that.
-///   * Else fail.
-///
-///  For more details, https://flutter.dev/go/federated-plugins.
 // TODO(stuartmorgan): Expand implementation to apply to all implementations,
 // not just Dart-only, per the federated plugin spec.
 List<PluginInterfaceResolution> resolvePlatformImplementation(
@@ -1374,20 +1242,6 @@ List<PluginInterfaceResolution> resolvePlatformImplementation(
   return finalResolution;
 }
 
-/// Generates the Dart plugin registrant, which allows to bind a platform
-/// implementation of a Dart only plugin to its interface.
-/// The new entrypoint wraps [currentMainUri], adds the [_PluginRegistrant] class,
-/// and writes the file to [newMainDart].
-///
-/// [mainFile] is the main entrypoint file. e.g. /<app>/lib/main.dart.
-///
-/// A successful run will create a new generate_main.dart file or update the existing file.
-/// Throws [ToolExit] if unable to generate the file.
-///
-/// This method also validates each plugin's pubspec.yaml, but errors are only
-/// reported if [throwOnPluginPubspecError] is [true].
-///
-/// For more details, see https://flutter.dev/go/federated-plugins.
 Future<void> generateMainDartWithPluginRegistrant(
   FlutterProject rootProject,
   PackageConfig packageConfig,

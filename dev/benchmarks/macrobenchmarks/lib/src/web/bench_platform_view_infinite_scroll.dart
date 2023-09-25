@@ -29,7 +29,6 @@ void _registerFactory() {
   });
 }
 
-/// Creates an infinite list of Link widgets and scrolls it.
 class BenchPlatformViewInfiniteScroll extends WidgetRecorder {
   BenchPlatformViewInfiniteScroll.forward()
       : initialOffset = 0.0,

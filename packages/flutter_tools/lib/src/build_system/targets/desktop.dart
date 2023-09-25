@@ -5,14 +5,6 @@
 import '../../base/file_system.dart';
 import '../depfile.dart';
 
-/// Unpack the engine artifact list [artifacts] from [engineSourcePath], ICU
-/// data (if provided), and [clientSourcePaths] (if provided) into a directory
-/// [outputDirectory].
-///
-/// Returns a [Depfile] including all copied files.
-///
-/// Throws an [Exception] if [artifacts] includes missing files, directories,
-/// or links.
 Depfile unpackDesktopArtifacts({
   required FileSystem fileSystem,
   required List<String> artifacts,

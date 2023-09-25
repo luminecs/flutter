@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [MouseRegion.onExit].
 
 void main() => runApp(const MouseRegionApp());
 

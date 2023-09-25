@@ -10,27 +10,7 @@ part of material_animated_icons; // ignore: use_string_in_part_of_directives
 // See: https://github.com/flutter/flutter/issues/1831 for details regarding
 // generic vector graphics support in Flutter.
 
-/// Shows an animated icon at a given animation [progress].
-///
-/// The available icons are specified in [AnimatedIcons].
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=pJcbh8pbvJs}
-///
-/// {@tool dartpad}
-/// This example shows how to create an animated icon. The icon is animated
-/// forward and reverse in a loop.
-///
-/// ** See code in examples/api/lib/material/animated_icon/animated_icon.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [Icons], for the list of available static Material Icons.
 class AnimatedIcon extends StatelessWidget {
-  /// Creates an AnimatedIcon.
-  ///
-  /// The [size] and [color] default to the value given by the current
-  /// [IconTheme].
   const AnimatedIcon({
     super.key,
     required this.icon,
@@ -41,57 +21,16 @@ class AnimatedIcon extends StatelessWidget {
     this.textDirection,
   });
 
-  /// The animation progress for the animated icon.
-  ///
-  /// The value is clamped to be between 0 and 1.
-  ///
-  /// This determines the actual frame that is displayed.
   final Animation<double> progress;
 
-  /// The color to use when drawing the icon.
-  ///
-  /// Defaults to the current [IconTheme] color, if any.
-  ///
-  /// The given color will be adjusted by the opacity of the current
-  /// [IconTheme], if any.
-  ///
-  /// In material apps, if there is a [Theme] without any [IconTheme]s
-  /// specified, icon colors default to white if the theme is dark
-  /// and black if the theme is light.
-  ///
-  /// If no [IconTheme] and no [Theme] is specified, icons will default to black.
-  ///
-  /// See [Theme] to set the current theme and [ThemeData.brightness]
-  /// for setting the current theme's brightness.
   final Color? color;
 
-  /// The size of the icon in logical pixels.
-  ///
-  /// Icons occupy a square with width and height equal to size.
-  ///
-  /// Defaults to the current [IconTheme] size.
   final double? size;
 
-  /// The icon to display. Available icons are listed in [AnimatedIcons].
   final AnimatedIconData icon;
 
-  /// Semantic label for the icon.
-  ///
-  /// Announced in accessibility modes (e.g TalkBack/VoiceOver).
-  /// This label does not show in the UI.
-  ///
-  /// See also:
-  ///
-  ///  * [SemanticsProperties.label], which is set to [semanticLabel] in the
-  ///    underlying [Semantics] widget.
   final String? semanticLabel;
 
-  /// The text direction to use for rendering the icon.
-  ///
-  /// If this is null, the ambient [Directionality] is used instead.
-  ///
-  /// If the text direction is [TextDirection.rtl], the icon will be mirrored
-  /// horizontally (e.g back arrow will point right).
   final TextDirection? textDirection;
 
   static ui.Path _pathFactory() => ui.Path();
@@ -144,7 +83,6 @@ class _AnimatedIconPainter extends CustomPainter {
   final Animation<double> progress;
   final Color color;
   final double scale;
-  /// If this is true the image will be mirrored horizontally.
   final bool shouldMirror;
   final _UiPathFactory uiPathFactory;
 
@@ -208,17 +146,9 @@ class _PathFrames {
   }
 }
 
-/// Paths are being built by a set of commands e.g moveTo, lineTo, etc...
-///
-/// _PathCommand instances represents such a command, and can apply it to
-/// a given Path.
 abstract class _PathCommand {
   const _PathCommand();
 
-  /// Applies the path command to [path].
-  ///
-  /// For example if the object is a [_PathMoveTo] command it will invoke
-  /// [Path.moveTo] on [path].
   void apply(ui.Path path, double progress);
 }
 
@@ -276,17 +206,6 @@ class _PathClose extends _PathCommand {
   }
 }
 
-/// Interpolates a value given a set of values equally spaced in time.
-///
-/// [interpolator] is the interpolation function used to interpolate between 2
-/// points of type T.
-///
-/// This is currently done with linear interpolation between every 2 consecutive
-/// points. Linear interpolation was smooth enough with the limited set of
-/// animations we have tested, so we use it for simplicity. If we find this to
-/// not be smooth enough we can try applying spline instead.
-///
-/// [progress] is expected to be between 0.0 and 1.0.
 T _interpolate<T>(List<T> values, double progress, _Interpolator<T> interpolator) {
   assert(progress <= 1.0);
   assert(progress >= 0.0);

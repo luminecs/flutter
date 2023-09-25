@@ -5,10 +5,6 @@
 import 'percentile_utils.dart';
 import 'timeline.dart';
 
-/// Profiling related timeline events.
-///
-/// We do not use a profiling category for these as all the dart timeline events
-/// have the same profiling category "embedder".
 const Set<String> kProfilingEvents = <String>{
   _kCpuProfile,
   _kGpuProfile,
@@ -21,39 +17,17 @@ const String _kCpuProfile = 'CpuUsage';
 const String _kGpuProfile = 'GpuUsage';
 const String _kMemoryProfile = 'MemoryUsage';
 
-/// Represents the supported profiling event types.
 enum ProfileType {
-  /// Profiling events corresponding to CPU usage.
   CPU,
 
-  /// Profiling events corresponding to GPU usage.
   GPU,
 
-  /// Profiling events corresponding to memory usage.
   Memory,
 }
 
-/// Summarizes [TimelineEvents]s corresponding to [kProfilingEvents] category.
-///
-/// A sample event (some fields have been omitted for brevity):
-/// ```json
-///     {
-///      "category": "embedder",
-///      "name": "CpuUsage",
-///      "ts": 121120,
-///      "args": {
-///        "total_cpu_usage": "20.5",
-///        "num_threads": "6"
-///      }
-///    },
-/// ```
-/// This class provides methods to compute the average and percentile information
-/// for supported profiles, i.e, CPU, Memory and GPU. Not all of these exist for
-/// all the platforms.
 class ProfilingSummarizer {
   ProfilingSummarizer._(this.eventByType);
 
-  /// Creates a ProfilingSummarizer given the timeline events.
   static ProfilingSummarizer fromEvents(List<TimelineEvent> profilingEvents) {
     final Map<ProfileType, List<TimelineEvent>> eventsByType =
         <ProfileType, List<TimelineEvent>>{};
@@ -66,12 +40,8 @@ class ProfilingSummarizer {
     return ProfilingSummarizer._(eventsByType);
   }
 
-  /// Key is the type of profiling event, for e.g. CPU, GPU, Memory.
   final Map<ProfileType, List<TimelineEvent>> eventByType;
 
-  /// Returns the average, 90th and 99th percentile summary of CPU, GPU and Memory
-  /// usage from the recorded events. If a given profile type isn't available
-  /// for any reason, the map will not contain the said profile type.
   Map<String, dynamic> summarize() {
     final Map<String, dynamic> summary = <String, dynamic>{};
     summary.addAll(_summarize(ProfileType.CPU, 'cpu_usage'));
@@ -91,7 +61,6 @@ class ProfilingSummarizer {
     return summary;
   }
 
-  /// Returns true if there are events in the timeline corresponding to [profileType].
   bool hasProfilingInfo(ProfileType profileType) {
     if (eventByType.containsKey(profileType)) {
       return eventByType[profileType]!.isNotEmpty;
@@ -100,7 +69,6 @@ class ProfilingSummarizer {
     }
   }
 
-  /// Computes the average of the `profileType` over the recorded events.
   double computeAverage(ProfileType profileType) {
     final List<TimelineEvent> events = eventByType[profileType]!;
     assert(events.isNotEmpty);
@@ -110,7 +78,6 @@ class ProfilingSummarizer {
     return total / events.length;
   }
 
-  /// The [percentile]-th percentile `profileType` over the recorded events.
   double computePercentile(ProfileType profileType, double percentile) {
     final List<TimelineEvent> events = eventByType[profileType]!;
     assert(events.isNotEmpty);

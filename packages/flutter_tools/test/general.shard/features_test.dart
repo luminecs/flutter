@@ -119,7 +119,6 @@ void main() {
       expect(testWithoutContextFeature.generateHelpMessage(), 'Enable or disable example.');
     });
 
-    /// Flutter Web
 
     testWithoutContext('Flutter web off by default on master', () {
       final FeatureFlags featureFlags = createFlags('master');
@@ -182,7 +181,6 @@ void main() {
       expect(featureFlags.isWebEnabled, false);
     });
 
-    /// Flutter macOS desktop.
 
     testWithoutContext('Flutter macos desktop off by default on master', () {
       final FeatureFlags featureFlags = createFlags('master');
@@ -244,7 +242,6 @@ void main() {
       expect(featureFlags.isMacOSEnabled, true);
     });
 
-    /// Flutter Linux Desktop
     testWithoutContext('Flutter linux desktop off by default on master', () {
       final FeatureFlags featureFlags = createFlags('stable');
 
@@ -305,7 +302,6 @@ void main() {
       expect(featureFlags.isLinuxEnabled, true);
     });
 
-    /// Flutter Windows desktop.
     testWithoutContext('Flutter Windows desktop off by default on master', () {
       final FeatureFlags featureFlags = createFlags('master');
 

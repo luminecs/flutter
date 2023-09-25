@@ -15,7 +15,6 @@ import 'logger.dart';
 
 typedef StringConverter = String? Function(String string);
 
-/// A function that will be run before the VM exits.
 typedef ShutdownHook = FutureOr<void> Function();
 
 // TODO(ianh): We have way too many ways to run subprocesses in this project.
@@ -27,7 +26,6 @@ typedef ShutdownHook = FutureOr<void> Function();
 abstract class ShutdownHooks {
   factory ShutdownHooks() => _DefaultShutdownHooks();
 
-  /// Registers a [ShutdownHook] to be executed before the VM exits.
   void addShutdownHook(
     ShutdownHook shutdownHook
   );
@@ -35,16 +33,6 @@ abstract class ShutdownHooks {
   @visibleForTesting
   List<ShutdownHook> get registeredHooks;
 
-  /// Runs all registered shutdown hooks and returns a future that completes when
-  /// all such hooks have finished.
-  ///
-  /// Shutdown hooks will be run in groups by their [ShutdownStage]. All shutdown
-  /// hooks within a given stage will be started in parallel and will be
-  /// guaranteed to run to completion before shutdown hooks in the next stage are
-  /// started.
-  ///
-  /// This class is constructed before the [Logger], so it cannot be direct
-  /// injected in the constructor.
   Future<void> runShutdownHooks(Logger logger);
 }
 
@@ -122,7 +110,6 @@ class RunResult {
     return out.toString().trimRight();
   }
 
-  /// Throws a [ProcessException] with the given `message`.
   void throwException(String message) {
     throw ProcessException(
       _command.first,
@@ -144,29 +131,6 @@ abstract class ProcessUtils {
     logger: logger,
   );
 
-  /// Spawns a child process to run the command [cmd].
-  ///
-  /// When [throwOnError] is `true`, if the child process finishes with a non-zero
-  /// exit code, a [ProcessException] is thrown.
-  ///
-  /// If [throwOnError] is `true`, and [allowedFailures] is supplied,
-  /// a [ProcessException] is only thrown on a non-zero exit code if
-  /// [allowedFailures] returns false when passed the exit code.
-  ///
-  /// When [workingDirectory] is set, it is the working directory of the child
-  /// process.
-  ///
-  /// When [allowReentrantFlutter] is set to `true`, the child process is
-  /// permitted to call the Flutter tool. By default it is not.
-  ///
-  /// When [environment] is supplied, it is used as the environment for the child
-  /// process.
-  ///
-  /// When [timeout] is supplied, [runAsync] will kill the child process and
-  /// throw a [ProcessException] when it doesn't finish in time.
-  ///
-  /// If [timeout] is supplied, the command will be retried [timeoutRetries] times
-  /// if it times out.
   Future<RunResult> run(
     List<String> cmd, {
     bool throwOnError = false,
@@ -178,7 +142,6 @@ abstract class ProcessUtils {
     int timeoutRetries = 0,
   });
 
-  /// Run the command and block waiting for its result.
   RunResult runSync(
     List<String> cmd, {
     bool throwOnError = false,
@@ -191,8 +154,6 @@ abstract class ProcessUtils {
     Encoding encoding = systemEncoding,
   });
 
-  /// This runs the command in the background from the specified working
-  /// directory. Completes when the process has been started.
   Future<Process> start(
     List<String> cmd, {
     String? workingDirectory,
@@ -201,17 +162,6 @@ abstract class ProcessUtils {
     ProcessStartMode mode = ProcessStartMode.normal,
   });
 
-  /// This runs the command and streams stdout/stderr from the child process to
-  /// this process' stdout/stderr. Completes with the process's exit code.
-  ///
-  /// If [filter] is null, no lines are removed.
-  ///
-  /// If [filter] is non-null, all lines that do not match it are removed. If
-  /// [mapFunction] is present, all lines that match [filter] are also forwarded
-  /// to [mapFunction] for further processing.
-  ///
-  /// If [stdoutErrorMatcher] is non-null, matching lines from stdout will be
-  /// treated as errors, just as if they had been logged to stderr instead.
   Future<int> stream(
     List<String> cmd, {
     String? workingDirectory,

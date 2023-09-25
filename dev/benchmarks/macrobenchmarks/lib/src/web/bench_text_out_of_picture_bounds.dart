@@ -8,25 +8,6 @@ import 'dart:ui';
 import 'recorder.dart';
 import 'test_data.dart';
 
-/// Draws 9 screens worth of text in a 3x3 grid with only the middle cell
-/// appearing on the visible screen:
-///
-///     +-------------+-------------+-------------+
-///     |             |             |             |
-///     |  invisible  |  invisible  |  invisible  |
-///     |             |             |             |
-///     +-----------------------------------------+
-///     |             |             |             |
-///     |  invisible  |   visible   |  invisible  |
-///     |             |             |             |
-///     +-----------------------------------------+
-///     |             |             |             |
-///     |  invisible  |  invisible  |  invisible  |
-///     |             |             |             |
-///     +-------------+-------------+-------------+
-///
-/// This reproduces the bug where we render more than visible causing
-/// performance issues: https://github.com/flutter/flutter/issues/48516
 class BenchTextOutOfPictureBounds extends SceneBuilderRecorder {
   BenchTextOutOfPictureBounds() : super(name: benchmarkName) {
     const Color red = Color.fromARGB(255, 255, 0, 0);

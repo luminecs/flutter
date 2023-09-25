@@ -19,22 +19,7 @@ import 'theme.dart';
 const double _kToolbarHeight = 44.0;
 const double _kToolbarContentDistance = 8.0;
 
-/// A fully-functional Material-style text selection toolbar.
-///
-/// Tries to position itself above [anchorAbove], but if it doesn't fit, then
-/// it positions itself below [anchorBelow].
-///
-/// If any children don't fit in the menu, an overflow menu will automatically
-/// be created.
-///
-/// See also:
-///
-///  * [AdaptiveTextSelectionToolbar], which builds the toolbar for the current
-///    platform.
-///  * [CupertinoTextSelectionToolbar], which is similar, but builds an iOS-
-///    style toolbar.
 class TextSelectionToolbar extends StatelessWidget {
-  /// Creates an instance of TextSelectionToolbar.
   const TextSelectionToolbar({
     super.key,
     required this.anchorAbove,
@@ -43,50 +28,16 @@ class TextSelectionToolbar extends StatelessWidget {
     required this.children,
   }) : assert(children.length > 0);
 
-  /// {@template flutter.material.TextSelectionToolbar.anchorAbove}
-  /// The focal point above which the toolbar attempts to position itself.
-  ///
-  /// If there is not enough room above before reaching the top of the screen,
-  /// then the toolbar will position itself below [anchorBelow].
-  /// {@endtemplate}
   final Offset anchorAbove;
 
-  /// {@template flutter.material.TextSelectionToolbar.anchorBelow}
-  /// The focal point below which the toolbar attempts to position itself, if it
-  /// doesn't fit above [anchorAbove].
-  /// {@endtemplate}
   final Offset anchorBelow;
 
-  /// {@template flutter.material.TextSelectionToolbar.children}
-  /// The children that will be displayed in the text selection toolbar.
-  ///
-  /// Typically these are buttons.
-  ///
-  /// Must not be empty.
-  /// {@endtemplate}
-  ///
-  /// See also:
-  ///   * [TextSelectionToolbarTextButton], which builds a default Material-
-  ///     style text selection toolbar text button.
   final List<Widget> children;
 
-  /// {@template flutter.material.TextSelectionToolbar.toolbarBuilder}
-  /// Builds the toolbar container.
-  ///
-  /// Useful for customizing the high-level background of the toolbar. The given
-  /// child Widget will contain all of the [children].
-  /// {@endtemplate}
   final ToolbarBuilder toolbarBuilder;
 
-  /// The size of the text selection handles.
-  ///
-  /// See also:
-  ///
-  ///  * [SpellCheckSuggestionsToolbar], which references this value to calculate
-  ///    the padding between the toolbar and anchor.
   static const double kHandleSize = 22.0;
 
-  /// Padding between the toolbar and the anchor.
   static const double kToolbarContentDistanceBelow = kHandleSize - 2.0;
 
   // Build the default Android Material text selection menu toolbar.

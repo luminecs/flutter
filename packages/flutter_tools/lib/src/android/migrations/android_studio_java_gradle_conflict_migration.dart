@@ -64,11 +64,6 @@ const String errorWhileMigrating = 'Encountered an error while attempting Gradle
     'version compatibility check, skipping migration attempt. Error was: ';
 
 
-/// Migrate to a newer version of Gradle when the existing one does not support
-/// the version of Java provided by the detected Android Studio version.
-///
-/// For more info see the Gradle-Java compatibility matrix:
-/// https://docs.gradle.org/current/userguide/compatibility.html
 class AndroidStudioJavaGradleConflictMigration extends ProjectMigrator {
   AndroidStudioJavaGradleConflictMigration(
     super.logger,

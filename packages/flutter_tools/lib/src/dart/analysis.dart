@@ -15,7 +15,6 @@ import '../base/terminal.dart';
 import '../base/utils.dart';
 import '../convert.dart';
 
-/// An interface to the Dart analysis server.
 class AnalysisServer {
   AnalysisServer(
     this.sdkPath,
@@ -98,10 +97,6 @@ class AnalysisServer {
 
   final List<String> _logs = <String>[];
 
-  /// Aggregated STDOUT and STDERR logs from the server.
-  ///
-  /// This can be surfaced to the user if the server crashes. If [tail] is null,
-  /// returns all logs, else only the last [tail] lines.
   String getLogs([int? tail]) {
     if (tail == null) {
       return _logs.join('\n');
@@ -222,7 +217,6 @@ enum AnalysisSeverity {
   none,
 }
 
-/// [AnalysisError] with command line style.
 class AnalysisError implements Comparable<AnalysisError> {
   AnalysisError(
     this.writtenError, {
@@ -291,7 +285,6 @@ class AnalysisError implements Comparable<AnalysisError> {
   }
 }
 
-/// [AnalysisError] in plain text content.
 class WrittenError {
   WrittenError._({
     required this.severity,
@@ -304,19 +297,6 @@ class WrittenError {
     required this.offset,
   });
 
-  ///  {
-  ///      "severity":"INFO",
-  ///      "type":"TODO",
-  ///      "location":{
-  ///          "file":"/Users/.../lib/test.dart",
-  ///          "offset":362,
-  ///          "length":72,
-  ///          "startLine":15,
-  ///         "startColumn":4
-  ///      },
-  ///      "message":"...",
-  ///      "hasFix":false
-  ///  }
   static WrittenError fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic> location = json['location'] as Map<String, dynamic>;
     return WrittenError._(

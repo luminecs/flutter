@@ -31,16 +31,12 @@ import 'assets.dart';
 import 'localizations.dart';
 import 'shader_compiler.dart';
 
-/// Whether the application has web plugins.
 const String kHasWebPlugins = 'HasWebPlugins';
 
-/// Base href to set in index.html in flutter build command
 const String kBaseHref = 'baseHref';
 
-/// The caching strategy to use for service worker generation.
 const String kServiceWorkerStrategy = 'ServiceWorkerStrategy';
 
-/// Generates an entry point for a web target.
 // Keep this in sync with build_runner/resident_web_runner.dart
 class WebEntrypointTarget extends Target {
   const WebEntrypointTarget();
@@ -104,7 +100,6 @@ class WebEntrypointTarget extends Target {
   }
 }
 
-/// Compiles a web entry point with dart2js.
 abstract class Dart2WebTarget extends Target {
   const Dart2WebTarget(this.webRenderer);
 
@@ -333,8 +328,6 @@ class Dart2WasmTarget extends Dart2WebTarget {
   ];
 }
 
-/// Unpacks the dart2js or dart2wasm compilation and resources to a given
-/// output directory.
 class WebReleaseBundle extends Target {
   const WebReleaseBundle(this.webRenderer, {required this.isWasm});
 
@@ -448,7 +441,6 @@ class WebReleaseBundle extends Target {
     );
   }
 
-  /// Create version.json file that contains data about version for package_info
   void createVersionFile(Environment environment, Map<String, String> defines) {
     final Map<String, dynamic> versionInfo =
         jsonDecode(FlutterProject.current().getVersionInfo())
@@ -468,11 +460,6 @@ class WebReleaseBundle extends Target {
   }
 }
 
-/// Static assets provided by the Flutter SDK that do not change, such as
-/// CanvasKit.
-///
-/// These assets can be cached until a new version of the flutter web sdk is
-/// downloaded.
 class WebBuiltInAssets extends Target {
   const WebBuiltInAssets(this.fileSystem, this.webRenderer, {required this.isWasm});
 
@@ -539,7 +526,6 @@ class WebBuiltInAssets extends Target {
   }
 }
 
-/// Generate a service worker for a web target.
 class WebServiceWorker extends Target {
   const WebServiceWorker(this.fileSystem, this.webRenderer, {required this.isWasm});
 

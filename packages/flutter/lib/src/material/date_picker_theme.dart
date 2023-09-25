@@ -19,24 +19,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Overrides the default values of visual properties for descendant
-/// [DatePickerDialog] widgets.
-///
-/// Descendant widgets obtain the current [DatePickerThemeData] object with
-/// [DatePickerTheme.of]. Instances of [DatePickerTheme] can
-/// be customized with [DatePickerThemeData.copyWith].
-///
-/// Typically a [DatePickerTheme] is specified as part of the overall
-/// [Theme] with [ThemeData.datePickerTheme].
-///
-/// All [DatePickerThemeData] properties are null by default. When null,
-/// the [DatePickerDialog] computes its own default values, typically based on
-/// the overall theme's [ThemeData.colorScheme], [ThemeData.textTheme], and
-/// [ThemeData.iconTheme].
 @immutable
 class DatePickerThemeData with Diagnosticable {
-  /// Creates a [DatePickerThemeData] that can be used to override default properties
-  /// in a [DatePickerTheme] widget.
   const DatePickerThemeData({
     this.backgroundColor,
     this.elevation,
@@ -76,236 +60,78 @@ class DatePickerThemeData with Diagnosticable {
     this.confirmButtonStyle,
   });
 
-  /// Overrides the default value of [Dialog.backgroundColor].
   final Color? backgroundColor;
 
-  /// Overrides the default value of [Dialog.elevation].
-  ///
-  /// See also:
-  ///   [Material.elevation], which explains how elevation is related to a component's shadow.
   final double? elevation;
 
-  /// Overrides the default value of [Dialog.shadowColor].
-  ///
-  /// See also:
-  ///   [Material.shadowColor], which explains how the shadow is rendered.
   final Color? shadowColor;
 
-  /// Overrides the default value of [Dialog.surfaceTintColor].
-  ///
-  /// See also:
-  ///   [Material.surfaceTintColor], which explains how this color is related to
-  ///   [elevation] and [backgroundColor].
   final Color? surfaceTintColor;
 
-  /// Overrides the default value of [Dialog.shape].
-  ///
-  /// If [elevation] is greater than zero then a shadow is shown and the shadow's
-  /// shape mirrors the shape of the dialog.
   final ShapeBorder? shape;
 
-  /// Overrides the header's default background fill color.
-  ///
-  /// The dialog's header displays the currently selected date.
   final Color? headerBackgroundColor;
 
-  /// Overrides the header's default color used for text labels and icons.
-  ///
-  /// The dialog's header displays the currently selected date.
-  ///
-  /// This is used instead of the [TextStyle.color] property of [headerHeadlineStyle]
-  /// and [headerHelpStyle].
   final Color? headerForegroundColor;
 
-  /// Overrides the header's default headline text style.
-  ///
-  /// The dialog's header displays the currently selected date.
-  ///
-  /// The [TextStyle.color] of the [headerHeadlineStyle] is not used,
-  /// [headerForegroundColor] is used instead.
   final TextStyle? headerHeadlineStyle;
 
-  /// Overrides the header's default help text style.
-  ///
-  /// The help text (also referred to as "supporting text" in the Material
-  /// spec) is usually a prompt to the user at the top of the header
-  /// (i.e. 'Select date').
-  ///
-  /// The [TextStyle.color] of the [headerHelpStyle] is not used,
-  /// [headerForegroundColor] is used instead.
-  ///
-  /// See also:
-  ///   [DatePickerDialog.helpText], which specifies the help text.
   final TextStyle? headerHelpStyle;
 
-  /// Overrides the default text style used for the row of weekday
-  /// labels at the top of the date picker grid.
   final TextStyle? weekdayStyle;
 
-  /// Overrides the default text style used for each individual day
-  /// label in the grid of the date picker.
-  ///
-  /// The [TextStyle.color] of the [dayStyle] is not used,
-  /// [dayForegroundColor] is used instead.
   final TextStyle? dayStyle;
 
-  /// Overrides the default color used to paint the day labels in the
-  /// grid of the date picker.
-  ///
-  /// This will be used instead of the color provided in [dayStyle].
   final MaterialStateProperty<Color?>? dayForegroundColor;
 
-  /// Overrides the default color used to paint the background of the
-  /// day labels in the grid of the date picker.
   final MaterialStateProperty<Color?>? dayBackgroundColor;
 
-  /// Overrides the default highlight color that's typically used to
-  /// indicate that a day in the grid is focused, hovered, or pressed.
   final MaterialStateProperty<Color?>? dayOverlayColor;
 
-  /// Overrides the default color used to paint the
-  /// [DatePickerDialog.currentDate] label in the grid of the dialog's
-  /// [CalendarDatePicker] and the corresponding year in the dialog's
-  /// [YearPicker].
-  ///
-  /// This will be used instead of the [TextStyle.color] provided in [dayStyle].
   final MaterialStateProperty<Color?>? todayForegroundColor;
 
-  /// Overrides the default color used to paint the background of the
-  /// [DatePickerDialog.currentDate] label in the grid of the date picker.
   final MaterialStateProperty<Color?>? todayBackgroundColor;
 
-  /// Overrides the border used to paint the
-  /// [DatePickerDialog.currentDate] label in the grid of the date
-  /// picker.
-  ///
-  /// The border side's [BorderSide.color] is not used,
-  /// [todayForegroundColor] is used instead.
   final BorderSide? todayBorder;
 
-  /// Overrides the default text style used to paint each of the year
-  /// entries in the year selector of the date picker.
-  ///
-  /// The [TextStyle.color] of the [yearStyle] is not used,
-  /// [yearForegroundColor] is used instead.
   final TextStyle? yearStyle;
 
-  /// Overrides the default color used to paint the year labels in the year
-  /// selector of the date picker.
-  ///
-  /// This will be used instead of the color provided in [yearStyle].
   final MaterialStateProperty<Color?>? yearForegroundColor;
 
-  /// Overrides the default color used to paint the background of the
-  /// year labels in the year selector of the of the date picker.
   final MaterialStateProperty<Color?>? yearBackgroundColor;
 
-  /// Overrides the default highlight color that's typically used to
-  /// indicate that a year in the year selector is focused, hovered,
-  /// or pressed.
   final MaterialStateProperty<Color?>? yearOverlayColor;
 
-  /// Overrides the default [Scaffold.backgroundColor] for
-  /// [DateRangePickerDialog].
   final Color? rangePickerBackgroundColor;
 
-  /// Overrides the default elevation of the full screen
-  /// [DateRangePickerDialog].
-  ///
-  /// See also:
-  ///   [Material.elevation], which explains how elevation is related to a component's shadow.
   final double? rangePickerElevation;
 
-  /// Overrides the color of the shadow painted below a full screen
-  /// [DateRangePickerDialog].
-  ///
-  /// See also:
-  ///   [Material.shadowColor], which explains how the shadow is rendered.
   final Color? rangePickerShadowColor;
 
-  /// Overrides the default color of the surface tint overlay applied
-  /// to the [backgroundColor] of a full screen
-  /// [DateRangePickerDialog]'s to indicate elevation.
-  ///
-  /// See also:
-  ///   [Material.surfaceTintColor], which explains how this color is related to
-  ///   [elevation].
   final Color? rangePickerSurfaceTintColor;
 
-  /// Overrides the default overall shape of a full screen
-  /// [DateRangePickerDialog].
-  ///
-  /// If [elevation] is greater than zero then a shadow is shown and the shadow's
-  /// shape mirrors the shape of the dialog.
-  ///
-  ///   [Material.surfaceTintColor], which explains how this color is related to
-  ///   [elevation].
   final ShapeBorder? rangePickerShape;
 
-  /// Overrides the default background fill color for [DateRangePickerDialog].
-  ///
-  /// The dialog's header displays the currently selected date range.
   final Color? rangePickerHeaderBackgroundColor;
 
-  /// Overrides the default color used for text labels and icons in
-  /// the header of a full screen [DateRangePickerDialog]
-  ///
-  /// The dialog's header displays the currently selected date range.
-  ///
-  /// This is used instead of any colors provided by
-  /// [rangePickerHeaderHeadlineStyle] or [rangePickerHeaderHelpStyle].
   final Color? rangePickerHeaderForegroundColor;
 
-  /// Overrides the default text style used for the headline text in
-  /// the header of a full screen [DateRangePickerDialog].
-  ///
-  /// The dialog's header displays the currently selected date range.
-  ///
-  /// The [TextStyle.color] of [rangePickerHeaderHeadlineStyle] is not used,
-  /// [rangePickerHeaderForegroundColor] is used instead.
   final TextStyle? rangePickerHeaderHeadlineStyle;
 
-  /// Overrides the default text style used for the help text of the
-  /// header of a full screen [DateRangePickerDialog].
-  ///
-  /// The help text (also referred to as "supporting text" in the Material
-  /// spec) is usually a prompt to the user at the top of the header
-  /// (i.e. 'Select date').
-  ///
-  /// The [TextStyle.color] of the [rangePickerHeaderHelpStyle] is not used,
-  /// [rangePickerHeaderForegroundColor] is used instead.
-  ///
-  /// See also:
-  ///   [DateRangePickerDialog.helpText], which specifies the help text.
   final TextStyle? rangePickerHeaderHelpStyle;
 
-  /// Overrides the default background color used to paint days
-  /// selected between the start and end dates in a
-  /// [DateRangePickerDialog].
   final Color? rangeSelectionBackgroundColor;
 
-  /// Overrides the default highlight color that's typically used to
-  /// indicate that a date in the selected range of a
-  /// [DateRangePickerDialog] is focused, hovered, or pressed.
   final MaterialStateProperty<Color?>? rangeSelectionOverlayColor;
 
-  /// Overrides the default color used to paint the horizontal divider
-  /// below the header text when dialog is in in portrait orientation
-  /// and vertical divider when the dialog is in landscape orientation.
   final Color? dividerColor;
 
-  /// Overrides the [InputDatePickerFormField]'s input decoration theme.
-  /// If this is null, [ThemeData.inputDecorationTheme] is used instead.
   final InputDecorationTheme? inputDecorationTheme;
 
-  /// Overrides the default style of the cancel button of a [DatePickerDialog].
   final ButtonStyle? cancelButtonStyle;
 
-  /// Overrrides the default style of the confirm (OK) button of a [DatePickerDialog].
   final ButtonStyle? confirmButtonStyle;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   DatePickerThemeData copyWith({
     Color? backgroundColor,
     double? elevation,
@@ -384,7 +210,6 @@ class DatePickerThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolates between two [DatePickerThemeData].
   static DatePickerThemeData lerp(DatePickerThemeData? a, DatePickerThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
@@ -565,87 +390,23 @@ class DatePickerThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines the visual properties for
-/// [DatePickerDialog]s in this widget's subtree.
-///
-/// Values specified here are used for [DatePickerDialog] properties that are not
-/// given an explicit non-null value.
 class DatePickerTheme extends InheritedTheme {
-  /// Creates a [DatePickerTheme] that controls visual parameters for
-  /// descendent [DatePickerDialog]s.
   const DatePickerTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Specifies the visual properties used by descendant [DatePickerDialog]
-  /// widgets.
   final DatePickerThemeData data;
 
-  /// The [data] from the closest instance of this class that encloses the given
-  /// context.
-  ///
-  /// If there is no [DatePickerTheme] in scope, this will return
-  /// [ThemeData.datePickerTheme] from the ambient [Theme].
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DatePickerThemeData theme = DatePickerTheme.of(context);
-  /// ```
-  ///
-  /// See also:
-  ///
-  ///  * [maybeOf], which returns null if it doesn't find a
-  ///    [DatePickerTheme] ancestor.
-  ///  * [defaults], which will return the default properties used when no
-  ///    other [DatePickerTheme] has been provided.
   static DatePickerThemeData of(BuildContext context) {
     return maybeOf(context) ?? Theme.of(context).datePickerTheme;
   }
 
-  /// The data from the closest instance of this class that encloses the given
-  /// context, if any.
-  ///
-  /// Use this function if you want to allow situations where no
-  /// [DatePickerTheme] is in scope. Prefer using [DatePickerTheme.of]
-  /// in situations where a [DatePickerThemeData] is expected to be
-  /// non-null.
-  ///
-  /// If there is no [DatePickerTheme] in scope, then this function will
-  /// return null.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DatePickerThemeData? theme = DatePickerTheme.maybeOf(context);
-  /// if (theme == null) {
-  ///   // Do something else instead.
-  /// }
-  /// ```
-  ///
-  /// See also:
-  ///
-  ///  * [of], which will return [ThemeData.datePickerTheme] if it doesn't
-  ///    find a [DatePickerTheme] ancestor, instead of returning null.
-  ///  * [defaults], which will return the default properties used when no
-  ///    other [DatePickerTheme] has been provided.
   static DatePickerThemeData? maybeOf(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<DatePickerTheme>()?.data;
   }
 
-  /// A DatePickerThemeData used as the default properties for date pickers.
-  ///
-  /// This is only used for properties not already specified in the ambient
-  /// [DatePickerTheme.of].
-  ///
-  /// See also:
-  ///
-  ///  * [of], which will return [ThemeData.datePickerTheme] if it doesn't
-  ///    find a [DatePickerTheme] ancestor, instead of returning null.
-  ///  * [maybeOf], which returns null if it doesn't find a
-  ///    [DatePickerTheme] ancestor.
   static DatePickerThemeData defaults(BuildContext context) {
     return Theme.of(context).useMaterial3
       ? _DatePickerDefaultsM3(context)

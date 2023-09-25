@@ -29,15 +29,6 @@ const String kFontManifestJson = 'FontManifest.json';
 // Should match '2x', '/1x', '1.5x', etc.
 final RegExp _assetVariantDirectoryRegExp = RegExp(r'/?(\d+(\.\d*)?)x$');
 
-/// The effect of adding `uses-material-design: true` to the pubspec is to insert
-/// the following snippet into the asset manifest:
-///
-/// ```yaml
-/// material:
-///   - family: MaterialIcons
-///     fonts:
-///       - asset: fonts/MaterialIcons-Regular.otf
-/// ```
 const List<Map<String, Object>> kMaterialFonts = <Map<String, Object>>[
   <String, Object>{
     'family': 'MaterialIcons',
@@ -53,9 +44,7 @@ const List<String> kMaterialShaders = <String>[
   'shaders/ink_sparkle.frag',
 ];
 
-/// Injected factory class for spawning [AssetBundle] instances.
 abstract class AssetBundleFactory {
-  /// The singleton instance, pulled from the [AppContext].
   static AssetBundleFactory get instance => context.get<AssetBundleFactory>()!;
 
   static AssetBundleFactory defaultInstance({
@@ -65,7 +54,6 @@ abstract class AssetBundleFactory {
     bool splitDeferredAssets = false,
   }) => _ManifestAssetBundleFactory(logger: logger, fileSystem: fileSystem, platform: platform, splitDeferredAssets: splitDeferredAssets);
 
-  /// Creates a new [AssetBundle].
   AssetBundle createBundle();
 }
 
@@ -81,22 +69,16 @@ abstract class AssetBundle {
 
   Map<String, AssetKind> get entryKinds;
 
-  /// The files that were specified under the deferred components assets sections
-  /// in pubspec.
   Map<String, Map<String, DevFSContent>> get deferredComponentsEntries;
 
-  /// Additional files that this bundle depends on that are not included in the
-  /// output result.
   List<File> get additionalDependencies;
 
-  /// Input files used to build this asset bundle.
   List<File> get inputFiles;
 
   bool wasBuiltOnce();
 
   bool needsBuild({ String manifestPath = defaultManifestPath });
 
-  /// Returns 0 for success; non-zero for failure.
   Future<int> build({
     String manifestPath = defaultManifestPath,
     required String packagesPath,
@@ -125,10 +107,7 @@ class _ManifestAssetBundleFactory implements AssetBundleFactory {
   AssetBundle createBundle() => ManifestAssetBundle(logger: _logger, fileSystem: _fileSystem, platform: _platform, splitDeferredAssets: _splitDeferredAssets);
 }
 
-/// An asset bundle based on a pubspec.yaml file.
 class ManifestAssetBundle implements AssetBundle {
-  /// Constructs an [ManifestAssetBundle] that gathers the set of assets from the
-  /// pubspec.yaml manifest.
   ManifestAssetBundle({
     required Logger logger,
     required FileSystem fileSystem,
@@ -734,8 +713,6 @@ class ManifestAssetBundle implements AssetBundle {
     return DevFSByteContent(message.buffer.asUint8List(0, message.lengthInBytes));
   }
 
-  /// Prefixes family names and asset paths of fonts included from packages with
-  /// 'packages/<package_name>'
   List<Font> _parsePackageFonts(
     FlutterManifest manifest,
     String packageName,
@@ -767,31 +744,6 @@ class ManifestAssetBundle implements AssetBundle {
     return packageFonts;
   }
 
-  /// Given an assetBase location and a pubspec.yaml Flutter manifest, return a
-  /// map of assets to asset variants.
-  ///
-  /// Returns null on missing assets.
-  ///
-  /// Given package: 'test_package' and an assets directory like this:
-  ///
-  /// - assets/foo
-  /// - assets/var1/foo
-  /// - assets/var2/foo
-  /// - assets/bar
-  ///
-  /// This will return:
-  /// ```
-  /// {
-  ///   asset: packages/test_package/assets/foo: [
-  ///     asset: packages/test_package/assets/foo,
-  ///     asset: packages/test_package/assets/var1/foo,
-  ///     asset: packages/test_package/assets/var2/foo,
-  ///   ],
-  ///   asset: packages/test_package/assets/bar: [
-  ///     asset: packages/test_package/assets/bar,
-  ///   ],
-  /// }
-  /// ```
   Map<_Asset, List<_Asset>>? _parseAssets(
     PackageConfig packageConfig,
     FlutterManifest flutterManifest,
@@ -1042,11 +994,8 @@ class _Asset {
 
   final Package? package;
 
-  /// A platform-independent URL where this asset can be found on disk on the
-  /// host system relative to [baseDir].
   final Uri relativeUri;
 
-  /// A platform-independent URL representing the entry for the asset manifest.
   final Uri entryUri;
 
   final AssetKind assetKind;
@@ -1055,8 +1004,6 @@ class _Asset {
     return fileSystem.file(fileSystem.path.join(baseDir, fileSystem.path.fromUri(relativeUri)));
   }
 
-  /// The delta between what the entryUri is and the relativeUri (e.g.,
-  /// packages/flutter_gallery).
   Uri? get symbolicPrefixUri {
     if (entryUri == relativeUri) {
       return null;

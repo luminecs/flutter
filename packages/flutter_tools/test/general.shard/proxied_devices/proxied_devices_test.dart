@@ -621,7 +621,6 @@ class FakeDaemonConnection extends Fake implements DaemonConnection {
     this.daemonEventStreams = const <String, List<DaemonEventData>>{},
   });
 
-  /// Mapping of method name to returned object from the [sendRequest] method.
   final Map<String, Object?> handledRequests;
 
   final Map<String, List<DaemonEventData>> daemonEventStreams;

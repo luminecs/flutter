@@ -6,23 +6,9 @@ import 'dart:math' as math;
 
 typedef _OutputSender = void Function(String category, String message, {bool? parseStackFrames, int? variablesReference});
 
-/// A formatter for improving the display of Flutter structured errors over DAP.
-///
-/// The formatter deserializes a `Flutter.Error` event and produces output
-/// similar to the `renderedErrorText` field, but may include ansi color codes
-/// to provide improved formatting (such as making stack frames from non-user
-/// code faint) if the client indicated support.
-///
-/// Lines that look like stack frames will be marked so they can be parsed by
-/// the base adapter and attached as [Source]s to allow them to be clickable
-/// in the client.
 class FlutterErrorFormatter {
   final List<_BatchedOutput> batchedOutput = <_BatchedOutput>[];
 
-  /// Formats a Flutter error.
-  ///
-  /// If this is not the first error since the reload, only a summary will be
-  /// included.
   void formatError(Map<String, Object?> errorData) {
     final _ErrorData data = _ErrorData(errorData);
 
@@ -44,7 +30,6 @@ class FlutterErrorFormatter {
     _write(barChar * header.length, isError: true);
   }
 
-  /// Sends all collected output through [sendOutput].
   void sendOutput(_OutputSender sendOutput) {
     for (final _BatchedOutput output in batchedOutput) {
       sendOutput(
@@ -55,11 +40,6 @@ class FlutterErrorFormatter {
     }
   }
 
-  /// Writes [text] to the output.
-  ///
-  /// If the last item in the batch has the same settings as this item, it will
-  /// be appended to the same item, otherwise a new item will be added to the
-  /// batch.
   void _write(
     String? text, {
     int indent = 0,
@@ -78,8 +58,6 @@ class FlutterErrorFormatter {
     }
   }
 
-  /// Writes [node] to the output using [indent], recursing unless [recursive]
-  /// is `false`.
   void _writeNode(_ErrorNode node, {int indent = 0, bool recursive = true}) {
     // Errors, summaries and lines starting "Exception:" are marked as errors so
     // they go to stderr instead of stdout (this may cause the client to colour
@@ -106,14 +84,12 @@ class FlutterErrorFormatter {
     }
   }
 
-  /// Writes [nodes] to the output.
   void _writeNodes(List<_ErrorNode> nodes, {int indent = 0, bool recursive = true}) {
     for (final _ErrorNode child in nodes) {
       _writeNode(child, indent: indent, recursive: recursive);
     }
   }
 
-  /// Writes a simple summary of [node] to the output.
   void _writeSummary(_ErrorNode node) {
     final bool allChildrenAreLeaf = node.children.isNotEmpty &&
         !node.children.any((_ErrorNode child) => child.children.isNotEmpty);
@@ -123,10 +99,6 @@ class FlutterErrorFormatter {
   }
 }
 
-/// A container for output to be sent to the client.
-///
-/// When multiple lines are being sent, they may be written to the same batch
-/// if the output options (error/stackFrame) are the same.
 class _BatchedOutput {
   _BatchedOutput(this.isError, {this.parseStackFrames = false});
 

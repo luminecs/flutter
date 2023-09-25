@@ -9,33 +9,7 @@ import 'material.dart';
 
 const Duration _kDefaultHighlightFadeDuration = Duration(milliseconds: 200);
 
-/// A visual emphasis on a part of a [Material] receiving user interaction.
-///
-/// This object is rarely created directly. Instead of creating an ink highlight
-/// directly, consider using an [InkResponse] or [InkWell] widget, which uses
-/// gestures (such as tap and long-press) to trigger ink highlights.
-///
-/// See also:
-///
-///  * [InkResponse], which uses gestures to trigger ink highlights and ink
-///    splashes in the parent [Material].
-///  * [InkWell], which is a rectangular [InkResponse] (the most common type of
-///    ink response).
-///  * [Material], which is the widget on which the ink highlight is painted.
-///  * [InkSplash], which is an ink feature that shows a reaction to user input
-///    on a [Material].
-///  * [Ink], a convenience widget for drawing images and other decorations on
-///    Material widgets.
 class InkHighlight extends InteractiveInkFeature {
-  /// Begin a highlight animation.
-  ///
-  /// The [controller] argument is typically obtained via
-  /// `Material.of(context)`.
-  ///
-  /// If a `rectCallback` is given, then it provides the highlight rectangle,
-  /// otherwise, the highlight rectangle is coincident with the [referenceBox].
-  ///
-  /// When the highlight is removed, `onRemoved` will be called.
   InkHighlight({
     required super.controller,
     required super.referenceBox,
@@ -75,17 +49,14 @@ class InkHighlight extends InteractiveInkFeature {
   late Animation<int> _alpha;
   late AnimationController _alphaController;
 
-  /// Whether this part of the material is being visually emphasized.
   bool get active => _active;
   bool _active = true;
 
-  /// Start visually emphasizing this part of the material.
   void activate() {
     _active = true;
     _alphaController.forward();
   }
 
-  /// Stop visually emphasizing this part of the material.
   void deactivate() {
     _active = false;
     _alphaController.reverse();

@@ -24,7 +24,6 @@ import 'src/reporting/reporting.dart';
 import 'src/runner/flutter_command.dart';
 import 'src/runner/flutter_command_runner.dart';
 
-/// Runs the Flutter tool with support for the specified list of [commands].
 Future<int> run(
   List<String> args,
   List<FlutterCommand> Function() commands, {
@@ -236,7 +235,6 @@ String _crashCommand(List<String> args) => 'flutter ${args.join(' ')}';
 
 String _crashException(dynamic error) => '${error.runtimeType}: $error';
 
-/// Saves the crash report to a local file.
 Future<File> _createLocalCrashReport(CrashDetails details) async {
   final StringBuffer buffer = StringBuffer();
 

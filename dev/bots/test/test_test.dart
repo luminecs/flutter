@@ -12,9 +12,6 @@ import 'package:process/process.dart';
 import '../test.dart';
 import 'common.dart';
 
-/// Fails a test if the exit code of `result` is not the expected value. This
-/// is favored over `expect(result.exitCode, expectedExitCode)` because this
-/// will include the process result's stdio in the failure message.
 void expectExitCode(ProcessResult result, int expectedExitCode) {
   if (result.exitCode != expectedExitCode) {
     fail(

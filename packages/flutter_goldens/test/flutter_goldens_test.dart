@@ -1076,7 +1076,6 @@ class RunInvocation {
 class FakeProcessManager extends Fake implements ProcessManager {
   Map<RunInvocation, ProcessResult> processResults = <RunInvocation, ProcessResult>{};
 
-  /// Used if [processResults] does not contain a matching invocation.
   ProcessResult? fallbackProcessResult;
 
   final List<String?> workingDirectories = <String?>[];

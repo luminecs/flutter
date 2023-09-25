@@ -64,7 +64,6 @@ Future<void> main(List<String> rawArgs) async {
   }
 }
 
-/// Command-line options for the `summarize.dart` command.
 final ArgParser _argParser = ArgParser()
   ..addFlag(
     kAsciiTableOpt,

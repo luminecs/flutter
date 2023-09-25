@@ -55,9 +55,6 @@ import 'src/resident_runner.dart';
 import 'src/runner/flutter_command.dart';
 import 'src/web/web_runner.dart';
 
-/// Main entry point for commands.
-///
-/// This function is intended to be used from the `flutter` command line tool.
 Future<void> main(List<String> args) async {
   final bool veryVerbose = args.contains('-vv');
   final bool verbose = args.contains('-v') || args.contains('--verbose') || veryVerbose;
@@ -240,9 +237,6 @@ List<FlutterCommand> generateCommands({
   UpdatePackagesCommand(),
 ];
 
-/// An abstraction for instantiation of the correct logger type.
-///
-/// Our logger class hierarchy and runtime requirements are overly complicated.
 class LoggerFactory {
   LoggerFactory({
     required Terminal terminal,
@@ -259,7 +253,6 @@ class LoggerFactory {
   final StopwatchFactory _stopwatchFactory;
   final OutputPreferences _outputPreferences;
 
-  /// Create the appropriate logger for the current platform and configuration.
   Logger createLogger({
     required bool verbose,
     required bool prefixedErrors,

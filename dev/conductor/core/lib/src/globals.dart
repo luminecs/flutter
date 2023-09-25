@@ -41,7 +41,6 @@ final RegExp releaseCandidateBranchRegex = RegExp(
   r'flutter-(\d+)\.(\d+)-candidate\.(\d+)',
 );
 
-/// Cast a dynamic to String and trim.
 String stdoutToString(dynamic input) {
   final String str = input as String;
   return str.trim();
@@ -67,13 +66,6 @@ bool assertsEnabled() {
   return assertsEnabled;
 }
 
-/// Either return the value from [env] or fall back to [argResults].
-///
-/// If the key does not exist in either the environment or CLI args, throws a
-/// [ConductorException].
-///
-/// The environment is favored over CLI args since the latter can have a default
-/// value, which the environment should be able to override.
 String? getValueFromEnvOrArgs(
   String name,
   ArgResults argResults,
@@ -108,15 +100,6 @@ bool getBoolFromEnvOrArgs(
   return argResults[name] as bool;
 }
 
-/// Return multiple values from the environment or fall back to [argResults].
-///
-/// Values read from an environment variable are assumed to be comma-delimited.
-///
-/// If the key does not exist in either the CLI args or environment, throws a
-/// [ConductorException].
-///
-/// The environment is favored over CLI args since the latter can have a default
-/// value, which the environment should be able to override.
 List<String> getValuesFromEnvOrArgs(
   String name,
   ArgResults argResults,
@@ -135,16 +118,10 @@ List<String> getValuesFromEnvOrArgs(
       'to be provided!');
 }
 
-/// Translate CLI arg names to env variable names.
-///
-/// For example, 'state-file' -> 'STATE_FILE'.
 String fromArgToEnvName(String argName) {
   return argName.toUpperCase().replaceAll(r'-', r'_');
 }
 
-/// Return a web link for the user to open a new PR.
-///
-/// Includes PR title and body via query params.
 String getNewPrLink({
   required String userName,
   required String repoName,

@@ -27,12 +27,6 @@ import 'custom_device_config.dart';
 import 'custom_device_workflow.dart';
 import 'custom_devices_config.dart';
 
-/// Replace all occurrences of `${someName}` with the value found for that
-/// name inside replacementValues or additionalReplacementValues.
-///
-/// The replacement value is first looked for in [replacementValues] and then
-/// [additionalReplacementValues]. If no value is found, an empty string will be
-/// substituted instead.
 List<String> interpolateCommand(
   List<String> command,
   Map<String, String> replacementValues, {
@@ -45,12 +39,9 @@ List<String> interpolateCommand(
   );
 }
 
-/// A log reader that can listen to a process' stdout / stderr or another log line
-/// Stream.
 class CustomDeviceLogReader extends DeviceLogReader {
   CustomDeviceLogReader(this.name);
 
-  /// The name of the device this log reader is associated with.
   @override
   final String name;
 
@@ -60,14 +51,6 @@ class CustomDeviceLogReader extends DeviceLogReader {
   @visibleForTesting
   final List<StreamSubscription<String>> subscriptions = <StreamSubscription<String>>[];
 
-  /// Listen to [process]' stdout and stderr, decode them using [SystemEncoding]
-  /// and add each decoded line to [logLines].
-  ///
-  /// However, [logLines] will not be done when the [process]' stdout and stderr
-  /// streams are done. So [logLines] will still be alive after the process has
-  /// finished.
-  ///
-  /// See [CustomDeviceLogReader.dispose] to end the [logLines] stream.
   void listenToProcessOutput(Process process, {Encoding encoding = systemEncoding}) {
     final Converter<List<int>, String> decoder = encoding.decoder;
 
@@ -84,21 +67,12 @@ class CustomDeviceLogReader extends DeviceLogReader {
     );
   }
 
-  /// Add all lines emitted by [lines] to this [CustomDeviceLogReader]s [logLines]
-  /// stream.
-  ///
-  /// Similar to [listenToProcessOutput], [logLines] will not be marked as done
-  /// when the argument stream is done.
-  ///
-  /// Useful when you want to combine the contents of multiple log readers.
   void listenToLinesStream(Stream<String> lines) {
     subscriptions.add(
       lines.listen(logLinesController.add)
     );
   }
 
-  /// Dispose this log reader, freeing all associated resources and marking
-  /// [logLines] as done.
   @override
   Future<void> dispose() async {
     final List<Future<void>> futures = <Future<void>>[];
@@ -116,7 +90,6 @@ class CustomDeviceLogReader extends DeviceLogReader {
   Stream<String> get logLines => logLinesController.stream;
 }
 
-/// A [DevicePortForwarder] that uses commands to forward / unforward a port.
 class CustomDevicePortForwarder extends DevicePortForwarder {
   CustomDevicePortForwarder({
     required String deviceName,
@@ -241,11 +214,6 @@ class CustomDevicePortForwarder extends DevicePortForwarder {
   }
 }
 
-/// A combination of [ApplicationPackage] and a [CustomDevice]. Can only start,
-/// stop this specific app package with this specific device. Useful because we
-/// often need to store additional context to an app that is running on a device,
-/// like any forwarded ports we need to unforward later, the process we need to
-/// kill to stop the app, maybe other things in the future.
 class CustomDeviceAppSession {
   CustomDeviceAppSession({
     required this.name,
@@ -274,13 +242,6 @@ class CustomDeviceAppSession {
   Process? _process;
   int? _forwardedHostPort;
 
-  /// Get the engine options for the given [debuggingOptions],
-  /// [traceStartup] and [route].
-  ///
-  /// [debuggingOptions] and [route] can be null.
-  ///
-  /// For example, `_getEngineOptions(null, false, null)` will return
-  /// `['enable-dart-profiling=true']`
   List<String> _getEngineOptions(DebuggingOptions debuggingOptions, bool traceStartup, String? route) {
     final String dartVmFlags = computeDartVmFlags(debuggingOptions);
     return <String>[
@@ -328,25 +289,10 @@ class CustomDeviceAppSession {
     ];
   }
 
-  /// Get the engine options for the given [debuggingOptions],
-  /// [traceStartup] and [route].
-  ///
-  /// [debuggingOptions] and [route] can be null.
-  ///
-  /// For example, `_getEngineOptionsForCmdline(null, false, null)` will return
-  /// `--enable-dart-profiling=true`
   String _getEngineOptionsForCmdline(DebuggingOptions debuggingOptions, bool traceStartup, String? route) {
     return _getEngineOptions(debuggingOptions, traceStartup, route).map((String e) => '--$e').join(' ');
   }
 
-  /// Start the app on the device.
-  /// Needs the app to be installed on the device and not running already.
-  ///
-  /// [mainPath], [route], [debuggingOptions], [platformArgs] and
-  /// [userIdentifier] may be null.
-  ///
-  /// [ipv6] may not be respected since it depends on the device config whether
-  /// it uses ipv6 or ipv4
   Future<LaunchResult> start({
     String? mainPath,
     String? route,
@@ -409,9 +355,6 @@ class CustomDeviceAppSession {
     }
   }
 
-  /// Stop the app on the device.
-  /// Returns false if the app is not yet running. Also unforwards any
-  /// forwarded ports.
   Future<bool> stop() async {
     if (_process == null) {
       return false;
@@ -434,9 +377,6 @@ class CustomDeviceAppSession {
   }
 }
 
-/// A device that uses user-configured actions for the common device methods.
-/// The exact actions are defined by the contents of the [CustomDeviceConfig]
-/// used to construct it.
 class CustomDevice extends Device {
   CustomDevice({
     required CustomDeviceConfig config,
@@ -479,8 +419,6 @@ class CustomDevice extends Device {
     return _sessions.putIfAbsent(
       app,
       () {
-        /// create a new session and add its logging to the global log reader.
-        /// (needed bc it's possible the infra requests a global log in [getLogReader]
         final CustomDeviceAppSession session = CustomDeviceAppSession(
           name: name,
           device: this,
@@ -496,18 +434,6 @@ class CustomDevice extends Device {
     );
   }
 
-  /// Tries to ping the device using the ping command given in the config.
-  /// All string interpolation occurrences inside the ping command will be replaced
-  /// using the entries in [replacementValues].
-  ///
-  /// If the process finishes with an exit code != 0, false will be returned and
-  /// the error (with the process' stdout and stderr) will be logged using
-  /// [_logger.printError].
-  ///
-  /// If [timeout] is not null and the process doesn't finish in time,
-  /// it will be killed with a SIGTERM, false will be returned and the timeout
-  /// will be reported in the log using [_logger.printError]. If [timeout]
-  /// is null, it's treated as if it's an infinite timeout.
   Future<bool> tryPing({
     Duration? timeout,
     Map<String, String> replacementValues = const <String, String>{}
@@ -535,18 +461,6 @@ class CustomDevice extends Device {
       || pingSuccessRegex.hasMatch(result.stderr);
   }
 
-  /// Tries to execute the configs postBuild command using [appName] for the
-  /// `${appName}` and [localPath] for the `${localPath}` interpolations,
-  /// any additional string interpolation occurrences will be replaced using the
-  /// entries in [additionalReplacementValues].
-  ///
-  /// Calling this when the config doesn't have a configured postBuild command
-  /// is an error.
-  ///
-  /// If [timeout] is not null and the process doesn't finish in time, it
-  /// will be killed with a SIGTERM, false will be returned and the timeout
-  /// will be reported in the log using [_logger.printError]. If [timeout]
-  /// is null, it's treated as if it's an infinite timeout.
   Future<bool> _tryPostBuild({
     required String appName,
     required String localPath,
@@ -577,14 +491,6 @@ class CustomDevice extends Device {
     }
   }
 
-  /// Tries to execute the configs uninstall command.
-  ///
-  /// [appName] is the name of the app to be installed.
-  ///
-  /// If [timeout] is not null and the process doesn't finish in time, it
-  /// will be killed with a SIGTERM, false will be returned and the timeout
-  /// will be reported in the log using [_logger.printError]. If [timeout]
-  /// is null, it's treated as if it's an infinite timeout.
   Future<bool> tryUninstall({
     required String appName,
     Duration? timeout,
@@ -611,14 +517,6 @@ class CustomDevice extends Device {
     }
   }
 
-  /// Tries to install the app to the custom device.
-  ///
-  /// [localPath] is the file / directory on the local device that will be
-  /// copied over to the target custom device. This is substituted for any occurrence
-  /// of `${localPath}` in the custom device configs `install` command.
-  ///
-  /// [appName] is the name of the app to be installed. Substituted for any occurrence
-  /// of `${appName}` in the custom device configs `install` command.
   Future<bool> tryInstall({
     required String localPath,
     required String appName,
@@ -816,11 +714,7 @@ class CustomDevice extends Device {
   }
 }
 
-/// A [PollingDeviceDiscovery] that'll try to ping all enabled devices in the argument
-/// [CustomDevicesConfig] and report the ones that were actually reachable.
 class CustomDevices extends PollingDeviceDiscovery {
-  /// Create a custom device discovery that pings all enabled devices in the
-  /// given [CustomDevicesConfig].
   CustomDevices({
     required FeatureFlags featureFlags,
     required ProcessManager processManager,

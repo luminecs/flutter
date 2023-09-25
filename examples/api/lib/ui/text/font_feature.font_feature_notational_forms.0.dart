@@ -6,7 +6,6 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 
-/// Flutter code sample for [FontFeature.FontFeature.notationalForms].
 
 void main() => runApp(const ExampleApp());
 

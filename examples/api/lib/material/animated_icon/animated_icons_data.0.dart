@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AnimatedIcon].
 
 final Map<String, AnimatedIconData> iconsList = <String, AnimatedIconData>{
   'add_event': AnimatedIcons.add_event,

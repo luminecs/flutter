@@ -6,7 +6,6 @@ import '../base/file_system.dart';
 import '../base/project_migrator.dart';
 import '../xcode_project.dart';
 
-/// Migrate the Xcode project for Xcode compatibility to avoid an "Update to recommended settings" Xcode warning.
 class XcodeProjectObjectVersionMigration extends ProjectMigrator {
   XcodeProjectObjectVersionMigration(
     XcodeBasedProject project,

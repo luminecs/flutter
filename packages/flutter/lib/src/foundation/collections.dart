@@ -4,21 +4,6 @@
 
 // TODO(ianh): These should be on the Set and List classes themselves.
 
-/// Compares two sets for element-by-element equality.
-///
-/// Returns true if the sets are both null, or if they are both non-null, have
-/// the same length, and contain the same members. Returns false otherwise.
-/// Order is not compared.
-///
-/// If the elements are maps, lists, sets, or other collections/composite
-/// objects, then the contents of those elements are not compared element by
-/// element unless their equality operators ([Object.==]) do so. For checking
-/// deep equality, consider using the [DeepCollectionEquality] class.
-///
-/// See also:
-///
-///  * [listEquals], which does something similar for lists.
-///  * [mapEquals], which does something similar for maps.
 bool setEquals<T>(Set<T>? a, Set<T>? b) {
   if (a == null) {
     return b == null;
@@ -37,21 +22,6 @@ bool setEquals<T>(Set<T>? a, Set<T>? b) {
   return true;
 }
 
-/// Compares two lists for element-by-element equality.
-///
-/// Returns true if the lists are both null, or if they are both non-null, have
-/// the same length, and contain the same members in the same order. Returns
-/// false otherwise.
-///
-/// If the elements are maps, lists, sets, or other collections/composite
-/// objects, then the contents of those elements are not compared element by
-/// element unless their equality operators ([Object.==]) do so. For checking
-/// deep equality, consider using the [DeepCollectionEquality] class.
-///
-/// See also:
-///
-///  * [setEquals], which does something similar for sets.
-///  * [mapEquals], which does something similar for maps.
 bool listEquals<T>(List<T>? a, List<T>? b) {
   if (a == null) {
     return b == null;
@@ -70,21 +40,6 @@ bool listEquals<T>(List<T>? a, List<T>? b) {
   return true;
 }
 
-/// Compares two maps for element-by-element equality.
-///
-/// Returns true if the maps are both null, or if they are both non-null, have
-/// the same length, and contain the same keys associated with the same values.
-/// Returns false otherwise.
-///
-/// If the elements are maps, lists, sets, or other collections/composite
-/// objects, then the contents of those elements are not compared element by
-/// element unless their equality operators ([Object.==]) do so. For checking
-/// deep equality, consider using the [DeepCollectionEquality] class.
-///
-/// See also:
-///
-///  * [setEquals], which does something similar for sets.
-///  * [listEquals], which does something similar for lists.
 bool mapEquals<T, U>(Map<T, U>? a, Map<T, U>? b) {
   if (a == null) {
     return b == null;
@@ -103,10 +58,6 @@ bool mapEquals<T, U>(Map<T, U>? a, Map<T, U>? b) {
   return true;
 }
 
-/// Returns the position of `value` in the `sortedList`, if it exists.
-///
-/// Returns `-1` if the `value` is not in the list. Requires the list items
-/// to implement [Comparable] and the `sortedList` to already be ordered.
 int binarySearch<T extends Comparable<Object>>(List<T> sortedList, T value) {
   int min = 0;
   int max = sortedList.length;
@@ -126,30 +77,8 @@ int binarySearch<T extends Comparable<Object>>(List<T> sortedList, T value) {
   return -1;
 }
 
-/// Limit below which merge sort defaults to insertion sort.
 const int _kMergeSortLimit = 32;
 
-/// Sorts a list between `start` (inclusive) and `end` (exclusive) using the
-/// merge sort algorithm.
-///
-/// If `compare` is omitted, this defaults to calling [Comparable.compareTo] on
-/// the objects. If any object is not [Comparable], this throws a [TypeError]
-/// (The stack trace may call it `_CastError` or `_TypeError`, but to catch it,
-/// use [TypeError]).
-///
-/// Merge-sorting works by splitting the job into two parts, sorting each
-/// recursively, and then merging the two sorted parts.
-///
-/// This takes on the order of `n * log(n)` comparisons and moves to sort `n`
-/// elements, but requires extra space of about the same size as the list being
-/// sorted.
-///
-/// This merge sort is stable: Equal elements end up in the same order as they
-/// started in.
-///
-/// For small lists (less than 32 elements), [mergeSort] automatically uses an
-/// insertion sort instead, as that is more efficient for small lists. The
-/// insertion sort is also stable.
 void mergeSort<T>(
   List<T> list, {
   int start = 0,
@@ -183,7 +112,6 @@ void mergeSort<T>(
   _merge<T>(compare, list, firstTarget, end, scratchSpace, 0, secondLength, list, start);
 }
 
-/// Returns a [Comparator] that asserts that its first argument is comparable.
 Comparator<T> _defaultCompare<T>() {
   // If we specify Comparable<T> here, it fails if the type is an int, because
   // int isn't a subtype of comparable. Leaving out the type implicitly converts
@@ -191,23 +119,6 @@ Comparator<T> _defaultCompare<T>() {
   return (T value1, T value2) => (value1 as Comparable<dynamic>).compareTo(value2);
 }
 
-/// Sort a list between `start` (inclusive) and `end` (exclusive) using
-/// insertion sort.
-///
-/// If `compare` is omitted, this defaults to calling [Comparable.compareTo] on
-/// the objects. If any object is not [Comparable], this throws a [TypeError]
-/// (The stack trace may call it `_CastError` or `_TypeError`, but to catch it,
-/// use [TypeError]).
-///
-/// Insertion sort is a simple sorting algorithm. For `n` elements it does on
-/// the order of `n * log(n)` comparisons but up to `n` squared moves. The
-/// sorting is performed in-place, without using extra memory.
-///
-/// For short lists the many moves have less impact than the simple algorithm,
-/// and it is often the favored sorting algorithm for short lists.
-///
-/// This insertion sort is stable: Equal elements end up in the same order as
-/// they started in.
 void _insertionSort<T>(
   List<T> list, {
   int Function(T, T)? compare,
@@ -237,10 +148,6 @@ void _insertionSort<T>(
   }
 }
 
-/// Performs an insertion sort into a potentially different list than the one
-/// containing the original values.
-///
-/// It will work in-place as well.
 void _movingInsertionSort<T>(
   List<T> list,
   int Function(T, T) compare,
@@ -271,13 +178,6 @@ void _movingInsertionSort<T>(
   }
 }
 
-/// Sorts `list` from `start` to `end` into `target` at `targetOffset`.
-///
-/// The `target` list must be able to contain the range from `start` to `end`
-/// after `targetOffset`.
-///
-/// Allows target to be the same list as `list`, as long as it's not overlapping
-/// the `start..end` range.
 void _mergeSort<T>(
   List<T> list,
   int Function(T, T) compare,
@@ -314,13 +214,6 @@ void _mergeSort<T>(
   );
 }
 
-/// Merges two lists into a target list.
-///
-/// One of the input lists may be positioned at the end of the target list.
-///
-/// For equal object, elements from `firstList` are always preferred. This
-/// allows the merge to be stable if the first list contains elements that
-/// started out earlier than the ones in `secondList`.
 void _merge<T>(
   int Function(T, T) compare,
   List<T> firstList,

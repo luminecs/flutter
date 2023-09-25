@@ -5,7 +5,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_driver/driver_extension.dart';
 
-/// This application displays text passed through a --dart-define.
 void main() {
   enableFlutterDriverExtension();
   runApp(

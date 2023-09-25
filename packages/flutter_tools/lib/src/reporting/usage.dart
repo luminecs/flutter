@@ -7,8 +7,6 @@ part of 'reporting.dart';
 const String _kFlutterUA = 'UA-67589403-6';
 
 abstract class Usage {
-  /// Create a new Usage instance; [versionOverride], [configDirOverride], and
-  /// [logFile] are used for testing.
   factory Usage({
     String settingsName = 'flutter',
     String? versionOverride,
@@ -28,40 +26,25 @@ abstract class Usage {
         firstRunMessenger: firstRunMessenger,
       );
 
-  /// Uses the global [Usage] instance to send a 'command' to analytics.
   static void command(String command, {
     CustomDimensions? parameters,
   }) => globals.flutterUsage.sendCommand(command, parameters: parameters);
 
-  /// Whether analytics reporting should be suppressed.
   bool get suppressAnalytics;
 
-  /// Suppress analytics for this session.
   set suppressAnalytics(bool value);
 
-  /// Whether analytics reporting is enabled.
   bool get enabled;
 
-  /// Enable or disable reporting analytics.
   set enabled(bool value);
 
-  /// A stable randomly generated UUID used to deduplicate multiple identical
-  /// reports coming from the same computer.
   String get clientId;
 
-  /// Sends a 'command' to the underlying analytics implementation.
-  ///
-  /// Using [command] above is preferred to ensure that the parameter
-  /// keys are well-defined in [CustomDimensions] above.
   void sendCommand(
     String command, {
     CustomDimensions? parameters,
   });
 
-  /// Sends an 'event' to the underlying analytics implementation.
-  ///
-  /// This method should not be used directly, instead see the
-  /// event types defined in this directory in `events.dart`.
   @visibleForOverriding
   @visibleForTesting
   void sendEvent(
@@ -72,7 +55,6 @@ abstract class Usage {
     CustomDimensions? parameters,
   });
 
-  /// Sends timing information to the underlying analytics implementation.
   void sendTiming(
     String category,
     String variableName,
@@ -80,19 +62,13 @@ abstract class Usage {
     String? label,
   });
 
-  /// Sends an exception to the underlying analytics implementation.
   void sendException(dynamic exception);
 
-  /// Fires whenever analytics data is sent over the network.
   @visibleForTesting
   Stream<Map<String, dynamic>> get onSend;
 
-  /// Returns when the last analytics event has been sent, or after a fixed
-  /// (short) delay, whichever is less.
   Future<void> ensureAnalyticsSent();
 
-  /// Prints a welcome message that informs the tool user about the collection
-  /// of anonymous usage information.
   void printWelcome();
 }
 
@@ -417,10 +393,6 @@ class LogToFileAnalytics extends AnalyticsMock {
 }
 
 
-/// Create a testing Usage instance.
-///
-/// All sent events, exceptions, timings, and pages are
-/// buffered on the object and can be inspected later.
 @visibleForTesting
 class TestUsage implements Usage {
   final List<TestUsageCommand> commands = <TestUsageCommand>[];

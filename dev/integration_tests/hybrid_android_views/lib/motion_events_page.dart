@@ -38,10 +38,8 @@ class MotionEventsBodyState extends State<MotionEventsBody> {
 
   MethodChannel? viewChannel;
 
-  /// The list of motion events that were passed to the FlutterView.
   List<Map<String, dynamic>> flutterViewEvents = <Map<String, dynamic>>[];
 
-  /// The list of motion events that were passed to the embedded view.
   List<Map<String, dynamic>> embeddedViewEvents = <Map<String, dynamic>>[];
 
   @override

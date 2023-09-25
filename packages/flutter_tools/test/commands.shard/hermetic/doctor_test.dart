@@ -950,7 +950,6 @@ class AsyncCrashingValidator extends DoctorValidator {
   }
 }
 
-/// A doctor that fails with a missing [ValidationResult].
 class FakeDoctor extends Doctor {
   FakeDoctor(Logger logger) : super(logger: logger);
 
@@ -964,7 +963,6 @@ class FakeDoctor extends Doctor {
   ];
 }
 
-/// A doctor that should pass, but still has issues in some categories.
 class FakePassingDoctor extends Doctor {
   FakePassingDoctor(Logger logger) : super(logger: logger);
 
@@ -977,8 +975,6 @@ class FakePassingDoctor extends Doctor {
   ];
 }
 
-/// A doctor that should pass, but still has 1 issue to test the singular of
-/// categories.
 class FakeSinglePassingDoctor extends Doctor {
   FakeSinglePassingDoctor(Logger logger) : super(logger: logger);
 
@@ -988,7 +984,6 @@ class FakeSinglePassingDoctor extends Doctor {
   ];
 }
 
-/// A doctor that passes and has no issues anywhere.
 class FakeQuietDoctor extends Doctor {
   FakeQuietDoctor(Logger logger) : super(logger: logger);
 
@@ -1001,7 +996,6 @@ class FakeQuietDoctor extends Doctor {
   ];
 }
 
-/// A doctor that passes and contains PII that can be hidden.
 class FakePiiDoctor extends Doctor {
   FakePiiDoctor(Logger logger) : super(logger: logger);
 
@@ -1011,7 +1005,6 @@ class FakePiiDoctor extends Doctor {
   ];
 }
 
-/// A doctor with a validator that throws an exception.
 class FakeCrashingDoctor extends Doctor {
   FakeCrashingDoctor(Logger logger) : super(logger: logger);
 
@@ -1025,7 +1018,6 @@ class FakeCrashingDoctor extends Doctor {
   ];
 }
 
-/// A doctor with a validator that will never finish.
 class FakeAsyncStuckDoctor extends Doctor {
   FakeAsyncStuckDoctor(Logger logger) : super(logger: logger);
 
@@ -1039,7 +1031,6 @@ class FakeAsyncStuckDoctor extends Doctor {
   ];
 }
 
-/// A doctor with a validator that throws an exception.
 class FakeAsyncCrashingDoctor extends Doctor {
   FakeAsyncCrashingDoctor(this._time, Logger logger) : super(logger: logger);
 
@@ -1055,8 +1046,6 @@ class FakeAsyncCrashingDoctor extends Doctor {
   ];
 }
 
-/// A DoctorValidatorsProvider that overrides the default validators without
-/// overriding the doctor.
 class FakeDoctorValidatorsProvider implements DoctorValidatorsProvider {
   @override
   List<DoctorValidator> get validators {
@@ -1119,7 +1108,6 @@ class PassingGroupedValidatorWithStatus extends DoctorValidator {
   }
 }
 
-/// A doctor that has two groups of two validators each.
 class FakeGroupedDoctor extends Doctor {
   FakeGroupedDoctor(Logger logger) : super(logger: logger);
 
@@ -1148,8 +1136,6 @@ class FakeGroupedDoctorWithStatus extends Doctor {
   ];
 }
 
-/// A doctor that takes any two validators. Used to check behavior when
-/// merging ValidationTypes (installed, missing, partial).
 class FakeSmallGroupDoctor extends Doctor {
   FakeSmallGroupDoctor(Logger logger, DoctorValidator val1, DoctorValidator val2)
     : validators = <DoctorValidator>[GroupedValidator(<DoctorValidator>[val1, val2])],

@@ -4,5 +4,4 @@
 
 import 'dart:io';
 
-/// This application exits immediately.
 void main() => exit(0);

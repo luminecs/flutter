@@ -9,15 +9,8 @@ import 'package:path/path.dart' as path;
 import '../framework/task_result.dart';
 import '../framework/utils.dart';
 
-/// Run each benchmark this many times and compute average, min, max.
-///
-/// This must be small enough that we can do all the work in 15 minutes, the
-/// devicelab deadline. Since there's four different analysis tasks, on average,
-/// each can have 4 minutes. The tasks currently average a little more than a
-/// minute, so that allows three runs per task.
 const int _kRunsPerBenchmark = 3;
 
-/// Path to the generated "mega gallery" app.
 Directory get _megaGalleryDirectory => dir(path.join(Directory.systemTemp.path, 'mega_gallery'));
 
 Future<TaskResult> analyzerBenchmarkTask() async {
@@ -82,7 +75,6 @@ abstract class _Benchmark {
   }
 }
 
-/// Times how long it takes to analyze the Flutter repository.
 class _FlutterRepoBenchmark extends _Benchmark {
   _FlutterRepoBenchmark({super.watch});
 
@@ -98,7 +90,6 @@ class _FlutterRepoBenchmark extends _Benchmark {
   }
 }
 
-/// Times how long it takes to analyze the generated "mega_gallery" app.
 class _MegaGalleryBenchmark extends _Benchmark {
   _MegaGalleryBenchmark({super.watch});
 
@@ -109,7 +100,6 @@ class _MegaGalleryBenchmark extends _Benchmark {
   Directory get directory => _megaGalleryDirectory;
 }
 
-/// Runs `benchmark` several times and reports the results.
 Future<_BenchmarkResult> _run(_Benchmark benchmark) async {
   final List<double> results = <double>[];
   for (int i = 0; i < _kRunsPerBenchmark; i += 1) {

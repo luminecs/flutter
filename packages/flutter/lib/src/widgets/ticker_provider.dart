@@ -12,86 +12,22 @@ export 'package:flutter/scheduler.dart' show TickerProvider;
 // Examples can assume:
 // late BuildContext context;
 
-/// Enables or disables tickers (and thus animation controllers) in the widget
-/// subtree.
-///
-/// This only works if [AnimationController] objects are created using
-/// widget-aware ticker providers. For example, using a
-/// [TickerProviderStateMixin] or a [SingleTickerProviderStateMixin].
 class TickerMode extends StatefulWidget {
-  /// Creates a widget that enables or disables tickers.
   const TickerMode({
     super.key,
     required this.enabled,
     required this.child,
   });
 
-  /// The requested ticker mode for this subtree.
-  ///
-  /// The effective ticker mode of this subtree may differ from this value
-  /// if there is an ancestor [TickerMode] with this field set to false.
-  ///
-  /// If true and all ancestor [TickerMode]s are also enabled, then tickers in
-  /// this subtree will tick.
-  ///
-  /// If false, then tickers in this subtree will not tick regardless of any
-  /// ancestor [TickerMode]s. Animations driven by such tickers are not paused,
-  /// they just don't call their callbacks. Time still elapses.
   final bool enabled;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
-  /// Whether tickers in the given subtree should be enabled or disabled.
-  ///
-  /// This is used automatically by [TickerProviderStateMixin] and
-  /// [SingleTickerProviderStateMixin] to decide if their tickers should be
-  /// enabled or disabled.
-  ///
-  /// In the absence of a [TickerMode] widget, this function defaults to true.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// bool tickingEnabled = TickerMode.of(context);
-  /// ```
   static bool of(BuildContext context) {
     final _EffectiveTickerMode? widget = context.dependOnInheritedWidgetOfExactType<_EffectiveTickerMode>();
     return widget?.enabled ?? true;
   }
 
-  /// Obtains a [ValueListenable] from the [TickerMode] surrounding the `context`,
-  /// which indicates whether tickers are enabled in the given subtree.
-  ///
-  /// When that [TickerMode] enabled or disabled tickers, the listenable notifies
-  /// its listeners.
-  ///
-  /// While the [ValueListenable] is stable for the lifetime of the surrounding
-  /// [TickerMode], calling this method does not establish a dependency between
-  /// the `context` and the [TickerMode] and the widget owning the `context`
-  /// does not rebuild when the ticker mode changes from true to false or vice
-  /// versa. This is preferable when the ticker mode does not impact what is
-  /// currently rendered on screen, e.g. because it is only used to mute/unmute a
-  /// [Ticker]. Since no dependency is established, the widget owning the
-  /// `context` is also not informed when it is moved to a new location in the
-  /// tree where it may have a different [TickerMode] ancestor. When this
-  /// happens, the widget must manually unsubscribe from the old listenable,
-  /// obtain a new one from the new ancestor [TickerMode] by calling this method
-  /// again, and re-subscribe to it. [StatefulWidget]s can, for example, do this
-  /// in [State.activate], which is called after the widget has been moved to
-  /// a new location.
-  ///
-  /// Alternatively, [of] can be used instead of this method to create a
-  /// dependency between the provided `context` and the ancestor [TickerMode].
-  /// In this case, the widget automatically rebuilds when the ticker mode
-  /// changes or when it is moved to a new [TickerMode] ancestor, which
-  /// simplifies the management cost in the widget at the expensive of some
-  /// potential unnecessary rebuilds.
-  ///
-  /// In the absence of a [TickerMode] widget, this function returns a
-  /// [ValueListenable], whose [ValueListenable.value] is always true.
   static ValueListenable<bool> getNotifier(BuildContext context) {
     final _EffectiveTickerMode? widget = context.getInheritedWidgetOfExactType<_EffectiveTickerMode>();
     return widget?.notifier ?? const _ConstantValueListenable<bool>(true);
@@ -164,16 +100,6 @@ class _EffectiveTickerMode extends InheritedWidget {
   }
 }
 
-/// Provides a single [Ticker] that is configured to only tick while the current
-/// tree is enabled, as defined by [TickerMode].
-///
-/// To create the [AnimationController] in a [State] that only uses a single
-/// [AnimationController], mix in this class, then pass `vsync: this`
-/// to the animation controller constructor.
-///
-/// This mixin only supports vending a single ticker. If you might have multiple
-/// [AnimationController] objects over the lifetime of the [State], use a full
-/// [TickerProviderStateMixin] instead.
 @optionalTypeArgs
 mixin SingleTickerProviderStateMixin<T extends StatefulWidget> on State<T> implements TickerProvider {
   Ticker? _ticker;
@@ -271,16 +197,6 @@ mixin SingleTickerProviderStateMixin<T extends StatefulWidget> on State<T> imple
   }
 }
 
-/// Provides [Ticker] objects that are configured to only tick while the current
-/// tree is enabled, as defined by [TickerMode].
-///
-/// To create an [AnimationController] in a class that uses this mixin, pass
-/// `vsync: this` to the animation controller constructor whenever you
-/// create a new animation controller.
-///
-/// If you only have a single [Ticker] (for example only a single
-/// [AnimationController]) for the lifetime of your [State], then using a
-/// [SingleTickerProviderStateMixin] is more efficient. This is the common case.
 @optionalTypeArgs
 mixin TickerProviderStateMixin<T extends StatefulWidget> on State<T> implements TickerProvider {
   Set<Ticker>? _tickers;

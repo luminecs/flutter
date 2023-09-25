@@ -646,8 +646,6 @@ const String kAdbShellGetprop = '''
 [xmpp.auto-presence]: [true]
 ''';
 
-/// A mock Android Console that presents a connection banner and responds to
-/// "avd name" requests with the supplied name.
 class FakeWorkingAndroidConsoleSocket extends Fake implements Socket {
   FakeWorkingAndroidConsoleSocket(this.avdName) {
     _controller.add('Android Console: Welcome!\n');
@@ -679,7 +677,6 @@ class FakeWorkingAndroidConsoleSocket extends Fake implements Socket {
   void destroy() { }
 }
 
-/// An Android console socket that drops all input and returns no output.
 class FakeUnresponsiveAndroidConsoleSocket extends Fake implements Socket {
   final StreamController<String> _controller = StreamController<String>();
 
@@ -693,7 +690,6 @@ class FakeUnresponsiveAndroidConsoleSocket extends Fake implements Socket {
   void destroy() { }
 }
 
-/// An Android console socket that drops all input and returns no output.
 class FakeDisconnectingAndroidConsoleSocket extends Fake implements Socket {
   FakeDisconnectingAndroidConsoleSocket() {
     _controller.add('Android Console: Welcome!\n');

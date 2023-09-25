@@ -8,8 +8,6 @@
 
 import 'package:intl/date_symbols.dart' as intl;
 
-/// The subset of date symbols supported by the intl package which are also
-/// supported by flutter_localizations.
 final Map<String, intl.DateSymbols> dateSymbols = <String, intl.DateSymbols>{
   'af': intl.DateSymbols(
     NAME: 'af',
@@ -18354,8 +18352,6 @@ final Map<String, intl.DateSymbols> dateSymbols = <String, intl.DateSymbols>{
   ),
 };
 
-/// The subset of date patterns supported by the intl package which are also
-/// supported by flutter_localizations.
 const Map<String, Map<String, String>> datePatterns =
     <String, Map<String, String>>{
   'af': <String, String>{

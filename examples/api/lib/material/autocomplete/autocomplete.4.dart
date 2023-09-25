@@ -6,9 +6,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Autocomplete] that demonstrates fetching the
-/// options asynchronously and debouncing the network calls, including handling
-/// network errors.
 
 void main() => runApp(const AutocompleteExampleApp());
 
@@ -175,10 +172,6 @@ class _FakeAPI {
 
 typedef _Debounceable<S, T> = Future<S?> Function(T parameter);
 
-/// Returns a new function that is a debounced version of the given function.
-///
-/// This means that the original function will be called only after no calls
-/// have been made for the given Duration.
 _Debounceable<S, T> _debounce<S, T>(_Debounceable<S?, T> function) {
   _DebounceTimer? debounceTimer;
 

@@ -25,12 +25,9 @@ const List<String> kModifiersOfInterest = <String>[
 const List<String> kSpecialPhysicalKeys = <String>['CapsLock'];
 const List<String> kSpecialLogicalKeys = <String>['CapsLock'];
 
-/// Generates the key mapping for macOS, based on the information in the key
-/// data structure given to it.
 class MacOSCodeGenerator extends PlatformCodeGenerator {
   MacOSCodeGenerator(super.keyData, super.logicalData, this._layoutGoals);
 
-  /// This generates the map of macOS key codes to physical keys.
   String get _scanCodeMap {
     final OutputLines<int> lines = OutputLines<int>('macOS scancode map');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -52,7 +49,6 @@ class MacOSCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the mask values for the part of a key code that defines its plane.
   String get _maskConstants {
     final StringBuffer buffer = StringBuffer();
     const List<MaskConstant> maskConstants = <MaskConstant>[
@@ -66,7 +62,6 @@ class MacOSCodeGenerator extends PlatformCodeGenerator {
     return buffer.toString().trimRight();
   }
 
-  /// This generates a map from the key code to a modifier flag.
   String get _keyToModifierFlagMap {
     final StringBuffer modifierKeyMap = StringBuffer();
     for (final String name in kModifiersOfInterest) {
@@ -75,7 +70,6 @@ class MacOSCodeGenerator extends PlatformCodeGenerator {
     return modifierKeyMap.toString().trimRight();
   }
 
-  /// This generates a map from the modifier flag to the key code.
   String get _modifierFlagToKeyMap {
     final StringBuffer modifierKeyMap = StringBuffer();
     for (final String name in kModifiersOfInterest) {
@@ -84,7 +78,6 @@ class MacOSCodeGenerator extends PlatformCodeGenerator {
     return modifierKeyMap.toString().trimRight();
   }
 
-  /// This generates some keys that needs special attention.
   String get _specialKeyConstants {
     final StringBuffer specialKeyConstants = StringBuffer();
     for (final String keyName in kSpecialPhysicalKeys) {

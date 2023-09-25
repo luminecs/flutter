@@ -32,7 +32,6 @@ import '../vmservice.dart';
 import '../web/web_runner.dart';
 import 'daemon.dart';
 
-/// Shared logic between `flutter run` and `flutter drive` commands.
 abstract class RunCommandBase extends FlutterCommand with DeviceBasedDevelopmentArtifacts {
   RunCommandBase({ required bool verboseHelp }) {
     addBuildModeFlags(verboseHelp: verboseHelp, defaultToRelease: false);
@@ -215,14 +214,12 @@ abstract class RunCommandBase extends FlutterCommand with DeviceBasedDevelopment
   @override
   bool get reportNullSafety => true;
 
-  /// Whether to start the application paused by default.
   bool get startPausedDefault;
 
   String? get route => stringArg('route');
 
   String? get traceAllowlist => stringArg('trace-allowlist');
 
-  /// Create a debugging options instance for the current `run` or `drive` invocation.
   @visibleForTesting
   @protected
   Future<DebuggingOptions> createDebuggingOptions(bool webMode) async {

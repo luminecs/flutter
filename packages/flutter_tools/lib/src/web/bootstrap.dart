@@ -4,15 +4,6 @@
 
 import 'package:package_config/package_config.dart';
 
-/// The JavaScript bootstrap script to support in-browser hot restart.
-///
-/// The [requireUrl] loads our cached RequireJS script file. The [mapperUrl]
-/// loads the special Dart stack trace mapper. The [entrypoint] is the
-/// actual main.dart file.
-///
-/// This file is served when the browser requests "main.dart.js" in debug mode,
-/// and is responsible for bootstrapping the RequireJS modules and attaching
-/// the hot reload hooks.
 String generateBootstrapScript({
   required String requireUrl,
   required String mapperUrl,
@@ -139,18 +130,6 @@ document.head.appendChild(requireEl);
 ''';
 }
 
-/// Generate a synthetic main module which captures the application's main
-/// method.
-///
-/// If a [bootstrapModule] name is not provided, defaults to 'main_module.bootstrap'.
-///
-/// RE: Object.keys usage in app.main:
-/// This attaches the main entrypoint and hot reload functionality to the window.
-/// The app module will have a single property which contains the actual application
-/// code. The property name is based off of the entrypoint that is generated, for example
-/// the file `foo/bar/baz.dart` will generate a property named approximately
-/// `foo__bar__baz`. Rather than attempt to guess, we assume the first property of
-/// this object is the module.
 String generateMainModule({
   required String entrypoint,
   required bool nullAssertions,
@@ -206,9 +185,6 @@ define("$bootstrapModule", ["$entrypoint", "dart_sdk"], function(app, dart_sdk) 
 ''';
 }
 
-/// Generates the bootstrap logic required for a flutter test running in a browser.
-///
-/// This hard-codes the device pixel ratio to 3.0 and a 2400 x 1800 window size.
 String generateTestEntrypoint({
   required String relativeTestPath,
   required String absolutePath,
@@ -262,7 +238,6 @@ String generateTestEntrypoint({
   ''';
 }
 
-/// Generate the unit test bootstrap file.
 String generateTestBootstrapFileContents(
     String mainUri, String requireUrl, String mapperUrl) {
   return '''

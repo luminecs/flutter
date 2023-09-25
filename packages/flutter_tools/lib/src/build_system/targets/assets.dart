@@ -17,15 +17,6 @@ import 'icon_tree_shaker.dart';
 import 'scene_importer.dart';
 import 'shader_compiler.dart';
 
-/// A helper function to copy an asset bundle into an [environment]'s output
-/// directory.
-///
-/// Throws [Exception] if [AssetBundle.build] returns a non-zero exit code.
-///
-/// [additionalContent] may contain additional DevFS entries that will be
-/// included in the final bundle, but not the AssetManifest.json file.
-///
-/// Returns a [Depfile] containing all assets used in the build.
 Future<Depfile> copyAssets(
   Environment environment,
   Directory outputDirectory, {
@@ -212,18 +203,8 @@ Future<Depfile> copyAssets(
   return depfile;
 }
 
-/// The path of the SkSL JSON bundle included in flutter_assets.
 const String kSkSLShaderBundlePath = 'io.flutter.shaders.json';
 
-/// Validate and process an SkSL asset bundle in a [DevFSContent].
-///
-/// Returns `null` if the bundle was not provided, otherwise attempts to
-/// validate the bundle.
-///
-/// Throws [Exception] if the bundle is invalid due to formatting issues.
-///
-/// If the current target platform is different than the platform constructed
-/// for the bundle, a warning will be printed.
 DevFSContent? processSkSLBundle(String? bundlePath, {
   required TargetPlatform targetPlatform,
   required FileSystem fileSystem,
@@ -285,7 +266,6 @@ DevFSContent? processSkSLBundle(String? bundlePath, {
   }));
 }
 
-/// Copy the assets defined in the flutter manifest into a build directory.
 class CopyAssets extends Target {
   const CopyAssets();
 

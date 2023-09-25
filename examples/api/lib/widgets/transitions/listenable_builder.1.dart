@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for a [ValueNotifier] with a [ListenableBuilder].
 
 void main() {
   runApp(const ListenableBuilderExample());

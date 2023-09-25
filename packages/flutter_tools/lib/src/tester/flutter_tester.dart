@@ -37,11 +37,6 @@ class FlutterTesterApp extends ApplicationPackage {
   String get name => _directory.basename;
 }
 
-/// The device interface for running on the flutter_tester shell.
-///
-/// Normally this is only used as the runner for `flutter test`, but it can
-/// also be used as a regular device when `--show-test-device` is provided
-/// to the flutter command.
 class FlutterTesterDevice extends Device {
   FlutterTesterDevice(super.id, {
     required ProcessManager processManager,

@@ -2,11 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Core Flutter framework primitives.
-///
-/// The features defined in this library are the lowest-level utility
-/// classes and functions used by all the other layers of the Flutter
-/// framework.
 library foundation;
 
 export 'package:meta/meta.dart' show

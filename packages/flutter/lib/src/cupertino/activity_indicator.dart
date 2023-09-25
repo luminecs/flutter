@@ -16,21 +16,7 @@ const Color _kActiveTickColor = CupertinoDynamicColor.withBrightness(
   darkColor: Color(0xFFEBEBF5),
 );
 
-/// An iOS-style activity indicator that spins clockwise.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=AENVH-ZqKDQ}
-///
-/// {@tool dartpad}
-/// This example shows how [CupertinoActivityIndicator] can be customized.
-///
-/// ** See code in examples/api/lib/cupertino/activity_indicator/cupertino_activity_indicator.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/progress-indicators/#activity-indicators>
 class CupertinoActivityIndicator extends StatefulWidget {
-  /// Creates an iOS-style activity indicator that spins clockwise.
   const CupertinoActivityIndicator({
     super.key,
     this.color,
@@ -39,12 +25,6 @@ class CupertinoActivityIndicator extends StatefulWidget {
   })  : assert(radius > 0.0),
         progress = 1.0;
 
-  /// Creates a non-animated iOS-style activity indicator that displays
-  /// a partial count of ticks based on the value of [progress].
-  ///
-  /// When provided, the value of [progress] must be between 0.0 (zero ticks
-  /// will be shown) and 1.0 (all ticks will be shown) inclusive. Defaults
-  /// to 1.0.
   const CupertinoActivityIndicator.partiallyRevealed({
     super.key,
     this.color,
@@ -55,27 +35,12 @@ class CupertinoActivityIndicator extends StatefulWidget {
         assert(progress <= 1.0),
         animating = false;
 
-  /// Color of the activity indicator.
-  ///
-  /// Defaults to color extracted from native iOS.
   final Color? color;
 
-  /// Whether the activity indicator is running its animation.
-  ///
-  /// Defaults to true.
   final bool animating;
 
-  /// Radius of the spinner widget.
-  ///
-  /// Defaults to 10 pixels. Must be positive.
   final double radius;
 
-  /// Determines the percentage of spinner ticks that will be shown. Typical usage would
-  /// display all ticks, however, this allows for more fine-grained control such as
-  /// during pull-to-refresh when the drag-down action shows one tick at a time as
-  /// the user continues to drag down.
-  ///
-  /// Defaults to one. Must be between zero and one, inclusive.
   final double progress;
 
   @override
@@ -136,8 +101,6 @@ class _CupertinoActivityIndicatorState extends State<CupertinoActivityIndicator>
 
 const double _kTwoPI = math.pi * 2.0;
 
-/// Alpha values extracted from the native component (for both dark and light mode) to
-/// draw the spinning ticks.
 const List<int> _kAlphaValues = <int>[
   47,
   47,
@@ -149,7 +112,6 @@ const List<int> _kAlphaValues = <int>[
   147,
 ];
 
-/// The alpha value that is used to draw the partially revealed ticks.
 const int _partiallyRevealedAlpha = 147;
 
 class _CupertinoActivityIndicatorPainter extends CustomPainter {

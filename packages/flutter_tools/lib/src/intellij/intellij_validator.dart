@@ -20,7 +20,6 @@ const String _ultimateEditionId = 'IntelliJIdea';
 const String _communityEditionTitle = 'IntelliJ IDEA Community Edition';
 const String _communityEditionId = 'IdeaIC';
 
-/// A doctor validator for both Intellij and Android Studio.
 abstract class IntelliJValidator extends DoctorValidator {
   IntelliJValidator(super.title, this.installPath, {
     required FileSystem fileSystem,
@@ -43,10 +42,6 @@ abstract class IntelliJValidator extends DoctorValidator {
 
   static final Version kMinIdeaVersion = Version(2017, 1, 0);
 
-  /// Create a [DoctorValidator] for each installation of Intellij.
-  ///
-  /// On platforms other than macOS, Linux, and Windows this returns an
-  /// empty list.
   static Iterable<DoctorValidator> installedValidators({
     required FileSystem fileSystem,
     required Platform platform,
@@ -136,7 +131,6 @@ abstract class IntelliJValidator extends DoctorValidator {
   }
 }
 
-/// A windows specific implementation of the intellij validator.
 class IntelliJValidatorOnWindows extends IntelliJValidator {
   IntelliJValidatorOnWindows(String title, this.version, String installPath, this.pluginsPath, {
     required FileSystem fileSystem,
@@ -244,7 +238,6 @@ class IntelliJValidatorOnWindows extends IntelliJValidator {
   }
 }
 
-/// A linux specific implementation of the intellij validator.
 class IntelliJValidatorOnLinux extends IntelliJValidator {
   IntelliJValidatorOnLinux(String title, this.version, String installPath, this.pluginsPath, {
     required FileSystem fileSystem,
@@ -357,7 +350,6 @@ class IntelliJValidatorOnLinux extends IntelliJValidator {
   }
 }
 
-/// A macOS specific implementation of the intellij validator.
 class IntelliJValidatorOnMac extends IntelliJValidator {
   IntelliJValidatorOnMac(String title, this.id, String installPath, {
     required FileSystem fileSystem,

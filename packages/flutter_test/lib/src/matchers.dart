@@ -22,400 +22,77 @@ import 'finders.dart';
 import 'goldens.dart';
 import 'widget_tester.dart' show WidgetTester;
 
-/// Asserts that the [FinderBase] matches nothing in the available candidates.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsNothing);
-/// ```
-///
-/// See also:
-///
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsOne], when you want the finder to find exactly one candidate.
-///  * [findsExactly], when you want the finder to find a specific number of candidates.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 const Matcher findsNothing = _FindsCountMatcher(null, 0);
 
-/// Asserts that the [Finder] locates at least one widget in the widget tree.
-///
-/// This is equivalent to the preferred [findsAny] method.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsWidgets);
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsOne], when you want the finder to find exactly one candidate.
-///  * [findsExactly], when you want the finder to find a specific number of candidates.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 const Matcher findsWidgets = _FindsCountMatcher(1, null);
 
-/// Asserts that the [FinderBase] locates at least one matching candidate.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsAny);
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsOne], when you want the finder to find exactly one candidate.
-///  * [findsExactly], when you want the finder to find a specific number of candidates.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 const Matcher findsAny = _FindsCountMatcher(1, null);
 
-/// Asserts that the [Finder] locates at exactly one widget in the widget tree.
-///
-/// This is equivalent to the preferred [findsOne] method.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsOneWidget);
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsExactly], when you want the finder to find a specific number of candidates.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 const Matcher findsOneWidget = _FindsCountMatcher(1, 1);
 
-/// Asserts that the [FinderBase] finds exactly one matching candidate.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsOne);
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsExactly], when you want the finder to find a specific number candidates.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 const Matcher findsOne = _FindsCountMatcher(1, 1);
 
-/// Asserts that the [Finder] locates the specified number of widgets in the widget tree.
-///
-/// This is equivalent to the preferred [findsExactly] method.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsNWidgets(2));
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsOne], when you want the finder to find exactly one candidate.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 Matcher findsNWidgets(int n) => _FindsCountMatcher(n, n);
 
-/// Asserts that the [FinderBase] locates the specified number of candidates.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsExactly(2));
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsOne], when you want the finder to find exactly one candidates.
-///  * [findsAtLeast], when you want the finder to find at least a specific number of candidates.
 Matcher findsExactly(int n) => _FindsCountMatcher(n, n);
 
-/// Asserts that the [Finder] locates at least a number of widgets in the widget tree.
-///
-/// This is equivalent to the preferred [findsAtLeast] method.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsAtLeastNWidgets(2));
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsOne], when you want the finder to find exactly one candidate.
-///  * [findsExactly], when you want the finder to find a specific number of candidates.
 Matcher findsAtLeastNWidgets(int n) => _FindsCountMatcher(n, null);
 
-/// Asserts that the [FinderBase] locates at least the given number of candidates.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save'), findsAtLeast(2));
-/// ```
-///
-/// See also:
-///
-///  * [findsNothing], when you want the finder to not find anything.
-///  * [findsAny], when you want the finder to find one or more candidates.
-///  * [findsOne], when you want the finder to find exactly one candidates.
-///  * [findsExactly], when you want the finder to find a specific number of candidates.
 Matcher findsAtLeast(int n) => _FindsCountMatcher(n, null);
 
-/// Asserts that the [Finder] locates a single widget that has at
-/// least one [Offstage] widget ancestor.
-///
-/// It's important to use a full finder, since by default finders exclude
-/// offstage widgets.
-///
-/// ## Sample code
-///
-/// ```dart
-/// expect(find.text('Save', skipOffstage: false), isOffstage);
-/// ```
-///
-/// See also:
-///
-///  * [isOnstage], the opposite.
 const Matcher isOffstage = _IsOffstage();
 
-/// Asserts that the [Finder] locates a single widget that has no
-/// [Offstage] widget ancestors.
-///
-/// See also:
-///
-///  * [isOffstage], the opposite.
 const Matcher isOnstage = _IsOnstage();
 
-/// Asserts that the [Finder] locates a single widget that has at
-/// least one [Card] widget ancestor.
-///
-/// See also:
-///
-///  * [isNotInCard], the opposite.
 const Matcher isInCard = _IsInCard();
 
-/// Asserts that the [Finder] locates a single widget that has no
-/// [Card] widget ancestors.
-///
-/// This is equivalent to `isNot(isInCard)`.
-///
-/// See also:
-///
-///  * [isInCard], the opposite.
 const Matcher isNotInCard = _IsNotInCard();
 
-/// Asserts that the object represents the same color as [color] when used to paint.
-///
-/// Specifically this matcher checks the object is of type [Color] and its [Color.value]
-/// equals to that of the given [color].
 Matcher isSameColorAs(Color color) => _ColorMatcher(targetColor: color);
 
-/// Asserts that an object's toString() is a plausible one-line description.
-///
-/// Specifically, this matcher checks that the string does not contains newline
-/// characters, and does not have leading or trailing whitespace, is not
-/// empty, and does not contain the default `Instance of ...` string.
 const Matcher hasOneLineDescription = _HasOneLineDescription();
 
-/// Asserts that an object's toStringDeep() is a plausible multiline
-/// description.
-///
-/// Specifically, this matcher checks that an object's
-/// `toStringDeep(prefixLineOne, prefixOtherLines)`:
-///
-///  * Does not have leading or trailing whitespace.
-///  * Does not contain the default `Instance of ...` string.
-///  * The last line has characters other than tree connector characters and
-///    whitespace. For example: the line ` │ ║ ╎` has only tree connector
-///    characters and whitespace.
-///  * Does not contain lines with trailing white space.
-///  * Has multiple lines.
-///  * The first line starts with `prefixLineOne`
-///  * All subsequent lines start with `prefixOtherLines`.
 const Matcher hasAGoodToStringDeep = _HasGoodToStringDeep();
 
-/// A matcher for functions that throw [FlutterError].
-///
-/// This is equivalent to `throwsA(isA<FlutterError>())`.
-///
-/// If you are trying to test whether a call to [WidgetTester.pumpWidget]
-/// results in a [FlutterError], see [TestWidgetsFlutterBinding.takeException].
-///
-/// See also:
-///
-///  * [throwsAssertionError], to test if a function throws any [AssertionError].
-///  * [throwsArgumentError], to test if a functions throws an [ArgumentError].
-///  * [isFlutterError], to test if any object is a [FlutterError].
 final Matcher throwsFlutterError = throwsA(isFlutterError);
 
-/// A matcher for functions that throw [AssertionError].
-///
-/// This is equivalent to `throwsA(isA<AssertionError>())`.
-///
-/// If you are trying to test whether a call to [WidgetTester.pumpWidget]
-/// results in an [AssertionError], see
-/// [TestWidgetsFlutterBinding.takeException].
-///
-/// See also:
-///
-///  * [throwsFlutterError], to test if a function throws a [FlutterError].
-///  * [throwsArgumentError], to test if a functions throws an [ArgumentError].
-///  * [isAssertionError], to test if any object is any kind of [AssertionError].
 final Matcher throwsAssertionError = throwsA(isAssertionError);
 
-/// A matcher for [FlutterError].
-///
-/// This is equivalent to `isInstanceOf<FlutterError>()`.
-///
-/// See also:
-///
-///  * [throwsFlutterError], to test if a function throws a [FlutterError].
-///  * [isAssertionError], to test if any object is any kind of [AssertionError].
 final TypeMatcher<FlutterError> isFlutterError = isA<FlutterError>();
 
-/// A matcher for [AssertionError].
-///
-/// This is equivalent to `isInstanceOf<AssertionError>()`.
-///
-/// See also:
-///
-///  * [throwsAssertionError], to test if a function throws any [AssertionError].
-///  * [isFlutterError], to test if any object is a [FlutterError].
 final TypeMatcher<AssertionError> isAssertionError = isA<AssertionError>();
 
-/// A matcher that compares the type of the actual value to the type argument T.
-///
-/// This is identical to [isA] and is included for backwards compatibility.
 TypeMatcher<T> isInstanceOf<T>() => isA<T>();
 
-/// Asserts that two [double]s are equal, within some tolerated error.
-///
-/// {@template flutter.flutter_test.moreOrLessEquals}
-/// Two values are considered equal if the difference between them is within
-/// [precisionErrorTolerance] of the larger one. This is an arbitrary value
-/// which can be adjusted using the `epsilon` argument. This matcher is intended
-/// to compare floating point numbers that are the result of different sequences
-/// of operations, such that they may have accumulated slightly different
-/// errors.
-/// {@endtemplate}
-///
-/// See also:
-///
-///  * [closeTo], which is identical except that the epsilon argument is
-///    required and not named.
-///  * [inInclusiveRange], which matches if the argument is in a specified
-///    range.
-///  * [rectMoreOrLessEquals] and [offsetMoreOrLessEquals], which do something
-///    similar but for [Rect]s and [Offset]s respectively.
 Matcher moreOrLessEquals(double value, { double epsilon = precisionErrorTolerance }) {
   return _MoreOrLessEquals(value, epsilon);
 }
 
-/// Asserts that two [Rect]s are equal, within some tolerated error.
-///
-/// {@macro flutter.flutter_test.moreOrLessEquals}
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is for [double]s.
-///  * [offsetMoreOrLessEquals], which is for [Offset]s.
-///  * [within], which offers a generic version of this functionality that can
-///    be used to match [Rect]s as well as other types.
 Matcher rectMoreOrLessEquals(Rect value, { double epsilon = precisionErrorTolerance }) {
   return _IsWithinDistance<Rect>(_rectDistance, value, epsilon);
 }
 
-/// Asserts that two [Matrix4]s are equal, within some tolerated error.
-///
-/// {@macro flutter.flutter_test.moreOrLessEquals}
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is for [double]s.
-///  * [offsetMoreOrLessEquals], which is for [Offset]s.
-///  * [matrix3MoreOrLessEquals], which is for [Matrix3]s.
 Matcher matrixMoreOrLessEquals(Matrix4 value, { double epsilon = precisionErrorTolerance }) {
   return _IsWithinDistance<Matrix4>(_matrixDistance, value, epsilon);
 }
 
-/// Asserts that two [Matrix3]s are equal, within some tolerated error.
-///
-/// {@macro flutter.flutter_test.moreOrLessEquals}
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is for [double]s.
-///  * [offsetMoreOrLessEquals], which is for [Offset]s.
-///  * [matrixMoreOrLessEquals], which is for [Matrix4]s.
 Matcher matrix3MoreOrLessEquals(Matrix3 value, { double epsilon = precisionErrorTolerance }) {
   return _IsWithinDistance<Matrix3>(_matrix3Distance, value, epsilon);
 }
 
-/// Asserts that two [Offset]s are equal, within some tolerated error.
-///
-/// {@macro flutter.flutter_test.moreOrLessEquals}
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is for [double]s.
-///  * [rectMoreOrLessEquals], which is for [Rect]s.
-///  * [within], which offers a generic version of this functionality that can
-///    be used to match [Offset]s as well as other types.
 Matcher offsetMoreOrLessEquals(Offset value, { double epsilon = precisionErrorTolerance }) {
   return _IsWithinDistance<Offset>(_offsetDistance, value, epsilon);
 }
 
-/// Asserts that two [String]s or `Iterable<String>`s are equal after
-/// normalizing likely hash codes.
-///
-/// A `#` followed by 5 hexadecimal digits is assumed to be a short hash code
-/// and is normalized to `#00000`.
-///
-/// Only [String] or `Iterable<String>` are allowed types for `value`.
-///
-/// See Also:
-///
-///  * [describeIdentity], a method that generates short descriptions of objects
-///    with ids that match the pattern `#[0-9a-f]{5}`.
-///  * [shortHash], a method that generates a 5 character long hexadecimal
-///    [String] based on [Object.hashCode].
-///  * [DiagnosticableTree.toStringDeep], a method that returns a [String]
-///    typically containing multiple hash codes.
 Matcher equalsIgnoringHashCodes(Object value) {
   assert(value is String || value is Iterable<String>, "Only String or Iterable<String> are allowed types for equalsIgnoringHashCodes, it doesn't accept ${value.runtimeType}");
   return _EqualsIgnoringHashCodes(value);
 }
 
-/// A matcher for [MethodCall]s, asserting that it has the specified
-/// method [name] and [arguments].
-///
-/// Arguments checking implements deep equality for [List] and [Map] types.
 Matcher isMethodCall(String name, { required dynamic arguments }) {
   return _IsMethodCall(name, arguments);
 }
 
-/// Asserts that 2 paths cover the same area by sampling multiple points.
-///
-/// Samples at least [sampleSize]^2 points inside [areaToCompare], and asserts
-/// that the [Path.contains] method returns the same value for each of the
-/// points for both paths.
-///
-/// When using this matcher you typically want to use a rectangle larger than
-/// the area you expect to paint in for [areaToCompare] to catch errors where
-/// the path draws outside the expected area.
 Matcher coversSameAreaAs(Path expectedPath, { required Rect areaToCompare, int sampleSize = 20 })
   => _CoversSameAreaAs(expectedPath, areaToCompare: areaToCompare, sampleSize: sampleSize);
 
@@ -426,125 +103,6 @@ Matcher coversSameAreaAs(Path expectedPath, { required Rect areaToCompare, int s
 // late Future<ByteData> someFont;
 // late WidgetTester tester;
 
-/// Asserts that a [Finder], [Future<ui.Image>], or [ui.Image] matches the
-/// golden image file identified by [key], with an optional [version] number.
-///
-/// For the case of a [Finder], the [Finder] must match exactly one widget and
-/// the rendered image of the first [RepaintBoundary] ancestor of the widget is
-/// treated as the image for the widget. As such, you may choose to wrap a test
-/// widget in a [RepaintBoundary] to specify a particular focus for the test.
-///
-/// The [key] may be either a [Uri] or a [String] representation of a URL.
-///
-/// The [version] is a number that can be used to differentiate historical
-/// golden files. This parameter is optional.
-///
-/// This is an asynchronous matcher, meaning that callers should use
-/// [expectLater] when using this matcher and await the future returned by
-/// [expectLater].
-///
-/// ## Golden File Testing
-///
-/// The term __golden file__ refers to a master image that is considered the true
-/// rendering of a given widget, state, application, or other visual
-/// representation you have chosen to capture.
-///
-/// The master golden image files that are tested against can be created or
-/// updated by running `flutter test --update-goldens` on the test.
-///
-/// {@tool snippet}
-/// Sample invocations of [matchesGoldenFile].
-///
-/// ```dart
-/// await expectLater(
-///   find.text('Save'),
-///   matchesGoldenFile('save.png'),
-/// );
-///
-/// await expectLater(
-///   image,
-///   matchesGoldenFile('save.png'),
-/// );
-///
-/// await expectLater(
-///   imageFuture,
-///   matchesGoldenFile(
-///     'save.png',
-///     version: 2,
-///   ),
-/// );
-///
-/// await expectLater(
-///   find.byType(MyWidget),
-///   matchesGoldenFile('goldens/myWidget.png'),
-/// );
-/// ```
-/// {@end-tool}
-///
-/// {@template flutter.flutter_test.matchesGoldenFile.custom_fonts}
-/// ## Including Fonts
-///
-/// Custom fonts may render differently across different platforms, or
-/// between different versions of Flutter. For example, a golden file generated
-/// on Windows with fonts will likely differ from the one produced by another
-/// operating system. Even on the same platform, if the generated golden is
-/// tested with a different Flutter version, the test may fail and require an
-/// updated image.
-///
-/// By default, the Flutter framework uses a font called 'Ahem' which shows
-/// squares instead of characters, however, it is possible to render images using
-/// custom fonts. For example, this is how to load the 'Roboto' font for a
-/// golden test:
-///
-/// {@tool snippet}
-/// How to load a custom font for golden images.
-/// ```dart
-/// testWidgets('Creating a golden image with a custom font', (WidgetTester tester) async {
-///   // Assuming the 'Roboto.ttf' file is declared in the pubspec.yaml file
-///   final Future<ByteData> font = rootBundle.load('path/to/font-file/Roboto.ttf');
-///
-///   final FontLoader fontLoader = FontLoader('Roboto')..addFont(font);
-///   await fontLoader.load();
-///
-///   await tester.pumpWidget(const MyWidget());
-///
-///   await expectLater(
-///     find.byType(MyWidget),
-///     matchesGoldenFile('myWidget.png'),
-///   );
-/// });
-/// ```
-/// {@end-tool}
-///
-/// The example above loads the desired font only for that specific test. To load
-/// a font for all golden file tests, the `FontLoader.load()` call could be
-/// moved in the `flutter_test_config.dart`. In this way, the font will always be
-/// loaded before a test:
-///
-/// {@tool snippet}
-/// Loading a custom font from the flutter_test_config.dart file.
-/// ```dart
-/// Future<void> testExecutable(FutureOr<void> Function() testMain) async {
-///   setUpAll(() async {
-///     final FontLoader fontLoader = FontLoader('SomeFont')..addFont(someFont);
-///     await fontLoader.load();
-///   });
-///
-///   await testMain();
-/// }
-/// ```
-/// {@end-tool}
-/// {@endtemplate}
-///
-/// See also:
-///
-///  * [GoldenFileComparator], which acts as the backend for this matcher.
-///  * [LocalFileComparator], which is the default [GoldenFileComparator]
-///    implementation for `flutter test`.
-///  * [matchesReferenceImage], which should be used instead if you want to
-///    verify that two different code paths create identical images.
-///  * [flutter_test] for a discussion of test configurations, whereby callers
-///    may swap out the backend for this matcher.
 AsyncMatcher matchesGoldenFile(Object key, {int? version}) {
   if (key is Uri) {
     return MatchesGoldenFile(key, version);
@@ -554,71 +112,10 @@ AsyncMatcher matchesGoldenFile(Object key, {int? version}) {
   throw ArgumentError('Unexpected type for golden file: ${key.runtimeType}');
 }
 
-/// Asserts that a [Finder], [Future<ui.Image>], or [ui.Image] matches a
-/// reference image identified by [image].
-///
-/// For the case of a [Finder], the [Finder] must match exactly one widget and
-/// the rendered image of the first [RepaintBoundary] ancestor of the widget is
-/// treated as the image for the widget.
-///
-/// This is an asynchronous matcher, meaning that callers should use
-/// [expectLater] when using this matcher and await the future returned by
-/// [expectLater].
-///
-/// ## Sample code
-///
-/// ```dart
-/// testWidgets('matchesReferenceImage', (WidgetTester tester) async {
-///   final ui.Paint paint = ui.Paint()
-///     ..style = ui.PaintingStyle.stroke
-///     ..strokeWidth = 1.0;
-///   final ui.PictureRecorder recorder = ui.PictureRecorder();
-///   final ui.Canvas pictureCanvas = ui.Canvas(recorder);
-///   pictureCanvas.drawCircle(Offset.zero, 20.0, paint);
-///   final ui.Picture picture = recorder.endRecording();
-///   addTearDown(picture.dispose);
-///   ui.Image referenceImage = await picture.toImage(50, 50);
-///   addTearDown(referenceImage.dispose);
-///
-///   await expectLater(find.text('Save'), matchesReferenceImage(referenceImage));
-///   await expectLater(image, matchesReferenceImage(referenceImage));
-///   await expectLater(imageFuture, matchesReferenceImage(referenceImage));
-/// });
-/// ```
-///
-/// See also:
-///
-///  * [matchesGoldenFile], which should be used instead if you need to verify
-///    that a [Finder] or [ui.Image] matches a golden image.
 AsyncMatcher matchesReferenceImage(ui.Image image) {
   return _MatchesReferenceImage(image);
 }
 
-/// Asserts that a [SemanticsNode] contains the specified information.
-///
-/// If either the label, hint, value, textDirection, or rect fields are not
-/// provided, then they are not part of the comparison. All of the boolean
-/// flag and action fields must match, and default to false.
-///
-/// To retrieve the semantics data of a widget, use [WidgetTester.getSemantics]
-/// with a [Finder] that returns a single widget. Semantics must be enabled
-/// in order to use this method.
-///
-/// ## Sample code
-///
-/// ```dart
-/// testWidgets('matchesSemantics', (WidgetTester tester) async {
-///   final SemanticsHandle handle = tester.ensureSemantics();
-///   // ...
-///   expect(tester.getSemantics(find.text('hello')), matchesSemantics(label: 'hello'));
-///   handle.dispose();
-/// });
-/// ```
-///
-/// See also:
-///
-///   * [SemanticsController.find] under [WidgetTester.semantics], the tester method which retrieves semantics.
-///   * [containsSemantics], a similar matcher without default values for flags or actions.
 Matcher matchesSemantics({
   String? label,
   AttributedString? attributedLabel,
@@ -775,30 +272,6 @@ Matcher matchesSemantics({
   );
 }
 
-/// Asserts that a [SemanticsNode] contains the specified information.
-///
-/// There are no default expected values, so no unspecified values will be
-/// validated.
-///
-/// To retrieve the semantics data of a widget, use [WidgetTester.getSemantics]
-/// with a [Finder] that returns a single widget. Semantics must be enabled
-/// in order to use this method.
-///
-/// ## Sample code
-///
-/// ```dart
-/// testWidgets('containsSemantics', (WidgetTester tester) async {
-///   final SemanticsHandle handle = tester.ensureSemantics();
-///   // ...
-///   expect(tester.getSemantics(find.text('hello')), containsSemantics(label: 'hello'));
-///   handle.dispose();
-/// });
-/// ```
-///
-/// See also:
-///
-///   * [SemanticsController.find] under [WidgetTester.semantics], the tester method which retrieves semantics.
-///   * [matchesSemantics], a similar matcher with default values for flags and actions.
 Matcher containsSemantics({
   String? label,
   AttributedString? attributedLabel,
@@ -955,37 +428,10 @@ Matcher containsSemantics({
   );
 }
 
-/// Asserts that the currently rendered widget meets the provided accessibility
-/// `guideline`.
-///
-/// This matcher requires the result to be awaited and for semantics to be
-/// enabled first.
-///
-/// ## Sample code
-///
-/// ```dart
-/// testWidgets('containsSemantics', (WidgetTester tester) async {
-///   final SemanticsHandle handle = tester.ensureSemantics();
-///   // ...
-///   await expectLater(tester, meetsGuideline(textContrastGuideline));
-///   handle.dispose();
-/// });
-/// ```
-///
-/// Supported accessibility guidelines:
-///
-///   * [androidTapTargetGuideline], for Android minimum tappable area guidelines.
-///   * [iOSTapTargetGuideline], for iOS minimum tappable area guidelines.
-///   * [textContrastGuideline], for WCAG minimum text contrast guidelines.
-///   * [labeledTapTargetGuideline], for enforcing labels on tappable areas.
 AsyncMatcher meetsGuideline(AccessibilityGuideline guideline) {
   return _MatchesAccessibilityGuideline(guideline);
 }
 
-/// The inverse matcher of [meetsGuideline].
-///
-/// This is needed because the [isNot] matcher does not compose with an
-/// [AsyncMatcher].
 AsyncMatcher doesNotMeetGuideline(AccessibilityGuideline guideline) {
   return _DoesNotMatchAccessibilityGuideline(guideline);
 }
@@ -1240,24 +686,12 @@ class _EqualsIgnoringHashCodes extends Matcher {
   }
 }
 
-/// Returns true if [c] represents a whitespace code unit.
 bool _isWhitespace(int c) => (c <= 0x000D && c >= 0x0009) || c == 0x0020;
 
-/// Returns true if [c] represents a vertical line Unicode line art code unit.
-///
-/// See [https://en.wikipedia.org/wiki/Box-drawing_character]. This method only
-/// specifies vertical line art code units currently used by Flutter line art.
-/// There are other line art characters that technically also represent vertical
-/// lines.
 bool _isVerticalLine(int c) {
   return c == 0x2502 || c == 0x2503 || c == 0x2551 || c == 0x254e;
 }
 
-/// Returns whether a [line] is all vertical tree connector characters.
-///
-/// Example vertical tree connector characters: `│ ║ ╎`.
-/// The last line of a text tree contains only vertical tree connector
-/// characters indicates a poorly formatted tree.
 bool _isAllTreeConnectorCharacters(String line) {
   for (int i = 0; i < line.length; ++i) {
     final int c = line.codeUnitAt(i);
@@ -1379,32 +813,8 @@ class _HasGoodToStringDeep extends Matcher {
   }
 }
 
-/// Computes the distance between two values.
-///
-/// The distance should be a metric in a metric space (see
-/// https://en.wikipedia.org/wiki/Metric_space). Specifically, if `f` is a
-/// distance function then the following conditions should hold:
-///
-/// - f(a, b) >= 0
-/// - f(a, b) == 0 if and only if a == b
-/// - f(a, b) == f(b, a)
-/// - f(a, c) <= f(a, b) + f(b, c), known as triangle inequality
-///
-/// This makes it useful for comparing numbers, [Color]s, [Offset]s and other
-/// sets of value for which a metric space is defined.
 typedef DistanceFunction<T> = num Function(T a, T b);
 
-/// The type of a union of instances of [DistanceFunction<T>] for various types
-/// T.
-///
-/// This type is used to describe a collection of [DistanceFunction<T>]
-/// functions which have (potentially) unrelated argument types. Since the
-/// argument types of the functions may be unrelated, their type is declared as
-/// `Never`, which is the bottom type in dart to which all other types can be
-/// assigned to.
-///
-/// Calling an instance of this type must either be done dynamically, or by
-/// first casting it to a [DistanceFunction<T>] for some concrete T.
 typedef AnyDistanceFunction = num Function(Never a, Never b);
 
 const Map<Type, AnyDistanceFunction> _kStandardDistanceFunctions = <Type, AnyDistanceFunction>{
@@ -1475,30 +885,6 @@ double _sizeDistance(Size a, Size b) {
   return delta.distance;
 }
 
-/// Asserts that two values are within a certain distance from each other.
-///
-/// The distance is computed by a [DistanceFunction].
-///
-/// If `distanceFunction` is null, a standard distance function is used for the
-/// `T` generic argument. Standard functions are defined for the following
-/// types:
-///
-///  * [Color], whose distance is the maximum component-wise delta.
-///  * [Offset], whose distance is the Euclidean distance computed using the
-///    method [Offset.distance].
-///  * [Rect], whose distance is the maximum component-wise delta.
-///  * [Size], whose distance is the [Offset.distance] of the offset computed as
-///    the difference between two sizes.
-///  * [int], whose distance is the absolute difference between two integers.
-///  * [double], whose distance is the absolute difference between two doubles.
-///
-/// See also:
-///
-///  * [moreOrLessEquals], which is similar to this function, but specializes in
-///    [double]s and has an optional `epsilon` parameter.
-///  * [rectMoreOrLessEquals], which is similar to this function, but
-///    specializes in [Rect]s and has an optional `epsilon` parameter.
-///  * [closeTo], which specializes in numbers only.
 Matcher within<T>({
   required num distance,
   required T from,
@@ -1649,47 +1035,18 @@ class _IsMethodCall extends Matcher {
   }
 }
 
-/// Asserts that a [Finder] locates a single object whose root RenderObject
-/// is a [RenderClipRect] with no clipper set, or an equivalent
-/// [RenderClipPath].
 const Matcher clipsWithBoundingRect = _ClipsWithBoundingRect();
 
-/// Asserts that a [Finder] locates a single object whose root RenderObject is
-/// not a [RenderClipRect], [RenderClipRRect], [RenderClipOval], or
-/// [RenderClipPath].
 const Matcher hasNoImmediateClip = _MatchAnythingExceptClip();
 
-/// Asserts that a [Finder] locates a single object whose root RenderObject
-/// is a [RenderClipRRect] with no clipper set, and border radius equals to
-/// [borderRadius], or an equivalent [RenderClipPath].
 Matcher clipsWithBoundingRRect({ required BorderRadius borderRadius }) {
   return _ClipsWithBoundingRRect(borderRadius: borderRadius);
 }
 
-/// Asserts that a [Finder] locates a single object whose root RenderObject
-/// is a [RenderClipPath] with a [ShapeBorderClipper] that clips to
-/// [shape].
 Matcher clipsWithShapeBorder({ required ShapeBorder shape }) {
   return _ClipsWithShapeBorder(shape: shape);
 }
 
-/// Asserts that a [Finder] locates a single object whose root RenderObject
-/// is a [RenderPhysicalModel] or a [RenderPhysicalShape].
-///
-/// - If the render object is a [RenderPhysicalModel]
-///    - If [shape] is non null asserts that [RenderPhysicalModel.shape] is equal to
-///   [shape].
-///    - If [borderRadius] is non null asserts that [RenderPhysicalModel.borderRadius] is equal to
-///   [borderRadius].
-///     - If [elevation] is non null asserts that [RenderPhysicalModel.elevation] is equal to
-///   [elevation].
-/// - If the render object is a [RenderPhysicalShape]
-///    - If [borderRadius] is non null asserts that the shape is a rounded
-///   rectangle with this radius.
-///    - If [borderRadius] is null, asserts that the shape is equivalent to
-///   [shape].
-///    - If [elevation] is non null asserts that [RenderPhysicalModel.elevation] is equal to
-///   [elevation].
 Matcher rendersOnPhysicalModel({
   BoxShape? shape,
   BorderRadius? borderRadius,
@@ -1702,11 +1059,6 @@ Matcher rendersOnPhysicalModel({
   );
 }
 
-/// Asserts that a [Finder] locates a single object whose root RenderObject
-/// is [RenderPhysicalShape] that uses a [ShapeBorderClipper] that clips to
-/// [shape] as its clipper.
-/// If [elevation] is non null asserts that [RenderPhysicalShape.elevation] is
-/// equal to [elevation].
 Matcher rendersOnPhysicalShape({
   required ShapeBorder shape,
   double? elevation,
@@ -2359,11 +1711,6 @@ class _MatchesSemanticsData extends Matcher {
   final int? currentValueLength;
   final List<Matcher>? children;
 
-  /// There are three possible states for these two maps:
-  ///
-  ///  1. If the flag/action maps to `true`, then it must be present in the SemanticData
-  ///  2. If the flag/action maps to `false`, then it must not be present in the SemanticData
-  ///  3. If the flag/action is not in the map, then it will not be validated against
   final Map<SemanticsAction, bool> actions;
   final Map<SemanticsFlag, bool> flags;
 

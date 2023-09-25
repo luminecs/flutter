@@ -5,21 +5,11 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' show TextSelectionToolbarLayoutDelegate;
 
-/// Positions the toolbar below [anchor] or adjusts it higher to fit above
-/// the bottom view insets, if applicable.
-///
-/// See also:
-///
-///   * [SpellCheckSuggestionsToolbar], which uses this to position itself.
 class SpellCheckSuggestionsToolbarLayoutDelegate extends SingleChildLayoutDelegate {
-  /// Creates an instance of [SpellCheckSuggestionsToolbarLayoutDelegate].
   SpellCheckSuggestionsToolbarLayoutDelegate({
     required this.anchor,
   });
 
-  /// {@macro flutter.material.SpellCheckSuggestionsToolbar.anchor}
-  ///
-  /// Should be provided in local coordinates.
   final Offset anchor;
 
   @override

@@ -25,12 +25,9 @@ String _toUpperSnake(String lowerCamel) {
     (Match match) => '_${match.group(1)!}').toUpperCase();
 }
 
-/// Generates the common/testing/key_codes.h based on the information in the key
-/// data structure given to it.
 class KeyCodesJavaGenerator extends BaseCodeGenerator {
   KeyCodesJavaGenerator(super.keyData, super.logicalData);
 
-  /// Gets the generated definitions of PhysicalKeyboardKeys.
   String get _physicalDefinitions {
     final OutputLines<int> lines = OutputLines<int>('Physical Key list');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -40,7 +37,6 @@ class KeyCodesJavaGenerator extends BaseCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// Gets the generated definitions of PhysicalKeyboardKeys.
   String get _logicalDefinitions {
     final OutputLines<int> lines = OutputLines<int>('Logical Key list', behavior: DeduplicateBehavior.kSkip);
     for (final LogicalKeyEntry entry in logicalData.entries) {

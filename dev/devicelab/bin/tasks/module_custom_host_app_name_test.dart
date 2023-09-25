@@ -15,8 +15,6 @@ final String gradlewExecutable = Platform.isWindows ? '.\\$gradlew' : './$gradle
 final String fileReadWriteMode = Platform.isWindows ? 'rw-rw-rw-' : 'rw-r--r--';
 final String platformLineSep = Platform.isWindows ? '\r\n': '\n';
 
-/// Tests that the Flutter module project template works and supports
-/// adding Flutter to an existing Android app.
 Future<void> main() async {
   await task(() async {
 

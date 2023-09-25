@@ -10,30 +10,12 @@ import 'basic_types.dart';
 import 'border_radius.dart';
 import 'borders.dart';
 
-/// A rectangular border with flattened or "beveled" corners.
-///
-/// The line segments that connect the rectangle's four sides will
-/// begin and at locations offset by the corresponding border radius,
-/// but not farther than the side's center. If all the border radii
-/// exceed the sides' half widths/heights the resulting shape is
-/// diamond made by connecting the centers of the sides.
 class BeveledRectangleBorder extends OutlinedBorder {
-  /// Creates a border like a [RoundedRectangleBorder] except that the corners
-  /// are joined by straight lines instead of arcs.
   const BeveledRectangleBorder({
     super.side,
     this.borderRadius = BorderRadius.zero,
   });
 
-  /// The radii for each corner.
-  ///
-  /// Each corner [Radius] defines the endpoints of a line segment that
-  /// spans the corner. The endpoints are located in the same place as
-  /// they would be for [RoundedRectangleBorder], but they're connected
-  /// by a straight line instead of an arc.
-  ///
-  /// Negative radius values are clamped to 0.0 by [getInnerPath] and
-  /// [getOuterPath].
   final BorderRadiusGeometry borderRadius;
 
   @override
@@ -66,8 +48,6 @@ class BeveledRectangleBorder extends OutlinedBorder {
     return super.lerpTo(b, t);
   }
 
-  /// Returns a copy of this RoundedRectangleBorder with the given fields
-  /// replaced with the new values.
   @override
   BeveledRectangleBorder copyWith({ BorderSide? side, BorderRadiusGeometry? borderRadius }) {
     return BeveledRectangleBorder(

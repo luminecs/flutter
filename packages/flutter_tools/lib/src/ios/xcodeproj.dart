@@ -22,7 +22,6 @@ import '../reporting/reporting.dart';
 final RegExp _settingExpr = RegExp(r'(\w+)\s*=\s*(.*)$');
 final RegExp _varExpr = RegExp(r'\$\(([^)]*)\)');
 
-/// Interpreter of Xcode projects.
 class XcodeProjectInterpreter {
   factory XcodeProjectInterpreter({
     required Platform platform,
@@ -63,12 +62,6 @@ class XcodeProjectInterpreter {
         _versionText = version?.toString(),
         _usage = usage;
 
-  /// Create an [XcodeProjectInterpreter] for testing.
-  ///
-  /// Defaults to installed with sufficient version,
-  /// a memory file system, fake platform, buffer logger,
-  /// test [Usage], and test [Terminal].
-  /// Set [version] to null to simulate Xcode not being installed.
   factory XcodeProjectInterpreter.test({
     required ProcessManager processManager,
     Version? version = const Version.withText(1000, 0, 0, '1000.0.0'),
@@ -153,12 +146,6 @@ class XcodeProjectInterpreter {
     return _build;
   }
 
-  /// The `xcrun` Xcode command to run or locate development
-  /// tools and properties.
-  ///
-  /// Returns `xcrun` on x86 macOS.
-  /// Returns `/usr/bin/arch -arm64e xcrun` on ARM macOS to force Xcode commands
-  /// to run outside the x86 Rosetta translation, which may cause crashes.
   List<String> xcrunCommand() {
     final List<String> xcrunCommand = <String>[];
     if (_operatingSystemUtils.hostPlatform == HostPlatform.darwin_arm64) {
@@ -172,11 +159,6 @@ class XcodeProjectInterpreter {
     return xcrunCommand;
   }
 
-  /// Asynchronously retrieve xcode build settings. This one is preferred for
-  /// new call-sites.
-  ///
-  /// If [scheme] is null, xcodebuild will return build settings for the first discovered
-  /// target (by default this is Runner).
   Future<Map<String, String>> getBuildSettings(
     String projectPath, {
     required XcodeProjectBuildContext buildContext,
@@ -243,9 +225,6 @@ class XcodeProjectInterpreter {
     }
   }
 
-  /// Asynchronously retrieve xcode build settings for the generated Pods.xcodeproj plugins project.
-  ///
-  /// Returns the stdout of the Xcode command.
   Future<String?> pluginsBuildSettingsOutput(
       Directory podXcodeProject, {
         Duration timeout = const Duration(minutes: 1),
@@ -340,10 +319,6 @@ class XcodeProjectInterpreter {
   }
 }
 
-/// Environment variables prefixed by FLUTTER_XCODE_ will be passed as build configurations to xcodebuild.
-/// This allows developers to pass arbitrary build settings in without the tool needing to make a flag
-/// for or be aware of each one. This could be used to set code signing build settings in a CI
-/// environment without requiring settings changes in the Xcode project.
 List<String> environmentVariablesAsXcodeBuildSettings(Platform platform) {
   const String xcodeBuildSettingPrefix = 'FLUTTER_XCODE_';
   return platform.environment.entries.where((MapEntry<String, String> mapEntry) {
@@ -365,8 +340,6 @@ Map<String, String> parseXcodeBuildSettings(String showBuildSettingsOutput) {
   return settings;
 }
 
-/// Substitutes variables in [str] with their values from the specified Xcode
-/// project and target.
 String substituteXcodeVariables(String str, Map<String, String> xcodeBuildSettings) {
   final Iterable<Match> matches = _varExpr.allMatches(str);
   if (matches.isEmpty) {
@@ -412,9 +385,6 @@ class XcodeProjectBuildContext {
   }
 }
 
-/// Information about an Xcode project.
-///
-/// Represents the output of `xcodebuild -list`.
 class XcodeProjectInfo {
   const XcodeProjectInfo(
     this.targets,
@@ -457,13 +427,11 @@ class XcodeProjectInfo {
 
   bool get definesCustomSchemes => !(schemes.contains('Runner') && schemes.length == 1);
 
-  /// The expected scheme for [buildInfo].
   @visibleForTesting
   static String expectedSchemeFor(BuildInfo? buildInfo) {
     return sentenceCase(buildInfo?.flavor ?? 'runner');
   }
 
-  /// The expected build configuration for [buildInfo] and [scheme].
   static String expectedBuildConfigurationFor(BuildInfo buildInfo, String scheme) {
     final String baseConfiguration = _baseConfigurationFor(buildInfo);
     if (buildInfo.flavor == null) {
@@ -472,8 +440,6 @@ class XcodeProjectInfo {
     return '$baseConfiguration-$scheme';
   }
 
-  /// Checks whether the [buildConfigurations] contains the specified string, without
-  /// regard to case.
   bool hasBuildConfigurationForBuildMode(String buildMode) {
     buildMode = buildMode.toLowerCase();
     for (final String name in buildConfigurations) {
@@ -484,8 +450,6 @@ class XcodeProjectInfo {
     return false;
   }
 
-  /// Returns unique scheme matching [buildInfo], or null, if there is no unique
-  /// best match.
   String? schemeFor(BuildInfo? buildInfo) {
     final String expectedScheme = expectedSchemeFor(buildInfo);
     if (schemes.contains(expectedScheme)) {
@@ -506,8 +470,6 @@ class XcodeProjectInfo {
     }
   }
 
-  /// Returns unique build configuration matching [buildInfo] and [scheme], or
-  /// null, if there is no unique best match.
   String? buildConfigurationFor(BuildInfo? buildInfo, String scheme) {
     if (buildInfo == null) {
       return null;

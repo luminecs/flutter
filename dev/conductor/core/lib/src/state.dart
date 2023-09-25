@@ -253,17 +253,9 @@ String phaseInstructions(pb.ConductorState state) {
   throw globals.ConductorException('Unimplemented phase ${state.currentPhase}');
 }
 
-/// Regex pattern for git remote host URLs.
-///
-/// First group = git host (currently must be github.com)
-/// Second group = account name
-/// Third group = repo name
 final RegExp githubRemotePattern = RegExp(
     r'^(git@github\.com:|https?:\/\/github\.com\/)([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)(\.git)?$');
 
-/// Parses a Git remote URL and returns the account name.
-///
-/// Uses [githubRemotePattern].
 String githubAccount(String remoteUrl) {
   final String engineUrl = remoteUrl;
   final RegExpMatch? match = githubRemotePattern.firstMatch(engineUrl);
@@ -281,10 +273,6 @@ String githubAccount(String remoteUrl) {
   return accountName;
 }
 
-/// Returns the next phase in the ReleasePhase enum.
-///
-/// Will throw a [ConductorException] if [ReleasePhase.RELEASE_COMPLETED] is
-/// passed as an argument, as there is no next phase.
 ReleasePhase getNextPhase(ReleasePhase currentPhase) {
   final ReleasePhase? nextPhase = ReleasePhase.valueOf(currentPhase.value + 1);
   if (nextPhase == null) {
@@ -313,10 +301,6 @@ pb.ConductorState readStateFromFile(File file) {
   return state;
 }
 
-/// This release will require a new Engine PR.
-///
-/// The logic is if there are engine cherrypicks that have not been abandoned OR
-/// there is a new Dart revision, then return true, else false.
 bool requiresEnginePR(pb.ConductorState state) {
   final bool hasRequiredCherrypicks = state.engine.cherrypicks.any(
     (pb.Cherrypick cp) => cp.state != pb.CherrypickState.ABANDONED,
@@ -327,10 +311,6 @@ bool requiresEnginePR(pb.ConductorState state) {
   return state.engine.dartRevision.isNotEmpty;
 }
 
-/// This release will require a new Framework PR.
-///
-/// The logic is if there was an Engine PR OR there are framework cherrypicks
-/// that have not been abandoned.
 bool requiresFrameworkPR(pb.ConductorState state) {
   if (requiresEnginePR(state)) {
     return true;

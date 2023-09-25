@@ -7,9 +7,6 @@ import 'package:meta/meta.dart';
 import 'file_system.dart';
 import 'logger.dart';
 
-/// Project is generated from a template on Flutter project creation.
-/// Sometimes (due to behavior changes in Xcode, Gradle, etc) these files need to be altered
-/// from the original template.
 abstract class ProjectMigrator {
   ProjectMigrator(this.logger);
 
@@ -18,7 +15,6 @@ abstract class ProjectMigrator {
 
   void migrate();
 
-  /// Return null if the line should be deleted.
   @protected
   String? migrateLine(String line) {
     return line;
@@ -34,8 +30,6 @@ abstract class ProjectMigrator {
   bool _migrationRequired = false;
 
   @protected
-  /// Calls [migrateLine] per line, then [migrateFileContents]
-  /// including the line migrations.
   void processFileLines(File file) {
     final List<String> lines = file.readAsLinesSync();
 

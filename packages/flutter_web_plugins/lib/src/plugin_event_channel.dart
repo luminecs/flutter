@@ -8,59 +8,19 @@ import 'package:flutter/services.dart';
 
 import 'plugin_registry.dart';
 
-/// A named channel for sending events to the framework-side using streams.
-///
-/// This is the platform-side equivalent of [EventChannel]. Whereas
-/// [EventChannel] receives a stream of events from platform plugins, this
-/// channel sends a stream of events to the handler listening on the
-/// framework-side.
-///
-/// If no [codec] is provided, then [StandardMethodCodec] is used. If no
-/// [binaryMessenger] is provided, then [pluginBinaryMessenger], which sends
-/// messages to the framework-side, is used.
-///
-/// Channels created using this class implement two methods for
-/// subscribing to the event stream. The methods use the encoding of
-/// the specified [codec].
-///
-/// The first method is `listen`. When called, it begins forwarding
-/// messages to the framework side when they are added to the
-/// `controller`. This triggers the [StreamController.onListen] callback
-/// on the `controller`.
-///
-/// The other method is `cancel`. When called, it stops forwarding
-/// events to the framework. This triggers the [StreamController.onCancel]
-/// callback on the `controller`.
-///
-/// Events added to the `controller` when the framework is not
-/// subscribed are silently discarded.
 class PluginEventChannel<T> {
-  /// Creates a new plugin event channel.
   const PluginEventChannel(
     this.name, [
     this.codec = const StandardMethodCodec(),
     this.binaryMessenger,
   ]);
 
-  /// The logical channel on which communication happens.
   final String name;
 
-  /// The message codec used by this channel.
-  ///
-  /// Defaults to [StandardMethodCodec].
   final MethodCodec codec;
 
-  /// The messenger used by this channel to send platform messages.
-  ///
-  /// When this is null, the [pluginBinaryMessenger] is used instead,
-  /// which sends messages from the platform-side to the
-  /// framework-side.
   final BinaryMessenger? binaryMessenger;
 
-  /// Use [setController] instead.
-  ///
-  /// This setter is deprecated because it has no corresponding getter,
-  /// and providing a getter would require making this class non-const.
   @Deprecated(
     'Replace calls to the "controller" setter with calls to the "setController" method. '
     'This feature was deprecated after v1.23.0-7.0.pre.'
@@ -69,10 +29,6 @@ class PluginEventChannel<T> {
     setController(controller);
   }
 
-  /// Changes the stream controller for this event channel.
-  ///
-  /// Setting the controller to null disconnects from the channel (setting
-  /// the message handler on the [binaryMessenger] to null).
   void setController(StreamController<T>? controller) {
     final BinaryMessenger messenger = binaryMessenger ?? pluginBinaryMessenger;
     if (controller == null) {

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigationRail].
 
 void main() => runApp(const NavigationRailExampleApp());
 

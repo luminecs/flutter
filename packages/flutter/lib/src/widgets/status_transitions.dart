@@ -5,19 +5,14 @@
 import 'basic.dart';
 import 'framework.dart';
 
-/// A widget that rebuilds when the given animation changes status.
 abstract class StatusTransitionWidget extends StatefulWidget {
-  /// Initializes fields for subclasses.
   const StatusTransitionWidget({
     super.key,
     required this.animation,
   });
 
-  /// The animation to which this widget is listening.
   final Animation<double> animation;
 
-  /// Override this method to build widgets that depend on the current status
-  /// of the animation.
   Widget build(BuildContext context);
 
   @override

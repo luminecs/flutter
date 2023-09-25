@@ -6,15 +6,11 @@ import '../base/file_system.dart';
 
 import 'build_system.dart';
 
-/// An exception thrown when a rule declares an input that does not exist on
-/// disk.
 class MissingInputException implements Exception {
   const MissingInputException(this.missing, this.target);
 
-  /// The file or directory we expected to find.
   final List<File> missing;
 
-  /// The name of the target this file should have been output from.
   final String target;
 
   @override
@@ -25,7 +21,6 @@ class MissingInputException implements Exception {
   }
 }
 
-/// An exception thrown if we detect a cycle in the dependencies of a target.
 class CycleException implements Exception {
   CycleException(this.targets);
 
@@ -36,7 +31,6 @@ class CycleException implements Exception {
       '${targets.map((Target target) => target.name).join(' -> ')}';
 }
 
-/// An exception thrown when a pattern is invalid.
 class InvalidPatternException implements Exception {
   InvalidPatternException(this.pattern);
 
@@ -46,15 +40,11 @@ class InvalidPatternException implements Exception {
   String toString() => 'The pattern "$pattern" is not valid';
 }
 
-/// An exception thrown when a rule declares an output that was not produced
-/// by the invocation.
 class MissingOutputException implements Exception {
   const MissingOutputException(this.missing, this.target);
 
-  /// The files we expected to find.
   final List<File> missing;
 
-  /// The name of the target this file should have been output from.
   final String target;
 
   @override
@@ -65,8 +55,6 @@ class MissingOutputException implements Exception {
   }
 }
 
-/// An exception thrown when in output is placed outside of
-/// [Environment.buildDir].
 class MisplacedOutputException implements Exception {
   MisplacedOutputException(this.path, this.target);
 
@@ -80,7 +68,6 @@ class MisplacedOutputException implements Exception {
   }
 }
 
-/// An exception thrown if a build action is missing a required define.
 class MissingDefineException implements Exception {
   MissingDefineException(this.define, this.target);
 

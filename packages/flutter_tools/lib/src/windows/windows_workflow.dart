@@ -7,13 +7,8 @@ import '../base/platform.dart';
 import '../doctor_validator.dart';
 import '../features.dart';
 
-/// The [WindowsWorkflow] instance.
 WindowsWorkflow? get windowsWorkflow => context.get<WindowsWorkflow>();
 
-/// The Windows-specific implementation of a [Workflow].
-///
-/// This workflow requires the host machine to be Windows, and the Windows
-/// desktop configuration setting to be enabled.
 class WindowsWorkflow implements Workflow {
   const WindowsWorkflow({
     required Platform platform,

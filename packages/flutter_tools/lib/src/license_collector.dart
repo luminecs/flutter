@@ -6,23 +6,6 @@ import 'package:package_config/package_config.dart';
 
 import 'base/file_system.dart';
 
-/// Processes dependencies into a string representing the NOTICES file.
-///
-/// Reads the NOTICES or LICENSE file from each package in the .packages file,
-/// splitting each one into each component license so that it can be de-duped
-/// if possible. If the NOTICES file exists, it is preferred over the LICENSE
-/// file.
-///
-/// Individual licenses inside each LICENSE file should be separated by 80
-/// hyphens on their own on a line.
-///
-/// If a LICENSE or NOTICES file contains more than one component license,
-/// then each component license must start with the names of the packages to
-/// which the component license applies, with each package name on its own line
-/// and the list of package names separated from the actual license text by a
-/// blank line. The packages need not match the names of the pub package. For
-/// example, a package might itself contain code from multiple third-party
-/// sources, and might need to include a license for each one.
 class LicenseCollector {
   LicenseCollector({
     required FileSystem fileSystem
@@ -30,13 +13,8 @@ class LicenseCollector {
 
   final FileSystem _fileSystem;
 
-  /// The expected separator for multiple licenses.
   static final String licenseSeparator = '\n${'-' * 80}\n';
 
-  /// Obtain licenses from the `packageMap` into a single result.
-  ///
-  /// [additionalLicenses] should contain aggregated license files from all
-  /// of the current applications dependencies.
   LicenseResult obtainLicenses(
     PackageConfig packageConfig,
     Map<String, List<File>> additionalLicenses,
@@ -89,7 +67,6 @@ class LicenseCollector {
       }).toList();
     combinedLicensesList.sort();
 
-    /// Append additional LICENSE files as specified in the pubspec.yaml.
     final List<String> additionalLicenseText = <String>[];
     final List<String> errorMessages = <String>[];
     for (final String package in additionalLicenses.keys) {
@@ -139,7 +116,6 @@ class LicenseCollector {
   }
 }
 
-/// The result of processing licenses with a [LicenseCollector].
 class LicenseResult {
   const LicenseResult({
     required this.combinedLicenses,
@@ -147,13 +123,9 @@ class LicenseResult {
     required this.errorMessages,
   });
 
-  /// The raw text of the consumed licenses.
   final String combinedLicenses;
 
-  /// Each license file that was consumed as input.
   final List<File> dependencies;
 
-  /// If non-empty, license collection failed and this messages should
-  /// be displayed by the asset parser.
   final List<String> errorMessages;
 }

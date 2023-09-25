@@ -25,9 +25,6 @@ class Pair<T> {
   String toString() => '($first,$second)';
 }
 
-/// Widget that will layout one child in the top half of this widget's size
-/// and the other child in the bottom half. It will swap which child is on top
-/// and which is on bottom every time the widget is rendered.
 abstract class Swapper extends RenderObjectWidget {
   const Swapper({ super.key, this.stable, this.swapper });
 

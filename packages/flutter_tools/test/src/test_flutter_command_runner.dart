@@ -26,9 +26,6 @@ CommandRunner<void> createTestCommandRunner([ FlutterCommand? command ]) {
   return runner;
 }
 
-/// Creates a flutter project in the [temp] directory using the
-/// [arguments] list if specified, or `--no-pub` if not.
-/// Returns the path to the flutter project.
 Future<String> createProject(Directory temp, { List<String>? arguments }) async {
   arguments ??= <String>['--no-pub'];
   final String projectPath = globals.fs.path.join(temp.path, 'flutter_project');

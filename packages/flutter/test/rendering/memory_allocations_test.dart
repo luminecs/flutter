@@ -50,7 +50,6 @@ class _TestLayer extends Layer{
   void addToScene(ui.SceneBuilder builder) {}
 }
 
-/// Create and dispose Flutter objects to fire memory allocation events.
 Future<int> _activateFlutterObjectsAndReturnCountOfEvents() async {
   int count = 0;
 

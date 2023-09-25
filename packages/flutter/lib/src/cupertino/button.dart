@@ -16,28 +16,7 @@ const EdgeInsets _kBackgroundButtonPadding = EdgeInsets.symmetric(
   horizontal: 64.0,
 );
 
-/// An iOS-style button.
-///
-/// Takes in a text or an icon that fades out and in on touch. May optionally have a
-/// background.
-///
-/// The [padding] defaults to 16.0 pixels. When using a [CupertinoButton] within
-/// a fixed height parent, like a [CupertinoNavigationBar], a smaller, or even
-/// [EdgeInsets.zero], should be used to prevent clipping larger [child]
-/// widgets.
-///
-/// {@tool dartpad}
-/// This sample shows produces an enabled and disabled [CupertinoButton] and
-/// [CupertinoButton.filled].
-///
-/// ** See code in examples/api/lib/cupertino/button/cupertino_button.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/buttons/>
 class CupertinoButton extends StatefulWidget {
-  /// Creates an iOS-style button.
   const CupertinoButton({
     super.key,
     required this.child,
@@ -52,12 +31,6 @@ class CupertinoButton extends StatefulWidget {
   }) : assert(pressedOpacity == null || (pressedOpacity >= 0.0 && pressedOpacity <= 1.0)),
        _filled = false;
 
-  /// Creates an iOS-style button with a filled background.
-  ///
-  /// The background color is derived from the [CupertinoTheme]'s `primaryColor`.
-  ///
-  /// To specify a custom background color, use the [color] argument of the
-  /// default constructor.
   const CupertinoButton.filled({
     super.key,
     required this.child,
@@ -72,69 +45,26 @@ class CupertinoButton extends StatefulWidget {
        color = null,
        _filled = true;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Typically a [Text] widget.
   final Widget child;
 
-  /// The amount of space to surround the child inside the bounds of the button.
-  ///
-  /// Defaults to 16.0 pixels.
   final EdgeInsetsGeometry? padding;
 
-  /// The color of the button's background.
-  ///
-  /// Defaults to null which produces a button with no background or border.
-  ///
-  /// Defaults to the [CupertinoTheme]'s `primaryColor` when the
-  /// [CupertinoButton.filled] constructor is used.
   final Color? color;
 
-  /// The color of the button's background when the button is disabled.
-  ///
-  /// Ignored if the [CupertinoButton] doesn't also have a [color].
-  ///
-  /// Defaults to [CupertinoColors.quaternarySystemFill] when [color] is
-  /// specified.
   final Color disabledColor;
 
-  /// The callback that is called when the button is tapped or otherwise activated.
-  ///
-  /// If this is set to null, the button will be disabled.
   final VoidCallback? onPressed;
 
-  /// Minimum size of the button.
-  ///
-  /// Defaults to kMinInteractiveDimensionCupertino which the iOS Human
-  /// Interface Guidelines recommends as the minimum tappable area.
   final double? minSize;
 
-  /// The opacity that the button will fade to when it is pressed.
-  /// The button will have an opacity of 1.0 when it is not pressed.
-  ///
-  /// This defaults to 0.4. If null, opacity will not change on pressed if using
-  /// your own custom effects is desired.
   final double? pressedOpacity;
 
-  /// The radius of the button's corners when it has a background color.
-  ///
-  /// Defaults to round corners of 8 logical pixels.
   final BorderRadius? borderRadius;
 
-  /// The alignment of the button's [child].
-  ///
-  /// Typically buttons are sized to be just big enough to contain the child and its
-  /// [padding]. If the button's size is constrained to a fixed size, for example by
-  /// enclosing it with a [SizedBox], this property defines how the child is aligned
-  /// within the available space.
-  ///
-  /// Always defaults to [Alignment.center].
   final AlignmentGeometry alignment;
 
   final bool _filled;
 
-  /// Whether the button is enabled or disabled. Buttons are disabled by default. To
-  /// enable a button, set its [onPressed] property to a non-null value.
   bool get enabled => onPressed != null;
 
   @override

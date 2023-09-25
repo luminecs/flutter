@@ -15,30 +15,6 @@ import 'package:file/file.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p; // flutter_ignore: package_path_import
 
-/// A [FileSystem] that wraps the [delegate] file system to create an overlay of
-/// files from multiple [roots].
-///
-/// Regular paths or `file:` URIs are resolved directly in the underlying file
-/// system, but URIs that use a special [scheme] are resolved by searching
-/// under a set of given roots in order.
-///
-/// For example, consider the following inputs:
-///
-///   - scheme is `multi-root`
-///   - the set of roots are `/a` and `/b`
-///   - the underlying file system contains files:
-///         /root_a/dir/only_a.dart
-///         /root_a/dir/both.dart
-///         /root_b/dir/only_b.dart
-///         /root_b/dir/both.dart
-///         /other/other.dart
-///
-/// Then:
-///
-///   - file:///other/other.dart is resolved as /other/other.dart
-///   - multi-root:///dir/only_a.dart is resolved as /root_a/dir/only_a.dart
-///   - multi-root:///dir/only_b.dart is resolved as /root_b/dir/only_b.dart
-///   - multi-root:///dir/both.dart is resolved as /root_a/dir/only_a.dart
 class MultiRootFileSystem extends ForwardingFileSystem {
   MultiRootFileSystem({
     required FileSystem delegate,
@@ -112,8 +88,6 @@ class MultiRootFileSystem extends ForwardingFileSystem {
     delegate.currentDirectory = path;
   }
 
-  /// If the path is a multiroot uri, resolve to the actual path of the
-  /// underlying file system. Otherwise, return as is.
   dynamic _resolve(dynamic path) {
     Uri uri;
     if (path == null) {

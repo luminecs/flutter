@@ -16,53 +16,7 @@ import 'theme.dart';
 // Examples can assume:
 // late Widget bottomAppBarContents;
 
-/// A container that is typically used with [Scaffold.bottomNavigationBar].
-///
-/// Typically used with a [Scaffold] and a [FloatingActionButton].
-///
-/// {@tool snippet}
-/// ```dart
-/// Scaffold(
-///   bottomNavigationBar: BottomAppBar(
-///     color: Colors.white,
-///     child: bottomAppBarContents,
-///   ),
-///   floatingActionButton: const FloatingActionButton(onPressed: null),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows the [BottomAppBar], which can be configured to have a notch using the
-/// [BottomAppBar.shape] property. This also includes an optional [FloatingActionButton], which illustrates
-/// the [FloatingActionButtonLocation]s in relation to the [BottomAppBar].
-///
-/// ** See code in examples/api/lib/material/bottom_app_bar/bottom_app_bar.1.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows Material 3 [BottomAppBar] with its expected look and behaviors.
-///
-/// This also includes an optional [FloatingActionButton], which illustrates
-/// the [FloatingActionButtonLocation.endContained].
-///
-/// ** See code in examples/api/lib/material/bottom_app_bar/bottom_app_bar.2.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [NotchedShape] which calculates the notch for a notched [BottomAppBar].
-///  * [FloatingActionButton] which the [BottomAppBar] makes a notch for.
-///  * [AppBar] for a toolbar that is shown at the top of the screen.
 class BottomAppBar extends StatefulWidget {
-  /// Creates a bottom application bar.
-  ///
-  /// The [clipBehavior] argument defaults to [Clip.none].
-  /// Additionally, [elevation] must be non-negative.
-  ///
-  /// If [color], [elevation], or [shape] are null, their [BottomAppBarTheme] values will be used.
-  /// If the corresponding [BottomAppBarTheme] property is null, then the default
-  /// specified in the property's documentation will be used.
   const BottomAppBar({
     super.key,
     this.color,
@@ -77,89 +31,24 @@ class BottomAppBar extends StatefulWidget {
     this.height,
   }) : assert(elevation == null || elevation >= 0.0);
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
-  ///
-  /// Typically the child will be a [Row] whose first child
-  /// is an [IconButton] with the [Icons.menu] icon.
   final Widget? child;
 
-  /// The amount of space to surround the child inside the bounds of the [BottomAppBar].
-  ///
-  /// In Material 3 the padding will default to `EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0)`
-  /// Otherwise the value will default to EdgeInsets.zero.
   final EdgeInsetsGeometry? padding;
 
-  /// The bottom app bar's background color.
-  ///
-  /// If this property is null then [BottomAppBarTheme.color] of
-  /// [ThemeData.bottomAppBarTheme] is used. If that's null then
-  /// [ThemeData.bottomAppBarColor] is used.
   final Color? color;
 
-  /// The z-coordinate at which to place this bottom app bar relative to its
-  /// parent.
-  ///
-  /// This controls the size of the shadow below the bottom app bar. The
-  /// value is non-negative.
-  ///
-  /// If this property is null then [BottomAppBarTheme.elevation] of
-  /// [ThemeData.bottomAppBarTheme] is used. If that's null and
-  /// [ThemeData.useMaterial3] is true, than the default value is 3 else is 8.
   final double? elevation;
 
-  /// The notch that is made for the floating action button.
-  ///
-  /// If this property is null then [BottomAppBarTheme.shape] of
-  /// [ThemeData.bottomAppBarTheme] is used. If that's null then the shape will
-  /// be rectangular with no notch.
   final NotchedShape? shape;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.none].
   final Clip clipBehavior;
 
-  /// The margin between the [FloatingActionButton] and the [BottomAppBar]'s
-  /// notch.
-  ///
-  /// Not used if [shape] is null.
   final double notchMargin;
 
-  /// A custom color for the Material 3 surface-tint elevation effect.
-  ///
-  /// In Material 3, a "surface tint" with an opacity related to [elevation]
-  /// will be applied to the [BottomAppBar]'s background.
-  /// Use this property to override the default color of that tint.
-  ///
-  /// If this property is null, then [BottomAppBarTheme.surfaceTintColor]
-  /// of [ThemeData.bottomAppBarTheme] is used.
-  /// If that is also null, [ColorScheme.surfaceTint] is used.
-  ///
-  /// Ignored if [ThemeData.useMaterial3] is false.
-  ///
-  /// The default is null.
-  ///
-  /// See [Material.surfaceTintColor] for more details on how this overlay is applied.
   final Color? surfaceTintColor;
 
-  /// The color of the shadow below the app bar.
-  ///
-  /// If this property is null, then [BottomAppBarTheme.shadowColor] of
-  /// [ThemeData.bottomAppBarTheme] is used. If that is also null, the default value
-  /// is fully opaque black for Material 2, and transparent for Material 3.
-  ///
-  /// See also:
-  ///
-  ///  * [elevation], which defines the size of the shadow below the app bar.
-  ///  * [shape], which defines the shape of the app bar and its shadow.
   final Color? shadowColor;
 
-  /// The double value used to indicate the height of the [BottomAppBar].
-  ///
-  /// If this is null, the default value is the minimum in relation to the content,
-  /// unless [ThemeData.useMaterial3] is true, in which case it defaults to 80.0.
   final double? height;
 
   @override

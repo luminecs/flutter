@@ -110,8 +110,6 @@ const String gradleDirectoryName = 'gradle';
 const String gradleWrapperDirectoryName = 'wrapper';
 const String gradleWrapperPropertiesFilename = 'gradle-wrapper.properties';
 
-/// Provides utilities to run a Gradle task, such as finding the Gradle executable
-/// or constructing a Gradle project.
 class GradleUtils {
   GradleUtils({
     required Platform platform,
@@ -128,8 +126,6 @@ class GradleUtils {
   final Logger _logger;
   final OperatingSystemUtils _operatingSystemUtils;
 
-  /// Gets the Gradle executable path and prepares the Gradle project.
-  /// This is the `gradlew` or `gradlew.bat` script in the `android/` directory.
   String getExecutable(FlutterProject project) {
     final Directory androidDir = project.android.hostAppGradleRoot;
     injectGradleWrapperIfNeeded(androidDir);
@@ -148,7 +144,6 @@ class GradleUtils {
        'exists or that ${gradle.dirname} can be read.');
   }
 
-  /// Injects the Gradle wrapper files if any of these files don't exist in [directory].
   void injectGradleWrapperIfNeeded(Directory directory) {
     copyDirectory(
       _cache.getArtifactDirectory('gradle_wrapper'),
@@ -185,11 +180,6 @@ distributionUrl=https\\://services.gradle.org/distributions/gradle-$gradleVersio
   }
 }
 
-/// Returns the Gradle version that the current Android plugin depends on when found,
-/// otherwise it returns a default version.
-///
-/// The Android plugin version is specified in the [build.gradle] file within
-/// the project's Android directory.
 String getGradleVersionForAndroidPlugin(Directory directory, Logger logger) {
   final File buildFile = directory.childFile('build.gradle');
   if (!buildFile.existsSync()) {
@@ -208,19 +198,12 @@ String getGradleVersionForAndroidPlugin(Directory directory, Logger logger) {
   return getGradleVersionFor(androidPluginVersion ?? 'unknown');
 }
 
-/// Returns the gradle file from the top level directory.
-/// The returned file is not guaranteed to be present.
 File getGradleWrapperFile(Directory directory) {
   return directory.childDirectory(gradleDirectoryName)
       .childDirectory(gradleWrapperDirectoryName)
       .childFile(gradleWrapperPropertiesFilename);
 }
 
-/// Parses the gradle wrapper distribution url to return a string containing
-/// the version number.
-///
-/// Expected input is of the form '...gradle-7.4.2-all.zip', and the output
-/// would be of the form '7.4.2'.
 String? parseGradleVersionFromDistributionUrl(String? distributionUrl) {
   if (distributionUrl == null) {
     return null;
@@ -232,11 +215,6 @@ String? parseGradleVersionFromDistributionUrl(String? distributionUrl) {
   return zipParts[1];
 }
 
-/// Returns either the gradle-wrapper.properties value from the passed in
-/// [directory] or if not present the version available in local path.
-///
-/// If gradle version is not found null is returned.
-/// [directory] should be an android directory with a build.gradle file.
 Future<String?> getGradleVersion(
     Directory directory, Logger logger, ProcessManager processManager) async {
   final File propertiesFile = getGradleWrapperFile(directory);
@@ -305,11 +283,6 @@ OS:           Mac OS X 13.2.1 aarch64
   }
 }
 
-/// Returns the Android Gradle Plugin (AGP) version that the current project
-/// depends on when found, null otherwise.
-///
-/// The Android plugin version is specified in the [build.gradle] file within
-/// the project's Android directory ([androidDirectory]).
 String? getAgpVersion(Directory androidDirectory, Logger logger) {
   final File buildFile = androidDirectory.childFile('build.gradle');
   if (!buildFile.existsSync()) {
@@ -466,11 +439,6 @@ bool validateGradleAndAgp(Logger logger,
   return false;
 }
 
-/// Validate that the [javaVersion] and Gradle version are compatible with
-/// each other.
-///
-/// Source of truth:
-/// https://docs.gradle.org/current/userguide/compatibility.html#java
 bool validateJavaAndGradle(Logger logger,
     {required String? javaV, required String? gradleV}) {
   // https://docs.gradle.org/current/userguide/compatibility.html#java
@@ -524,13 +492,6 @@ bool validateJavaAndGradle(Logger logger,
   return false;
 }
 
-/// Returns compatibility information for the valid range of Gradle versions for
-/// the specified Java version.
-///
-/// Returns null when the tooling has not documented the compatibile Gradle
-/// versions for the Java version (either the version is too old or too new). If
-/// this seems like a mistake, the caller may need to update the
-/// [_javaGradleCompatList] detailing Java/Gradle compatibility.
 JavaGradleCompat? getValidGradleVersionRangeForJavaVersion(
   Logger logger, {
   required String javaV,
@@ -545,15 +506,6 @@ JavaGradleCompat? getValidGradleVersionRangeForJavaVersion(
   return null;
 }
 
-/// Validate that the specified Java and Android Gradle Plugin (AGP) versions are
-/// compatible with each other.
-///
-/// Returns true when the specified Java and AGP versions are
-/// definitely compatible; otherwise, false is assumed by default. In addition,
-/// this will return false when either a null Java or AGP version is provided.
-///
-/// Source of truth are the AGP release notes:
-/// https://developer.android.com/build/releases/gradle-plugin
 bool validateJavaAndAgp(Logger logger,
     {required String? javaV, required String? agpV}) {
   if (javaV == null || agpV == null) {
@@ -586,8 +538,6 @@ bool validateJavaAndAgp(Logger logger,
   return false;
   }
 
-  /// Returns compatibility information concerning the minimum AGP
-  /// version for the specified Java version.
   JavaAgpCompat? getMinimumAgpVersionForJavaVersion(Logger logger,
     {required String javaV}) {
   for (final JavaAgpCompat data in _javaAgpCompatList) {
@@ -600,9 +550,6 @@ bool validateJavaAndAgp(Logger logger,
   return null;
 }
 
-/// Returns valid Java range for specified Gradle and AGP verisons.
-///
-/// Assumes that gradleV and agpV are compatible versions.
 VersionRange getJavaVersionFor({required String gradleV, required String agpV}) {
   // Find minimum Java version based on AGP compatibility.
   String? minJavaVersion;
@@ -623,9 +570,6 @@ VersionRange getJavaVersionFor({required String gradleV, required String agpV}) 
   return VersionRange(minJavaVersion, maxJavaVersion);
 }
 
-/// Returns the Gradle version that is required by the given Android Gradle plugin version
-/// by picking the largest compatible version from
-/// https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
 String getGradleVersionFor(String androidPluginVersion) {
   final List<GradleForAgp> compatList = <GradleForAgp> [
     GradleForAgp(agpMin: '1.0.0', agpMax: '1.1.3', minRequiredGradle: '2.3'),
@@ -660,11 +604,6 @@ String getGradleVersionFor(String androidPluginVersion) {
   throwToolExit('Unsupported Android Plugin version: $androidPluginVersion.');
 }
 
-/// Overwrite local.properties in the specified Flutter project's Android
-/// sub-project, if needed.
-///
-/// If [requireAndroidSdk] is true (the default) and no Android SDK is found,
-/// this will fail with a [ToolExit].
 void updateLocalProperties({
   required FlutterProject project,
   BuildInfo? buildInfo,
@@ -723,9 +662,6 @@ void updateLocalProperties({
   }
 }
 
-/// Writes standard Android local properties to the specified [properties] file.
-///
-/// Writes the path to the Android SDK, if known.
 void writeLocalProperties(File properties) {
   final SettingsFile settings = SettingsFile();
   final AndroidSdk? androidSdk = globals.androidSdk;
@@ -826,11 +762,6 @@ String getGradlewFileName(Platform platform) {
   }
 }
 
-/// List of compatible Java/Gradle versions.
-///
-/// Should be updated when a new version of Java is supported by a new version
-/// of Gradle, as https://docs.gradle.org/current/userguide/compatibility.html
-/// details.
 List<JavaGradleCompat> _javaGradleCompatList = const <JavaGradleCompat>[
     JavaGradleCompat(
       javaMin: '19',

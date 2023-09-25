@@ -7,8 +7,6 @@ import 'package:meta/meta.dart';
 import '../base/platform.dart';
 import '../build_info.dart';
 
-/// Quiver has this, but unfortunately we can't depend on it bc flutter_tools
-/// uses non-nullsafe quiver by default (because of dwds).
 bool _listsEqual(List<dynamic>? a, List<dynamic>? b) {
   if (a == b) {
     return true;
@@ -23,13 +21,6 @@ bool _listsEqual(List<dynamic>? a, List<dynamic>? b) {
   return a.asMap().entries.every((MapEntry<int, dynamic> e) => e.value == b[e.key]);
 }
 
-/// The normal [RegExp.==] operator is inherited from [Object], so only
-/// returns true when the regexes are the same instance.
-///
-/// This function instead _should_ return true when the regexes are
-/// functionally the same, i.e. when they have the same matches & captures for
-/// any given input. At least that's the goal, in reality this has lots of false
-/// negatives (for example when the flags differ). Still better than [RegExp.==].
 bool _regexesEqual(RegExp? a, RegExp? b) {
   if (a == b) {
     return true;
@@ -45,9 +36,6 @@ bool _regexesEqual(RegExp? a, RegExp? b) {
     && a.isDotAll == b.isDotAll;
 }
 
-/// Something went wrong while trying to load the custom devices config from the
-/// JSON representation. Maybe some value is missing, maybe something has the
-/// wrong type, etc.
 @immutable
 class CustomDeviceRevivalException implements Exception {
   const CustomDeviceRevivalException(this.message);
@@ -74,10 +62,6 @@ class CustomDeviceRevivalException implements Exception {
   int get hashCode => message.hashCode;
 }
 
-/// A single configured custom device.
-///
-/// In the custom devices config file on disk, there may be multiple custom
-/// devices configured.
 @immutable
 class CustomDeviceConfig {
   const CustomDeviceConfig({
@@ -102,11 +86,6 @@ class CustomDeviceConfig {
          || platform == TargetPlatform.linux_arm64
        );
 
-  /// Create a CustomDeviceConfig from some JSON value.
-  /// If anything fails internally (some value doesn't have the right type,
-  /// some value is missing, etc) a [CustomDeviceRevivalException] with the description
-  /// of the error is thrown. (No exceptions/errors other than JsonRevivalException
-  /// should ever be thrown by this factory.)
   factory CustomDeviceConfig.fromJson(dynamic json) {
     final Map<String, dynamic> typedMap = _castJsonObject(
       json,
@@ -222,9 +201,6 @@ class CustomDeviceConfig {
   static const String _kForwardPortSuccessRegex = 'forwardPortSuccessRegex';
   static const String _kScreenshotCommand = 'screenshot';
 
-  /// An example device config used for creating the default config file.
-  /// Uses windows-specific ping and pingSuccessRegex. For the linux and macOs
-  /// example config, see [exampleUnix].
   static final CustomDeviceConfig exampleWindows = CustomDeviceConfig(
     id: 'pi',
     label: 'Raspberry Pi',
@@ -275,9 +251,6 @@ class CustomDeviceConfig {
     ],
   );
 
-  /// An example device config used for creating the default config file.
-  /// Uses ping and pingSuccessRegex values that only work on linux or macOs.
-  /// For the Windows example config, see [exampleWindows].
   static final CustomDeviceConfig exampleUnix = exampleWindows.copyWith(
     pingCommand: const <String>[
       'ping',
@@ -288,11 +261,6 @@ class CustomDeviceConfig {
     explicitPingSuccessRegex: true
   );
 
-  /// Returns an example custom device config that works on the given host platform.
-  ///
-  /// This is not the platform of the target device, it's the platform of the
-  /// development machine. Examples for different platforms may be different
-  /// because for example the ping command is different on Windows or Linux/macOS.
   static CustomDeviceConfig getExampleForPlatform(Platform platform) {
     if (platform.isWindows) {
       return exampleWindows;
@@ -318,19 +286,10 @@ class CustomDeviceConfig {
   final RegExp? forwardPortSuccessRegex;
   final List<String>? screenshotCommand;
 
-  /// Returns true when this custom device config uses port forwarding,
-  /// which is the case when [forwardPortCommand] is not null.
   bool get usesPortForwarding => forwardPortCommand != null;
 
-  /// Returns true when this custom device config supports screenshotting,
-  /// which is the case when the [screenshotCommand] is not null.
   bool get supportsScreenshotting => screenshotCommand != null;
 
-  /// Invokes and returns the result of [closure].
-  ///
-  /// If anything at all is thrown when executing the closure, a
-  /// [CustomDeviceRevivalException] is thrown with the given [fieldDescription] and
-  /// [expectedValueDescription].
   static T _maybeRethrowAsRevivalException<T>(T Function() closure, String fieldDescription, String expectedValueDescription) {
     try {
       return closure();
@@ -339,10 +298,6 @@ class CustomDeviceConfig {
     }
   }
 
-  /// Tries to make a string-keyed, non-null map from [value].
-  ///
-  /// If the value is null or not a valid string-keyed map, a [CustomDeviceRevivalException]
-  /// with the given [fieldDescription] and [expectedValueDescription] is thrown.
   static Map<String, dynamic> _castJsonObject(dynamic value, String fieldDescription, String expectedValueDescription) {
     if (value == null) {
       throw CustomDeviceRevivalException.fromDescriptions(fieldDescription, expectedValueDescription);
@@ -355,10 +310,6 @@ class CustomDeviceConfig {
     );
   }
 
-  /// Tries to cast [value] to a bool.
-  ///
-  /// If the value is null or not a bool, a [CustomDeviceRevivalException] with the given
-  /// [fieldDescription] and [expectedValueDescription] is thrown.
   static bool _castBool(dynamic value, String fieldDescription, String expectedValueDescription) {
     if (value == null) {
       throw CustomDeviceRevivalException.fromDescriptions(fieldDescription, expectedValueDescription);
@@ -371,10 +322,6 @@ class CustomDeviceConfig {
     );
   }
 
-  /// Tries to cast [value] to a String.
-  ///
-  /// If the value is null or not a String, a [CustomDeviceRevivalException] with the given
-  /// [fieldDescription] and [expectedValueDescription] is thrown.
   static String _castString(dynamic value, String fieldDescription, String expectedValueDescription) {
     if (value == null) {
       throw CustomDeviceRevivalException.fromDescriptions(fieldDescription, expectedValueDescription);
@@ -387,10 +334,6 @@ class CustomDeviceConfig {
     );
   }
 
-  /// Tries to cast [value] to a nullable String.
-  ///
-  /// If the value not null and not a String, a [CustomDeviceRevivalException] with the given
-  /// [fieldDescription] and [expectedValueDescription] is thrown.
   static String? _castStringOrNull(dynamic value, String fieldDescription, String expectedValueDescription) {
     if (value == null) {
       return null;
@@ -399,11 +342,6 @@ class CustomDeviceConfig {
     return _castString(value, fieldDescription, expectedValueDescription);
   }
 
-  /// Tries to make a list of strings from [value].
-  ///
-  /// If the value is null or not a list containing only string values,
-  /// a [CustomDeviceRevivalException] with the given [fieldDescription] and
-  /// [expectedValueDescription] is thrown.
   static List<String> _castStringList(
     dynamic value,
     String fieldDescription,
@@ -427,12 +365,6 @@ class CustomDeviceConfig {
     return list;
   }
 
-  /// Tries to make a list of strings from [value], or returns null if [value]
-  /// is null.
-  ///
-  /// If the value is not null and not a list containing only string values,
-  /// a [CustomDeviceRevivalException] with the given [fieldDescription] and
-  /// [expectedValueDescription] is thrown.
   static List<String>? _castStringListOrNull(
     dynamic value,
     String fieldDescription,
@@ -446,12 +378,6 @@ class CustomDeviceConfig {
     return _castStringList(value, fieldDescription, expectedValueDescription, minLength: minLength);
   }
 
-  /// Tries to construct a RegExp from [value], or returns null if [value]
-  /// is null.
-  ///
-  /// If the value is not null and not a valid string-ified regex,
-  /// a [CustomDeviceRevivalException] with the given [fieldDescription] and
-  /// [expectedValueDescription] is thrown.
   static RegExp? _convertToRegexOrNull(dynamic value, String fieldDescription, String expectedValueDescription) {
     if (value == null) {
       return null;

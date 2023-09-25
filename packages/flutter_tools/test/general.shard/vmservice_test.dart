@@ -886,7 +886,6 @@ class MockVMService extends Fake implements vm_service.VmService {
 // ignore: avoid_implementing_value_types
 class FakeDevice extends Fake implements Device { }
 
-/// A [WebSocketConnector] that always throws an [io.SocketException].
 Future<io.WebSocket> failingWebSocketConnector(
   String url, {
   io.CompressionOptions? compression,

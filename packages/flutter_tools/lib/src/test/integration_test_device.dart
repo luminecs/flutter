@@ -37,9 +37,6 @@ class IntegrationTestTestDevice implements TestDevice {
   final Completer<void> _finished = Completer<void>();
   final Completer<Uri> _gotProcessVmServiceUri = Completer<Uri>();
 
-  /// Starts the device.
-  ///
-  /// [entrypointPath] must be a path to an un-compiled source file.
   @override
   Future<StreamChannel<String>> start(String entrypointPath) async {
     final TargetPlatform targetPlatform = await device.targetPlatform;

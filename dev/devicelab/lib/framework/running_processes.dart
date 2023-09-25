@@ -84,12 +84,6 @@ Future<Set<RunningProcessInfo>> windowsRunningProcesses(
   return processPowershellOutput(result.stdout as String).toSet();
 }
 
-/// Parses the output of the PowerShell script from [windowsRunningProcesses].
-///
-/// E.g.:
-/// ProcessId CreationDate          CommandLine
-/// --------- ------------          -----------
-///      2904 3/11/2019 11:01:54 AM "C:\Program Files\Android\Android Studio\jre\bin\java.exe" -Xmx1536M -Dfile.encoding=windows-1252 -Duser.country=US -Duser.language=en -Duser.variant -cp C:\Users\win1\.gradle\wrapper\dists\gradle-4.10.2-all\9fahxiiecdb76a5g3aw9oi8rv\gradle-4.10.2\lib\gradle-launcher-4.10.2.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 4.10.2
 @visibleForTesting
 Iterable<RunningProcessInfo> processPowershellOutput(String output) sync* {
   const int processIdHeaderSize = 'ProcessId'.length;
@@ -169,13 +163,6 @@ Future<Set<RunningProcessInfo>> posixRunningProcesses(
   return processPsOutput(result.stdout as String, processName).toSet();
 }
 
-/// Parses the output of the command in [posixRunningProcesses].
-///
-/// E.g.:
-///
-/// STARTED                        PID COMMAND
-/// Sat Mar  9 20:12:47 2019         1 /sbin/launchd
-/// Sat Mar  9 20:13:00 2019        49 /usr/sbin/syslogd
 @visibleForTesting
 Iterable<RunningProcessInfo> processPsOutput(
   String output,

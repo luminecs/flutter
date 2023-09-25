@@ -4,8 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Autocomplete] that shows how to fetch the options
-/// from a remote API.
 
 const Duration fakeAPIDuration = Duration(seconds: 1);
 

@@ -12,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-/// Generates the [PointerEvent] to simulate a drag operation from
-/// `center - totalMove/2` to `center + totalMove/2`.
 Iterable<PointerEvent> dragInputEvents(
   final Duration epoch,
   final Offset center, {
@@ -179,48 +177,6 @@ Future<void> main() async {
   }, semanticsEnabled: false, variant: variant);
 }
 
-/// Calculates the smoothness measure from `scrollOffset` and `delays` list.
-///
-/// Smoothness (`abs_jerk`) is measured by the absolute value of the discrete
-/// 2nd derivative of the scroll offset.
-///
-/// It was experimented that jerk (3rd derivative of the position) is a good
-/// measure the smoothness.
-/// Here we are using 2nd derivative instead because the input is completely
-/// linear and the expected acceleration should be strictly zero.
-/// Observed acceleration is jumping from positive to negative within
-/// adjacent frames, meaning mathematically the discrete 3-rd derivative
-/// (`f[3] - 3*f[2] + 3*f[1] - f[0]`) is not a good approximation of jerk
-/// (continuous 3-rd derivative), while discrete 2nd
-/// derivative (`f[2] - 2*f[1] + f[0]`) on the other hand is a better measure
-/// of how the scrolling deviate away from linear, and given the acceleration
-/// should average to zero within two frames, it's also a good approximation
-/// for jerk in terms of physics.
-/// We use abs rather than square because square (2-norm) amplifies the
-/// effect of the data point that's relatively large, but in this metric
-/// we prefer smaller data point to have similar effect.
-/// This is also why we count the number of data that's larger than a
-/// threshold (and the result is tested not sensitive to this threshold),
-/// which is effectively a 0-norm.
-///
-/// Frames that are too slow to build (longer than 40ms) or with input delay
-/// longer than 16ms (1/60Hz) is filtered out to separate the janky due to slow
-/// response.
-///
-/// The returned map has keys:
-/// `average_abs_jerk`: average for the overall smoothness. The smaller this
-/// number the more smooth the scrolling is.
-/// `janky_count`: number of frames with `abs_jerk` larger than 0.5. The frames
-/// that take longer than the frame budget to build are ignored, so increase of
-/// this number itself may not represent a regression.
-/// `dropped_frame_count`: number of frames that are built longer than 40ms and
-///  are not used for smoothness measurement.
-/// `frame_timestamp`: the list of the timestamp for each frame, in the time
-/// order.
-/// `scroll_offset`: the scroll offset for each frame. Its length is the same as
-/// `frame_timestamp`.
-/// `input_delay`: the list of maximum delay time of the input simulation during
-/// a frame. Its length is the same as `frame_timestamp`
 Map<String, dynamic> scrollSummary(
   List<double> scrollOffset,
   List<Duration> delays,

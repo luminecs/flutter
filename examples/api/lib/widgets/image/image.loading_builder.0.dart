@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Image.loadingBuilder].
 
 void main() => runApp(const LoadingBuilderExampleApp());
 

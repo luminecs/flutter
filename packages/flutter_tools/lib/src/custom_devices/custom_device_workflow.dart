@@ -7,12 +7,6 @@ import 'package:meta/meta.dart';
 import '../doctor_validator.dart';
 import '../features.dart';
 
-/// The custom-devices-specific implementation of a [Workflow].
-///
-/// Will apply to the host platform / be able to launch & list devices only if
-/// the custom devices feature is enabled in the featureFlags argument.
-///
-/// Can't list emulators at all.
 @immutable
 class CustomDeviceWorkflow implements Workflow {
   const CustomDeviceWorkflow({

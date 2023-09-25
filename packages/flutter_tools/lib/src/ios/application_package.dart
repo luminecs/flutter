@@ -11,13 +11,11 @@ import '../template.dart';
 import '../xcode_project.dart';
 import 'plist_parser.dart';
 
-/// Tests whether a [Directory] is an iOS bundle directory.
 bool _isBundleDirectory(Directory dir) => dir.path.endsWith('.app');
 
 abstract class IOSApp extends ApplicationPackage {
   IOSApp({required String projectBundleId}) : super(id: projectBundleId);
 
-  /// Creates a new IOSApp from an existing app bundle or IPA.
   static IOSApp? fromPrebuiltApp(FileSystemEntity applicationBinary) {
     final FileSystemEntityType entityType = globals.fs.typeSync(applicationBinary.path);
     if (entityType == FileSystemEntityType.notFound) {
@@ -102,8 +100,6 @@ abstract class IOSApp extends ApplicationPackage {
 
   String get deviceBundlePath;
 
-  /// Directory used by ios-deploy to store incremental installation metadata for
-  /// faster second installs.
   Directory? get appDeltaDirectory;
 }
 
@@ -215,10 +211,6 @@ class PrebuiltIOSApp extends IOSApp implements PrebuiltApplicationPackage {
     required this.applicationPackage,
   });
 
-  /// The uncompressed bundle of the application.
-  ///
-  /// [IOSApp.fromPrebuiltApp] will uncompress the application into a temporary
-  /// directory even when an `.ipa` file was used to create the [IOSApp] instance.
   final Directory uncompressedBundle;
   final String? bundleName;
 
@@ -236,9 +228,6 @@ class PrebuiltIOSApp extends IOSApp implements PrebuiltApplicationPackage {
 
   String get _bundlePath => uncompressedBundle.path;
 
-  /// A [File] or [Directory] pointing to the application bundle.
-  ///
-  /// This can be either an `.ipa` file or an uncompressed `.app` directory.
   @override
   final FileSystemEntity applicationPackage;
 }

@@ -11,89 +11,7 @@ import 'package:vector_math/vector_math_64.dart';
 import 'ink_well.dart';
 import 'material.dart';
 
-/// Begin a Material 3 ink sparkle ripple, centered at the tap or click position
-/// relative to the [referenceBox].
-///
-/// This effect relies on a shader and therefore is unsupported on the Flutter
-/// Web HTML backend.
-///
-/// To use this effect, pass an instance of [splashFactory] to the
-/// `splashFactory` parameter of either the Material [ThemeData] or any
-/// component that has a `splashFactory` parameter, such as buttons:
-///  - [ElevatedButton]
-///  - [TextButton]
-///  - [OutlinedButton]
-///
-/// The [controller] argument is typically obtained via
-/// `Material.of(context)`.
-///
-/// If [containedInkWell] is true, then the effect will be sized to fit
-/// the well rectangle, and clipped to it when drawn. The well
-/// rectangle is the box returned by [rectCallback], if provided, or
-/// otherwise is the bounds of the [referenceBox].
-///
-/// If [containedInkWell] is false, then [rectCallback] should be null.
-/// The ink ripple is clipped only to the edges of the [Material].
-/// This is the default.
-///
-/// When the ripple is removed, [onRemoved] will be called.
-///
-/// {@tool snippet}
-///
-/// For typical use, pass the [InkSparkle.splashFactory] to the `splashFactory`
-/// parameter of a button style or [ThemeData].
-///
-/// ```dart
-/// ElevatedButton(
-///   style: ElevatedButton.styleFrom(splashFactory: InkSparkle.splashFactory),
-///   child: const Text('Sparkle!'),
-///   onPressed: () { },
-/// )
-/// ```
-/// {@end-tool}
 class InkSparkle extends InteractiveInkFeature {
-  /// Begin a sparkly ripple effect, centered at [position] relative to
-  /// [referenceBox].
-  ///
-  /// The [color] defines the color of the splash itself. The sparkles are
-  /// always white.
-  ///
-  /// The [controller] argument is typically obtained via
-  /// `Material.of(context)`.
-  ///
-  /// [textDirection] is used by [customBorder] if it is non-null. This allows
-  /// the [customBorder]'s path to be properly defined if it was the path was
-  /// expressed in terms of "start" and "end" instead of
-  /// "left" and "right".
-  ///
-  /// If [containedInkWell] is true, then the ripple will be sized to fit
-  /// the well rectangle, then clipped to it when drawn. The well
-  /// rectangle is the box returned by [rectCallback], if provided, or
-  /// otherwise is the bounds of the [referenceBox].
-  ///
-  /// If [containedInkWell] is false, then [rectCallback] should be null.
-  /// The ink ripple is clipped only to the edges of the [Material].
-  /// This is the default.
-  ///
-  /// Clipping can happen in 3 different ways:
-  ///  1. If [customBorder] is provided, it is used to determine the path for
-  ///     clipping.
-  ///  2. If [customBorder] is null, and [borderRadius] is provided, then the
-  ///     canvas is clipped by an [RRect] created from [borderRadius].
-  ///  3. If [borderRadius] is the default [BorderRadius.zero], then the canvas
-  ///     is clipped with [rectCallback].
-  /// When the ripple is removed, [onRemoved] will be called.
-  ///
-  /// [turbulenceSeed] can be passed if a non random seed should be used for
-  /// the turbulence and sparkles. By default, the seed is a random number
-  /// between 0.0 and 1000.0.
-  ///
-  /// Turbulence is an input to the shader and helps to provides a more natural,
-  ///  non-circular, "splash" effect.
-  ///
-  /// Sparkle randomization is also driven by the [turbulenceSeed]. Sparkles are
-  /// identified in the shader as "noise", and the sparkles are derived from
-  /// pseudorandom triangular noise.
   InkSparkle({
     required super.controller,
     required super.referenceBox,
@@ -239,18 +157,8 @@ class InkSparkle extends InteractiveInkFeature {
   late final ui.FragmentShader _fragmentShader;
   bool _fragmentShaderInitialized = false;
 
-  /// Used to specify this type of ink splash for an [InkWell], [InkResponse],
-  /// material [Theme], or [ButtonStyle].
-  ///
-  /// Since no [turbulenceSeed] is passed, the effect will be random for
-  /// subsequent presses in the same position.
   static const InteractiveInkFeatureFactory splashFactory = _InkSparkleFactory();
 
-  /// Used to specify this type of ink splash for an [InkWell], [InkResponse],
-  /// material [Theme], or [ButtonStyle].
-  ///
-  /// Since a [turbulenceSeed] is passed, the effect will not be random for
-  /// subsequent presses in the same position. This can be used for testing.
   static const InteractiveInkFeatureFactory constantTurbulenceSeedSplashFactory = _InkSparkleFactory.constantTurbulenceSeed();
 
   @override
@@ -307,11 +215,6 @@ class InkSparkle extends InteractiveInkFeature {
   double get _height => referenceBox.size.height;
 
 
-  /// All double values for uniforms come from the Android 12 ripple
-  /// implementation from the following files:
-  /// - https://cs.android.com/android/platform/superproject/+/master:frameworks/base/graphics/java/android/graphics/drawable/RippleShader.java
-  /// - https://cs.android.com/android/platform/superproject/+/master:frameworks/base/graphics/java/android/graphics/drawable/RippleDrawable.java
-  /// - https://cs.android.com/android/platform/superproject/+/master:frameworks/base/graphics/java/android/graphics/drawable/RippleAnimationSession.java
   void _updateFragmentShader() {
     const double turbulenceScale = 1.5;
     final double turbulencePhase = _turbulenceSeed + _radiusScale.value;
@@ -364,16 +267,6 @@ class InkSparkle extends InteractiveInkFeature {
       ..setFloat(27, math.sin(rotation3));
   }
 
-  /// Transforms the canvas for an ink feature to be painted on the [canvas].
-  ///
-  /// This should be called before painting ink features that do not use
-  /// [paintInkCircle].
-  ///
-  /// The [transform] argument is the [Matrix4] transform that typically
-  /// shifts the coordinate space of the canvas to the space in which
-  /// the ink feature is to be painted.
-  ///
-  /// For examples on how the function is used, see [InkSparkle] and [paintInkCircle].
   void _transformCanvas({
     required Canvas canvas,
     required Matrix4 transform,
@@ -386,21 +279,6 @@ class InkSparkle extends InteractiveInkFeature {
     }
   }
 
-  /// Clips the canvas for an ink feature to be painted on the [canvas].
-  ///
-  /// This should be called before painting ink features with [paintFeature]
-  /// that do not use [paintInkCircle].
-  ///
-  /// The [clipCallback] is the callback used to obtain the [Rect] used for clipping
-  /// the ink effect.
-  ///
-  /// If [clipCallback] is null, no clipping is performed on the ink circle.
-  ///
-  /// The [textDirection] is used by [customBorder] if it is non-null. This
-  /// allows the [customBorder]'s path to be properly defined if the path was
-  /// expressed in terms of "start" and "end" instead of "left" and "right".
-  ///
-  /// For examples on how the function is used, see [InkSparkle].
   void _clipCanvas({
     required Canvas canvas,
     required RectCallback clipCallback,

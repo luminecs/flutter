@@ -17,7 +17,6 @@ int sortFilesByPath (FileSystemEntity a, FileSystemEntity b) {
   return a.path.compareTo(b.path);
 }
 
-/// Simple data class to hold parsed locale. Does not promise validity of any data.
 @immutable
 class LocaleInfo implements Comparable<LocaleInfo> {
   const LocaleInfo({
@@ -28,14 +27,6 @@ class LocaleInfo implements Comparable<LocaleInfo> {
     required this.originalString,
   });
 
-  /// Simple parser. Expects the locale string to be in the form of 'language_script_COUNTRY'
-  /// where the language is 2 characters, script is 4 characters with the first uppercase,
-  /// and country is 2-3 characters and all uppercase.
-  ///
-  /// 'language_COUNTRY' or 'language_script' are also valid. Missing fields will be null.
-  ///
-  /// When `deriveScriptCode` is true, if [scriptCode] was unspecified, it will
-  /// be derived from the [languageCode] and [countryCode] if possible.
   factory LocaleInfo.fromString(String locale, { bool deriveScriptCode = false }) {
     final List<String> codes = locale.split('_'); // [language, script, country]
     assert(codes.isNotEmpty && codes.length < 4);
@@ -55,12 +46,6 @@ class LocaleInfo implements Comparable<LocaleInfo> {
     assert(countryCode == null || countryCode.isNotEmpty);
     assert(scriptCode == null || scriptCode.isNotEmpty);
 
-    /// Adds scriptCodes to locales where we are able to assume it to provide
-    /// finer granularity when resolving locales.
-    ///
-    /// The basis of the assumptions here are based off of known usage of scripts
-    /// across various countries. For example, we know Taiwan uses traditional (Hant)
-    /// script, so it is safe to apply (Hant) to Taiwanese languages.
     if (deriveScriptCode && scriptCode == null) {
       switch (languageCode) {
         case 'zh': {
@@ -141,8 +126,6 @@ class LocaleInfo implements Comparable<LocaleInfo> {
   }
 }
 
-/// Parse the data for a locale from a file, and store it in the [attributes]
-/// and [resources] keys.
 void loadMatchingArbsIntoBundleMaps({
   required Directory directory,
   required RegExp filenamePattern,
@@ -150,12 +133,6 @@ void loadMatchingArbsIntoBundleMaps({
   required Map<LocaleInfo, Map<String, dynamic>> localeToResourceAttributes,
 }) {
 
-  /// Set that holds the locales that were assumed from the existing locales.
-  ///
-  /// For example, when the data lacks data for zh_Hant, we will use the data of
-  /// the first Hant Chinese locale as a default by repeating the data. If an
-  /// explicit match is later found, we can reference this set to see if we should
-  /// overwrite the existing assumed data.
   final Set<LocaleInfo> assumedLocales = <LocaleInfo>{};
 
   for (final FileSystemEntity entity in directory.listSync().toList()..sort(sortFilesByPath)) {
@@ -317,9 +294,6 @@ final Map<String, String> _scripts = <String, String>{};
 const String kProvincePrefix = ', Province of ';
 const String kParentheticalPrefix = ' (';
 
-/// Prepares the data for the [describeLocale] method below.
-///
-/// The data is obtained from the official IANA registry.
 void precacheLanguageAndRegionTags() {
   final List<Map<String, List<String>>> sections =
       languageSubtagRegistry.split('%%').skip(1).map<Map<String, List<String>>>(_parseSection).toList();
@@ -380,7 +354,6 @@ String describeLocale(String tag) {
   return output;
 }
 
-/// Writes the header of each class which corresponds to a locale.
 String generateClassDeclaration(
   LocaleInfo locale,
   String classNamePrefix,
@@ -389,32 +362,9 @@ String generateClassDeclaration(
   final String camelCaseName = locale.camelCase();
   return '''
 
-/// The translations for ${describeLocale(locale.originalString)} (`${locale.originalString}`).
 class $classNamePrefix$camelCaseName extends $superClass {''';
 }
 
-/// Return the input string as a Dart-parseable string.
-///
-/// ```
-/// foo => 'foo'
-/// foo "bar" => 'foo "bar"'
-/// foo 'bar' => "foo 'bar'"
-/// foo 'bar' "baz" => '''foo 'bar' "baz"'''
-/// ```
-///
-/// This function is used by tools that take in a JSON-formatted file to
-/// generate Dart code. For this reason, characters with special meaning
-/// in JSON files are escaped. For example, the backspace character (\b)
-/// has to be properly escaped by this function so that the generated
-/// Dart code correctly represents this character:
-/// ```
-/// foo\bar => 'foo\\bar'
-/// foo\nbar => 'foo\\nbar'
-/// foo\\nbar => 'foo\\\\nbar'
-/// foo\\bar => 'foo\\\\bar'
-/// foo\ bar => 'foo\\ bar'
-/// foo$bar = 'foo\$bar'
-/// ```
 String generateString(String value) {
   if (<String>['\n', '\f', '\t', '\r', '\b'].every((String pattern) => !value.contains(pattern))) {
     final bool hasDollar = value.contains(r'$');
@@ -455,9 +405,6 @@ String generateString(String value) {
   return "'$value'";
 }
 
-/// Only used to generate localization strings for the Kannada locale ('kn') because
-/// some of the localized strings contain characters that can crash Emacs on Linux.
-/// See packages/flutter_localizations/lib/src/l10n/README for more information.
 String generateEncodedString(String? locale, String value) {
   if (locale != 'kn' || value.runes.every((int code) => code <= 0xFF)) {
     return generateString(value);

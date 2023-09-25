@@ -145,18 +145,13 @@ class WebBuilder {
   }
 }
 
-/// Web rendering backend mode.
 enum WebRendererMode implements CliEnum {
-  /// Auto detects which rendering backend to use.
   auto,
 
-  /// Always uses canvaskit.
   canvaskit,
 
-  /// Always uses html.
   html,
 
-  /// Always use skwasm.
   skwasm;
 
   @override
@@ -193,7 +188,6 @@ enum WebRendererMode implements CliEnum {
       };
 }
 
-/// The correct precompiled artifact to use for each build and render mode.
 const Map<WebRendererMode, Map<NullSafetyMode, HostArtifact>> kDartSdkJsArtifactMap = <WebRendererMode, Map<NullSafetyMode, HostArtifact>>{
   WebRendererMode.auto: <NullSafetyMode, HostArtifact> {
     NullSafetyMode.sound: HostArtifact.webPrecompiledCanvaskitAndHtmlSoundSdk,
@@ -209,7 +203,6 @@ const Map<WebRendererMode, Map<NullSafetyMode, HostArtifact>> kDartSdkJsArtifact
   },
 };
 
-/// The correct source map artifact to use for each build and render mode.
 const Map<WebRendererMode, Map<NullSafetyMode, HostArtifact>> kDartSdkJsMapArtifactMap = <WebRendererMode, Map<NullSafetyMode, HostArtifact>>{
   WebRendererMode.auto: <NullSafetyMode, HostArtifact> {
     NullSafetyMode.sound: HostArtifact.webPrecompiledCanvaskitAndHtmlSoundSdkSourcemaps,

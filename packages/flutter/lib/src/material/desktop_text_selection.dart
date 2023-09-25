@@ -10,25 +10,15 @@ import 'desktop_text_selection_toolbar.dart';
 import 'desktop_text_selection_toolbar_button.dart';
 import 'material_localizations.dart';
 
-/// Desktop Material styled text selection handle controls.
-///
-/// Specifically does not manage the toolbar, which is left to
-/// [EditableText.contextMenuBuilder].
 class _DesktopTextSelectionHandleControls extends DesktopTextSelectionControls with TextSelectionHandleControls {
 }
 
-/// Desktop Material styled text selection controls.
-///
-/// The [desktopTextSelectionControls] global variable has a
-/// suitable instance of this class.
 class DesktopTextSelectionControls extends TextSelectionControls {
-  /// Desktop has no text selection handles.
   @override
   Size getHandleSize(double textLineHeight) {
     return Size.zero;
   }
 
-  /// Builder for the Material-style desktop copy/paste text selection toolbar.
   @Deprecated(
     'Use `contextMenuBuilder` instead. '
     'This feature was deprecated after v3.3.0-0.5.pre.',
@@ -58,13 +48,11 @@ class DesktopTextSelectionControls extends TextSelectionControls {
     );
   }
 
-  /// Builds the text selection handles, but desktop has none.
   @override
   Widget buildHandle(BuildContext context, TextSelectionHandleType type, double textLineHeight, [VoidCallback? onTap]) {
     return const SizedBox.shrink();
   }
 
-  /// Gets the position for the text selection handles, but desktop has none.
   @override
   Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight) {
     return Offset.zero;
@@ -98,13 +86,9 @@ class DesktopTextSelectionControls extends TextSelectionControls {
 // TODO(justinmc): Deprecate this after TextSelectionControls.buildToolbar is
 // deleted, when users should migrate back to desktopTextSelectionControls.
 // See https://github.com/flutter/flutter/pull/124262
-/// Desktop text selection handle controls that loosely follow Material design
-/// conventions.
 final TextSelectionControls desktopTextSelectionHandleControls =
     _DesktopTextSelectionHandleControls();
 
-/// Desktop text selection controls that loosely follow Material design
-/// conventions.
 final TextSelectionControls desktopTextSelectionControls =
     DesktopTextSelectionControls();
 

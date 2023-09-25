@@ -13,21 +13,17 @@ import 'base/user_messages.dart';
 import 'base/utils.dart';
 import 'plugins.dart';
 
-/// Whether or not Impeller Scene 3D model import is enabled.
 const bool kIs3dSceneSupported = true;
 
 const Set<String> _kValidPluginPlatforms = <String>{
   'android', 'ios', 'web', 'windows', 'linux', 'macos',
 };
 
-/// A wrapper around the `flutter` section in the `pubspec.yaml` file.
 class FlutterManifest {
   FlutterManifest._({required Logger logger}) : _logger = logger;
 
-  /// Returns an empty manifest.
   factory FlutterManifest.empty({ required Logger logger }) = FlutterManifest._;
 
-  /// Returns null on invalid manifest. Returns empty manifest on missing file.
   static FlutterManifest? createFromPath(String path, {
     required FileSystem fileSystem,
     required Logger logger,
@@ -39,7 +35,6 @@ class FlutterManifest {
     return FlutterManifest.createFromString(manifest, logger: logger);
   }
 
-  /// Returns null on missing or invalid manifest.
   @visibleForTesting
   static FlutterManifest? createFromString(String manifest, { required Logger logger }) {
     return _createFromYaml(loadYaml(manifest), logger);
@@ -66,22 +61,16 @@ class FlutterManifest {
 
   final Logger _logger;
 
-  /// A map representation of the entire `pubspec.yaml` file.
   Map<String, Object?> _descriptor = <String, Object?>{};
 
-  /// A map representation of the `flutter` section in the `pubspec.yaml` file.
   Map<String, Object?> _flutterDescriptor = <String, Object?>{};
 
   Map<String, Object?> get flutterDescriptor => _flutterDescriptor;
 
-  /// True if the `pubspec.yaml` file does not exist.
   bool get isEmpty => _descriptor.isEmpty;
 
-  /// The string value of the top-level `name` property in the `pubspec.yaml` file.
   String get appName => _descriptor['name'] as String? ?? '';
 
-  /// Contains the name of the dependencies.
-  /// These are the keys specified in the `dependency` map.
   Set<String> get dependencies {
     final YamlMap? dependencies = _descriptor['dependencies'] as YamlMap?;
     return dependencies != null ? <String>{...dependencies.keys.cast<String>()} : <String>{};
@@ -90,8 +79,6 @@ class FlutterManifest {
   // Flag to avoid printing multiple invalid version messages.
   bool _hasShowInvalidVersionMsg = false;
 
-  /// The version String from the `pubspec.yaml` file.
-  /// Can be null if it isn't set or has a wrong format.
   String? get appVersion {
     final String? verStr = _descriptor['version']?.toString();
     if (verStr == null) {
@@ -110,8 +97,6 @@ class FlutterManifest {
     return version?.toString();
   }
 
-  /// The build version name from the `pubspec.yaml` file.
-  /// Can be null if version isn't set or has a wrong format.
   String? get buildName {
     final String? version = appVersion;
     if (version != null && version.contains('+')) {
@@ -120,8 +105,6 @@ class FlutterManifest {
     return version;
   }
 
-  /// The build version number from the `pubspec.yaml` file.
-  /// Can be null if version isn't set or has a wrong format.
   String? get buildNumber {
     final String? version = appVersion;
     if (version != null && version.contains('+')) {
@@ -136,9 +119,6 @@ class FlutterManifest {
     return _flutterDescriptor['uses-material-design'] as bool? ?? false;
   }
 
-  /// True if this Flutter module should use AndroidX dependencies.
-  ///
-  /// If false the deprecated Android Support library will be used.
   bool get usesAndroidX {
     final Object? module = _flutterDescriptor['module'];
     if (module is YamlMap) {
@@ -147,18 +127,6 @@ class FlutterManifest {
     return false;
   }
 
-  /// Any additional license files listed under the `flutter` key.
-  ///
-  /// This is expected to be a list of file paths that should be treated as
-  /// relative to the pubspec in this directory.
-  ///
-  /// For example:
-  ///
-  /// ```yaml
-  /// flutter:
-  ///   licenses:
-  ///     - assets/foo_license.txt
-  /// ```
   List<String> get additionalLicenses {
     final Object? licenses = _flutterDescriptor['licenses'];
     if (licenses is YamlList) {
@@ -167,28 +135,10 @@ class FlutterManifest {
     return <String>[];
   }
 
-  /// True if this manifest declares a Flutter module project.
-  ///
-  /// A Flutter project is considered a module when it has a `module:`
-  /// descriptor. A Flutter module project supports integration into an
-  /// existing host app, and has managed platform host code.
-  ///
-  /// Such a project can be created using `flutter create -t module`.
   bool get isModule => _flutterDescriptor.containsKey('module');
 
-  /// True if this manifest declares a Flutter plugin project.
-  ///
-  /// A Flutter project is considered a plugin when it has a `plugin:`
-  /// descriptor. A Flutter plugin project wraps custom Android and/or
-  /// iOS code in a Dart interface for consumption by other Flutter app
-  /// projects.
-  ///
-  /// Such a project can be created using `flutter create -t plugin`.
   bool get isPlugin => _flutterDescriptor.containsKey('plugin');
 
-  /// Returns the Android package declared by this manifest in its
-  /// module or plugin descriptor. Returns null, if there is no
-  /// such declaration.
   String? get androidPackage {
     if (isModule) {
       final Object? module = _flutterDescriptor['module'];
@@ -214,8 +164,6 @@ class FlutterManifest {
     return null;
   }
 
-  /// Returns the deferred components configuration if declared. Returns
-  /// null if no deferred components are declared.
   late final List<DeferredComponent>? deferredComponents = computeDeferredComponents();
   List<DeferredComponent>? computeDeferredComponents() {
     if (!_flutterDescriptor.containsKey('deferred-components')) {
@@ -260,8 +208,6 @@ class FlutterManifest {
     return components;
   }
 
-  /// Returns the iOS bundle identifier declared by this manifest in its
-  /// module descriptor. Returns null if there is no such declaration.
   String? get iosBundleIdentifier {
     if (isModule) {
       final Object? module = _flutterDescriptor['module'];
@@ -272,9 +218,6 @@ class FlutterManifest {
     return null;
   }
 
-  /// Gets the supported platforms. This only supports the new `platforms` format.
-  ///
-  /// If the plugin uses the legacy pubspec format, this method returns null.
   Map<String, Object?>? get supportedPlatforms {
     if (isPlugin) {
       final YamlMap? plugin = _flutterDescriptor['plugin'] as YamlMap?;
@@ -286,7 +229,6 @@ class FlutterManifest {
     return null;
   }
 
-  /// Like [supportedPlatforms], but only returns the valid platforms that are supported in flutter plugins.
   Map<String, Object?>? get validSupportedPlatforms {
     final Map<String, Object?>? allPlatforms = supportedPlatforms;
     if (allPlatforms == null) {
@@ -400,13 +342,6 @@ class FlutterManifest {
     return results;
   }
 
-  /// Whether a synthetic flutter_gen package should be generated.
-  ///
-  /// This can be provided to the [Pub] interface to inject a new entry
-  /// into the package_config.json file which points to `.dart_tool/flutter_gen`.
-  ///
-  /// This allows generated source code to be imported using a package
-  /// alias.
   late final bool generateSyntheticPackage = _computeGenerateSyntheticPackage();
   bool _computeGenerateSyntheticPackage() {
     if (!_flutterDescriptor.containsKey('generate')) {

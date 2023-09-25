@@ -40,7 +40,6 @@ class FlutterDriverFactory {
   final String _dartSdkPath;
   final DevtoolsLauncher _devtoolsLauncher;
 
-  /// Create a driver service for running `flutter drive`.
   DriverService createDriverService(bool web) {
     if (web) {
       return WebDriverService(
@@ -59,9 +58,7 @@ class FlutterDriverFactory {
   }
 }
 
-/// An interface for the `flutter driver` integration test operations.
 abstract class DriverService {
-  /// Install and launch the application for the provided [device].
   Future<void> start(
     BuildInfo buildInfo,
     Device device,
@@ -74,7 +71,6 @@ abstract class DriverService {
     Map<String, Object> platformArgs = const <String, Object>{},
   });
 
-  /// If --use-existing-app is provided, configured the correct VM Service URI.
   Future<void> reuseApplication(
     Uri vmServiceUri,
     Device device,
@@ -82,11 +78,6 @@ abstract class DriverService {
     bool ipv6,
   );
 
-  /// Start the test file with the provided [arguments] and [environment], returning
-  /// the test process exit code.
-  ///
-  /// if [profileMemory] is provided, it will be treated as a file path to write a
-  /// devtools memory profile.
   Future<int> startTest(
     String testFile,
     List<String> arguments,
@@ -102,19 +93,12 @@ abstract class DriverService {
     String? profileMemory,
   });
 
-  /// Stop the running application and uninstall it from the device.
-  ///
-  /// If [writeSkslOnExit] is non-null, will connect to the VM Service
-  /// and write SkSL to the file. This is only supported on mobile and
-  /// desktop devices.
   Future<void> stop({
     File? writeSkslOnExit,
     String? userIdentifier,
   });
 }
 
-/// An implementation of the driver service that connects to mobile and desktop
-/// applications.
 class FlutterDriverService extends DriverService {
   FlutterDriverService({
     required ApplicationPackageFactory applicationPackageFactory,

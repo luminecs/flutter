@@ -135,7 +135,6 @@ void main() {
 
     const Color surface = Color(0xFFF0F0F0);
 
-    /// Shades of blue with contrast ratio of 2.9, 4.4, 4.5 from [surface].
     const Color blue29 = Color(0xFF7E7EFB);
     const Color blue44 = Color(0xFF5757FF);
     const Color blue45 = Color(0xFF5252FF);

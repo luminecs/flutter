@@ -8,7 +8,6 @@ import 'platform.dart' as platform;
 
 export 'platform.dart' show TargetPlatform;
 
-/// The dart:io implementation of [platform.defaultTargetPlatform].
 platform.TargetPlatform get defaultTargetPlatform {
   platform.TargetPlatform? result;
   if (Platform.isAndroid) {

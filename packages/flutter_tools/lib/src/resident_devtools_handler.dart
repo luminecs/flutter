@@ -18,16 +18,9 @@ ResidentDevtoolsHandler createDefaultHandler(DevtoolsLauncher? launcher, Residen
   return FlutterResidentDevtoolsHandler(launcher, runner, logger);
 }
 
-/// Helper class to manage the life-cycle of devtools and its interaction with
-/// the resident runner.
 abstract class ResidentDevtoolsHandler {
-  /// The current devtools server, or null if one is not running.
   DevToolsServerAddress? get activeDevToolsServer;
 
-  /// Whether it's ok to announce the [activeDevToolsServer].
-  ///
-  /// This should only return true once all the devices have been notified
-  /// of the DevTools.
   bool get readyToAnnounce;
 
   Future<void> hotRestart(List<FlutterDevice?> flutterDevices);
@@ -208,7 +201,6 @@ class FlutterResidentDevtoolsHandler implements ResidentDevtoolsHandler {
     ]);
   }
 
-  /// Returns null if the service extension cannot be found on the device.
   Future<FlutterDevice?> _waitForExtensionsForDevice(FlutterDevice flutterDevice) async {
     const String extension = 'ext.flutter.connectedVmServiceUri';
     try {
@@ -339,8 +331,6 @@ class NoOpDevtoolsHandler implements ResidentDevtoolsHandler {
   }
 }
 
-/// Convert a [URI] with query parameters into a display format instead
-/// of the default URI encoding.
 String urlToDisplayString(Uri uri) {
   final StringBuffer base = StringBuffer(uri.replace(
     queryParameters: <String, String>{},

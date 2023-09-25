@@ -14,7 +14,6 @@ import 'desktop.dart';
 import 'icon_tree_shaker.dart';
 import 'shader_compiler.dart';
 
-/// The only files/subdirectories we care about.
 const List<String> _kWindowsArtifacts = <String>[
   'flutter_windows.dll',
   'flutter_windows.dll.exp',
@@ -29,7 +28,6 @@ const List<String> _kWindowsArtifacts = <String>[
 
 const String _kWindowsDepfile = 'windows_engine_sources.d';
 
-/// Copies the Windows desktop embedding files to the copy directory.
 class UnpackWindows extends Target {
   const UnpackWindows();
 
@@ -95,7 +93,6 @@ class UnpackWindows extends Target {
   }
 }
 
-/// Creates a bundle for the Windows desktop target.
 abstract class BundleWindowsAssets extends Target {
   const BundleWindowsAssets();
 
@@ -148,12 +145,9 @@ abstract class BundleWindowsAssets extends Target {
   }
 }
 
-/// A wrapper for AOT compilation that copies app.so into the output directory.
 class WindowsAotBundle extends Target {
-  /// Create a [WindowsAotBundle] wrapper for [aotTarget].
   const WindowsAotBundle(this.aotTarget);
 
-  /// The [AotElfBase] subclass that produces the app.so.
   final AotElfBase aotTarget;
 
   @override

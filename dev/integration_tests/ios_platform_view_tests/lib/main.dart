@@ -16,7 +16,6 @@ void main() {
   runApp(const MyApp());
 }
 
-/// The main app entrance of the test
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -32,9 +31,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// A page with several buttons in the center.
-///
-/// On press the button, a page with platform view should be pushed into the scene.
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title});
   final String? title;
@@ -95,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-/// A page to test thread merge for platform view.
 class MergeThreadTestPage extends StatelessWidget {
   const MergeThreadTestPage({super.key});
 
@@ -126,7 +121,6 @@ class MergeThreadTestPage extends StatelessWidget {
   }
 }
 
-/// A page to test platform view focus.
 class FocusTestPage extends StatefulWidget {
   const FocusTestPage({super.key});
 
@@ -167,8 +161,6 @@ class _FocusTestPageState extends State<FocusTestPage> {
   }
 }
 
-/// A page to test a platform view in an alert dialog prompt is still tappable.
-/// See [this issue](https://github.com/flutter/flutter/issues/118366).
 class ZOrderTestPage extends StatefulWidget {
   const ZOrderTestPage({super.key});
 

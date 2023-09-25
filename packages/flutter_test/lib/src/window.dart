@@ -6,18 +6,9 @@ import 'dart:ui' hide window;
 
 import 'package:flutter/foundation.dart';
 
-/// Test version of [AccessibilityFeatures] in which specific features may
-/// be set to arbitrary values.
-///
-/// By default, all features are disabled. For an instance where all the
-/// features are enabled, consider the [FakeAccessibilityFeatures.allOn]
-/// constant.
 @immutable
 // ignore: avoid_implementing_value_types
 class FakeAccessibilityFeatures implements AccessibilityFeatures {
-  /// Creates a test instance of [AccessibilityFeatures].
-  ///
-  /// By default, all features are disabled.
   const FakeAccessibilityFeatures({
     this.accessibleNavigation = false,
     this.invertColors = false,
@@ -28,7 +19,6 @@ class FakeAccessibilityFeatures implements AccessibilityFeatures {
     this.onOffSwitchLabels = false,
   });
 
-  /// An instance of [AccessibilityFeatures] where all the features are enabled.
   static const FakeAccessibilityFeatures allOn = FakeAccessibilityFeatures(
     accessibleNavigation: true,
     invertColors: true,
@@ -88,29 +78,14 @@ class FakeAccessibilityFeatures implements AccessibilityFeatures {
     );
   }
 
-  /// This gives us some grace time when the dart:ui side adds something to
-  /// [AccessibilityFeatures], and makes things easier when we do rolls to
-  /// give us time to catch up.
-  ///
-  /// If you would like to add to this class, changes must first be made in the
-  /// engine, followed by the framework.
   @override
   dynamic noSuchMethod(Invocation invocation) {
     return null;
   }
 }
 
-/// Used to fake insets and padding for [TestFlutterView]s.
-///
-/// See also:
-///
-///   * [TestFlutterView.padding], [TestFlutterView.systemGestureInsets],
-///     [TestFlutterView.viewInsets], and [TestFlutterView.viewPadding] for test
-///     properties that make use of [FakeViewPadding].
 @immutable
 class FakeViewPadding implements ViewPadding {
-  /// Instantiates a new [FakeViewPadding] object for faking insets and padding
-  /// during tests.
   const FakeViewPadding({
     this.left = 0.0,
     this.top = 0.0,
@@ -124,7 +99,6 @@ class FakeViewPadding implements ViewPadding {
     right = base.right,
     bottom = base.bottom;
 
-  /// A view padding that has zeros for each edge.
   static const FakeViewPadding zero = FakeViewPadding();
 
   @override
@@ -140,16 +114,7 @@ class FakeViewPadding implements ViewPadding {
   final double bottom;
 }
 
-/// [PlatformDispatcher] that wraps another [PlatformDispatcher] and
-/// allows faking of some properties for testing purposes.
-///
-/// See also:
-///
-///   * [TestFlutterView], which wraps a [FlutterView] for testing and
-///     mocking purposes.
 class TestPlatformDispatcher implements PlatformDispatcher {
-  /// Constructs a [TestPlatformDispatcher] that defers all behavior to the given
-  /// [PlatformDispatcher] unless explicitly overridden for test purposes.
   TestPlatformDispatcher({
     required PlatformDispatcher platformDispatcher,
   }) : _platformDispatcher = platformDispatcher {
@@ -157,7 +122,6 @@ class TestPlatformDispatcher implements PlatformDispatcher {
     _platformDispatcher.onMetricsChanged = _handleMetricsChanged;
   }
 
-  /// The [PlatformDispatcher] that is wrapped by this [TestPlatformDispatcher].
   final PlatformDispatcher _platformDispatcher;
 
   @override
@@ -186,13 +150,11 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   Locale get locale => _localeTestValue ?? _platformDispatcher.locale;
   Locale? _localeTestValue;
-  /// Hides the real locale and reports the given [localeTestValue] instead.
   set localeTestValue(Locale localeTestValue) { // ignore: avoid_setters_without_getters
     _localeTestValue = localeTestValue;
     onLocaleChanged?.call();
   }
 
-  /// Deletes any existing test locale and returns to using the real locale.
   void clearLocaleTestValue() {
     _localeTestValue = null;
     onLocaleChanged?.call();
@@ -201,13 +163,11 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   List<Locale> get locales => _localesTestValue ?? _platformDispatcher.locales;
   List<Locale>? _localesTestValue;
-  /// Hides the real locales and reports the given [localesTestValue] instead.
   set localesTestValue(List<Locale> localesTestValue) { // ignore: avoid_setters_without_getters
     _localesTestValue = localesTestValue;
     onLocaleChanged?.call();
   }
 
-  /// Deletes any existing test locales and returns to using the real locales.
   void clearLocalesTestValue() {
     _localesTestValue = null;
     onLocaleChanged?.call();
@@ -223,12 +183,10 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   String get initialLifecycleState => _initialLifecycleStateTestValue;
   String _initialLifecycleStateTestValue = '';
-  /// Sets a faked initialLifecycleState for testing.
   set initialLifecycleStateTestValue(String state) { // ignore: avoid_setters_without_getters
     _initialLifecycleStateTestValue = state;
   }
 
-  /// Resets [initialLifecycleState] to the default value for the platform.
   void resetInitialLifecycleState() {
     _initialLifecycleStateTestValue = '';
   }
@@ -236,15 +194,11 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   double get textScaleFactor => _textScaleFactorTestValue ?? _platformDispatcher.textScaleFactor;
   double? _textScaleFactorTestValue;
-  /// Hides the real text scale factor and reports the given
-  /// [textScaleFactorTestValue] instead.
   set textScaleFactorTestValue(double textScaleFactorTestValue) { // ignore: avoid_setters_without_getters
     _textScaleFactorTestValue = textScaleFactorTestValue;
     onTextScaleFactorChanged?.call();
   }
 
-  /// Deletes any existing test text scale factor and returns to using the real
-  /// text scale factor.
   void clearTextScaleFactorTestValue() {
     _textScaleFactorTestValue = null;
     onTextScaleFactorChanged?.call();
@@ -259,15 +213,11 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   set onPlatformBrightnessChanged(VoidCallback? callback) {
     _platformDispatcher.onPlatformBrightnessChanged = callback;
   }
-  /// Hides the real text scale factor and reports the given
-  /// [platformBrightnessTestValue] instead.
   set platformBrightnessTestValue(Brightness platformBrightnessTestValue) { // ignore: avoid_setters_without_getters
     _platformBrightnessTestValue = platformBrightnessTestValue;
     onPlatformBrightnessChanged?.call();
   }
 
-  /// Deletes any existing test platform brightness and returns to using the
-  /// real platform brightness.
   void clearPlatformBrightnessTestValue() {
     _platformBrightnessTestValue = null;
     onPlatformBrightnessChanged?.call();
@@ -276,14 +226,10 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   bool get alwaysUse24HourFormat => _alwaysUse24HourFormatTestValue ?? _platformDispatcher.alwaysUse24HourFormat;
   bool? _alwaysUse24HourFormatTestValue;
-  /// Hides the real clock format and reports the given
-  /// [alwaysUse24HourFormatTestValue] instead.
   set alwaysUse24HourFormatTestValue(bool alwaysUse24HourFormatTestValue) { // ignore: avoid_setters_without_getters
     _alwaysUse24HourFormatTestValue = alwaysUse24HourFormatTestValue;
   }
 
-  /// Deletes any existing test clock format and returns to using the real clock
-  /// format.
   void clearAlwaysUse24HourTestValue() {
     _alwaysUse24HourFormatTestValue = null;
   }
@@ -302,8 +248,6 @@ class TestPlatformDispatcher implements PlatformDispatcher {
     _nativeSpellCheckServiceDefinedTestValue = nativeSpellCheckServiceDefinedTestValue;
   }
 
-  /// Deletes existing value that determines whether or not a native spell check
-  /// service is defined and returns to the real value.
   void clearNativeSpellCheckServiceDefined() {
     _nativeSpellCheckServiceDefinedTestValue = null;
   }
@@ -311,13 +255,10 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   bool get brieflyShowPassword => _brieflyShowPasswordTestValue ?? _platformDispatcher.brieflyShowPassword;
   bool? _brieflyShowPasswordTestValue;
-  /// Hides the real [brieflyShowPassword] and reports the given
-  /// `brieflyShowPasswordTestValue` instead.
   set brieflyShowPasswordTestValue(bool brieflyShowPasswordTestValue) { // ignore: avoid_setters_without_getters
     _brieflyShowPasswordTestValue = brieflyShowPasswordTestValue;
   }
 
-  /// Resets [brieflyShowPassword] to the default value for the platform.
   void resetBrieflyShowPassword() {
     _brieflyShowPasswordTestValue = null;
   }
@@ -353,14 +294,10 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   String get defaultRouteName => _defaultRouteNameTestValue ?? _platformDispatcher.defaultRouteName;
   String? _defaultRouteNameTestValue;
-  /// Hides the real default route name and reports the given
-  /// [defaultRouteNameTestValue] instead.
   set defaultRouteNameTestValue(String defaultRouteNameTestValue) { // ignore: avoid_setters_without_getters
     _defaultRouteNameTestValue = defaultRouteNameTestValue;
   }
 
-  /// Deletes any existing test default route name and returns to using the real
-  /// default route name.
   void clearDefaultRouteNameTestValue() {
     _defaultRouteNameTestValue = null;
   }
@@ -373,15 +310,11 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   bool get semanticsEnabled => _semanticsEnabledTestValue ?? _platformDispatcher.semanticsEnabled;
   bool? _semanticsEnabledTestValue;
-  /// Hides the real semantics enabled and reports the given
-  /// [semanticsEnabledTestValue] instead.
   set semanticsEnabledTestValue(bool semanticsEnabledTestValue) { // ignore: avoid_setters_without_getters
     _semanticsEnabledTestValue = semanticsEnabledTestValue;
     onSemanticsEnabledChanged?.call();
   }
 
-  /// Deletes any existing test semantics enabled and returns to using the real
-  /// semantics enabled.
   void clearSemanticsEnabledTestValue() {
     _semanticsEnabledTestValue = null;
     onSemanticsEnabledChanged?.call();
@@ -404,18 +337,11 @@ class TestPlatformDispatcher implements PlatformDispatcher {
   @override
   AccessibilityFeatures get accessibilityFeatures => _accessibilityFeaturesTestValue ?? _platformDispatcher.accessibilityFeatures;
   AccessibilityFeatures? _accessibilityFeaturesTestValue;
-  /// Hides the real accessibility features and reports the given
-  /// [accessibilityFeaturesTestValue] instead.
-  ///
-  /// Consider using [FakeAccessibilityFeatures] to provide specific
-  /// values for the various accessibility features under test.
   set accessibilityFeaturesTestValue(AccessibilityFeatures accessibilityFeaturesTestValue) { // ignore: avoid_setters_without_getters
     _accessibilityFeaturesTestValue = accessibilityFeaturesTestValue;
     onAccessibilityFeaturesChanged?.call();
   }
 
-  /// Deletes any existing test accessibility features and returns to using the
-  /// real accessibility features.
   void clearAccessibilityFeaturesTestValue() {
     _accessibilityFeaturesTestValue = null;
     onAccessibilityFeaturesChanged?.call();
@@ -442,12 +368,6 @@ class TestPlatformDispatcher implements PlatformDispatcher {
     _platformDispatcher.sendPlatformMessage(name, data, callback);
   }
 
-  /// Delete any test value properties that have been set on this [TestPlatformDispatcher]
-  /// and return to reporting the real [PlatformDispatcher] values for all
-  /// [PlatformDispatcher] properties.
-  ///
-  /// If desired, clearing of properties can be done on an individual basis,
-  /// e.g., [clearLocaleTestValue].
   void clearAllTestValues() {
     clearAccessibilityFeaturesTestValue();
     clearAlwaysUse24HourTestValue();
@@ -571,22 +491,6 @@ class TestPlatformDispatcher implements PlatformDispatcher {
     _platformDispatcher.requestDartPerformanceMode(mode);
   }
 
-  /// The system font family to use for this test.
-  ///
-  /// Defaults to the value provided by [PlatformDispatcher.systemFontFamily].
-  /// This can only be set in a test environment to emulate different platform
-  /// configurations. A standard [PlatformDispatcher] is not mutable from the
-  /// framework.
-  ///
-  /// Setting this value to `null` will force [systemFontFamily] to return
-  /// `null`. If you want to have the value default to the platform
-  /// [systemFontFamily], use [resetSystemFontFamily].
-  ///
-  /// See also:
-  ///
-  ///   * [PlatformDispatcher.systemFontFamily] for the standard implementation
-  ///   * [resetSystemFontFamily] to reset this value specifically
-  ///   * [clearAllTestValues] to reset all test values for this view
   @override
   String? get systemFontFamily {
     return _forceSystemFontFamilyToBeNull
@@ -603,7 +507,6 @@ class TestPlatformDispatcher implements PlatformDispatcher {
     onSystemFontFamilyChanged?.call();
   }
 
-  /// Resets [systemFontFamily] to the default for the platform.
   void resetSystemFontFamily() {
     _systemFontFamily = null;
     _forceSystemFontFamilyToBeNull = false;
@@ -618,33 +521,13 @@ class TestPlatformDispatcher implements PlatformDispatcher {
     _platformDispatcher.updateSemantics(update);
   }
 
-  /// This gives us some grace time when the dart:ui side adds something to
-  /// [PlatformDispatcher], and makes things easier when we do rolls to give
-  /// us time to catch up.
   @override
   dynamic noSuchMethod(Invocation invocation) {
     return null;
   }
 }
 
-/// A [FlutterView] that wraps another [FlutterView] and allows faking of
-/// some properties for testing purposes.
-///
-/// This class should not be instantiated manually, as
-/// it requires a backing [FlutterView] that must be produced from
-/// a [PlatformDispatcher].
-///
-/// See also:
-///
-///   * [WidgetTester.view] which allows for accessing the [TestFlutterView]
-///     for single view applications or widget testing.
-///   * [WidgetTester.viewOf] which allows for accessing the appropriate
-///     [TestFlutterView] in a given situation for multi-view applications.
-///   * [TestPlatformDispatcher], which allows for faking of platform specific
-///     functionality.
 class TestFlutterView implements FlutterView {
-  /// Constructs a [TestFlutterView] that defers all behavior to the given
-  /// [FlutterView] unless explicitly overridden for testing.
   TestFlutterView({
     required FlutterView view,
     required TestPlatformDispatcher platformDispatcher,
@@ -654,7 +537,6 @@ class TestFlutterView implements FlutterView {
     _platformDispatcher = platformDispatcher,
     _display = display;
 
-  /// The [FlutterView] backing this [TestFlutterView].
   final FlutterView _view;
 
   @override
@@ -668,43 +550,16 @@ class TestFlutterView implements FlutterView {
   @override
   int get viewId => _view.viewId;
 
-  /// The device pixel ratio to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.devicePixelRatio]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FlutterView.devicePixelRatio] for the standard implementation
-  ///   * [TestDisplay.devicePixelRatio] which will stay in sync with this value
-  ///   * [resetDevicePixelRatio] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   double get devicePixelRatio => _display._devicePixelRatio ?? _view.devicePixelRatio;
   set devicePixelRatio(double value) {
     _display.devicePixelRatio = value;
   }
 
-  /// Resets [devicePixelRatio] for this test view to the default value for this view.
-  ///
-  /// This will also reset the [devicePixelRatio] for the [TestDisplay]
-  /// that is related to this view.
   void resetDevicePixelRatio() {
     _display.resetDevicePixelRatio();
   }
 
-  /// The display features to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.displayFeatures]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FlutterView.displayFeatures] for the standard implementation
-  ///   * [resetDisplayFeatures] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   List<DisplayFeature> get displayFeatures => _displayFeatures ?? _view.displayFeatures;
   List<DisplayFeature>? _displayFeatures;
@@ -713,24 +568,11 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [displayFeatures] to the default values for this view.
   void resetDisplayFeatures() {
     _displayFeatures = null;
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The padding to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.padding]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FakeViewPadding] which is used to set this value for testing
-  ///   * [FlutterView.padding] for the standard implementation.
-  ///   * [resetPadding] to reset this value specifically.
-  ///   * [reset] to reset all test values for this view.
   @override
   FakeViewPadding get padding => _padding ?? FakeViewPadding._wrap(_view.padding);
   FakeViewPadding? _padding;
@@ -739,33 +581,11 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [padding] to the default value for this view.
   void resetPadding() {
     _padding = null;
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The physical geometry to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.physicalGeometry]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// This property and [physicalSize] are dependent on one another. If both
-  /// properties are set through their test setters, the final result will be
-  /// that [physicalGeometry] determines the location and [physicalSize]
-  /// determines the size of the [physicalGeometry] [Rect]. If only
-  /// [physicalSize] is set, the final result is that the default value of
-  /// [physicalGeometry] determines the location and [physicalSize] determines
-  /// the size of the [physicalGeometry] [Rect]. If only [physicalGeometry]
-  /// is set, it will determine both the location and size of the
-  /// [physicalGeometry] [Rect].
-  ///
-  /// See also:
-  ///
-  ///   * [FlutterView.physicalGeometry] for the standard implementation
-  ///   * [resetPhysicalGeometry] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   Rect get physicalGeometry {
     Rect value = _physicalGeometry ?? _view.physicalGeometry;
@@ -780,37 +600,12 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [physicalGeometry] to the default value for this view.
-  ///
-  /// This will also reset [physicalSize] as the values are dependent
-  /// on one another.
   void resetPhysicalGeometry() {
     _physicalGeometry = null;
     _physicalSize = null;
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The physical size to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.physicalSize]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// This property and [physicalGeometry] are dependent on one another. If both
-  /// properties are set through their test setters, the final result will be
-  /// that [physicalGeometry] determines the location and [physicalSize]
-  /// determines the size of the [physicalGeometry] [Rect]. If only
-  /// [physicalSize] is set, the final result is that the default value of
-  /// [physicalGeometry] determines the location and [physicalSize] determines
-  /// the size of the [physicalGeometry] [Rect]. If only [physicalGeometry]
-  /// is set, it will determine both the location and size of the
-  /// [physicalGeometry] [Rect].
-  ///
-  /// See also:
-  ///
-  ///   * [FlutterView.physicalSize] for the standard implementation
-  ///   * [resetPhysicalSize] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   Size get physicalSize {
     // This has to be able to default to `_view.physicalSize` as web_ui handles
@@ -824,26 +619,10 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [physicalSize] to the default value for this view.
-  ///
-  /// This will also reset [physicalGeometry] as the values are dependent
-  /// on one another.
   void resetPhysicalSize() {
     resetPhysicalGeometry();
   }
 
-  /// The system gesture insets to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.systemGestureInsets].
-  /// This can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FakeViewPadding] which is used to set this value for testing
-  ///   * [FlutterView.systemGestureInsets] for the standard implementation
-  ///   * [resetSystemGestureInsets] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   FakeViewPadding get systemGestureInsets => _systemGestureInsets ?? FakeViewPadding._wrap(_view.systemGestureInsets);
   FakeViewPadding? _systemGestureInsets;
@@ -852,24 +631,11 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [systemGestureInsets] to the default value for this view.
   void resetSystemGestureInsets() {
     _systemGestureInsets = null;
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The view insets to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.viewInsets]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FakeViewPadding] which is used to set this value for testing
-  ///   * [FlutterView.viewInsets] for the standard implementation
-  ///   * [resetViewInsets] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   FakeViewPadding get viewInsets => _viewInsets ?? FakeViewPadding._wrap(_view.viewInsets);
   FakeViewPadding? _viewInsets;
@@ -878,24 +644,11 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [viewInsets] to the default value for this view.
   void resetViewInsets() {
     _viewInsets = null;
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The view padding to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.viewPadding]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FakeViewPadding] which is used to set this value for testing
-  ///   * [FlutterView.viewPadding] for the standard implementation
-  ///   * [resetViewPadding] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   FakeViewPadding get viewPadding => _viewPadding ?? FakeViewPadding._wrap(_view.viewPadding);
   FakeViewPadding? _viewPadding;
@@ -904,23 +657,11 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [viewPadding] to the default value for this view.
   void resetViewPadding() {
     _viewPadding = null;
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The gesture settings to use for this test.
-  ///
-  /// Defaults to the value provided by [FlutterView.gestureSettings]. This
-  /// can only be set in a test environment to emulate different view
-  /// configurations. A standard [FlutterView] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [FlutterView.gestureSettings] for the standard implementation
-  ///   * [resetGestureSettings] to reset this value specifically
-  ///   * [reset] to reset all test values for this view
   @override
   GestureSettings get gestureSettings => _gestureSettings ?? _view.gestureSettings;
   GestureSettings? _gestureSettings;
@@ -929,7 +670,6 @@ class TestFlutterView implements FlutterView {
     platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [gestureSettings] to the default value for this view.
   void resetGestureSettings() {
     _gestureSettings = null;
     platformDispatcher.onMetricsChanged?.call();
@@ -945,19 +685,6 @@ class TestFlutterView implements FlutterView {
     _view.updateSemantics(update);
   }
 
-  /// Resets all test values to the defaults for this view.
-  ///
-  /// See also:
-  ///
-  ///   * [resetDevicePixelRatio] to reset [devicePixelRatio] specifically
-  ///   * [resetDisplayFeatures]  to reset [displayFeatures] specifically
-  ///   * [resetPadding] to reset [padding] specifically
-  ///   * [resetPhysicalGeometry] to reset [physicalGeometry] specifically
-  ///   * [resetPhysicalSize] to reset [physicalSize] specifically
-  ///   * [resetSystemGestureInsets] to reset [systemGestureInsets] specifically
-  ///   * [resetViewInsets] to reset [viewInsets] specifically
-  ///   * [resetViewPadding] to reset [viewPadding] specifically
-  ///   * [resetGestureSettings] to reset [gestureSettings] specifically
   void reset() {
     resetDevicePixelRatio();
     resetDisplayFeatures();
@@ -970,22 +697,13 @@ class TestFlutterView implements FlutterView {
     resetGestureSettings();
   }
 
-  /// This gives us some grace time when the dart:ui side adds something to
-  /// [FlutterView], and makes things easier when we do rolls to give
-  /// us time to catch up.
   @override
   dynamic noSuchMethod(Invocation invocation) {
     return null;
   }
 }
 
-/// A version of [Display] that can be modified to allow for testing various
-/// use cases.
-///
-/// Updates to the [TestDisplay] will be surfaced through
-/// [PlatformDispatcher.onMetricsChanged].
 class TestDisplay implements Display {
-  /// Creates a new [TestDisplay] backed by the given [Display].
   TestDisplay(TestPlatformDispatcher platformDispatcher, Display display)
   : _platformDispatcher = platformDispatcher, _display = display;
 
@@ -995,18 +713,6 @@ class TestDisplay implements Display {
   @override
   int get id => _display.id;
 
-  /// The device pixel ratio to use for this test.
-  ///
-  /// Defaults to the value provided by [Display.devicePixelRatio]. This
-  /// can only be set in a test environment to emulate different display
-  /// configurations. A standard [Display] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [Display.devicePixelRatio] for the standard implementation
-  ///   * [TestFlutterView.devicePixelRatio] which will stay in sync with this value
-  ///   * [resetDevicePixelRatio] to reset this value specifically
-  ///   * [reset] to reset all test values for this display
   @override
   double get devicePixelRatio => _devicePixelRatio ?? _display.devicePixelRatio;
   double? _devicePixelRatio;
@@ -1015,26 +721,11 @@ class TestDisplay implements Display {
     _platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [devicePixelRatio] to the default value for this display.
-  ///
-  /// This will also reset the [devicePixelRatio] for any [TestFlutterView]s
-  /// that are related to this display.
   void resetDevicePixelRatio() {
     _devicePixelRatio = null;
     _platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The refresh rate to use for this test.
-  ///
-  /// Defaults to the value provided by [Display.refreshRate]. This
-  /// can only be set in a test environment to emulate different display
-  /// configurations. A standard [Display] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [Display.refreshRate] for the standard implementation
-  ///   * [resetRefreshRate] to reset this value specifically
-  ///   * [reset] to reset all test values for this display
   @override
   double get refreshRate => _refreshRate ?? _display.refreshRate;
   double? _refreshRate;
@@ -1043,23 +734,11 @@ class TestDisplay implements Display {
     _platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [refreshRate] to the default value for this display.
   void resetRefreshRate() {
     _refreshRate = null;
     _platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// The size of the [Display] to use for this test.
-  ///
-  /// Defaults to the value provided by [Display.refreshRate]. This
-  /// can only be set in a test environment to emulate different display
-  /// configurations. A standard [Display] is not mutable from the framework.
-  ///
-  /// See also:
-  ///
-  ///   * [Display.refreshRate] for the standard implementation
-  ///   * [resetRefreshRate] to reset this value specifically
-  ///   * [reset] to reset all test values for this display
   @override
   Size get size => _size ?? _display.size;
   Size? _size;
@@ -1068,27 +747,17 @@ class TestDisplay implements Display {
     _platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets [size] to the default value for this display.
   void resetSize() {
     _size = null;
     _platformDispatcher.onMetricsChanged?.call();
   }
 
-  /// Resets all values on this [TestDisplay].
-  ///
-  /// See also:
-  ///   * [resetDevicePixelRatio] to reset [devicePixelRatio] specifically
-  ///   * [resetRefreshRate] to reset [refreshRate] specifically
-  ///   * [resetSize] to reset [size] specifically
   void reset() {
     resetDevicePixelRatio();
     resetRefreshRate();
     resetSize();
   }
 
-  /// This gives us some grace time when the dart:ui side adds something to
-  /// [Display], and makes things easier when we do rolls to give
-  /// us time to catch up.
   @override
   dynamic noSuchMethod(Invocation invocation) {
     return null;
@@ -1131,64 +800,12 @@ class _UnsupportedDisplay implements TestDisplay {
   }
 }
 
-/// Deprecated. Will be removed in a future version of Flutter.
-///
-/// This class has been deprecated to prepare for Flutter's upcoming support
-/// for multiple views and multiple windows.
-///
-/// [SingletonFlutterWindow] that wraps another [SingletonFlutterWindow] and
-/// allows faking of some properties for testing purposes.
-///
-/// Tests for certain widgets, e.g., [MaterialApp], might require faking certain
-/// properties of a [SingletonFlutterWindow]. [TestWindow] facilitates the
-/// faking of these properties by overriding the properties of a real
-/// [SingletonFlutterWindow] with desired fake values. The binding used within
-/// tests, [TestWidgetsFlutterBinding], contains a [TestWindow] that is used by
-/// all tests.
-///
-/// ## Sample Code
-///
-/// A test can utilize a [TestWindow] in the following way:
-///
-/// ```dart
-/// testWidgets('your test name here', (WidgetTester tester) async {
-///   // Retrieve the TestWidgetsFlutterBinding.
-///   final TestWidgetsFlutterBinding testBinding = tester.binding;
-///
-///   // Fake the desired properties of the TestWindow. All code running
-///   // within this test will perceive the following fake text scale
-///   // factor as the real text scale factor of the window.
-///   testBinding.platformDispatcher.textScaleFactorTestValue = 2.5;
-///
-///   // Test code that depends on text scale factor here.
-/// });
-/// ```
-///
-/// The [TestWidgetsFlutterBinding] is recreated for each test and
-/// therefore any fake values defined in one test will not persist
-/// to the next.
-///
-/// If a test needs to override a real [SingletonFlutterWindow] property and
-/// then later return to using the real [SingletonFlutterWindow] property,
-/// [TestWindow] provides methods to clear each individual test value, e.g.,
-/// [clearDevicePixelRatioTestValue].
-///
-/// To clear all fake test values in a [TestWindow], consider using
-/// [clearAllTestValues].
-///
-/// See also:
-///
-///   * [TestPlatformDispatcher], which wraps a [PlatformDispatcher] for
-///     testing purposes and is used by the [platformDispatcher] property of
-///     this class.
 @Deprecated(
   'Use TestPlatformDispatcher (via WidgetTester.platformDispatcher) or TestFlutterView (via WidgetTester.view) instead. '
   'Deprecated to prepare for the upcoming multi-window support. '
   'This feature was deprecated after v3.9.0-0.1.pre.'
 )
 class TestWindow implements SingletonFlutterWindow {
-  /// Constructs a [TestWindow] that defers all behavior to the given
-  /// [SingletonFlutterWindow] unless explicitly overridden for test purposes.
   @Deprecated(
     'Use TestPlatformDispatcher (via WidgetTester.platformDispatcher) or TestFlutterView (via WidgetTester.view) instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1198,19 +815,6 @@ class TestWindow implements SingletonFlutterWindow {
     required SingletonFlutterWindow window,
   }) : platformDispatcher = TestPlatformDispatcher(platformDispatcher: window.platformDispatcher);
 
-  /// Constructs a [TestWindow] that defers all behavior to the given
-  /// [TestPlatformDispatcher] and its [TestPlatformDispatcher.implicitView].
-  ///
-  /// This class will not work when multiple views are present. If multiple view
-  /// support is needed use [WidgetTester.platformDispatcher] and
-  /// [WidgetTester.viewOf].
-  ///
-  /// See also:
-  ///
-  ///   * [TestPlatformDispatcher] which allows faking of platform-wide values for
-  ///     testing purposes.
-  ///   * [TestFlutterView] which allows faking of view-specific values for
-  ///     testing purposes.
   @Deprecated(
     'Use TestPlatformDispatcher (via WidgetTester.platformDispatcher) or TestFlutterView (via WidgetTester.view) instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1242,8 +846,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   double get devicePixelRatio => _view.devicePixelRatio;
-  /// Hides the real device pixel ratio and reports the given [devicePixelRatio]
-  /// instead.
   @Deprecated(
     'Use WidgetTester.view.devicePixelRatio instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1253,8 +855,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.devicePixelRatio = devicePixelRatio;
   }
 
-  /// Deletes any existing test device pixel ratio and returns to using the real
-  /// device pixel ratio.
   @Deprecated(
     'Use WidgetTester.view.resetDevicePixelRatio() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1271,8 +871,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   Size get physicalSize => _view.physicalSize;
-  /// Hides the real physical size and reports the given [physicalSizeTestValue]
-  /// instead.
   @Deprecated(
     'Use WidgetTester.view.physicalSize instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1282,8 +880,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.physicalSize = physicalSizeTestValue;
   }
 
-  /// Deletes any existing test physical size and returns to using the real
-  /// physical size.
   @Deprecated(
     'Use WidgetTester.view.resetPhysicalSize() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1300,10 +896,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   ViewPadding get viewInsets => _view.viewInsets;
-  /// Hides the real view insets and reports the given [viewInsetsTestValue]
-  /// instead.
-  ///
-  /// Use [FakeViewPadding] to set this value for testing.
   @Deprecated(
     'Use WidgetTester.view.viewInsets instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1313,8 +905,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.viewInsets = value is FakeViewPadding ? value : FakeViewPadding._wrap(value);
   }
 
-  /// Deletes any existing test view insets and returns to using the real view
-  /// insets.
   @Deprecated(
     'Use WidgetTester.view.resetViewInsets() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1331,10 +921,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   ViewPadding get viewPadding => _view.viewPadding;
-  /// Hides the real view padding and reports the given [paddingTestValue]
-  /// instead.
-  ///
-  /// Use [FakeViewPadding] to set this value for testing.
   @Deprecated(
     'Use WidgetTester.view.viewPadding instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1344,8 +930,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.viewPadding = value is FakeViewPadding ? value : FakeViewPadding._wrap(value);
   }
 
-  /// Deletes any existing test view padding and returns to using the real
-  /// viewPadding.
   @Deprecated(
     'Use WidgetTester.view.resetViewPadding() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1362,9 +946,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   ViewPadding get padding => _view.padding;
-  /// Hides the real padding and reports the given [paddingTestValue] instead.
-  ///
-  /// Use [FakeViewPadding] to set this value for testing.
   @Deprecated(
     'Use WidgetTester.view.padding instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1374,7 +955,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.padding = value is FakeViewPadding ? value : FakeViewPadding._wrap(value);
   }
 
-  /// Deletes any existing test padding and returns to using the real padding.
   @Deprecated(
     'Use WidgetTester.view.resetPadding() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1391,7 +971,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   GestureSettings get gestureSettings => _view.gestureSettings;
-  /// Hides the real gesture settings and reports the given [gestureSettingsTestValue] instead.
   @Deprecated(
     'Use WidgetTester.view.gestureSettings instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1401,7 +980,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.gestureSettings = gestureSettingsTestValue;
   }
 
-  /// Deletes any existing test gesture settings and returns to using the real gesture settings.
   @Deprecated(
     'Use WidgetTester.view.resetGestureSettings() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1418,7 +996,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   List<DisplayFeature> get displayFeatures => _view.displayFeatures;
-  /// Hides the real displayFeatures and reports the given [displayFeaturesTestValue] instead.
   @Deprecated(
     'Use WidgetTester.view.displayFeatures instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1428,7 +1005,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.displayFeatures = displayFeaturesTestValue;
   }
 
-  /// Deletes any existing test padding and returns to using the real padding.
   @Deprecated(
     'Use WidgetTester.view.resetDisplayFeatures() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1445,10 +1021,6 @@ class TestWindow implements SingletonFlutterWindow {
   )
   @override
   ViewPadding get systemGestureInsets => _view.systemGestureInsets;
-  /// Hides the real system gesture insets and reports the given
-  /// [systemGestureInsetsTestValue] instead.
-  ///
-  /// Use [FakeViewPadding] to set this value for testing.
   @Deprecated(
     'Use WidgetTester.view.systemGestureInsets instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1458,7 +1030,6 @@ class TestWindow implements SingletonFlutterWindow {
     _view.systemGestureInsets = value is FakeViewPadding ? value : FakeViewPadding._wrap(value);
   }
 
-  /// Deletes any existing test system gesture insets and returns to using the real system gesture insets.
   @Deprecated(
     'Use WidgetTester.view.resetSystemGestureInsets() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1787,14 +1358,6 @@ class TestWindow implements SingletonFlutterWindow {
     platformDispatcher.sendPlatformMessage(name, data, callback);
   }
 
-  /// Delete any test value properties that have been set on this [TestWindow]
-  /// as well as its [platformDispatcher].
-  ///
-  /// After calling this, the real [SingletonFlutterWindow] and
-  /// [PlatformDispatcher] values are reported again.
-  ///
-  /// If desired, clearing of properties can be done on an individual basis,
-  /// e.g., [clearDevicePixelRatioTestValue].
   @Deprecated(
     'Use WidgetTester.platformDispatcher.clearAllTestValues() and WidgetTester.view.reset() instead. '
     'Deprecated to prepare for the upcoming multi-window support. '
@@ -1903,9 +1466,6 @@ class TestWindow implements SingletonFlutterWindow {
   @override
   int get viewId => _view.viewId;
 
-  /// This gives us some grace time when the dart:ui side adds something to
-  /// [SingletonFlutterWindow], and makes things easier when we do rolls to give
-  /// us time to catch up.
   @override
   dynamic noSuchMethod(Invocation invocation) {
     return null;

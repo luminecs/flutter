@@ -199,9 +199,6 @@ void main() {
   });
 }
 
-/// A Flutter Tester device.
-///
-/// Uses a mock HttpServer. We don't want to bind random ports in our CI hosts.
 class TestFlutterTesterDevice extends FlutterTesterTestDevice {
   TestFlutterTesterDevice({
     required super.platform,

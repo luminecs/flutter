@@ -8,7 +8,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/dart2js.dart';
 
-/// Expected sequence of method calls.
 const List<String> callChain = <String>['baz', 'bar', 'foo'];
 
 final List<StackFrame> expectedProfileStackFrames = callChain.map<StackFrame>((String method) {
@@ -62,9 +61,6 @@ const List<StackFrame> expectedDebugStackFrames = <StackFrame>[
   ),
 ];
 
-/// Tests that we do not crash while parsing Web stack traces.
-///
-/// This test is run in debug, profile, and release modes.
 void main() {
   final StringBuffer output = StringBuffer();
   try {
@@ -135,8 +131,6 @@ void _checkStackFrameContents(List<StackFrame> parsedFrames, List<StackFrame> ex
   }
 }
 
-/// Use custom equality to ignore [StackFrame.source], which is not important
-/// for the purposes of this test.
 class StackFrameEquality implements Equality<StackFrame> {
   @override
   bool equals(StackFrame e1, StackFrame e2) {

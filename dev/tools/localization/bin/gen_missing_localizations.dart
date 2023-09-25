@@ -68,8 +68,6 @@ bool intentionallyOmitted(String key, Map<String, dynamic> bundle) {
   return attribute is Map && attribute.containsKey('notUsed');
 }
 
-/// Whether `key` corresponds to one of the plural variations of a key with
-/// the same prefix and suffix "Other".
 bool isPluralVariation(String key, Map<String, dynamic> bundle) {
   final Match? pluralMatch = kPluralRegexp.firstMatch(key);
   if (pluralMatch == null) {

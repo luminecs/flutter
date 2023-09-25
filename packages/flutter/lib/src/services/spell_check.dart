@@ -7,32 +7,12 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'system_channels.dart';
 
-/// A data structure representing a range of misspelled text and the suggested
-/// replacements for this range.
-///
-/// For example, one [SuggestionSpan] of the
-/// [List<SuggestionSpan>] suggestions of the [SpellCheckResults] corresponding
-/// to "Hello, wrold!" may be:
-/// ```dart
-/// SuggestionSpan suggestionSpan =
-///   const SuggestionSpan(
-///     TextRange(start: 7, end: 12),
-///     <String>['word', 'world', 'old'],
-/// );
-/// ```
 @immutable
 class SuggestionSpan {
-  /// Creates a span representing a misspelled range of text and the replacements
-  /// suggested by a spell checker.
-  ///
-  /// The [range] and replacement [suggestions] must all not
-  /// be null.
   const SuggestionSpan(this.range, this.suggestions);
 
-  /// The misspelled range of text.
   final TextRange range;
 
-  /// The alternate suggestions for the misspelled range of text.
   final List<String> suggestions;
 
   @override
@@ -51,22 +31,12 @@ class SuggestionSpan {
   int get hashCode => Object.hash(range.start, range.end, Object.hashAll(suggestions));
 }
 
-/// A data structure grouping together the [SuggestionSpan]s and related text of
-/// results returned by a spell checker.
 @immutable
 class SpellCheckResults {
-  /// Creates results based off those received by spell checking some text input.
   const SpellCheckResults(this.spellCheckedText, this.suggestionSpans);
 
-  /// The text that the [suggestionSpans] correspond to.
   final String spellCheckedText;
 
-  /// The spell check results of the [spellCheckedText].
-  ///
-  /// See also:
-  ///
-  ///  * [SuggestionSpan], the ranges of misspelled text and corresponding
-  ///    replacement suggestions.
   final List<SuggestionSpan> suggestionSpans;
 
   @override
@@ -84,50 +54,21 @@ class SpellCheckResults {
   int get hashCode => Object.hash(spellCheckedText, Object.hashAll(suggestionSpans));
 }
 
-/// Determines how spell check results are received for text input.
 abstract class SpellCheckService {
-  /// Facilitates a spell check request.
-  ///
-  /// Returns a [Future] that resolves with a [List] of [SuggestionSpan]s for
-  /// all misspelled words in the given [String] for the given [Locale].
   Future<List<SuggestionSpan>?> fetchSpellCheckSuggestions(
     Locale locale, String text
   );
 }
 
-/// The service used by default to fetch spell check results for text input.
-///
-/// Any widget may use this service to spell check text by calling
-/// `fetchSpellCheckSuggestions(locale, text)` with an instance of this class.
-/// This is currently only supported by Android and iOS.
-///
-/// See also:
-///
-///  * [SpellCheckService], the service that this implements that may be
-///    overridden for use by [EditableText].
-///  * [EditableText], which may use this service to fetch results.
 class DefaultSpellCheckService implements SpellCheckService {
-  /// Creates service to spell check text input by default via communication
-  /// over the spell check [MethodChannel].
   DefaultSpellCheckService() {
     spellCheckChannel = SystemChannels.spellCheck;
   }
 
-  /// The last received results from the shell side.
   SpellCheckResults? lastSavedResults;
 
-  /// The channel used to communicate with the shell side to complete spell
-  /// check requests.
   late MethodChannel spellCheckChannel;
 
-  /// Merges two lists of spell check [SuggestionSpan]s.
-  ///
-  /// Used in cases where the text has not changed, but the spell check results
-  /// received from the shell side have. This case is caused by IMEs (GBoard,
-  /// for instance) that ignore the composing region when spell checking text.
-  ///
-  /// Assumes that the lists provided as parameters are sorted by range start
-  /// and that both list of [SuggestionSpan]s apply to the same text.
   static List<SuggestionSpan> mergeResults(
       List<SuggestionSpan> oldResults, List<SuggestionSpan> newResults) {
     final List<SuggestionSpan> mergedResults = <SuggestionSpan>[];

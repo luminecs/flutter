@@ -24,21 +24,11 @@ import 'macos/native_assets.dart';
 import 'macos/native_assets_host.dart';
 import 'resident_runner.dart';
 
-/// Programmatic API to be used by Dart launchers to invoke native builds.
-///
-/// It enables mocking `package:native_assets_builder` package.
-/// It also enables mocking native toolchain discovery via [cCompilerConfig].
 abstract class NativeAssetsBuildRunner {
-  /// Whether the project has a `.dart_tools/package_config.json`.
-  ///
-  /// If there is no package config, [packagesWithNativeAssets], [build], and
-  /// [dryRun] must not be invoked.
   Future<bool> hasPackageConfig();
 
-  /// All packages in the transitive dependencies that have a `build.dart`.
   Future<List<Package>> packagesWithNativeAssets();
 
-  /// Runs all [packagesWithNativeAssets] `build.dart` in dry run.
   Future<DryRunResult> dryRun({
     required bool includeParentEnvironment,
     required LinkModePreference linkModePreference,
@@ -46,7 +36,6 @@ abstract class NativeAssetsBuildRunner {
     required Uri workingDirectory,
   });
 
-  /// Runs all [packagesWithNativeAssets] `build.dart`.
   Future<BuildResult> build({
     required bool includeParentEnvironment,
     required BuildMode buildMode,
@@ -58,11 +47,9 @@ abstract class NativeAssetsBuildRunner {
     IOSSdk? targetIOSSdk,
   });
 
-  /// The C compiler config to use for compilation.
   Future<CCompilerConfig> get cCompilerConfig;
 }
 
-/// Uses `package:native_assets_builder` for its implementation.
 class NativeAssetsBuildRunnerImpl implements NativeAssetsBuildRunner {
   NativeAssetsBuildRunnerImpl(
     this.projectUri,
@@ -178,7 +165,6 @@ class NativeAssetsBuildRunnerImpl implements NativeAssetsBuildRunner {
   }();
 }
 
-/// Write [assets] to `native_assets.yaml` in [yamlParentDirectory].
 Future<Uri> writeNativeAssetsYaml(
   Iterable<Asset> assets,
   Uri yamlParentDirectory,
@@ -196,7 +182,6 @@ Future<Uri> writeNativeAssetsYaml(
   return nativeAssetsFile.uri;
 }
 
-/// Select the native asset build mode for a given Flutter build mode.
 BuildMode nativeAssetsBuildMode(build_info.BuildMode buildMode) {
   switch (buildMode) {
     case build_info.BuildMode.debug:
@@ -208,12 +193,6 @@ BuildMode nativeAssetsBuildMode(build_info.BuildMode buildMode) {
   }
 }
 
-/// Checks whether this project does not yet have a package config file.
-///
-/// A project has no package config when `pub get` has not yet been run.
-///
-/// Native asset builds cannot be run without a package config. If there is
-/// no package config, leave a logging trace about that.
 Future<bool> hasNoPackageConfig(NativeAssetsBuildRunner buildRunner) async {
   final bool packageConfigExists = await buildRunner.hasPackageConfig();
   if (!packageConfigExists) {
@@ -222,11 +201,6 @@ Future<bool> hasNoPackageConfig(NativeAssetsBuildRunner buildRunner) async {
   return !packageConfigExists;
 }
 
-/// Checks that if native assets is disabled, none of the dependencies declare
-/// native assets.
-///
-/// If any of the dependencies have native assets, but native assets are
-/// disabled, exits the tool.
 Future<bool> isDisabledAndNoNativeAssets(NativeAssetsBuildRunner buildRunner) async {
   if (featureFlags.isNativeAssetsEnabled) {
     return false;
@@ -242,10 +216,6 @@ Future<bool> isDisabledAndNoNativeAssets(NativeAssetsBuildRunner buildRunner) as
   );
 }
 
-/// Ensures that either this project has no native assets, or that native assets
-/// are supported on that operating system.
-///
-/// Exits the tool if the above condition is not satisfied.
 Future<void> ensureNoNativeAssetsOrOsIsSupported(
   Uri workingDirectory,
   String os,
@@ -267,13 +237,6 @@ Future<void> ensureNoNativeAssetsOrOsIsSupported(
   );
 }
 
-/// Ensure all native assets have a linkmode declared to be dynamic loading.
-///
-/// In JIT, the link mode must always be dynamic linking.
-/// In AOT, the static linking has not yet been implemented in Dart:
-/// https://github.com/dart-lang/sdk/issues/49418.
-///
-/// Therefore, ensure all `build.dart` scripts return only dynamic libraries.
 void ensureNoLinkModeStatic(List<Asset> nativeAssets) {
   final Iterable<Asset> staticAssets = nativeAssets.whereLinkMode(LinkMode.static);
   if (staticAssets.isNotEmpty) {
@@ -286,18 +249,11 @@ void ensureNoLinkModeStatic(List<Asset> nativeAssets) {
   }
 }
 
-/// This should be the same for different archs, debug/release, etc.
-/// It should work for all macOS.
 Uri nativeAssetsBuildUri(Uri projectUri, OS os) {
   final String buildDir = build_info.getBuildDirectory();
   return projectUri.resolve('$buildDir/native_assets/$os/');
 }
 
-/// Gets the native asset id to dylib mapping to embed in the kernel file.
-///
-/// Run hot compiles a kernel file that is pushed to the device after hot
-/// restart. We need to embed the native assets mapping in order to access
-/// native assets after hot restart.
 Future<Uri?> dryRunNativeAssets({
   required Uri projectUri,
   required FileSystem fileSystem,
@@ -380,9 +336,6 @@ Future<Uri?> dryRunNativeAssets({
   return nativeAssetsYaml;
 }
 
-/// Dry run the native builds for multiple OSes.
-///
-/// Needed for `flutter run -d all`.
 Future<Uri?> dryRunNativeAssetsMultipeOSes({
   required NativeAssetsBuildRunner buildRunner,
   required Uri projectUri,
@@ -409,8 +362,6 @@ Future<Uri?> dryRunNativeAssetsMultipeOSes({
   return nativeAssetsUri;
 }
 
-/// With `flutter run -d all` we need a place to store the native assets
-/// mapping for multiple OSes combined.
 Uri buildUriMultiple(Uri projectUri) {
   final String buildDir = build_info.getBuildDirectory();
   return projectUri.resolve('$buildDir/native_assets/multiple/');

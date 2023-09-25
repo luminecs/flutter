@@ -21,47 +21,16 @@ import 'tap_region.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// The type of the [RawAutocomplete] callback which computes the list of
-/// optional completions for the widget's field, based on the text the user has
-/// entered so far.
-///
-/// See also:
-///
-///   * [RawAutocomplete.optionsBuilder], which is of this type.
 typedef AutocompleteOptionsBuilder<T extends Object> = FutureOr<Iterable<T>> Function(TextEditingValue textEditingValue);
 
-/// The type of the callback used by the [RawAutocomplete] widget to indicate
-/// that the user has selected an option.
-///
-/// See also:
-///
-///   * [RawAutocomplete.onSelected], which is of this type.
 typedef AutocompleteOnSelected<T extends Object> = void Function(T option);
 
-/// The type of the [RawAutocomplete] callback which returns a [Widget] that
-/// displays the specified [options] and calls [onSelected] if the user
-/// selects an option.
-///
-/// The returned widget from this callback will be wrapped in an
-/// [AutocompleteHighlightedOption] inherited widget. This will allow
-/// this callback to determine which option is currently highlighted for
-/// keyboard navigation.
-///
-/// See also:
-///
-///   * [RawAutocomplete.optionsViewBuilder], which is of this type.
 typedef AutocompleteOptionsViewBuilder<T extends Object> = Widget Function(
   BuildContext context,
   AutocompleteOnSelected<T> onSelected,
   Iterable<T> options,
 );
 
-/// The type of the Autocomplete callback which returns the widget that
-/// contains the input [TextField] or [TextFormField].
-///
-/// See also:
-///
-///   * [RawAutocomplete.fieldViewBuilder], which is of this type.
 typedef AutocompleteFieldViewBuilder = Widget Function(
   BuildContext context,
   TextEditingController textEditingController,
@@ -69,84 +38,16 @@ typedef AutocompleteFieldViewBuilder = Widget Function(
   VoidCallback onFieldSubmitted,
 );
 
-/// The type of the [RawAutocomplete] callback that converts an option value to
-/// a string which can be displayed in the widget's options menu.
-///
-/// See also:
-///
-///   * [RawAutocomplete.displayStringForOption], which is of this type.
 typedef AutocompleteOptionToString<T extends Object> = String Function(T option);
 
-/// A direction in which to open the options-view overlay.
-///
-/// See also:
-///
-///  * [RawAutocomplete.optionsViewOpenDirection], which is of this type.
-///  * [RawAutocomplete.optionsViewBuilder] to specify how to build the
-///    selectable-options widget.
-///  * [RawAutocomplete.fieldViewBuilder] to optionally specify how to build the
-///    corresponding field widget.
 enum OptionsViewOpenDirection {
-  /// Open upward.
-  ///
-  /// The bottom edge of the options view will align with the top edge
-  /// of the text field built by [RawAutocomplete.fieldViewBuilder].
   up,
 
-  /// Open downward.
-  ///
-  /// The top edge of the options view will align with the bottom edge
-  /// of the text field built by [RawAutocomplete.fieldViewBuilder].
   down,
 }
 
 // TODO(justinmc): Mention AutocompleteCupertino when it is implemented.
-/// {@template flutter.widgets.RawAutocomplete.RawAutocomplete}
-/// A widget for helping the user make a selection by entering some text and
-/// choosing from among a list of options.
-///
-/// The user's text input is received in a field built with the
-/// [fieldViewBuilder] parameter. The options to be displayed are determined
-/// using [optionsBuilder] and rendered with [optionsViewBuilder].
-/// {@endtemplate}
-///
-/// This is a core framework widget with very basic UI.
-///
-/// {@tool dartpad}
-/// This example shows how to create a very basic autocomplete widget using the
-/// [fieldViewBuilder] and [optionsViewBuilder] parameters.
-///
-/// ** See code in examples/api/lib/widgets/autocomplete/raw_autocomplete.0.dart **
-/// {@end-tool}
-///
-/// The type parameter T represents the type of the options. Most commonly this
-/// is a String, as in the example above. However, it's also possible to use
-/// another type with a `toString` method, or a custom [displayStringForOption].
-/// Options will be compared using `==`, so it may be beneficial to override
-/// [Object.==] and [Object.hashCode] for custom types.
-///
-/// {@tool dartpad}
-/// This example is similar to the previous example, but it uses a custom T data
-/// type instead of directly using String.
-///
-/// ** See code in examples/api/lib/widgets/autocomplete/raw_autocomplete.1.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows the use of RawAutocomplete in a form.
-///
-/// ** See code in examples/api/lib/widgets/autocomplete/raw_autocomplete.2.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [Autocomplete], which is a Material-styled implementation that is based
-/// on RawAutocomplete.
 class RawAutocomplete<T extends Object> extends StatefulWidget {
-  /// Create an instance of RawAutocomplete.
-  ///
-  /// [displayStringForOption], [optionsBuilder] and [optionsViewBuilder] must
-  /// not be null.
   const RawAutocomplete({
     super.key,
     required this.optionsViewBuilder,
@@ -169,129 +70,29 @@ class RawAutocomplete<T extends Object> extends StatefulWidget {
          'textEditingController and initialValue cannot be simultaneously defined.',
        );
 
-  /// {@template flutter.widgets.RawAutocomplete.fieldViewBuilder}
-  /// Builds the field whose input is used to get the options.
-  ///
-  /// Pass the provided [TextEditingController] to the field built here so that
-  /// RawAutocomplete can listen for changes.
-  /// {@endtemplate}
-  ///
-  /// If this parameter is null, then a [SizedBox.shrink] is built instead.
-  /// For how that pattern can be useful, see [textEditingController].
   final AutocompleteFieldViewBuilder? fieldViewBuilder;
 
-  /// The [FocusNode] that is used for the text field.
-  ///
-  /// {@template flutter.widgets.RawAutocomplete.split}
-  /// The main purpose of this parameter is to allow the use of a separate text
-  /// field located in another part of the widget tree instead of the text
-  /// field built by [fieldViewBuilder]. For example, it may be desirable to
-  /// place the text field in the AppBar and the options below in the main body.
-  ///
-  /// When following this pattern, [fieldViewBuilder] can be omitted,
-  /// so that a text field is not drawn where it would normally be.
-  /// A separate text field can be created elsewhere, and a
-  /// FocusNode and TextEditingController can be passed both to that text field
-  /// and to RawAutocomplete.
-  ///
-  /// {@tool dartpad}
-  /// This examples shows how to create an autocomplete widget with the text
-  /// field in the AppBar and the results in the main body of the app.
-  ///
-  /// ** See code in examples/api/lib/widgets/autocomplete/raw_autocomplete.focus_node.0.dart **
-  /// {@end-tool}
-  /// {@endtemplate}
-  ///
-  /// If this parameter is not null, then [textEditingController] must also be
-  /// not null.
   final FocusNode? focusNode;
 
-  /// {@template flutter.widgets.RawAutocomplete.optionsViewBuilder}
-  /// Builds the selectable options widgets from a list of options objects.
-  ///
-  /// The options are displayed floating below or above the field using a
-  /// [CompositedTransformFollower] inside of an [Overlay], not at the same
-  /// place in the widget tree as [RawAutocomplete]. To control whether it opens
-  /// upward or downward, use [optionsViewOpenDirection].
-  ///
-  /// In order to track which item is highlighted by keyboard navigation, the
-  /// resulting options will be wrapped in an inherited
-  /// [AutocompleteHighlightedOption] widget.
-  /// Inside this callback, the index of the highlighted option can be obtained
-  /// from [AutocompleteHighlightedOption.of] to display the highlighted option
-  /// with a visual highlight to indicate it will be the option selected from
-  /// the keyboard.
-  ///
-  /// {@endtemplate}
   final AutocompleteOptionsViewBuilder<T> optionsViewBuilder;
 
-  /// {@template flutter.widgets.RawAutocomplete.optionsViewOpenDirection}
-  /// The direction in which to open the options-view overlay.
-  ///
-  /// Defaults to [OptionsViewOpenDirection.down].
-  /// {@endtemplate}
   final OptionsViewOpenDirection optionsViewOpenDirection;
 
-  /// {@template flutter.widgets.RawAutocomplete.displayStringForOption}
-  /// Returns the string to display in the field when the option is selected.
-  ///
-  /// This is useful when using a custom T type and the string to display is
-  /// different than the string to search by.
-  ///
-  /// If not provided, will use `option.toString()`.
-  /// {@endtemplate}
   final AutocompleteOptionToString<T> displayStringForOption;
 
-  /// {@template flutter.widgets.RawAutocomplete.onSelected}
-  /// Called when an option is selected by the user.
-  /// {@endtemplate}
   final AutocompleteOnSelected<T>? onSelected;
 
-  /// {@template flutter.widgets.RawAutocomplete.optionsBuilder}
-  /// A function that returns the current selectable options objects given the
-  /// current TextEditingValue.
-  /// {@endtemplate}
   final AutocompleteOptionsBuilder<T> optionsBuilder;
 
-  /// The [TextEditingController] that is used for the text field.
-  ///
-  /// {@macro flutter.widgets.RawAutocomplete.split}
-  ///
-  /// If this parameter is not null, then [focusNode] must also be not null.
   final TextEditingController? textEditingController;
 
-  /// {@template flutter.widgets.RawAutocomplete.initialValue}
-  /// The initial value to use for the text field.
-  /// {@endtemplate}
-  ///
-  /// Setting the initial value does not notify [textEditingController]'s
-  /// listeners, and thus will not cause the options UI to appear.
-  ///
-  /// This parameter is ignored if [textEditingController] is defined.
   final TextEditingValue? initialValue;
 
-  /// Calls [AutocompleteFieldViewBuilder]'s onFieldSubmitted callback for the
-  /// RawAutocomplete widget indicated by the given [GlobalKey].
-  ///
-  /// This is not typically used unless a custom field is implemented instead of
-  /// using [fieldViewBuilder]. In the typical case, the onFieldSubmitted
-  /// callback is passed via the [AutocompleteFieldViewBuilder] signature. When
-  /// not using fieldViewBuilder, the same callback can be called by using this
-  /// static method.
-  ///
-  /// See also:
-  ///
-  ///  * [focusNode] and [textEditingController], which contain a code example
-  ///    showing how to create a separate field outside of fieldViewBuilder.
   static void onFieldSubmitted<T extends Object>(GlobalKey key) {
     final _RawAutocompleteState<T> rawAutocomplete = key.currentState! as _RawAutocompleteState<T>;
     rawAutocomplete._onFieldSubmitted();
   }
 
-  /// The default way to convert an option to a string in
-  /// [displayStringForOption].
-  ///
-  /// Uses the `toString` method of the given `option`.
   static String defaultStringForOption(Object? option) {
     return option.toString();
   }
@@ -611,52 +412,21 @@ class _AutocompleteCallbackAction<T extends Intent> extends CallbackAction<T> {
   bool consumesKey(covariant T intent) => enabled;
 }
 
-/// An [Intent] to highlight the previous option in the autocomplete list.
 class AutocompletePreviousOptionIntent extends Intent {
-  /// Creates an instance of AutocompletePreviousOptionIntent.
   const AutocompletePreviousOptionIntent();
 }
 
-/// An [Intent] to highlight the next option in the autocomplete list.
 class AutocompleteNextOptionIntent extends Intent {
-  /// Creates an instance of AutocompleteNextOptionIntent.
   const AutocompleteNextOptionIntent();
 }
 
-/// An inherited widget used to indicate which autocomplete option should be
-/// highlighted for keyboard navigation.
-///
-/// The `RawAutoComplete` widget will wrap the options view generated by the
-/// `optionsViewBuilder` with this widget to provide the highlighted option's
-/// index to the builder.
-///
-/// In the builder callback the index of the highlighted option can be obtained
-/// by using the static [of] method:
-///
-/// ```dart
-/// int highlightedIndex = AutocompleteHighlightedOption.of(context);
-/// ```
-///
-/// which can then be used to tell which option should be given a visual
-/// indication that will be the option selected with the keyboard.
 class AutocompleteHighlightedOption extends InheritedNotifier<ValueNotifier<int>> {
-  /// Create an instance of AutocompleteHighlightedOption inherited widget.
   const AutocompleteHighlightedOption({
     super.key,
     required ValueNotifier<int> highlightIndexNotifier,
     required super.child,
   }) : super(notifier: highlightIndexNotifier);
 
-  /// Returns the index of the highlighted option from the closest
-  /// [AutocompleteHighlightedOption] ancestor.
-  ///
-  /// If there is no ancestor, it returns 0.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// int highlightedIndex = AutocompleteHighlightedOption.of(context);
-  /// ```
   static int of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AutocompleteHighlightedOption>()?.notifier?.value ?? 0;
   }

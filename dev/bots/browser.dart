@@ -10,15 +10,6 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_static/shelf_static.dart';
 
-/// Runs Chrome, opens the given `appUrl`, and returns the result reported by the
-/// app.
-///
-/// The app is served from the `appDirectory`. Typically, the app is built
-/// using `flutter build web` and served from `build/web`.
-///
-/// The launched app is expected to report the result by sending an HTTP POST
-/// request to "/test-result" containing result data as plain text body of the
-/// request. This function has no opinion about what that string contains.
 Future<String> evalTestAppInChrome({
   required String appUrl,
   required String appDirectory,

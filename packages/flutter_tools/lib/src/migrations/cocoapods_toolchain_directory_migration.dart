@@ -8,12 +8,6 @@ import '../base/version.dart';
 import '../ios/xcodeproj.dart';
 import '../xcode_project.dart';
 
-/// Starting in Xcode 15, when building macOS, DT_TOOLCHAIN_DIR cannot be used
-/// to evaluate LD_RUNPATH_SEARCH_PATHS or LIBRARY_SEARCH_PATHS. `xcodebuild`
-/// error message recommend using TOOLCHAIN_DIR instead.
-///
-/// This has been fixed upstream in CocoaPods, but migrate a copy of their
-/// workaround so users don't need to update.
 class CocoaPodsToolchainDirectoryMigration extends ProjectMigrator {
   CocoaPodsToolchainDirectoryMigration(
     XcodeBasedProject project,

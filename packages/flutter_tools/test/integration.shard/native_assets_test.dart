@@ -42,11 +42,6 @@ final List<String> add2appBuildSubcommands = <String>[
   ],
 ];
 
-/// The build modes to target for each flutter command that supports passing
-/// a build mode.
-///
-/// The flow of compiling kernel as well as bundling dylibs can differ based on
-/// build mode, so we should cover this.
 const List<String> buildModes = <String>[
   'debug',
   'profile',
@@ -275,8 +270,6 @@ void main() {
   }
 }
 
-/// For `flutter build` we can't easily test whether running the app works.
-/// Check that we have the dylibs in the app.
 void expectDylibIsBundledMacOS(Directory appDirectory, String buildMode) {
   final Directory appBundle = appDirectory.childDirectory('build/$hostOs/Build/Products/${buildMode.upperCaseFirst()}/$exampleAppName.app');
   expect(appBundle, exists);
@@ -295,9 +288,6 @@ void expectDylibIsBundledIos(Directory appDirectory, String buildMode) {
   expect(dylib, exists);
 }
 
-/// Checks that dylibs are bundled.
-///
-/// Sample path: build/linux/x64/release/bundle/lib/libmy_package.so
 void expectDylibIsBundledLinux(Directory appDirectory, String buildMode) {
   // Linux does not support cross compilation, so always only check current architecture.
   final String architecture = Architecture.current.dartPlatform;
@@ -309,8 +299,6 @@ void expectDylibIsBundledLinux(Directory appDirectory, String buildMode) {
   expect(dylib, exists);
 }
 
-/// For `flutter build` we can't easily test whether running the app works.
-/// Check that we have the dylibs in the app.
 void expectDylibIsBundledWithFrameworks(Directory appDirectory, String buildMode, String os) {
   final Directory frameworksFolder = appDirectory.childDirectory('build/$os/framework/${buildMode.upperCaseFirst()}');
   expect(frameworksFolder, exists);
@@ -318,9 +306,6 @@ void expectDylibIsBundledWithFrameworks(Directory appDirectory, String buildMode
   expect(dylib, exists);
 }
 
-/// Check that the native assets are built with the C Compiler that Flutter uses.
-///
-/// This inspects the build configuration to see if the C compiler was configured.
 void expectCCompilerIsConfigured(Directory appDirectory) {
   final Directory nativeAssetsBuilderDir = appDirectory.childDirectory('.dart_tool/native_assets_builder/');
   for (final Directory subDir in nativeAssetsBuilderDir.listSync().whereType<Directory>()) {

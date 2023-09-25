@@ -13,13 +13,6 @@ import '../convert.dart';
 import '../device.dart';
 import '../macos/xcode.dart';
 
-/// A wrapper around the `devicectl` command line tool.
-///
-/// CoreDevice is a device connectivity stack introduced in Xcode 15. Devices
-/// with iOS 17 or greater are CoreDevices.
-///
-/// `devicectl` (CoreDevice Device Control) is an Xcode CLI tool used for
-/// interacting with CoreDevices.
 class IOSCoreDeviceControl {
   IOSCoreDeviceControl({
     required Logger logger,
@@ -36,14 +29,8 @@ class IOSCoreDeviceControl {
   final Xcode _xcode;
   final FileSystem _fileSystem;
 
-  /// When the `--timeout` flag is used with `devicectl`, it must be at
-  /// least 5 seconds. If lower than 5 seconds, `devicectl` will error and not
-  /// run the command.
   static const int _minimumTimeoutInSeconds = 5;
 
-  /// Executes `devicectl` command to get list of devices. The command will
-  /// likely complete before [timeout] is reached. If [timeout] is reached,
-  /// the command will be stopped as a failure.
   Future<List<Object?>> _listCoreDevices({
     Duration timeout = const Duration(seconds: _minimumTimeoutInSeconds),
   }) async {
@@ -119,9 +106,6 @@ class IOSCoreDeviceControl {
     return devices;
   }
 
-  /// Executes `devicectl` command to get list of apps installed on the device.
-  /// If [bundleId] is provided, it will only return apps matching the bundle
-  /// identifier exactly.
   Future<List<Object?>> _listInstalledApps({
     required String deviceId,
     String? bundleId,
@@ -258,8 +242,6 @@ class IOSCoreDeviceControl {
     }
   }
 
-  /// Uninstalls the app from the device. Will succeed even if the app is not
-  /// currently installed on the device.
   Future<bool> uninstallApp({
     required String deviceId,
     required String bundleId,
@@ -373,21 +355,6 @@ class IOSCoreDevice {
     required this.visibilityClass,
   });
 
-  /// Parse JSON from `devicectl list devices --json-output` while it's in beta preview mode.
-  ///
-  /// Example:
-  /// {
-  ///   "capabilities" : [
-  ///   ],
-  ///   "connectionProperties" : {
-  ///   },
-  ///   "deviceProperties" : {
-  ///   },
-  ///   "hardwareProperties" : {
-  ///   },
-  ///   "identifier" : "123456BB5-AEDE-7A22-B890-1234567890DD",
-  ///   "visibilityClass" : "default"
-  /// }
   factory IOSCoreDevice.fromBetaJson(
     Map<String, Object?> data, {
     required Logger logger,
@@ -472,20 +439,6 @@ class _IOSCoreDeviceCapability {
     required this.name,
   });
 
-  /// Parse `capabilities` section of JSON from `devicectl list devices --json-output`
-  /// while it's in beta preview mode.
-  ///
-  /// Example:
-  /// "capabilities" : [
-  ///   {
-  ///     "featureIdentifier" : "com.apple.coredevice.feature.spawnexecutable",
-  ///     "name" : "Spawn Executable"
-  ///   },
-  ///   {
-  ///     "featureIdentifier" : "com.apple.coredevice.feature.launchapplication",
-  ///     "name" : "Launch Application"
-  ///   }
-  /// ]
   factory _IOSCoreDeviceCapability.fromBetaJson(Map<String, Object?> data) {
     return _IOSCoreDeviceCapability._(
       featureIdentifier: data['featureIdentifier']?.toString(),
@@ -511,29 +464,6 @@ class _IOSCoreDeviceConnectionProperties {
     required this.tunnelTransportProtocol,
   });
 
-  /// Parse `connectionProperties` section of JSON from `devicectl list devices --json-output`
-  /// while it's in beta preview mode.
-  ///
-  /// Example:
-  /// "connectionProperties" : {
-  ///   "authenticationType" : "manualPairing",
-  ///   "isMobileDeviceOnly" : false,
-  ///   "lastConnectionDate" : "2023-06-15T15:29:00.082Z",
-  ///   "localHostnames" : [
-  ///     "iPadName.coredevice.local",
-  ///     "00001234-0001234A3C03401E.coredevice.local",
-  ///     "12345BB5-AEDE-4A22-B653-6037262550DD.coredevice.local"
-  ///   ],
-  ///   "pairingState" : "paired",
-  ///   "potentialHostnames" : [
-  ///     "00001234-0001234A3C03401E.coredevice.local",
-  ///     "12345BB5-AEDE-4A22-B653-6037262550DD.coredevice.local"
-  ///   ],
-  ///   "transportType" : "wired",
-  ///   "tunnelIPAddress" : "fdf1:23c4:cd56::1",
-  ///   "tunnelState" : "connected",
-  ///   "tunnelTransportProtocol" : "tcp"
-  /// }
   factory _IOSCoreDeviceConnectionProperties.fromBetaJson(
     Map<String, Object?> data, {
     required Logger logger,
@@ -599,23 +529,6 @@ class IOSCoreDeviceProperties {
     required this.screenViewingURL,
   });
 
-  /// Parse `deviceProperties` section of JSON from `devicectl list devices --json-output`
-  /// while it's in beta preview mode.
-  ///
-  /// Example:
-  /// "deviceProperties" : {
-  ///   "bootedFromSnapshot" : true,
-  ///   "bootedSnapshotName" : "com.apple.os.update-B5336980824124F599FD39FE91016493A74331B09F475250BB010B276FE2439E3DE3537349A3A957D3FF2A4B623B4ECC",
-  ///   "bootState" : "booted",
-  ///   "ddiServicesAvailable" : true,
-  ///   "developerModeStatus" : "enabled",
-  ///   "hasInternalOSBuild" : false,
-  ///   "name" : "iPadName",
-  ///   "osBuildUpdate" : "21A5248v",
-  ///   "osVersionNumber" : "17.0",
-  ///   "rootFileSystemIsWritable" : false,
-  ///   "screenViewingURL" : "coredevice-devices:/viewDeviceByUUID?uuid=123456BB5-AEDE-7A22-B890-1234567890DD"
-  /// }
   factory IOSCoreDeviceProperties.fromBetaJson(Map<String, Object?> data) {
     return IOSCoreDeviceProperties._(
       bootedFromSnapshot: data['bootedFromSnapshot'] is bool? ? data['bootedFromSnapshot'] as bool? : null,
@@ -662,43 +575,6 @@ class _IOSCoreDeviceHardwareProperties {
     required this.udid,
   });
 
-  /// Parse `hardwareProperties` section of JSON from `devicectl list devices --json-output`
-  /// while it's in beta preview mode.
-  ///
-  /// Example:
-  /// "hardwareProperties" : {
-  ///   "cpuType" : {
-  ///     "name" : "arm64e",
-  ///     "subType" : 2,
-  ///     "type" : 16777228
-  ///   },
-  ///   "deviceType" : "iPad",
-  ///   "ecid" : 12345678903408542,
-  ///   "hardwareModel" : "J617AP",
-  ///   "internalStorageCapacity" : 128000000000,
-  ///   "marketingName" : "iPad Pro (11-inch) (4th generation)\"",
-  ///   "platform" : "iOS",
-  ///   "productType" : "iPad14,3",
-  ///   "serialNumber" : "HC123DHCQV",
-  ///   "supportedCPUTypes" : [
-  ///     {
-  ///       "name" : "arm64e",
-  ///       "subType" : 2,
-  ///       "type" : 16777228
-  ///     },
-  ///     {
-  ///       "name" : "arm64",
-  ///       "subType" : 0,
-  ///       "type" : 16777228
-  ///     }
-  ///   ],
-  ///   "supportedDeviceFamilies" : [
-  ///     1,
-  ///     2
-  ///   ],
-  ///   "thinningProductType" : "iPad14,3-A",
-  ///   "udid" : "00001234-0001234A3C03401E"
-  /// }
   factory _IOSCoreDeviceHardwareProperties.fromBetaJson(
     Map<String, Object?> data, {
     required Logger logger,
@@ -769,15 +645,6 @@ class _IOSCoreDeviceCPUType {
     this.cpuType,
   });
 
-  /// Parse `hardwareProperties.cpuType` and `hardwareProperties.supportedCPUTypes`
-  /// sections of JSON from `devicectl list devices --json-output` while it's in beta preview mode.
-  ///
-  /// Example:
-  /// "cpuType" : {
-  ///   "name" : "arm64e",
-  ///   "subType" : 2,
-  ///   "type" : 16777228
-  /// }
   factory _IOSCoreDeviceCPUType.fromBetaJson(Map<String, Object?> data) {
     return _IOSCoreDeviceCPUType._(
       name: data['name']?.toString(),
@@ -807,23 +674,6 @@ class IOSCoreDeviceInstalledApp {
     required this.version,
   });
 
-  /// Parse JSON from `devicectl device info apps --json-output` while it's in
-  /// beta preview mode.
-  ///
-  /// Example:
-  /// {
-  ///   "appClip" : false,
-  ///   "builtByDeveloper" : true,
-  ///   "bundleIdentifier" : "com.example.flutterApp",
-  ///   "bundleVersion" : "1",
-  ///   "defaultApp" : false,
-  ///   "hidden" : false,
-  ///   "internalApp" : false,
-  ///   "name" : "Flutter App",
-  ///   "removable" : true,
-  ///   "url" : "file:///private/var/containers/Bundle/Application/12345E6A-7F89-0C12-345E-F6A7E890CFF1/Runner.app/",
-  ///   "version" : "1.0.0"
-  /// }
   factory IOSCoreDeviceInstalledApp.fromBetaJson(Map<String, Object?> data) {
     return IOSCoreDeviceInstalledApp._(
       appClip: data['appClip'] is bool? ? data['appClip'] as bool? : null,

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for the [DropdownMenuEntry] `labelWidget` property.
 
 enum ColorItem {
   blue('Blue', Colors.blue),

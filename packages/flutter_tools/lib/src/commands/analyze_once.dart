@@ -26,7 +26,6 @@ class AnalyzeOnce extends AnalyzeBase {
         repoPackages: repoPackages,
       );
 
-  /// The working directory for testing analysis using dartanalyzer.
   final Directory? workingDirectory;
 
   @override

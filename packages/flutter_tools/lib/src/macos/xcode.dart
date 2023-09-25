@@ -22,23 +22,14 @@ import '../ios/xcodeproj.dart';
 
 Version get xcodeRequiredVersion => Version(14, null, null);
 
-/// Diverging this number from the minimum required version will provide a doctor
-/// warning, not error, that users should upgrade Xcode.
 Version get xcodeRecommendedVersion => xcodeRequiredVersion;
 
-/// SDK name passed to `xcrun --sdk`. Corresponds to undocumented Xcode
-/// SUPPORTED_PLATFORMS values.
-///
-/// Usage: xcrun [options] <tool name> ... arguments ...
-/// ...
-/// --sdk <sdk name>            find the tool for the given SDK name.
 String getSDKNameForIOSEnvironmentType(EnvironmentType environmentType) {
   return (environmentType == EnvironmentType.simulator)
       ? 'iphonesimulator'
       : 'iphoneos';
 }
 
-/// A utility class for interacting with Xcode command line tools.
 class Xcode {
   Xcode({
     required Platform platform,
@@ -57,10 +48,6 @@ class Xcode {
             ProcessUtils(logger: logger, processManager: processManager),
         _logger = logger;
 
-  /// Create an [Xcode] for testing.
-  ///
-  /// Defaults to a memory file system, fake platform,
-  /// buffer logger, and test [XcodeProjectInterpreter].
   @visibleForTesting
   factory Xcode.test({
     required ProcessManager processManager,
@@ -127,8 +114,6 @@ class Xcode {
     return pathToXcode.substring(0, index + 4);
   }
 
-  /// Path to script to automate debugging through Xcode. Used in xcode_debug.dart.
-  /// Located in this file to make it easily overrideable in google3.
   String get xcodeAutomationScriptPath {
     final String flutterRoot = _flutterRoot ?? Cache.flutterRoot!;
     final String flutterToolsAbsolutePath = _fileSystem.path.join(
@@ -153,7 +138,6 @@ class Xcode {
   String? get versionText => _xcodeProjectInterpreter.versionText;
 
   bool? _eulaSigned;
-  /// Has the EULA been signed?
   bool get eulaSigned {
     if (_eulaSigned == null) {
       try {
@@ -176,7 +160,6 @@ class Xcode {
 
   bool? _isSimctlInstalled;
 
-  /// Verifies that simctl is installed by trying to run it.
   bool get isSimctlInstalled {
     if (_isSimctlInstalled == null) {
       try {
@@ -195,8 +178,6 @@ class Xcode {
 
   bool? _isDevicectlInstalled;
 
-  /// Verifies that `devicectl` is installed by checking Xcode version and trying
-  /// to run it. `devicectl` is made available in Xcode 15.
   bool get isDevicectlInstalled {
     if (_isDevicectlInstalled == null) {
       try {
@@ -231,7 +212,6 @@ class Xcode {
     return version >= xcodeRecommendedVersion;
   }
 
-  /// See [XcodeProjectInterpreter.xcrunCommand].
   List<String> xcrunCommand() => _xcodeProjectInterpreter.xcrunCommand();
 
   Future<RunResult> cc(List<String> args) => _run('cc', args);
@@ -268,7 +248,6 @@ class Xcode {
     return _fileSystem.directory(appPath).existsSync() ? appPath : null;
   }
 
-  /// Gets the version number of the platform for the selected SDK.
   Future<Version?> sdkPlatformVersion(EnvironmentType environmentType) async {
     final RunResult runResult = await _processUtils.run(
       <String>[...xcrunCommand(), '--sdk', getSDKNameForIOSEnvironmentType(environmentType), '--show-sdk-platform-version'],

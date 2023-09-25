@@ -3866,8 +3866,6 @@ Future<void> _runFlutterTest(Directory workingDir, { String? target }) async {
   expect(exec.exitCode, 0);
 }
 
-/// A ProcessManager that invokes a real process manager, but keeps
-/// track of all commands sent to it.
 class LoggingProcessManager extends LocalProcessManager {
   List<List<String>> commands = <List<String>>[];
 

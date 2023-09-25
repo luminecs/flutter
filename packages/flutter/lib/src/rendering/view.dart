@@ -14,28 +14,17 @@ import 'debug.dart';
 import 'layer.dart';
 import 'object.dart';
 
-/// The layout constraints for the root render object.
 @immutable
 class ViewConfiguration {
-  /// Creates a view configuration.
-  ///
-  /// By default, the view has zero [size] and a [devicePixelRatio] of 1.0.
   const ViewConfiguration({
     this.size = Size.zero,
     this.devicePixelRatio = 1.0,
   });
 
-  /// The size of the output surface.
   final Size size;
 
-  /// The pixel density of the output surface.
   final double devicePixelRatio;
 
-  /// Creates a transformation matrix that applies the [devicePixelRatio].
-  ///
-  /// The matrix translates points from the local coordinate system of the
-  /// app (in logical pixels) to the global coordinate system of the
-  /// [FlutterView] (in physical pixels).
   Matrix4 toMatrix() {
     return Matrix4.diagonal3Values(devicePixelRatio, devicePixelRatio, 1.0);
   }
@@ -57,21 +46,7 @@ class ViewConfiguration {
   String toString() => '$size at ${debugFormatDouble(devicePixelRatio)}x';
 }
 
-/// The root of the render tree.
-///
-/// The view represents the total output surface of the render tree and handles
-/// bootstrapping the rendering pipeline. The view has a unique child
-/// [RenderBox], which is required to fill the entire output surface.
 class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox> {
-  /// Creates the root of the render tree.
-  ///
-  /// Typically created by the binding (e.g., [RendererBinding]).
-  ///
-  /// Providing a [configuration] is optional, but a configuration must be set
-  /// before calling [prepareInitialFrame]. This decouples creating the
-  /// [RenderView] object from configuring it. Typically, the object is created
-  /// by the [View] widget and configured by the [RendererBinding] when the
-  /// [RenderView] is registered with it by the [View] widget.
   RenderView({
     RenderBox? child,
     ViewConfiguration? configuration,
@@ -81,22 +56,9 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     this.child = child;
   }
 
-  /// The current layout size of the view.
   Size get size => _size;
   Size _size = Size.zero;
 
-  /// The constraints used for the root layout.
-  ///
-  /// Typically, this configuration is set by the [RendererBinding], when the
-  /// [RenderView] is registered with it. It will also update the configuration
-  /// if necessary. Therefore, if used in conjunction with the [RendererBinding]
-  /// this property must not be set manually as the [RendererBinding] will just
-  /// override it.
-  ///
-  /// For tests that want to change the size of the view, set
-  /// [TestFlutterView.physicalSize] on the appropriate [TestFlutterView]
-  /// (typically [WidgetTester.view]) instead of setting a configuration
-  /// directly on the [RenderView].
   ViewConfiguration get configuration => _configuration!;
   ViewConfiguration? _configuration;
   set configuration(ViewConfiguration value) {
@@ -116,47 +78,13 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     markNeedsLayout();
   }
 
-  /// Whether a [configuration] has been set.
   bool get hasConfiguration => _configuration != null;
 
-  /// The [FlutterView] into which this [RenderView] will render.
   ui.FlutterView get flutterView => _view;
   final ui.FlutterView _view;
 
-  /// Whether Flutter should automatically compute the desired system UI.
-  ///
-  /// When this setting is enabled, Flutter will hit-test the layer tree at the
-  /// top and bottom of the screen on each frame looking for an
-  /// [AnnotatedRegionLayer] with an instance of a [SystemUiOverlayStyle]. The
-  /// hit-test result from the top of the screen provides the status bar settings
-  /// and the hit-test result from the bottom of the screen provides the system
-  /// nav bar settings.
-  ///
-  /// If there is no [AnnotatedRegionLayer] on the bottom, the hit-test result
-  /// from the top provides the system nav bar settings. If there is no
-  /// [AnnotatedRegionLayer] on the top, the hit-test result from the bottom
-  /// provides the system status bar settings.
-  ///
-  /// Setting this to false does not cause previous automatic adjustments to be
-  /// reset, nor does setting it to true cause the app to update immediately.
-  ///
-  /// If you want to imperatively set the system ui style instead, it is
-  /// recommended that [automaticSystemUiAdjustment] is set to false.
-  ///
-  /// See also:
-  ///
-  ///  * [AnnotatedRegion], for placing [SystemUiOverlayStyle] in the layer tree.
-  ///  * [SystemChrome.setSystemUIOverlayStyle], for imperatively setting the system ui style.
   bool automaticSystemUiAdjustment = true;
 
-  /// Bootstrap the rendering pipeline by preparing the first frame.
-  ///
-  /// This should only be called once, and must be called before changing
-  /// [configuration]. It is typically called immediately after calling the
-  /// constructor.
-  ///
-  /// This does not actually schedule the first frame. Call
-  /// [PipelineOwner.requestVisualUpdate] on [owner] to do that.
   void prepareInitialFrame() {
     assert(owner != null);
     assert(_rootTransform == null);
@@ -196,16 +124,6 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     }
   }
 
-  /// Determines the set of render objects located at the given position.
-  ///
-  /// Returns true if the given point is contained in this render object or one
-  /// of its descendants. Adds any render objects that contain the point to the
-  /// given hit test result.
-  ///
-  /// The [position] argument is in the coordinate system of the render view,
-  /// which is to say, in logical pixels. This is not necessarily the same
-  /// coordinate system as that expected by the root [Layer], which will
-  /// normally be in physical (device) pixels.
   bool hitTest(HitTestResult result, { required Offset position }) {
     if (child != null) {
       child!.hitTest(BoxHitTestResult.wrap(result), position: position);
@@ -240,9 +158,6 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     super.applyPaintTransform(child, transform);
   }
 
-  /// Uploads the composited layer tree to the engine.
-  ///
-  /// Actually causes the output of the rendering pipeline to appear on screen.
   void compositeFrame() {
     if (!kReleaseMode) {
       FlutterTimeline.startSync('COMPOSITING');
@@ -268,11 +183,6 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     }
   }
 
-  /// Sends the provided [SemanticsUpdate] to the [FlutterView] associated with
-  /// this [RenderView].
-  ///
-  /// A [SemanticsUpdate] is produced by a [SemanticsOwner] during the
-  /// [EnginePhase.flushSemantics] phase.
   void updateSemantics(ui.SemanticsUpdate update) {
     _view.updateSemantics(update);
   }
@@ -403,19 +313,6 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
 
   static final List<DebugPaintCallback> _debugPaintCallbacks = <DebugPaintCallback>[];
 
-  /// Registers a [DebugPaintCallback] that is called every time a [RenderView]
-  /// repaints in debug mode.
-  ///
-  /// The callback may paint a debug overlay on top of the content of the
-  /// [RenderView] provided to the callback. Callbacks are invoked in the
-  /// order they were registered in.
-  ///
-  /// Neither registering a callback nor the continued presence of a callback
-  /// changes how often [RenderView]s are repainted. It is up to the owner of
-  /// the callback to call [markNeedsPaint] on any [RenderView] for which it
-  /// wants to update the painted overlay.
-  ///
-  /// Does nothing in release mode.
   static void debugAddPaintCallback(DebugPaintCallback callback) {
     assert(() {
       _debugPaintCallbacks.add(callback);
@@ -423,14 +320,6 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     }());
   }
 
-  /// Removes a callback registered with [debugAddPaintCallback].
-  ///
-  /// It does not schedule a frame to repaint the [RenderView]s without the
-  /// overlay painted by the removed callback. It is up to the owner of the
-  /// callback to call [markNeedsPaint] on the relevant [RenderView]s to
-  /// repaint them without the overlay.
-  ///
-  /// Does nothing in release mode.
   static void debugRemovePaintCallback(DebugPaintCallback callback) {
     assert(() {
       _debugPaintCallbacks.remove(callback);
@@ -439,8 +328,4 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   }
 }
 
-/// A callback for painting a debug overlay on top of the provided [RenderView].
-///
-/// Used by [RenderView.debugAddPaintCallback] and
-/// [RenderView.debugRemovePaintCallback].
 typedef DebugPaintCallback = void Function(PaintingContext context, Offset offset, RenderView renderView);

@@ -16,20 +16,16 @@ void main() {
     final NavigationRail navigationRailWidget =
         tester.firstWidget(find.byType(NavigationRail));
 
-    /// NavigationRailDestinations must be rendered
     expect(find.text('First'), findsOneWidget);
     expect(find.text('Second'), findsOneWidget);
     expect(find.text('Third'), findsOneWidget);
 
-    /// initial index must be zero
     expect(navigationRailWidget.selectedIndex, 0);
 
-    /// switch to second tab
     await tester.tap(find.text('Second'));
     await tester.pumpAndSettle();
     expect(find.text('selectedIndex: 1'), findsOneWidget);
 
-    /// switch to third tab
     await tester.tap(find.text('Third'));
     await tester.pumpAndSettle();
     expect(find.text('selectedIndex: 2'), findsOneWidget);

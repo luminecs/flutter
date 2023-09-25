@@ -12,20 +12,7 @@ import 'focus_manager.dart';
 import 'framework.dart';
 import 'text_editing_intents.dart';
 
-/// Provides undo/redo capabilities for a [ValueNotifier].
-///
-/// Listens to [value] and saves relevant values for undoing/redoing. The
-/// cadence at which values are saved is a best approximation of the native
-/// behaviors of a number of hardware keyboard on Flutter's desktop
-/// platforms, as there are subtle differences between each of the platforms.
-///
-/// Listens to keyboard undo/redo shortcuts and calls [onTriggered] when a
-/// shortcut is triggered that would affect the state of the [value].
-///
-/// The [child] must manage focus on the [focusNode]. For example, using a
-/// [TextField] or [Focus] widget.
 class UndoHistory<T> extends StatefulWidget {
-  /// Creates an instance of [UndoHistory].
   const UndoHistory({
     super.key,
     this.shouldChangeUndoStack,
@@ -36,47 +23,22 @@ class UndoHistory<T> extends StatefulWidget {
     required this.child,
   });
 
-  /// The value to track over time.
   final ValueNotifier<T> value;
 
-  /// Called when checking whether a value change should be pushed onto
-  /// the undo stack.
   final bool Function(T? oldValue, T newValue)? shouldChangeUndoStack;
 
-  /// Called when an undo or redo causes a state change.
-  ///
-  /// If the state would still be the same before and after the undo/redo, this
-  /// will not be called. For example, receiving a redo when there is nothing
-  /// to redo will not call this method.
-  ///
-  /// Changes to the [value] while this method is running will not be recorded
-  /// on the undo stack. For example, a [TextInputFormatter] may change the value
-  /// from what was on the undo stack, but this new value will not be recorded,
-  /// as that would wipe out the redo history.
   final void Function(T value) onTriggered;
 
-  /// The [FocusNode] that will be used to listen for focus to set the initial
-  /// undo state for the element.
   final FocusNode focusNode;
 
-  /// {@template flutter.widgets.undoHistory.controller}
-  /// Controls the undo state.
-  ///
-  /// If null, this widget will create its own [UndoHistoryController].
-  /// {@endtemplate}
   final UndoHistoryController? controller;
 
-  /// The child widget of [UndoHistory].
   final Widget child;
 
   @override
   State<UndoHistory<T>> createState() => UndoHistoryState<T>();
 }
 
-/// State for a [UndoHistory].
-///
-/// Provides [undo], [redo], [canUndo], and [canRedo] for programmatic access
-/// to the undo state for custom undo and redo UI implementations.
 @visibleForTesting
 class UndoHistoryState<T> extends State<UndoHistory<T>> with UndoManagerClient {
   final _UndoStack<T> _stack = _UndoStack<T>();
@@ -264,22 +226,14 @@ class UndoHistoryState<T> extends State<UndoHistory<T>> with UndoManagerClient {
   }
 }
 
-/// Represents whether the current undo stack can undo or redo.
 @immutable
 class UndoHistoryValue {
-  /// Creates a value for whether the current undo stack can undo or redo.
-  ///
-  /// The [canUndo] and [canRedo] arguments must have a value, but default to
-  /// false.
   const UndoHistoryValue({this.canUndo = false, this.canRedo = false});
 
-  /// A value corresponding to an undo stack that can neither undo nor redo.
   static const UndoHistoryValue empty = UndoHistoryValue();
 
-  /// Whether the current undo stack can perform an undo operation.
   final bool canUndo;
 
-  /// Whether the current undo stack can perform a redo operation.
   final bool canRedo;
 
   @override
@@ -300,38 +254,13 @@ class UndoHistoryValue {
   );
 }
 
-/// A controller for the undo history, for example for an editable text field.
-///
-/// Whenever a change happens to the underlying value that the [UndoHistory]
-/// widget tracks, that widget updates the [value] and the controller notifies
-/// it's listeners. Listeners can then read the canUndo and canRedo
-/// properties of the value to discover whether [undo] or [redo] are possible.
-///
-/// The controller also has [undo] and [redo] methods to modify the undo
-/// history.
-///
-/// {@tool dartpad}
-/// This example creates a [TextField] with an [UndoHistoryController]
-/// which provides undo and redo buttons.
-///
-/// ** See code in examples/api/lib/widgets/undo_history/undo_history_controller.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-/// * [EditableText], which uses the [UndoHistory] widget and allows
-///   control of the underlying history using an [UndoHistoryController].
 class UndoHistoryController extends ValueNotifier<UndoHistoryValue> {
-  /// Creates a controller for an [UndoHistory] widget.
   UndoHistoryController({UndoHistoryValue? value}) : super(value ?? UndoHistoryValue.empty);
 
-  /// Notifies listeners that [undo] has been called.
   final ChangeNotifier onUndo = ChangeNotifier();
 
-  /// Notifies listeners that [redo] has been called.
   final ChangeNotifier onRedo = ChangeNotifier();
 
-  /// Reverts the value on the stack to the previous value.
   void undo() {
     if (!value.canUndo) {
       return;
@@ -340,7 +269,6 @@ class UndoHistoryController extends ValueNotifier<UndoHistoryValue> {
     onUndo.notifyListeners();
   }
 
-  /// Updates the value on the stack to the next value.
   void redo() {
     if (!value.canRedo) {
       return;
@@ -357,10 +285,7 @@ class UndoHistoryController extends ValueNotifier<UndoHistoryValue> {
   }
 }
 
-/// A data structure representing a chronological list of states that can be
-/// undone and redone.
 class _UndoStack<T> {
-  /// Creates an instance of [_UndoStack].
   _UndoStack();
 
   final List<T> _list = <T>[];
@@ -368,16 +293,12 @@ class _UndoStack<T> {
   // The index of the current value, or -1 if the list is empty.
   int _index = -1;
 
-  /// Returns the current value of the stack.
   T? get currentValue => _list.isEmpty ? null : _list[_index];
 
   bool get canUndo => _list.isNotEmpty && _index > 0;
 
   bool get canRedo => _list.isNotEmpty && _index < _list.length - 1;
 
-  /// Add a new state change to the stack.
-  ///
-  /// Pushing identical objects will not create multiple entries.
   void push(T value) {
     if (_list.isEmpty) {
       _index = 0;
@@ -400,12 +321,6 @@ class _UndoStack<T> {
     _index = _list.length - 1;
   }
 
-  /// Returns the current value after an undo operation.
-  ///
-  /// An undo operation moves the current value to the previously pushed value,
-  /// if any.
-  ///
-  /// Iff the stack is completely empty, then returns null.
   T? undo() {
     if (_list.isEmpty) {
       return null;
@@ -420,12 +335,6 @@ class _UndoStack<T> {
     return currentValue;
   }
 
-  /// Returns the current value after a redo operation.
-  ///
-  /// A redo operation moves the current value to the value that was last
-  /// undone, if any.
-  ///
-  /// Iff the stack is completely empty, then returns null.
   T? redo() {
     if (_list.isEmpty) {
       return null;
@@ -440,7 +349,6 @@ class _UndoStack<T> {
     return currentValue;
   }
 
-  /// Remove everything from the stack.
   void clear() {
     _list.clear();
     _index = -1;
@@ -452,16 +360,10 @@ class _UndoStack<T> {
   }
 }
 
-/// A function that can be throttled with the throttle function.
 typedef _Throttleable<T> = void Function(T currentArg);
 
-/// A function that has been throttled by [_throttle].
 typedef _Throttled<T> = Timer Function(T currentArg);
 
-/// Returns a _Throttled that will call through to the given function only a
-/// maximum of once per duration.
-///
-/// Only works for functions that take exactly one argument and return void.
 _Throttled<T> _throttle<T>({
   required Duration duration,
   required _Throttleable<T> function,

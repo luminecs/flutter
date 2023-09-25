@@ -9,14 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The speed, in pixels per second, that the drag gestures should end with.
 const double speed = 1500.0;
 
-/// The number of down drags and the number of up drags. The total number of
-/// gestures is twice this number.
 const int maxIterations = 4;
 
-/// The time that is allowed between gestures for the fling effect to settle.
 const Duration pauses = Duration(milliseconds: 500);
 
 Future<void> main() async {
@@ -33,9 +29,6 @@ Future<void> main() async {
   ));
   await SchedulerBinding.instance.endOfFrame;
 
-  /// Wait 50ms to allow the raster thread to actually put up the frame. (The
-  /// endOfFrame future ends when we send the data to the engine, before
-  /// the raster thread has had a chance to rasterize, etc.)
   await Future<void>.delayed(const Duration(milliseconds: 50));
   debugPrint('==== MEMORY BENCHMARK ==== READY ====');
 

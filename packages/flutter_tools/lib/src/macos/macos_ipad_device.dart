@@ -17,9 +17,6 @@ import '../device.dart';
 import '../ios/ios_workflow.dart';
 import '../project.dart';
 
-/// Represents an ARM macOS target that can run iPad apps.
-///
-/// https://developer.apple.com/documentation/apple-silicon/running-your-ios-apps-on-macos
 class MacOSDesignedForIPadDevice extends DesktopDevice {
   MacOSDesignedForIPadDevice({
     required ProcessManager processManager,
@@ -113,13 +110,10 @@ class MacOSDesignedForIPadDevices extends PollingDeviceDiscovery {
   @override
   bool get supportsPlatform => _platform.isMacOS;
 
-  /// iOS (not desktop macOS) development is enabled, the host is an ARM Mac,
-  /// and discovery is allowed for this command.
   @override
   bool get canListAnything =>
       _iosWorkflow.canListDevices && _operatingSystemUtils.hostPlatform == HostPlatform.darwin_arm64 && allowDiscovery;
 
-  /// Set to show ARM macOS as an iOS device target.
   static bool allowDiscovery = false;
 
   @override

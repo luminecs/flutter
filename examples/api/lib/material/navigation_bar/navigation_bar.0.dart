@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigationBar].
 
 void main() => runApp(const NavigationBarApp());
 
@@ -62,7 +61,6 @@ class _NavigationExampleState extends State<NavigationExample> {
         ],
       ),
       body: <Widget>[
-        /// Home page
         Card(
           shadowColor: Colors.transparent,
           margin: const EdgeInsets.all(8.0),
@@ -75,7 +73,6 @@ class _NavigationExampleState extends State<NavigationExample> {
             ),
           ),
         ),
-        /// Notifications page
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -97,7 +94,6 @@ class _NavigationExampleState extends State<NavigationExample> {
             ],
           ),
         ),
-        /// Messages page
         ListView.builder(
           reverse: true,
           itemCount: 2,

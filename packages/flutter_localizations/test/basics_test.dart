@@ -71,8 +71,6 @@ void main() {
   });
 }
 
-/// A localizations delegate that does not contain any useful data, and is only
-/// used to trigger didChangeDependencies upon locale change.
 class _DummyLocalizationsDelegate extends LocalizationsDelegate<DummyLocalizations> {
   @override
   Future<DummyLocalizations> load(Locale locale) async => DummyLocalizations();

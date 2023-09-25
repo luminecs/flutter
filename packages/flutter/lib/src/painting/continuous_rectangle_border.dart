@@ -11,38 +11,12 @@ import 'border_radius.dart';
 import 'borders.dart';
 import 'edge_insets.dart';
 
-/// A rectangular border with smooth continuous transitions between the straight
-/// sides and the rounded corners.
-///
-/// {@tool snippet}
-/// ```dart
-/// Widget build(BuildContext context) {
-///   return Material(
-///     shape: ContinuousRectangleBorder(
-///       borderRadius: BorderRadius.circular(28.0),
-///     ),
-///   );
-/// }
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [RoundedRectangleBorder] Which creates rectangles with rounded corners,
-///    however its straight sides change into a rounded corner with a circular
-///    radius in a step function instead of gradually like the
-///    [ContinuousRectangleBorder].
 class ContinuousRectangleBorder extends OutlinedBorder {
-  /// Creates a [ContinuousRectangleBorder].
   const ContinuousRectangleBorder({
     super.side,
     this.borderRadius = BorderRadius.zero,
   });
 
-  /// The radius for each corner.
-  ///
-  /// Negative radius values are clamped to 0.0 by [getInnerPath] and
-  /// [getOuterPath].
   final BorderRadiusGeometry borderRadius;
 
   @override

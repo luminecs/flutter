@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Form].
 
 void main() => runApp(const FormExampleApp());
 

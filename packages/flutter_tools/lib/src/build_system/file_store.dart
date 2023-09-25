@@ -13,7 +13,6 @@ import '../base/utils.dart';
 import '../convert.dart';
 import 'hash.dart';
 
-/// An encoded representation of all file hashes.
 class FileStorage {
   FileStorage(this.version, this.files);
 
@@ -44,7 +43,6 @@ class FileStorage {
   }
 }
 
-/// A stored file hash and path.
 class FileHash {
   FileHash(this.path, this.hash);
 
@@ -66,29 +64,12 @@ class FileHash {
   }
 }
 
-/// The strategy used by [FileStore] to determine if a file has been
-/// invalidated.
 enum FileStoreStrategy {
-  /// The [FileStore] will compute an md5 hash of the file contents.
   hash,
 
-  /// The [FileStore] will check for differences in the file's last modified
-  /// timestamp.
   timestamp,
 }
 
-/// A globally accessible cache of files.
-///
-/// In cases where multiple targets read the same source files as inputs, we
-/// avoid recomputing or storing multiple copies of hashes by delegating
-/// through this class.
-///
-/// This class uses either timestamps or file hashes depending on the
-/// provided [FileStoreStrategy]. All information is held in memory during
-/// a build operation, and may be persisted to cache in the root build
-/// directory.
-///
-/// The format of the file store is subject to change and not part of its API.
 class FileStore {
   FileStore({
     required File cacheFile,
@@ -111,7 +92,6 @@ class FileStore {
   // The current version of the file cache storage format.
   static const int _kVersion = 2;
 
-  /// Read file hashes from disk.
   void initialize() {
     _logger.printTrace('Initializing file store');
     if (!_cacheFile.existsSync()) {
@@ -148,7 +128,6 @@ class FileStore {
     _logger.printTrace('Done initializing file store');
   }
 
-  /// Persist file marks to disk for a non-incremental build.
   void persist() {
     _logger.printTrace('Persisting file store');
     if (!_cacheFile.existsSync()) {
@@ -175,15 +154,12 @@ class FileStore {
     _logger.printTrace('Done persisting file store');
   }
 
-  /// Reset `previousMarks` for an incremental build.
   void persistIncremental() {
     previousAssetKeys.clear();
     previousAssetKeys.addAll(currentAssetKeys);
     currentAssetKeys.clear();
   }
 
-  /// Computes a diff of the provided files and returns a list of files
-  /// that were dirty.
   List<File> diffFileList(List<File> files) {
     final List<File> dirty = <File>[];
     switch (_strategy) {

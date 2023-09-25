@@ -15,11 +15,6 @@ import 'binding.dart';
 import 'finders.dart';
 import 'goldens.dart';
 
-/// Render the closest [RepaintBoundary] of the [element] into an image.
-///
-/// See also:
-///
-///  * [OffsetLayer.toImage] which is the actual method being called.
 Future<ui.Image> captureImage(Element element) {
   assert(element.renderObject != null);
   RenderObject renderObject = element.renderObject!;
@@ -31,28 +26,15 @@ Future<ui.Image> captureImage(Element element) {
   return layer.toImage(renderObject.paintBounds);
 }
 
-/// Whether or not [captureImage] is supported.
-///
-/// This can be used to skip tests on platforms that don't support
-/// capturing images.
-///
-/// Currently this is true except when tests are running in the context of a web
-/// browser (`flutter test --platform chrome`).
 const bool canCaptureImage = true;
 
-/// The matcher created by [matchesGoldenFile]. This class is enabled when the
-/// test is running on a VM using conditional import.
 class MatchesGoldenFile extends AsyncMatcher {
-  /// Creates an instance of [MatchesGoldenFile]. Called by [matchesGoldenFile].
   const MatchesGoldenFile(this.key, this.version);
 
-  /// Creates an instance of [MatchesGoldenFile]. Called by [matchesGoldenFile].
   MatchesGoldenFile.forStringPath(String path, this.version) : key = Uri.parse(path);
 
-  /// The [key] to the golden image.
   final Uri key;
 
-  /// The [version] of the golden image.
   final int? version;
 
   @override

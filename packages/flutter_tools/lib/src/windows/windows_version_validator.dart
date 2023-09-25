@@ -5,18 +5,14 @@
 import '../base/os.dart';
 import '../doctor_validator.dart';
 
-/// Flutter only supports development on Windows host machines version 10 and greater.
 const List<String> kUnsupportedVersions = <String>[
   '6',
   '7',
   '8',
 ];
 
-/// Regex pattern for identifying line from systeminfo stdout with windows version
-/// (ie. 10.5.4123)
 const String kWindowsOSVersionSemVerPattern = r'([0-9]+)\.([0-9]+)\.([0-9\.]+)';
 
-/// Validator for supported Windows host machine operating system version.
 class WindowsVersionValidator extends DoctorValidator {
   const WindowsVersionValidator({
     required OperatingSystemUtils operatingSystemUtils,

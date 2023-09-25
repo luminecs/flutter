@@ -12,78 +12,9 @@ import 'package:material_color_utilities/material_color_utilities.dart';
 import 'colors.dart';
 import 'theme_data.dart';
 
-/// {@template flutter.material.color_scheme.ColorScheme}
-/// A set of 30 colors based on the
-/// [Material spec](https://m3.material.io/styles/color/the-color-system/color-roles)
-/// that can be used to configure the color properties of most components.
-/// {@endtemplate}
-///
-/// ### Colors in Material 3
-///
-/// {@macro flutter.material.colors.colorRoles}
-///
-/// The main accent color groups in the scheme are [primary], [secondary],
-/// and [tertiary].
-///
-/// * Primary colors are used for key components across the UI, such as the FAB,
-///   prominent buttons, and active states.
-///
-/// * Secondary colors are used for less prominent components in the UI, such as
-///   filter chips, while expanding the opportunity for color expression.
-///
-/// * Tertiary colors are used for contrasting accents that can be used to
-///   balance primary and secondary colors or bring heightened attention to
-///   an element, such as an input field. The tertiary colors are left
-///   for makers to use at their discretion and are intended to support
-///   broader color expression in products.
-///
-/// The remaining colors of the scheme are comprised of neutral colors used for
-/// backgrounds and surfaces, as well as specific colors for errors, dividers
-/// and shadows.
-///
-/// Many of the colors have matching 'on' colors, which are used for drawing
-/// content on top of the matching color. For example, if something is using
-/// [primary] for a background color, [onPrimary] would be used to paint text
-/// and icons on top of it. For this reason, the 'on' colors should have a
-/// contrast ratio with their matching colors of at least 4.5:1 in order to
-/// be readable.
-///
-/// ### Setting Colors in Flutter
-///
-///{@macro flutter.material.colors.settingColors}
 //
 @immutable
 class ColorScheme with Diagnosticable {
-  /// Create a ColorScheme instance from the given colors.
-  ///
-  /// [ColorScheme.fromSeed] can be used as a simpler way to create a full
-  /// color scheme derived from a single seed color.
-  ///
-  /// For the color parameters that are nullable, it is still recommended
-  /// that applications provide values for them. They are only nullable due
-  /// to backwards compatibility concerns.
-  ///
-  /// If a color is not provided, the closest fallback color from the given
-  /// colors will be used for it (e.g. [primaryContainer] will default
-  /// to [primary]). Material Design 3 makes use of these colors for many
-  /// component defaults, so for the best results the application should
-  /// supply colors for all the parameters. An easy way to ensure this is to
-  /// use [ColorScheme.fromSeed] to generate a full set of colors.
-  ///
-  /// During the migration to Material Design 3, if an app's
-  /// [ThemeData.useMaterial3] is false, then components will only
-  /// use the following colors for defaults:
-  ///
-  /// * [primary]
-  /// * [onPrimary]
-  /// * [secondary]
-  /// * [onSecondary]
-  /// * [error]
-  /// * [onError]
-  /// * [background]
-  /// * [onBackground]
-  /// * [surface]
-  /// * [onSurface]
   const ColorScheme({
     required this.brightness,
     required this.primary,
@@ -137,28 +68,6 @@ class ColorScheme with Diagnosticable {
        _inversePrimary = inversePrimary,
        _surfaceTint = surfaceTint;
 
-  /// Generate a [ColorScheme] derived from the given `seedColor`.
-  ///
-  /// Using the seedColor as a starting point, a set of tonal palettes are
-  /// constructed. These tonal palettes are based on the Material 3 Color
-  /// system and provide all the needed colors for a [ColorScheme]. These
-  /// colors are designed to work well together and meet contrast
-  /// requirements for accessibility.
-  ///
-  /// If any of the optional color parameters are non-null they will be
-  /// used in place of the generated colors for that field in the resulting
-  /// color scheme. This allows apps to override specific colors for their
-  /// needs.
-  ///
-  /// Given the nature of the algorithm, the seedColor may not wind up as
-  /// one of the ColorScheme colors.
-  ///
-  /// See also:
-  ///
-  ///  * <https://m3.material.io/styles/color/the-color-system/color-roles>, the
-  ///    Material 3 Color system specification.
-  ///  * <https://pub.dev/packages/material_color_utilities>, the package
-  ///    used to generate the tonal palettes needed for the scheme.
   factory ColorScheme.fromSeed({
     required Color seedColor,
     Brightness brightness = Brightness.light,
@@ -235,8 +144,6 @@ class ColorScheme with Diagnosticable {
     );
   }
 
-  /// Create a ColorScheme based on a purple primary color that matches the
-  /// [baseline Material color scheme](https://material.io/design/color/the-color-system.html#color-theme-creation).
   const ColorScheme.light({
     this.brightness = Brightness.light,
     this.primary = const Color(0xff6200ee),
@@ -290,8 +197,6 @@ class ColorScheme with Diagnosticable {
        _inversePrimary = inversePrimary,
        _surfaceTint = surfaceTint;
 
-  /// Create the recommended dark color scheme that matches the
-  /// [baseline Material color scheme](https://material.io/design/color/dark-theme.html#ui-application).
   const ColorScheme.dark({
     this.brightness = Brightness.dark,
     this.primary = const Color(0xffbb86fc),
@@ -345,8 +250,6 @@ class ColorScheme with Diagnosticable {
        _inversePrimary = inversePrimary,
        _surfaceTint = surfaceTint;
 
-  /// Create a high contrast ColorScheme based on a purple primary color that
-  /// matches the [baseline Material color scheme](https://material.io/design/color/the-color-system.html#color-theme-creation).
   const ColorScheme.highContrastLight({
     this.brightness = Brightness.light,
     this.primary = const Color(0xff0000ba),
@@ -400,8 +303,6 @@ class ColorScheme with Diagnosticable {
        _inversePrimary = inversePrimary,
        _surfaceTint = surfaceTint;
 
-  /// Create a high contrast ColorScheme based on the dark
-  /// [baseline Material color scheme](https://material.io/design/color/dark-theme.html#ui-application).
   const ColorScheme.highContrastDark({
     this.brightness = Brightness.dark,
     this.primary = const Color(0xffefb7ff),
@@ -455,10 +356,6 @@ class ColorScheme with Diagnosticable {
        _inversePrimary = inversePrimary,
        _surfaceTint = surfaceTint;
 
-  /// Create a color scheme from a [MaterialColor] swatch.
-  ///
-  /// This constructor is used by [ThemeData] to create its default
-  /// color scheme.
   factory ColorScheme.fromSwatch({
     MaterialColor primarySwatch = Colors.blue,
     Color? accentColor,
@@ -490,185 +387,88 @@ class ColorScheme with Diagnosticable {
 
   static Brightness _brightnessFor(Color color) => ThemeData.estimateBrightnessForColor(color);
 
-  /// The overall brightness of this color scheme.
   final Brightness brightness;
 
-  /// The color displayed most frequently across your app’s screens and components.
   final Color primary;
 
-  /// A color that's clearly legible when drawn on [primary].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [primary] and [onPrimary] of at least 4.5:1 is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   final Color onPrimary;
 
   final Color? _primaryContainer;
-  /// A color used for elements needing less emphasis than [primary].
   Color get primaryContainer => _primaryContainer ?? primary;
 
   final Color? _onPrimaryContainer;
-  /// A color that's clearly legible when drawn on [primaryContainer].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [primaryContainer] and [onPrimaryContainer] of at least 4.5:1
-  /// is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onPrimaryContainer => _onPrimaryContainer ?? onPrimary;
 
-  /// An accent color used for less prominent components in the UI, such as
-  /// filter chips, while expanding the opportunity for color expression.
   final Color secondary;
 
-  /// A color that's clearly legible when drawn on [secondary].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [secondary] and [onSecondary] of at least 4.5:1 is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   final Color onSecondary;
 
   final Color? _secondaryContainer;
-  /// A color used for elements needing less emphasis than [secondary].
   Color get secondaryContainer => _secondaryContainer ?? secondary;
 
   final Color? _onSecondaryContainer;
-  /// A color that's clearly legible when drawn on [secondaryContainer].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [secondaryContainer] and [onSecondaryContainer] of at least 4.5:1 is
-  /// recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onSecondaryContainer => _onSecondaryContainer ?? onSecondary;
 
   final Color? _tertiary;
-  /// A color used as a contrasting accent that can balance [primary]
-  /// and [secondary] colors or bring heightened attention to an element,
-  /// such as an input field.
   Color get tertiary => _tertiary ?? secondary;
 
   final Color? _onTertiary;
-  /// A color that's clearly legible when drawn on [tertiary].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [tertiary] and [onTertiary] of at least 4.5:1 is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onTertiary => _onTertiary ?? onSecondary;
 
   final Color? _tertiaryContainer;
-  /// A color used for elements needing less emphasis than [tertiary].
   Color get tertiaryContainer => _tertiaryContainer ?? tertiary;
 
   final Color? _onTertiaryContainer;
-  /// A color that's clearly legible when drawn on [tertiaryContainer].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [tertiaryContainer] and [onTertiaryContainer] of at least 4.5:1 is
-  /// recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onTertiaryContainer => _onTertiaryContainer ?? onTertiary;
 
-  /// The color to use for input validation errors, e.g. for
-  /// [InputDecoration.errorText].
   final Color error;
 
-  /// A color that's clearly legible when drawn on [error].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [error] and [onError] of at least 4.5:1 is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   final Color onError;
 
   final Color? _errorContainer;
-  /// A color used for error elements needing less emphasis than [error].
   Color get errorContainer => _errorContainer ?? error;
 
   final Color? _onErrorContainer;
-  /// A color that's clearly legible when drawn on [errorContainer].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [errorContainer] and [onErrorContainer] of at least 4.5:1 is
-  /// recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onErrorContainer => _onErrorContainer ?? onError;
 
-  /// A color that typically appears behind scrollable content.
   final Color background;
 
-  /// A color that's clearly legible when drawn on [background].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [background] and [onBackground] of at least 4.5:1 is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   final Color onBackground;
 
-  /// The background color for widgets like [Card].
   final Color surface;
 
-  /// A color that's clearly legible when drawn on [surface].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [surface] and [onSurface] of at least 4.5:1 is recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   final Color onSurface;
 
   final Color? _surfaceVariant;
-  /// A color variant of [surface] that can be used for differentiation against
-  /// a component using [surface].
   Color get surfaceVariant => _surfaceVariant ?? surface;
 
   final Color? _onSurfaceVariant;
-  /// A color that's clearly legible when drawn on [surfaceVariant].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [surfaceVariant] and [onSurfaceVariant] of at least 4.5:1 is
-  /// recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onSurfaceVariant => _onSurfaceVariant ?? onSurface;
 
   final Color? _outline;
-  /// A utility color that creates boundaries and emphasis to improve usability.
   Color get outline => _outline ?? onBackground;
 
   final Color? _outlineVariant;
-  /// A utility color that creates boundaries for decorative elements when a
-  /// 3:1 contrast isn’t required, such as for dividers or decorative elements.
   Color get outlineVariant => _outlineVariant ?? onBackground;
 
   final Color? _shadow;
-  /// A color use to paint the drop shadows of elevated components.
   Color get shadow => _shadow ?? const Color(0xff000000);
 
   final Color? _scrim;
-  /// A color use to paint the scrim around of modal components.
   Color get scrim => _scrim ?? const Color(0xff000000);
 
   final Color? _inverseSurface;
-  /// A surface color used for displaying the reverse of what’s seen in the
-  /// surrounding UI, for example in a SnackBar to bring attention to
-  /// an alert.
   Color get inverseSurface => _inverseSurface ?? onSurface;
 
   final Color? _onInverseSurface;
-  /// A color that's clearly legible when drawn on [inverseSurface].
-  ///
-  /// To ensure that an app is accessible, a contrast ratio between
-  /// [inverseSurface] and [onInverseSurface] of at least 4.5:1 is
-  /// recommended. See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   Color get onInverseSurface => _onInverseSurface ?? surface;
 
   final Color? _inversePrimary;
-  /// An accent color used for displaying a highlight color on [inverseSurface]
-  /// backgrounds, like button text in a SnackBar.
   Color get inversePrimary => _inversePrimary ?? onPrimary;
 
   final Color? _surfaceTint;
-  /// A color used as an overlay on a surface color to indicate a component's
-  /// elevation.
   Color get surfaceTint => _surfaceTint ?? primary;
 
-  /// Creates a copy of this color scheme with the given fields
-  /// replaced by the non-null parameter values.
   ColorScheme copyWith({
     Brightness? brightness,
     Color? primary,
@@ -737,9 +537,6 @@ class ColorScheme with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two [ColorScheme] objects.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static ColorScheme lerp(ColorScheme a, ColorScheme b, double t) {
     if (identical(a, b)) {
       return a;
@@ -895,40 +692,6 @@ class ColorScheme with Diagnosticable {
     properties.add(ColorProperty('surfaceTint', surfaceTint, defaultValue: defaultScheme.surfaceTint));
   }
 
-  /// Generate a [ColorScheme] derived from the given `imageProvider`.
-  ///
-  /// Material Color Utilities extracts the dominant color from the
-  /// supplied [ImageProvider]. Using this color, a [ColorScheme] is generated
-  /// with harmnonious colors that meet contrast requirements for accessibility.
-  ///
-  /// If any of the optional color parameters are non-null, they will be
-  /// used in place of the generated colors for that field in the resulting
-  /// [ColorScheme]. This allows apps to override specific colors for their
-  /// needs.
-  ///
-  /// Given the nature of the algorithm, the most dominant color of the
-  /// `imageProvider` may not wind up as one of the [ColorScheme] colors.
-  ///
-  /// The provided image will be scaled down to a maximum size of 112x112 pixels
-  /// during color extraction.
-  ///
-  /// {@tool dartpad}
-  /// This sample shows how to use [ColorScheme.fromImageProvider] to create
-  /// content-based dynamic color schemes.
-  ///
-  /// ** See code in examples/api/lib/material/color_scheme/dynamic_content_color.0.dart **
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  ///  * [M3 Guidelines: Dynamic color from content](https://m3.material.io/styles/color/dynamic-color/user-generated-color#8af550b9-a19e-4e9f-bb0a-7f611fed5d0f)
-  ///  * <https://pub.dev/packages/dynamic_color>, a package to create
-  ///    [ColorScheme]s based on a platform's implementation of dynamic color.
-  ///  * <https://m3.material.io/styles/color/the-color-system/color-roles>, the
-  ///    Material 3 Color system specification.
-  ///  * <https://pub.dev/packages/material_color_utilities>, the package
-  ///    used to algorightmically determine the dominant color and to generate
-  ///    the [ColorScheme].
   static Future<ColorScheme> fromImageProvider({
     required ImageProvider provider,
     Brightness brightness = Brightness.light,

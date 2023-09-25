@@ -25,18 +25,10 @@ final String flutter = path.join(flutterRoot, 'bin', Platform.isWindows ? 'flutt
 final String flutterPackages = path.join(flutterRoot, 'packages');
 final String flutterExamples = path.join(flutterRoot, 'examples');
 
-/// The path to the `dart` executable; set at the top of `main`
 late final String dart;
 
-/// The path to the `pub` executable; set at the top of `main`
 late final String pub;
 
-/// When you call this, you can pass additional arguments to pass custom
-/// arguments to flutter analyze. For example, you might want to call this
-/// script with the parameter --dart-sdk to use custom dart sdk.
-///
-/// For example:
-/// bin/cache/dart-sdk/bin/dart dev/bots/analyze.dart --dart-sdk=/tmp/dart-sdk
 Future<void> main(List<String> arguments) async {
   final String dartSdk = path.join(
     Directory.current.absolute.path,
@@ -52,8 +44,6 @@ Future<void> main(List<String> arguments) async {
   reportSuccessAndExit('${bold}Analysis successful.$reset');
 }
 
-/// Scans [arguments] for an argument of the form `--dart-sdk` or
-/// `--dart-sdk=...` and returns the configured SDK, if any.
 String? _getDartSdkFromArguments(List<String> arguments) {
   String? result;
   for (int i = 0; i < arguments.length; i += 1) {
@@ -157,8 +147,6 @@ Future<void> run(List<String> arguments) async {
     workingDirectory: flutterRoot,
   );
 
-  /// Ensure that no new dependencies have been accidentally
-  /// added to core packages.
   printProgress('Package Allowlist...');
   await _checkConsumerDependencies();
 
@@ -347,16 +335,6 @@ Future<void> verifyTargetPlatform(String workingDirectory) async {
   }
 }
 
-/// Verify that we use clampDouble instead of Double.clamp for performance reasons.
-///
-/// We currently can't distinguish valid uses of clamp from problematic ones so
-/// if the clamp is operating on a type other than a `double` the
-/// `// ignore_clamp_double_lint` comment must be added to the line where clamp is
-/// invoked.
-///
-/// See also:
-///   * https://github.com/flutter/flutter/pull/103559
-///   * https://github.com/flutter/flutter/issues/103917
 Future<void> verifyNoDoubleClamp(String workingDirectory) async {
   final String flutterLibPath = '$workingDirectory/packages/flutter/lib';
   final Stream<File> testFiles =
@@ -382,8 +360,6 @@ Future<void> verifyNoDoubleClamp(String workingDirectory) async {
   }
 }
 
-/// Verify Token Templates are mapped to correct file names while generating
-/// M3 defaults in /dev/tools/gen_defaults/bin/gen_defaults.dart.
 Future<void> verifyTokenTemplatesUpdateCorrectFiles(String workingDirectory) async {
   final List<String> errors = <String>[];
 
@@ -432,10 +408,6 @@ Future<void> verifyTokenTemplatesUpdateCorrectFiles(String workingDirectory) asy
   }
 }
 
-/// Verify tool test files end in `_test.dart`.
-///
-/// The test runner will only recognize files ending in `_test.dart` as tests to
-/// be run: https://github.com/dart-lang/test/tree/master/pkgs/test#running-tests
 Future<void> verifyToolTestsEndInTestDart(String workingDirectory) async {
   final String toolsTestPath = path.join(
     workingDirectory,
@@ -524,9 +496,6 @@ final RegExp _leadingComment = RegExp(r'//');
 final RegExp _goldenTagPattern1 = RegExp(r'@Tags\(');
 final RegExp _goldenTagPattern2 = RegExp(r"'reduced-test-set'");
 
-/// Only golden file tests in the flutter package are subject to reduced testing,
-/// for example, invocations in flutter_test to validate comparator
-/// functionality do not require tagging.
 const String _ignoreGoldenTag = '// flutter_ignore: golden_tag (see analyze.dart)';
 const String _ignoreGoldenTagForFile = '// flutter_ignore_for_file: golden_tag (see analyze.dart)';
 
@@ -590,14 +559,8 @@ final RegExp _deprecationMessagePattern = RegExp(r"^ *'(?<message>.+) '$");
 final RegExp _deprecationVersionPattern = RegExp(r"^ *'This feature was deprecated after v(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?<build>-\d+\.\d+\.pre)?\.',?$");
 final RegExp _deprecationEndPattern = RegExp(r'^ *\)$');
 
-/// Some deprecation notices are special, for example they're used to annotate members that
-/// will never go away and were never allowed but which we are trying to show messages for.
-/// (One example would be a library that intentionally conflicts with a member in another
-/// library to indicate that it is incompatible with that other library. Another would be
-/// the regexp just above...)
 const String _ignoreDeprecation = ' // flutter_ignore: deprecation_syntax (see analyze.dart)';
 
-/// Some deprecation notices are exempt for historical reasons. They must have an issue listed.
 final RegExp _legacyDeprecation = RegExp(r' // flutter_ignore: deprecation_syntax, https://github.com/flutter/flutter/issues/\d+$');
 
 Future<void> verifyDeprecations(String workingDirectory, { int minimumMatches = 2000 }) async {
@@ -1034,7 +997,6 @@ Future<void> verifyInternationalizations(String workingDirectory, String dartExe
 }
 
 
-/// Verifies that all instances of "checked mode" have been migrated to "debug mode".
 Future<void> verifyNoCheckedMode(String workingDirectory) async {
   final String flutterPackages = path.join(workingDirectory, 'packages');
   final List<File> files = await _allFiles(flutterPackages, 'dart', minimumMatches: 400)

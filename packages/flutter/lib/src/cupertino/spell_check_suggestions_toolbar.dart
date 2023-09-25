@@ -11,59 +11,25 @@ import 'localizations.dart';
 import 'text_selection_toolbar.dart';
 import 'text_selection_toolbar_button.dart';
 
-/// iOS only shows 3 spell check suggestions in the toolbar.
 const int _kMaxSuggestions = 3;
 
-/// The default spell check suggestions toolbar for iOS.
-///
-/// Tries to position itself below the [anchors], but if it doesn't fit, then it
-/// readjusts to fit above bottom view insets.
-///
-/// See also:
-///  * [SpellCheckSuggestionsToolbar], which is similar but for both the
-///    Material and Cupertino libraries.
 class CupertinoSpellCheckSuggestionsToolbar extends StatelessWidget {
-  /// Constructs a [CupertinoSpellCheckSuggestionsToolbar].
-  ///
-  /// [buttonItems] must not contain more than three items.
   const CupertinoSpellCheckSuggestionsToolbar({
     super.key,
     required this.anchors,
     required this.buttonItems,
   }) : assert(buttonItems.length <= _kMaxSuggestions);
 
-  /// Constructs a [CupertinoSpellCheckSuggestionsToolbar] with the default
-  /// children for an [EditableText].
-  ///
-  /// See also:
-  ///  * [SpellCheckSuggestionsToolbar.editableText], which is similar but
-  ///    builds an Android-style toolbar.
   CupertinoSpellCheckSuggestionsToolbar.editableText({
     super.key,
     required EditableTextState editableTextState,
   }) : buttonItems = buildButtonItems(editableTextState) ?? <ContextMenuButtonItem>[],
        anchors = editableTextState.contextMenuAnchors;
 
-  /// The location on which to anchor the menu.
   final TextSelectionToolbarAnchors anchors;
 
-  /// The [ContextMenuButtonItem]s that will be turned into the correct button
-  /// widgets and displayed in the spell check suggestions toolbar.
-  ///
-  /// Must not contain more than three items.
-  ///
-  /// See also:
-  ///
-  ///  * [AdaptiveTextSelectionToolbar.buttonItems], the list of
-  ///    [ContextMenuButtonItem]s that are used to build the buttons of the
-  ///    text selection toolbar.
-  ///  * [SpellCheckSuggestionsToolbar.buttonItems], the list of
-  ///    [ContextMenuButtonItem]s used to build the Material style spell check
-  ///    suggestions toolbar.
   final List<ContextMenuButtonItem> buttonItems;
 
-  /// Builds the button items for the toolbar based on the available
-  /// spell check suggestions.
   static List<ContextMenuButtonItem>? buildButtonItems(
     EditableTextState editableTextState,
   ) {
@@ -134,7 +100,6 @@ class CupertinoSpellCheckSuggestionsToolbar extends StatelessWidget {
     editableTextState.hideToolbar();
   }
 
-  /// Builds the toolbar buttons based on the [buttonItems].
   List<Widget> _buildToolbarButtons(BuildContext context) {
     return buttonItems.map((ContextMenuButtonItem buttonItem) {
       return CupertinoTextSelectionToolbarButton.buttonItem(

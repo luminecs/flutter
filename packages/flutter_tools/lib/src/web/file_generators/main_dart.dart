@@ -4,7 +4,6 @@
 
 import 'package:package_config/package_config.dart';
 
-/// Generates the main.dart file.
 String generateMainDartFile(String appEntrypoint, {
   required String pluginRegistrantEntrypoint,
   LanguageVersion? languageVersion,

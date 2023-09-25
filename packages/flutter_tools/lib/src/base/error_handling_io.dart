@@ -21,20 +21,8 @@ import 'platform.dart';
 // ToolExit and a message that is more clear than the FileSystemException by
 // itself.
 
-/// On windows this is error code 2: ERROR_FILE_NOT_FOUND, and on
-/// macOS/Linux it is error code 2/ENOENT: No such file or directory.
 const int kSystemCannotFindFile = 2;
 
-/// A [FileSystem] that throws a [ToolExit] on certain errors.
-///
-/// If a [FileSystem] error is not caused by the Flutter tool, and can only be
-/// addressed by the user, it should be caught by this [FileSystem] and thrown
-/// as a [ToolExit] using [throwToolExit].
-///
-/// Cf. If there is some hope that the tool can continue when an operation fails
-/// with an error, then that error/operation should not be handled here. For
-/// example, the tool should generally be able to continue executing even if it
-/// fails to delete a file.
 class ErrorHandlingFileSystem extends ForwardingFileSystem {
   ErrorHandlingFileSystem({
     required FileSystem delegate,
@@ -48,14 +36,6 @@ class ErrorHandlingFileSystem extends ForwardingFileSystem {
 
   final Platform _platform;
 
-  /// Allow any file system operations executed within the closure to fail with any
-  /// operating system error, rethrowing an [Exception] instead of a [ToolExit].
-  ///
-  /// This should not be used with async file system operation.
-  ///
-  /// This can be used to bypass the [ErrorHandlingFileSystem] permission exit
-  /// checks for situations where failure is acceptable, such as the flutter
-  /// persistent settings cache.
   static void noExitOnFailure(void Function() operation) {
     final bool previousValue = ErrorHandlingFileSystem._noExitOnFailure;
     try {
@@ -66,12 +46,6 @@ class ErrorHandlingFileSystem extends ForwardingFileSystem {
     }
   }
 
-  /// Delete the file or directory and return true if it exists, take no
-  /// action and return false if it does not.
-  ///
-  /// This method should be preferred to checking if it exists and
-  /// then deleting, because it handles the edge case where the file or directory
-  /// is deleted by a different program between the two calls.
   static bool deleteIfExists(FileSystemEntity file, {bool recursive = false}) {
     if (!file.existsSync()) {
       return false;
@@ -301,8 +275,6 @@ class ErrorHandlingFile
     );
   }
 
-  /// This copy method attempts to handle file system errors from both reading
-  /// and writing the copied file.
   @override
   File copySync(String newPath) {
     final File resultFile = fileSystem.file(newPath);
@@ -613,14 +585,6 @@ T _runSync<T>(T Function() op, {
 }
 
 
-/// A [ProcessManager] that throws a [ToolExit] on certain errors.
-///
-/// If a [ProcessException] is not caused by the Flutter tool, and can only be
-/// addressed by the user, it should be caught by this [ProcessManager] and thrown
-/// as a [ToolExit] using [throwToolExit].
-///
-/// See also:
-///   * [ErrorHandlingFileSystem], for a similar file system strategy.
 class ErrorHandlingProcessManager extends ProcessManager {
   ErrorHandlingProcessManager({
     required ProcessManager delegate,

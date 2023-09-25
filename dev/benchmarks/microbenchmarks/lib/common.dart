@@ -37,8 +37,6 @@ double _doIntegral({
   return result;
 }
 
-/// Probability is defined as the probability that the mean is within the
-/// [margin] of the true value.
 double _doProbability({required double mean, required double stddev, required double margin}) {
   return _doIntegral(
     func: (double x) => _doNormal(mean: mean, stddev: stddev, x: x),
@@ -48,42 +46,15 @@ double _doProbability({required double mean, required double stddev, required do
   );
 }
 
-/// This class knows how to format benchmark results for machine and human
-/// consumption.
-///
 
-/// Example:
-///
-///     BenchmarkResultPrinter printer = BenchmarkResultPrinter();
-///     printer.add(
-///       description: 'Average frame time',
-///       value: averageFrameTime,
-///       unit: 'ms',
-///       name: 'average_frame_time',
-///     );
-///     printer.printToStdout();
-///
 class BenchmarkResultPrinter {
 
   final List<_BenchmarkResult> _results = <_BenchmarkResult>[];
 
-  /// Adds a benchmark result to the list of results.
-  ///
-  /// [description] is a human-readable description of the result. [value] is a
-  /// result value. [unit] is the unit of measurement, such as "ms", "km", "h".
-  /// [name] is a computer-readable name of the result used as a key in the JSON
-  /// serialization of the results.
   void addResult({ required String description, required double value, required String unit, required String name }) {
     _results.add(_BenchmarkResult(description, value, unit, name));
   }
 
-  /// Adds a benchmark result to the list of results and a probability of that
-  /// result.
-  ///
-  /// The probability is calculated as the probability that the mean is +- 5% of
-  /// the true value.
-  ///
-  /// See also [addResult].
   void addResultStatistics({
     required String description,
     required List<double> values,
@@ -99,8 +70,6 @@ class BenchmarkResultPrinter {
         'percent', '${name}_probability_5pct'));
   }
 
-  /// Prints the results added via [addResult] to standard output, once as JSON
-  /// for computer consumption and once formatted as plain text for humans.
   void printToStdout() {
     // IMPORTANT: keep these values in sync with dev/devicelab/bin/tasks/microbenchmarks.dart
     const String jsonStart = '================ RESULTS ================';
@@ -133,15 +102,11 @@ class BenchmarkResultPrinter {
 class _BenchmarkResult {
   _BenchmarkResult(this.description, this.value, this.unit, this.name);
 
-  /// Human-readable description of the result, e.g. "Average frame time".
   final String description;
 
-  /// Result value that in agreement with [unit].
   final double value;
 
-  /// Unit of measurement that is in agreement with [value].
   final String unit;
 
-  /// Computer-readable name of the result.
   final String name;
 }

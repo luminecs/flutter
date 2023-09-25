@@ -6,12 +6,6 @@ import 'dart:convert';
 
 import 'utils.dart';
 
-/// The data structure used to manage keyboard key entries.
-///
-/// The main constructor parses the given input data into the data structure.
-///
-/// The data structure can be also loaded and saved to JSON, with the
-/// [PhysicalKeyData.fromJson] constructor and [toJson] method, respectively.
 class PhysicalKeyData {
   factory PhysicalKeyData(
     String chromiumHidCodes,
@@ -33,7 +27,6 @@ class PhysicalKeyData {
     return PhysicalKeyData._(data);
   }
 
-  /// Parses the given JSON data and populates the data structure from it.
   factory PhysicalKeyData.fromJson(Map<String, dynamic> contentMap) {
     final Map<String, PhysicalKeyEntry> data = <String, PhysicalKeyEntry>{};
     for (final MapEntry<String, dynamic> jsonEntry in contentMap.entries) {
@@ -45,14 +38,10 @@ class PhysicalKeyData {
 
   PhysicalKeyData._(this._data);
 
-  /// Find an entry from name, or null if not found.
   PhysicalKeyEntry? tryEntryByName(String name) {
     return _data[name];
   }
 
-  /// Find an entry from name.
-  ///
-  /// Asserts if the name is not found.
   PhysicalKeyEntry entryByName(String name) {
     final PhysicalKeyEntry? entry = tryEntryByName(name);
     assert(entry != null,
@@ -60,14 +49,11 @@ class PhysicalKeyData {
     return entry!;
   }
 
-  /// All entries.
   Iterable<PhysicalKeyEntry> get entries => _data.values;
 
   // Keys mapped from their names.
   final Map<String, PhysicalKeyEntry> _data;
 
-  /// Converts the data structure into a JSON structure that can be parsed by
-  /// [PhysicalKeyData.fromJson].
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> outputMap = <String, dynamic>{};
     for (final PhysicalKeyEntry entry in _data.values) {
@@ -76,22 +62,6 @@ class PhysicalKeyData {
     return outputMap;
   }
 
-  /// Parses entries from Android's `Generic.kl` scan code data file.
-  ///
-  /// Lines in this file look like this (without the ///):
-  ///
-  /// ```
-  /// key 100   ALT_RIGHT
-  /// # key 101 "KEY_LINEFEED"
-  /// key 477   F12               FUNCTION
-  /// ```
-  ///
-  /// We parse the commented out lines as well as the non-commented lines, so
-  /// that we can get names for all of the available scan codes, not just ones
-  /// defined for the generic profile.
-  ///
-  /// Some keys (notably `MEDIA_EJECT`) can be mapped to more than
-  /// one scan code, so the mapping can't just be 1:1, it has to be 1:many.
   static Map<String, List<int>> _readAndroidScanCodes(String keyboardLayout, String nameMap) {
     final RegExp keyEntry = RegExp(
       r'#?\s*' // Optional comment mark
@@ -133,11 +103,6 @@ class PhysicalKeyData {
     return result;
   }
 
-  /// Parses entries from Chromium's HID code mapping header file.
-  ///
-  /// Lines in this file look like this (without the ///):
-  ///            USB       evdev   XKB     Win     Mac     Code     Enum
-  /// DOM_CODE(0x000010, 0x0000, 0x0000, 0x0000, 0xffff, "Hyper", HYPER),
   static Map<String, PhysicalKeyEntry> _readHidEntries(
     String input,
     Map<String, List<int>> nameToAndroidScanCodes,
@@ -208,12 +173,7 @@ class PhysicalKeyData {
   }
 }
 
-/// A single entry in the key data structure.
-///
-/// Can be read from JSON with the [PhysicalKeyEntry.fromJsonMapEntry] constructor, or
-/// written with the [toJson] method.
 class PhysicalKeyEntry {
-  /// Creates a single key entry from available data.
   PhysicalKeyEntry({
     required this.usbHidCode,
     required this.name,
@@ -227,7 +187,6 @@ class PhysicalKeyEntry {
     List<String>? otherWebCodes,
   }) : otherWebCodes = otherWebCodes ?? <String>[];
 
-  /// Populates the key from a JSON map.
   factory PhysicalKeyEntry.fromJsonMapEntry(Map<String, dynamic> map) {
     final Map<String, dynamic> names = map['names'] as Map<String, dynamic>;
     final Map<String, dynamic> scanCodes = map['scanCodes'] as Map<String, dynamic>;
@@ -245,30 +204,16 @@ class PhysicalKeyEntry {
     );
   }
 
-  /// The USB HID code of the key
   final int usbHidCode;
 
-  /// The Evdev scan code of the key, from Chromium's header file.
   final int? evdevCode;
-  /// The XKb scan code of the key from Chromium's header file.
   final int? xKbScanCode;
-  /// The Windows scan code of the key from Chromium's header file.
   final int? windowsScanCode;
-  /// The macOS scan code of the key from Chromium's header file.
   final int? macOSScanCode;
-  /// The iOS scan code of the key from UIKey's documentation (USB Hid table)
   final int? iOSScanCode;
-  /// The list of Android scan codes matching this key, created by looking up
-  /// the Android name in the Chromium data, and substituting the Android scan
-  /// code value.
   final List<int> androidScanCodes;
-  /// The name of the key, mostly derived from the DomKey name in Chromium,
-  /// but where there was no DomKey representation, derived from the Chromium
-  /// symbol name.
   final String name;
-  /// The Chromium event code for the key.
   final String? chromiumCode;
-  /// Other codes used by Web besides chromiumCode.
   final List<String> otherWebCodes;
 
   Iterable<String> webCodes() sync* {
@@ -278,7 +223,6 @@ class PhysicalKeyEntry {
     yield* otherWebCodes;
   }
 
-  /// Creates a JSON map from the key data.
   Map<String, dynamic> toJson() {
     return removeEmptyValues(<String, dynamic>{
       'names': <String, dynamic>{
@@ -307,19 +251,8 @@ class PhysicalKeyEntry {
     return upperCamel.replaceAllMapped(RegExp(r'([A-Z])'), (Match match) => ' ${match.group(1)}').trim();
   }
 
-  /// Gets the name of the key suitable for placing in comments.
-  ///
-  /// Takes the [constantName] and converts it from lower camel case to capitalized
-  /// separate words (e.g. "wakeUp" converts to "Wake Up").
   String get commentName => getCommentName(constantName);
 
-  /// Gets the named used for the key constant in the definitions in
-  /// keyboard_key.g.dart.
-  ///
-  /// If set by the constructor, returns the name set, but otherwise constructs
-  /// the name from the various different names available, making sure that the
-  /// name isn't a Dart reserved word (if it is, then it adds the word "Key" to
-  /// the end of the name).
   late final String constantName = (() {
     String? result;
     if (name.isEmpty) {

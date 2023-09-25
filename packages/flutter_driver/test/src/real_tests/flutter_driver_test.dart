@@ -18,7 +18,6 @@ import 'package:vm_service/vm_service.dart' as vms;
 
 import '../../common.dart';
 
-/// Magical timeout value that's different from the default.
 const Duration _kTestTimeout = Duration(milliseconds: 1234);
 const String _kSerializedTestTimeout = '1234';
 const String _kWebScriptPrefix = r"window.$flutterDriver('";

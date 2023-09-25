@@ -711,7 +711,6 @@ testWidgetsWithLeakTracking('Stepper custom indexed controls test', (WidgetTeste
     ));
   });
 
-  ///https://github.com/flutter/flutter/issues/16920
   testWidgetsWithLeakTracking('Stepper icons size test', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -1580,10 +1579,8 @@ testWidgetsWithLeakTracking('Stepper custom indexed controls test', (WidgetTeste
       ),
     );
 
-    /// Finds the overridden widget for StepState.complete
     expect(find.byType(FlutterLogo), findsOneWidget);
 
-    /// StepState.editing and StepState.error should have a default icon
     expect(find.byIcon(Icons.edit), findsOneWidget);
     expect(find.text('!'), findsOneWidget);
   });

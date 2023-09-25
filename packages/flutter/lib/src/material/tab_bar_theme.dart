@@ -10,23 +10,8 @@ import 'material_state.dart';
 import 'tabs.dart';
 import 'theme.dart';
 
-/// Defines a theme for [TabBar] widgets.
-///
-/// A tab bar theme describes the color of the tab label and the size/shape of
-/// the [TabBar.indicator].
-///
-/// Descendant widgets obtain the current theme's [TabBarTheme] object using
-/// `TabBarTheme.of(context)`. Instances of [TabBarTheme] can be customized with
-/// [TabBarTheme.copyWith].
-///
-/// See also:
-///
-///  * [TabBar], a widget that displays a horizontal row of tabs.
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class TabBarTheme with Diagnosticable {
-  /// Creates a tab bar theme that can be used with [ThemeData.tabBarTheme].
   const TabBarTheme({
     this.indicator,
     this.indicatorColor,
@@ -44,62 +29,34 @@ class TabBarTheme with Diagnosticable {
     this.tabAlignment,
   });
 
-  /// Overrides the default value for [TabBar.indicator].
   final Decoration? indicator;
 
-  /// Overrides the default value for [TabBar.indicatorColor].
   final Color? indicatorColor;
 
-  /// Overrides the default value for [TabBar.indicatorSize].
   final TabBarIndicatorSize? indicatorSize;
 
-  /// Overrides the default value for [TabBar.dividerColor].
   final Color? dividerColor;
 
-  /// Overrides the default value for [TabBar.dividerHeight].
   final double? dividerHeight;
 
-  /// Overrides the default value for [TabBar.labelColor].
-  ///
-  /// If [labelColor] is a [MaterialStateColor], then the effective color will
-  /// depend on the [MaterialState.selected] state, i.e. if the [Tab] is
-  /// selected or not. In case of unselected state, this [MaterialStateColor]'s
-  /// resolved color will be used even if [TabBar.unselectedLabelColor] or
-  /// [unselectedLabelColor] is non-null.
   final Color? labelColor;
 
-  /// Overrides the default value for [TabBar.labelPadding].
-  ///
-  /// If there are few tabs with both icon and text and few
-  /// tabs with only icon or text, this padding is vertically
-  /// adjusted to provide uniform padding to all tabs.
   final EdgeInsetsGeometry? labelPadding;
 
-  /// Overrides the default value for [TabBar.labelStyle].
   final TextStyle? labelStyle;
 
-  /// Overrides the default value for [TabBar.unselectedLabelColor].
   final Color? unselectedLabelColor;
 
-  /// Overrides the default value for [TabBar.unselectedLabelStyle].
   final TextStyle? unselectedLabelStyle;
 
-  /// Overrides the default value for [TabBar.overlayColor].
   final MaterialStateProperty<Color?>? overlayColor;
 
-  /// Overrides the default value for [TabBar.splashFactory].
   final InteractiveInkFeatureFactory? splashFactory;
 
-  /// {@macro flutter.material.tabs.mouseCursor}
-  ///
-  /// If specified, overrides the default value of [TabBar.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 
-  /// Overrides the default value for [TabBar.tabAlignment].
   final TabAlignment? tabAlignment;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   TabBarTheme copyWith({
     Decoration? indicator,
     Color? indicatorColor,
@@ -134,14 +91,10 @@ class TabBarTheme with Diagnosticable {
     );
   }
 
-  /// The data from the closest [TabBarTheme] instance given the build context.
   static TabBarTheme of(BuildContext context) {
     return Theme.of(context).tabBarTheme;
   }
 
-  /// Linearly interpolate between two tab bar themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static TabBarTheme lerp(TabBarTheme a, TabBarTheme b, double t) {
     if (identical(a, b)) {
       return a;

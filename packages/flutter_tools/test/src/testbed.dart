@@ -45,40 +45,7 @@ final Map<Type, Generator> _testbedDefaults = <Type, Generator>{
   Pub: () => ThrowingPub(), // prevent accidental invocations of pub.
 };
 
-/// Manages interaction with the tool injection and runner system.
-///
-/// The Testbed automatically injects reasonable defaults through the context
-/// DI system such as a [BufferLogger] and a [MemoryFileSystem].
-///
-/// Example:
-///
-/// Testing that a filesystem operation works as expected:
-///
-///     void main() {
-///       group('Example', () {
-///         Testbed testbed;
-///
-///         setUp(() {
-///           testbed = Testbed(setUp: () {
-///             globals.fs.file('foo').createSync()
-///           });
-///         })
-///
-///         test('Can delete a file', () => testbed.run(() {
-///           expect(globals.fs.file('foo').existsSync(), true);
-///           globals.fs.file('foo').deleteSync();
-///           expect(globals.fs.file('foo').existsSync(), false);
-///         }));
-///       });
-///     }
-///
-/// For a more detailed example, see the code in test_compiler_test.dart.
 class Testbed {
-  /// Creates a new [TestBed]
-  ///
-  /// `overrides` provides more overrides in addition to the test defaults.
-  /// `setup` may be provided to apply mocks within the tool managed zone,
-  /// including any specified overrides.
   Testbed({FutureOr<void> Function()? setup, Map<Type, Generator>? overrides})
       : _setup = setup,
         _overrides = overrides;
@@ -86,10 +53,6 @@ class Testbed {
   final FutureOr<void> Function()? _setup;
   final Map<Type, Generator>? _overrides;
 
-  /// Runs `test` within a tool zone.
-  ///
-  /// `overrides` may be used to provide new context values for the single test
-  /// case or override any context values from the setup.
   Future<T?> run<T>(FutureOr<T> Function() test, {Map<Type, Generator>? overrides}) {
     final Map<Type, Generator> testOverrides = <Type, Generator>{
       ..._testbedDefaults,

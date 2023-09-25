@@ -36,12 +36,6 @@ import '../web/web_runner.dart';
 
 const String protocolVersion = '0.6.1';
 
-/// A server process command. This command will start up a long-lived server.
-/// It reads JSON-RPC based commands from stdin, executes them, and returns
-/// JSON-RPC based responses and events to stdout.
-///
-/// It can be shutdown with a `daemon.shutdown` command (or by killing the
-/// process).
 class DaemonCommand extends FlutterCommand {
   DaemonCommand({ this.hidden = false }) {
     argParser.addOption(
@@ -109,7 +103,6 @@ class _DaemonServer {
 
   final int? port;
 
-  /// Stdout logger used to print general server-related errors.
   final Logger logger;
 
   // Logger that sends the message to the other end of daemon connection.
@@ -327,9 +320,6 @@ abstract class Domain {
   Future<void> dispose() async { }
 }
 
-/// This domain responds to methods like [version] and [shutdown].
-///
-/// This domain fires the `daemon.logMessage` event.
 class DaemonDomain extends Domain {
   DaemonDomain(Daemon daemon) : super(daemon, 'daemon') {
     registerHandler('version', version);
@@ -383,11 +373,6 @@ class DaemonDomain extends Domain {
     return Future<String>.value(protocolVersion);
   }
 
-  /// Sends a request back to the client asking it to expose/tunnel a URL.
-  ///
-  /// This method should only be called if the client opted-in with the
-  /// --web-allow-expose-url switch. The client may return the same URL back if
-  /// tunnelling is not required for a given URL.
   Future<String> exposeUrl(String url) async {
     final Object? res = await daemon.connection.sendRequest('app.exposeUrl', <String, String>{'url': url});
     if (res is Map<String, Object?> && res['url'] is String) {
@@ -408,11 +393,6 @@ class DaemonDomain extends Domain {
     await _subscription?.cancel();
   }
 
-  /// Enumerates the platforms supported by the provided project.
-  ///
-  /// This does not filter based on the current workflow restrictions, such
-  /// as whether command line tools are installed or whether the host platform
-  /// is correct.
   Future<Map<String, Object>> getSupportedPlatforms(Map<String, Object?> args) async {
     final String? projectRoot = _getStringArg(args, 'projectRoot', required: true);
     final List<String> result = <String>[];
@@ -463,7 +443,6 @@ class DaemonDomain extends Domain {
     }
   }
 
-  /// If notifyVerbose is set, the daemon will forward all verbose logs.
   Future<void> setNotifyVerbose(Map<String, Object?> args) async {
     daemon.notifyingLogger?.notifyVerbose = _getBoolArg(args, 'verbose') ?? true;
   }
@@ -474,9 +453,6 @@ typedef RunOrAttach = Future<void> Function({
   Completer<void>? appStartedCompleter,
 });
 
-/// This domain responds to methods like [start] and [stop].
-///
-/// It fires events for application start, stop, and stdout and stderr.
 class AppDomain extends Domain {
   AppDomain(Daemon daemon) : super(daemon, 'app') {
     registerHandler('restart', restart);
@@ -705,13 +681,6 @@ class AppDomain extends Domain {
     )!;
   }
 
-  /// Debounce and queue reload actions.
-  ///
-  /// Only one reload action will run at a time. Actions requested in quick
-  /// succession (within [_hotReloadDebounceDuration]) will be merged together
-  /// and all return the same result. If an action is requested after an identical
-  /// action has already started, it will be queued and run again once the first
-  /// action completes.
   Future<OperationResult>? _queueAndDebounceReloadAction(
     AppInstance app,
     OperationType operationType,
@@ -730,15 +699,6 @@ class AppDomain extends Domain {
     );
   }
 
-  /// Returns an error, or the service extension result (a map with two fixed
-  /// keys, `type` and `method`). The result may have one or more additional keys,
-  /// depending on the specific service extension end-point. For example:
-  ///
-  ///     {
-  ///       "value":"android",
-  ///       "type":"_extensionType",
-  ///       "method":"ext.flutter.platformOverride"
-  ///     }
   Future<Map<String, Object?>> callServiceExtension(Map<String, Object?> args) async {
     final String? appId = _getStringArg(args, 'appId', required: true);
     final String methodName = _getStringArg(args, 'methodName')!;
@@ -827,10 +787,6 @@ class AppDomain extends Domain {
 
 typedef _DeviceEventHandler = void Function(Device device);
 
-/// This domain lets callers list and monitor connected devices.
-///
-/// It exports a `getDevices()` call, as well as firing `device.added` and
-/// `device.removed` events.
 class DeviceDomain extends Domain {
   DeviceDomain(Daemon daemon) : super(daemon, 'device') {
     registerHandler('getDevices', getDevices);
@@ -855,7 +811,6 @@ class DeviceDomain extends Domain {
     globals.deviceManager!.deviceDiscoverers.forEach(addDeviceDiscoverer);
   }
 
-  /// An incrementing number used to generate unique ids.
   int _id = 0;
   final Map<String, ApplicationPackage?> _applicationPackages = <String, ApplicationPackage?>{};
   final Map<String, DeviceLogReader> _logReaders = <String, DeviceLogReader>{};
@@ -889,8 +844,6 @@ class DeviceDomain extends Domain {
 
   final List<PollingDeviceDiscovery> _discoverers = <PollingDeviceDiscovery>[];
 
-  /// Return a list of the currently connected devices, with each device
-  /// represented as a map of properties (id, name, platform, ...).
   Future<List<Map<String, Object?>>> getDevices([ Map<String, Object?>? args ]) async {
     return <Map<String, Object?>>[
       for (final PollingDeviceDiscovery discoverer in _discoverers)
@@ -899,7 +852,6 @@ class DeviceDomain extends Domain {
     ];
   }
 
-  /// Return a list of the current devices, discarding existing cache of devices.
   Future<List<Map<String, Object?>>> discoverDevices([ Map<String, Object?>? args ]) async {
     return <Map<String, Object?>>[
       for (final PollingDeviceDiscovery discoverer in _discoverers)
@@ -908,21 +860,18 @@ class DeviceDomain extends Domain {
     ];
   }
 
-  /// Enable device events.
   Future<void> enable(Map<String, Object?> args) async {
     for (final PollingDeviceDiscovery discoverer in _discoverers) {
       discoverer.startPolling();
     }
   }
 
-  /// Disable device events.
   Future<void> disable(Map<String, Object?> args) async {
     for (final PollingDeviceDiscovery discoverer in _discoverers) {
       discoverer.stopPolling();
     }
   }
 
-  /// Forward a host port to a device port.
   Future<Map<String, Object?>> forward(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final int devicePort = _getIntArg(args, 'devicePort', required: true)!;
@@ -938,7 +887,6 @@ class DeviceDomain extends Domain {
     return <String, Object?>{'hostPort': hostPort};
   }
 
-  /// Removes a forwarded port.
   Future<void> unforward(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final int devicePort = _getIntArg(args, 'devicePort', required: true)!;
@@ -952,7 +900,6 @@ class DeviceDomain extends Domain {
     return device.portForwarder!.unforward(ForwardedPort(hostPort, devicePort));
   }
 
-  /// Returns whether a device supports runtime mode.
   Future<bool> supportsRuntimeMode(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final Device? device = await daemon.deviceDomain._getDevice(deviceId);
@@ -963,7 +910,6 @@ class DeviceDomain extends Domain {
     return await device.supportsRuntimeMode(BuildMode.fromCliName(buildMode));
   }
 
-  /// Creates an application package from a file in the temp directory.
   Future<String> uploadApplicationPackage(Map<String, Object?> args) async {
     final TargetPlatform targetPlatform = getTargetPlatformForName(_getStringArg(args, 'targetPlatform', required: true)!);
     final File applicationBinary = daemon.proxyDomain.tempDirectory.childFile(_getStringArg(args, 'applicationBinary', required: true)!);
@@ -976,7 +922,6 @@ class DeviceDomain extends Domain {
     return id;
   }
 
-  /// Starts the log reader on the device.
   Future<String> startLogReader(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final Device? device = await daemon.deviceDomain._getDevice(deviceId);
@@ -995,13 +940,11 @@ class DeviceDomain extends Domain {
     return id;
   }
 
-  /// Stops a log reader that was previously started.
   Future<void> stopLogReader(Map<String, Object?> args) async {
     final String? id = _getStringArg(args, 'id', required: true);
     _logReaders.remove(id)?.dispose();
   }
 
-  /// Starts an app on a device.
   Future<Map<String, Object?>> startApp(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final Device? device = await daemon.deviceDomain._getDevice(deviceId);
@@ -1033,7 +976,6 @@ class DeviceDomain extends Domain {
     };
   }
 
-  /// Stops an app.
   Future<bool> stopApp(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final Device? device = await daemon.deviceDomain._getDevice(deviceId);
@@ -1051,7 +993,6 @@ class DeviceDomain extends Domain {
     );
   }
 
-  /// Takes a screenshot.
   Future<String?> takeScreenshot(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final Device? device = await daemon.deviceDomain._getDevice(deviceId);
@@ -1069,7 +1010,6 @@ class DeviceDomain extends Domain {
     }
   }
 
-  /// Starts DDS for the device.
   Future<String?> startDartDevelopmentService(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
     final bool? disableServiceAuthCodes = _getBoolArg(args, 'disableServiceAuthCodes');
@@ -1089,7 +1029,6 @@ class DeviceDomain extends Domain {
     return device.dds.uri?.toString();
   }
 
-  /// Starts DDS for the device.
   Future<void> shutdownDartDevelopmentService(Map<String, Object?> args) async {
     final String? deviceId = _getStringArg(args, 'deviceId', required: true);
 
@@ -1121,7 +1060,6 @@ class DeviceDomain extends Domain {
     return Future<void>.value();
   }
 
-  /// Return the connected device matching the deviceId field in the args.
   Future<Device?> _getDevice(String? deviceId) async {
     for (final PollingDeviceDiscovery discoverer in _discoverers) {
       final List<Device> devices = await discoverer.devices(
@@ -1336,7 +1274,6 @@ class NotifyingLogger extends DelegatingLogger {
   void clear() { }
 }
 
-/// A running application, started by this daemon.
 class AppInstance {
   AppInstance(this.id, { this.runner, this.logToStdout = false, required AppRunLogger logger })
     : _logger = logger;
@@ -1362,7 +1299,6 @@ class AppInstance {
   }
 }
 
-/// This domain responds to methods like [getEmulators] and [launch].
 class EmulatorDomain extends Domain {
   EmulatorDomain(Daemon daemon) : super(daemon, 'emulator') {
     registerHandler('getEmulators', getEmulators);
@@ -1422,7 +1358,6 @@ class ProxyDomain extends Domain {
   final Map<String, Socket> _forwardedConnections = <String, Socket>{};
   int _id = 0;
 
-  /// Writes to a file in a local temporary directory.
   Future<void> writeTempFile(Map<String, Object?> args, Stream<List<int>>? binary) async {
     final String path = _getStringArg(args, 'path', required: true)!;
     final File file = tempDirectory.childFile(path);
@@ -1430,7 +1365,6 @@ class ProxyDomain extends Domain {
     await file.openWrite().addStream(binary!);
   }
 
-  /// Calculate rolling hashes for a file in the local temporary directory.
   Future<Map<String, Object?>?> calculateFileHashes(Map<String, Object?> args) async {
     final String path = _getStringArg(args, 'path', required: true)!;
     final File file = tempDirectory.childFile(path);
@@ -1453,7 +1387,6 @@ class ProxyDomain extends Domain {
     return result;
   }
 
-  /// Opens a connection to a local port, and returns the connection id.
   Future<String> connect(Map<String, Object?> args) async {
     final int targetPort = _getIntArg(args, 'port', required: true)!;
     final String id = 'portForwarder_${targetPort}_${_id++}';
@@ -1496,7 +1429,6 @@ class ProxyDomain extends Domain {
     return id;
   }
 
-  /// Disconnects from a previously established connection.
   Future<bool> disconnect(Map<String, Object?> args) async {
     final String? id = _getStringArg(args, 'id', required: true);
     if (_forwardedConnections.containsKey(id)) {
@@ -1506,7 +1438,6 @@ class ProxyDomain extends Domain {
     return false;
   }
 
-  /// Writes to a previously established connection.
   Future<bool> write(Map<String, Object?> args, Stream<List<int>>? binary) async {
     final String? id = _getStringArg(args, 'id', required: true);
     if (_forwardedConnections.containsKey(id)) {
@@ -1532,11 +1463,6 @@ class ProxyDomain extends Domain {
   Directory get tempDirectory => _tempDirectory ??= globals.fs.systemTempDirectory.childDirectory('flutter_tool_daemon')..createSync();
 }
 
-/// A [Logger] which sends log messages to a listening daemon client.
-///
-/// This class can either:
-///   1) Send stdout messages and progress events to the client IDE
-///   1) Log messages to stdout and send progress events to the client IDE
 //
 // TODO(devoncarew): To simplify this code a bit, we could choose to specialize
 // this class into two, one for each of the above use cases.
@@ -1634,7 +1560,6 @@ class LogMessage {
   final StackTrace? stackTrace;
 }
 
-/// The method by which the Flutter app was launched.
 enum LaunchMode {
   run._('run'),
   attach._('attach');
@@ -1652,11 +1577,6 @@ enum OperationType {
   restart
 }
 
-/// A queue that debounces operations for a period and merges operations of the same type.
-/// Only one action (or any type) will run at a time. Actions of the same type requested
-/// in quick succession will be merged together and all return the same result. If an action
-/// is requested after an identical action has already started, it will be queued
-/// and run again once the first action completes.
 class DebounceOperationQueue<T, K> {
   final Map<K, RestartableTimer> _debounceTimers = <K, RestartableTimer>{};
   final Map<K, Future<T>> _operationQueue = <K, Future<T>>{};
@@ -1700,7 +1620,6 @@ class DebounceOperationQueue<T, K> {
   }
 }
 
-/// Specialized exception for returning errors to the daemon client.
 class DaemonException implements Exception {
   DaemonException(this.message);
 

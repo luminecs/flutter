@@ -96,9 +96,6 @@ class _EditableTextToolbarBuilderExampleAppState extends State<EditableTextToolb
   }
 }
 
-/// A simple, yet totally custom, text selection toolbar.
-///
-/// Displays its children in a scrollable grid.
 class _MyTextSelectionToolbar extends StatelessWidget {
   const _MyTextSelectionToolbar({
     required this.anchor,

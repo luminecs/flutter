@@ -141,7 +141,6 @@ void main() {
   testWidgetsWithLeakTracking(
       'Hovering over Cupertino context menu action updates cursor to clickable on Web',
       (WidgetTester tester) async {
-    /// Cupertino context menu action without "onPressed" callback.
     await tester.pumpWidget(getApp());
     final Offset contextMenuAction =
         tester.getCenter(find.text('I am a CupertinoContextMenuAction'));

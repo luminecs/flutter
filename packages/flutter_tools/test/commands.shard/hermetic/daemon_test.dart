@@ -31,10 +31,6 @@ import '../../src/context.dart';
 import '../../src/fake_devices.dart';
 import '../../src/fakes.dart';
 
-/// Runs a callback using FakeAsync.run while continually pumping the
-/// microtask queue. This avoids a deadlock when tests `await` a Future
-/// which queues a microtask that will not be processed unless the queue
-/// is flushed.
 Future<T> _runFakeAsync<T>(Future<T> Function(FakeAsync time) f) async {
   return FakeAsync().run((FakeAsync time) async {
     bool pump = true;

@@ -14,33 +14,19 @@ import 'binding.dart';
 import 'finders.dart';
 import 'goldens.dart';
 
-/// An unsupported method that exists for API compatibility.
 Future<ui.Image> captureImage(Element element) {
   throw UnsupportedError('captureImage is not supported on the web.');
 }
 
-/// Whether or not [captureImage] is supported.
-///
-/// This can be used to skip tests on platforms that don't support
-/// capturing images.
-///
-/// Currently this is true except when tests are running in the context of a web
-/// browser (`flutter test --platform chrome`).
 const bool canCaptureImage = false;
 
-/// The matcher created by [matchesGoldenFile]. This class is enabled when the
-/// test is running in a web browser using conditional import.
 class MatchesGoldenFile extends AsyncMatcher {
-  /// Creates an instance of [MatchesGoldenFile]. Called by [matchesGoldenFile].
   const MatchesGoldenFile(this.key, this.version);
 
-  /// Creates an instance of [MatchesGoldenFile]. Called by [matchesGoldenFile].
   MatchesGoldenFile.forStringPath(String path, this.version) : key = Uri.parse(path);
 
-  /// The [key] to the golden image.
   final Uri key;
 
-  /// The [version] of the golden image.
   final int? version;
 
   @override

@@ -858,7 +858,6 @@ void main() {
     expect(navigatorKey.currentState!.userGestureInProgress, false);
   });
 
-  /// Regression test for https://github.com/flutter/flutter/issues/29596.
   testWidgetsWithLeakTracking('test edge swipe then drop back at ending point works', (WidgetTester tester) async {
     await tester.pumpWidget(
       CupertinoApp(

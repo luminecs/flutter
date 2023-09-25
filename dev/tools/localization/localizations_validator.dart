@@ -19,15 +19,6 @@ class ValidationError implements Exception {
   String toString() => message;
 }
 
-/// Sanity checking of the @foo metadata in the English translations, *_en.arb.
-///
-/// - For each foo, resource, there must be a corresponding @foo.
-/// - For each @foo resource, there must be a corresponding foo, except
-///   for plurals, for which there must be a fooOther.
-/// - Each @foo resource must have a Map value with a String valued
-///   description entry.
-///
-/// Throws an exception upon failure.
 void validateEnglishLocalizations(File file) {
   final StringBuffer errorMessages = StringBuffer();
 
@@ -96,17 +87,6 @@ void validateEnglishLocalizations(File file) {
   }
 }
 
-/// This removes undefined localizations (localizations that aren't present in
-/// the canonical locale anymore) by:
-///
-/// 1. Looking up the canonical (English, in this case) localizations.
-/// 2. For each locale, getting the resources.
-/// 3. Determining the set of keys that aren't plural variations (we're only
-///    interested in the base terms being translated and not their variants)
-/// 4. Determining the set of invalid keys; that is those that are (non-plural)
-///    keys in the resources for this locale, but which _aren't_ keys in the
-///    canonical list.
-/// 5. Removes the invalid mappings from this resource's locale.
 void removeUndefinedLocalizations(
   Map<LocaleInfo, Map<String, String>> localeToResources,
 ) {
@@ -132,15 +112,6 @@ void removeUndefinedLocalizations(
   });
 }
 
-/// Enforces the following invariants in our localizations:
-///
-/// - Resource keys are valid, i.e. they appear in the canonical list.
-/// - Resource keys are complete for language-level locales, e.g. "es", "he".
-///
-/// Uses "en" localizations as the canonical source of locale keys that other
-/// locales are compared against.
-///
-/// If validation fails, throws an exception.
 void validateLocalizations(
   Map<LocaleInfo, Map<String, String>> localeToResources,
   Map<LocaleInfo, Map<String, dynamic>> localeToAttributes, {

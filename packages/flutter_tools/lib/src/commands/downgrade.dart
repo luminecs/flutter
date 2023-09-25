@@ -16,16 +16,6 @@ import '../persistent_tool_state.dart';
 import '../runner/flutter_command.dart';
 import '../version.dart';
 
-/// The flutter downgrade command returns the SDK to the last recorded version
-/// for a particular branch.
-///
-/// For example, suppose a user on the beta channel upgrades from 1.2.3 to 1.4.6.
-/// The tool will record that sha "abcdefg" was the last active beta channel in the
-/// persistent tool state. If the user is still on the beta channel and runs
-/// flutter downgrade, this will take the user back to "abcdefg". They will not be
-/// able to downgrade again, since the tool only records one prior version.
-/// Additionally, if they had switched channels to stable before trying to downgrade,
-/// the command would fail since there was no previously recorded stable version.
 class DowngradeCommand extends FlutterCommand {
   DowngradeCommand({
     bool verboseHelp = false,

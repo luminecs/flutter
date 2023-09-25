@@ -16,7 +16,6 @@ export 'package:process/process.dart' show ProcessManager;
 
 typedef VoidCallback = void Function();
 
-/// A command for [FakeProcessManager].
 @immutable
 class FakeCommand {
   const FakeCommand({
@@ -36,71 +35,30 @@ class FakeCommand {
     this.processStartMode,
   });
 
-  /// The exact commands that must be matched for this [FakeCommand] to be
-  /// considered correct.
   final List<Pattern> command;
 
-  /// The exact working directory that must be matched for this [FakeCommand] to
-  /// be considered correct.
-  ///
-  /// If this is null, the working directory is ignored.
   final String? workingDirectory;
 
-  /// The environment that must be matched for this [FakeCommand] to be considered correct.
-  ///
-  /// If this is null, then the environment is ignored.
-  ///
-  /// Otherwise, each key in this environment must be present and must have a
-  /// value that matches the one given here for the [FakeCommand] to match.
   final Map<String, String>? environment;
 
-  /// The stdout and stderr encoding that must be matched for this [FakeCommand]
-  /// to be considered correct.
-  ///
-  /// If this is null, then the encodings are ignored.
   final Encoding? encoding;
 
-  /// The time to allow to elapse before returning the [exitCode], if this command
-  /// is "executed".
-  ///
-  /// If you set this to a non-zero time, you should use a [FakeAsync] zone,
-  /// otherwise the test will be artificially slow.
   final Duration duration;
 
-  /// A callback that is run after [duration] expires but before the [exitCode]
-  /// (and output) are passed back.
   final VoidCallback? onRun;
 
-  /// The process' exit code.
-  ///
-  /// To simulate a never-ending process, set [duration] to a value greater than
-  /// 15 minutes (the timeout for our tests).
-  ///
-  /// To simulate a crash, subtract the crash signal number from 256. For example,
-  /// SIGPIPE (-13) is 243.
   final int exitCode;
 
-  /// The output to simulate on stdout. This will be encoded as UTF-8 and
-  /// returned in one go.
   final String stdout;
 
-  /// The output to simulate on stderr. This will be encoded as UTF-8 and
-  /// returned in one go.
   final String stderr;
 
-  /// If provided, allows the command completion to be blocked until the future
-  /// resolves.
   final Completer<void>? completer;
 
-  /// An optional stdin sink that will be exposed through the resulting
-  /// [FakeProcess].
   final IOSink? stdin;
 
-  /// If provided, this exception will be thrown when the fake command is run.
   final Object? exception;
 
-  /// When true, stdout and stderr will only be emitted after the `exitCode`
-  /// [Future] on [io.Process] completes.
   final bool outputFollowsExit;
 
   final io.ProcessStartMode? processStartMode;
@@ -129,13 +87,6 @@ class FakeCommand {
   }
 }
 
-/// A fake process for use with [FakeProcessManager].
-///
-/// The process delays exit until both [duration] (if specified) has elapsed
-/// and [completer] (if specified) has completed.
-///
-/// When [outputFollowsExit] is specified, bytes are streamed to [stderr] and
-/// [stdout] after the process exits.
 @visibleForTesting
 class FakeProcess implements io.Process {
   FakeProcess({
@@ -186,10 +137,8 @@ class FakeProcess implements io.Process {
     }
   }
 
-  /// The process exit code.
   final int _exitCode;
 
-  /// When specified, blocks process exit until completed.
   final Completer<void>? _completer;
 
   @override
@@ -198,7 +147,6 @@ class FakeProcess implements io.Process {
   @override
   final int pid;
 
-  /// The raw byte content of stderr.
   final List<int> _stderr;
 
   @override
@@ -210,7 +158,6 @@ class FakeProcess implements io.Process {
   @override
   late final Stream<List<int>> stdout;
 
-  /// The raw byte content of stdout.
   final List<int> _stdout;
 
   @override
@@ -221,51 +168,23 @@ class FakeProcess implements io.Process {
 }
 
 abstract class FakeProcessManager implements ProcessManager {
-  /// A fake [ProcessManager] which responds to all commands as if they had run
-  /// instantaneously with an exit code of 0 and no output.
   factory FakeProcessManager.any() = _FakeAnyProcessManager;
 
-  /// A fake [ProcessManager] which responds to particular commands with
-  /// particular results.
-  ///
-  /// On creation, pass in a list of [FakeCommand] objects. When the
-  /// [ProcessManager] methods such as [start] are invoked, the next
-  /// [FakeCommand] must match (otherwise the test fails); its settings are used
-  /// to simulate the result of running that command.
-  ///
-  /// If no command is found, then one is implied which immediately returns exit
-  /// code 0 with no output.
-  ///
-  /// There is no logic to ensure that all the listed commands are run. Use
-  /// [FakeCommand.onRun] to set a flag, or specify a sentinel command as your
-  /// last command and verify its execution is successful, to ensure that all
-  /// the specified commands are actually called.
   factory FakeProcessManager.list(List<FakeCommand> commands) = _SequenceProcessManager;
   factory FakeProcessManager.empty() => _SequenceProcessManager(<FakeCommand>[]);
 
   FakeProcessManager._();
 
-  /// Adds a new [FakeCommand] to the current process manager.
-  ///
-  /// This can be used to configure test expectations after the [ProcessManager] has been
-  /// provided to another interface.
-  ///
-  /// This is a no-op on [FakeProcessManager.any].
   void addCommand(FakeCommand command);
 
-  /// Add multiple [FakeCommand] to the current process manager.
   void addCommands(Iterable<FakeCommand> commands) {
     commands.forEach(addCommand);
   }
 
   final Map<int, FakeProcess> _fakeRunningProcesses = <int, FakeProcess>{};
 
-  /// Whether this fake has more [FakeCommand]s that are expected to run.
-  ///
-  /// This is always `true` for [FakeProcessManager.any].
   bool get hasRemainingExpectations;
 
-  /// The expected [FakeCommand]s that have not yet run.
   List<FakeCommand> get _remainingExpectations;
 
   @protected
@@ -387,7 +306,6 @@ abstract class FakeProcessManager implements ProcessManager {
     );
   }
 
-  /// Returns false if executable in [excludedExecutables].
   @override
   bool canRun(dynamic executable, {String? workingDirectory}) => !excludedExecutables.contains(executable);
 
@@ -470,8 +388,6 @@ class _SequenceProcessManager extends FakeProcessManager {
   List<FakeCommand> get _remainingExpectations => _commands;
 }
 
-/// Matcher that successfully matches against a [FakeProcessManager] with
-/// no remaining expectations ([item.hasRemainingExpectations] returns false).
 const Matcher hasNoRemainingExpectations = _HasNoRemainingExpectations();
 
 class _HasNoRemainingExpectations extends Matcher {

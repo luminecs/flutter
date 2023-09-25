@@ -12,28 +12,9 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines the visual properties of [Divider], [VerticalDivider], dividers
-/// between [ListTile]s, and dividers between rows in [DataTable]s.
-///
-/// Descendant widgets obtain the current [DividerThemeData] object using
-/// `DividerTheme.of(context)`. Instances of [DividerThemeData]
-/// can be customized with [DividerThemeData.copyWith].
-///
-/// Typically a [DividerThemeData] is specified as part of the overall
-/// [Theme] with [ThemeData.dividerTheme].
-///
-/// All [DividerThemeData] properties are `null` by default. When null,
-/// the widgets will provide their own defaults.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class DividerThemeData with Diagnosticable {
 
-  /// Creates a theme that can be used for [DividerTheme] or
-  /// [ThemeData.dividerTheme].
   const DividerThemeData({
     this.color,
     this.space,
@@ -42,29 +23,16 @@ class DividerThemeData with Diagnosticable {
     this.endIndent,
   });
 
-  /// The color of [Divider]s and [VerticalDivider]s, also
-  /// used between [ListTile]s, between rows in [DataTable]s, and so forth.
   final Color? color;
 
-  /// The [Divider]'s height or the [VerticalDivider]'s width.
-  ///
-  /// This represents the amount of horizontal or vertical space the divider
-  /// takes up.
   final double? space;
 
-  /// The thickness of the line drawn within the divider.
   final double? thickness;
 
-  /// The amount of empty space at the leading edge of [Divider] or top edge of
-  /// [VerticalDivider].
   final double? indent;
 
-  /// The amount of empty space at the trailing edge of [Divider] or bottom edge
-  /// of [VerticalDivider].
   final double? endIndent;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   DividerThemeData copyWith({
     Color? color,
     double? space,
@@ -81,9 +49,6 @@ class DividerThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two Divider themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static DividerThemeData lerp(DividerThemeData? a, DividerThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
@@ -133,34 +98,15 @@ class DividerThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines the configuration for
-/// [Divider]s, [VerticalDivider]s, dividers between [ListTile]s, and dividers
-/// between rows in [DataTable]s in this widget's subtree.
 class DividerTheme extends InheritedTheme {
-  /// Creates a divider theme that controls the configurations for
-  /// [Divider]s, [VerticalDivider]s, dividers between [ListTile]s, and dividers
-  /// between rows in [DataTable]s in its widget subtree.
   const DividerTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties for descendant [Divider]s, [VerticalDivider]s, dividers
-  /// between [ListTile]s, and dividers between rows in [DataTable]s.
   final DividerThemeData data;
 
-  /// The closest instance of this class's [data] value that encloses the given
-  /// context.
-  ///
-  /// If there is no ancestor, it returns [ThemeData.dividerTheme]. Applications
-  /// can assume that the returned value will not be null.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DividerThemeData theme = DividerTheme.of(context);
-  /// ```
   static DividerThemeData of(BuildContext context) {
     final DividerTheme? dividerTheme = context.dependOnInheritedWidgetOfExactType<DividerTheme>();
     return dividerTheme?.data ?? Theme.of(context).dividerTheme;

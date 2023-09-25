@@ -7,13 +7,10 @@ import 'package:flutter/material.dart';
 import '../../gallery/demo.dart';
 
 enum _ReorderableListType {
-  /// A list tile that contains a [CircleAvatar].
   horizontalAvatar,
 
-  /// A list tile that contains a [CircleAvatar].
   verticalAvatar,
 
-  /// A list tile that contains three lines of text and a checkbox.
   threeLine,
 }
 

@@ -7,70 +7,45 @@ import 'package:yaml/yaml.dart';
 import 'base/common.dart';
 import 'base/file_system.dart';
 
-/// Constant for 'pluginClass' key in plugin maps.
 const String kPluginClass = 'pluginClass';
 
-/// Constant for 'dartPluginClass' key in plugin maps.
 const String kDartPluginClass = 'dartPluginClass';
 
-/// Constant for 'ffiPlugin' key in plugin maps.
 const String kFfiPlugin = 'ffiPlugin';
 
 // Constant for 'defaultPackage' key in plugin maps.
 const String kDefaultPackage = 'default_package';
 
-/// Constant for 'sharedDarwinSource' key in plugin maps.
-/// Can be set for iOS and macOS plugins.
 const String kSharedDarwinSource = 'sharedDarwinSource';
 
-/// Constant for 'supportedVariants' key in plugin maps.
 const String kSupportedVariants = 'supportedVariants';
 
-/// Platform variants that a Windows plugin can support.
 enum PluginPlatformVariant {
-  /// Win32 variant of Windows.
   win32,
 }
 
-/// Marker interface for all platform specific plugin config implementations.
 abstract class PluginPlatform {
   const PluginPlatform();
 
   Map<String, dynamic> toMap();
 }
 
-/// A plugin that has platform variants.
 abstract class VariantPlatformPlugin {
-  /// The platform variants supported by the plugin.
   Set<PluginPlatformVariant> get supportedVariants;
 }
 
 abstract class NativeOrDartPlugin {
-  /// Determines whether the plugin has a Dart implementation.
   bool hasDart();
 
-  /// Determines whether the plugin has a FFI implementation.
   bool hasFfi();
 
-  /// Determines whether the plugin has a method channel implementation.
   bool hasMethodChannel();
 }
 
 abstract class DarwinPlugin {
-  /// Indicates the iOS and macOS native code is shareable the subdirectory "darwin",
   bool get sharedDarwinSource;
 }
 
-/// Contains parameters to template an Android plugin.
-///
-/// The [name] of the plugin is required. Additionally, either:
-/// - [defaultPackage], or
-/// - an implementation consisting of:
-///   - the [package] and [pluginClass] that will be the entry point to the
-///     plugin's native code, and/or
-///   - the [dartPluginClass] that will be the entry point for the plugin's
-///     Dart code
-/// is required.
 class AndroidPlugin extends PluginPlatform implements NativeOrDartPlugin {
   AndroidPlugin({
     required this.name,
@@ -118,25 +93,18 @@ class AndroidPlugin extends PluginPlatform implements NativeOrDartPlugin {
 
   static const String kConfigKey = 'android';
 
-  /// The plugin name defined in pubspec.yaml.
   final String name;
 
-  /// The plugin package name defined in pubspec.yaml.
   final String? package;
 
-  /// The native plugin main class defined in pubspec.yaml, if any.
   final String? pluginClass;
 
-  /// The Dart plugin main class defined in pubspec.yaml, if any.
   final String? dartPluginClass;
 
-  /// Is FFI plugin defined in pubspec.yaml.
   final bool ffiPlugin;
 
-  /// The default implementation package defined in pubspec.yaml, if any.
   final String? defaultPackage;
 
-  /// The absolute path to the plugin in the pub cache.
   final String pluginPath;
 
   @override
@@ -154,7 +122,6 @@ class AndroidPlugin extends PluginPlatform implements NativeOrDartPlugin {
     };
   }
 
-  /// Returns the version of the Android embedding.
   late final Set<String> _supportedEmbeddings = _getSupportedEmbeddings();
 
   Set<String> _getSupportedEmbeddings() {
@@ -222,16 +189,6 @@ class AndroidPlugin extends PluginPlatform implements NativeOrDartPlugin {
   }
 }
 
-/// Contains the parameters to template an iOS plugin.
-///
-/// The [name] of the plugin is required. Additionally, either:
-/// - [defaultPackage], or
-/// - an implementation consisting of:
-///   - the [pluginClass] (with optional [classPrefix]) that will be the entry
-///     point to the plugin's native code, and/or
-///   - the [dartPluginClass] that will be the entry point for the plugin's
-///     Dart code
-/// is required.
 class IOSPlugin extends PluginPlatform implements NativeOrDartPlugin, DarwinPlugin {
   const IOSPlugin({
     required this.name,
@@ -269,16 +226,12 @@ class IOSPlugin extends PluginPlatform implements NativeOrDartPlugin, DarwinPlug
 
   final String name;
 
-  /// Note, this is here only for legacy reasons. Multi-platform format
-  /// always sets it to empty String.
   final String classPrefix;
   final String? pluginClass;
   final String? dartPluginClass;
   final bool ffiPlugin;
   final String? defaultPackage;
 
-  /// Indicates the iOS native code is shareable with macOS in
-  /// the subdirectory "darwin", otherwise in the subdirectory "ios".
   @override
   final bool sharedDarwinSource;
 
@@ -305,11 +258,6 @@ class IOSPlugin extends PluginPlatform implements NativeOrDartPlugin, DarwinPlug
   }
 }
 
-/// Contains the parameters to template a macOS plugin.
-///
-/// The [name] of the plugin is required. Either [dartPluginClass] or
-/// [pluginClass] or [ffiPlugin] are required.
-/// [pluginClass] will be the entry point to the plugin's native code.
 class MacOSPlugin extends PluginPlatform implements NativeOrDartPlugin, DarwinPlugin {
   const MacOSPlugin({
     required this.name,
@@ -354,8 +302,6 @@ class MacOSPlugin extends PluginPlatform implements NativeOrDartPlugin, DarwinPl
   final bool ffiPlugin;
   final String? defaultPackage;
 
-  /// Indicates the macOS native code is shareable with iOS in
-  /// the subdirectory "darwin", otherwise in the subdirectory "macos".
   @override
   final bool sharedDarwinSource;
 
@@ -381,10 +327,6 @@ class MacOSPlugin extends PluginPlatform implements NativeOrDartPlugin, DarwinPl
   }
 }
 
-/// Contains the parameters to template a Windows plugin.
-///
-/// The [name] of the plugin is required. Either [dartPluginClass] or [pluginClass] are required.
-/// [pluginClass] will be the entry point to the plugin's native code.
 class WindowsPlugin extends PluginPlatform
     implements NativeOrDartPlugin, VariantPlatformPlugin {
   const WindowsPlugin({
@@ -473,10 +415,6 @@ class WindowsPlugin extends PluginPlatform
   }
 }
 
-/// Contains the parameters to template a Linux plugin.
-///
-/// The [name] of the plugin is required. Either [dartPluginClass] or [pluginClass] are required.
-/// [pluginClass] will be the entry point to the plugin's native code.
 class LinuxPlugin extends PluginPlatform implements NativeOrDartPlugin {
   const LinuxPlugin({
     required this.name,
@@ -540,11 +478,6 @@ class LinuxPlugin extends PluginPlatform implements NativeOrDartPlugin {
   }
 }
 
-/// Contains the parameters to template a web plugin.
-///
-/// The required fields include: [name] of the plugin, the [pluginClass] that will
-/// be the entry point to the plugin's implementation, and the [fileName]
-/// containing the code.
 class WebPlugin extends PluginPlatform {
   const WebPlugin({
     required this.name,
@@ -568,15 +501,10 @@ class WebPlugin extends PluginPlatform {
 
   static const String kConfigKey = 'web';
 
-  /// The name of the plugin.
   final String name;
 
-  /// The class containing the plugin implementation details.
-  ///
-  /// This class should have a static `registerWith` method defined.
   final String pluginClass;
 
-  /// The name of the file containing the class implementation above.
   final String fileName;
 
   @override

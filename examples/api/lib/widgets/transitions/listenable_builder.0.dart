@@ -4,17 +4,9 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ListenableBuilder].
 
 void main() => runApp(const ListenableBuilderExample());
 
-/// This widget listens for changes in the focus state of the subtree defined by
-/// its [child] widget, changing the border and color of the container it is in
-/// when it has focus.
-///
-/// A [FocusListenerContainer] swaps out the [BorderSide] of a border around the
-/// child widget with [focusedSide], and the background color with
-/// [focusedColor], when a widget that is a descendant of this widget has focus.
 class FocusListenerContainer extends StatefulWidget {
   const FocusListenerContainer({
     super.key,
@@ -25,22 +17,14 @@ class FocusListenerContainer extends StatefulWidget {
     required this.child,
   });
 
-  /// This is the border that will be used when not focused, and which defines
-  /// all the attributes except for the [OutlinedBorder.side] when focused.
   final OutlinedBorder? border;
 
-  /// This is the [BorderSide] that will be used for [border] when the [child]
-  /// subtree is focused.
   final BorderSide? focusedSide;
 
-  /// This is the [Color] that will be used as the fill color for the background
-  /// of the [child] when a descendant widget is focused.
   final Color? focusedColor;
 
-  /// The padding around the inside of the container.
   final EdgeInsetsGeometry? padding;
 
-  /// This is defines the subtree to listen to for focus changes.
   final Widget child;
 
   @override

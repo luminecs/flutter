@@ -31,17 +31,6 @@ const String kStateOption = 'state-file';
 const String kVersionOverrideOption = 'version-override';
 const String kGithubUsernameOption = 'github-username';
 
-/// Command to print the status of the current Flutter release.
-///
-/// This command has many required options which the user must provide
-/// via command line arguments (or optionally environment variables).
-///
-/// This command is the one with the worst user experience (as the user has to
-/// carefully type out many different options into their terminal) and the one
-/// that would benefit the most from a GUI frontend. This command will
-/// optionally read its options from an environment variable to facilitate a workflow
-/// in which configuration is provided by editing a bash script that sets environment
-/// variables and then invokes the conductor tool.
 class StartCommand extends Command<void> {
   StartCommand({
     required this.checkouts,
@@ -195,9 +184,6 @@ class StartCommand extends Command<void> {
   }
 }
 
-/// Context for starting a new release.
-///
-/// This is a frontend-agnostic implementation.
 class StartContext extends Context {
   StartContext({
     required this.candidateBranch,
@@ -253,15 +239,11 @@ class StartContext extends Context {
   final Version? versionOverride;
   final String githubUsername;
 
-  /// If validations should be overridden.
   final bool force;
 
   final EngineRepository engine;
   final FrameworkRepository framework;
 
-  /// Determine which part of the version to increment in the next release.
-  ///
-  /// If [atBranchPoint] is true, then this is a [ReleaseType.BETA_INITIAL].
   @visibleForTesting
   ReleaseType computeReleaseType(Version lastVersion, bool atBranchPoint) {
     if (atBranchPoint) {
@@ -383,7 +365,6 @@ class StartContext extends Context {
     stdio.printStatus(state_import.presentState(state));
   }
 
-  /// Determine this release's version number from the [lastVersion] and the [incrementLetter].
   Version calculateNextVersion(Version lastVersion, ReleaseType releaseType) {
     late final Version nextVersion;
     switch (releaseType) {
@@ -404,10 +385,6 @@ class StartContext extends Context {
     return nextVersion;
   }
 
-  /// Ensures the branch point [candidateBranch] and `master` has a version tag.
-  ///
-  /// This is necessary for version reporting for users on the `master` channel
-  /// to be correct.
   Future<Version> ensureBranchPointTagged({
     required Version requestedVersion,
     required String branchPoint,

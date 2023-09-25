@@ -1109,7 +1109,6 @@ void main() {
     testWidgetsWithLeakTracking('Move focus to next/previous node using lexical order.', (WidgetTester tester) async {
       const int nodeCount = 10;
 
-      /// Generate ['J' ... 'A'];
       final List<String> keys = List<String>.generate(nodeCount, (int index) => String.fromCharCode('A'.codeUnits[0] + nodeCount - index - 1));
       final List<FocusNode> nodes = List<FocusNode>.generate(nodeCount, (int index) => FocusNode(debugLabel: 'Node ${keys[index]}'));
       addTearDown(() {
@@ -1571,10 +1570,6 @@ void main() {
         );
       }
 
-      /// Layout is:
-      ///          [0]
-      ///       [1]   [2]
-      ///    [3]   [4]   [5]
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -1704,11 +1699,6 @@ void main() {
         );
       }
 
-      /// Layout is:
-      ///           [0, 1]
-      ///    [0, 0] [    ] [0, 2]
-      ///    [  1,  0 ] [1, 1] [1, 2]
-      ///    [2, 0] [2, 1] [2, 2]
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -1844,16 +1834,6 @@ void main() {
         );
       }
 
-      /// Layout is:
-      ///           [0]
-      ///    [  1]
-      ///     [ 2]
-      ///     [ 3]
-      ///
-      /// The important feature is that nothing is in the vertical band defined
-      /// by widget [0]. We want it to traverse to 1, 2, 3 in order, even though
-      /// the center of [2] is horizontally closer to the vertical axis of [0]'s
-      /// center than [1]'s.
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -1935,16 +1915,6 @@ void main() {
         );
       }
 
-      /// Layout is:
-      ///    [0]
-      ///        [ ][2][3]
-      ///        [1]
-      /// ([ ] is part of [1], [1] is just taller than [2] and [3]).
-      ///
-      /// The important feature is that nothing is in the horizontal band
-      /// defined by widget [0]. We want it to traverse to 1, 2, 3 in order,
-      /// even though the center of [2] is vertically closer to the horizontal
-      /// axis of [0]'s center than [1]'s.
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -3321,7 +3291,6 @@ class TestRoute extends PageRouteBuilder<void> {
         );
 }
 
-/// Used to test removal of nodes while sorting.
 class SkipAllButFirstAndLastPolicy extends FocusTraversalPolicy with DirectionalFocusTraversalPolicyMixin {
   @override
   Iterable<FocusNode> sortDescendants(Iterable<FocusNode> descendants, FocusNode currentNode) {

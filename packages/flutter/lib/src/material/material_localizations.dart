@@ -17,668 +17,341 @@ import 'typography.dart';
 // Please refer to instructions in this markdown file
 // (packages/flutter_localizations/README.md)
 
-/// Defines the localized resource values used by the Material widgets.
-///
-/// See also:
-///
-///  * [DefaultMaterialLocalizations], the default, English-only, implementation
-///    of this interface.
-///  * [GlobalMaterialLocalizations], which provides material localizations for
-///    many languages.
 abstract class MaterialLocalizations {
-  /// The tooltip for the leading [AppBar] menu (a.k.a. 'hamburger') button.
   String get openAppDrawerTooltip;
 
-  /// The [BackButton]'s tooltip.
   String get backButtonTooltip;
 
-  /// The [CloseButton]'s tooltip.
   String get closeButtonTooltip;
 
-  /// The tooltip for the delete button on a [Chip].
   String get deleteButtonTooltip;
 
-  /// The tooltip for the more button on an overflowing text selection menu.
   String get moreButtonTooltip;
 
-  /// The tooltip for the [CalendarDatePicker]'s "next month" button.
   String get nextMonthTooltip;
 
-  /// The tooltip for the [CalendarDatePicker]'s "previous month" button.
   String get previousMonthTooltip;
 
-  /// The tooltip for the [PaginatedDataTable]'s "first page" button.
   String get firstPageTooltip;
 
-  /// The tooltip for the [PaginatedDataTable]'s "last page" button.
   String get lastPageTooltip;
 
-  /// The tooltip for the [PaginatedDataTable]'s "next page" button.
   String get nextPageTooltip;
 
-  /// The tooltip for the [PaginatedDataTable]'s "previous page" button.
   String get previousPageTooltip;
 
-  /// The default [PopupMenuButton] tooltip.
   String get showMenuTooltip;
 
-  /// The default title for [AboutListTile].
   String aboutListTileTitle(String applicationName);
 
-  /// Title for the [LicensePage] widget.
   String get licensesPageTitle;
 
-  /// Subtitle for a package in the [LicensePage] widget.
   String licensesPackageDetailText(int licenseCount);
 
-  /// Title for the [PaginatedDataTable]'s row info footer.
   String pageRowsInfoTitle(int firstRow, int lastRow, int rowCount, bool rowCountIsApproximate);
 
-  /// Title for the [PaginatedDataTable]'s "rows per page" footer.
   String get rowsPerPageTitle;
 
-  /// The accessibility label used on a tab in a [TabBar].
-  ///
-  /// This message describes the index of the selected tab and how many tabs
-  /// there are, e.g. 'Tab 1 of 2' in United States English.
-  ///
-  /// `tabIndex` and `tabCount` must be greater than or equal to one.
   String tabLabel({ required int tabIndex, required int tabCount });
 
-  /// Title for the [PaginatedDataTable]'s selected row count header.
   String selectedRowCountTitle(int selectedRowCount);
 
-  /// Label for "cancel" buttons and menu items.
   String get cancelButtonLabel;
 
-  /// Label for "close" buttons and menu items.
   String get closeButtonLabel;
 
-  /// Label for "continue" buttons and menu items.
   String get continueButtonLabel;
 
-  /// Label for "copy" edit buttons and menu items.
   String get copyButtonLabel;
 
-  /// Label for "cut" edit buttons and menu items.
   String get cutButtonLabel;
 
-  /// Label for "scan text" OCR edit buttons and menu items.
   String get scanTextButtonLabel;
 
-  /// Label for OK buttons and menu items.
   String get okButtonLabel;
 
-  /// Label for "paste" edit buttons and menu items.
   String get pasteButtonLabel;
 
-  /// Label for "select all" edit buttons and menu items.
   String get selectAllButtonLabel;
 
-  /// Label for "look up" edit buttons and menu items.
   String get lookUpButtonLabel;
 
-  /// Label for "search web" edit buttons and menu items.
   String get searchWebButtonLabel;
 
-  /// Label for "share" edit buttons and menu items.
   String get shareButtonLabel;
 
-  /// Label for the [AboutDialog] button that shows the [LicensePage].
   String get viewLicensesButtonLabel;
 
-  /// The abbreviation for ante meridiem (before noon) shown in the time picker.
   String get anteMeridiemAbbreviation;
 
-  /// The abbreviation for post meridiem (after noon) shown in the time picker.
   String get postMeridiemAbbreviation;
 
-  /// The text-to-speech announcement made when a time picker invoked using
-  /// [showTimePicker] is set to the hour picker mode.
   String get timePickerHourModeAnnouncement;
 
-  /// The text-to-speech announcement made when a time picker invoked using
-  /// [showTimePicker] is set to the minute picker mode.
   String get timePickerMinuteModeAnnouncement;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) for a modal
-  /// barrier to indicate that a tap dismisses the barrier.
-  ///
-  /// A modal barrier can for example be found behind an alert or popup to block
-  /// user interaction with elements behind it.
   String get modalBarrierDismissLabel;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) for a
-  /// context menu to indicate that a tap dismisses the context menu.
   String get menuDismissLabel;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) when a
-  /// drawer widget is opened.
   String get drawerLabel;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) when a
-  /// popup menu widget is opened.
   String get popupMenuLabel;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) when a
-  /// MenuBarMenu widget is opened.
   String get menuBarMenuLabel;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) when a
-  /// dialog widget is opened.
   String get dialogLabel;
 
-  /// Label read out by accessibility tools (TalkBack or VoiceOver) when an
-  /// alert dialog widget is opened.
   String get alertDialogLabel;
 
-  /// Label indicating that a text field is a search field. This will be used
-  /// as a hint text in the text field.
   String get searchFieldLabel;
 
-  /// Label indicating that a given date is the current date.
   String get currentDateLabel;
 
-  /// Label for the scrim rendered underneath a [BottomSheet].
   String get scrimLabel;
 
-  /// Label for a [BottomSheet], used as the `modalRouteContentName` of the
-  /// [scrimOnTapHint].
   String get bottomSheetLabel;
 
-  /// Hint text announced when tapping on the scrim underneath the content of
-  /// a modal route.
   String scrimOnTapHint(String modalRouteContentName);
 
-  /// The format used to lay out the time picker.
-  ///
-  /// The documentation for [TimeOfDayFormat] enum values provides details on
-  /// each supported layout.
   TimeOfDayFormat timeOfDayFormat({ bool alwaysUse24HourFormat = false });
 
-  /// Defines the localized [TextStyle] geometry for [ThemeData.textTheme].
-  ///
-  /// The [scriptCategory] defines the overall geometry of a [TextTheme] for
-  /// the [Typography.geometryThemeFor] method in terms of the
-  /// three language categories defined in https://material.io/go/design-typography.
-  ///
-  /// Generally speaking, font sizes for [ScriptCategory.tall] and
-  /// [ScriptCategory.dense] scripts - for text styles that are smaller than the
-  /// title style - are one unit larger than they are for
-  /// [ScriptCategory.englishLike] scripts.
   ScriptCategory get scriptCategory;
 
-  /// Formats [number] as a decimal, inserting locale-appropriate thousands
-  /// separators as necessary.
   String formatDecimal(int number);
 
-  /// Formats [TimeOfDay.hour] in the given time of day according to the value
-  /// of [timeOfDayFormat].
-  ///
-  /// If [alwaysUse24HourFormat] is true, formats hour using [HourFormat.HH]
-  /// rather than the default for the current locale.
   String formatHour(TimeOfDay timeOfDay, { bool alwaysUse24HourFormat = false });
 
-  /// Formats [TimeOfDay.minute] in the given time of day according to the value
-  /// of [timeOfDayFormat].
   String formatMinute(TimeOfDay timeOfDay);
 
-  /// Formats [timeOfDay] according to the value of [timeOfDayFormat].
-  ///
-  /// If [alwaysUse24HourFormat] is true, formats hour using [HourFormat.HH]
-  /// rather than the default for the current locale. This value is usually
-  /// passed from [MediaQueryData.alwaysUse24HourFormat], which has platform-
-  /// specific behavior.
   String formatTimeOfDay(TimeOfDay timeOfDay, { bool alwaysUse24HourFormat = false });
 
-  /// Full unabbreviated year format, e.g. 2017 rather than 17.
   String formatYear(DateTime date);
 
-  /// Formats the date in a compact format.
-  ///
-  /// Usually just the numeric values for the for day, month and year are used.
-  ///
-  /// Examples:
-  ///
-  /// - US English: 02/21/2019
-  /// - Russian: 21.02.2019
-  ///
-  /// See also:
-  ///   * [parseCompactDate], which will convert a compact date string to a [DateTime].
   String formatCompactDate(DateTime date);
 
-  /// Formats the date using a short-width format.
-  ///
-  /// Includes the abbreviation of the month, the day and year.
-  ///
-  /// Examples:
-  ///
-  /// - US English: Feb 21, 2019
-  /// - Russian: 21 февр. 2019 г.
   String formatShortDate(DateTime date);
 
-  /// Formats the date using a medium-width format.
-  ///
-  /// Abbreviates month and days of week. This appears in the header of the date
-  /// picker invoked using [showDatePicker].
-  ///
-  /// Examples:
-  ///
-  /// - US English: Wed, Sep 27
-  /// - Russian: ср, сент. 27
   String formatMediumDate(DateTime date);
 
-  /// Formats day of week, month, day of month and year in a long-width format.
-  ///
-  /// Does not abbreviate names. Appears in spoken announcements of the date
-  /// picker invoked using [showDatePicker], when accessibility mode is on.
-  ///
-  /// Examples:
-  ///
-  /// - US English: Wednesday, September 27, 2017
-  /// - Russian: Среда, Сентябрь 27, 2017
   String formatFullDate(DateTime date);
 
-  /// Formats the month and the year of the given [date].
-  ///
-  /// The returned string does not contain the day of the month. This appears
-  /// in the date picker invoked using [showDatePicker].
   String formatMonthYear(DateTime date);
 
-  /// Formats the month and day of the given [date].
-  ///
-  /// Examples:
-  ///
-  /// - US English: Feb 21
-  /// - Russian: 21 февр.
   String formatShortMonthDay(DateTime date);
 
-  /// Converts the given compact date formatted string into a [DateTime].
-  ///
-  /// The format of the string must be a valid compact date format for the
-  /// given locale. If the text doesn't represent a valid date, `null` will be
-  /// returned.
-  ///
-  /// See also:
-  ///   * [formatCompactDate], which will convert a [DateTime] into a string in the compact format.
   DateTime? parseCompactDate(String? inputString);
 
-  /// List of week day names in narrow format, usually 1- or 2-letter
-  /// abbreviations of full names.
-  ///
-  /// The list begins with the value corresponding to Sunday and ends with
-  /// Saturday. Use [firstDayOfWeekIndex] to find the first day of week in this
-  /// list.
-  ///
-  /// Examples:
-  ///
-  /// - US English: S, M, T, W, T, F, S
-  /// - Russian: вс, пн, вт, ср, чт, пт, сб - notice that the list begins with
-  ///   вс (Sunday) even though the first day of week for Russian is Monday.
   List<String> get narrowWeekdays;
 
-  /// Index of the first day of week, where 0 points to Sunday, and 6 points to
-  /// Saturday.
-  ///
-  /// This getter is compatible with [narrowWeekdays]. For example:
-  ///
-  /// ```dart
-  ///  MaterialLocalizations localizations = MaterialLocalizations.of(context);
-  /// // The name of the first day of week for the current locale.
-  /// String firstDayOfWeek = localizations.narrowWeekdays[localizations.firstDayOfWeekIndex];
-  /// ```
   int get firstDayOfWeekIndex;
 
-  /// The character string used to separate the parts of a compact date format
-  /// (i.e. mm/dd/yyyy has a separator of '/').
   String get dateSeparator;
 
-  /// The help text used on an empty [InputDatePickerFormField] to indicate
-  /// to the user the date format being asked for.
   String get dateHelpText;
 
-  /// The semantic label used to announce when the user has entered the year
-  /// selection mode of the [CalendarDatePicker] which is used in the data picker
-  /// dialog created with [showDatePicker].
   String get selectYearSemanticsLabel;
 
-  /// The label used to indicate a date that has not been entered or selected
-  /// yet in the date picker.
   String get unspecifiedDate;
 
-  /// The label used to indicate a date range that has not been entered or
-  /// selected yet in the date range picker.
   String get unspecifiedDateRange;
 
-  /// The label used to describe the text field used in an [InputDatePickerFormField].
   String get dateInputLabel;
 
-  /// The label used for the starting date input field in the date range picker
-  /// created with [showDateRangePicker].
   String get dateRangeStartLabel;
 
-  /// The label used for the ending date input field in the date range picker
-  /// created with [showDateRangePicker].
   String get dateRangeEndLabel;
 
-  /// The semantics label used for the selected start date in the date range
-  /// picker's day grid.
   String dateRangeStartDateSemanticLabel(String formattedDate);
 
-  /// The semantics label used for the selected end date in the date range
-  /// picker's day grid.
   String dateRangeEndDateSemanticLabel(String formattedDate);
 
-  /// Error message displayed to the user when they have entered a text string
-  /// in an [InputDatePickerFormField] that is not in a valid date format.
   String get invalidDateFormatLabel;
 
-  /// Error message displayed to the user when they have entered an invalid
-  /// date range in the input mode of the date range picker created with
-  /// [showDateRangePicker].
   String get invalidDateRangeLabel;
 
-  /// Error message displayed to the user when they have entered a date that
-  /// is outside the valid range for the date picker.
-  /// [showDateRangePicker].
   String get dateOutOfRangeLabel;
 
-  /// Label for a 'SAVE' button. Currently used by the full screen mode of the
-  /// date range picker.
   String get saveButtonLabel;
 
-  /// Label used in the header of the date picker dialog created with
-  /// [showDatePicker].
   String get datePickerHelpText;
 
-  /// Label used in the header of the date range picker dialog created with
-  /// [showDateRangePicker].
   String get dateRangePickerHelpText;
 
-  /// Tooltip used for the calendar mode button of the date pickers.
   String get calendarModeButtonLabel;
 
-  /// Tooltip used for the text input mode button of the date pickers.
   String get inputDateModeButtonLabel;
 
-  /// Label used in the header of the time picker dialog created with
-  /// [showTimePicker] when in [TimePickerEntryMode.dial].
   String get timePickerDialHelpText;
 
-  /// Label used in the header of the time picker dialog created with
-  /// [showTimePicker] when in [TimePickerEntryMode.input].
   String get timePickerInputHelpText;
 
-  /// Label used below the hour text field of the time picker dialog created
-  /// with [showTimePicker] when in [TimePickerEntryMode.input].
   String get timePickerHourLabel;
 
-  /// Label used below the minute text field of the time picker dialog created
-  /// with [showTimePicker] when in [TimePickerEntryMode.input].
   String get timePickerMinuteLabel;
 
-  /// Error message for the time picker dialog created with [showTimePicker]
-  /// when in [TimePickerEntryMode.input].
   String get invalidTimeLabel;
 
-  /// Tooltip used to put the time picker into [TimePickerEntryMode.dial].
   String get dialModeButtonLabel;
 
-  /// Tooltip used to put the time picker into [TimePickerEntryMode.input].
   String get inputTimeModeButtonLabel;
 
-  /// The semantics label used to indicate which account is signed in the
-  /// [UserAccountsDrawerHeader] widget.
   String get signedInLabel;
 
-  /// The semantics label used for the button on [UserAccountsDrawerHeader] that
-  /// hides the list of accounts.
   String get hideAccountsLabel;
 
-  /// The semantics label used for the button on [UserAccountsDrawerHeader] that
-  /// shows the list of accounts.
   String get showAccountsLabel;
 
-  /// The semantics label used for [ReorderableListView] to reorder an item in the
-  /// list to the start of the list.
   @Deprecated(
     'Use the reorderItemToStart from WidgetsLocalizations instead. '
     'This feature was deprecated after v3.10.0-2.0.pre.'
   )
   String get reorderItemToStart;
 
-  /// The semantics label used for [ReorderableListView] to reorder an item in the
-  /// list to the end of the list.
   @Deprecated(
     'Use the reorderItemToEnd from WidgetsLocalizations instead. '
     'This feature was deprecated after v3.10.0-2.0.pre.'
   )
   String get reorderItemToEnd;
 
-  /// The semantics label used for [ReorderableListView] to reorder an item in the
-  /// list one space up the list.
   @Deprecated(
     'Use the reorderItemUp from WidgetsLocalizations instead. '
     'This feature was deprecated after v3.10.0-2.0.pre.'
   )
   String get reorderItemUp;
 
-  /// The semantics label used for [ReorderableListView] to reorder an item in the
-  /// list one space down the list.
   @Deprecated(
     'Use the reorderItemDown from WidgetsLocalizations instead. '
     'This feature was deprecated after v3.10.0-2.0.pre.'
   )
   String get reorderItemDown;
 
-  /// The semantics label used for [ReorderableListView] to reorder an item in the
-  /// list one space left in the list.
   @Deprecated(
     'Use the reorderItemLeft from WidgetsLocalizations instead. '
     'This feature was deprecated after v3.10.0-2.0.pre.'
   )
   String get reorderItemLeft;
 
-  /// The semantics label used for [ReorderableListView] to reorder an item in the
-  /// list one space right in the list.
   @Deprecated(
     'Use the reorderItemRight from WidgetsLocalizations instead. '
     'This feature was deprecated after v3.10.0-2.0.pre.'
   )
   String get reorderItemRight;
 
-  /// The semantics hint to describe the tap action on an expanded [ExpandIcon].
   String get expandedIconTapHint => 'Collapse';
 
-  /// The semantics hint to describe the tap action on a collapsed [ExpandIcon].
   String get collapsedIconTapHint => 'Expand';
 
-  /// The semantics hint to describe the tap action on an expanded
-  /// [ExpansionTile] on iOS and macOS. This is appended to the [collapsedHint]
-  /// hint to provide a more detailed description of the action, e.g. "Expanded
-  /// double tap to collapse".
   String get expansionTileExpandedHint => 'double tap to collapse';
 
-  /// The semantics hint to describe the tap action on a collapsed
-  /// [ExpansionTile] on iOS and macOS. This is appended to the [expandedHint]
-  /// hint to provide a more detailed description of the action, e.g. "Collapsed
-  /// double tap to expand".
   String get expansionTileCollapsedHint => 'double tap to expand';
 
-  /// The semantics hint to describe the tap action on an expanded [ExpansionTile].
   String get expansionTileExpandedTapHint => 'Collapse';
 
-  /// The semantics hint to describe the tap action on a collapsed [ExpansionTile].
   String get expansionTileCollapsedTapHint => 'Expand for more details';
 
-  /// The semantics hint to describe the [ExpansionTile] expanded state.
   String get expandedHint => 'Collapsed';
 
-  /// The semantics hint to describe the [ExpansionTile] collapsed state.
   String get collapsedHint => 'Expanded';
 
-  /// The label for the [TextField]'s character counter.
   String remainingTextFieldCharacterCount(int remaining);
 
-  /// The default semantics label for a [RefreshIndicator].
   String get refreshIndicatorSemanticLabel;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.alt].
   String get keyboardKeyAlt;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.altGraph].
   String get keyboardKeyAltGraph;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.backspace].
   String get keyboardKeyBackspace;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.capsLock].
   String get keyboardKeyCapsLock;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.channelDown].
   String get keyboardKeyChannelDown;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.channelUp].
   String get keyboardKeyChannelUp;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.control].
   String get keyboardKeyControl;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.delete].
   String get keyboardKeyDelete;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.eject].
   String get keyboardKeyEject;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.end].
   String get keyboardKeyEnd;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.escape].
   String get keyboardKeyEscape;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.fn].
   String get keyboardKeyFn;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.home].
   String get keyboardKeyHome;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.insert].
   String get keyboardKeyInsert;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.meta].
   String get keyboardKeyMeta;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.meta] on macOS.
   String get keyboardKeyMetaMacOs;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.meta] on Windows.
   String get keyboardKeyMetaWindows;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numLock].
   String get keyboardKeyNumLock;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad1].
   String get keyboardKeyNumpad1;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad2].
   String get keyboardKeyNumpad2;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad3].
   String get keyboardKeyNumpad3;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad4].
   String get keyboardKeyNumpad4;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad5].
   String get keyboardKeyNumpad5;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad6].
   String get keyboardKeyNumpad6;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad7].
   String get keyboardKeyNumpad7;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad8].
   String get keyboardKeyNumpad8;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad9].
   String get keyboardKeyNumpad9;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpad0].
   String get keyboardKeyNumpad0;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadAdd].
   String get keyboardKeyNumpadAdd;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadComma].
   String get keyboardKeyNumpadComma;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadDecimal].
   String get keyboardKeyNumpadDecimal;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadDivide].
   String get keyboardKeyNumpadDivide;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadEnter].
   String get keyboardKeyNumpadEnter;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadEqual].
   String get keyboardKeyNumpadEqual;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadMultiply].
   String get keyboardKeyNumpadMultiply;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadParenLeft].
   String get keyboardKeyNumpadParenLeft;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadParenRight].
   String get keyboardKeyNumpadParenRight;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.numpadSubtract].
   String get keyboardKeyNumpadSubtract;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.pageDown].
   String get keyboardKeyPageDown;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.pageUp].
   String get keyboardKeyPageUp;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.power].
   String get keyboardKeyPower;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.powerOff].
   String get keyboardKeyPowerOff;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.printScreen].
   String get keyboardKeyPrintScreen;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.scrollLock].
   String get keyboardKeyScrollLock;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.select].
   String get keyboardKeySelect;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.shift].
   String get keyboardKeyShift;
 
-  /// The shortcut label for the keyboard key [LogicalKeyboardKey.space].
   String get keyboardKeySpace;
 
-  /// The `MaterialLocalizations` from the closest [Localizations] instance
-  /// that encloses the given context.
-  ///
-  /// If no [MaterialLocalizations] are available in the given `context`, this
-  /// method throws an exception.
-  ///
-  /// This method is just a convenient shorthand for:
-  /// `Localizations.of<MaterialLocalizations>(context, MaterialLocalizations)!`.
-  ///
-  /// References to the localized resources defined by this class are typically
-  /// written in terms of this method. For example:
-  ///
-  /// ```dart
-  /// tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-  /// ```
   static MaterialLocalizations of(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
     return Localizations.of<MaterialLocalizations>(context, MaterialLocalizations)!;
@@ -701,20 +374,7 @@ class _MaterialLocalizationsDelegate extends LocalizationsDelegate<MaterialLocal
   String toString() => 'DefaultMaterialLocalizations.delegate(en_US)';
 }
 
-/// US English strings for the material widgets.
-///
-/// See also:
-///
-///  * [GlobalMaterialLocalizations], which provides material localizations for
-///    many languages.
-///  * [MaterialApp.localizationsDelegates], which automatically includes
-///    [DefaultMaterialLocalizations.delegate] by default.
 class DefaultMaterialLocalizations implements MaterialLocalizations {
-  /// Constructs an object that defines the material widgets' localized strings
-  /// for US English (only).
-  ///
-  /// [LocalizationsDelegate] implementations typically call the static [load]
-  /// function, rather than constructing this class directly.
   const DefaultMaterialLocalizations();
 
   // Ordered to match DateTime.monday=1, DateTime.sunday=6
@@ -779,11 +439,6 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
     'December',
   ];
 
-  /// Returns the number of days in a month, according to the proleptic
-  /// Gregorian calendar.
-  ///
-  /// This applies the leap year logic introduced by the Gregorian reforms of
-  /// 1582. It will not give valid results for dates prior to that time.
   int _getDaysInMonth(int year, int month) {
     if (month == DateTime.february) {
       final bool isLeapYear = (year % 4 == 0) && (year % 100 != 0) ||
@@ -813,8 +468,6 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
     }
   }
 
-  /// Formats [number] using two digits, assuming it's in the 0-99 inclusive
-  /// range. Not designed to format values outside this range.
   String _formatTwoDigitZeroPad(int number) {
     assert(0 <= number && number < 100);
 
@@ -1282,21 +935,10 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   @override
   String get refreshIndicatorSemanticLabel => 'Refresh';
 
-  /// Creates an object that provides US English resource values for the material
-  /// library widgets.
-  ///
-  /// The [locale] parameter is ignored.
-  ///
-  /// This method is typically used to create a [LocalizationsDelegate].
-  /// The [MaterialApp] does so by default.
   static Future<MaterialLocalizations> load(Locale locale) {
     return SynchronousFuture<MaterialLocalizations>(const DefaultMaterialLocalizations());
   }
 
-  /// A [LocalizationsDelegate] that uses [DefaultMaterialLocalizations.load]
-  /// to create an instance of this class.
-  ///
-  /// [MaterialApp] automatically adds this value to [MaterialApp.localizationsDelegates].
   static const LocalizationsDelegate<MaterialLocalizations> delegate = _MaterialLocalizationsDelegate();
 
   @override

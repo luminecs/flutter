@@ -7,16 +7,12 @@ import 'package:flutter/material.dart';
 import '../../gallery/demo.dart';
 
 enum _MaterialListType {
-  /// A list tile that contains a single line of text.
   oneLine,
 
-  /// A list tile that contains a [CircleAvatar] followed by a single line of text.
   oneLineWithAvatar,
 
-  /// A list tile that contains two lines of text.
   twoLine,
 
-  /// A list tile that contains three lines of text.
   threeLine,
 }
 

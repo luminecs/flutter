@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ScaffoldMessengerState.showSnackBar].
 
 void main() => runApp(const ShowSnackBarExampleApp());
 

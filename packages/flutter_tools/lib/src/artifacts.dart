@@ -17,13 +17,10 @@ import 'cache.dart';
 import 'globals.dart' as globals;
 
 enum Artifact {
-  /// The tool which compiles a dart kernel file into native code.
   genSnapshot,
-  /// The flutter tester binary.
   flutterTester,
   flutterFramework,
   flutterXcframework,
-  /// The framework directory of the macOS desktop.
   flutterMacOSFramework,
   vmSnapshotData,
   isolateSnapshotData,
@@ -32,65 +29,43 @@ enum Artifact {
   platformLibrariesJson,
   flutterPatchedSdkPath,
 
-  /// The root directory of the dart SDK.
   engineDartSdkPath,
-  /// The dart binary used to execute any of the required snapshots.
   engineDartBinary,
-  /// The dart binary for running aot snapshots
   engineDartAotRuntime,
-  /// The snapshot of frontend_server compiler.
   frontendServerSnapshotForEngineDartSdk,
-  /// The dart snapshot of the dart2js compiler.
   dart2jsSnapshot,
-  /// The dart snapshot of the dart2wasm compiler.
   dart2wasmSnapshot,
-  /// The wasm-opt binary that ships with the dart-sdk
   wasmOptBinary,
 
-  /// The root of the Linux desktop sources.
   linuxDesktopPath,
   // The root of the cpp headers for Linux desktop.
   linuxHeaders,
-  /// The root of the Windows desktop sources.
   windowsDesktopPath,
-  /// The root of the cpp client code for Windows desktop.
   windowsCppClientWrapper,
 
-  /// The root of the sky_engine package.
   skyEnginePath,
 
   // Fuchsia artifacts from the engine prebuilts.
   fuchsiaKernelCompiler,
   fuchsiaFlutterRunner,
 
-  /// Tools related to subsetting or icon font files.
   fontSubset,
   constFinder,
 
-  /// The location of file generators.
   flutterToolsFileGenerators,
 }
 
-/// A subset of [Artifact]s that are platform and build mode independent
 enum HostArtifact {
-  /// The root of the web implementation of the dart SDK.
   flutterWebSdk,
-  /// The libraries JSON file for web release builds.
   flutterWebLibrariesJson,
 
-  /// Folder that contains platform dill files for the web sdk.
   webPlatformKernelFolder,
 
-  /// The summary dill for the dartdevc target.
   webPlatformDDCKernelDill,
-  /// The summary dill with null safety enabled for the dartdevc target.g
   webPlatformDDCSoundKernelDill,
-  /// The summary dill for the dartdevc target.
   webPlatformDart2JSKernelDill,
-  /// The summary dill with null safety enabled for the dartdevc target.
   webPlatformDart2JSSoundKernelDill,
 
-  /// The precompiled SDKs and sourcemaps for web debug builds.
   webPrecompiledSdk,
   webPrecompiledSdkSourcemaps,
   webPrecompiledCanvaskitSdk,
@@ -109,7 +84,6 @@ enum HostArtifact {
   idevicescreenshot,
   iproxy,
 
-  /// The root of the sky_engine package.
   skyEnginePath,
 
   // The Impeller shader compiler.
@@ -284,59 +258,28 @@ class EngineBuildPaths {
   final String? webSdk;
 }
 
-/// Information about a local engine build (i.e. `--local-engine[-host]=...`).
-///
-/// See https://github.com/flutter/flutter/wiki/The-flutter-tool#using-a-locally-built-engine-with-the-flutter-tool
-/// for more information about local engine builds.
 class LocalEngineInfo {
-  /// Creates a reference to a local engine build.
-  ///
-  /// The [targetOutPath] and [hostOutPath] are assumed to be resolvable
-  /// paths to the built engine artifacts for the target (device) and host
-  /// (build) platforms, respectively.
   const LocalEngineInfo({
     required this.targetOutPath,
     required this.hostOutPath,
   });
 
-  /// The path to the engine artifacts for the target (device) platform.
-  ///
-  /// For example, if the target platform is Android debug, this would be a path
-  /// like `/path/to/engine/src/out/android_debug_unopt`. To retrieve just the
-  /// name (platform), see [localTargetName].
   final String targetOutPath;
 
-  /// The path to the engine artifacts for the host (build) platform.
-  ///
-  /// For example, if the host platform is debug, this would be a path like
-  /// `/path/to/engine/src/out/host_debug_unopt`. To retrieve just the name
-  /// (platform), see [localHostName].
   final String hostOutPath;
 
-  /// The name of the target (device) platform, i.e. `android_debug_unopt`.
   String get localTargetName => globals.fs.path.basename(targetOutPath);
 
-  /// The name of the host (build) platform, e.g. `host_debug_unopt`.
   String get localHostName => globals.fs.path.basename(hostOutPath);
 }
 
 // Manages the engine artifacts of Flutter.
 abstract class Artifacts {
-  /// A test-specific implementation of artifacts that returns stable paths for
-  /// all artifacts.
-  ///
-  /// If a [fileSystem] is not provided, creates a new [MemoryFileSystem] instance.
-  ///
-  /// Creates a [LocalEngineArtifacts] if `localEngine` is non-null
   @visibleForTesting
   factory Artifacts.test({FileSystem? fileSystem}) {
     return _TestArtifacts(fileSystem ?? MemoryFileSystem.test());
   }
 
-  /// A test-specific implementation of artifacts that returns stable paths for
-  /// all artifacts, and uses a local engine.
-  ///
-  /// If a [fileSystem] is not provided, creates a new [MemoryFileSystem] instance.
   @visibleForTesting
   factory Artifacts.testLocalEngine({
     required String localEngine,
@@ -378,7 +321,6 @@ abstract class Artifacts {
     return artifacts;
   }
 
-  /// Returns the requested [artifact] for the [platform], [mode], and [environmentType] combination.
   String getArtifactPath(
     Artifact artifact, {
     TargetPlatform? platform,
@@ -386,8 +328,6 @@ abstract class Artifacts {
     EnvironmentType? environmentType,
   });
 
-  /// Retrieve a host specific artifact that does not depend on the
-  /// current build mode or environment.
   FileSystemEntity getHostArtifact(
     HostArtifact artifact,
   );
@@ -396,15 +336,11 @@ abstract class Artifacts {
   // and [mode] combination.
   String getEngineType(TargetPlatform platform, [ BuildMode? mode ]);
 
-  /// Whether these artifacts correspond to a non-versioned local engine.
   bool get isLocalEngine;
 
-  /// If these artifacts are bound to a local engine build, returns info about
-  /// the location and name of the local engine, otherwise returns null.
   LocalEngineInfo? get localEngineInfo;
 }
 
-/// Manages the engine artifacts downloaded to the local cache.
 class CachedArtifacts implements Artifacts {
   CachedArtifacts({
     required FileSystem fileSystem,
@@ -833,7 +769,6 @@ String _getIosEngineArtifactPath(String engineDirectory,
       .path;
 }
 
-/// Manages the artifacts of a locally built engine.
 class CachedLocalEngineArtifacts implements Artifacts {
   CachedLocalEngineArtifacts(
     this._hostEngineOutPath, {
@@ -1283,13 +1218,7 @@ class CachedLocalWebSdkArtifacts implements Artifacts {
   LocalEngineInfo? get localEngineInfo => _parent.localEngineInfo;
 }
 
-/// An implementation of [Artifacts] that provides individual overrides.
-///
-/// If an artifact is not provided, the lookup delegates to the parent.
 class OverrideArtifacts implements Artifacts {
-  /// Creates a new [OverrideArtifacts].
-  ///
-  /// [parent] must be provided.
   OverrideArtifacts({
     required this.parent,
     this.frontendServer,
@@ -1348,7 +1277,6 @@ class OverrideArtifacts implements Artifacts {
   }
 }
 
-/// Locate the Dart SDK.
 String _dartSdkPath(Cache cache) {
   return cache.getRoot().childDirectory('dart-sdk').path;
 }

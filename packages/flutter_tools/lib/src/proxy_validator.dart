@@ -6,10 +6,6 @@ import 'base/io.dart';
 import 'base/platform.dart';
 import 'doctor_validator.dart';
 
-/// A validator that displays configured HTTP_PROXY environment variables.
-///
-/// if the `HTTP_PROXY` environment variable is non-empty, the contents are
-/// validated along with `NO_PROXY`.
 class ProxyValidator extends DoctorValidator {
   ProxyValidator({
     required Platform platform,
@@ -22,9 +18,6 @@ class ProxyValidator extends DoctorValidator {
   final String _httpProxy;
   final String _noProxy;
 
-  /// Gets a trimmed, non-null environment variable. If the variable is not set
-  /// an empty string will be returned. Checks for the lowercase version of the
-  /// environment variable first, then uppercase to match Dart's HTTP implementation.
   static String _getEnv(String key, Platform platform) =>
     platform.environment[key.toLowerCase()]?.trim() ??
     platform.environment[key.toUpperCase()]?.trim() ??

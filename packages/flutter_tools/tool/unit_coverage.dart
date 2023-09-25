@@ -4,10 +4,6 @@
 
 import 'dart:io';
 
-/// Produces a per-library coverage summary when fed an lcov file, sorted by
-/// increasing code coverage percentage.
-///
-/// Usage: `dart tool/unit_coverage lcov.info`
 void main(List<String> args) {
   if (args.isEmpty || args.length > 1) {
     print('Usage: dart tool/unit_coverage lcov.info');

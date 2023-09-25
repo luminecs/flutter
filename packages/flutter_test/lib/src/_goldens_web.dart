@@ -10,7 +10,6 @@ import 'package:matcher/expect.dart' show fail;
 
 import 'goldens.dart';
 
-/// An unsupported [GoldenFileComparator] that exists for API compatibility.
 class LocalFileComparator extends GoldenFileComparator {
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) {
@@ -23,36 +22,13 @@ class LocalFileComparator extends GoldenFileComparator {
   }
 }
 
-/// Returns whether [test] and [master] are pixel by pixel identical.
-///
-/// This method is not supported on the web and throws an [UnsupportedError]
-/// when called.
 Future<ComparisonResult> compareLists(List<int> test, List<int> master) async {
   throw UnsupportedError('Golden testing is not supported on the web.');
 }
 
-/// The default [WebGoldenComparator] implementation for `flutter test`.
-///
-/// This comparator will send a request to the test server for golden comparison
-/// which will then defer the comparison to [goldenFileComparator].
-///
-/// See also:
-///
-///   * [matchesGoldenFile], the function from [flutter_test] that invokes the
-///    comparator.
 class DefaultWebGoldenComparator extends WebGoldenComparator {
-  /// Creates a new [DefaultWebGoldenComparator] for the specified [testFile].
-  ///
-  /// Golden file keys will be interpreted as file paths relative to the
-  /// directory in which [testFile] resides.
-  ///
-  /// The [testFile] URL must represent a file.
   DefaultWebGoldenComparator(this.testUri);
 
-  /// The test file currently being executed.
-  ///
-  /// Golden file keys will be interpreted as file paths relative to the
-  /// directory in which this file resides.
   Uri testUri;
 
   @override

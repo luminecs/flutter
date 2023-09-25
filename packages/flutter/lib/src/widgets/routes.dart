@@ -34,18 +34,11 @@ import 'transitions.dart';
 // late dynamic _myState, newValue;
 // late StateSetter setState;
 
-/// A route that displays widgets in the [Navigator]'s [Overlay].
-///
-/// See also:
-///
-///  * [Route], which documents the meaning of the `T` generic type argument.
 abstract class OverlayRoute<T> extends Route<T> {
-  /// Creates a route that knows how to interact with an [Overlay].
   OverlayRoute({
     super.settings,
   });
 
-  /// Subclasses should override this getter to return the builders for the overlay.
   @factory
   Iterable<OverlayEntry> createOverlayEntries();
 
@@ -60,15 +53,6 @@ abstract class OverlayRoute<T> extends Route<T> {
     super.install();
   }
 
-  /// Controls whether [didPop] calls [NavigatorState.finalizeRoute].
-  ///
-  /// If true, this route removes its overlay entries during [didPop].
-  /// Subclasses can override this getter if they want to delay finalization
-  /// (for example to animate the route's exit before removing it from the
-  /// overlay).
-  ///
-  /// Subclasses that return false from [finishedWhenPopped] are responsible for
-  /// calling [NavigatorState.finalizeRoute] themselves.
   @protected
   bool get finishedWhenPopped => true;
 
@@ -92,73 +76,22 @@ abstract class OverlayRoute<T> extends Route<T> {
   }
 }
 
-/// A route with entrance and exit transitions.
-///
-/// See also:
-///
-///  * [Route], which documents the meaning of the `T` generic type argument.
 abstract class TransitionRoute<T> extends OverlayRoute<T> {
-  /// Creates a route that animates itself when it is pushed or popped.
   TransitionRoute({
     super.settings,
   });
 
-  /// This future completes only once the transition itself has finished, after
-  /// the overlay entries have been removed from the navigator's overlay.
-  ///
-  /// This future completes once the animation has been dismissed. That will be
-  /// after [popped], because [popped] typically completes before the animation
-  /// even starts, as soon as the route is popped.
   Future<T?> get completed => _transitionCompleter.future;
   final Completer<T?> _transitionCompleter = Completer<T?>();
 
-  /// Handle to the performance mode request.
-  ///
-  /// When the route is animating, the performance mode is requested. It is then
-  /// disposed when the animation ends. Requesting [DartPerformanceMode.latency]
-  /// indicates to the engine that the transition is latency sensitive and to delay
-  /// non-essential work while this handle is active.
   PerformanceModeRequestHandle? _performanceModeRequestHandle;
 
-  /// {@template flutter.widgets.TransitionRoute.transitionDuration}
-  /// The duration the transition going forwards.
-  ///
-  /// See also:
-  ///
-  /// * [reverseTransitionDuration], which controls the duration of the
-  /// transition when it is in reverse.
-  /// {@endtemplate}
   Duration get transitionDuration;
 
-  /// {@template flutter.widgets.TransitionRoute.reverseTransitionDuration}
-  /// The duration the transition going in reverse.
-  ///
-  /// By default, the reverse transition duration is set to the value of
-  /// the forwards [transitionDuration].
-  /// {@endtemplate}
   Duration get reverseTransitionDuration => transitionDuration;
 
-  /// {@template flutter.widgets.TransitionRoute.opaque}
-  /// Whether the route obscures previous routes when the transition is complete.
-  ///
-  /// When an opaque route's entrance transition is complete, the routes behind
-  /// the opaque route will not be built to save resources.
-  /// {@endtemplate}
   bool get opaque;
 
-  /// {@template flutter.widgets.TransitionRoute.allowSnapshotting}
-  /// Whether the route transition will prefer to animate a snapshot of the
-  /// entering/exiting routes.
-  ///
-  /// When this value is true, certain route transitions (such as the Android
-  /// zoom page transition) will snapshot the entering and exiting routes.
-  /// These snapshots are then animated in place of the underlying widgets to
-  /// improve performance of the transition.
-  ///
-  /// Generally this means that animations that occur on the entering/exiting
-  /// route while the route animation plays may appear frozen - unless they
-  /// are a hero animation or something that is drawn in a separate overlay.
-  /// {@endtemplate}
   bool get allowSnapshotting => true;
 
   // This ensures that if we got to the dismissed state while still current,
@@ -170,39 +103,18 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
 
   bool _popFinalized = false;
 
-  /// The animation that drives the route's transition and the previous route's
-  /// forward transition.
   Animation<double>? get animation => _animation;
   Animation<double>? _animation;
 
-  /// The animation controller that the route uses to drive the transitions.
-  ///
-  /// The animation itself is exposed by the [animation] property.
   @protected
   AnimationController? get controller => _controller;
   AnimationController? _controller;
 
-  /// The animation for the route being pushed on top of this route. This
-  /// animation lets this route coordinate with the entrance and exit transition
-  /// of route pushed on top of this route.
   Animation<double>? get secondaryAnimation => _secondaryAnimation;
   final ProxyAnimation _secondaryAnimation = ProxyAnimation(kAlwaysDismissedAnimation);
 
-  /// Whether to takeover the [controller] created by [createAnimationController].
-  ///
-  /// If true, this route will call [AnimationController.dispose] when the
-  /// controller is no longer needed.
-  /// If false, the controller should be disposed by whoever owned it.
-  ///
-  /// It defaults to `true`.
   bool willDisposeAnimationController = true;
 
-  /// Called to create the animation controller that will drive the transitions to
-  /// this route from the previous one, and back to the previous route from this
-  /// one.
-  ///
-  /// The returned controller will be disposed by [AnimationController.dispose]
-  /// if the [willDisposeAnimationController] is `true`.
   AnimationController createAnimationController() {
     assert(!_transitionCompleter.isCompleted, 'Cannot reuse a $runtimeType after disposing it.');
     final Duration duration = transitionDuration;
@@ -216,9 +128,6 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
     );
   }
 
-  /// Called to create the animation that exposes the current progress of
-  /// the transition controlled by the animation controller created by
-  /// [createAnimationController()].
   Animation<double> createAnimation() {
     assert(!_transitionCompleter.isCompleted, 'Cannot reuse a $runtimeType after disposing it.');
     assert(_controller != null);
@@ -425,55 +334,8 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
     });
   }
 
-  /// Returns true if this route supports a transition animation that runs
-  /// when [nextRoute] is pushed on top of it or when [nextRoute] is popped
-  /// off of it.
-  ///
-  /// Subclasses can override this method to restrict the set of routes they
-  /// need to coordinate transitions with.
-  ///
-  /// If true, and `nextRoute.canTransitionFrom()` is true, then the
-  /// [ModalRoute.buildTransitions] `secondaryAnimation` will run from 0.0 - 1.0
-  /// when [nextRoute] is pushed on top of this one. Similarly, if
-  /// the [nextRoute] is popped off of this route, the
-  /// `secondaryAnimation` will run from 1.0 - 0.0.
-  ///
-  /// If false, this route's [ModalRoute.buildTransitions] `secondaryAnimation` parameter
-  /// value will be [kAlwaysDismissedAnimation]. In other words, this route
-  /// will not animate when [nextRoute] is pushed on top of it or when
-  /// [nextRoute] is popped off of it.
-  ///
-  /// Returns true by default.
-  ///
-  /// See also:
-  ///
-  ///  * [canTransitionFrom], which must be true for [nextRoute] for the
-  ///    [ModalRoute.buildTransitions] `secondaryAnimation` to run.
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) => true;
 
-  /// Returns true if [previousRoute] should animate when this route
-  /// is pushed on top of it or when then this route is popped off of it.
-  ///
-  /// Subclasses can override this method to restrict the set of routes they
-  /// need to coordinate transitions with.
-  ///
-  /// If true, and `previousRoute.canTransitionTo()` is true, then the
-  /// previous route's [ModalRoute.buildTransitions] `secondaryAnimation` will
-  /// run from 0.0 - 1.0 when this route is pushed on top of
-  /// it. Similarly, if this route is popped off of [previousRoute]
-  /// the previous route's `secondaryAnimation` will run from 1.0 - 0.0.
-  ///
-  /// If false, then the previous route's [ModalRoute.buildTransitions]
-  /// `secondaryAnimation` value will be kAlwaysDismissedAnimation. In
-  /// other words [previousRoute] will not animate when this route is
-  /// pushed on top of it or when then this route is popped off of it.
-  ///
-  /// Returns true by default.
-  ///
-  /// See also:
-  ///
-  ///  * [canTransitionTo], which must be true for [previousRoute] for its
-  ///    [ModalRoute.buildTransitions] `secondaryAnimation` to run.
   bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) => true;
 
   @override
@@ -489,32 +351,21 @@ abstract class TransitionRoute<T> extends OverlayRoute<T> {
     super.dispose();
   }
 
-  /// A short description of this route useful for debugging.
   String get debugLabel => objectRuntimeType(this, 'TransitionRoute');
 
   @override
   String toString() => '${objectRuntimeType(this, 'TransitionRoute')}(animation: $_controller)';
 }
 
-/// An entry in the history of a [LocalHistoryRoute].
 class LocalHistoryEntry {
-  /// Creates an entry in the history of a [LocalHistoryRoute].
-  ///
-  /// The [impliesAppBarDismissal] defaults to true if not provided.
   LocalHistoryEntry({ this.onRemove, this.impliesAppBarDismissal = true });
 
-  /// Called when this entry is removed from the history of its associated [LocalHistoryRoute].
   final VoidCallback? onRemove;
 
   LocalHistoryRoute<dynamic>? _owner;
 
-  /// Whether an [AppBar] in the route this entry belongs to should
-  /// automatically add a back button or close button.
-  ///
-  /// Defaults to true.
   final bool impliesAppBarDismissal;
 
-  /// Remove this entry from the history of its associated [LocalHistoryRoute].
   void remove() {
     _owner?.removeLocalHistoryEntry(this);
     assert(_owner == null);
@@ -525,151 +376,9 @@ class LocalHistoryEntry {
   }
 }
 
-/// A mixin used by routes to handle back navigations internally by popping a list.
-///
-/// When a [Navigator] is instructed to pop, the current route is given an
-/// opportunity to handle the pop internally. A [LocalHistoryRoute] handles the
-/// pop internally if its list of local history entries is non-empty. Rather
-/// than being removed as the current route, the most recent [LocalHistoryEntry]
-/// is removed from the list and its [LocalHistoryEntry.onRemove] is called.
-///
-/// See also:
-///
-///  * [Route], which documents the meaning of the `T` generic type argument.
 mixin LocalHistoryRoute<T> on Route<T> {
   List<LocalHistoryEntry>? _localHistory;
   int _entriesImpliesAppBarDismissal = 0;
-  /// Adds a local history entry to this route.
-  ///
-  /// When asked to pop, if this route has any local history entries, this route
-  /// will handle the pop internally by removing the most recently added local
-  /// history entry.
-  ///
-  /// The given local history entry must not already be part of another local
-  /// history route.
-  ///
-  /// {@tool snippet}
-  ///
-  /// The following example is an app with 2 pages: `HomePage` and `SecondPage`.
-  /// The `HomePage` can navigate to the `SecondPage`.
-  ///
-  /// The `SecondPage` uses a [LocalHistoryEntry] to implement local navigation
-  /// within that page. Pressing 'show rectangle' displays a red rectangle and
-  /// adds a local history entry. At that point, pressing the '< back' button
-  /// pops the latest route, which is the local history entry, and the red
-  /// rectangle disappears. Pressing the '< back' button a second time
-  /// once again pops the latest route, which is the `SecondPage`, itself.
-  /// Therefore, the second press navigates back to the `HomePage`.
-  ///
-  /// ```dart
-  /// class App extends StatelessWidget {
-  ///   const App({super.key});
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return MaterialApp(
-  ///       initialRoute: '/',
-  ///       routes: <String, WidgetBuilder>{
-  ///         '/': (BuildContext context) => const HomePage(),
-  ///         '/second_page': (BuildContext context) => const SecondPage(),
-  ///       },
-  ///     );
-  ///   }
-  /// }
-  ///
-  /// class HomePage extends StatefulWidget {
-  ///   const HomePage({super.key});
-  ///
-  ///   @override
-  ///   State<HomePage> createState() => _HomePageState();
-  /// }
-  ///
-  /// class _HomePageState extends State<HomePage> {
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Scaffold(
-  ///       body: Center(
-  ///         child: Column(
-  ///           mainAxisSize: MainAxisSize.min,
-  ///           children: <Widget>[
-  ///             const Text('HomePage'),
-  ///             // Press this button to open the SecondPage.
-  ///             ElevatedButton(
-  ///               child: const Text('Second Page >'),
-  ///               onPressed: () {
-  ///                 Navigator.pushNamed(context, '/second_page');
-  ///               },
-  ///             ),
-  ///           ],
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  ///
-  /// class SecondPage extends StatefulWidget {
-  ///   const SecondPage({super.key});
-  ///
-  ///   @override
-  ///   State<SecondPage> createState() => _SecondPageState();
-  /// }
-  ///
-  /// class _SecondPageState extends State<SecondPage> {
-  ///
-  ///   bool _showRectangle = false;
-  ///
-  ///   Future<void> _navigateLocallyToShowRectangle() async {
-  ///     // This local history entry essentially represents the display of the red
-  ///     // rectangle. When this local history entry is removed, we hide the red
-  ///     // rectangle.
-  ///     setState(() => _showRectangle = true);
-  ///     ModalRoute.of(context)?.addLocalHistoryEntry(
-  ///         LocalHistoryEntry(
-  ///             onRemove: () {
-  ///               // Hide the red rectangle.
-  ///               setState(() => _showRectangle = false);
-  ///             }
-  ///         )
-  ///     );
-  ///   }
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     final Widget localNavContent = _showRectangle
-  ///       ? Container(
-  ///           width: 100.0,
-  ///           height: 100.0,
-  ///           color: Colors.red,
-  ///         )
-  ///       : ElevatedButton(
-  ///           onPressed: _navigateLocallyToShowRectangle,
-  ///           child: const Text('Show Rectangle'),
-  ///         );
-  ///
-  ///     return Scaffold(
-  ///       body: Center(
-  ///         child: Column(
-  ///           mainAxisAlignment: MainAxisAlignment.center,
-  ///           children: <Widget>[
-  ///             localNavContent,
-  ///             ElevatedButton(
-  ///               child: const Text('< Back'),
-  ///               onPressed: () {
-  ///                 // Pop a route. If this is pressed while the red rectangle is
-  ///                 // visible then it will pop our local history entry, which
-  ///                 // will hide the red rectangle. Otherwise, the SecondPage will
-  ///                 // navigate back to the HomePage.
-  ///                 Navigator.of(context).pop();
-  ///               },
-  ///             ),
-  ///           ],
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
   void addLocalHistoryEntry(LocalHistoryEntry entry) {
     assert(entry._owner == null);
     entry._owner = this;
@@ -686,10 +395,6 @@ mixin LocalHistoryRoute<T> on Route<T> {
     }
   }
 
-  /// Remove a local history entry from this route.
-  ///
-  /// The entry's [LocalHistoryEntry.onRemove] callback, if any, will be called
-  /// synchronously.
   void removeLocalHistoryEntry(LocalHistoryEntry entry) {
     assert(entry._owner == this);
     assert(_localHistory!.contains(entry));
@@ -833,7 +538,6 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
   // This is the combination of the two animations for the route.
   late Listenable _listenable;
 
-  /// The node this scope will use for its root [FocusScope] widget.
   final FocusScopeNode focusScopeNode = FocusScopeNode(debugLabel: '$_ModalScopeState Focus Scope');
   final ScrollController primaryScrollController = ScrollController();
 
@@ -988,73 +692,25 @@ class _ModalScopeState<T> extends State<_ModalScope<T>> {
   }
 }
 
-/// A route that blocks interaction with previous routes.
-///
-/// [ModalRoute]s cover the entire [Navigator]. They are not necessarily
-/// [opaque], however; for example, a pop-up menu uses a [ModalRoute] but only
-/// shows the menu in a small box overlapping the previous route.
-///
-/// The `T` type argument is the return value of the route. If there is no
-/// return value, consider using `void` as the return value.
-///
-/// See also:
-///
-///  * [Route], which further documents the meaning of the `T` generic type argument.
 abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T> {
-  /// Creates a route that blocks interaction with previous routes.
   ModalRoute({
     super.settings,
     this.filter,
     this.traversalEdgeBehavior,
   });
 
-  /// The filter to add to the barrier.
-  ///
-  /// If given, this filter will be applied to the modal barrier using
-  /// [BackdropFilter]. This allows blur effects, for example.
   final ui.ImageFilter? filter;
 
-  /// Controls the transfer of focus beyond the first and the last items of a
-  /// [FocusScopeNode].
-  ///
-  /// If set to null, [Navigator.routeTraversalEdgeBehavior] is used.
   final TraversalEdgeBehavior? traversalEdgeBehavior;
 
   // The API for general users of this class
 
-  /// Returns the modal route most closely associated with the given context.
-  ///
-  /// Returns null if the given context is not associated with a modal route.
-  ///
-  /// {@tool snippet}
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// ModalRoute<int>? route = ModalRoute.of<int>(context);
-  /// ```
-  /// {@end-tool}
-  ///
-  /// The given [BuildContext] will be rebuilt if the state of the route changes
-  /// while it is visible (specifically, if [isCurrent] or [canPop] change value).
   @optionalTypeArgs
   static ModalRoute<T>? of<T extends Object?>(BuildContext context) {
     final _ModalScopeStatus? widget = context.dependOnInheritedWidgetOfExactType<_ModalScopeStatus>();
     return widget?.route as ModalRoute<T>?;
   }
 
-  /// Schedule a call to [buildTransitions].
-  ///
-  /// Whenever you need to change internal state for a [ModalRoute] object, make
-  /// the change in a function that you pass to [setState], as in:
-  ///
-  /// ```dart
-  /// setState(() { _myState = newValue; });
-  /// ```
-  ///
-  /// If you just change the state directly without calling [setState], then the
-  /// route will not be scheduled for rebuilding, meaning that its rendering
-  /// will not be updated.
   @protected
   void setState(VoidCallback fn) {
     if (_scopeKey.currentState != null) {
@@ -1067,11 +723,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     }
   }
 
-  /// Returns a predicate that's true if the route has the specified name and if
-  /// popping the route will not yield the same route, i.e. if the route's
-  /// [willHandlePopInternally] property is false.
-  ///
-  /// This function is typically used with [Navigator.popUntil()].
   static RoutePredicate withName(String name) {
     return (Route<dynamic> route) {
       return !route.willHandlePopInternally
@@ -1082,163 +733,8 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
 
   // The API for subclasses to override - used by _ModalScope
 
-  /// Override this method to build the primary content of this route.
-  ///
-  /// The arguments have the following meanings:
-  ///
-  ///  * `context`: The context in which the route is being built.
-  ///  * [animation]: The animation for this route's transition. When entering,
-  ///    the animation runs forward from 0.0 to 1.0. When exiting, this animation
-  ///    runs backwards from 1.0 to 0.0.
-  ///  * [secondaryAnimation]: The animation for the route being pushed on top of
-  ///    this route. This animation lets this route coordinate with the entrance
-  ///    and exit transition of routes pushed on top of this route.
-  ///
-  /// This method is only called when the route is first built, and rarely
-  /// thereafter. In particular, it is not automatically called again when the
-  /// route's state changes unless it uses [ModalRoute.of]. For a builder that
-  /// is called every time the route's state changes, consider
-  /// [buildTransitions]. For widgets that change their behavior when the
-  /// route's state changes, consider [ModalRoute.of] to obtain a reference to
-  /// the route; this will cause the widget to be rebuilt each time the route
-  /// changes state.
-  ///
-  /// In general, [buildPage] should be used to build the page contents, and
-  /// [buildTransitions] for the widgets that change as the page is brought in
-  /// and out of view. Avoid using [buildTransitions] for content that never
-  /// changes; building such content once from [buildPage] is more efficient.
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation);
 
-  /// Override this method to wrap the [child] with one or more transition
-  /// widgets that define how the route arrives on and leaves the screen.
-  ///
-  /// By default, the child (which contains the widget returned by [buildPage])
-  /// is not wrapped in any transition widgets.
-  ///
-  /// The [buildTransitions] method, in contrast to [buildPage], is called each
-  /// time the [Route]'s state changes while it is visible (e.g. if the value of
-  /// [canPop] changes on the active route).
-  ///
-  /// The [buildTransitions] method is typically used to define transitions
-  /// that animate the new topmost route's comings and goings. When the
-  /// [Navigator] pushes a route on the top of its stack, the new route's
-  /// primary [animation] runs from 0.0 to 1.0. When the Navigator pops the
-  /// topmost route, e.g. because the use pressed the back button, the
-  /// primary animation runs from 1.0 to 0.0.
-  ///
-  /// {@tool snippet}
-  /// The following example uses the primary animation to drive a
-  /// [SlideTransition] that translates the top of the new route vertically
-  /// from the bottom of the screen when it is pushed on the Navigator's
-  /// stack. When the route is popped the SlideTransition translates the
-  /// route from the top of the screen back to the bottom.
-  ///
-  /// We've used [PageRouteBuilder] to demonstrate the [buildTransitions] method
-  /// here. The body of an override of the [buildTransitions] method would be
-  /// defined in the same way.
-  ///
-  /// ```dart
-  /// PageRouteBuilder<void>(
-  ///   pageBuilder: (BuildContext context,
-  ///       Animation<double> animation,
-  ///       Animation<double> secondaryAnimation,
-  ///   ) {
-  ///     return Scaffold(
-  ///       appBar: AppBar(title: const Text('Hello')),
-  ///       body: const Center(
-  ///         child: Text('Hello World'),
-  ///       ),
-  ///     );
-  ///   },
-  ///   transitionsBuilder: (
-  ///       BuildContext context,
-  ///       Animation<double> animation,
-  ///       Animation<double> secondaryAnimation,
-  ///       Widget child,
-  ///    ) {
-  ///     return SlideTransition(
-  ///       position: Tween<Offset>(
-  ///         begin: const Offset(0.0, 1.0),
-  ///         end: Offset.zero,
-  ///       ).animate(animation),
-  ///       child: child, // child is the value returned by pageBuilder
-  ///     );
-  ///   },
-  /// )
-  /// ```
-  /// {@end-tool}
-  ///
-  /// When the [Navigator] pushes a route on the top of its stack, the
-  /// [secondaryAnimation] can be used to define how the route that was on
-  /// the top of the stack leaves the screen. Similarly when the topmost route
-  /// is popped, the secondaryAnimation can be used to define how the route
-  /// below it reappears on the screen. When the Navigator pushes a new route
-  /// on the top of its stack, the old topmost route's secondaryAnimation
-  /// runs from 0.0 to 1.0. When the Navigator pops the topmost route, the
-  /// secondaryAnimation for the route below it runs from 1.0 to 0.0.
-  ///
-  /// {@tool snippet}
-  /// The example below adds a transition that's driven by the
-  /// [secondaryAnimation]. When this route disappears because a new route has
-  /// been pushed on top of it, it translates in the opposite direction of
-  /// the new route. Likewise when the route is exposed because the topmost
-  /// route has been popped off.
-  ///
-  /// ```dart
-  /// PageRouteBuilder<void>(
-  ///   pageBuilder: (BuildContext context,
-  ///       Animation<double> animation,
-  ///       Animation<double> secondaryAnimation,
-  ///   ) {
-  ///     return Scaffold(
-  ///       appBar: AppBar(title: const Text('Hello')),
-  ///       body: const Center(
-  ///         child: Text('Hello World'),
-  ///       ),
-  ///     );
-  ///   },
-  ///   transitionsBuilder: (
-  ///       BuildContext context,
-  ///       Animation<double> animation,
-  ///       Animation<double> secondaryAnimation,
-  ///       Widget child,
-  ///   ) {
-  ///     return SlideTransition(
-  ///       position: Tween<Offset>(
-  ///         begin: const Offset(0.0, 1.0),
-  ///         end: Offset.zero,
-  ///       ).animate(animation),
-  ///       child: SlideTransition(
-  ///         position: Tween<Offset>(
-  ///           begin: Offset.zero,
-  ///           end: const Offset(0.0, 1.0),
-  ///         ).animate(secondaryAnimation),
-  ///         child: child,
-  ///       ),
-  ///      );
-  ///   },
-  /// )
-  /// ```
-  /// {@end-tool}
-  ///
-  /// In practice the `secondaryAnimation` is used pretty rarely.
-  ///
-  /// The arguments to this method are as follows:
-  ///
-  ///  * `context`: The context in which the route is being built.
-  ///  * [animation]: When the [Navigator] pushes a route on the top of its stack,
-  ///    the new route's primary [animation] runs from 0.0 to 1.0. When the [Navigator]
-  ///    pops the topmost route this animation runs from 1.0 to 0.0.
-  ///  * [secondaryAnimation]: When the Navigator pushes a new route
-  ///    on the top of its stack, the old topmost route's [secondaryAnimation]
-  ///    runs from 0.0 to 1.0. When the [Navigator] pops the topmost route, the
-  ///    [secondaryAnimation] for the route below it runs from 1.0 to 0.0.
-  ///  * `child`, the page contents, as returned by [buildPage].
-  ///
-  /// See also:
-  ///
-  ///  * [buildPage], which is used to describe the actual contents of the page,
-  ///    and whose result is passed to the `child` argument of this method.
   Widget buildTransitions(
     BuildContext context,
     Animation<double> animation,
@@ -1273,209 +769,21 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
 
   // The API for subclasses to override - used by this class
 
-  /// {@template flutter.widgets.ModalRoute.barrierDismissible}
-  /// Whether you can dismiss this route by tapping the modal barrier.
-  ///
-  /// The modal barrier is the scrim that is rendered behind each route, which
-  /// generally prevents the user from interacting with the route below the
-  /// current route, and normally partially obscures such routes.
-  ///
-  /// For example, when a dialog is on the screen, the page below the dialog is
-  /// usually darkened by the modal barrier.
-  ///
-  /// If [barrierDismissible] is true, then tapping this barrier, pressing
-  /// the escape key on the keyboard, or calling route popping functions
-  /// such as [Navigator.pop] will cause the current route to be popped
-  /// with null as the value.
-  ///
-  /// If [barrierDismissible] is false, then tapping the barrier has no effect.
-  ///
-  /// If this getter would ever start returning a different value,
-  /// either [changedInternalState] or [changedExternalState] should
-  /// be invoked so that the change can take effect.
-  ///
-  /// It is safe to use `navigator.context` to look up inherited
-  /// widgets here, because the [Navigator] calls
-  /// [changedExternalState] whenever its dependencies change, and
-  /// [changedExternalState] causes the modal barrier to rebuild.
-  ///
-  /// See also:
-  ///
-  ///  * [Navigator.pop], which is used to dismiss the route.
-  ///  * [barrierColor], which controls the color of the scrim for this route.
-  ///  * [ModalBarrier], the widget that implements this feature.
-  /// {@endtemplate}
   bool get barrierDismissible;
 
-  /// Whether the semantics of the modal barrier are included in the
-  /// semantics tree.
-  ///
-  /// The modal barrier is the scrim that is rendered behind each route, which
-  /// generally prevents the user from interacting with the route below the
-  /// current route, and normally partially obscures such routes.
-  ///
-  /// If [semanticsDismissible] is true, then modal barrier semantics are
-  /// included in the semantics tree.
-  ///
-  /// If [semanticsDismissible] is false, then modal barrier semantics are
-  /// excluded from the semantics tree and tapping on the modal barrier
-  /// has no effect.
-  ///
-  /// If this getter would ever start returning a different value,
-  /// either [changedInternalState] or [changedExternalState] should
-  /// be invoked so that the change can take effect.
-  ///
-  /// It is safe to use `navigator.context` to look up inherited
-  /// widgets here, because the [Navigator] calls
-  /// [changedExternalState] whenever its dependencies change, and
-  /// [changedExternalState] causes the modal barrier to rebuild.
   bool get semanticsDismissible => true;
 
-  /// {@template flutter.widgets.ModalRoute.barrierColor}
-  /// The color to use for the modal barrier. If this is null, the barrier will
-  /// be transparent.
-  ///
-  /// The modal barrier is the scrim that is rendered behind each route, which
-  /// generally prevents the user from interacting with the route below the
-  /// current route, and normally partially obscures such routes.
-  ///
-  /// For example, when a dialog is on the screen, the page below the dialog is
-  /// usually darkened by the modal barrier.
-  ///
-  /// The color is ignored, and the barrier made invisible, when
-  /// [ModalRoute.offstage] is true.
-  ///
-  /// While the route is animating into position, the color is animated from
-  /// transparent to the specified color.
-  /// {@endtemplate}
-  ///
-  /// If this getter would ever start returning a different color, one
-  /// of the [changedInternalState] or [changedExternalState] methods
-  /// should be invoked so that the change can take effect.
-  ///
-  /// It is safe to use `navigator.context` to look up inherited
-  /// widgets here, because the [Navigator] calls
-  /// [changedExternalState] whenever its dependencies change, and
-  /// [changedExternalState] causes the modal barrier to rebuild.
-  ///
-  /// {@tool snippet}
-  ///
-  /// For example, to make the barrier color use the theme's
-  /// background color, one could say:
-  ///
-  /// ```dart
-  /// Color get barrierColor => Theme.of(navigator.context).colorScheme.background;
-  /// ```
-  ///
-  /// {@end-tool}
-  ///
-  /// See also:
-  ///
-  ///  * [barrierDismissible], which controls the behavior of the barrier when
-  ///    tapped.
-  ///  * [ModalBarrier], the widget that implements this feature.
   Color? get barrierColor;
 
-  /// {@template flutter.widgets.ModalRoute.barrierLabel}
-  /// The semantic label used for a dismissible barrier.
-  ///
-  /// If the barrier is dismissible, this label will be read out if
-  /// accessibility tools (like VoiceOver on iOS) focus on the barrier.
-  ///
-  /// The modal barrier is the scrim that is rendered behind each route, which
-  /// generally prevents the user from interacting with the route below the
-  /// current route, and normally partially obscures such routes.
-  ///
-  /// For example, when a dialog is on the screen, the page below the dialog is
-  /// usually darkened by the modal barrier.
-  /// {@endtemplate}
-  ///
-  /// If this getter would ever start returning a different label,
-  /// either [changedInternalState] or [changedExternalState] should
-  /// be invoked so that the change can take effect.
-  ///
-  /// It is safe to use `navigator.context` to look up inherited
-  /// widgets here, because the [Navigator] calls
-  /// [changedExternalState] whenever its dependencies change, and
-  /// [changedExternalState] causes the modal barrier to rebuild.
-  ///
-  /// See also:
-  ///
-  ///  * [barrierDismissible], which controls the behavior of the barrier when
-  ///    tapped.
-  ///  * [ModalBarrier], the widget that implements this feature.
   String? get barrierLabel;
 
-  /// The curve that is used for animating the modal barrier in and out.
-  ///
-  /// The modal barrier is the scrim that is rendered behind each route, which
-  /// generally prevents the user from interacting with the route below the
-  /// current route, and normally partially obscures such routes.
-  ///
-  /// For example, when a dialog is on the screen, the page below the dialog is
-  /// usually darkened by the modal barrier.
-  ///
-  /// While the route is animating into position, the color is animated from
-  /// transparent to the specified [barrierColor].
-  ///
-  /// If this getter would ever start returning a different curve,
-  /// either [changedInternalState] or [changedExternalState] should
-  /// be invoked so that the change can take effect.
-  ///
-  /// It is safe to use `navigator.context` to look up inherited
-  /// widgets here, because the [Navigator] calls
-  /// [changedExternalState] whenever its dependencies change, and
-  /// [changedExternalState] causes the modal barrier to rebuild.
-  ///
-  /// It defaults to [Curves.ease].
-  ///
-  /// See also:
-  ///
-  ///  * [barrierColor], which determines the color that the modal transitions
-  ///    to.
-  ///  * [Curves] for a collection of common curves.
-  ///  * [AnimatedModalBarrier], the widget that implements this feature.
   Curve get barrierCurve => Curves.ease;
 
-  /// {@template flutter.widgets.ModalRoute.maintainState}
-  /// Whether the route should remain in memory when it is inactive.
-  ///
-  /// If this is true, then the route is maintained, so that any futures it is
-  /// holding from the next route will properly resolve when the next route
-  /// pops. If this is not necessary, this can be set to false to allow the
-  /// framework to entirely discard the route's widget hierarchy when it is not
-  /// visible.
-  ///
-  /// Setting [maintainState] to false does not guarantee that the route will be
-  /// discarded. For instance, it will not be descarded if it is still visible
-  /// because the next above it is not opaque (e.g. it is a popup dialog).
-  /// {@endtemplate}
-  ///
-  /// If this getter would ever start returning a different value, the
-  /// [changedInternalState] should be invoked so that the change can take
-  /// effect.
-  ///
-  /// See also:
-  ///
-  ///  * [OverlayEntry.maintainState], which is the underlying implementation
-  ///    of this property.
   bool get maintainState;
 
 
   // The API for _ModalScope and HeroController
 
-  /// Whether this route is currently offstage.
-  ///
-  /// On the first frame of a route's entrance transition, the route is built
-  /// [Offstage] using an animation progress of 1.0. The route is invisible and
-  /// non-interactive, but each widget has its final size and position. This
-  /// mechanism lets the [HeroController] determine the final local of any hero
-  /// widgets being animated as part of the transition.
-  ///
-  /// The modal barrier, if any, is not rendered if [offstage] is true (see
-  /// [barrierColor]).
-  ///
-  /// Whenever this changes value, [changedInternalState] is called.
   bool get offstage => _offstage;
   bool _offstage = false;
   set offstage(bool value) {
@@ -1490,7 +798,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     changedInternalState();
   }
 
-  /// The build context for the subtree containing the primary content of this route.
   BuildContext? get subtreeContext => _subtreeKey.currentContext;
 
   @override
@@ -1505,24 +812,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
 
   final Set<PopEntry> _popEntries = <PopEntry>{};
 
-  /// Returns [RoutePopDisposition.doNotPop] if any of callbacks added with
-  /// [addScopedWillPopCallback] returns either false or null. If they all
-  /// return true, the base [Route.willPop]'s result will be returned. The
-  /// callbacks will be called in the order they were added, and will only be
-  /// called if all previous callbacks returned true.
-  ///
-  /// Typically this method is not overridden because applications usually
-  /// don't create modal routes directly, they use higher level primitives
-  /// like [showDialog]. The scoped [WillPopCallback] list makes it possible
-  /// for ModalRoute descendants to collectively define the value of [willPop].
-  ///
-  /// See also:
-  ///
-  ///  * [Form], which provides an `onWillPop` callback that uses this mechanism.
-  ///  * [addScopedWillPopCallback], which adds a callback to the list this
-  ///    method checks.
-  ///  * [removeScopedWillPopCallback], which removes a callback from the list
-  ///    this method checks.
   @Deprecated(
     'Use popDisposition instead. '
     'This feature was deprecated after v3.12.0-1.0.pre.',
@@ -1539,23 +828,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     return super.willPop();
   }
 
-  /// Returns [RoutePopDisposition.doNotPop] if any of the [PopEntry] instances
-  /// registered with [registerPopEntry] have [PopEntry.canPopNotifier] set to
-  /// false.
-  ///
-  /// Typically this method is not overridden because applications usually
-  /// don't create modal routes directly, they use higher level primitives
-  /// like [showDialog]. The scoped [PopEntry] list makes it possible for
-  /// ModalRoute descendants to collectively define the value of
-  /// [popDisposition].
-  ///
-  /// See also:
-  ///
-  ///  * [Form], which provides an `onPopInvoked` callback that is similar.
-  ///  * [registerPopEntry], which adds a [PopEntry] to the list this method
-  ///    checks.
-  ///  * [unregisterPopEntry], which removes a [PopEntry] from the list this
-  ///    method checks.
   @override
   RoutePopDisposition get popDisposition {
     final bool canPop = _popEntries.every((PopEntry popEntry) {
@@ -1575,24 +847,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     }
   }
 
-  /// Enables this route to veto attempts by the user to dismiss it.
-  ///
-  /// This callback runs asynchronously and it's possible that it will be called
-  /// after its route has been disposed. The callback should check [State.mounted]
-  /// before doing anything.
-  ///
-  /// A typical application of this callback would be to warn the user about
-  /// unsaved [Form] data if the user attempts to back out of the form. In that
-  /// case, use the [Form.onWillPop] property to register the callback.
-  ///
-  /// See also:
-  ///
-  ///  * [WillPopScope], which manages the registration and unregistration
-  ///    process automatically.
-  ///  * [Form], which provides an `onWillPop` callback that uses this mechanism.
-  ///  * [willPop], which runs the callbacks added with this method.
-  ///  * [removeScopedWillPopCallback], which removes a callback from the list
-  ///    that [willPop] checks.
   @Deprecated(
     'Use registerPopEntry or PopScope instead. '
     'This feature was deprecated after v3.12.0-1.0.pre.',
@@ -1602,13 +856,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     _willPopCallbacks.add(callback);
   }
 
-  /// Remove one of the callbacks run by [willPop].
-  ///
-  /// See also:
-  ///
-  ///  * [Form], which provides an `onWillPop` callback that uses this mechanism.
-  ///  * [addScopedWillPopCallback], which adds callback to the list
-  ///    checked by [willPop].
   @Deprecated(
     'Use unregisterPopEntry or PopScope instead. '
     'This feature was deprecated after v3.12.0-1.0.pre.',
@@ -1618,27 +865,12 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     _willPopCallbacks.remove(callback);
   }
 
-  /// Registers the existence of a [PopEntry] in the route.
-  ///
-  /// [PopEntry] instances registered in this way will have their
-  /// [PopEntry.onPopInvoked] callbacks called when a route is popped or a pop
-  /// is attempted. They will also be able to block pop operations with
-  /// [PopEntry.canPopNotifier] through this route's [popDisposition] method.
-  ///
-  /// See also:
-  ///
-  ///  * [unregisterPopEntry], which performs the opposite operation.
   void registerPopEntry(PopEntry popEntry) {
     _popEntries.add(popEntry);
     popEntry.canPopNotifier.addListener(_handlePopEntryChange);
     _handlePopEntryChange();
   }
 
-  /// Unregisters a [PopEntry] in the route's widget subtree.
-  ///
-  /// See also:
-  ///
-  ///  * [registerPopEntry], which performs the opposite operation.
   void unregisterPopEntry(PopEntry popEntry) {
     _popEntries.remove(popEntry);
     popEntry.canPopNotifier.removeListener(_handlePopEntryChange);
@@ -1672,23 +904,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     }
   }
 
-  /// True if one or more [WillPopCallback] callbacks exist.
-  ///
-  /// This method is used to disable the horizontal swipe pop gesture supported
-  /// by [MaterialPageRoute] for [TargetPlatform.iOS] and
-  /// [TargetPlatform.macOS]. If a pop might be vetoed, then the back gesture is
-  /// disabled.
-  ///
-  /// The [buildTransitions] method will not be called again if this changes,
-  /// since it can change during the build as descendants of the route add or
-  /// remove callbacks.
-  ///
-  /// See also:
-  ///
-  ///  * [addScopedWillPopCallback], which adds a callback.
-  ///  * [removeScopedWillPopCallback], which removes a callback.
-  ///  * [willHandlePopInternally], which reports on another reason why
-  ///    a pop might be vetoed.
   @Deprecated(
     'Use popDisposition instead. '
     'This feature was deprecated after v3.12.0-1.0.pre.',
@@ -1721,22 +936,8 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     }
   }
 
-  /// Whether this route can be popped.
-  ///
-  /// A route can be popped if there is at least one active route below it, or
-  /// if [willHandlePopInternally] returns true.
-  ///
-  /// When this changes, if the route is visible, the route will
-  /// rebuild, and any widgets that used [ModalRoute.of] will be
-  /// notified.
   bool get canPop => hasActiveRouteBelow || willHandlePopInternally;
 
-  /// Whether an [AppBar] in the route should automatically add a back button or
-  /// close button.
-  ///
-  /// This getter returns true if there is at least one active route below it,
-  /// or there is at least one [LocalHistoryEntry] with [impliesAppBarDismissal]
-  /// set to true
   bool get impliesAppBarDismissal => hasActiveRouteBelow || _entriesImpliesAppBarDismissal > 0;
 
   // Internals
@@ -1770,14 +971,6 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
     return barrier;
   }
 
-  /// Build the barrier for this [ModalRoute], subclasses can override
-  /// this method to create their own barrier with customized features such as
-  /// color or accessibility focus size.
-  ///
-  /// See also:
-  /// * [ModalBarrier], which is typically used to build a barrier.
-  /// * [ModalBottomSheetRoute], which overrides this method to build a
-  ///   customized barrier.
   Widget buildModalBarrier() {
     Widget barrier;
     if (barrierColor != null && barrierColor!.alpha != 0 && !offstage) { // changedInternalState is called if barrierColor or offstage updates
@@ -1836,22 +1029,7 @@ abstract class ModalRoute<T> extends TransitionRoute<T> with LocalHistoryRoute<T
   String toString() => '${objectRuntimeType(this, 'ModalRoute')}($settings, animation: $_animation)';
 }
 
-/// A modal route that overlays a widget over the current route.
-///
-/// {@macro flutter.widgets.ModalRoute.barrierDismissible}
-///
-/// {@tool dartpad}
-/// This example shows how to create a dialog box that is dismissible.
-///
-/// ** See code in examples/api/lib/widgets/routes/popup_route.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///   * [ModalRoute], which is the base class for this class.
-///   * [Navigator.pop], which is used to dismiss the route.
 abstract class PopupRoute<T> extends ModalRoute<T> {
-  /// Initializes the [PopupRoute].
   PopupRoute({
     super.settings,
     super.filter,
@@ -1868,89 +1046,9 @@ abstract class PopupRoute<T> extends ModalRoute<T> {
   bool get allowSnapshotting => false;
 }
 
-/// A [Navigator] observer that notifies [RouteAware]s of changes to the
-/// state of their [Route].
-///
-/// [RouteObserver] informs subscribers whenever a route of type `R` is pushed
-/// on top of their own route of type `R` or popped from it. This is for example
-/// useful to keep track of page transitions, e.g. a `RouteObserver<PageRoute>`
-/// will inform subscribed [RouteAware]s whenever the user navigates away from
-/// the current page route to another page route.
-///
-/// To be informed about route changes of any type, consider instantiating a
-/// `RouteObserver<Route>`.
-///
-/// ## Type arguments
-///
-/// When using more aggressive [lints](https://dart.dev/lints),
-/// in particular lints such as `always_specify_types`,
-/// the Dart analyzer will require that certain types
-/// be given with their type arguments. Since the [Route] class and its
-/// subclasses have a type argument, this includes the arguments passed to this
-/// class. Consider using `dynamic` to specify the entire class of routes rather
-/// than only specific subtypes. For example, to watch for all [ModalRoute]
-/// variants, the `RouteObserver<ModalRoute<dynamic>>` type may be used.
-///
-/// {@tool snippet}
-///
-/// To make a [StatefulWidget] aware of its current [Route] state, implement
-/// [RouteAware] in its [State] and subscribe it to a [RouteObserver]:
-///
-/// ```dart
-/// // Register the RouteObserver as a navigation observer.
-/// final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
-///
-/// void main() {
-///   runApp(MaterialApp(
-///     home: Container(),
-///     navigatorObservers: <RouteObserver<ModalRoute<void>>>[ routeObserver ],
-///   ));
-/// }
-///
-/// class RouteAwareWidget extends StatefulWidget {
-///   const RouteAwareWidget({super.key});
-///
-///   @override
-///   State<RouteAwareWidget> createState() => RouteAwareWidgetState();
-/// }
-///
-/// // Implement RouteAware in a widget's state and subscribe it to the RouteObserver.
-/// class RouteAwareWidgetState extends State<RouteAwareWidget> with RouteAware {
-///
-///   @override
-///   void didChangeDependencies() {
-///     super.didChangeDependencies();
-///     routeObserver.subscribe(this, ModalRoute.of(context)!);
-///   }
-///
-///   @override
-///   void dispose() {
-///     routeObserver.unsubscribe(this);
-///     super.dispose();
-///   }
-///
-///   @override
-///   void didPush() {
-///     // Route was pushed onto navigator and is now topmost route.
-///   }
-///
-///   @override
-///   void didPopNext() {
-///     // Covering route was popped off the navigator.
-///   }
-///
-///   @override
-///   Widget build(BuildContext context) => Container();
-///
-/// }
-/// ```
-/// {@end-tool}
 class RouteObserver<R extends Route<dynamic>> extends NavigatorObserver {
   final Map<R, Set<RouteAware>> _listeners = <R, Set<RouteAware>>{};
 
-  /// Whether this observer is managing changes for the specified route.
-  ///
-  /// If asserts are disabled, this method will throw an exception.
   @visibleForTesting
   bool debugObservingRoute(R route) {
     late bool contained;
@@ -1961,11 +1059,6 @@ class RouteObserver<R extends Route<dynamic>> extends NavigatorObserver {
     return contained;
   }
 
-  /// Subscribe [routeAware] to be informed about changes to [route].
-  ///
-  /// Going forward, [routeAware] will be informed about qualifying changes
-  /// to [route], e.g. when [route] is covered by another route or when [route]
-  /// is popped off the [Navigator] stack.
   void subscribe(RouteAware routeAware, R route) {
     final Set<RouteAware> subscribers = _listeners.putIfAbsent(route, () => <RouteAware>{});
     if (subscribers.add(routeAware)) {
@@ -1973,10 +1066,6 @@ class RouteObserver<R extends Route<dynamic>> extends NavigatorObserver {
     }
   }
 
-  /// Unsubscribe [routeAware].
-  ///
-  /// [routeAware] is no longer informed about changes to its route. If the given argument was
-  /// subscribed to multiple types, this will unregister it (once) from each type.
   void unsubscribe(RouteAware routeAware) {
     final List<R> routes = _listeners.keys.toList();
     for (final R route in routes) {
@@ -2025,72 +1114,17 @@ class RouteObserver<R extends Route<dynamic>> extends NavigatorObserver {
   }
 }
 
-/// An interface for objects that are aware of their current [Route].
-///
-/// This is used with [RouteObserver] to make a widget aware of changes to the
-/// [Navigator]'s session history.
 abstract mixin class RouteAware {
-  /// Called when the top route has been popped off, and the current route
-  /// shows up.
   void didPopNext() { }
 
-  /// Called when the current route has been pushed.
   void didPush() { }
 
-  /// Called when the current route has been popped off.
   void didPop() { }
 
-  /// Called when a new route has been pushed, and the current route is no
-  /// longer visible.
   void didPushNext() { }
 }
 
-/// A general dialog route which allows for customization of the dialog popup.
-///
-/// It is used internally by [showGeneralDialog] or can be directly pushed
-/// onto the [Navigator] stack to enable state restoration. See
-/// [showGeneralDialog] for a state restoration app example.
-///
-/// This function takes a `pageBuilder`, which typically builds a dialog.
-/// Content below the dialog is dimmed with a [ModalBarrier]. The widget
-/// returned by the `builder` does not share a context with the location that
-/// `showDialog` is originally called from. Use a [StatefulBuilder] or a
-/// custom [StatefulWidget] if the dialog needs to update dynamically.
-///
-/// The `barrierDismissible` argument is used to indicate whether tapping on the
-/// barrier will dismiss the dialog. It is `true` by default and cannot be `null`.
-///
-/// The `barrierColor` argument is used to specify the color of the modal
-/// barrier that darkens everything below the dialog. If `null`, the default
-/// color `Colors.black54` is used.
-///
-/// The `settings` argument define the settings for this route. See
-/// [RouteSettings] for details.
-///
-/// {@template flutter.widgets.RawDialogRoute}
-/// A [DisplayFeature] can split the screen into sub-screens. The closest one to
-/// [anchorPoint] is used to render the content.
-///
-/// If no [anchorPoint] is provided, then [Directionality] is used:
-///
-///   * for [TextDirection.ltr], [anchorPoint] is `Offset.zero`, which will
-///     cause the content to appear in the top-left sub-screen.
-///   * for [TextDirection.rtl], [anchorPoint] is `Offset(double.maxFinite, 0)`,
-///     which will cause the content to appear in the top-right sub-screen.
-///
-/// If no [anchorPoint] is provided, and there is no [Directionality] ancestor
-/// widget in the tree, then the widget asserts during build in debug mode.
-/// {@endtemplate}
-///
-/// See also:
-///
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
-///  * [showGeneralDialog], which is a way to display a RawDialogRoute.
-///  * [showDialog], which is a way to display a DialogRoute.
-///  * [showCupertinoDialog], which displays an iOS-style dialog.
 class RawDialogRoute<T> extends PopupRoute<T> {
-  /// A general dialog route which allows for customization of the dialog popup.
   RawDialogRoute({
     required RoutePageBuilder pageBuilder,
     bool barrierDismissible = true,
@@ -2128,7 +1162,6 @@ class RawDialogRoute<T> extends PopupRoute<T> {
 
   final RouteTransitionsBuilder? _transitionBuilder;
 
-  /// {@macro flutter.widgets.DisplayFeatureSubScreen.anchorPoint}
   final Offset? anchorPoint;
 
   @override
@@ -2159,82 +1192,6 @@ class RawDialogRoute<T> extends PopupRoute<T> {
   }
 }
 
-/// Displays a dialog above the current contents of the app.
-///
-/// This function allows for customization of aspects of the dialog popup.
-///
-/// This function takes a `pageBuilder` which is used to build the primary
-/// content of the route (typically a dialog widget). Content below the dialog
-/// is dimmed with a [ModalBarrier]. The widget returned by the `pageBuilder`
-/// does not share a context with the location that [showGeneralDialog] is
-/// originally called from. Use a [StatefulBuilder] or a custom
-/// [StatefulWidget] if the dialog needs to update dynamically.
-///
-/// The `context` argument is used to look up the [Navigator] for the
-/// dialog. It is only used when the method is called. Its corresponding widget
-/// can be safely removed from the tree before the dialog is closed.
-///
-/// The `useRootNavigator` argument is used to determine whether to push the
-/// dialog to the [Navigator] furthest from or nearest to the given `context`.
-/// By default, `useRootNavigator` is `true` and the dialog route created by
-/// this method is pushed to the root navigator.
-///
-/// If the application has multiple [Navigator] objects, it may be necessary to
-/// call `Navigator.of(context, rootNavigator: true).pop(result)` to close the
-/// dialog rather than just `Navigator.pop(context, result)`.
-///
-/// The `barrierDismissible` argument is used to determine whether this route
-/// can be dismissed by tapping the modal barrier. This argument defaults
-/// to false. If `barrierDismissible` is true, a non-null `barrierLabel` must be
-/// provided.
-///
-/// The `barrierLabel` argument is the semantic label used for a dismissible
-/// barrier. This argument defaults to `null`.
-///
-/// The `barrierColor` argument is the color used for the modal barrier. This
-/// argument defaults to `Color(0x80000000)`.
-///
-/// The `transitionDuration` argument is used to determine how long it takes
-/// for the route to arrive on or leave off the screen. This argument defaults
-/// to 200 milliseconds.
-///
-/// The `transitionBuilder` argument is used to define how the route arrives on
-/// and leaves off the screen. By default, the transition is a linear fade of
-/// the page's contents.
-///
-/// The `routeSettings` will be used in the construction of the dialog's route.
-/// See [RouteSettings] for more details.
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// Returns a [Future] that resolves to the value (if any) that was passed to
-/// [Navigator.pop] when the dialog was closed.
-///
-/// ### State Restoration in Dialogs
-///
-/// Using this method will not enable state restoration for the dialog. In order
-/// to enable state restoration for a dialog, use [Navigator.restorablePush]
-/// or [Navigator.restorablePushNamed] with [RawDialogRoute].
-///
-/// For more information about state restoration, see [RestorationManager].
-///
-/// {@tool sample}
-/// This sample demonstrates how to create a restorable dialog. This is
-/// accomplished by enabling state restoration by specifying
-/// [WidgetsApp.restorationScopeId] and using [Navigator.restorablePush] to
-/// push [RawDialogRoute] when the button is tapped.
-///
-/// {@macro flutter.widgets.RestorationManager}
-///
-/// ** See code in examples/api/lib/widgets/routes/show_general_dialog.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
-///  * [showDialog], which displays a Material-style dialog.
-///  * [showCupertinoDialog], which displays an iOS-style dialog.
 Future<T?> showGeneralDialog<T extends Object?>({
   required BuildContext context,
   required RoutePageBuilder pageBuilder,
@@ -2260,40 +1217,15 @@ Future<T?> showGeneralDialog<T extends Object?>({
   ));
 }
 
-/// Signature for the function that builds a route's primary contents.
-/// Used in [PageRouteBuilder] and [showGeneralDialog].
-///
-/// See [ModalRoute.buildPage] for complete definition of the parameters.
 typedef RoutePageBuilder = Widget Function(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation);
 
-/// Signature for the function that builds a route's transitions.
-/// Used in [PageRouteBuilder] and [showGeneralDialog].
-///
-/// See [ModalRoute.buildTransitions] for complete definition of the parameters.
 typedef RouteTransitionsBuilder = Widget Function(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child);
 
-/// A callback type for informing that a navigation pop has been invoked,
-/// whether or not it was handled successfully.
-///
-/// Accepts a didPop boolean indicating whether or not back navigation
-/// succeeded.
 typedef PopInvokedCallback = void Function(bool didPop);
 
-/// Allows listening to and preventing pops.
-///
-/// Can be registered in [ModalRoute] to listen to pops with [onPopInvoked] or
-/// to enable/disable them with [canPopNotifier].
-///
-/// See also:
-///
-///  * [PopScope], which provides similar functionality in a widget.
-///  * [ModalRoute.registerPopEntry], which unregisters instances of this.
-///  * [ModalRoute.unregisterPopEntry], which unregisters instances of this.
 abstract class PopEntry {
-  /// {@macro flutter.widgets.PopScope.onPopInvoked}
   PopInvokedCallback? get onPopInvoked;
 
-  /// {@macro flutter.widgets.PopScope.canPop}
   ValueListenable<bool> get canPopNotifier;
 
   @override

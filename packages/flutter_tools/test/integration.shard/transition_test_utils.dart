@@ -29,16 +29,8 @@ typedef LineHandler = String? Function(String line);
 abstract class Transition {
   const Transition({this.handler, this.logging});
 
-  /// Callback that is invoked when the transition matches.
-  ///
-  /// This should not throw, even if the test is failing. (For example, don't use "expect"
-  /// in these callbacks.) Throwing here would prevent the [runFlutter] function from running
-  /// to completion, which would leave zombie `flutter` processes around.
   final LineHandler? handler;
 
-  /// Whether to enable or disable logging when this transition is matched.
-  ///
-  /// The default value, null, leaves the logging state unaffected.
   final bool? logging;
 
   bool matches(String line);

@@ -8,13 +8,8 @@ import '../doctor_validator.dart';
 import '../features.dart';
 import 'fuchsia_sdk.dart';
 
-/// The [FuchsiaWorkflow] instance.
 FuchsiaWorkflow? get fuchsiaWorkflow => context.get<FuchsiaWorkflow>();
 
-/// The Fuchsia-specific implementation of a [Workflow].
-///
-/// This workflow assumes development within the fuchsia source tree,
-/// including a working fx command-line tool in the user's PATH.
 class FuchsiaWorkflow implements Workflow {
   FuchsiaWorkflow({
     required Platform platform,

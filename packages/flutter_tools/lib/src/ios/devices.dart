@@ -67,27 +67,8 @@ class IOSDevices extends PollingDeviceDiscovery {
 
   StreamSubscription<XCDeviceEventNotification>? _observedDeviceEventsSubscription;
 
-  /// Cache for all devices found by `xcdevice list`, including not connected
-  /// devices. Used to minimize the need to call `xcdevice list`.
-  ///
-  /// Separate from `deviceNotifier` since `deviceNotifier` should only contain
-  /// connected devices.
   final Map<String, IOSDevice> _cachedPolledDevices = <String, IOSDevice>{};
 
-  /// Maps device id to a map of the device's observed connections. When the
-  /// mapped connection is `true`, that means that observed events indicated
-  /// the device is connected via that particular interface.
-  ///
-  /// The device id must be missing from the map or both interfaces must be
-  /// false for the device to be considered disconnected.
-  ///
-  /// Example:
-  /// {
-  ///   device-id: {
-  ///     usb: false,
-  ///     wifi: false,
-  ///   },
-  /// }
   final Map<String, Map<XCDeviceEventInterface, bool>> _observedConnectionsByDeviceId =
       <String, Map<XCDeviceEventInterface, bool>>{};
 
@@ -173,7 +154,6 @@ class IOSDevices extends PollingDeviceDiscovery {
     }
   }
 
-  /// Adds or updates devices in cache. Does not remove devices from cache.
   void _updateCachedDevices(List<Device> devices) {
     for (final Device device in devices) {
       if (device is! IOSDevice) {
@@ -183,8 +163,6 @@ class IOSDevices extends PollingDeviceDiscovery {
     }
   }
 
-  /// Updates notifier with devices found in the cache that are determined
-  /// to be connected.
   void _updateNotifierFromCache() {
     final ItemListNotifier<Device>? notifier = deviceNotifier;
     if (notifier == null) {
@@ -312,7 +290,6 @@ class IOSDevice extends Device {
     return Version.parse(_sdkVersion);
   }
 
-  /// May be 0 if version cannot be parsed.
   int get majorSdkVersion {
     return sdkVersion?.major ?? 0;
   }
@@ -326,18 +303,11 @@ class IOSDevice extends Device {
   final DarwinArch cpuArchitecture;
 
   @override
-  /// The [connectionInterface] provided from `XCDevice.getAvailableIOSDevices`
-  /// may not be accurate. Sometimes if it doesn't have a long enough time
-  /// to connect, wireless devices will have an interface of `usb`/`attached`.
-  /// This may change after waiting for the device to connect in
-  /// `waitForDeviceToConnect`.
   DeviceConnectionInterface connectionInterface;
 
   @override
   bool isConnected;
 
-  /// CoreDevice is a device connectivity stack introduced in Xcode 15. Devices
-  /// with iOS 17 or greater are CoreDevices.
   final bool isCoreDevice;
 
   final Map<IOSApp?, DeviceLogReader> _logReaders = <IOSApp?, DeviceLogReader>{};
@@ -774,16 +744,6 @@ class IOSDevice extends Device {
     );
   }
 
-  /// Starting with Xcode 15 and iOS 17, `ios-deploy` stopped working due to
-  /// the new CoreDevice connectivity stack. Previously, `ios-deploy` was used
-  /// to install the app, launch the app, and start `debugserver`.
-  /// Xcode 15 introduced a new command line tool called `devicectl` that
-  /// includes much of the functionality supplied by `ios-deploy`. However,
-  /// `devicectl` lacks the ability to start a `debugserver` and therefore `ptrace`, which are needed
-  /// for debug mode due to using a JIT Dart VM.
-  ///
-  /// Therefore, when starting an app on a CoreDevice, use `devicectl` when
-  /// debugging is not enabled. Otherwise, use Xcode automation.
   Future<bool> _startAppOnCoreDevice({
     required DebuggingOptions debuggingOptions,
     required IOSApp package,
@@ -993,18 +953,6 @@ class IOSDevice extends Device {
   }
 }
 
-/// Decodes a vis-encoded syslog string to a UTF-8 representation.
-///
-/// Apple's syslog logs are encoded in 7-bit form. Input bytes are encoded as follows:
-/// 1. 0x00 to 0x19: non-printing range. Some ignored, some encoded as <...>.
-/// 2. 0x20 to 0x7f: as-is, with the exception of 0x5c (backslash).
-/// 3. 0x5c (backslash): octal representation \134.
-/// 4. 0x80 to 0x9f: \M^x (using control-character notation for range 0x00 to 0x40).
-/// 5. 0xa0: octal representation \240.
-/// 6. 0xa1 to 0xf7: \M-x (where x is the input byte stripped of its high-order bit).
-/// 7. 0xf8 to 0xff: unused in 4-byte UTF-8.
-///
-/// See: [vis(3) manpage](https://www.freebsd.org/cgi/man.cgi?query=vis&sektion=3)
 String decodeSyslog(String line) {
   // UTF-8 values for \, M, -, ^.
   const int kBackslash = 0x5c;
@@ -1072,7 +1020,6 @@ class IOSDeviceLogReader extends DeviceLogReader {
       _usingCISystem = usingCISystem,
       _forceXcodeDebug = forceXcodeDebug;
 
-  /// Create a new [IOSDeviceLogReader].
   factory IOSDeviceLogReader.create({
     required IOSDevice device,
     IOSApp? app,
@@ -1093,7 +1040,6 @@ class IOSDeviceLogReader extends DeviceLogReader {
     );
   }
 
-  /// Create an [IOSDeviceLogReader] for testing.
   factory IOSDeviceLogReader.test({
     required IMobileDevice iMobileDevice,
     bool useSyslog = true,
@@ -1122,7 +1068,6 @@ class IOSDeviceLogReader extends DeviceLogReader {
   final bool _usingCISystem;
 
   // TODO(vashworth): Remove after Xcode 15 and iOS 17 are in CI (https://github.com/flutter/flutter/issues/132128)
-  /// Whether XcodeDebug workflow is being forced.
   final bool _forceXcodeDebug;
 
   // Matches a syslog line from the runner.
@@ -1159,16 +1104,10 @@ class IOSDeviceLogReader extends DeviceLogReader {
     }
   }
 
-  /// Used to track messages prefixed with "flutter:" from the fallback log source.
   final List<String> _fallbackStreamFlutterMessages = <String>[];
 
-  /// Used to track if a message prefixed with "flutter:" has been received from the primary log.
   bool primarySourceFlutterLogReceived = false;
 
-  /// There are three potential logging sources: `idevicesyslog`, `ios-deploy`,
-  /// and Unified Logging (Dart VM). When using more than one of these logging
-  /// sources at a time, prefer to use the primary source. However, if the
-  /// primary source is not working, use the fallback.
   bool _excludeLog(String message, IOSDeviceLogSource source) {
     // If no fallback, don't exclude any logs.
     if (logSources.fallbackSource == null) {
@@ -1228,10 +1167,6 @@ class IOSDeviceLogReader extends DeviceLogReader {
 
   static const int minimumUniversalLoggingSdkVersion = 13;
 
-  /// Determine the primary and fallback source for device logs.
-  ///
-  /// There are three potential logging sources: `idevicesyslog`, `ios-deploy`,
-  /// and Unified Logging (Dart VM).
   @visibleForTesting
   _IOSDeviceLogSources get logSources {
     // `ios-deploy` stopped working with iOS 17 / Xcode 15, so use `idevicesyslog` instead.
@@ -1286,16 +1221,12 @@ class IOSDeviceLogReader extends DeviceLogReader {
     );
   }
 
-  /// Whether `idevicesyslog` is used as either the primary or fallback source for device logs.
   @visibleForTesting
   bool get useSyslogLogging {
     return logSources.primarySource == IOSDeviceLogSource.idevicesyslog ||
         logSources.fallbackSource == IOSDeviceLogSource.idevicesyslog;
   }
 
-  /// Whether the Dart VM is used as either the primary or fallback source for device logs.
-  ///
-  /// Unified Logging only works after the Dart VM has been connected to.
   @visibleForTesting
   bool get useUnifiedLogging {
     return logSources.primarySource == IOSDeviceLogSource.unifiedLogging ||
@@ -1303,14 +1234,12 @@ class IOSDeviceLogReader extends DeviceLogReader {
   }
 
 
-  /// Whether `ios-deploy` is used as either the primary or fallback source for device logs.
   @visibleForTesting
   bool get useIOSDeployLogging {
     return logSources.primarySource == IOSDeviceLogSource.iosDeploy ||
         logSources.fallbackSource == IOSDeviceLogSource.iosDeploy;
   }
 
-  /// Listen to Dart VM for logs on iOS 13 or greater.
   Future<void> _listenToUnifiedLoggingEvents(FlutterVmService connectedVmService) async {
     if (!useUnifiedLogging) {
       return;
@@ -1341,10 +1270,8 @@ class IOSDeviceLogReader extends DeviceLogReader {
     ]);
   }
 
-  /// Log reader will listen to [debugger.logLines] and will detach debugger on dispose.
   IOSDeployDebugger? get debuggerStream => _iosDeployDebugger;
 
-  /// Send messages from ios-deploy debugger stream to device log reader stream.
   set debuggerStream(IOSDeployDebugger? debugger) {
     // Logging is gathered from syslog on iOS earlier than 13.
     if (!useIOSDeployLogging) {
@@ -1370,8 +1297,6 @@ class IOSDeviceLogReader extends DeviceLogReader {
   // Strip off the logging metadata (leave the category), or just echo the line.
   String _debuggerLineHandler(String line) => _debuggerLoggingRegex.firstMatch(line)?.group(1) ?? line;
 
-  /// Start and listen to idevicesyslog to get device logs for iOS versions
-  /// prior to 13 or if [useBothLogDeviceReaders] is true.
   void _listenToSysLog() {
     if (!useSyslogLogging) {
       return;
@@ -1440,11 +1365,8 @@ class IOSDeviceLogReader extends DeviceLogReader {
 }
 
 enum IOSDeviceLogSource {
-  /// Gets logs from ios-deploy debugger.
   iosDeploy,
-  /// Gets logs from idevicesyslog.
   idevicesyslog,
-  /// Gets logs from the Dart VM Service.
   unifiedLogging,
 }
 
@@ -1458,10 +1380,8 @@ class _IOSDeviceLogSources {
   final IOSDeviceLogSource? fallbackSource;
 }
 
-/// A [DevicePortForwarder] specialized for iOS usage with iproxy.
 class IOSDevicePortForwarder extends DevicePortForwarder {
 
-  /// Create a new [IOSDevicePortForwarder].
   IOSDevicePortForwarder({
     required Logger logger,
     required String id,
@@ -1472,12 +1392,6 @@ class IOSDevicePortForwarder extends DevicePortForwarder {
        _iproxy = iproxy,
        _operatingSystemUtils = operatingSystemUtils;
 
-  /// Create a [IOSDevicePortForwarder] for testing.
-  ///
-  /// This specifies the path to iproxy as 'iproxy` and the dyLdLibEntry as
-  /// 'DYLD_LIBRARY_PATH: /path/to/libs'.
-  ///
-  /// The device id may be provided, but otherwise defaults to '1234'.
   factory IOSDevicePortForwarder.test({
     required ProcessManager processManager,
     required Logger logger,

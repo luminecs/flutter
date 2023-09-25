@@ -590,23 +590,6 @@ void main() {
       });
     });
 
-    /// Builds a grid:
-    ///
-    ///       <- x ->
-    ///   0 1 2 3 4 5 6 7 8 9
-    /// 0 c c c c c c c c c c
-    /// 1 c c c c c c c c c c
-    /// 2 c c c c c c c c c c
-    /// 3 c c c c c c c c c c  y
-    /// 4 c c c c v v c c c c
-    /// 5 c c c c v v c c c c
-    /// 6 c c c c c c c c c c
-    /// 7 c c c c c c c c c c
-    /// 8 c c c c c c c c c c
-    /// 9 c c c c c c c c c c
-    ///
-    /// Each c is a 100x100 container, v are containers visible in initial
-    /// viewport.
 
     await tester.pumpWidget(
       Directionality(

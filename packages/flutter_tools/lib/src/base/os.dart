@@ -75,19 +75,10 @@ abstract class OperatingSystemUtils {
   final ProcessManager _processManager;
   final ProcessUtils _processUtils;
 
-  /// Make the given file executable. This may be a no-op on some platforms.
   void makeExecutable(File file);
 
-  /// Updates the specified file system [entity] to have the file mode
-  /// bits set to the value defined by [mode], which can be specified in octal
-  /// (e.g. `644`) or symbolically (e.g. `u+x`).
-  ///
-  /// On operating systems that do not support file mode bits, this will be a
-  /// no-op.
   void chmod(FileSystemEntity entity, String mode);
 
-  /// Return the path (with symlinks resolved) to the given executable, or null
-  /// if `which` was not able to locate the binary.
   File? which(String execName) {
     final List<File> result = _which(execName);
     if (result.isEmpty) {
@@ -96,25 +87,18 @@ abstract class OperatingSystemUtils {
     return result.first;
   }
 
-  /// Return a list of all paths to `execName` found on the system. Uses the
-  /// PATH environment variable.
   List<File> whichAll(String execName) => _which(execName, all: true);
 
-  /// Return the File representing a new pipe.
   File makePipe(String path);
 
   void unzip(File file, Directory targetDirectory);
 
   void unpack(File gzippedTarFile, Directory targetDirectory);
 
-  /// Compresses a stream using gzip level 1 (faster but larger).
   Stream<List<int>> gzipLevel1Stream(Stream<List<int>> stream) {
     return stream.cast<List<int>>().transform<List<int>>(gzipLevel1.encoder);
   }
 
-  /// Returns a pretty name string for the current operating system.
-  ///
-  /// If available, the detailed version of the OS is included.
   String get name {
     const Map<String, String> osNames = <String, String>{
       'macos': 'Mac OS',
@@ -129,15 +113,8 @@ abstract class OperatingSystemUtils {
 
   List<File> _which(String execName, { bool all = false });
 
-  /// Returns the separator between items in the PATH environment variable.
   String get pathVarSeparator;
 
-  /// Returns an unused network port.
-  ///
-  /// Returns 0 if an unused port cannot be found.
-  ///
-  /// The port returned by this function may become used before it is bound by
-  /// its intended user.
   Future<int> findFreePort({bool ipv6 = false}) async {
     int port = 0;
     ServerSocket? serverSocket;
@@ -583,10 +560,6 @@ class _WindowsUtils extends OperatingSystemUtils {
   String get pathVarSeparator => ';';
 }
 
-/// Find and return the project root directory relative to the specified
-/// directory or the current working directory if none specified.
-/// Return null if the project root could not be found
-/// or if the project root is the flutter repository root.
 String? findProjectRoot(FileSystem fileSystem, [ String? directory ]) {
   const String kProjectRootSentinel = 'pubspec.yaml';
   directory ??= fileSystem.currentDirectory.path;

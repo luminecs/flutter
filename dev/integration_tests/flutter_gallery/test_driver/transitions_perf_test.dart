@@ -13,10 +13,6 @@ import 'package:test/test.dart' hide TypeMatcher, isInstanceOf;
 
 const FileSystem _fs = LocalFileSystem();
 
-/// The demos we don't run as part of the integration test.
-///
-/// Demo names are formatted as 'DEMO_NAME@DEMO_CATEGORY' (see
-/// `demo_lists.dart` for more examples).
 const List<String> kSkippedDemos = <String>[
   // This demo is flaky on CI due to hitting the network.
   // See: https://github.com/flutter/flutter/issues/100497
@@ -29,8 +25,6 @@ const List<String> kSkippedDemos = <String>[
 // in transitions_perf.dart.
 List<String> _allDemos = <String>[];
 
-/// Extracts event data from [events] recorded by timeline, validates it, turns
-/// it into a histogram, and saves to a JSON file.
 Future<void> saveDurationsHistogram(List<Map<String, dynamic>> events, String outputPath) async {
   final Map<String, List<int>> durations = <String, List<int>>{};
   Map<String, dynamic>? startEvent;
@@ -109,8 +103,6 @@ Future<void> saveDurationsHistogram(List<Map<String, dynamic>> events, String ou
   await file.writeAsString(const JsonEncoder.withIndent('  ').convert(durations));
 }
 
-/// Scrolls each demo menu item into view, launches it, then returns to the
-/// home screen twice.
 Future<void> runDemos(List<String> demos, FlutterDriver driver) async {
   final SerializableFinder demoList = find.byValueKey('GalleryDemoList');
   String? currentDemoCategory;

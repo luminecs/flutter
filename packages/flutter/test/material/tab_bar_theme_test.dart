@@ -811,7 +811,6 @@ void main() {
   });
 
   testWidgets('TabBar.tabAlignment overrides TabBarTheme.tabAlignment', (WidgetTester tester) async {
-    /// Test non-scrollable tab bar.
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
@@ -842,7 +841,6 @@ void main() {
     double tabTwoRight = (availableWidth / 2) + tabTwoRect.width + kTabLabelPadding.right;
     expect(tabTwoRect.right, equals(tabTwoRight));
 
-    /// Test scrollable tab bar.
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(

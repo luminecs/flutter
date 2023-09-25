@@ -22,7 +22,6 @@ import '../native_assets.dart';
 import '../project.dart';
 import 'test_time_recorder.dart';
 
-/// A request to the [TestCompiler] for recompilation.
 class CompilationRequest {
   CompilationRequest(this.mainUri, this.result);
 
@@ -30,23 +29,7 @@ class CompilationRequest {
   Completer<String?> result;
 }
 
-/// A frontend_server wrapper for the flutter test runner.
-///
-/// This class is a wrapper around compiler that allows multiple isolates to
-/// enqueue compilation requests, but ensures only one compilation at a time.
 class TestCompiler {
-  /// Creates a new [TestCompiler] which acts as a frontend_server proxy.
-  ///
-  /// [trackWidgetCreation] configures whether the kernel transform is applied
-  /// to the output. This also changes the output file to include a '.track`
-  /// extension.
-  ///
-  /// [flutterProject] is the project for which we are running tests.
-  ///
-  /// If [precompiledDillPath] is passed, it will be used to initialize the
-  /// compiler.
-  ///
-  /// If [testTimeRecorder] is passed, times will be recorded in it.
   TestCompiler(
     this.buildInfo,
     this.flutterProject,
@@ -109,7 +92,6 @@ class TestCompiler {
     await _shutdown();
   }
 
-  /// Create the resident compiler used to compile the test.
   @visibleForTesting
   Future<ResidentCompiler?> createCompiler() async {
     final ResidentCompiler residentCompiler = ResidentCompiler(

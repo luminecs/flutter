@@ -15,81 +15,7 @@ import 'widgets_localizations.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter/material.dart';
 
-/// Implementation of localized strings for the material widgets using the
-/// `intl` package for date and time formatting.
-///
-/// ## Supported languages
-///
-/// This class supports locales with the following [Locale.languageCode]s:
-///
-/// {@macro flutter.localizations.material.languages}
-///
-/// This list is available programmatically via [kMaterialSupportedLanguages].
-///
-/// ## Sample code
-///
-/// To include the localizations provided by this class in a [MaterialApp],
-/// add [GlobalMaterialLocalizations.delegates] to
-/// [MaterialApp.localizationsDelegates], and specify the locales your
-/// app supports with [MaterialApp.supportedLocales]:
-///
-/// ```dart
-/// const MaterialApp(
-///   localizationsDelegates: GlobalMaterialLocalizations.delegates,
-///   supportedLocales: <Locale>[
-///     Locale('en', 'US'), // American English
-///     Locale('he', 'IL'), // Israeli Hebrew
-///     // ...
-///   ],
-///   // ...
-/// )
-/// ```
-///
-/// ## Overriding translations
-///
-/// To create a translation that's similar to an existing language's translation
-/// but has slightly different strings, subclass the relevant translation
-/// directly and then create a [LocalizationsDelegate<MaterialLocalizations>]
-/// subclass to define how to load it.
-///
-/// Avoid subclassing an unrelated language (for example, subclassing
-/// [MaterialLocalizationEn] and then passing a non-English `localeName` to the
-/// constructor). Doing so will cause confusion for locale-specific behaviors;
-/// in particular, translations that use the `localeName` for determining how to
-/// pluralize will end up doing invalid things. Subclassing an existing
-/// language's translations is only suitable for making small changes to the
-/// existing strings. For providing a new language entirely, implement
-/// [MaterialLocalizations] directly.
-///
-/// See also:
-///
-///  * The Flutter Internationalization Tutorial,
-///    <https://flutter.dev/tutorials/internationalization/>.
-///  * [DefaultMaterialLocalizations], which only provides US English translations.
 abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
-  /// Initializes an object that defines the material widgets' localized strings
-  /// for the given `locale`.
-  ///
-  /// The arguments are used for further runtime localization of data,
-  /// specifically for selecting plurals, date and time formatting, and number
-  /// formatting. They correspond to the following values:
-  ///
-  ///  1. The string that would be returned by [Intl.canonicalizedLocale] for
-  ///     the locale.
-  ///  2. The [DateFormat] for [formatYear].
-  ///  3. The [DateFormat] for [formatShortDate].
-  ///  4. The [DateFormat] for [formatMediumDate].
-  ///  5. The [DateFormat] for [formatFullDate].
-  ///  6. The [DateFormat] for [formatMonthYear].
-  ///  7. The [DateFormat] for [formatShortMonthDay].
-  ///  8. The [NumberFormat] for [formatDecimal] (also used by [formatHour] and
-  ///     [formatTimeOfDay] when [timeOfDayFormat] doesn't use [HourFormat.HH]).
-  ///  9. The [NumberFormat] for [formatHour] and the hour part of
-  ///     [formatTimeOfDay] when [timeOfDayFormat] uses [HourFormat.HH], and for
-  ///     [formatMinute] and the minute part of [formatTimeOfDay].
-  ///
-  /// The [narrowWeekdays] and [firstDayOfWeekIndex] properties use the values
-  /// from the [intl.DateFormat] used by [formatFullDate].
   const GlobalMaterialLocalizations({
     required String localeName,
     required intl.DateFormat fullYearFormat,
@@ -234,8 +160,6 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     }
   }
 
-  /// The raw version of [dateRangeStartDateSemanticLabel], with `$formattedDate` verbatim
-  /// in the string.
   @protected
   String get dateRangeStartDateSemanticLabelRaw;
 
@@ -244,8 +168,6 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     return dateRangeStartDateSemanticLabelRaw.replaceFirst(r'$fullDate', formattedDate);
   }
 
-  /// The raw version of [dateRangeEndDateSemanticLabel], with `$fullDate` verbatim
-  /// in the string.
   @protected
   String get dateRangeEndDateSemanticLabelRaw;
 
@@ -254,8 +176,6 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     return dateRangeEndDateSemanticLabelRaw.replaceFirst(r'$fullDate', formattedDate);
   }
 
-  /// The raw version of [scrimOnTapHint], with `$modalRouteContentName` verbatim
-  /// in the string.
   @protected
   String get scrimOnTapHintRaw;
 
@@ -265,8 +185,6 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     return text.replaceFirst(r'$modalRouteContentName', modalRouteContentName);
   }
 
-  /// The raw version of [aboutListTileTitle], with `$applicationName` verbatim
-  /// in the string.
   @protected
   String get aboutListTileTitleRaw;
 
@@ -276,15 +194,9 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     return text.replaceFirst(r'$applicationName', applicationName);
   }
 
-  /// The raw version of [pageRowsInfoTitle], with `$firstRow`, `$lastRow`' and
-  /// `$rowCount` verbatim in the string, for the case where the value is
-  /// approximate.
   @protected
   String get pageRowsInfoTitleApproximateRaw;
 
-  /// The raw version of [pageRowsInfoTitle], with `$firstRow`, `$lastRow`' and
-  /// `$rowCount` verbatim in the string, for the case where the value is
-  /// precise.
   @protected
   String get pageRowsInfoTitleRaw;
 
@@ -298,8 +210,6 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
       .replaceFirst(r'$rowCount', formatDecimal(rowCount));
   }
 
-  /// The raw version of [tabLabel], with `$tabIndex` and `$tabCount` verbatim
-  /// in the string.
   @protected
   String get tabLabelRaw;
 
@@ -313,93 +223,21 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
       .replaceFirst(r'$tabCount', formatDecimal(tabCount));
   }
 
-  /// The "zero" form of [selectedRowCountTitle].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [selectedRowCountTitleOne], the "one" form
-  ///  * [selectedRowCountTitleTwo], the "two" form
-  ///  * [selectedRowCountTitleFew], the "few" form
-  ///  * [selectedRowCountTitleMany], the "many" form
-  ///  * [selectedRowCountTitleOther], the "other" form
   @protected
   String? get selectedRowCountTitleZero => null;
 
-  /// The "one" form of [selectedRowCountTitle].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [selectedRowCountTitleZero], the "zero" form
-  ///  * [selectedRowCountTitleTwo], the "two" form
-  ///  * [selectedRowCountTitleFew], the "few" form
-  ///  * [selectedRowCountTitleMany], the "many" form
-  ///  * [selectedRowCountTitleOther], the "other" form
   @protected
   String? get selectedRowCountTitleOne => null;
 
-  /// The "two" form of [selectedRowCountTitle].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [selectedRowCountTitleZero], the "zero" form
-  ///  * [selectedRowCountTitleOne], the "one" form
-  ///  * [selectedRowCountTitleFew], the "few" form
-  ///  * [selectedRowCountTitleMany], the "many" form
-  ///  * [selectedRowCountTitleOther], the "other" form
   @protected
   String? get selectedRowCountTitleTwo => null;
 
-  /// The "few" form of [selectedRowCountTitle].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [selectedRowCountTitleZero], the "zero" form
-  ///  * [selectedRowCountTitleOne], the "one" form
-  ///  * [selectedRowCountTitleTwo], the "two" form
-  ///  * [selectedRowCountTitleMany], the "many" form
-  ///  * [selectedRowCountTitleOther], the "other" form
   @protected
   String? get selectedRowCountTitleFew => null;
 
-  /// The "many" form of [selectedRowCountTitle].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [selectedRowCountTitleZero], the "zero" form
-  ///  * [selectedRowCountTitleOne], the "one" form
-  ///  * [selectedRowCountTitleTwo], the "two" form
-  ///  * [selectedRowCountTitleFew], the "few" form
-  ///  * [selectedRowCountTitleOther], the "other" form
   @protected
   String? get selectedRowCountTitleMany => null;
 
-  /// The "other" form of [selectedRowCountTitle].
-  ///
-  /// This form is required.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [selectedRowCountTitleZero], the "zero" form
-  ///  * [selectedRowCountTitleOne], the "one" form
-  ///  * [selectedRowCountTitleTwo], the "two" form
-  ///  * [selectedRowCountTitleFew], the "few" form
-  ///  * [selectedRowCountTitleMany], the "many" form
   @protected
   String get selectedRowCountTitleOther;
 
@@ -417,26 +255,9 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     ).replaceFirst(r'$selectedRowCount', formatDecimal(selectedRowCount));
   }
 
-  /// The format to use for [timeOfDayFormat].
   @protected
   TimeOfDayFormat get timeOfDayFormatRaw;
 
-  /// The [TimeOfDayFormat] corresponding to one of the following supported
-  /// patterns:
-  ///
-  ///  * `HH:mm`
-  ///  * `HH.mm`
-  ///  * `HH 'h' mm`
-  ///  * `HH:mm น.`
-  ///  * `H:mm`
-  ///  * `h:mm a`
-  ///  * `a h:mm`
-  ///  * `ah:mm`
-  ///
-  /// See also:
-  ///
-  ///  * <http://demo.icu-project.org/icu-bin/locexp?d_=en&_=en_US>, which shows
-  ///    the short time pattern used in the `en_US` locale.
   @override
   TimeOfDayFormat timeOfDayFormat({ bool alwaysUse24HourFormat = false }) {
     if (alwaysUse24HourFormat) {
@@ -445,98 +266,21 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     return timeOfDayFormatRaw;
   }
 
-  /// The "zero" form of [licensesPackageDetailText].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [licensesPackageDetailTextZero], the "zero" form
-  ///  * [licensesPackageDetailTextOne], the "one" form
-  ///  * [licensesPackageDetailTextTwo], the "two" form
-  ///  * [licensesPackageDetailTextFew], the "few" form
-  ///  * [licensesPackageDetailTextMany], the "many" form
-  ///  * [licensesPackageDetailTextOther], the "other" form
   @protected
   String? get licensesPackageDetailTextZero => null;
 
-  /// The "one" form of [licensesPackageDetailText].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [licensesPackageDetailTextZero], the "zero" form
-  ///  * [licensesPackageDetailTextOne], the "one" form
-  ///  * [licensesPackageDetailTextTwo], the "two" form
-  ///  * [licensesPackageDetailTextFew], the "few" form
-  ///  * [licensesPackageDetailTextMany], the "many" form
-  ///  * [licensesPackageDetailTextOther], the "other" form
   @protected
   String? get licensesPackageDetailTextOne => null;
 
-  /// The "two" form of [licensesPackageDetailText].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [licensesPackageDetailTextZero], the "zero" form
-  ///  * [licensesPackageDetailTextOne], the "one" form
-  ///  * [licensesPackageDetailTextTwo], the "two" form
-  ///  * [licensesPackageDetailTextFew], the "few" form
-  ///  * [licensesPackageDetailTextMany], the "many" form
-  ///  * [licensesPackageDetailTextOther], the "other" form
   @protected
   String? get licensesPackageDetailTextTwo => null;
 
-  /// The "many" form of [licensesPackageDetailText].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [licensesPackageDetailTextZero], the "zero" form
-  ///  * [licensesPackageDetailTextOne], the "one" form
-  ///  * [licensesPackageDetailTextTwo], the "two" form
-  ///  * [licensesPackageDetailTextFew], the "few" form
-  ///  * [licensesPackageDetailTextMany], the "many" form
-  ///  * [licensesPackageDetailTextOther], the "other" form
   @protected
   String? get licensesPackageDetailTextMany => null;
 
-  /// The "few" form of [licensesPackageDetailText].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [licensesPackageDetailTextZero], the "zero" form
-  ///  * [licensesPackageDetailTextOne], the "one" form
-  ///  * [licensesPackageDetailTextTwo], the "two" form
-  ///  * [licensesPackageDetailTextFew], the "few" form
-  ///  * [licensesPackageDetailTextMany], the "many" form
-  ///  * [licensesPackageDetailTextOther], the "other" form
   @protected
   String? get licensesPackageDetailTextFew => null;
 
-  /// The "other" form of [licensesPackageDetailText].
-  ///
-  /// This form is required.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [licensesPackageDetailTextZero], the "zero" form
-  ///  * [licensesPackageDetailTextOne], the "one" form
-  ///  * [licensesPackageDetailTextTwo], the "two" form
-  ///  * [licensesPackageDetailTextFew], the "few" form
-  ///  * [licensesPackageDetailTextMany], the "many" form
-  ///  * [licensesPackageDetailTextOther], the "other" form
   @protected
   String get licensesPackageDetailTextOther;
 
@@ -554,98 +298,21 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
     ).replaceFirst(r'$licenseCount', formatDecimal(licenseCount));
   }
 
-  /// The "zero" form of [remainingTextFieldCharacterCount].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [remainingTextFieldCharacterCountZero], the "zero" form
-  ///  * [remainingTextFieldCharacterCountOne], the "one" form
-  ///  * [remainingTextFieldCharacterCountTwo], the "two" form
-  ///  * [remainingTextFieldCharacterCountFew], the "few" form
-  ///  * [remainingTextFieldCharacterCountMany], the "many" form
-  ///  * [remainingTextFieldCharacterCountOther], the "other" form
   @protected
   String? get remainingTextFieldCharacterCountZero => null;
 
-  /// The "one" form of [remainingTextFieldCharacterCount].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [remainingTextFieldCharacterCountZero], the "zero" form
-  ///  * [remainingTextFieldCharacterCountOne], the "one" form
-  ///  * [remainingTextFieldCharacterCountTwo], the "two" form
-  ///  * [remainingTextFieldCharacterCountFew], the "few" form
-  ///  * [remainingTextFieldCharacterCountMany], the "many" form
-  ///  * [remainingTextFieldCharacterCountOther], the "other" form
   @protected
   String? get remainingTextFieldCharacterCountOne => null;
 
-  /// The "two" form of [remainingTextFieldCharacterCount].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [remainingTextFieldCharacterCountZero], the "zero" form
-  ///  * [remainingTextFieldCharacterCountOne], the "one" form
-  ///  * [remainingTextFieldCharacterCountTwo], the "two" form
-  ///  * [remainingTextFieldCharacterCountFew], the "few" form
-  ///  * [remainingTextFieldCharacterCountMany], the "many" form
-  ///  * [remainingTextFieldCharacterCountOther], the "other" form
   @protected
   String? get remainingTextFieldCharacterCountTwo => null;
 
-  /// The "many" form of [remainingTextFieldCharacterCount].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [remainingTextFieldCharacterCountZero], the "zero" form
-  ///  * [remainingTextFieldCharacterCountOne], the "one" form
-  ///  * [remainingTextFieldCharacterCountTwo], the "two" form
-  ///  * [remainingTextFieldCharacterCountFew], the "few" form
-  ///  * [remainingTextFieldCharacterCountMany], the "many" form
-  ///  * [remainingTextFieldCharacterCountOther], the "other" form
   @protected
   String? get remainingTextFieldCharacterCountMany => null;
 
-  /// The "few" form of [remainingTextFieldCharacterCount].
-  ///
-  /// This form is optional.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [remainingTextFieldCharacterCountZero], the "zero" form
-  ///  * [remainingTextFieldCharacterCountOne], the "one" form
-  ///  * [remainingTextFieldCharacterCountTwo], the "two" form
-  ///  * [remainingTextFieldCharacterCountFew], the "few" form
-  ///  * [remainingTextFieldCharacterCountMany], the "many" form
-  ///  * [remainingTextFieldCharacterCountOther], the "other" form
   @protected
   String? get remainingTextFieldCharacterCountFew => null;
 
-  /// The "other" form of [remainingTextFieldCharacterCount].
-  ///
-  /// This form is required.
-  ///
-  /// See also:
-  ///
-  ///  * [Intl.plural], to which this form is passed.
-  ///  * [remainingTextFieldCharacterCountZero], the "zero" form
-  ///  * [remainingTextFieldCharacterCountOne], the "one" form
-  ///  * [remainingTextFieldCharacterCountTwo], the "two" form
-  ///  * [remainingTextFieldCharacterCountFew], the "few" form
-  ///  * [remainingTextFieldCharacterCountMany], the "many" form
-  ///  * [remainingTextFieldCharacterCountOther], the "other" form
   @protected
   String get remainingTextFieldCharacterCountOther;
 
@@ -666,34 +333,8 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
   @override
   ScriptCategory get scriptCategory;
 
-  /// A [LocalizationsDelegate] for [MaterialLocalizations].
-  ///
-  /// Most internationalized apps will use [GlobalMaterialLocalizations.delegates]
-  /// as the value of [MaterialApp.localizationsDelegates] to include
-  /// the localizations for both the material and widget libraries.
   static const LocalizationsDelegate<MaterialLocalizations> delegate = _MaterialLocalizationsDelegate();
 
-  /// A value for [MaterialApp.localizationsDelegates] that's typically used by
-  /// internationalized apps.
-  ///
-  /// ## Sample code
-  ///
-  /// To include the localizations provided by this class and by
-  /// [GlobalWidgetsLocalizations] in a [MaterialApp],
-  /// use [GlobalMaterialLocalizations.delegates] as the value of
-  /// [MaterialApp.localizationsDelegates], and specify the locales your
-  /// app supports with [MaterialApp.supportedLocales]:
-  ///
-  /// ```dart
-  /// const MaterialApp(
-  ///   localizationsDelegates: GlobalMaterialLocalizations.delegates,
-  ///   supportedLocales: <Locale>[
-  ///     Locale('en', 'US'), // English
-  ///     Locale('he', 'IL'), // Hebrew
-  ///   ],
-  ///   // ...
-  /// )
-  /// ```
   static const List<LocalizationsDelegate<dynamic>> delegates = <LocalizationsDelegate<dynamic>>[
     GlobalCupertinoLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,
@@ -701,9 +342,6 @@ abstract class GlobalMaterialLocalizations implements MaterialLocalizations {
   ];
 }
 
-/// Finds the [TimeOfDayFormat] to use instead of the `original` when the
-/// `original` uses 12-hour format and [MediaQueryData.alwaysUse24HourFormat]
-/// is true.
 TimeOfDayFormat _get24HourVersionOf(TimeOfDayFormat original) {
   switch (original) {
     case TimeOfDayFormat.HH_colon_mm:

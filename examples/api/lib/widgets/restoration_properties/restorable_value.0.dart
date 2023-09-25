@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [RestorableValue].
 
 void main() => runApp(const RestorableValueExampleApp());
 
@@ -34,7 +33,6 @@ class RestorableValueExample extends StatefulWidget {
   State<RestorableValueExample> createState() => _RestorableValueExampleState();
 }
 
-/// RestorationProperty objects can be used because of RestorationMixin.
 class _RestorableValueExampleState extends State<RestorableValueExample> with RestorationMixin {
   // In this example, the restoration ID for the mixin is passed in through
   // the [StatefulWidget]'s constructor.

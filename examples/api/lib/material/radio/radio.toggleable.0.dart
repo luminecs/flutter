@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Radio.toggleable].
 
 void main() => runApp(const ToggleableExampleApp());
 

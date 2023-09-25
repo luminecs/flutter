@@ -5331,9 +5331,6 @@ class _NestedNavigatorsPage extends StatefulWidget {
     this.navigatorKey,
   });
 
-  /// Whether the PopScope on the /popscope page is enabled.
-  ///
-  /// If null, then no PopScope is built at all.
   final bool? popScopePageEnabled;
 
   final GlobalKey<NavigatorState>? navigatorKey;

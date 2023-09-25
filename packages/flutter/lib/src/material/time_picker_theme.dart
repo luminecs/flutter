@@ -15,29 +15,9 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines the visual properties of the widget displayed with [showTimePicker].
-///
-/// Descendant widgets obtain the current [TimePickerThemeData] object using
-/// `TimePickerTheme.of(context)`. Instances of [TimePickerThemeData]
-/// can be customized with [TimePickerThemeData.copyWith].
-///
-/// Typically a [TimePickerThemeData] is specified as part of the overall
-/// [Theme] with [ThemeData.timePickerTheme].
-///
-/// All [TimePickerThemeData] properties are `null` by default. When null,
-/// [showTimePicker] will provide its own defaults.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
-///  * [TimePickerTheme], which describes the actual configuration of a time
-///    picker theme.
 @immutable
 class TimePickerThemeData with Diagnosticable {
 
-  /// Creates a theme that can be used for [TimePickerTheme] or
-  /// [ThemeData.timePickerTheme].
   const TimePickerThemeData({
     this.backgroundColor,
     this.cancelButtonStyle,
@@ -63,191 +43,50 @@ class TimePickerThemeData with Diagnosticable {
     this.shape,
   });
 
-  /// The background color of a time picker.
-  ///
-  /// If this is null, the time picker defaults to the overall theme's
-  /// [ColorScheme.background].
   final Color? backgroundColor;
 
-  /// The style of the cancel button of a [TimePickerDialog].
   final ButtonStyle? cancelButtonStyle;
 
-  /// The style of the confirm (OK) button of a [TimePickerDialog].
   final ButtonStyle? confirmButtonStyle;
 
-  /// The color and weight of the day period's outline.
-  ///
-  /// If this is null, the time picker defaults to:
-  ///
-  /// ```dart
-  /// BorderSide(
-  ///   color: Color.alphaBlend(
-  ///     Theme.of(context).colorScheme.onBackground.withOpacity(0.38),
-  ///     Theme.of(context).colorScheme.surface,
-  ///   ),
-  /// ),
-  /// ```
   final BorderSide? dayPeriodBorderSide;
 
-  /// The background color of the AM/PM toggle.
-  ///
-  /// If [dayPeriodColor] is a [MaterialStateColor], then the effective
-  /// background color can depend on the [MaterialState.selected] state, i.e.
-  /// if the segment is selected or not.
-  ///
-  /// By default, if the segment is selected, the overall theme's
-  /// `ColorScheme.primary.withOpacity(0.12)` is used when the overall theme's
-  /// brightness is [Brightness.light] and
-  /// `ColorScheme.primary.withOpacity(0.24)` is used when the overall theme's
-  /// brightness is [Brightness.dark].
-  /// If the segment is not selected, [Colors.transparent] is used to allow the
-  /// [Dialog]'s color to be used.
   final Color? dayPeriodColor;
 
-  /// The shape of the day period that the time picker uses.
-  ///
-  /// If this is null, the time picker defaults to:
-  ///
-  /// ```dart
-  /// const RoundedRectangleBorder(
-  ///   borderRadius: BorderRadius.all(Radius.circular(4.0)),
-  ///   side: BorderSide(),
-  /// )
-  /// ```
   final OutlinedBorder? dayPeriodShape;
 
-  /// The color of the day period text that represents AM/PM.
-  ///
-  /// If [dayPeriodTextColor] is a [MaterialStateColor], then the effective
-  /// text color can depend on the [MaterialState.selected] state, i.e. if the
-  /// text is selected or not.
-  ///
-  /// By default the overall theme's [ColorScheme.primary] color is used when
-  /// the text is selected and `ColorScheme.onSurface.withOpacity(0.60)` when
-  /// it's not selected.
   final Color? dayPeriodTextColor;
 
-  /// Used to configure the [TextStyle]s for the day period control.
-  ///
-  /// If this is null, the time picker defaults to the overall theme's
-  /// [TextTheme.titleMedium].
   final TextStyle? dayPeriodTextStyle;
 
-  /// The background color of the time picker dial when the entry mode is
-  /// [TimePickerEntryMode.dial] or [TimePickerEntryMode.dialOnly].
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is true, the time picker
-  /// dial background color defaults [ColorScheme.surfaceVariant] color.
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is false, the time picker
-  /// dial background color defaults to [ColorScheme.onSurface] color with
-  /// an opacity of 0.08 when the overall theme's brightness is [Brightness.light]
-  /// and [ColorScheme.onSurface] color with an opacity of 0.12 when the overall
-  /// theme's brightness is [Brightness.dark].
   final Color? dialBackgroundColor;
 
-  /// The color of the time picker dial's hand when the entry mode is
-  /// [TimePickerEntryMode.dial] or [TimePickerEntryMode.dialOnly].
-  ///
-  /// If this is null, the time picker defaults to the overall theme's
-  /// [ColorScheme.primary].
   final Color? dialHandColor;
 
-  /// The color of the dial text that represents specific hours and minutes.
-  ///
-  /// If [dialTextColor] is a [MaterialStateColor], then the effective
-  /// text color can depend on the [MaterialState.selected] state, i.e. if the
-  /// text is selected or not.
-  ///
-  /// If this color is null then the dial's text colors are based on the
-  /// theme's [ThemeData.colorScheme].
   final Color? dialTextColor;
 
-  /// The [TextStyle] for the numbers on the time selection dial.
-  ///
-  /// If [dialTextStyle]'s [TextStyle.color] is a [MaterialStateColor], then the
-  /// effective text color can depend on the [MaterialState.selected] state,
-  /// i.e. if the text is selected or not.
-  ///
-  /// If this style is null then the dial's text style is based on the theme's
-  /// [ThemeData.textTheme].
   final TextStyle? dialTextStyle;
 
-  /// The Material elevation for the time picker dialog.
   final double? elevation;
 
-  /// The color of the entry mode [IconButton].
-  ///
-  /// If this is null, the time picker defaults to:
-  ///
-  ///
-  /// ```dart
-  /// Theme.of(context).colorScheme.onSurface.withOpacity(
-  ///   Theme.of(context).colorScheme.brightness == Brightness.dark ? 1.0 : 0.6,
-  /// )
-  /// ```
   final Color? entryModeIconColor;
 
-  /// Used to configure the [TextStyle]s for the helper text in the header.
-  ///
-  /// If this is null, the time picker defaults to the overall theme's
-  /// [TextTheme.labelSmall].
   final TextStyle? helpTextStyle;
 
-  /// The background color of the hour and minute header segments.
-  ///
-  /// If [hourMinuteColor] is a [MaterialStateColor], then the effective
-  /// background color can depend on the [MaterialState.selected] state, i.e.
-  /// if the segment is selected or not.
-  ///
-  /// By default, if the segment is selected, the overall theme's
-  /// `ColorScheme.primary.withOpacity(0.12)` is used when the overall theme's
-  /// brightness is [Brightness.light] and
-  /// `ColorScheme.primary.withOpacity(0.24)` is used when the overall theme's
-  /// brightness is [Brightness.dark].
-  /// If the segment is not selected, the overall theme's
-  /// `ColorScheme.onSurface.withOpacity(0.12)` is used.
   final Color? hourMinuteColor;
 
-  /// The shape of the hour and minute controls that the time picker uses.
-  ///
-  /// If this is null, the time picker defaults to
-  /// `RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4.0)))`.
   final ShapeBorder? hourMinuteShape;
 
-  /// The color of the header text that represents hours and minutes.
-  ///
-  /// If [hourMinuteTextColor] is a [MaterialStateColor], then the effective
-  /// text color can depend on the [MaterialState.selected] state, i.e. if the
-  /// text is selected or not.
-  ///
-  /// By default the overall theme's [ColorScheme.primary] color is used when
-  /// the text is selected and [ColorScheme.onSurface] when it's not selected.
   final Color? hourMinuteTextColor;
 
-  /// Used to configure the [TextStyle]s for the hour/minute controls.
-  ///
-  /// If this is null, the time picker defaults to the overall theme's
-  /// [TextTheme.headline3].
   final TextStyle? hourMinuteTextStyle;
 
-  /// The input decoration theme for the [TextField]s in the time picker.
-  ///
-  /// If this is null, the time picker provides its own defaults.
   final InputDecorationTheme? inputDecorationTheme;
 
-  /// The padding around the time picker dialog when the entry mode is
-  /// [TimePickerEntryMode.dial] or [TimePickerEntryMode.dialOnly].
   final EdgeInsetsGeometry? padding;
 
-  /// The shape of the [Dialog] that the time picker is presented in.
-  ///
-  /// If this is null, the time picker defaults to
-  /// `RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4.0)))`.
   final ShapeBorder? shape;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   TimePickerThemeData copyWith({
     Color? backgroundColor,
     ButtonStyle? cancelButtonStyle,
@@ -299,9 +138,6 @@ class TimePickerThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two time picker themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static TimePickerThemeData lerp(TimePickerThemeData? a, TimePickerThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
@@ -430,33 +266,15 @@ class TimePickerThemeData with Diagnosticable {
   }
 }
 
-/// An inherited widget that defines the configuration for time pickers
-/// displayed using [showTimePicker] in this widget's subtree.
-///
-/// Values specified here are used for time picker properties that are not
-/// given an explicit non-null value.
 class TimePickerTheme extends InheritedTheme {
-  /// Creates a time picker theme that controls the configurations for
-  /// time pickers displayed in its widget subtree.
   const TimePickerTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties for descendant time picker widgets.
   final TimePickerThemeData data;
 
-  /// The [data] value of the closest [TimePickerTheme] ancestor.
-  ///
-  /// If there is no ancestor, it returns [ThemeData.timePickerTheme].
-  /// Applications can assume that the returned value will not be null.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// TimePickerThemeData theme = TimePickerTheme.of(context);
-  /// ```
   static TimePickerThemeData of(BuildContext context) {
     final TimePickerTheme? timePickerTheme = context.dependOnInheritedWidgetOfExactType<TimePickerTheme>();
     return timePickerTheme?.data ?? Theme.of(context).timePickerTheme;

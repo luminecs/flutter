@@ -21,5 +21,4 @@ void tryToDelete(Directory directory) {
   }
 }
 
-/// Matcher for functions that throw [DriverError].
 final Matcher throwsDriverError = throwsA(isA<DriverError>());

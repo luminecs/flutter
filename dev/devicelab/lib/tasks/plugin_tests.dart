@@ -11,7 +11,6 @@ import '../framework/ios.dart';
 import '../framework/task_result.dart';
 import '../framework/utils.dart';
 
-/// Combines several TaskFunctions with trivial success value into one.
 TaskFunction combine(List<TaskFunction> tasks) {
   return () async {
     for (final TaskFunction task in tasks) {
@@ -24,8 +23,6 @@ TaskFunction combine(List<TaskFunction> tasks) {
   };
 }
 
-/// Defines task that creates new Flutter project, adds a local and remote
-/// plugin, and then builds the specified [buildTarget].
 class PluginTest {
   PluginTest(
     this.buildTarget,
@@ -123,8 +120,6 @@ class _FlutterProject {
     await pubspec.writeAsString(content, flush: true);
   }
 
-  /// Converts a plugin created from the standard template to a Dart-only
-  /// plugin.
   Future<void> convertDefaultPluginToDartPlugin() async {
     final String dartPluginClass = 'DartClassFor$name';
     // Convert the metadata.
@@ -164,8 +159,6 @@ class $dartPluginClass {
     }
   }
 
-  /// Converts an iOS/macOS plugin created from the standard template to a shared
-  /// darwin directory plugin.
   Future<void> convertDefaultPluginToSharedDarwinPlugin() async {
     // Convert the metadata.
     final File pubspec = pubspecFile;

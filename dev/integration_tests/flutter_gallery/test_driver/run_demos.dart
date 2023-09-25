@@ -6,18 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gallery/demo_lists.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The demos we don't run as part of the integration test.
-///
-/// Demo names are formatted as 'DEMO_NAME@DEMO_CATEGORY' (see
-/// `demo_lists.dart` for more examples).
 final List<String> kSkippedDemos = <String>[
   // This demo is flaky on CI due to hitting the network.
   // See: https://github.com/flutter/flutter/issues/100497
   'Video@Media',
 ];
 
-/// Scrolls each demo menu item into view, launches it, then returns to the
-/// home screen twice.
 Future<void> runDemos(List<String> demos, WidgetController controller) async {
   final Finder demoList = find.byType(Scrollable);
   String? currentDemoCategory;

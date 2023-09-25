@@ -6,16 +6,6 @@ import 'dart:io' as io show Directory, File, IOOverrides, Link;
 
 import 'package:flutter_tools/src/base/file_system.dart';
 
-/// An [IOOverrides] that can delegate to [FileSystem] implementation if provided.
-///
-/// Does not override any of the socket facilities.
-///
-/// Do not provide a [LocalFileSystem] as a delegate. Since internally this calls
-/// out to `dart:io` classes, it will result in a stack overflow error as the
-/// IOOverrides and LocalFileSystem call each other endlessly.
-///
-/// The only safe delegate types are those that do not call out to `dart:io`,
-/// like the [MemoryFileSystem].
 class FlutterIOOverrides extends io.IOOverrides {
   FlutterIOOverrides({ FileSystem? fileSystem })
     : _fileSystemDelegate = fileSystem;

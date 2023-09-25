@@ -10,22 +10,8 @@ import 'package:flutter/widgets.dart';
 
 import 'theme.dart';
 
-/// Overrides the default values of visual properties for descendant
-/// [AppBar] widgets.
-///
-/// Descendant widgets obtain the current [AppBarTheme] object with
-/// `AppBarTheme.of(context)`. Instances of [AppBarTheme] can be customized
-/// with [AppBarTheme.copyWith].
-///
-/// Typically an [AppBarTheme] is specified as part of the overall [Theme] with
-/// [ThemeData.appBarTheme].
-///
-/// All [AppBarTheme] properties are `null` by default. When null, the [AppBar]
-/// compute its own default values, typically based on the overall theme's
-/// [ThemeData.colorScheme], [ThemeData.textTheme], and [ThemeData.iconTheme].
 @immutable
 class AppBarTheme with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.appBarTheme].
   const AppBarTheme({
     Color? color,
     Color? backgroundColor,
@@ -49,109 +35,36 @@ class AppBarTheme with Diagnosticable {
        ),
        backgroundColor = backgroundColor ?? color;
 
-  /// Overrides the default value of [AppBar.backgroundColor] in all
-  /// descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [foregroundColor], which overrides the default value of
-  ///    [AppBar.foregroundColor] in all descendant [AppBar] widgets.
   final Color? backgroundColor;
 
-  /// Overrides the default value of [AppBar.foregroundColor] in all
-  /// descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [backgroundColor], which overrides the default value of
-  ///    [AppBar.backgroundColor] in all descendant [AppBar] widgets.
   final Color? foregroundColor;
 
-  /// Overrides the default value of [AppBar.elevation] in all
-  /// descendant [AppBar] widgets.
   final double? elevation;
 
-  /// Overrides the default value of [AppBar.scrolledUnderElevation] in all
-  /// descendant [AppBar] widgets.
   final double? scrolledUnderElevation;
 
-  /// Overrides the default value of [AppBar.shadowColor] in all
-  /// descendant [AppBar] widgets.
   final Color? shadowColor;
 
-  /// Overrides the default value of [AppBar.surfaceTintColor] in all
-  /// descendant [AppBar] widgets.
   final Color? surfaceTintColor;
 
-  /// Overrides the default value of [AppBar.shape] in all
-  /// descendant [AppBar] widgets.
   final ShapeBorder? shape;
 
-  /// Overrides the default value of [AppBar.iconTheme] in all
-  /// descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [actionsIconTheme], which overrides the default value of
-  ///    [AppBar.actionsIconTheme] in all descendant [AppBar] widgets.
-  ///  * [foregroundColor], which overrides the default value
-  ///    [AppBar.foregroundColor] in all descendant [AppBar] widgets.
   final IconThemeData? iconTheme;
 
-  /// Overrides the default value of [AppBar.actionsIconTheme] in all
-  /// descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [iconTheme], which overrides the default value of
-  ///    [AppBar.iconTheme] in all descendant [AppBar] widgets.
-  ///  * [foregroundColor], which overrides the default value
-  ///    [AppBar.foregroundColor] in all descendant [AppBar] widgets.
   final IconThemeData? actionsIconTheme;
 
-  /// Overrides the default value of [AppBar.centerTitle]
-  /// property in all descendant [AppBar] widgets.
   final bool? centerTitle;
 
-  /// Overrides the default value of the obsolete [AppBar.titleSpacing]
-  /// property in all descendant [AppBar] widgets.
-  ///
-  /// If null, [AppBar] uses default value of [NavigationToolbar.kMiddleSpacing].
   final double? titleSpacing;
 
-  /// Overrides the default value of the [AppBar.toolbarHeight]
-  /// property in all descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [AppBar.preferredHeightFor], which computes the overall
-  ///    height of an AppBar widget, taking this value into account.
   final double? toolbarHeight;
 
-  /// Overrides the default value of the obsolete [AppBar.toolbarTextStyle]
-  /// property in all descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [titleTextStyle], which overrides the default of [AppBar.titleTextStyle]
-  ///    in all descendant [AppBar] widgets.
   final TextStyle? toolbarTextStyle;
 
-  /// Overrides the default value of [AppBar.titleTextStyle]
-  /// property in all descendant [AppBar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [toolbarTextStyle], which overrides the default of [AppBar.toolbarTextStyle]
-  ///    in all descendant [AppBar] widgets.
   final TextStyle? titleTextStyle;
 
-  /// Overrides the default value of [AppBar.systemOverlayStyle]
-  /// property in all descendant [AppBar] widgets.
   final SystemUiOverlayStyle? systemOverlayStyle;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   AppBarTheme copyWith({
     IconThemeData? actionsIconTheme,
     Color? color,
@@ -193,14 +106,10 @@ class AppBarTheme with Diagnosticable {
     );
   }
 
-  /// The [ThemeData.appBarTheme] property of the ambient [Theme].
   static AppBarTheme of(BuildContext context) {
     return Theme.of(context).appBarTheme;
   }
 
-  /// Linearly interpolate between two AppBar themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static AppBarTheme lerp(AppBarTheme? a, AppBarTheme? b, double t) {
     if (identical(a, b) && a != null) {
       return a;

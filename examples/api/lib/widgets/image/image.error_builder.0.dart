@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Image.errorBuilder].
 
 void main() => runApp(const ErrorBuilderExampleApp());
 

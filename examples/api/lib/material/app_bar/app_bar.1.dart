@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AppBar].
 
 // todo-luminecs List.generate()
 final List<int> _items = List<int>.generate(51, (int index) => index);

@@ -18,45 +18,7 @@ const double _kCupertinoFocusColorOpacity = 0.80;
 const double _kCupertinoFocusColorBrightness = 0.69;
 const double _kCupertinoFocusColorSaturation = 0.835;
 
-/// A macOS style checkbox.
-///
-/// The checkbox itself does not maintain any state. Instead, when the state of
-/// the checkbox changes, the widget calls the [onChanged] callback. Most
-/// widgets that use a checkbox will listen for the [onChanged] callback and
-/// rebuild the checkbox with a new [value] to update the visual appearance of
-/// the checkbox.
-///
-/// The checkbox can optionally display three values - true, false, and null -
-/// if [tristate] is true. When [value] is null a dash is displayed. By default
-/// [tristate] is false and the checkbox's [value] must be true or false.
-///
-/// In the Apple Human Interface Guidelines (HIG), checkboxes are encouraged for
-/// use on macOS, but is silent about their use on iOS. If a multi-selection
-/// component is needed on iOS, the HIG encourages the developer to use switches
-/// ([CupertinoSwitch] in Flutter) instead, or to find a creative custom
-/// solution.
-///
-/// See also:
-///
-///  * [Checkbox], the Material Design equivalent.
-///  * [CupertinoSwitch], a widget with semantics similar to [CupertinoCheckbox].
-///  * [CupertinoSlider], for selecting a value in a range.
-///  * <https://developer.apple.com/design/human-interface-guidelines/components/selection-and-input/toggles/>
 class CupertinoCheckbox extends StatefulWidget {
-  /// Creates a macOS-styled checkbox.
-  ///
-  /// The checkbox itself does not maintain any state. Instead, when the state of
-  /// the checkbox changes, the widget calls the [onChanged] callback. Most
-  /// widgets that use a checkbox will listen for the [onChanged] callback and
-  /// rebuild the checkbox with a new [value] to update the visual appearance of
-  /// the checkbox.
-  ///
-  /// The following arguments are required:
-  ///
-  /// * [value], which determines whether the checkbox is checked. The [value]
-  ///   can only be null if [tristate] is true.
-  /// * [onChanged], which is called when the value of the checkbox should
-  ///   change. It can be set to null to disable the checkbox.
   const CupertinoCheckbox({
     super.key,
     required this.value,
@@ -72,95 +34,28 @@ class CupertinoCheckbox extends StatefulWidget {
     this.shape,
   }) : assert(tristate || value != null);
 
-  /// Whether this checkbox is checked.
-  ///
-  /// When [tristate] is true, a value of null corresponds to the mixed state.
-  /// When [tristate] is false, this value must not be null. This is asserted in
-  /// debug mode.
   final bool? value;
 
-  /// Called when the value of the checkbox should change.
-  ///
-  /// The checkbox passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the checkbox with the new
-  /// value.
-  ///
-  /// If this callback is null, the checkbox will be displayed as disabled
-  /// and will not respond to input gestures.
-  ///
-  /// When the checkbox is tapped, if [tristate] is false (the default) then
-  /// the [onChanged] callback will be applied to `!value`. If [tristate] is
-  /// true this callback cycle from false to true to null and back to false
-  /// again.
-  ///
-  /// The callback provided to [onChanged] should update the state of the parent
-  /// [StatefulWidget] using the [State.setState] method, so that the parent
-  /// gets rebuilt; for example:
-  ///
-  /// ```dart
-  /// CupertinoCheckbox(
-  ///   value: _throwShotAway,
-  ///   onChanged: (bool? newValue) {
-  ///     setState(() {
-  ///       _throwShotAway = newValue!;
-  ///     });
-  ///   },
-  /// )
-  /// ```
   final ValueChanged<bool?>? onChanged;
 
-  /// The color to use when this checkbox is checked.
-  ///
-  /// Defaults to [CupertinoColors.activeBlue].
   final Color? activeColor;
 
-  /// The color used if the checkbox is inactive.
-  ///
-  /// By default, [CupertinoColors.inactiveGray] is used.
   final Color? inactiveColor;
 
-  /// The color to use for the check icon when this checkbox is checked.
-  ///
-  /// If null, then the value of [CupertinoColors.white] is used.
   final Color? checkColor;
 
-  /// If true, the checkbox's [value] can be true, false, or null.
-  ///
-  /// [CupertinoCheckbox] displays a dash when its value is null.
-  ///
-  /// When a tri-state checkbox ([tristate] is true) is tapped, its [onChanged]
-  /// callback will be applied to true if the current value is false, to null if
-  /// value is true, and to false if value is null (i.e. it cycles through false
-  /// => true => null => false when tapped).
-  ///
-  /// If tristate is false (the default), [value] must not be null, and
-  /// [onChanged] will only toggle between true and false.
   final bool tristate;
 
-  /// The color for the checkbox's border shadow when it has the input focus.
-  ///
-  /// If null, then a paler form of the [activeColor] will be used.
   final Color? focusColor;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// The color and width of the checkbox's border.
-  ///
-  /// If this property is null, then the side defaults to a one pixel wide
-  /// black, solid border.
   final BorderSide? side;
 
-  /// The shape of the checkbox.
-  ///
-  /// If this property is null then the shape defaults to a
-  /// [RoundedRectangleBorder] with a circular corner radius of 4.0.
   final OutlinedBorder? shape;
 
-  /// The width of a checkbox widget.
   static const double width = 18.0;
 
   @override

@@ -19,17 +19,10 @@ import 'base/platform.dart';
 import 'build_info.dart';
 import 'convert.dart';
 
-/// Opt-in changes to the dart compilers.
 const List<String> kDartCompilerExperiments = <String>[
 ];
 
-/// The target model describes the set of core libraries that are available within
-/// the SDK.
 class TargetModel {
-  /// Parse a [TargetModel] from a raw string.
-  ///
-  /// Throws an exception if passed a value other than 'flutter',
-  /// 'flutter_runner', 'vm', or 'dartdevc'.
   factory TargetModel(String rawValue) {
     switch (rawValue) {
       case 'flutter':
@@ -46,16 +39,12 @@ class TargetModel {
 
   const TargetModel._(this._value);
 
-  /// The Flutter patched Dart SDK.
   static const TargetModel flutter = TargetModel._('flutter');
 
-  /// The Fuchsia patched SDK.
   static const TargetModel flutterRunner = TargetModel._('flutter_runner');
 
-  /// The Dart VM.
   static const TargetModel vm = TargetModel._('vm');
 
-  /// The development compiler for JavaScript.
   static const TargetModel dartdevc = TargetModel._('dartdevc');
 
   final String _value;
@@ -71,13 +60,11 @@ class CompilerOutput {
   final int errorCount;
   final List<Uri> sources;
 
-  /// This field is only non-null for expression compilation requests.
   final Uint8List? expressionData;
 }
 
 enum StdoutState { CollectDiagnostic, CollectDependencies }
 
-/// Handles stdin/stdout communication with the frontend server.
 class StdoutHandler {
   StdoutHandler({
     required Logger logger,
@@ -164,7 +151,6 @@ class StdoutHandler {
   }
 }
 
-/// List the preconfigured build options for a given build mode.
 List<String> buildModeOptions(BuildMode mode, List<String> dartDefines) =>
     switch (mode) {
       BuildMode.debug => <String>[
@@ -193,7 +179,6 @@ List<String> buildModeOptions(BuildMode mode, List<String> dartDefines) =>
       _ => throw Exception('Unknown BuildMode: $mode')
     };
 
-/// A compiler interface for producing single (non-incremental) kernel files.
 class KernelCompiler {
   KernelCompiler({
     required FileSystem fileSystem,
@@ -369,7 +354,6 @@ class KernelCompiler {
   }
 }
 
-/// Class that allows to serialize compilation requests to the compiler.
 abstract class _CompilationRequest {
   _CompilationRequest(this.completer);
 
@@ -471,11 +455,6 @@ class _RejectRequest extends _CompilationRequest {
       compiler._reject();
 }
 
-/// Wrapper around incremental frontend server compiler, that communicates with
-/// server via stdin/stdout.
-///
-/// The wrapper is intended to stay resident in memory as user changes, reloads,
-/// restarts the Flutter app.
 abstract class ResidentCompiler {
   factory ResidentCompiler(String sdkRoot, {
     required BuildMode buildMode,
@@ -505,17 +484,6 @@ abstract class ResidentCompiler {
   // See: https://github.com/flutter/flutter/issues/50494
   void addFileSystemRoot(String root);
 
-  /// If invoked for the first time, it compiles Dart script identified by
-  /// [mainPath], [invalidatedFiles] list is ignored.
-  /// On successive runs [invalidatedFiles] indicates which files need to be
-  /// recompiled. If [mainPath] is [null], previously used [mainPath] entry
-  /// point that is used for recompilation.
-  /// Binary file name is returned if compilation was successful, otherwise
-  /// null is returned.
-  ///
-  /// If [checkDartPluginRegistry] is true, it is the caller's responsibility
-  /// to ensure that the generated registrant file has been updated such that
-  /// it is wrapping [mainUri].
   Future<CompilerOutput?> recompile(
     Uri mainUri,
     List<Uri>? invalidatedFiles, {
@@ -542,26 +510,6 @@ abstract class ResidentCompiler {
     bool isStatic,
   );
 
-  /// Compiles [expression] in [libraryUri] at [line]:[column] to JavaScript
-  /// in [moduleName].
-  ///
-  /// Values listed in [jsFrameValues] are substituted for their names in the
-  /// [expression].
-  ///
-  /// Ensures that all [jsModules] are loaded and accessible inside the
-  /// expression.
-  ///
-  /// Example values of parameters:
-  /// [moduleName] is of the form '/packages/hello_world_main.dart'
-  /// [jsFrameValues] is a map from js variable name to its primitive value
-  /// or another variable name, for example
-  /// { 'x': '1', 'y': 'y', 'o': 'null' }
-  /// [jsModules] is a map from variable name to the module name, where
-  /// variable name is the name originally used in JavaScript to contain the
-  /// module object, for example:
-  /// { 'dart':'dart_sdk', 'main': '/packages/hello_world_main.dart' }
-  /// Returns a [CompilerOutput] including the name of the file containing the
-  /// compilation result and a number of errors.
   Future<CompilerOutput?> compileExpressionToJs(
     String libraryUri,
     int line,
@@ -572,19 +520,10 @@ abstract class ResidentCompiler {
     String expression,
   );
 
-  /// Should be invoked when results of compilation are accepted by the client.
-  ///
-  /// Either [accept] or [reject] should be called after every [recompile] call.
   void accept();
 
-  /// Should be invoked when results of compilation are rejected by the client.
-  ///
-  /// Either [accept] or [reject] should be called after every [recompile] call.
   Future<CompilerOutput?> reject();
 
-  /// Should be invoked when frontend server compiler should forget what was
-  /// accepted previously so that next call to [recompile] produces complete
-  /// kernel file.
   void reset();
 
   Future<Object> shutdown();
@@ -650,14 +589,8 @@ class DefaultResidentCompiler implements ResidentCompiler {
     fileSystemRoots.add(root);
   }
 
-  /// The path to the root of the Dart SDK used to compile.
-  ///
-  /// This is used to resolve the [platformDill].
   final String sdkRoot;
 
-  /// The path to the platform dill file.
-  ///
-  /// This does not need to be provided for the normal Flutter workflow.
   final String? platformDill;
 
   Process? _server;
@@ -1043,8 +976,6 @@ class DefaultResidentCompiler implements ResidentCompiler {
   }
 }
 
-/// Convert a file URI into a multi-root scheme URI if provided, otherwise
-/// return unmodified.
 @visibleForTesting
 String toMultiRootPath(Uri fileUri, String? scheme, List<String> fileSystemRoots, bool windows) {
   if (scheme == null || fileSystemRoots.isEmpty || fileUri.scheme != 'file') {

@@ -24,10 +24,6 @@ import 'common.dart';
 import 'icon_tree_shaker.dart';
 import 'shader_compiler.dart';
 
-/// Supports compiling a dart kernel file to an assembly file.
-///
-/// If more than one iOS arch is provided, then this rule will
-/// produce a universal binary.
 abstract class AotAssemblyBase extends Target {
   const AotAssemblyBase();
 
@@ -133,7 +129,6 @@ abstract class AotAssemblyBase extends Target {
   }
 }
 
-/// Generate an assembly target from a dart kernel file in release mode.
 class AotAssemblyRelease extends AotAssemblyBase {
   const AotAssemblyRelease();
 
@@ -168,7 +163,6 @@ class AotAssemblyRelease extends AotAssemblyBase {
 }
 
 
-/// Generate an assembly target from a dart kernel file in profile mode.
 class AotAssemblyProfile extends AotAssemblyBase {
   const AotAssemblyProfile();
 
@@ -202,7 +196,6 @@ class AotAssemblyProfile extends AotAssemblyBase {
   ];
 }
 
-/// Create a trivial App.framework file for debug iOS builds.
 class DebugUniversalFramework extends Target {
   const DebugUniversalFramework();
 
@@ -247,11 +240,6 @@ class DebugUniversalFramework extends Target {
   }
 }
 
-/// Copy the iOS framework to the correct copy dir by invoking 'rsync'.
-///
-/// This class is abstract to share logic between the three concrete
-/// implementations. The shelling out is done to avoid complications with
-/// preserving special files (e.g., symbolic links) in the framework structure.
 abstract class UnpackIOS extends Target {
   const UnpackIOS();
 
@@ -327,7 +315,6 @@ abstract class UnpackIOS extends Target {
     }
   }
 
-  /// Destructively thin Flutter.framework to include only the specified architectures.
   Future<void> _thinFramework(
     Environment environment,
     String frameworkBinaryPath,
@@ -376,8 +363,6 @@ abstract class UnpackIOS extends Target {
     }
   }
 
-  /// Destructively strip bitcode from the framework. This can be removed
-  /// when the framework is no longer built with bitcode.
   Future<void> _bitcodeStripFramework(
     Environment environment,
     String frameworkBinaryPath,
@@ -397,7 +382,6 @@ abstract class UnpackIOS extends Target {
   }
 }
 
-/// Unpack the release prebuilt engine framework.
 class ReleaseUnpackIOS extends UnpackIOS {
   const ReleaseUnpackIOS();
 
@@ -408,7 +392,6 @@ class ReleaseUnpackIOS extends UnpackIOS {
   BuildMode get buildMode => BuildMode.release;
 }
 
-/// Unpack the profile prebuilt engine framework.
 class ProfileUnpackIOS extends UnpackIOS {
   const ProfileUnpackIOS();
 
@@ -419,7 +402,6 @@ class ProfileUnpackIOS extends UnpackIOS {
   BuildMode get buildMode => BuildMode.profile;
 }
 
-/// Unpack the debug prebuilt engine framework.
 class DebugUnpackIOS extends UnpackIOS {
   const DebugUnpackIOS();
 
@@ -430,13 +412,6 @@ class DebugUnpackIOS extends UnpackIOS {
   BuildMode get buildMode => BuildMode.debug;
 }
 
-/// The base class for all iOS bundle targets.
-///
-/// This is responsible for setting up the basic App.framework structure, including:
-/// * Copying the app.dill/kernel_blob.bin from the build directory to assets (debug)
-/// * Copying the precompiled isolate/vm data from the engine (debug)
-/// * Copying the flutter assets to App.framework/flutter_assets
-/// * Copying either the stub or real App assembly file to App.framework/App
 abstract class IosAssetBundle extends Target {
   const IosAssetBundle();
 
@@ -548,7 +523,6 @@ abstract class IosAssetBundle extends Target {
   }
 }
 
-/// Build a debug iOS application bundle.
 class DebugIosApplicationBundle extends IosAssetBundle {
   const DebugIosApplicationBundle();
 
@@ -578,7 +552,6 @@ class DebugIosApplicationBundle extends IosAssetBundle {
   ];
 }
 
-/// IosAssetBundle with debug symbols, used for Profile and Release builds.
 abstract class _IosAssetBundleWithDSYM extends IosAssetBundle {
   const _IosAssetBundleWithDSYM();
 
@@ -595,7 +568,6 @@ abstract class _IosAssetBundleWithDSYM extends IosAssetBundle {
   ];
 }
 
-/// Build a profile iOS application bundle.
 class ProfileIosApplicationBundle extends _IosAssetBundleWithDSYM {
   const ProfileIosApplicationBundle();
 
@@ -608,7 +580,6 @@ class ProfileIosApplicationBundle extends _IosAssetBundleWithDSYM {
   ];
 }
 
-/// Build a release iOS application bundle.
 class ReleaseIosApplicationBundle extends _IosAssetBundleWithDSYM {
   const ReleaseIosApplicationBundle();
 
@@ -645,11 +616,6 @@ class ReleaseIosApplicationBundle extends _IosAssetBundleWithDSYM {
   }
 }
 
-/// Create an App.framework for debug iOS targets.
-///
-/// This framework needs to exist for the Xcode project to link/bundle,
-/// but it isn't actually executed. To generate something valid, we compile a trivial
-/// constant.
 Future<void> _createStubAppFramework(File outputFile, Environment environment,
     Set<String>? iosArchNames, String sdkRoot) async {
   try {

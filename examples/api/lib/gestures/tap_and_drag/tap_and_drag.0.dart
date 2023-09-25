@@ -5,7 +5,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [TapAndPanGestureRecognizer].
 
 void main() {
   runApp(const TapAndDragToZoomApp());

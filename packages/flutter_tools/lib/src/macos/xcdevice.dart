@@ -58,7 +58,6 @@ enum XCDeviceEventInterface {
   final DeviceConnectionInterface connectionInterface;
 }
 
-/// A utility class for interacting with Xcode xcdevice command line tools.
 class XCDevice {
   XCDevice({
     required Artifacts artifacts,
@@ -189,10 +188,6 @@ class XCDevice {
     return null;
   }
 
-  /// Observe identifiers (UDIDs) of devices as they attach and detach.
-  ///
-  /// Each attach and detach event contains information on the event type,
-  /// the event interface, and the device identifer.
   Stream<XCDeviceEventNotification>? observedDeviceEvents() {
     if (!isInstalled) {
       _logger.printTrace("Xcode not found. Run 'flutter doctor' for more information.");
@@ -281,11 +276,6 @@ class XCDevice {
     );
   }
 
-  /// Starts the command and streams stdout/stderr from the child process to
-  /// this process' stdout/stderr.
-  ///
-  /// If [mapFunction] is present, all lines are forwarded to [mapFunction] for
-  /// further processing.
   Future<Process> _streamXCDeviceEventCommand(
     List<String> cmd, {
     String prefix = '',
@@ -364,9 +354,6 @@ class XCDevice {
     return null;
   }
 
-  /// Wait for a connect event for a specific device. Must use device's exact UDID.
-  ///
-  /// To cancel this process, call [cancelWaitForDeviceToConnect].
   Future<XCDeviceEventNotification?> waitForDeviceToConnect(
     String deviceId,
   ) async {
@@ -462,15 +449,6 @@ class XCDevice {
     _wifiDeviceWaitProcess?.kill();
   }
 
-  /// A list of [IOSDevice]s. This list includes connected devices and
-  /// disconnected wireless devices.
-  ///
-  /// Sometimes devices may have incorrect connection information
-  /// (`isConnected`, `connectionInterface`) if it timed out before it could get the
-  /// information. Wireless devices can take longer to get the correct
-  /// information.
-  ///
-  /// [timeout] defaults to 2 seconds.
   Future<List<IOSDevice>> getAvailableIOSDevices({ Duration? timeout }) async {
     final List<Object>? allAvailableDevices = await _getAllDevices(timeout: timeout ?? const Duration(seconds: 2));
 
@@ -636,8 +614,6 @@ class XCDevice {
     return deviceMap.values.toList();
   }
 
-  /// Despite the name, com.apple.platform.iphoneos includes iPhone, iPads, and all iOS devices.
-  /// Excludes simulators.
   static bool _isIPhoneOSDevice(Map<String, Object?> deviceProperties) {
     final Object? platform = deviceProperties['platform'];
     if (platform is String) {
@@ -720,7 +696,6 @@ class XCDevice {
     return cpuArchitecture ?? DarwinArch.arm64;
   }
 
-  /// Error message parsed from xcdevice. null if no error.
   static String? _parseErrorMessage(Map<String, Object?>? errorProperties) {
     //  {
     //    "simulator" : false,
@@ -799,7 +774,6 @@ class XCDevice {
     return errorMessage.toString();
   }
 
-  /// List of all devices reporting errors.
   Future<List<String>> getDiagnostics() async {
     final List<Object>? allAvailableDevices = await _getAllDevices(
       useCache: true,

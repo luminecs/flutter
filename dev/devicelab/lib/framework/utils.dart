@@ -15,37 +15,23 @@ import 'devices.dart';
 import 'host_agent.dart';
 import 'task_result.dart';
 
-/// Virtual current working directory, which affect functions, such as [exec].
 String cwd = Directory.current.path;
 
-/// The local engine to use for [flutter] and [evalFlutter], if any.
-///
-/// This is set as an environment variable when running the task, see runTask in runner.dart.
 String? get localEngineFromEnv {
   const bool isDefined = bool.hasEnvironment('localEngine');
   return isDefined ? const String.fromEnvironment('localEngine') : null;
 }
 
-/// The local engine host to use for [flutter] and [evalFlutter], if any.
-///
-/// This is set as an environment variable when running the task, see runTask in runner.dart.
 String? get localEngineHostFromEnv {
   const bool isDefined = bool.hasEnvironment('localEngineHost');
   return isDefined ? const String.fromEnvironment('localEngineHost') : null;
 }
 
-/// The local engine source path to use if a local engine is used for [flutter]
-/// and [evalFlutter].
-///
-/// This is set as an environment variable when running the task, see runTask in runner.dart.
 String? get localEngineSrcPathFromEnv {
   const bool isDefined = bool.hasEnvironment('localEngineSrcPath');
   return isDefined ? const String.fromEnvironment('localEngineSrcPath') : null;
 }
 
-/// The local Web SDK to use for [flutter] and [evalFlutter], if any.
-///
-/// This is set as an environment variable when running the task, see runTask in runner.dart.
 String? get localWebSdkFromEnv {
   const bool isDefined = bool.hasEnvironment('localWebSdk');
   return isDefined ? const String.fromEnvironment('localWebSdk') : null;
@@ -72,7 +58,6 @@ class ProcessInfo {
   }
 }
 
-/// Result of a health check for a specific parameter.
 class HealthCheckResult {
   HealthCheckResult.success([this.details]) : succeeded = true;
   HealthCheckResult.failure(this.details) : succeeded = false;
@@ -124,7 +109,6 @@ void rm(FileSystemEntity entity, { bool recursive = false}) {
   }
 }
 
-/// Remove recursively.
 void rmTree(FileSystemEntity entity) {
   rm(entity, recursive: true);
 }
@@ -168,7 +152,6 @@ FileSystemEntity move(FileSystemEntity whatToMove,
       .renameSync(path.join(to.path, name ?? path.basename(whatToMove.path)));
 }
 
-/// Equivalent of `chmod a+x file`
 void makeExecutable(File file) {
   // Windows files do not have an executable bit
   if (Platform.isWindows) {
@@ -189,12 +172,10 @@ void makeExecutable(File file) {
   }
 }
 
-/// Equivalent of `mkdir directory`.
 void mkdir(Directory directory) {
   directory.createSync();
 }
 
-/// Equivalent of `mkdir -p directory`.
 void mkdirs(Directory directory) {
   directory.createSync(recursive: true);
 }
@@ -261,30 +242,6 @@ Future<DateTime> getFlutterRepoCommitTimestamp(String commit) {
   });
 }
 
-/// Starts a subprocess.
-///
-/// The first argument is the full path to the executable to run.
-///
-/// The second argument is the list of arguments to provide on the command line.
-/// This argument can be null, indicating no arguments (same as the empty list).
-///
-/// The `environment` argument can be provided to configure environment variables
-/// that will be made available to the subprocess. The `BOT` environment variable
-/// is always set and overrides any value provided in the `environment` argument.
-/// The `isBot` argument controls the value of the `BOT` variable. It will either
-/// be "true", if `isBot` is true (the default), or "false" if it is false.
-///
-/// The `BOT` variable is in particular used by the `flutter` tool to determine
-/// how verbose to be and whether to enable analytics by default.
-///
-/// The working directory can be provided using the `workingDirectory` argument.
-/// By default it will default to the current working directory (see [cwd]).
-///
-/// Information regarding the execution of the subprocess is printed to the
-/// console.
-///
-/// The actual process executes asynchronously. A handle to the subprocess is
-/// returned in the form of a [Future] that completes to a [Process] object.
 Future<Process> startProcess(
   String executable,
   List<String>? arguments, {
@@ -332,7 +289,6 @@ Future<void> forceQuitRunningProcesses() async {
   _runningProcesses.clear();
 }
 
-/// Executes a command and returns its exit code.
 Future<int> exec(
   String executable,
   List<String> arguments, {
@@ -382,11 +338,6 @@ Future<int> _execute(
   return exitCode;
 }
 
-/// Forwards standard out and standard error from [process] to this process'
-/// respective outputs. Also writes stdout to [output] and stderr to [stderr]
-/// if they are not null.
-///
-/// Returns a future that completes when both out and error streams a closed.
 Future<void> forwardStandardStreams(
   Process process, {
   StringBuffer? output,
@@ -421,9 +372,6 @@ Future<void> forwardStandardStreams(
   ]);
 }
 
-/// Executes a command and returns its standard output as a String.
-///
-/// For logging purposes, the command's output is also printed out by default.
 Future<String> eval(
   String executable,
   List<String> arguments, {
@@ -489,8 +437,6 @@ List<String> _flutterCommandArgs(String command, List<String> options) {
   ];
 }
 
-/// Runs the flutter `command`, and returns the exit code.
-/// If `canFail` is `false`, the future completes with an error.
 Future<int> flutter(String command, {
   List<String> options = const <String>[],
   bool canFail = false, // as in, whether failures are ok. False means that they are fatal.
@@ -507,28 +453,6 @@ Future<int> flutter(String command, {
   return exitCode;
 }
 
-/// Starts a Flutter subprocess.
-///
-/// The first argument is the flutter command to run.
-///
-/// The second argument is the list of arguments to provide on the command line.
-/// This argument can be null, indicating no arguments (same as the empty list).
-///
-/// The `environment` argument can be provided to configure environment variables
-/// that will be made available to the subprocess. The `BOT` environment variable
-/// is always set and overrides any value provided in the `environment` argument.
-/// The `isBot` argument controls the value of the `BOT` variable. It will either
-/// be "true", if `isBot` is true (the default), or "false" if it is false.
-///
-/// The `isBot` argument controls whether the `BOT` environment variable is set
-/// to `true` or `false` and is used by the `flutter` tool to determine how
-/// verbose to be and whether to enable analytics by default.
-///
-/// Information regarding the execution of the subprocess is printed to the
-/// console.
-///
-/// The actual process executes asynchronously. A handle to the subprocess is
-/// returned in the form of a [Future] that completes to a [Process] object.
 Future<Process> startFlutter(String command, {
   List<String> options = const <String>[],
   Map<String, String> environment = const <String, String>{},
@@ -552,7 +476,6 @@ Future<Process> startFlutter(String command, {
   return process;
 }
 
-/// Runs a `flutter` command and returns the standard output as a string.
 Future<String> evalFlutter(String command, {
   List<String> options = const <String>[],
   bool canFail = false, // as in, whether failures are ok. False means that they are fatal.
@@ -624,8 +547,6 @@ String get pubBin =>
 
 Future<int> dart(List<String> args) => exec(dartBin, <String>['--disable-dart-dev', ...args]);
 
-/// Returns a future that completes with a path suitable for JAVA_HOME
-/// or with null, if Java cannot be found.
 Future<String?> findJavaHome() async {
   if (_javaHome == null) {
     final Iterable<String> hits = grep(
@@ -715,25 +636,12 @@ Future<void> getNewGallery(String revision, Directory galleryDir) async {
   });
 }
 
-/// Splits [from] into lines and selects those that contain [pattern].
 Iterable<String> grep(Pattern pattern, {required String from}) {
   return from.split('\n').where((String line) {
     return line.contains(pattern);
   });
 }
 
-/// Captures asynchronous stack traces thrown by [callback].
-///
-/// This is a convenience wrapper around [Chain] optimized for use with
-/// `async`/`await`.
-///
-/// Example:
-///
-///     try {
-///       await captureAsyncStacks(() { /* async things */ });
-///     } catch (error, chain) {
-///
-///     }
 Future<void> runAndCaptureAsyncStacks(Future<void> Function() callback) {
   final Completer<void> completer = Completer<void>();
   Chain.capture(() async {
@@ -750,10 +658,6 @@ final RegExp _obsRegExp =
 final RegExp _obsPortRegExp = RegExp(r'(\S+:(\d+)/\S*)$');
 final RegExp _obsUriRegExp = RegExp(r'((http|//)[a-zA-Z0-9:/=_\-\.\[\]]+)');
 
-/// Tries to extract a port from the string.
-///
-/// The `prefix`, if specified, is a regular expression pattern and must not contain groups.
-/// `prefix` defaults to the RegExp: `A Dart VM Service .* is available at: `.
 int? parseServicePort(String line, {
   Pattern? prefix,
 }) {
@@ -768,10 +672,6 @@ int? parseServicePort(String line, {
   return matches.isEmpty ? null : int.parse(matches[0].group(2)!);
 }
 
-/// Tries to extract a URL from the string.
-///
-/// The `prefix`, if specified, is a regular expression pattern and must not contain groups.
-/// `prefix` defaults to the RegExp: `A Dart VM Service .* is available at: `.
 Uri? parseServiceUri(String line, {
   Pattern? prefix,
 }) {
@@ -786,42 +686,36 @@ Uri? parseServiceUri(String line, {
   return matches.isEmpty ? null : Uri.parse(matches[0].group(0)!);
 }
 
-/// Checks that the file exists, otherwise throws a [FileSystemException].
 void checkFileExists(String file) {
   if (!exists(File(file))) {
     throw FileSystemException('Expected file to exist.', file);
   }
 }
 
-/// Checks that the file does not exists, otherwise throws a [FileSystemException].
 void checkFileNotExists(String file) {
   if (exists(File(file))) {
     throw FileSystemException('Expected file to not exist.', file);
   }
 }
 
-/// Checks that the directory exists, otherwise throws a [FileSystemException].
 void checkDirectoryExists(String directory) {
   if (!exists(Directory(directory))) {
     throw FileSystemException('Expected directory to exist.', directory);
   }
 }
 
-/// Checks that the directory does not exist, otherwise throws a [FileSystemException].
 void checkDirectoryNotExists(String directory) {
   if (exists(Directory(directory))) {
     throw FileSystemException('Expected directory to not exist.', directory);
   }
 }
 
-/// Checks that the symlink exists, otherwise throws a [FileSystemException].
 void checkSymlinkExists(String file) {
   if (!exists(Link(file))) {
     throw FileSystemException('Expected symlink to exist.', file);
   }
 }
 
-/// Check that `collection` contains all entries in `values`.
 void checkCollectionContains<T>(Iterable<T> values, Iterable<T> collection) {
   for (final T value in values) {
     if (!collection.contains(value)) {
@@ -830,7 +724,6 @@ void checkCollectionContains<T>(Iterable<T> values, Iterable<T> collection) {
   }
 }
 
-/// Check that `collection` does not contain any entries in `values`
 void checkCollectionDoesNotContain<T>(Iterable<T> values, Iterable<T> collection) {
   for (final T value in values) {
     if (collection.contains(value)) {
@@ -839,8 +732,6 @@ void checkCollectionDoesNotContain<T>(Iterable<T> values, Iterable<T> collection
   }
 }
 
-/// Checks that the contents of a [File] at `filePath` contains the specified
-/// [Pattern]s, otherwise throws a [TaskResult].
 void checkFileContains(List<Pattern> patterns, String filePath) {
   final String fileContent = File(filePath).readAsStringSync();
   for (final Pattern pattern in patterns) {
@@ -853,10 +744,6 @@ void checkFileContains(List<Pattern> patterns, String filePath) {
   }
 }
 
-/// Clones a git repository.
-///
-/// Removes the directory [path], then clones the git repository
-/// specified by [repo] to the directory [path].
 Future<int> gitClone({required String path, required String repo}) async {
   rmTree(Directory(path));
 
@@ -868,14 +755,6 @@ Future<int> gitClone({required String path, required String repo}) async {
   );
 }
 
-/// Call [fn] retrying so long as [retryIf] return `true` for the exception
-/// thrown and [maxAttempts] has not been reached.
-///
-/// If no [retryIf] function is given this will retry any for any [Exception]
-/// thrown. To retry on an [Error], the error must be caught and _rethrown_
-/// as an [Exception].
-///
-/// Waits a constant duration of [delayDuration] between every retry attempt.
 Future<T> retry<T>(
   FutureOr<T> Function() fn, {
   FutureOr<bool> Function(Exception)? retryIf,

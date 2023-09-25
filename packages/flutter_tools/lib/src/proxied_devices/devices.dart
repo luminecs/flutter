@@ -31,11 +31,6 @@ T _cast<T>(Object? object) {
   }
 }
 
-/// A [DeviceDiscovery] that will connect to a flutter daemon and connects to
-/// the devices remotely.
-///
-/// If [deltaFileTransfer] is true, the proxy will use an rsync-like algorithm that
-/// only transfers the changed part of the application package for deployment.
 class ProxiedDevices extends PollingDeviceDiscovery {
   ProxiedDevices(this.connection, {
     bool deltaFileTransfer = true,
@@ -46,7 +41,6 @@ class ProxiedDevices extends PollingDeviceDiscovery {
        _logger = logger,
        super('Proxied devices');
 
-  /// [DaemonConnection] used to communicate with the daemon.
   final DaemonConnection connection;
 
   final Logger _logger;
@@ -121,15 +115,6 @@ class ProxiedDevices extends PollingDeviceDiscovery {
   }
 }
 
-/// A [Device] that acts as a proxy to remotely connected device.
-///
-/// The communication happens via a flutter daemon.
-///
-/// If [deltaFileTransfer] is true, the proxy will use an rsync-like algorithm that
-/// only transfers the changed part of the application package for deployment.
-///
-/// If [enableDdsProxy] is true, DDS will be started on the daemon instead of
-/// starting locally.
 class ProxiedDevice extends Device {
   ProxiedDevice(this.connection, String id, {
     bool deltaFileTransfer = true,
@@ -162,7 +147,6 @@ class ProxiedDevice extends Device {
         platformType: platformType,
         ephemeral: ephemeral);
 
-  /// [DaemonConnection] used to communicate with the daemon.
   final DaemonConnection connection;
 
   final Logger _logger;
@@ -238,12 +222,9 @@ class ProxiedDevice extends Device {
   }) => _ProxiedLogReader(connection, this, app);
 
   ProxiedPortForwarder? _proxiedPortForwarder;
-  /// [proxiedPortForwarder] forwards a port from the remote host to local host.
   ProxiedPortForwarder get proxiedPortForwarder => _proxiedPortForwarder ??= ProxiedPortForwarder(connection, logger: _logger);
 
   DevicePortForwarder? _portForwarder;
-  /// [portForwarder] forwards a port from the remote device to remote host, and
-  /// then forward the port from remote host to local host.
   @override
   DevicePortForwarder get portForwarder => _portForwarder ??= ProxiedPortForwarder(connection, deviceId: id, logger: _logger);
 
@@ -394,7 +375,6 @@ class ProxiedDevice extends Device {
   }
 }
 
-/// A [DeviceLogReader] for a proxied device.
 class _ProxiedLogReader extends DeviceLogReader {
   _ProxiedLogReader(this.connection, this.device, this.applicationPackage);
 
@@ -440,7 +420,6 @@ class _ProxiedLogReader extends DeviceLogReader {
   }
 }
 
-/// A port forwarded by a [ProxiedPortForwarder].
 class _ProxiedForwardedPort extends ForwardedPort {
   _ProxiedForwardedPort(this.connection, {
     required int hostPort,
@@ -450,16 +429,12 @@ class _ProxiedForwardedPort extends ForwardedPort {
     required this.serverSocket
   }): super(hostPort, devicePort);
 
-  /// [DaemonConnection] used to communicate with the daemon.
   final DaemonConnection connection;
 
-  /// The forwarded port on the remote device.
   final int? remoteDevicePort;
 
-  /// The device identifier of the remote device.
   final String? deviceId;
 
-  /// The [ServerSocket] that is serving the local forwarded port.
   final ServerSocket serverSocket;
 
   @override
@@ -467,7 +442,6 @@ class _ProxiedForwardedPort extends ForwardedPort {
     unforward();
   }
 
-  /// Unforwards the remote port, and stops the local server.
   Future<void> unforward() async {
     await serverSocket.close();
 
@@ -483,13 +457,6 @@ class _ProxiedForwardedPort extends ForwardedPort {
 
 typedef CreateSocketServer = Future<ServerSocket> Function(Logger logger, int? hostPort, bool? ipv6);
 
-/// A [DevicePortForwarder] for a proxied device.
-///
-/// If [deviceId] is not null, the port forwarder forwards ports from the remote
-/// device, to the remote host, and then to the local host.
-///
-/// If [deviceId] is null, then the port forwarder only forwards ports from the
-/// remote host to the local host.
 @visibleForTesting
 class ProxiedPortForwarder extends DevicePortForwarder {
   ProxiedPortForwarder(this.connection, {
@@ -633,9 +600,6 @@ class ProxiedPortForwarder extends DevicePortForwarder {
     ]);
   }
 
-  /// Returns the original remote port given the local port.
-  ///
-  /// If this is not a port that is handled by this port forwarder, return null.
   int? originalRemotePort(int localForwardedPort) {
     return _hostPortToForwardedPorts[localForwardedPort]?.devicePort;
   }
@@ -655,11 +619,6 @@ Future<ServerSocket> _defaultCreateServerSocket(Logger logger, int? hostPort, bo
   return ServerSocket.bind(InternetAddress.loopbackIPv6, hostPort ?? 0);
 }
 
-/// A class that starts the [DartDevelopmentService] on the daemon.
-///
-/// There are a lot of communications between DDS and the VM service on the
-/// device. When using proxied device, starting DDS remotely helps reduces the
-/// amount of data transferred with the remote daemon, hence improving latency.
 class ProxiedDartDevelopmentService implements DartDevelopmentService {
   ProxiedDartDevelopmentService(
     this.connection,
@@ -675,7 +634,6 @@ class ProxiedDartDevelopmentService implements DartDevelopmentService {
 
   final Logger _logger;
 
-  /// [DaemonConnection] used to communicate with the daemon.
   final DaemonConnection connection;
 
   final ProxiedPortForwarder _proxiedPortForwarder;

@@ -12,19 +12,13 @@ import 'inherited_theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Controls the default properties of icons in a widget subtree.
-///
-/// The icon theme is honored by [Icon] and [ImageIcon] widgets.
 class IconTheme extends InheritedTheme {
-  /// Creates an icon theme that controls properties of descendant widgets.
   const IconTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Creates an icon theme that controls the properties of
-  /// descendant widgets, and merges in the current icon theme, if any.
   static Widget merge({
     Key? key,
     required IconThemeData data,
@@ -41,28 +35,8 @@ class IconTheme extends InheritedTheme {
     );
   }
 
-  /// The set of properties to use for icons in this subtree.
   final IconThemeData data;
 
-  /// The data from the closest instance of this class that encloses the given
-  /// context, if any.
-  ///
-  /// If there is no ambient icon theme, defaults to [IconThemeData.fallback].
-  /// The returned [IconThemeData] is concrete (all values are non-null; see
-  /// [IconThemeData.isConcrete]). Any properties on the ambient icon theme that
-  /// are null get defaulted to the values specified on
-  /// [IconThemeData.fallback].
-  ///
-  /// The [Theme] widget from the `material` library introduces an [IconTheme]
-  /// widget set to the [ThemeData.iconTheme], so in a Material Design
-  /// application, this will typically default to the icon theme from the
-  /// ambient [Theme].
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// IconThemeData theme = IconTheme.of(context);
-  /// ```
   static IconThemeData of(BuildContext context) {
     final IconThemeData iconThemeData = _getInheritedIconThemeData(context).resolve(context);
     return iconThemeData.isConcrete

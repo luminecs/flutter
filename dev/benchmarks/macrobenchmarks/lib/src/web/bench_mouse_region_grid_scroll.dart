@@ -13,9 +13,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'recorder.dart';
 
-/// Creates a grid of mouse regions, then continuously scrolls them up and down.
-///
-/// Measures our ability to render mouse regions.
 class BenchMouseRegionGridScroll extends WidgetRecorder {
   BenchMouseRegionGridScroll() : super(name: benchmarkName);
 

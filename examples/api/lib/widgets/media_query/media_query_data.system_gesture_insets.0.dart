@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [MediaQueryData.systemGestureInsets].
 
 void main() => runApp(const SystemGestureInsetsExampleApp());
 

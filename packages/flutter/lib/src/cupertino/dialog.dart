@@ -153,43 +153,7 @@ bool _isInAccessibilityMode(BuildContext context) {
   return factor != null && factor > _kMaxRegularTextScaleFactor;
 }
 
-/// An iOS-style alert dialog.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=75CsnyRXf5I}
-///
-/// An alert dialog informs the user about situations that require
-/// acknowledgment. An alert dialog has an optional title, optional content,
-/// and an optional list of actions. The title is displayed above the content
-/// and the actions are displayed below the content.
-///
-/// This dialog styles its title and content (typically a message) to match the
-/// standard iOS title and message dialog text style. These default styles can
-/// be overridden by explicitly defining [TextStyle]s for [Text] widgets that
-/// are part of the title or content.
-///
-/// To display action buttons that look like standard iOS dialog buttons,
-/// provide [CupertinoDialogAction]s for the [actions] given to this dialog.
-///
-/// Typically passed as the child widget to [showDialog], which displays the
-/// dialog.
-///
-/// {@tool dartpad}
-/// This sample shows how to use a [CupertinoAlertDialog].
-///	The [CupertinoAlertDialog] shows an alert with a set of two choices
-/// when [CupertinoButton] is pressed.
-///
-/// ** See code in examples/api/lib/cupertino/dialog/cupertino_alert_dialog.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoPopupSurface], which is a generic iOS-style popup surface that
-///    holds arbitrary content to create custom popups.
-///  * [CupertinoDialogAction], which is an iOS-style dialog button.
-///  * [AlertDialog], a Material Design alert dialog.
-///  * <https://developer.apple.com/ios/human-interface-guidelines/views/alerts/>
 class CupertinoAlertDialog extends StatefulWidget {
-  /// Creates an iOS-style alert dialog.
   const CupertinoAlertDialog({
     super.key,
     this.title,
@@ -201,51 +165,18 @@ class CupertinoAlertDialog extends StatefulWidget {
     this.insetAnimationCurve = Curves.decelerate,
   });
 
-  /// The (optional) title of the dialog is displayed in a large font at the top
-  /// of the dialog.
-  ///
-  /// Typically a [Text] widget.
   final Widget? title;
 
-  /// The (optional) content of the dialog is displayed in the center of the
-  /// dialog in a lighter font.
-  ///
-  /// Typically a [Text] widget.
   final Widget? content;
 
-  /// The (optional) set of actions that are displayed at the bottom of the
-  /// dialog.
-  ///
-  /// Typically this is a list of [CupertinoDialogAction] widgets.
   final List<Widget> actions;
 
-  /// A scroll controller that can be used to control the scrolling of the
-  /// [content] in the dialog.
-  ///
-  /// Defaults to null, and is typically not needed, since most alert messages
-  /// are short.
-  ///
-  /// See also:
-  ///
-  ///  * [actionScrollController], which can be used for controlling the actions
-  ///    section when there are many actions.
   final ScrollController? scrollController;
 
-  /// A scroll controller that can be used to control the scrolling of the
-  /// actions in the dialog.
-  ///
-  /// Defaults to null, and is typically not needed.
-  ///
-  /// See also:
-  ///
-  ///  * [scrollController], which can be used for controlling the [content]
-  ///    section when it is long.
   final ScrollController? actionScrollController;
 
-  /// {@macro flutter.material.dialog.insetAnimationDuration}
   final Duration insetAnimationDuration;
 
-  /// {@macro flutter.material.dialog.insetAnimationCurve}
   final Curve insetAnimationCurve;
 
   @override
@@ -384,40 +315,15 @@ class _CupertinoAlertDialogState extends State<CupertinoAlertDialog> {
   }
 }
 
-/// Rounded rectangle surface that looks like an iOS popup surface, e.g., alert dialog
-/// and action sheet.
-///
-/// A [CupertinoPopupSurface] can be configured to paint or not paint a white
-/// color on top of its blurred area. Typical usage should paint white on top
-/// of the blur. However, the white paint can be disabled for the purpose of
-/// rendering divider gaps for a more complicated layout, e.g., [CupertinoAlertDialog].
-/// Additionally, the white paint can be disabled to render a blurred rounded
-/// rectangle without any color (similar to iOS's volume control popup).
-///
-/// See also:
-///
-///  * [CupertinoAlertDialog], which is a dialog with a title, content, and
-///    actions.
-///  * <https://developer.apple.com/ios/human-interface-guidelines/views/alerts/>
 class CupertinoPopupSurface extends StatelessWidget {
-  /// Creates an iOS-style rounded rectangle popup surface.
   const CupertinoPopupSurface({
     super.key,
     this.isSurfacePainted = true,
     this.child,
   });
 
-  /// Whether or not to paint a translucent white on top of this surface's
-  /// blurred background. [isSurfacePainted] should be true for a typical popup
-  /// that contains content without any dividers. A popup that requires dividers
-  /// should set [isSurfacePainted] to false and then paint its own surface area.
-  ///
-  /// Some popups, like iOS's volume control popup, choose to render a blurred
-  /// area without any white paint covering it. To achieve this effect,
-  /// [isSurfacePainted] should be set to false.
   final bool isSurfacePainted;
 
-  /// The widget below this widget in the tree.
   final Widget? child;
 
   @override
@@ -435,51 +341,7 @@ class CupertinoPopupSurface extends StatelessWidget {
   }
 }
 
-/// An iOS-style action sheet.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=U-ao8p4A82k}
-///
-/// An action sheet is a specific style of alert that presents the user
-/// with a set of two or more choices related to the current context.
-/// An action sheet can have a title, an additional message, and a list
-/// of actions. The title is displayed above the message and the actions
-/// are displayed below this content.
-///
-/// This action sheet styles its title and message to match standard iOS action
-/// sheet title and message text style.
-///
-/// To display action buttons that look like standard iOS action sheet buttons,
-/// provide [CupertinoActionSheetAction]s for the [actions] given to this action
-/// sheet.
-///
-/// To include a iOS-style cancel button separate from the other buttons,
-/// provide an [CupertinoActionSheetAction] for the [cancelButton] given to this
-/// action sheet.
-///
-/// An action sheet is typically passed as the child widget to
-/// [showCupertinoModalPopup], which displays the action sheet by sliding it up
-/// from the bottom of the screen.
-///
-/// {@tool dartpad}
-/// This sample shows how to use a [CupertinoActionSheet].
-///	The [CupertinoActionSheet] shows a modal popup that slides in from the
-/// bottom when [CupertinoButton] is pressed.
-///
-/// ** See code in examples/api/lib/cupertino/dialog/cupertino_action_sheet.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoActionSheetAction], which is an iOS-style action sheet button.
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/views/action-sheets/>
 class CupertinoActionSheet extends StatefulWidget {
-  /// Creates an iOS-style action sheet.
-  ///
-  /// An action sheet must have a non-null value for at least one of the
-  /// following arguments: [actions], [title], [message], or [cancelButton].
-  ///
-  /// Generally, action sheets are used to give the user a choice between
-  /// two or more choices for the current context.
   const CupertinoActionSheet({
     super.key,
     this.title,
@@ -494,40 +356,16 @@ class CupertinoActionSheet extends StatefulWidget {
          'actions, title, message, or cancelButton',
        );
 
-  /// An optional title of the action sheet. When the [message] is non-null,
-  /// the font of the [title] is bold.
-  ///
-  /// Typically a [Text] widget.
   final Widget? title;
 
-  /// An optional descriptive message that provides more details about the
-  /// reason for the alert.
-  ///
-  /// Typically a [Text] widget.
   final Widget? message;
 
-  /// The set of actions that are displayed for the user to select.
-  ///
-  /// Typically this is a list of [CupertinoActionSheetAction] widgets.
   final List<Widget>? actions;
 
-  /// A scroll controller that can be used to control the scrolling of the
-  /// [message] in the action sheet.
-  ///
-  /// This attribute is typically not needed, as alert messages should be
-  /// short.
   final ScrollController? messageScrollController;
 
-  /// A scroll controller that can be used to control the scrolling of the
-  /// [actions] in the action sheet.
-  ///
-  /// This attribute is typically not needed.
   final ScrollController? actionScrollController;
 
-  /// The optional cancel button that is grouped separately from the other
-  /// actions.
-  ///
-  /// Typically this is an [CupertinoActionSheetAction] widget.
   final Widget? cancelButton;
 
   @override
@@ -676,14 +514,7 @@ class _CupertinoActionSheetState extends State<CupertinoActionSheet> {
   }
 }
 
-/// A button typically used in a [CupertinoActionSheet].
-///
-/// See also:
-///
-///  * [CupertinoActionSheet], an alert that presents the user with a set of two or
-///    more choices related to the current context.
 class CupertinoActionSheetAction extends StatelessWidget {
-  /// Creates an action for an iOS-style action sheet.
   const CupertinoActionSheetAction({
     super.key,
     required this.onPressed,
@@ -692,22 +523,12 @@ class CupertinoActionSheetAction extends StatelessWidget {
     required this.child,
   });
 
-  /// The callback that is called when the button is tapped.
   final VoidCallback onPressed;
 
-  /// Whether this action is the default choice in the action sheet.
-  ///
-  /// Default buttons have bold text.
   final bool isDefaultAction;
 
-  /// Whether this action might change or delete data.
-  ///
-  /// Destructive buttons have red text.
   final bool isDestructiveAction;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Typically a [Text] widget.
   final Widget child;
 
   @override
@@ -1596,14 +1417,7 @@ class _ActionButtonParentData extends MultiChildLayoutParentData {
   bool isPressed = false;
 }
 
-/// A button typically used in a [CupertinoAlertDialog].
-///
-/// See also:
-///
-///  * [CupertinoAlertDialog], a dialog that informs the user about situations
-///    that require acknowledgment.
 class CupertinoDialogAction extends StatelessWidget {
-  /// Creates an action for an iOS-style dialog.
   const CupertinoDialogAction({
     super.key,
     this.onPressed,
@@ -1613,45 +1427,16 @@ class CupertinoDialogAction extends StatelessWidget {
     required this.child,
   });
 
-  /// The callback that is called when the button is tapped or otherwise
-  /// activated.
-  ///
-  /// If this is set to null, the button will be disabled.
   final VoidCallback? onPressed;
 
-  /// Set to true if button is the default choice in the dialog.
-  ///
-  /// Default buttons have bold text. Similar to
-  /// [UIAlertController.preferredAction](https://developer.apple.com/documentation/uikit/uialertcontroller/1620102-preferredaction),
-  /// but more than one action can have this attribute set to true in the same
-  /// [CupertinoAlertDialog].
-  ///
-  /// This parameters defaults to false.
   final bool isDefaultAction;
 
-  /// Whether this action destroys an object.
-  ///
-  /// For example, an action that deletes an email is destructive.
-  ///
-  /// Defaults to false.
   final bool isDestructiveAction;
 
-  /// [TextStyle] to apply to any text that appears in this button.
-  ///
-  /// Dialog actions have a built-in text resizing policy for long text. To
-  /// ensure that this resizing policy always works as expected, [textStyle]
-  /// must be used if a text size is desired other than that specified in
-  /// [_kCupertinoDialogActionStyle].
   final TextStyle? textStyle;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Typically a [Text] widget.
   final Widget child;
 
-  /// Whether the button is enabled or disabled. Buttons are disabled by
-  /// default. To enable a button, set its [onPressed] property to a non-null
-  /// value.
   bool get enabled => onPressed != null;
 
   double _calculatePadding(BuildContext context) {

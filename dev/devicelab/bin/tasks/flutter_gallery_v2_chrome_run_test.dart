@@ -16,23 +16,15 @@ Future<void> main() async {
   await task(const NewGalleryChromeRunTest().run);
 }
 
-/// After the gallery loads, a duration of [durationToWaitForError]
-/// is waited, allowing any possible exceptions to be thrown.
 const Duration durationToWaitForError = Duration(seconds: 5);
 
-/// Flutter prints this string when an app is successfully loaded.
-/// Used to check when the app is successfully loaded.
 const String successfullyLoadedString = 'To hot restart';
 
-/// Flutter prints this string when an exception is caught.
-/// Used to check if there are any exceptions.
 const String exceptionString = 'EXCEPTION CAUGHT';
 
-/// Checks that the New Flutter Gallery runs successfully on Chrome.
 class NewGalleryChromeRunTest {
   const NewGalleryChromeRunTest();
 
-  /// Runs the test.
   Future<TaskResult> run() async {
     final Directory galleryParentDir =
         Directory.systemTemp.createTempSync('flutter_gallery_v2_chrome_run.');

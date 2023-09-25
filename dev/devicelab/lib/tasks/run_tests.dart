@@ -219,7 +219,6 @@ class DesktopRunOutputTest extends RunOutputTask {
     }
   );
 
-  /// Whether `flutter run` is expected to produce output on stderr.
   final bool allowStderr;
 
   @override
@@ -251,11 +250,9 @@ class DesktopRunOutputTest extends RunOutputTask {
     return TaskResult.success(null);
   }
 
-  /// Verify the output from `flutter run`'s build step.
   void verifyBuildOutput(List<String> stdout) {}
 }
 
-/// Test that the output of `flutter run` is expected.
 abstract class RunOutputTask {
   RunOutputTask(
     this.testDirectory,
@@ -268,11 +265,8 @@ abstract class RunOutputTask {
     r'\[(VERBOSE|INFO|WARNING|ERROR|FATAL):.+\(\d+\)\]',
   );
 
-  /// The directory where the app under test is defined.
   final String testDirectory;
-  /// The main entry-point file of the application, as run on the device.
   final String testTarget;
-  /// Whether to run the app in release mode.
   final bool release;
 
   Future<TaskResult> call() {
@@ -343,17 +337,12 @@ abstract class RunOutputTask {
     });
   }
 
-  /// Prepare the device for running the test app.
   Future<void> prepare(String deviceId) => Future<void>.value();
 
-  /// Returns true if this stderr output line is expected.
   bool isExpectedStderr(String line) => false;
 
-  /// Verify the output of `flutter run`.
   TaskResult verify(List<String> stdout, List<String> stderr) => throw UnimplementedError('verify is not implemented');
 
-  /// Helper that verifies a line in [list] matches [matcher].
-  /// The [list] is updated to contain the lines remaining after the match.
   void _findNextMatcherInList(
     List<String> list,
     bool Function(String testLine) matcher,

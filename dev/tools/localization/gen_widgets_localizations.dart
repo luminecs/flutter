@@ -36,27 +36,17 @@ import '../widgets_localizations.dart';
 // method defined in `flutter_localizations/lib/src/widgets_localizations.dart`.''';
 }
 
-/// Returns the source of the constructor for a GlobalWidgetsLocalizations
-/// subclass.
 String generateWidgetsConstructor(LocaleInfo locale) {
   final String localeName = locale.originalString;
   final String language = locale.languageCode.toLowerCase();
   final String textDirection = _rtlLanguages.contains(language) ? 'TextDirection.rtl' : 'TextDirection.ltr';
   return '''
-  /// Create an instance of the translation bundle for ${describeLocale(localeName)}.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalWidgetsLocalizations].
   const WidgetsLocalization${locale.camelCase()}() : super($textDirection);''';
 }
 
-/// Returns the source of the constructor for a GlobalWidgetsLocalizations
-/// subclass.
 String generateWidgetsConstructorForCountrySubclass(LocaleInfo locale) {
   final String localeName = locale.originalString;
   return '''
-  /// Create an instance of the translation bundle for ${describeLocale(localeName)}.
-  ///
-  /// For details on the meaning of the arguments, see [GlobalWidgetsLocalizations].
   const WidgetsLocalization${locale.camelCase()}();''';
 }
 

@@ -17024,7 +17024,6 @@ void main() {
   );
 }
 
-/// A Simple widget for testing the obscure text.
 class _ObscureTextTestWidget extends StatefulWidget {
    const _ObscureTextTestWidget({ required this.controller });
 

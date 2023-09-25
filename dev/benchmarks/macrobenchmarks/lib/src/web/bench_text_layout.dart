@@ -25,8 +25,6 @@ String _randomize(String text) {
 class ParagraphGenerator {
   int _counter = 0;
 
-  /// Randomizes the given [text] and creates a paragraph with a unique
-  /// font-size so that the engine doesn't reuse a cached ruler.
   ui.Paragraph generate(
     String text, {
     int? maxLines,
@@ -45,18 +43,12 @@ class ParagraphGenerator {
   }
 }
 
-/// Which mode to run [BenchBuildColorsGrid] in.
 enum _TestMode {
-  /// Uses the HTML rendering backend with the canvas 2D text layout.
   useCanvasTextLayout,
 
-  /// Uses CanvasKit for everything.
   useCanvasKit,
 }
 
-/// Repeatedly lays out a paragraph.
-///
-/// Creates a different paragraph each time in order to avoid hitting the cache.
 class BenchTextLayout extends RawRecorder {
   BenchTextLayout.canvas()
       : super(name: canvasBenchmarkName);
@@ -137,11 +129,6 @@ class BenchTextLayout extends RawRecorder {
   }
 }
 
-/// Repeatedly lays out the same paragraph.
-///
-/// Uses the same paragraph content to make sure we hit the cache. It doesn't
-/// use the same paragraph instance because the layout method will shortcircuit
-/// in that case.
 class BenchTextCachedLayout extends RawRecorder {
   BenchTextCachedLayout.canvas()
       : super(name: canvasBenchmarkName);
@@ -167,17 +154,8 @@ class BenchTextCachedLayout extends RawRecorder {
   }
 }
 
-/// Global counter incremented every time the benchmark is asked to
-/// [createWidget].
-///
-/// The purpose of this counter is to make sure the rendered paragraphs on each
-/// build are unique.
 int _counter = 0;
 
-/// Measures how expensive it is to construct a realistic text-heavy piece of UI.
-///
-/// The benchmark constructs a tabbed view, where each tab displays a list of
-/// colors. Each color's description is made of several [Text] nodes.
 class BenchBuildColorsGrid extends WidgetBuildRecorder {
   BenchBuildColorsGrid.canvas()
       : _mode = _TestMode.useCanvasTextLayout, super(name: canvasBenchmarkName);
@@ -185,18 +163,12 @@ class BenchBuildColorsGrid extends WidgetBuildRecorder {
   BenchBuildColorsGrid.canvasKit()
       : _mode = _TestMode.useCanvasKit, super(name: canvasKitBenchmarkName);
 
-  /// Disables tracing for this benchmark.
-  ///
-  /// When tracing is enabled, DOM layout takes longer to complete. This has a
-  /// significant effect on the benchmark since we do a lot of text layout
-  /// operations that trigger synchronous DOM layout.
   @override
   bool get isTracingEnabled => false;
 
   static const String canvasBenchmarkName = 'text_canvas_color_grid';
   static const String canvasKitBenchmarkName = 'text_canvas_kit_color_grid';
 
-  /// Whether to use the new canvas-based text measurement implementation.
   final _TestMode _mode;
 
   num _textLayoutMicros = 0;

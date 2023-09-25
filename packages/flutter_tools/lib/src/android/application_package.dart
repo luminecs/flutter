@@ -20,7 +20,6 @@ import '../project.dart';
 import 'android_sdk.dart';
 import 'gradle.dart';
 
-/// An application package created from an already built Android APK.
 class AndroidApk extends ApplicationPackage implements PrebuiltApplicationPackage {
   AndroidApk({
     required super.id,
@@ -29,9 +28,6 @@ class AndroidApk extends ApplicationPackage implements PrebuiltApplicationPackag
     required this.launchActivity,
   });
 
-  /// Creates a new AndroidApk from an existing APK.
-  ///
-  /// Returns `null` if the APK was invalid or any required tooling was missing.
   static AndroidApk? fromApk(
     File apk, {
     required AndroidSdk androidSdk,
@@ -87,13 +83,10 @@ class AndroidApk extends ApplicationPackage implements PrebuiltApplicationPackag
   @override
   final FileSystemEntity applicationPackage;
 
-  /// The path to the activity that should be launched.
   final String launchActivity;
 
-  /// The version code of the APK.
   final int? versionCode;
 
-  /// Creates a new AndroidApk based on the information in the Android manifest.
   static Future<AndroidApk?> fromAndroidProject(
     AndroidProject androidProject, {
     required AndroidSdk? androidSdk,

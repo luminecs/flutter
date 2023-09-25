@@ -564,7 +564,6 @@ class ScreenshotDevice extends Fake implements Device {
 
   final Completer<void> _firstScreenshotCompleter = Completer<void>();
 
-  /// A Future that completes when [takeScreenshot] is called the first time.
   Future<void> get firstScreenshot => _firstScreenshotCompleter.future;
 
   @override
@@ -622,7 +621,6 @@ class FakePub extends Fake implements Pub {
   }) async { }
 }
 
-/// A [FlutterDriverFactory] that creates a [NeverEndingDriverService].
 class NeverEndingFlutterDriverFactory extends Fake implements FlutterDriverFactory {
   NeverEndingFlutterDriverFactory(this.callback);
 
@@ -632,10 +630,6 @@ class NeverEndingFlutterDriverFactory extends Fake implements FlutterDriverFacto
   DriverService createDriverService(bool web) => NeverEndingDriverService(callback);
 }
 
-/// A [DriverService] that will return a Future from [startTest] that will never complete.
-///
-/// This is to simulate when the test will take a long time, but a signal is
-/// expected to interrupt the process.
 class NeverEndingDriverService extends Fake implements DriverService {
   NeverEndingDriverService(this.callback);
 

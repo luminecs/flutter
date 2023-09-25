@@ -33,7 +33,6 @@ DefaultTextStyle getLabelStyle(WidgetTester tester, String labelText) {
   );
 }
 
-/// Adds the basic requirements for a Chip.
 Widget wrapForChip({
   required Widget child,
   TextDirection textDirection = TextDirection.ltr,

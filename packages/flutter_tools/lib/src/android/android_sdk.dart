@@ -38,7 +38,6 @@ class AndroidSdk {
     reinitialize();
   }
 
-  /// The Android SDK root directory.
   final Directory directory;
 
   final Java? _java;
@@ -46,28 +45,11 @@ class AndroidSdk {
   List<AndroidSdkVersion> _sdkVersions = <AndroidSdkVersion>[];
   AndroidSdkVersion? _latestVersion;
 
-  /// Whether the `cmdline-tools` directory exists in the Android SDK.
-  ///
-  /// This is required to use the newest SDK manager which only works with
-  /// the newer JDK.
   bool get cmdlineToolsAvailable => directory.childDirectory('cmdline-tools').existsSync();
 
-  /// Whether the `platform-tools` or `cmdline-tools` directory exists in the Android SDK.
-  ///
-  /// It is possible to have an Android SDK folder that is missing this with
-  /// the expectation that it will be downloaded later, e.g. by gradle or the
-  /// sdkmanager. The [licensesAvailable] property should be used to determine
-  /// whether the licenses are at least possibly accepted.
   bool get platformToolsAvailable => cmdlineToolsAvailable
      || directory.childDirectory('platform-tools').existsSync();
 
-  /// Whether the `licenses` directory exists in the Android SDK.
-  ///
-  /// The existence of this folder normally indicates that the SDK licenses have
-  /// been accepted, e.g. via the sdkmanager, Android Studio, or by copying them
-  /// from another workstation such as in CI scenarios. If these files are valid
-  /// gradle or the sdkmanager will be able to download and use other parts of
-  /// the SDK on demand.
   bool get licensesAvailable => directory.childDirectory('licenses').existsSync();
 
   static AndroidSdk? locateAndroidSdk() {
@@ -174,7 +156,6 @@ class AndroidSdk {
 
   String? get avdManagerPath => getAvdManagerPath();
 
-  /// Locate the path for storing AVD emulator images. Returns null if none found.
   String? getAvdPath() {
     final String? avdHome = globals.platform.environment['ANDROID_AVD_HOME'];
     final String? home = globals.platform.environment['HOME'];
@@ -217,8 +198,6 @@ class AndroidSdk {
     return platforms;
   }
 
-  /// Validate the Android SDK. This returns an empty list if there are no
-  /// issues; otherwise, it returns a list of issues found.
   List<String> validateSdkWellFormed() {
     if (adbPath == null || !globals.processManager.canRun(adbPath)) {
       return <String>['Android SDK file not found: ${adbPath ?? 'adb'}.'];
@@ -320,10 +299,6 @@ class AndroidSdk {
 
   String? getAvdManagerPath() => getCmdlineToolsPath(globals.platform.isWindows ? 'avdmanager.bat' : 'avdmanager');
 
-  /// Sets up various paths used internally.
-  ///
-  /// This method should be called in a case where the tooling may have updated
-  /// SDK artifacts, such as after running a gradle build.
   void reinitialize() {
     List<Version> buildTools = <Version>[]; // 19.1.0, 22.0.1, ...
 
@@ -396,7 +371,6 @@ class AndroidSdk {
     _latestVersion = _sdkVersions.isEmpty ? null : _sdkVersions.last;
   }
 
-  /// Returns the filesystem path of the Android SDK manager tool.
   String? get sdkManagerPath {
     final String executable = globals.platform.isWindows
       ? 'sdkmanager.bat'
@@ -408,7 +382,6 @@ class AndroidSdk {
     return null;
   }
 
-  /// Returns the version of the Android SDK manager tool or null if not found.
   String? get sdkManagerVersion {
     if (sdkManagerPath == null || !globals.processManager.canRun(sdkManagerPath)) {
       throwToolExit(
@@ -451,12 +424,6 @@ class AndroidSdkVersion implements Comparable<AndroidSdkVersion> {
 
   String get androidJarPath => getPlatformsPath('android.jar');
 
-  /// Return the path to the android application package tool.
-  ///
-  /// This is used to dump the xml in order to launch built android applications.
-  ///
-  /// See also:
-  ///   * [AndroidApk.fromApk], which depends on this to determine application identifiers.
   String get aaptPath => getBuildToolsPath('aapt');
 
   List<String> validateSdkWellFormed() {

@@ -43,8 +43,6 @@ void main() {
         );
         fileSystem.file('pubspec.yaml').writeAsBytesSync(<int>[0xFFFE]);
 
-        /// Technically this should throw a FileSystemException but this is
-        /// currently a bug in package:file.
         expect(
           () => projectFactory.fromDirectory(fileSystem.currentDirectory),
           throwsToolExit(),
@@ -1405,8 +1403,6 @@ flutter:
   return FlutterProject.fromDirectory(directory);
 }
 
-/// Executes the [testMethod] in a context where the file system
-/// is in memory.
 @isTest
 void _testInMemory(
   String description,
@@ -1494,8 +1490,6 @@ void _testInMemory(
   );
 }
 
-/// Transfers files and folders from the local file system's Flutter
-/// installation to an (in-memory) file system used for testing.
 void transfer(FileSystemEntity entity, FileSystem target) {
   if (entity is Directory) {
     target.directory(entity.absolute.path).createSync(recursive: true);

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigationBar] with nested [Navigator] destinations.
 
 void main() {
   runApp(const MaterialApp(home: Home()));

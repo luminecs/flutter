@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FlexibleSpaceBar].
 
 void main() => runApp(const MaterialApp(home: FlexibleSpaceBarExampleApp()));
 

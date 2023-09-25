@@ -11,93 +11,32 @@ import 'box.dart';
 import 'object.dart';
 import 'table_border.dart';
 
-/// Parent data used by [RenderTable] for its children.
 class TableCellParentData extends BoxParentData {
-  /// Where this cell should be placed vertically.
-  ///
-  /// When using [TableCellVerticalAlignment.baseline], the text baseline must be set as well.
   TableCellVerticalAlignment? verticalAlignment;
 
-  /// The column that the child was in the last time it was laid out.
   int? x;
 
-  /// The row that the child was in the last time it was laid out.
   int? y;
 
   @override
   String toString() => '${super.toString()}; ${verticalAlignment == null ? "default vertical alignment" : "$verticalAlignment"}';
 }
 
-/// Base class to describe how wide a column in a [RenderTable] should be.
-///
-/// To size a column to a specific number of pixels, use a [FixedColumnWidth].
-/// This is the cheapest way to size a column.
-///
-/// Other algorithms that are relatively cheap include [FlexColumnWidth], which
-/// distributes the space equally among the flexible columns,
-/// [FractionColumnWidth], which sizes a column based on the size of the
-/// table's container.
 @immutable
 abstract class TableColumnWidth {
-  /// Abstract const constructor. This constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const TableColumnWidth();
 
-  /// The smallest width that the column can have.
-  ///
-  /// The `cells` argument is an iterable that provides all the cells
-  /// in the table for this column. Walking the cells is by definition
-  /// O(N), so algorithms that do that should be considered expensive.
-  ///
-  /// The `containerWidth` argument is the `maxWidth` of the incoming
-  /// constraints for the table, and might be infinite.
   double minIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth);
 
-  /// The ideal width that the column should have. This must be equal
-  /// to or greater than the [minIntrinsicWidth]. The column might be
-  /// bigger than this width, e.g. if the column is flexible or if the
-  /// table's width ends up being forced to be bigger than the sum of
-  /// all the maxIntrinsicWidth values.
-  ///
-  /// The `cells` argument is an iterable that provides all the cells
-  /// in the table for this column. Walking the cells is by definition
-  /// O(N), so algorithms that do that should be considered expensive.
-  ///
-  /// The `containerWidth` argument is the `maxWidth` of the incoming
-  /// constraints for the table, and might be infinite.
   double maxIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth);
 
-  /// The flex factor to apply to the cell if there is any room left
-  /// over when laying out the table. The remaining space is
-  /// distributed to any columns with flex in proportion to their flex
-  /// value (higher values get more space).
-  ///
-  /// The `cells` argument is an iterable that provides all the cells
-  /// in the table for this column. Walking the cells is by definition
-  /// O(N), so algorithms that do that should be considered expensive.
   double? flex(Iterable<RenderBox> cells) => null;
 
   @override
   String toString() => objectRuntimeType(this, 'TableColumnWidth');
 }
 
-/// Sizes the column according to the intrinsic dimensions of all the
-/// cells in that column.
-///
-/// This is a very expensive way to size a column.
-///
-/// A flex value can be provided. If specified (and non-null), the
-/// column will participate in the distribution of remaining space
-/// once all the non-flexible columns have been sized.
 class IntrinsicColumnWidth extends TableColumnWidth {
-  /// Creates a column width based on intrinsic sizing.
-  ///
-  /// This sizing algorithm is very expensive.
-  ///
-  /// The `flex` argument specifies the flex factor to apply to the column if
-  /// there is any room left over when laying out the table. If `flex` is
-  /// null (the default), the table will not distribute any extra space to the
-  /// column.
   const IntrinsicColumnWidth({ double? flex }) : _flex = flex;
 
   @override
@@ -127,14 +66,9 @@ class IntrinsicColumnWidth extends TableColumnWidth {
   String toString() => '${objectRuntimeType(this, 'IntrinsicColumnWidth')}(flex: ${_flex?.toStringAsFixed(1)})';
 }
 
-/// Sizes the column to a specific number of pixels.
-///
-/// This is the cheapest way to size a column.
 class FixedColumnWidth extends TableColumnWidth {
-  /// Creates a column width based on a fixed number of logical pixels.
   const FixedColumnWidth(this.value);
 
-  /// The width the column should occupy in logical pixels.
   final double value;
 
   @override
@@ -151,16 +85,9 @@ class FixedColumnWidth extends TableColumnWidth {
   String toString() => '${objectRuntimeType(this, 'FixedColumnWidth')}(${debugFormatDouble(value)})';
 }
 
-/// Sizes the column to a fraction of the table's constraints' maxWidth.
-///
-/// This is a cheap way to size a column.
 class FractionColumnWidth extends TableColumnWidth {
-  /// Creates a column width based on a fraction of the table's constraints'
-  /// maxWidth.
   const FractionColumnWidth(this.value);
 
-  /// The fraction of the table's constraints' maxWidth that this column should
-  /// occupy.
   final double value;
 
   @override
@@ -183,20 +110,9 @@ class FractionColumnWidth extends TableColumnWidth {
   String toString() => '${objectRuntimeType(this, 'FractionColumnWidth')}($value)';
 }
 
-/// Sizes the column by taking a part of the remaining space once all
-/// the other columns have been laid out.
-///
-/// For example, if two columns have a [FlexColumnWidth], then half the
-/// space will go to one and half the space will go to the other.
-///
-/// This is a cheap way to size a column.
 class FlexColumnWidth extends TableColumnWidth {
-  /// Creates a column width based on a fraction of the remaining space once all
-  /// the other columns have been laid out.
   const FlexColumnWidth([this.value = 1.0]);
 
-  /// The fraction of the remaining space once all the other columns have
-  /// been laid out that this column should occupy.
   final double value;
 
   @override
@@ -218,24 +134,11 @@ class FlexColumnWidth extends TableColumnWidth {
   String toString() => '${objectRuntimeType(this, 'FlexColumnWidth')}(${debugFormatDouble(value)})';
 }
 
-/// Sizes the column such that it is the size that is the maximum of
-/// two column width specifications.
-///
-/// For example, to have a column be 10% of the container width or
-/// 100px, whichever is bigger, you could use:
-///
-///     const MaxColumnWidth(const FixedColumnWidth(100.0), FractionColumnWidth(0.1))
-///
-/// Both specifications are evaluated, so if either specification is
-/// expensive, so is this.
 class MaxColumnWidth extends TableColumnWidth {
-  /// Creates a column width that is the maximum of two other column widths.
   const MaxColumnWidth(this.a, this.b);
 
-  /// A lower bound for the width of this column.
   final TableColumnWidth a;
 
-  /// Another lower bound for the width of this column.
   final TableColumnWidth b;
 
   @override
@@ -270,24 +173,11 @@ class MaxColumnWidth extends TableColumnWidth {
   String toString() => '${objectRuntimeType(this, 'MaxColumnWidth')}($a, $b)';
 }
 
-/// Sizes the column such that it is the size that is the minimum of
-/// two column width specifications.
-///
-/// For example, to have a column be 10% of the container width but
-/// never bigger than 100px, you could use:
-///
-///     const MinColumnWidth(const FixedColumnWidth(100.0), FractionColumnWidth(0.1))
-///
-/// Both specifications are evaluated, so if either specification is
-/// expensive, so is this.
 class MinColumnWidth extends TableColumnWidth {
-  /// Creates a column width that is the minimum of two other column widths.
   const MinColumnWidth(this.a, this.b);
 
-  /// An upper bound for the width of this column.
   final TableColumnWidth a;
 
-  /// Another upper bound for the width of this column.
   final TableColumnWidth b;
 
   @override
@@ -322,47 +212,19 @@ class MinColumnWidth extends TableColumnWidth {
   String toString() => '${objectRuntimeType(this, 'MinColumnWidth')}($a, $b)';
 }
 
-/// Vertical alignment options for cells in [RenderTable] objects.
-///
-/// This is specified using [TableCellParentData] objects on the
-/// [RenderObject.parentData] of the children of the [RenderTable].
 enum TableCellVerticalAlignment {
-  /// Cells with this alignment are placed with their top at the top of the row.
   top,
 
-  /// Cells with this alignment are vertically centered in the row.
   middle,
 
-  /// Cells with this alignment are placed with their bottom at the bottom of the row.
   bottom,
 
-  /// Cells with this alignment are aligned such that they all share the same
-  /// baseline. Cells with no baseline are top-aligned instead. The baseline
-  /// used is specified by [RenderTable.textBaseline]. It is not valid to use
-  /// the baseline value if [RenderTable.textBaseline] is not specified.
-  ///
-  /// This vertical alignment is relatively expensive because it causes the table
-  /// to compute the baseline for each cell in the row.
   baseline,
 
-  /// Cells with this alignment are sized to be as tall as the row, then made to fit the row.
-  /// If all the cells have this alignment, then the row will have zero height.
   fill
 }
 
-/// A table where the columns and rows are sized to fit the contents of the cells.
 class RenderTable extends RenderBox {
-  /// Creates a table render object.
-  ///
-  ///  * `columns` must either be null or non-negative. If `columns` is null,
-  ///    the number of columns will be inferred from length of the first sublist
-  ///    of `children`.
-  ///  * `rows` must either be null or non-negative. If `rows` is null, the
-  ///    number of rows will be inferred from the `children`. If `rows` is not
-  ///    null, then `children` must be null.
-  ///  * `children` must either be null or contain lists of all the same length.
-  ///    if `children` is not null, then `rows` must be null.
-  ///  * [columnWidths] may be null, in which case it defaults to an empty map.
   RenderTable({
     int? columns,
     int? rows,
@@ -396,13 +258,6 @@ class RenderTable extends RenderBox {
   // _children.length must be rows * columns
   List<RenderBox?> _children = const <RenderBox?>[];
 
-  /// The number of vertical alignment lines in this table.
-  ///
-  /// Changing the number of columns will remove any children that no longer fit
-  /// in the table.
-  ///
-  /// Changing the number of columns is an expensive operation because the table
-  /// needs to rearrange its internal representation.
   int get columns => _columns;
   int _columns;
   set columns(int value) {
@@ -433,10 +288,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// The number of horizontal alignment lines in this table.
-  ///
-  /// Changing the number of rows will remove any children that no longer fit
-  /// in the table.
   int get rows => _rows;
   int _rows;
   set rows(int value) {
@@ -456,19 +307,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// How the horizontal extents of the columns of this table should be determined.
-  ///
-  /// If the [Map] has a null entry for a given column, the table uses the
-  /// [defaultColumnWidth] instead.
-  ///
-  /// The layout performance of the table depends critically on which column
-  /// sizing algorithms are used here. In particular, [IntrinsicColumnWidth] is
-  /// quite expensive because it needs to measure each cell in the column to
-  /// determine the intrinsic size of the column.
-  ///
-  /// This property can never return null. If it is set to null, and the existing
-  /// map is not empty, then the value is replaced by an empty map. (If it is set
-  /// to null while the current value is an empty map, the value is not changed.)
   Map<int, TableColumnWidth>? get columnWidths => Map<int, TableColumnWidth>.unmodifiable(_columnWidths);
   Map<int, TableColumnWidth> _columnWidths;
   set columnWidths(Map<int, TableColumnWidth>? value) {
@@ -482,7 +320,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// Determines how the width of column with the given index is determined.
   void setColumnWidth(int column, TableColumnWidth value) {
     if (_columnWidths[column] == value) {
       return;
@@ -491,10 +328,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// How to determine with widths of columns that don't have an explicit sizing algorithm.
-  ///
-  /// Specifically, the [defaultColumnWidth] is used for column `i` if
-  /// `columnWidths[i]` is null.
   TableColumnWidth get defaultColumnWidth => _defaultColumnWidth;
   TableColumnWidth _defaultColumnWidth;
   set defaultColumnWidth(TableColumnWidth value) {
@@ -505,7 +338,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// The direction in which the columns are ordered.
   TextDirection get textDirection => _textDirection;
   TextDirection _textDirection;
   set textDirection(TextDirection value) {
@@ -516,7 +348,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// The style to use when painting the boundary and interior divisions of the table.
   TableBorder? get border => _border;
   TableBorder? _border;
   set border(TableBorder? value) {
@@ -527,11 +358,6 @@ class RenderTable extends RenderBox {
     markNeedsPaint();
   }
 
-  /// The decorations to use for each row of the table.
-  ///
-  /// Row decorations fill the horizontal and vertical extent of each row in
-  /// the table, unlike decorations for individual cells, which might not fill
-  /// either.
   List<Decoration> get rowDecorations => List<Decoration>.unmodifiable(_rowDecorations ?? const <Decoration>[]);
   // _rowDecorations and _rowDecorationPainters need to be in sync. They have to
   // either both be null or have same length.
@@ -550,9 +376,6 @@ class RenderTable extends RenderBox {
     _rowDecorationPainters = _rowDecorations != null ? List<BoxPainter?>.filled(_rowDecorations!.length, null) : null;
   }
 
-  /// The settings to pass to the [rowDecorations] when painting, so that they
-  /// can resolve images appropriately. See [ImageProvider.resolve] and
-  /// [BoxPainter.paint].
   ImageConfiguration get configuration => _configuration;
   ImageConfiguration _configuration;
   set configuration(ImageConfiguration value) {
@@ -563,7 +386,6 @@ class RenderTable extends RenderBox {
     markNeedsPaint();
   }
 
-  /// How cells that do not explicitly specify a vertical alignment are aligned vertically.
   TableCellVerticalAlignment get defaultVerticalAlignment => _defaultVerticalAlignment;
   TableCellVerticalAlignment _defaultVerticalAlignment;
   set defaultVerticalAlignment(TableCellVerticalAlignment value) {
@@ -574,7 +396,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// The text baseline to use when aligning rows using [TableCellVerticalAlignment.baseline].
   TextBaseline? get textBaseline => _textBaseline;
   TextBaseline? _textBaseline;
   set textBaseline(TextBaseline? value) {
@@ -592,14 +413,6 @@ class RenderTable extends RenderBox {
     }
   }
 
-  /// Replaces the children of this table with the given cells.
-  ///
-  /// The cells are divided into the specified number of columns before
-  /// replacing the existing children.
-  ///
-  /// If the new cells contain any existing children of the table, those
-  /// children are moved to their new location in the table rather than
-  /// removed from the table and re-added.
   void setFlatChildren(int columns, List<RenderBox?> cells) {
     if (cells == _children && columns == _columns) {
       return;
@@ -661,7 +474,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// Replaces the children of this table with the given cells.
   void setChildren(List<List<RenderBox>>? cells) {
     // TODO(ianh): Make this smarter, like setFlatChildren
     if (cells == null) {
@@ -680,9 +492,6 @@ class RenderTable extends RenderBox {
     assert(_children.length == rows * columns);
   }
 
-  /// Adds a row to the end of the table.
-  ///
-  /// The newly added children must not already have parents.
   void addRow(List<RenderBox?> cells) {
     assert(cells.length == columns);
     assert(_children.length == rows * columns);
@@ -696,11 +505,6 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// Replaces the child at the given position with the given child.
-  ///
-  /// If the given child is already located at the given position, this function
-  /// does not modify the table. Otherwise, the given child must not already
-  /// have a parent.
   void setChild(int x, int y, RenderBox? value) {
     assert(x >= 0 && x < columns && y >= 0 && y < rows);
     assert(_children.length == rows * columns);
@@ -808,10 +612,6 @@ class RenderTable extends RenderBox {
     return _baselineDistance;
   }
 
-  /// Returns the list of [RenderBox] objects that are in the given
-  /// column, in row order, starting from the first row.
-  ///
-  /// This is a lazily-evaluated iterable.
   // The following uses sync* because it is public API documented to return a
   // lazy iterable.
   Iterable<RenderBox> column(int x) sync* {
@@ -824,10 +624,6 @@ class RenderTable extends RenderBox {
     }
   }
 
-  /// Returns the list of [RenderBox] objects that are on the given
-  /// row, in column order, starting with the first column.
-  ///
-  /// This is a lazily-evaluated iterable.
   // The following uses sync* because it is public API documented to return a
   // lazy iterable.
   Iterable<RenderBox> row(int y) sync* {
@@ -1009,13 +805,6 @@ class RenderTable extends RenderBox {
   Iterable<double>? _columnLefts;
   late double _tableWidth;
 
-  /// Returns the position and dimensions of the box that the given
-  /// row covers, in this render object's coordinate space (so the
-  /// left coordinate is always 0.0).
-  ///
-  /// The row being queried must exist.
-  ///
-  /// This is only valid after layout.
   Rect getRowBox(int row) {
     assert(row >= 0);
     assert(row < rows);

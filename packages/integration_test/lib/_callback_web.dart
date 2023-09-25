@@ -6,43 +6,17 @@ import 'dart:async';
 
 import 'common.dart';
 
-/// The dart:html implementation of [CallbackManager].
-///
-/// See also:
-///
-///  * `_callback_io.dart`, which has the dart:io implementation
 CallbackManager get callbackManager => _singletonWebDriverCommandManager;
 
-/// WebDriverCommandManager singleton.
 final WebCallbackManager _singletonWebDriverCommandManager =
     WebCallbackManager();
 
-/// Manages communication between `integration_tests` and the `driver_tests`.
-///
-/// Along with responding to callbacks from the driver side this calls enables
-/// usage of Web Driver commands by sending [WebDriverCommand]s to driver side.
-///
-/// Tests can execute an Web Driver commands such as `screenshot` using browsers'
-/// WebDriver APIs.
-///
-/// See: https://www.w3.org/TR/webdriver/
 class WebCallbackManager implements CallbackManager {
-  /// App side tests will put the command requests from WebDriver to this pipe.
   Completer<WebDriverCommand> _webDriverCommandPipe =
       Completer<WebDriverCommand>();
 
-  /// Updated when WebDriver completes the request by the test method.
-  ///
-  /// For example, a test method will ask for a screenshot by calling
-  /// `takeScreenshot`. When this screenshot is taken [_driverCommandComplete]
-  /// will complete.
   Completer<bool> _driverCommandComplete = Completer<bool>();
 
-  /// Takes screenshot using WebDriver screenshot command.
-  ///
-  /// Only works on Web when tests are run via `flutter driver` command.
-  ///
-  /// See: https://www.w3.org/TR/webdriver/#screen-capture.
   @override
   Future<Map<String, dynamic>> takeScreenshot(String screenshotName, [Map<String, Object?>? args]) async {
     await _sendWebDriverCommand(WebDriverCommand.screenshot(screenshotName, args));
@@ -75,10 +49,6 @@ class WebCallbackManager implements CallbackManager {
     }
   }
 
-  /// The callback function to response the driver side input.
-  ///
-  /// Provides a handshake mechanism for executing [WebDriverCommand]s on the
-  /// driver side.
   @override
   Future<Map<String, dynamic>> callback(
       Map<String, String> params, IntegrationTestResults testRunner) async {

@@ -48,114 +48,6 @@ const double _inputFormPortraitHeight = 98.0;
 const double _inputFormLandscapeHeight = 108.0;
 const double _kMaxTextScaleFactor = 1.3;
 
-/// Shows a dialog containing a Material Design date picker.
-///
-/// The returned [Future] resolves to the date selected by the user when the
-/// user confirms the dialog. If the user cancels the dialog, null is returned.
-///
-/// When the date picker is first displayed, if [initialDate] is not null, it
-/// will show the month of [initialDate], with [initialDate] selected. Otherwise
-/// it will show the [currentDate]'s month.
-///
-/// The [firstDate] is the earliest allowable date. The [lastDate] is the latest
-/// allowable date. If [initialDate] is not null, it must either fall between
-/// these dates, or be equal to one of them. For each of these [DateTime]
-/// parameters, only their dates are considered. Their time fields are ignored.
-/// They must all be non-null.
-///
-/// The [currentDate] represents the current day (i.e. today). This
-/// date will be highlighted in the day grid. If null, the date of
-/// [DateTime.now] will be used.
-///
-/// An optional [initialEntryMode] argument can be used to display the date
-/// picker in the [DatePickerEntryMode.calendar] (a calendar month grid)
-/// or [DatePickerEntryMode.input] (a text input field) mode.
-/// It defaults to [DatePickerEntryMode.calendar].
-///
-/// {@template flutter.material.date_picker.switchToInputEntryModeIcon}
-/// An optional [switchToInputEntryModeIcon] argument can be used to
-/// display a custom Icon in the corner of the dialog
-/// when [DatePickerEntryMode] is [DatePickerEntryMode.calendar]. Clicking on
-/// icon changes the [DatePickerEntryMode] to [DatePickerEntryMode.input].
-/// If null, `Icon(useMaterial3 ? Icons.edit_outlined : Icons.edit)` is used.
-/// {@endtemplate}
-///
-/// {@template flutter.material.date_picker.switchToCalendarEntryModeIcon}
-/// An optional [switchToCalendarEntryModeIcon] argument can be used to
-/// display a custom Icon in the corner of the dialog
-/// when [DatePickerEntryMode] is [DatePickerEntryMode.input]. Clicking on
-/// icon changes the [DatePickerEntryMode] to [DatePickerEntryMode.calendar].
-/// If null, `Icon(Icons.calendar_today)` is used.
-/// {@endtemplate}
-///
-/// An optional [selectableDayPredicate] function can be passed in to only allow
-/// certain days for selection. If provided, only the days that
-/// [selectableDayPredicate] returns true for will be selectable. For example,
-/// this can be used to only allow weekdays for selection. If provided, it must
-/// return true for [initialDate].
-///
-/// The following optional string parameters allow you to override the default
-/// text used for various parts of the dialog:
-///
-///   * [helpText], label displayed at the top of the dialog.
-///   * [cancelText], label on the cancel button.
-///   * [confirmText], label on the ok button.
-///   * [errorFormatText], message used when the input text isn't in a proper date format.
-///   * [errorInvalidText], message used when the input text isn't a selectable date.
-///   * [fieldHintText], text used to prompt the user when no text has been entered in the field.
-///   * [fieldLabelText], label for the date text input field.
-///
-/// An optional [locale] argument can be used to set the locale for the date
-/// picker. It defaults to the ambient locale provided by [Localizations].
-///
-/// An optional [textDirection] argument can be used to set the text direction
-/// ([TextDirection.ltr] or [TextDirection.rtl]) for the date picker. It
-/// defaults to the ambient text direction provided by [Directionality]. If both
-/// [locale] and [textDirection] are non-null, [textDirection] overrides the
-/// direction chosen for the [locale].
-///
-/// The [context], [barrierDismissible], [barrierColor], [barrierLabel],
-/// [useRootNavigator] and [routeSettings] arguments are passed to [showDialog],
-/// the documentation for which discusses how it is used.
-///
-/// The [builder] parameter can be used to wrap the dialog widget
-/// to add inherited widgets like [Theme].
-///
-/// An optional [initialDatePickerMode] argument can be used to have the
-/// calendar date picker initially appear in the [DatePickerMode.year] or
-/// [DatePickerMode.day] mode. It defaults to [DatePickerMode.day].
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// ### State Restoration
-///
-/// Using this method will not enable state restoration for the date picker.
-/// In order to enable state restoration for a date picker, use
-/// [Navigator.restorablePush] or [Navigator.restorablePushNamed] with
-/// [DatePickerDialog].
-///
-/// For more information about state restoration, see [RestorationManager].
-///
-/// {@macro flutter.widgets.RestorationManager}
-///
-/// {@tool dartpad}
-/// This sample demonstrates how to create a restorable Material date picker.
-/// This is accomplished by enabling state restoration by specifying
-/// [MaterialApp.restorationScopeId] and using [Navigator.restorablePush] to
-/// push [DatePickerDialog] when the button is tapped.
-///
-/// ** See code in examples/api/lib/material/date_picker/show_date_picker.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [showDateRangePicker], which shows a Material Design date range picker
-///    used to select a range of dates.
-///  * [CalendarDatePicker], which provides the calendar grid used by the date picker dialog.
-///  * [InputDatePickerFormField], which provides a text input field for entering dates.
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
-///  * [showTimePicker], which shows a dialog that contains a Material Design time picker.
 Future<DateTime?> showDatePicker({
   required BuildContext context,
   DateTime? initialDate,
@@ -257,17 +149,7 @@ Future<DateTime?> showDatePicker({
   );
 }
 
-/// A Material-style date picker dialog.
-///
-/// It is used internally by [showDatePicker] or can be directly pushed
-/// onto the [Navigator] stack to enable state restoration. See
-/// [showDatePicker] for a state restoration app example.
-///
-/// See also:
-///
-///  * [showDatePicker], which is a way to display the date picker.
 class DatePickerDialog extends StatefulWidget {
-  /// A Material-style date picker dialog.
   DatePickerDialog({
     super.key,
     DateTime? initialDate,
@@ -311,99 +193,43 @@ class DatePickerDialog extends StatefulWidget {
     );
   }
 
-  /// The initially selected [DateTime] that the picker should display.
-  ///
-  /// If this is null, there is no selected date. A date must be selected to
-  /// submit the dialog.
   final DateTime? initialDate;
 
-  /// The earliest allowable [DateTime] that the user can select.
   final DateTime firstDate;
 
-  /// The latest allowable [DateTime] that the user can select.
   final DateTime lastDate;
 
-  /// The [DateTime] representing today. It will be highlighted in the day grid.
   final DateTime currentDate;
 
-  /// The initial mode of date entry method for the date picker dialog.
-  ///
-  /// See [DatePickerEntryMode] for more details on the different data entry
-  /// modes available.
   final DatePickerEntryMode initialEntryMode;
 
-  /// Function to provide full control over which [DateTime] can be selected.
   final SelectableDayPredicate? selectableDayPredicate;
 
-  /// The text that is displayed on the cancel button.
   final String? cancelText;
 
-  /// The text that is displayed on the confirm button.
   final String? confirmText;
 
-  /// The text that is displayed at the top of the header.
-  ///
-  /// This is used to indicate to the user what they are selecting a date for.
   final String? helpText;
 
-  /// The initial display of the calendar picker.
   final DatePickerMode initialCalendarMode;
 
-  /// The error text displayed if the entered date is not in the correct format.
   final String? errorFormatText;
 
-  /// The error text displayed if the date is not valid.
-  ///
-  /// A date is not valid if it is earlier than [firstDate], later than
-  /// [lastDate], or doesn't pass the [selectableDayPredicate].
   final String? errorInvalidText;
 
-  /// The hint text displayed in the [TextField].
-  ///
-  /// If this is null, it will default to the date format string. For example,
-  /// 'mm/dd/yyyy' for en_US.
   final String? fieldHintText;
 
-  /// The label text displayed in the [TextField].
-  ///
-  /// If this is null, it will default to the words representing the date format
-  /// string. For example, 'Month, Day, Year' for en_US.
   final String? fieldLabelText;
 
-  /// {@template flutter.material.datePickerDialog}
-  /// The keyboard type of the [TextField].
-  ///
-  /// If this is null, it will default to [TextInputType.datetime]
-  /// {@endtemplate}
   final TextInputType? keyboardType;
 
-  /// Restoration ID to save and restore the state of the [DatePickerDialog].
-  ///
-  /// If it is non-null, the date picker will persist and restore the
-  /// date selected on the dialog.
-  ///
-  /// The state of this widget is persisted in a [RestorationBucket] claimed
-  /// from the surrounding [RestorationScope] using the provided restoration ID.
-  ///
-  /// See also:
-  ///
-  ///  * [RestorationManager], which explains how state restoration works in
-  ///    Flutter.
   final String? restorationId;
 
 
-  /// Called when the [DatePickerDialog] is toggled between
-  /// [DatePickerEntryMode.calendar],[DatePickerEntryMode.input].
-  ///
-  /// An example of how this callback might be used is an app that saves the
-  /// user's preferred entry mode and uses it to initialize the
-  /// `initialEntryMode` parameter the next time the date picker is shown.
   final ValueChanged<DatePickerEntryMode>? onDatePickerModeChange;
 
-  /// {@macro flutter.material.date_picker.switchToInputEntryModeIcon}
   final Icon? switchToInputEntryModeIcon;
 
-  /// {@macro flutter.material.date_picker.switchToCalendarEntryModeIcon}
   final Icon? switchToCalendarEntryModeIcon;
 
   @override
@@ -782,20 +608,8 @@ class _RestorableAutovalidateMode extends RestorableValue<AutovalidateMode> {
   Object? toPrimitives() => value.index;
 }
 
-/// Re-usable widget that displays the selected date (in large font) and the
-/// help text above it.
-///
-/// These types include:
-///
-/// * Single Date picker with calendar mode.
-/// * Single Date picker with text input mode.
-/// * Date Range picker with text input mode.
-///
-/// [helpText], [orientation], [icon], [onIconPressed] are required and must be
-/// non-null.
 class _DatePickerHeader extends StatelessWidget {
 
-  /// Creates a header for use in a date picker dialog.
   const _DatePickerHeader({
     required this.helpText,
     required this.titleText,
@@ -810,31 +624,16 @@ class _DatePickerHeader extends StatelessWidget {
   static const double _datePickerHeaderPortraitHeight = 120.0;
   static const double _headerPaddingLandscape = 16.0;
 
-  /// The text that is displayed at the top of the header.
-  ///
-  /// This is used to indicate to the user what they are selecting a date for.
   final String helpText;
 
-  /// The text that is displayed at the center of the header.
   final String titleText;
 
-  /// The semantic label associated with the [titleText].
   final String? titleSemanticsLabel;
 
-  /// The [TextStyle] that the title text is displayed with.
   final TextStyle? titleStyle;
 
-  /// The orientation is used to decide how to layout its children.
   final Orientation orientation;
 
-  /// Indicates the header is being displayed in a shorter/narrower context.
-  ///
-  /// This will be used to tighten up the space between the help text and date
-  /// text if `true`. Additionally, it will use a smaller typography style if
-  /// `true`.
-  ///
-  /// This is necessary for displaying the manual input mode in
-  /// landscape orientation, in order to account for the keyboard height.
   final bool isShort;
 
   final Widget? entryModeButton;
@@ -930,104 +729,6 @@ class _DatePickerHeader extends StatelessWidget {
   }
 }
 
-/// Shows a full screen modal dialog containing a Material Design date range
-/// picker.
-///
-/// The returned [Future] resolves to the [DateTimeRange] selected by the user
-/// when the user saves their selection. If the user cancels the dialog, null is
-/// returned.
-///
-/// If [initialDateRange] is non-null, then it will be used as the initially
-/// selected date range. If it is provided, `initialDateRange.start` must be
-/// before or on `initialDateRange.end`.
-///
-/// The [firstDate] is the earliest allowable date. The [lastDate] is the latest
-/// allowable date.
-///
-/// If an initial date range is provided, `initialDateRange.start`
-/// and `initialDateRange.end` must both fall between or on [firstDate] and
-/// [lastDate]. For all of these [DateTime] values, only their dates are
-/// considered. Their time fields are ignored.
-///
-/// The [currentDate] represents the current day (i.e. today). This
-/// date will be highlighted in the day grid. If null, the date of
-/// `DateTime.now()` will be used.
-///
-/// An optional [initialEntryMode] argument can be used to display the date
-/// picker in the [DatePickerEntryMode.calendar] (a scrollable calendar month
-/// grid) or [DatePickerEntryMode.input] (two text input fields) mode.
-/// It defaults to [DatePickerEntryMode.calendar].
-///
-/// {@macro flutter.material.date_picker.switchToInputEntryModeIcon}
-///
-/// {@macro flutter.material.date_picker.switchToCalendarEntryModeIcon}
-///
-/// The following optional string parameters allow you to override the default
-/// text used for various parts of the dialog:
-///
-///   * [helpText], the label displayed at the top of the dialog.
-///   * [cancelText], the label on the cancel button for the text input mode.
-///   * [confirmText],the label on the ok button for the text input mode.
-///   * [saveText], the label on the save button for the fullscreen calendar
-///     mode.
-///   * [errorFormatText], the message used when an input text isn't in a proper
-///     date format.
-///   * [errorInvalidText], the message used when an input text isn't a
-///     selectable date.
-///   * [errorInvalidRangeText], the message used when the date range is
-///     invalid (e.g. start date is after end date).
-///   * [fieldStartHintText], the text used to prompt the user when no text has
-///     been entered in the start field.
-///   * [fieldEndHintText], the text used to prompt the user when no text has
-///     been entered in the end field.
-///   * [fieldStartLabelText], the label for the start date text input field.
-///   * [fieldEndLabelText], the label for the end date text input field.
-///
-/// An optional [locale] argument can be used to set the locale for the date
-/// picker. It defaults to the ambient locale provided by [Localizations].
-///
-/// An optional [textDirection] argument can be used to set the text direction
-/// ([TextDirection.ltr] or [TextDirection.rtl]) for the date picker. It
-/// defaults to the ambient text direction provided by [Directionality]. If both
-/// [locale] and [textDirection] are non-null, [textDirection] overrides the
-/// direction chosen for the [locale].
-///
-/// The [context], [barrierDismissible], [barrierColor], [barrierLabel],
-/// [useRootNavigator] and [routeSettings] arguments are passed to [showDialog],
-/// the documentation for which discusses how it is used.
-///
-/// The [builder] parameter can be used to wrap the dialog widget
-/// to add inherited widgets like [Theme].
-///
-/// {@macro flutter.widgets.RawDialogRoute}
-///
-/// ### State Restoration
-///
-/// Using this method will not enable state restoration for the date range picker.
-/// In order to enable state restoration for a date range picker, use
-/// [Navigator.restorablePush] or [Navigator.restorablePushNamed] with
-/// [DateRangePickerDialog].
-///
-/// For more information about state restoration, see [RestorationManager].
-///
-/// {@macro flutter.widgets.RestorationManager}
-///
-/// {@tool sample}
-/// This sample demonstrates how to create a restorable Material date range picker.
-/// This is accomplished by enabling state restoration by specifying
-/// [MaterialApp.restorationScopeId] and using [Navigator.restorablePush] to
-/// push [DateRangePickerDialog] when the button is tapped.
-///
-/// ** See code in examples/api/lib/material/date_picker/show_date_range_picker.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [showDatePicker], which shows a Material Design date picker used to
-///    select a single date.
-///  * [DateTimeRange], which is used to describe a date range.
-///  * [DisplayFeatureSubScreen], which documents the specifics of how
-///    [DisplayFeature]s can split the screen into sub-screens.
 Future<DateTimeRange?> showDateRangePicker({
   required BuildContext context,
   DateTimeRange? initialDateRange,
@@ -1141,12 +842,6 @@ Future<DateTimeRange?> showDateRangePicker({
   );
 }
 
-/// Returns a locale-appropriate string to describe the start of a date range.
-///
-/// If `startDate` is null, then it defaults to 'Start Date', otherwise if it
-/// is in the same year as the `endDate` then it will use the short month
-/// day format (i.e. 'Jan 21'). Otherwise it will return the short date format
-/// (i.e. 'Jan 21, 2020').
 String _formatRangeStartDate(MaterialLocalizations localizations, DateTime? startDate, DateTime? endDate) {
   return startDate == null
     ? localizations.dateRangeStartLabel
@@ -1155,12 +850,6 @@ String _formatRangeStartDate(MaterialLocalizations localizations, DateTime? star
       : localizations.formatShortDate(startDate);
 }
 
-/// Returns an locale-appropriate string to describe the end of a date range.
-///
-/// If `endDate` is null, then it defaults to 'End Date', otherwise if it
-/// is in the same year as the `startDate` and the `currentDate` then it will
-/// just use the short month day format (i.e. 'Jan 21'), otherwise it will
-/// include the year (i.e. 'Jan 21, 2020').
 String _formatRangeEndDate(MaterialLocalizations localizations, DateTime? startDate, DateTime? endDate, DateTime currentDate) {
   return endDate == null
     ? localizations.dateRangeEndLabel
@@ -1169,17 +858,7 @@ String _formatRangeEndDate(MaterialLocalizations localizations, DateTime? startD
       : localizations.formatShortDate(endDate);
 }
 
-/// A Material-style date range picker dialog.
-///
-/// It is used internally by [showDateRangePicker] or can be directly pushed
-/// onto the [Navigator] stack to enable state restoration. See
-/// [showDateRangePicker] for a state restoration app example.
-///
-/// See also:
-///
-///  * [showDateRangePicker], which is a way to display the date picker.
 class DateRangePickerDialog extends StatefulWidget {
-  /// A Material-style date range picker dialog.
   const DateRangePickerDialog({
     super.key,
     this.initialDateRange,
@@ -1204,130 +883,44 @@ class DateRangePickerDialog extends StatefulWidget {
     this.switchToCalendarEntryModeIcon,
   });
 
-  /// The date range that the date range picker starts with when it opens.
-  ///
-  /// If an initial date range is provided, `initialDateRange.start`
-  /// and `initialDateRange.end` must both fall between or on [firstDate] and
-  /// [lastDate]. For all of these [DateTime] values, only their dates are
-  /// considered. Their time fields are ignored.
-  ///
-  /// If [initialDateRange] is non-null, then it will be used as the initially
-  /// selected date range. If it is provided, `initialDateRange.start` must be
-  /// before or on `initialDateRange.end`.
   final DateTimeRange? initialDateRange;
 
-  /// The earliest allowable date on the date range.
   final DateTime firstDate;
 
-  /// The latest allowable date on the date range.
   final DateTime lastDate;
 
-  /// The [currentDate] represents the current day (i.e. today).
-  ///
-  /// This date will be highlighted in the day grid.
-  ///
-  /// If `null`, the date of `DateTime.now()` will be used.
   final DateTime? currentDate;
 
-  /// The initial date range picker entry mode.
-  ///
-  /// The date range has two main modes: [DatePickerEntryMode.calendar] (a
-  /// scrollable calendar month grid) or [DatePickerEntryMode.input] (two text
-  /// input fields) mode.
-  ///
-  /// It defaults to [DatePickerEntryMode.calendar].
   final DatePickerEntryMode initialEntryMode;
 
-  /// The label on the cancel button for the text input mode.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.cancelButtonLabel] is used.
   final String? cancelText;
 
-  /// The label on the "OK" button for the text input mode.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.okButtonLabel] is used.
   final String? confirmText;
 
-  /// The label on the save button for the fullscreen calendar mode.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.saveButtonLabel] is used.
   final String? saveText;
 
-  /// The label displayed at the top of the dialog.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.dateRangePickerHelpText] is used.
   final String? helpText;
 
-  /// The message used when the date range is invalid (e.g. start date is after
-  /// end date).
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.invalidDateRangeLabel] is used.
   final String? errorInvalidRangeText;
 
-  /// The message used when an input text isn't in a proper date format.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.invalidDateFormatLabel] is used.
   final String? errorFormatText;
 
-  /// The message used when an input text isn't a selectable date.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.dateOutOfRangeLabel] is used.
   final String? errorInvalidText;
 
-  /// The text used to prompt the user when no text has been entered in the
-  /// start field.
-  ///
-  /// If null, the localized value of
-  /// [MaterialLocalizations.dateHelpText] is used.
   final String? fieldStartHintText;
 
-  /// The text used to prompt the user when no text has been entered in the
-  /// end field.
-  ///
-  /// If null, the localized value of [MaterialLocalizations.dateHelpText] is
-  /// used.
   final String? fieldEndHintText;
 
-  /// The label for the start date text input field.
-  ///
-  /// If null, the localized value of [MaterialLocalizations.dateRangeStartLabel]
-  /// is used.
   final String? fieldStartLabelText;
 
-  /// The label for the end date text input field.
-  ///
-  /// If null, the localized value of [MaterialLocalizations.dateRangeEndLabel]
-  /// is used.
   final String? fieldEndLabelText;
 
-  /// {@macro flutter.material.datePickerDialog}
   final TextInputType keyboardType;
 
-  /// Restoration ID to save and restore the state of the [DateRangePickerDialog].
-  ///
-  /// If it is non-null, the date range picker will persist and restore the
-  /// date range selected on the dialog.
-  ///
-  /// The state of this widget is persisted in a [RestorationBucket] claimed
-  /// from the surrounding [RestorationScope] using the provided restoration ID.
-  ///
-  /// See also:
-  ///
-  ///  * [RestorationManager], which explains how state restoration works in
-  ///    Flutter.
   final String? restorationId;
 
-  /// {@macro flutter.material.date_picker.switchToInputEntryModeIcon}
   final Icon? switchToInputEntryModeIcon;
 
-  /// {@macro flutter.material.date_picker.switchToCalendarEntryModeIcon}
   final Icon? switchToCalendarEntryModeIcon;
 
   @override
@@ -1731,10 +1324,7 @@ const double _horizontalPadding = 8.0;
 const double _maxCalendarWidthLandscape = 384.0;
 const double _maxCalendarWidthPortrait = 480.0;
 
-/// Displays a scrollable calendar grid that allows a user to select a range
-/// of dates.
 class _CalendarDateRangePicker extends StatefulWidget {
-  /// Creates a scrollable calendar grid for picking date ranges.
   _CalendarDateRangePicker({
     DateTime? initialStartDate,
     DateTime? initialEndDate,
@@ -1758,25 +1348,18 @@ class _CalendarDateRangePicker extends StatefulWidget {
     );
   }
 
-  /// The [DateTime] that represents the start of the initial date range selection.
   final DateTime? initialStartDate;
 
-  /// The [DateTime] that represents the end of the initial date range selection.
   final DateTime? initialEndDate;
 
-  /// The earliest allowable [DateTime] that the user can select.
   final DateTime firstDate;
 
-  /// The latest allowable [DateTime] that the user can select.
   final DateTime lastDate;
 
-  /// The [DateTime] representing today. It will be highlighted in the day grid.
   final DateTime currentDate;
 
-  /// Called when the user changes the start date of the selected range.
   final ValueChanged<DateTime>? onStartDateChanged;
 
-  /// Called when the user changes the end date of the selected range.
   final ValueChanged<DateTime?>? onEndDateChanged;
 
   @override
@@ -1986,27 +1569,16 @@ class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> 
     });
   }
 
-  /// Move focus to the next element after the day grid.
   void _handleGridNextFocus(NextFocusIntent intent) {
     _dayGridFocus.requestFocus();
     _dayGridFocus.nextFocus();
   }
 
-  /// Move focus to the previous element before the day grid.
   void _handleGridPreviousFocus(PreviousFocusIntent intent) {
     _dayGridFocus.requestFocus();
     _dayGridFocus.previousFocus();
   }
 
-  /// Move the internal focus date in the direction of the given intent.
-  ///
-  /// This will attempt to move the focused day to the next selectable day in
-  /// the given direction. If the new date is not in the current month, then
-  /// the page view will be scrolled to show the new date's month.
-  ///
-  /// For horizontal directions, it will move forward or backward a day (depending
-  /// on the current [TextDirection]). For vertical directions it will move up and
-  /// down a week at a time.
   void _handleDirectionFocus(DirectionalFocusIntent intent) {
     assert(_focusedDay != null);
     setState(() {
@@ -2062,10 +1634,6 @@ class _CalendarKeyboardNavigatorState extends State<_CalendarKeyboardNavigator> 
   }
 }
 
-/// InheritedWidget indicating what the current focused date is for its children.
-///
-/// This is used by the [_MonthPicker] to let its children [_DayPicker]s know
-/// what the currently focused date (if any) should be.
 class _FocusedDate extends InheritedWidget {
   const _FocusedDate({
     required super.child,
@@ -2089,23 +1657,6 @@ class _FocusedDate extends InheritedWidget {
 class _DayHeaders extends StatelessWidget {
   const _DayHeaders();
 
-  /// Builds widgets showing abbreviated days of week. The first widget in the
-  /// returned list corresponds to the first day of week for the current locale.
-  ///
-  /// Examples:
-  ///
-  ///     ┌ Sunday is the first day of week in the US (en_US)
-  ///     |
-  ///     S M T W T F S  ← the returned list contains these widgets
-  ///     _ _ _ _ _ 1 2
-  ///     3 4 5 6 7 8 9
-  ///
-  ///     ┌ But it's Monday in the UK (en_GB)
-  ///     |
-  ///     M T W T F S S  ← the returned list contains these widgets
-  ///     _ _ _ _ 1 2 3
-  ///     4 5 6 7 8 9 10
-  ///
   List<Widget> _getDayHeaders(TextStyle headerStyle, MaterialLocalizations localizations) {
     final List<Widget> result = <Widget>[];
     for (int i = localizations.firstDayOfWeekIndex; result.length < DateTime.daysPerWeek; i = (i + 1) % DateTime.daysPerWeek) {
@@ -2169,12 +1720,6 @@ class _MonthItemGridDelegate extends SliverGridDelegate {
 const _MonthItemGridDelegate _monthItemGridDelegate = _MonthItemGridDelegate();
 
 class _MonthSliverGridLayout extends SliverGridLayout {
-  /// Creates a layout that uses equally sized and spaced tiles for each day of
-  /// the week and an additional edge tile for padding at the start and end of
-  /// each row.
-  ///
-  /// This is necessary to facilitate the painting of the range highlight
-  /// correctly.
   const _MonthSliverGridLayout({
     required this.crossAxisCount,
     required this.dayChildWidth,
@@ -2184,33 +1729,18 @@ class _MonthSliverGridLayout extends SliverGridLayout {
        assert(dayChildWidth >= 0),
        assert(edgeChildWidth >= 0);
 
-  /// The number of children in the cross axis.
   final int crossAxisCount;
 
-  /// The width in logical pixels of the day child widgets.
   final double dayChildWidth;
 
-  /// The width in logical pixels of the edge child widgets.
   final double edgeChildWidth;
 
-  /// Whether the children should be placed in the opposite order of increasing
-  /// coordinates in the cross axis.
-  ///
-  /// For example, if the cross axis is horizontal, the children are placed from
-  /// left to right when [reverseCrossAxis] is false and from right to left when
-  /// [reverseCrossAxis] is true.
-  ///
-  /// Typically set to the return value of [axisDirectionIsReversed] applied to
-  /// the [SliverConstraints.crossAxisDirection].
   final bool reverseCrossAxis;
 
-  /// The number of logical pixels from the leading edge of one row to the
-  /// leading edge of the next row.
   double get _rowHeight {
     return _monthItemRowHeight + _monthItemSpaceBetweenRows;
   }
 
-  /// The height in logical pixels of the children widgets.
   double get _childHeight {
     return _monthItemRowHeight;
   }
@@ -2259,12 +1789,7 @@ class _MonthSliverGridLayout extends SliverGridLayout {
   }
 }
 
-/// Displays the days of a given month and allows choosing a date range.
-///
-/// The days are arranged in a rectangular grid with one column for each day of
-/// the week.
 class _MonthItem extends StatefulWidget {
-  /// Creates a month item.
   _MonthItem({
     required this.selectedDateStart,
     required this.selectedDateEnd,
@@ -2280,29 +1805,18 @@ class _MonthItem extends StatefulWidget {
        assert(selectedDateEnd == null || !selectedDateEnd.isAfter(lastDate)),
        assert(selectedDateStart == null || selectedDateEnd == null || !selectedDateStart.isAfter(selectedDateEnd));
 
-  /// The currently selected start date.
-  ///
-  /// This date is highlighted in the picker.
   final DateTime? selectedDateStart;
 
-  /// The currently selected end date.
-  ///
-  /// This date is highlighted in the picker.
   final DateTime? selectedDateEnd;
 
-  /// The current date at the time the picker is displayed.
   final DateTime currentDate;
 
-  /// Called when the user picks a day.
   final ValueChanged<DateTime> onChanged;
 
-  /// The earliest date the user is permitted to pick.
   final DateTime firstDate;
 
-  /// The latest date the user is permitted to pick.
   final DateTime lastDate;
 
-  /// The month whose days are displayed by this picker.
   final DateTime displayedMonth;
 
   @override
@@ -2310,7 +1824,6 @@ class _MonthItem extends StatefulWidget {
 }
 
 class _MonthItemState extends State<_MonthItem> {
-  /// List of [FocusNode]s, one for each day of the month.
   late List<FocusNode> _dayFocusNodes;
 
   @override
@@ -2618,27 +2131,16 @@ class _MonthItemState extends State<_MonthItem> {
   }
 }
 
-/// Determines which style to use to paint the highlight.
 enum _HighlightPainterStyle {
-  /// Paints nothing.
   none,
 
-  /// Paints a rectangle that occupies the leading half of the space.
   highlightLeading,
 
-  /// Paints a rectangle that occupies the trailing half of the space.
   highlightTrailing,
 
-  /// Paints a rectangle that occupies all available space.
   highlightAll,
 }
 
-/// This custom painter will add a background highlight to its child.
-///
-/// This highlight will be drawn depending on the [style], [color], and
-/// [textDirection] supplied. It will either paint a rectangle on the
-/// left/right, a full rectangle, or nothing at all. This logic is determined by
-/// a combination of the [style] and [textDirection].
 class _HighlightPainter extends CustomPainter {
   _HighlightPainter({
     required this.color,
@@ -2833,11 +2335,7 @@ class _InputDateRangePickerDialog extends StatelessWidget {
   }
 }
 
-/// Provides a pair of text fields that allow the user to enter the start and
-/// end dates that represent a range of dates.
 class _InputDateRangePicker extends StatefulWidget {
-  /// Creates a row with two text fields configured to accept the start and end dates
-  /// of a date range.
   _InputDateRangePicker({
     super.key,
     DateTime? initialStartDate,
@@ -2862,69 +2360,44 @@ class _InputDateRangePicker extends StatefulWidget {
        firstDate = DateUtils.dateOnly(firstDate),
        lastDate = DateUtils.dateOnly(lastDate);
 
-  /// The [DateTime] that represents the start of the initial date range selection.
   final DateTime? initialStartDate;
 
-  /// The [DateTime] that represents the end of the initial date range selection.
   final DateTime? initialEndDate;
 
-  /// The earliest allowable [DateTime] that the user can select.
   final DateTime firstDate;
 
-  /// The latest allowable [DateTime] that the user can select.
   final DateTime lastDate;
 
-  /// Called when the user changes the start date of the selected range.
   final ValueChanged<DateTime?>? onStartDateChanged;
 
-  /// Called when the user changes the end date of the selected range.
   final ValueChanged<DateTime?>? onEndDateChanged;
 
-  /// The text that is displayed at the top of the header.
-  ///
-  /// This is used to indicate to the user what they are selecting a date for.
   final String? helpText;
 
-  /// Error text used to indicate the text in a field is not a valid date.
   final String? errorFormatText;
 
-  /// Error text used to indicate the date in a field is not in the valid range
-  /// of [firstDate] - [lastDate].
   final String? errorInvalidText;
 
-  /// Error text used to indicate the dates given don't form a valid date
-  /// range (i.e. the start date is after the end date).
   final String? errorInvalidRangeText;
 
-  /// Hint text shown when the start date field is empty.
   final String? fieldStartHintText;
 
-  /// Hint text shown when the end date field is empty.
   final String? fieldEndHintText;
 
-  /// Label used for the start date field.
   final String? fieldStartLabelText;
 
-  /// Label used for the end date field.
   final String? fieldEndLabelText;
 
-  /// {@macro flutter.widgets.editableText.autofocus}
   final bool autofocus;
 
-  /// If true, the date fields will validate and update their error text
-  /// immediately after every change. Otherwise, you must call
-  /// [_InputDateRangePickerState.validate] to validate.
   final bool autovalidate;
 
-  /// {@macro flutter.material.datePickerDialog}
   final TextInputType keyboardType;
 
   @override
   _InputDateRangePickerState createState() => _InputDateRangePickerState();
 }
 
-/// The current state of an [_InputDateRangePicker]. Can be used to
-/// [validate] the date field entries.
 class _InputDateRangePickerState extends State<_InputDateRangePicker> {
   late String _startInputText;
   late String _endInputText;
@@ -2969,12 +2442,6 @@ class _InputDateRangePickerState extends State<_InputDateRangePicker> {
     }
   }
 
-  /// Validates that the text in the start and end fields represent a valid
-  /// date range.
-  ///
-  /// Will return true if the range is valid. If not, it will
-  /// return false and display an appropriate error message under one of the
-  /// text fields.
   bool validate() {
     String? startError = _validateDate(_startDate);
     final String? endError = _validateDate(_endDate);

@@ -9,7 +9,6 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 
-/// The HTTP verb for a [FakeRequest].
 enum HttpMethod {
   get,
   put,
@@ -50,12 +49,6 @@ String _toMethodString(HttpMethod method) {
   };
 }
 
-/// Create a fake request that configures the [FakeHttpClient] to respond
-/// with the provided [response].
-///
-/// By default, returns a response with a 200 OK status code and an
-/// empty response. If [responseError] is non-null, will throw this instead
-/// of returning the response when closing the request.
 class FakeRequest {
   const FakeRequest(this.uri, {
     this.method = HttpMethod.get,
@@ -74,7 +67,6 @@ class FakeRequest {
   String toString() => 'Request{${_toMethodString(method)}, $uri}';
 }
 
-/// The response the server will create for a given [FakeRequest].
 class FakeResponse {
   const FakeResponse({
     this.statusCode = HttpStatus.ok,
@@ -89,21 +81,10 @@ class FakeResponse {
   final Map<String, List<String>> headers;
 }
 
-/// A fake implementation of the HttpClient used for testing.
-///
-/// This does not fully implement the HttpClient. If an additional method
-/// is actually needed by the test script, then it should be added here
-/// instead of in another fake.
 class FakeHttpClient implements HttpClient {
-  /// Creates an HTTP client that responses to each provided
-  /// fake request with the provided fake response.
-  ///
-  /// This does not enforce any order on the requests, but if multiple
-  /// requests match then the first will be selected;
   FakeHttpClient.list(List<FakeRequest> requests)
     : _requests = requests.toList();
 
-  /// Creates an HTTP client that always returns an empty 200 request.
   FakeHttpClient.any() : _any = true, _requests = <FakeRequest>[];
 
   bool _any = false;

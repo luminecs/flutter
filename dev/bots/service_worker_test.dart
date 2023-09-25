@@ -179,8 +179,6 @@ Future<void> _waitForAppToLoad(
   ]);
 }
 
-/// A drop-in replacement for `package:test` expect that can run outside the
-/// test zone.
 void expect(Object? actual, Object? expected) {
   final Matcher matcher = wrapMatcher(expected);
   // matchState needs to be of type <Object?, Object?>, see https://github.com/flutter/flutter/issues/99522
@@ -251,9 +249,7 @@ Future<void> runWebServiceWorkerTest({
   print('BEGIN runWebServiceWorkerTest(headless: $headless, testType: $testType)');
 
   try {
-    /////
     // Attempt to load a different version of the service worker!
-    /////
     await _rebuildApp(version: 1, testType: testType, target: _target);
 
     print('Call update() on the current web worker');
@@ -289,9 +285,7 @@ Future<void> runWebServiceWorkerTest({
     requestedPathCounts.clear();
     await server!.stop();
 
-    //////////////////////////////////////////////////////
     // Caching server
-    //////////////////////////////////////////////////////
     await _rebuildApp(version: 1, testType: testType, target: _target);
 
     print('With cache: test first page load');
@@ -365,9 +359,7 @@ Future<void> runWebServiceWorkerTest({
     await server!.stop();
 
 
-    //////////////////////////////////////////////////////
     // Non-caching server
-    //////////////////////////////////////////////////////
     print('No cache: test first page load');
     await _rebuildApp(version: 3, testType: testType, target: _target);
     await startAppServer(cacheControl: 'max-age=0');
@@ -519,9 +511,7 @@ Future<void> runWebServiceWorkerTestWithCachingResources({
   print('BEGIN runWebServiceWorkerTestWithCachingResources(headless: $headless, testType: $testType)');
 
   try {
-    //////////////////////////////////////////////////////
     // Caching server
-    //////////////////////////////////////////////////////
     await _rebuildApp(version: 1, testType: testType, target: _targetWithCachedResources);
 
     print('With cache: test first page load');
@@ -709,7 +699,6 @@ Future<void> runWebServiceWorkerTestWithBlockedServiceWorkers({
   print('END runWebServiceWorkerTestWithBlockedServiceWorkers(headless: $headless)');
 }
 
-/// Regression test for https://github.com/flutter/flutter/issues/130212.
 Future<void> runWebServiceWorkerTestWithCustomServiceWorkerVersion({
   required bool headless,
 }) async {

@@ -3781,7 +3781,6 @@ testWidgetsWithLeakTracking('SnackBarAction backgroundColor works as a Color', (
   });
 }
 
-/// Start test for "SnackBar dismiss test".
 Future<void> _testSnackBarDismiss({
   required WidgetTester tester,
   required Key tapTarget,
@@ -3823,7 +3822,6 @@ Future<void> _testSnackBarDismiss({
   }
 }
 
-/// Create drag gestures for DismissDirections.
 Map<DismissDirection, List<Offset>> _getDragGesturesOfDismissDirections(double scaffoldWidth) {
   final Map<DismissDirection, List<Offset>> dragGestures = <DismissDirection, List<Offset>>{};
 

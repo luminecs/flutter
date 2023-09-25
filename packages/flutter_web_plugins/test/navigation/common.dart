@@ -4,7 +4,6 @@
 
 import 'package:flutter_web_plugins/url_strategy.dart';
 
-/// A mock implementation of [PlatformLocation] that doesn't access the browser.
 class TestPlatformLocation implements PlatformLocation {
   @override
   String pathname = '';
@@ -18,7 +17,6 @@ class TestPlatformLocation implements PlatformLocation {
   @override
   Object? get state => null;
 
-  /// Mocks the base href of the document.
   String baseHref = '';
 
   @override

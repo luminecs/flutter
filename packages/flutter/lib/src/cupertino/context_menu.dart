@@ -56,17 +56,12 @@ typedef _DismissCallback = void Function(
   double opacity,
 );
 
-/// A function that produces the preview when the CupertinoContextMenu is open.
-///
-/// Called every time the animation value changes.
 typedef ContextMenuPreviewBuilder = Widget Function(
   BuildContext context,
   Animation<double> animation,
   Widget child,
 );
 
-/// A function that builds the child and handles the transition between the
-/// default child and the preview when the CupertinoContextMenu is open.
 typedef CupertinoContextMenuBuilder = Widget Function(
   BuildContext context,
   Animation<double> animation,
@@ -93,46 +88,7 @@ enum _ContextMenuLocation {
   right,
 }
 
-/// A full-screen modal route that opens when the [child] is long-pressed.
-///
-/// When open, the [CupertinoContextMenu] shows the child, or the widget returned
-/// by [previewBuilder] if given, in a large full-screen [Overlay] with a list
-/// of buttons specified by [actions]. The child/preview is placed in an
-/// [Expanded] widget so that it will grow to fill the Overlay if its size is
-/// unconstrained.
-///
-/// When closed, the [CupertinoContextMenu] displays the child as if the
-/// [CupertinoContextMenu] were not there. Sizing and positioning is unaffected.
-/// The menu can be closed like other [PopupRoute]s, such as by tapping the
-/// background or by calling `Navigator.pop(context)`. Unlike [PopupRoute], it can
-/// also be closed by swiping downwards.
-///
-/// The [previewBuilder] parameter is most commonly used to display a slight
-/// variation of [child]. See [previewBuilder] for an example of rounding the
-/// child's corners and allowing its aspect ratio to expand, similar to the
-/// Photos app on iOS.
-///
-/// {@tool dartpad}
-/// This sample shows a very simple [CupertinoContextMenu] for the Flutter logo.
-/// Long press on it to open.
-///
-/// ** See code in examples/api/lib/cupertino/context_menu/cupertino_context_menu.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This sample shows a similar CupertinoContextMenu, this time using [builder]
-/// to add a border radius to the widget.
-///
-/// ** See code in examples/api/lib/cupertino/context_menu/cupertino_context_menu.1.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/controls/context-menus/>
 class CupertinoContextMenu extends StatefulWidget {
-  /// Create a context menu.
-  ///
-  /// The [actions] parameter cannot be empty.
   CupertinoContextMenu({
     super.key,
     required this.actions,
@@ -146,12 +102,6 @@ class CupertinoContextMenu extends StatefulWidget {
   }) : assert(actions.isNotEmpty),
        builder = ((BuildContext context, Animation<double> animation) => child);
 
-  /// Creates a context menu with a custom [builder] controlling the widget.
-  ///
-  /// Use instead of the default constructor when it is needed to have a more
-  /// custom animation.
-  ///
-  /// The [actions] parameter cannot be empty.
   CupertinoContextMenu.builder({
     super.key,
     required this.actions,
@@ -161,201 +111,15 @@ class CupertinoContextMenu extends StatefulWidget {
        child = null,
        previewBuilder = null;
 
-  /// Exposes the default border radius for matching iOS 16.0 behavior. This
-  /// value was eyeballed from the iOS simulator running iOS 16.0.
-  ///
-  /// {@tool snippet}
-  ///
-  /// Below is example code in order to match the default border radius for an
-  /// iOS 16.0 open preview.
-  ///
-  /// ```dart
-  /// CupertinoContextMenu.builder(
-  ///   actions: <Widget>[
-  ///     CupertinoContextMenuAction(
-  ///       child: const Text('Action one'),
-  ///       onPressed: () {},
-  ///     ),
-  ///   ],
-  ///   builder:(BuildContext context, Animation<double> animation) {
-  ///     final Animation<BorderRadius?> borderRadiusAnimation = BorderRadiusTween(
-  ///       begin: BorderRadius.circular(0.0),
-  ///       end: BorderRadius.circular(CupertinoContextMenu.kOpenBorderRadius),
-  ///     ).animate(
-  ///       CurvedAnimation(
-  ///         parent: animation,
-  ///         curve: Interval(
-  ///           CupertinoContextMenu.animationOpensAt,
-  ///           1.0,
-  ///         ),
-  ///       ),
-  ///     );
-  ///
-  ///     final Animation<Decoration> boxDecorationAnimation = DecorationTween(
-  ///       begin: const BoxDecoration(
-  ///        color: Color(0xFFFFFFFF),
-  ///        boxShadow: <BoxShadow>[],
-  ///       ),
-  ///       end: const BoxDecoration(
-  ///        color: Color(0xFFFFFFFF),
-  ///        boxShadow: CupertinoContextMenu.kEndBoxShadow,
-  ///       ),
-  ///      ).animate(
-  ///        CurvedAnimation(
-  ///         parent: animation,
-  ///         curve: Interval(
-  ///           0.0,
-  ///           CupertinoContextMenu.animationOpensAt,
-  ///         ),
-  ///       )
-  ///     );
-  ///
-  ///     return Container(
-  ///       decoration:
-  ///         animation.value < CupertinoContextMenu.animationOpensAt ? boxDecorationAnimation.value : null,
-  ///       child: FittedBox(
-  ///         fit: BoxFit.cover,
-  ///         child: ClipRRect(
-  ///           borderRadius: borderRadiusAnimation.value ?? BorderRadius.circular(0.0),
-  ///           child: SizedBox(
-  ///             height: 150,
-  ///             width: 150,
-  ///             child: Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-  ///           ),
-  ///         ),
-  ///       )
-  ///     );
-  ///   },
-  /// )
-  /// ```
-  ///
-  /// {@end-tool}
   static const double kOpenBorderRadius = _previewBorderRadiusRatio;
 
-  /// Exposes the final box shadow of the opening animation of the child widget
-  /// to match the default behavior of the native iOS widget. This value was
-  /// eyeballed from the iOS simulator running iOS 16.0.
   static const List<BoxShadow> kEndBoxShadow = _endBoxShadow;
 
-  /// The point at which the CupertinoContextMenu begins to animate
-  /// into the open position.
-  ///
-  /// A value between 0.0 and 1.0 corresponding to a point in [builder]'s
-  /// animation. When passing in an animation to [builder] the range before
-  /// [animationOpensAt] will correspond to the animation when the widget is
-  /// pressed and held, and the range after is the animation as the menu is
-  /// fully opening. For an example, see the documentation for [builder].
   static final double animationOpensAt =
       _previewLongPressTimeout.inMilliseconds / _animationDuration;
 
-  /// A function that returns a widget to be used alternatively from [child].
-  ///
-  /// The widget returned by the function will be shown at all times: when the
-  /// [CupertinoContextMenu] is closed, when it is in the middle of opening,
-  /// and when it is fully open. This will overwrite the default animation that
-  /// matches the behavior of an iOS 16.0 context menu.
-  ///
-  /// This builder can be used instead of the child when the intended child has
-  /// a property that would conflict with the default animation, such as a
-  /// border radius or a shadow, or if a more custom animation is needed.
-  ///
-  /// In addition to the current [BuildContext], the function is also called
-  /// with an [Animation]. The complete animation goes from 0 to 1 when
-  /// the CupertinoContextMenu opens, and from 1 to 0 when it closes, and it can
-  /// be used to animate the widget in sync with this opening and closing.
-  ///
-  /// The animation works in two stages. The first happens on press and hold of
-  /// the widget from 0 to [animationOpensAt], and the second stage for when the
-  /// widget fully opens up to the menu, from [animationOpensAt] to 1.
-  ///
-  /// {@tool snippet}
-  ///
-  /// Below is an example of using [builder] to show an image tile setup to be
-  /// opened in the default way to match a native iOS 16.0 app. The behavior
-  /// will match what will happen if the simple child image was passed as just
-  /// the [child] parameter, instead of [builder]. This can be manipulated to
-  /// add more customizability to the widget's animation.
-  ///
-  /// ```dart
-  /// CupertinoContextMenu.builder(
-  ///   actions: <Widget>[
-  ///     CupertinoContextMenuAction(
-  ///       child: const Text('Action one'),
-  ///       onPressed: () {},
-  ///     ),
-  ///   ],
-  ///   builder:(BuildContext context, Animation<double> animation) {
-  ///     final Animation<BorderRadius?> borderRadiusAnimation = BorderRadiusTween(
-  ///       begin: BorderRadius.circular(0.0),
-  ///       end: BorderRadius.circular(CupertinoContextMenu.kOpenBorderRadius),
-  ///     ).animate(
-  ///       CurvedAnimation(
-  ///         parent: animation,
-  ///         curve: Interval(
-  ///           CupertinoContextMenu.animationOpensAt,
-  ///           1.0,
-  ///         ),
-  ///       ),
-  ///      );
-  ///
-  ///     final Animation<Decoration> boxDecorationAnimation = DecorationTween(
-  ///       begin: const BoxDecoration(
-  ///        color: Color(0xFFFFFFFF),
-  ///        boxShadow: <BoxShadow>[],
-  ///       ),
-  ///       end: const BoxDecoration(
-  ///        color: Color(0xFFFFFFFF),
-  ///        boxShadow: CupertinoContextMenu.kEndBoxShadow,
-  ///       ),
-  ///      ).animate(
-  ///        CurvedAnimation(
-  ///         parent: animation,
-  ///         curve: Interval(
-  ///           0.0,
-  ///           CupertinoContextMenu.animationOpensAt,
-  ///         ),
-  ///       ),
-  ///     );
-  ///
-  ///     return Container(
-  ///       decoration:
-  ///         animation.value < CupertinoContextMenu.animationOpensAt ? boxDecorationAnimation.value : null,
-  ///       child: FittedBox(
-  ///         fit: BoxFit.cover,
-  ///         child: ClipRRect(
-  ///           borderRadius: borderRadiusAnimation.value ?? BorderRadius.circular(0.0),
-  ///           child: SizedBox(
-  ///             height: 150,
-  ///             width: 150,
-  ///             child: Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-  ///           ),
-  ///         ),
-  ///       ),
-  ///     );
-  ///   },
-  /// )
-  /// ```
-  ///
-  /// {@end-tool}
-  ///
-  /// {@tool dartpad}
-  /// Additionally below is an example of a real world use case for [builder].
-  ///
-  /// If a widget is passed to the [child] parameter with properties that
-  /// conflict with the default animation, in this case the border radius,
-  /// unwanted behaviors can arise. Here a boxed shadow will wrap the widget as
-  /// it is expanded. To handle this, a more custom animation and widget can be
-  /// passed to the builder, using values exposed by [CupertinoContextMenu],
-  /// like [CupertinoContextMenu.kEndBoxShadow], to match the native iOS
-  /// animation as close as desired.
-  ///
-  /// ** See code in examples/api/lib/cupertino/context_menu/cupertino_context_menu.1.dart **
-  /// {@end-tool}
   final CupertinoContextMenuBuilder builder;
 
-  /// The default preview builder if none is provided. It makes a rectangle
-  /// around the child widget with rounded borders, matching the iOS 16 opened
-  /// context menu eyeballed on the XCode iOS simulator.
   static Widget _defaultPreviewBuilder(BuildContext context, Animation<double> animation, Widget child) {
     return FittedBox(
       fit: BoxFit.cover,
@@ -368,95 +132,12 @@ class CupertinoContextMenu extends StatefulWidget {
 
   // TODO(mitchgoodwin): deprecate [child] with builder refactor https://github.com/flutter/flutter/issues/116306
 
-  /// The widget that can be "opened" with the [CupertinoContextMenu].
-  ///
-  /// When the [CupertinoContextMenu] is long-pressed, the menu will open and
-  /// this widget (or the widget returned by [previewBuilder], if provided) will
-  /// be moved to the new route and placed inside of an [Expanded] widget. This
-  /// allows the child to resize to fit in its place in the new route, if it
-  /// doesn't size itself.
-  ///
-  /// When the [CupertinoContextMenu] is "closed", this widget acts like a
-  /// [Container], i.e. it does not constrain its child's size or affect its
-  /// position.
   final Widget? child;
 
-  /// The actions that are shown in the menu.
-  ///
-  /// These actions are typically [CupertinoContextMenuAction]s.
-  ///
-  /// This parameter must not be empty.
   final List<Widget> actions;
 
-  /// If true, clicking on the [CupertinoContextMenuAction]s will
-  /// produce haptic feedback.
-  ///
-  /// Uses [HapticFeedback.heavyImpact] when activated.
-  /// Defaults to false.
   final bool enableHapticFeedback;
 
-  /// A function that returns an alternative widget to show when the
-  /// [CupertinoContextMenu] is open.
-  ///
-  /// If not specified, [child] will be shown.
-  ///
-  /// The preview is often used to show a slight variation of the [child]. For
-  /// example, the child could be given rounded corners in the preview but have
-  /// sharp corners when in the page.
-  ///
-  /// In addition to the current [BuildContext], the function is also called
-  /// with an [Animation] and the [child]. The animation goes from 0 to 1 when
-  /// the CupertinoContextMenu opens, and from 1 to 0 when it closes, and it can
-  /// be used to animate the preview in sync with this opening and closing. The
-  /// child parameter provides access to the child displayed when the
-  /// CupertinoContextMenu is closed.
-  ///
-  /// {@tool snippet}
-  ///
-  /// Below is an example of using [previewBuilder] to show an image tile that's
-  /// similar to each tile in the iOS iPhoto app's context menu. Several of
-  /// these could be used in a GridView for a similar effect.
-  ///
-  /// When opened, the child animates to show its full aspect ratio and has
-  /// rounded corners. The larger size of the open CupertinoContextMenu allows
-  /// the FittedBox to fit the entire image, even when it has a very tall or
-  /// wide aspect ratio compared to the square of a GridView, so this animates
-  /// into view as the CupertinoContextMenu is opened. The preview is swapped in
-  /// right when the open animation begins, which includes the rounded corners.
-  ///
-  /// ```dart
-  /// CupertinoContextMenu(
-  ///   // The FittedBox in the preview here allows the image to animate its
-  ///   // aspect ratio when the CupertinoContextMenu is animating its preview
-  ///   // widget open and closed.
-  ///   // ignore: deprecated_member_use
-  ///   previewBuilder: (BuildContext context, Animation<double> animation, Widget child) {
-  ///     return FittedBox(
-  ///       fit: BoxFit.cover,
-  ///       // This ClipRRect rounds the corners of the image when the
-  ///       // CupertinoContextMenu is open, even though it's not rounded when
-  ///       // it's closed. It uses the given animation to animate the corners
-  ///       // in sync with the opening animation.
-  ///       child: ClipRRect(
-  ///         borderRadius: BorderRadius.circular(64.0 * animation.value),
-  ///         child: Image.asset('assets/photo.jpg'),
-  ///       ),
-  ///     );
-  ///   },
-  ///   actions: <Widget>[
-  ///     CupertinoContextMenuAction(
-  ///       child: const Text('Action one'),
-  ///       onPressed: () {},
-  ///     ),
-  ///   ],
-  ///   child: FittedBox(
-  ///     fit: BoxFit.cover,
-  ///     child: Image.asset('assets/photo.jpg'),
-  ///   ),
-  /// )
-  /// ```
-  ///
-  /// {@end-tool}
   @Deprecated(
     'Use CupertinoContextMenu.builder instead. '
     'This feature was deprecated after v3.4.0-34.1.pre.',

@@ -12,11 +12,6 @@ import 'package:path/path.dart' as path;
 
 final String platformLineSep = Platform.isWindows ? '\r\n': '\n';
 
-/// Tests that a plugin A can depend on platform code from a plugin B
-/// as long as plugin B is defined as a pub dependency of plugin A.
-///
-/// This test fails when `flutter build apk` fails and the stderr from this command
-/// contains "Unresolved reference: plugin_b".
 Future<void> main() async {
   await task(() async {
 

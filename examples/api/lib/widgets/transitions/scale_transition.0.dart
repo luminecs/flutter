@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ScaleTransition].
 
 void main() => runApp(const ScaleTransitionExampleApp());
 
@@ -26,8 +25,6 @@ class ScaleTransitionExample extends StatefulWidget {
   State<ScaleTransitionExample> createState() => _ScaleTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _ScaleTransitionExampleState extends State<ScaleTransitionExample> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),

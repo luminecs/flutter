@@ -54,16 +54,6 @@ const CupertinoDynamicColor _kToolbarTextColor = CupertinoDynamicColor.withBrigh
 
 const Duration _kToolbarTransitionDuration = Duration(milliseconds: 125);
 
-/// The type for a Function that builds a toolbar's container with the given
-/// child.
-///
-/// The anchor is provided in global coordinates.
-///
-/// See also:
-///
-///   * [CupertinoTextSelectionToolbar.toolbarBuilder], which is of this type.
-///   * [TextSelectionToolbar.toolbarBuilder], which is similar, but for an
-///     Material-style toolbar.
 typedef CupertinoToolbarBuilder = Widget Function(
   BuildContext context,
   Offset anchorAbove,
@@ -71,25 +61,7 @@ typedef CupertinoToolbarBuilder = Widget Function(
   Widget child,
 );
 
-/// An iOS-style text selection toolbar.
-///
-/// Typically displays buttons for text manipulation, e.g. copying and pasting
-/// text.
-///
-/// Tries to position itself above [anchorAbove], but if it doesn't fit, then
-/// it positions itself below [anchorBelow].
-///
-/// If any children don't fit in the menu, an overflow menu will automatically
-/// be created.
-///
-/// See also:
-///
-///  * [AdaptiveTextSelectionToolbar], which builds the toolbar for the current
-///    platform.
-///  * [TextSelectionToolbar], which is similar, but builds an Android-style
-///    toolbar.
 class CupertinoTextSelectionToolbar extends StatelessWidget {
-  /// Creates an instance of CupertinoTextSelectionToolbar.
   const CupertinoTextSelectionToolbar({
     super.key,
     required this.anchorAbove,
@@ -98,33 +70,14 @@ class CupertinoTextSelectionToolbar extends StatelessWidget {
     this.toolbarBuilder = _defaultToolbarBuilder,
   }) : assert(children.length > 0);
 
-  /// {@macro flutter.material.TextSelectionToolbar.anchorAbove}
   final Offset anchorAbove;
 
-  /// {@macro flutter.material.TextSelectionToolbar.anchorBelow}
   final Offset anchorBelow;
 
-  /// {@macro flutter.material.TextSelectionToolbar.children}
-  ///
-  /// See also:
-  ///   * [CupertinoTextSelectionToolbarButton], which builds a default
-  ///     Cupertino-style text selection toolbar text button.
   final List<Widget> children;
 
-  /// {@macro flutter.material.TextSelectionToolbar.toolbarBuilder}
-  ///
-  /// The given anchor and isAbove can be used to position an arrow, as in the
-  /// default Cupertino toolbar.
   final CupertinoToolbarBuilder toolbarBuilder;
 
-  /// Minimal padding from all edges of the selection toolbar to all edges of the
-  /// viewport.
-  ///
-  /// See also:
-  ///
-  ///  * [SpellCheckSuggestionsToolbar], which uses this same value for its
-  ///    padding from the edges of the viewport.
-  ///  * [TextSelectionToolbar], which uses this same value as well.
   static const double kToolbarScreenPadding = 8.0;
 
   // Builds a toolbar just like the default iOS toolbar, with the right color
@@ -672,7 +625,6 @@ abstract class _CupertinoChevronPainter extends CustomPainter {
 
   final Color color;
 
-  /// If this is true the chevron will point left, else it will point right.
   final bool isLeft;
 
   @override

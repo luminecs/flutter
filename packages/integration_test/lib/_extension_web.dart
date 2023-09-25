@@ -8,14 +8,6 @@ import 'dart:html' as html;
 import 'dart:js';
 import 'dart:js_util' as js_util;
 
-/// The web implementation of [registerWebServiceExtension].
-///
-/// Adds a hidden `window.$flutterDriver` JavaScript function that's called by
-/// `FlutterWebDriver` to fulfill FlutterDriver commands.
-///
-/// See also:
-///
-///  * `_extension_io.dart`, which has the dart:io implementation
 void registerWebServiceExtension(Future<Map<String, dynamic>> Function(Map<String, String>) callback) {
   // Define the result variable because packages/flutter_driver/lib/src/driver/web_driver.dart
   // checks for this value to become non-null when waiting for the result. If this value is

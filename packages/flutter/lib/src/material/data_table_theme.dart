@@ -13,30 +13,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines default property values for descendant [DataTable]
-/// widgets.
-///
-/// Descendant widgets obtain the current [DataTableThemeData] object
-/// using `DataTableTheme.of(context)`. Instances of
-/// [DataTableThemeData] can be customized with
-/// [DataTableThemeData.copyWith].
-///
-/// Typically a [DataTableThemeData] is specified as part of the
-/// overall [Theme] with [ThemeData.dataTableTheme].
-///
-/// All [DataTableThemeData] properties are `null` by default. When
-/// null, the [DataTable] will use the values from [ThemeData] if they exist,
-/// otherwise it will provide its own defaults based on the overall [Theme]'s
-/// textTheme and colorScheme. See the individual [DataTable] properties for
-/// details.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class DataTableThemeData with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.dataTableTheme].
   const DataTableThemeData({
     this.decoration,
     this.dataRowColor,
@@ -63,59 +41,40 @@ class DataTableThemeData with Diagnosticable {
        dataRowMinHeight = dataRowHeight ?? dataRowMinHeight,
        dataRowMaxHeight = dataRowHeight ?? dataRowMaxHeight;
 
-  /// {@macro flutter.material.dataTable.decoration}
   final Decoration? decoration;
 
-  /// {@macro flutter.material.dataTable.dataRowColor}
-  /// {@macro flutter.material.DataTable.dataRowColor}
   final MaterialStateProperty<Color?>? dataRowColor;
 
-  /// {@macro flutter.material.dataTable.dataRowHeight}
   @Deprecated(
     'Migrate to use dataRowMinHeight and dataRowMaxHeight instead. '
     'This feature was deprecated after v3.7.0-5.0.pre.',
   )
   double? get dataRowHeight => dataRowMinHeight == dataRowMaxHeight ? dataRowMinHeight : null;
 
-  /// {@macro flutter.material.dataTable.dataRowMinHeight}
   final double? dataRowMinHeight;
 
-  /// {@macro flutter.material.dataTable.dataRowMaxHeight}
   final double? dataRowMaxHeight;
 
-  /// {@macro flutter.material.dataTable.dataTextStyle}
   final TextStyle? dataTextStyle;
 
-  /// {@macro flutter.material.dataTable.headingRowColor}
-  /// {@macro flutter.material.DataTable.headingRowColor}
   final MaterialStateProperty<Color?>? headingRowColor;
 
-  /// {@macro flutter.material.dataTable.headingRowHeight}
   final double? headingRowHeight;
 
-  /// {@macro flutter.material.dataTable.headingTextStyle}
   final TextStyle? headingTextStyle;
 
-  /// {@macro flutter.material.dataTable.horizontalMargin}
   final double? horizontalMargin;
 
-  /// {@macro flutter.material.dataTable.columnSpacing}
   final double? columnSpacing;
 
-  /// {@macro flutter.material.dataTable.dividerThickness}
   final double? dividerThickness;
 
-  /// {@macro flutter.material.dataTable.checkboxHorizontalMargin}
   final double? checkboxHorizontalMargin;
 
-  /// If specified, overrides the default value of [DataColumn.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? headingCellCursor;
 
-  /// If specified, overrides the default value of [DataRow.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? dataRowCursor;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   DataTableThemeData copyWith({
     Decoration? decoration,
     MaterialStateProperty<Color?>? dataRowColor,
@@ -160,9 +119,6 @@ class DataTableThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two [DataTableThemeData]s.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static DataTableThemeData lerp(DataTableThemeData a, DataTableThemeData b, double t) {
     if (identical(a, b)) {
       return a;
@@ -248,41 +204,15 @@ class DataTableThemeData with Diagnosticable {
   }
 }
 
-/// Applies a data table theme to descendant [DataTable] widgets.
-///
-/// Descendant widgets obtain the current theme's [DataTableTheme] object using
-/// [DataTableTheme.of]. When a widget uses [DataTableTheme.of], it is
-/// automatically rebuilt if the theme later changes.
-///
-/// A data table theme can be specified as part of the overall Material
-/// theme using [ThemeData.dataTableTheme].
-///
-/// See also:
-///
-///  * [DataTableThemeData], which describes the actual configuration
-///    of a data table theme.
 class DataTableTheme extends InheritedWidget {
-  /// Constructs a data table theme that configures all descendant
-  /// [DataTable] widgets.
   const DataTableTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties used for all descendant [DataTable] widgets.
   final DataTableThemeData data;
 
-  /// Returns the configuration [data] from the closest
-  /// [DataTableTheme] ancestor. If there is no ancestor, it returns
-  /// [ThemeData.dataTableTheme]. Applications can assume that the
-  /// returned value will not be null.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DataTableThemeData theme = DataTableTheme.of(context);
-  /// ```
   static DataTableThemeData of(BuildContext context) {
     final DataTableTheme? dataTableTheme = context.dependOnInheritedWidgetOfExactType<DataTableTheme>();
     return dataTableTheme?.data ?? Theme.of(context).dataTableTheme;

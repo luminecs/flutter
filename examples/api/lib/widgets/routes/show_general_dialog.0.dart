@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [showGeneralDialog].
 
 void main() => runApp(const GeneralDialogApp());
 
@@ -29,7 +28,6 @@ class GeneralDialogExample extends StatelessWidget {
       body: Center(
         child: OutlinedButton(
           onPressed: () {
-            /// This shows an alert dialog.
             Navigator.of(context).restorablePush(_dialogBuilder);
           },
           child: const Text('Open Dialog'),

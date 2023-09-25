@@ -6,7 +6,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [MatrixTransition].
 
 void main() => runApp(const MatrixTransitionExampleApp());
 
@@ -28,8 +27,6 @@ class MatrixTransitionExample extends StatefulWidget {
   State<MatrixTransitionExample> createState() => _MatrixTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _MatrixTransitionExampleState extends State<MatrixTransitionExample> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;

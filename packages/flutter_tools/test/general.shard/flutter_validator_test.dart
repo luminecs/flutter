@@ -17,7 +17,6 @@ import '../src/common.dart';
 import '../src/fake_process_manager.dart';
 import '../src/fakes.dart';
 
-/// Matches a doctor validation result.
 Matcher _matchDoctorValidation({
   required ValidationType validationType,
   required String statusInfo,
@@ -623,7 +622,6 @@ class FakeOperatingSystemUtils extends Fake implements OperatingSystemUtils {
     };
   }
 
-  /// A map of [File]s that calls to [which] will return.
   Map<String, File>? whichLookup;
 
   @override

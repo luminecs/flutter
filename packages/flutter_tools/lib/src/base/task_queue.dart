@@ -7,29 +7,18 @@ import 'dart:collection';
 
 import '../globals.dart' as globals;
 
-/// A closure type used by the [TaskQueue].
 typedef TaskQueueClosure<T> = Future<T> Function();
 
-/// A task queue of Futures to be completed in parallel, throttling
-/// the number of simultaneous tasks.
-///
-/// The tasks return results of type T.
 class TaskQueue<T> {
-  /// Creates a task queue with a maximum number of simultaneous jobs.
-  /// The [maxJobs] parameter defaults to the number of CPU cores on the
-  /// system.
   TaskQueue({int? maxJobs})
       : maxJobs = maxJobs ?? globals.platform.numberOfProcessors;
 
-  /// The maximum number of jobs that this queue will run simultaneously.
   final int maxJobs;
 
   final Queue<_TaskQueueItem<T>> _pendingTasks = Queue<_TaskQueueItem<T>>();
   final Set<_TaskQueueItem<T>> _activeTasks = <_TaskQueueItem<T>>{};
   final Set<Completer<void>> _completeListeners = <Completer<void>>{};
 
-  /// Returns a future that completes when all tasks in the [TaskQueue] are
-  /// complete.
   Future<void> get tasksComplete {
     // In case this is called when there are no tasks, we want it to
     // signal complete immediately.
@@ -41,8 +30,6 @@ class TaskQueue<T> {
     return completer.future;
   }
 
-  /// Adds a single closure to the task queue, returning a future that
-  /// completes when the task completes.
   Future<T> add(TaskQueueClosure<T> task) {
     final Completer<T> completer = Completer<T>();
     _pendingTasks.add(_TaskQueueItem<T>(task, completer));

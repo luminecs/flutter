@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [PositionedTransition].
 
 void main() => runApp(const PositionedTransitionExampleApp());
 
@@ -26,8 +25,6 @@ class PositionedTransitionExample extends StatefulWidget {
   State<PositionedTransitionExample> createState() => _PositionedTransitionExampleState();
 }
 
-/// [AnimationController]s can be created with `vsync: this` because of
-/// [TickerProviderStateMixin].
 class _PositionedTransitionExampleState extends State<PositionedTransitionExample> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),

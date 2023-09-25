@@ -16,7 +16,6 @@ import './globals.dart';
 import './stdio.dart';
 import './version.dart';
 
-/// Allowed git remote names.
 enum RemoteName {
   upstream,
   mirror,
@@ -45,7 +44,6 @@ class Remote {
 
   final RemoteName _name;
 
-  /// The name of the remote.
   String get name {
     switch (_name) {
       case RemoteName.upstream:
@@ -55,44 +53,9 @@ class Remote {
     }
   }
 
-  /// The URL of the remote.
   final String url;
 }
 
-/// A source code repository.
-///
-/// This class is an abstraction over a git
-/// repository on the local disk. Ideally this abstraction would hide from
-/// the outside libraries what git calls were needed to either read or update
-/// data in the underlying repository. In practice, most of the bugs in the
-/// conductor codebase are related to the git calls made from this and its
-/// subclasses.
-///
-/// Two factors that make this code more complicated than it would otherwise
-/// need to be are:
-/// 1. That any particular invocation of the conductor may or may not already
-/// have the git checkout present on disk, depending on what commands were
-/// previously run; and
-/// 2. The need to provide overrides for integration tests (in particular
-/// the ability to mark a [Repository] instance as a [localUpstream] made
-/// integration tests more hermetic, at the cost of complexity in the
-/// implementation).
-///
-/// The only way to simplify the first factor would be to change the behavior of
-/// the conductor tool to be a long-lived dart process that keeps all of its
-/// state in memory and blocks on user input. This would add the constraint that
-/// the user would need to keep the process running for the duration of a
-/// release, which could potentially take multiple days and users could not
-/// manually change the state of the release process (via editing the JSON
-/// config file). However, these may be reasonable trade-offs to make the
-/// codebase simpler and easier to reason about.
-///
-/// The way to simplify the second factor would be to not put any special
-/// handling in this library for integration tests. This would make integration
-/// tests more difficult/less hermetic, but the production code more reliable.
-/// This is probably the right trade-off to make, as the integration tests were
-/// still not hermetic or reliable, and the main integration test was ultimately
-/// deleted in #84354.
 abstract class Repository {
   Repository({
     required this.name,
@@ -113,20 +76,10 @@ abstract class Repository {
   final String name;
   final Remote upstreamRemote;
 
-  /// Branches that must exist locally in this [Repository].
-  ///
-  /// If this [Repository] is used as a local upstream for another, the
-  /// downstream may try to fetch these branches, and git will fail if they do
-  /// not exist.
   final List<String> requiredLocalBranches;
 
-  /// Remote for user's mirror.
-  ///
-  /// This value can be null, in which case attempting to access it will lead to
-  /// a [ConductorException].
   final Remote? mirrorRemote;
 
-  /// The initial ref (branch or commit name) to check out.
   final String? initialRef;
   final Git git;
   final ProcessManager processManager;
@@ -135,16 +88,11 @@ abstract class Repository {
   final FileSystem fileSystem;
   final Directory parentDirectory;
 
-  /// If the repository will be used as an upstream for a test repo.
   final bool localUpstream;
 
   Directory? _checkoutDirectory;
   String? previousCheckoutLocation;
 
-  /// Directory for the repository checkout.
-  ///
-  /// Since cloning a repository takes a long time, we do not ensure it is
-  /// cloned on the filesystem until this getter is accessed.
   Future<Directory> get checkoutDirectory async {
     if (_checkoutDirectory != null) {
       return _checkoutDirectory!;
@@ -179,19 +127,8 @@ abstract class Repository {
     return _checkoutDirectory!;
   }
 
-  /// RegExp pattern to parse the output of git ls-remote.
-  ///
-  /// Git output looks like:
-  ///
-  /// 35185330c6af3a435f615ee8ac2fed8b8bb7d9d4        refs/heads/95159-squash
-  /// 6f60a1e7b2f3d2c2460c9dc20fe54d0e9654b131        refs/heads/add-debug-trace
-  /// c1436c42c0f3f98808ae767e390c3407787f1a67        refs/heads/add-recipe-field
-  /// 4d44dca340603e25d4918c6ef070821181202e69        refs/heads/add-release-channel
-  ///
-  /// We are interested in capturing what comes after 'refs/heads/'.
   static final RegExp _lsRemotePattern = RegExp(r'.*\s+refs\/heads\/([^\s]+)$');
 
-  /// Parse git ls-remote --heads and return branch names.
   Future<List<String>> listRemoteBranches(String remote) async {
     final String output = await git.getOutput(
       <String>['ls-remote', '--heads', remote],
@@ -210,7 +147,6 @@ abstract class Repository {
     return remoteBranches;
   }
 
-  /// Ensure the repository is cloned to disk and initialized with proper state.
   Future<void> lazilyInitialize(Directory checkoutDirectory) async {
     if (checkoutDirectory.existsSync()) {
       stdio.printTrace('Deleting $name from ${checkoutDirectory.path}...');
@@ -269,7 +205,6 @@ abstract class Repository {
     );
   }
 
-  /// The URL of the remote named [remoteName].
   Future<String> remoteUrl(String remoteName) async {
     return git.getOutput(
       <String>['remote', 'get-url', remoteName],
@@ -278,7 +213,6 @@ abstract class Repository {
     );
   }
 
-  /// Verify the repository's git checkout is clean.
   Future<bool> gitCheckoutClean() async {
     final String output = await git.getOutput(
       <String>['status', '--porcelain'],
@@ -288,7 +222,6 @@ abstract class Repository {
     return output == '';
   }
 
-  /// Return the revision for the branch point between two refs.
   Future<String> branchPoint(String firstRef, String secondRef) async {
     return (await git.getOutput(
       <String>['merge-base', firstRef, secondRef],
@@ -297,7 +230,6 @@ abstract class Repository {
     )).trim();
   }
 
-  /// Fetch all branches and associated commits and tags from [remoteName].
   Future<void> fetch(String remoteName) async {
     await git.run(
       <String>['fetch', remoteName, '--tags'],
@@ -306,9 +238,6 @@ abstract class Repository {
     );
   }
 
-  /// Create (and checkout) a new branch based on the current HEAD.
-  ///
-  /// Runs `git checkout -b $branchName`.
   Future<void> newBranch(String branchName) async {
     await git.run(
       <String>['checkout', '-b', branchName],
@@ -317,7 +246,6 @@ abstract class Repository {
     );
   }
 
-  /// Check out the given ref.
   Future<void> checkout(String ref) async {
     await git.run(
       <String>['checkout', ref],
@@ -326,7 +254,6 @@ abstract class Repository {
     );
   }
 
-  /// Obtain the version tag at the tip of a release branch.
   Future<String> getFullTag(
     String remoteName,
     String branchName, {
@@ -350,7 +277,6 @@ abstract class Repository {
     );
   }
 
-  /// Tag [commit] and push the tag to the remote.
   Future<void> tag(String commit, String tagName, String remote) async {
     assert(commit.isNotEmpty);
     assert(tagName.isNotEmpty);
@@ -371,7 +297,6 @@ abstract class Repository {
     stdio.printStatus('Tag push successful.');
   }
 
-  /// List commits in reverse chronological order.
   Future<List<String>> revList(List<String> args) async {
     return (await git.getOutput(<String>['rev-list', ...args],
             'rev-list with args ${args.join(' ')}',
@@ -380,7 +305,6 @@ abstract class Repository {
         .split('\n');
   }
 
-  /// Look up the commit for [ref].
   Future<String> reverseParse(String ref) async {
     final String revisionHash = await git.getOutput(
       <String>['rev-parse', ref],
@@ -391,7 +315,6 @@ abstract class Repository {
     return revisionHash;
   }
 
-  /// Determines if one ref is an ancestor for another.
   Future<bool> isAncestor(String possibleAncestor, String possibleDescendant) async {
     final int exitcode = await git.run(
       <String>[
@@ -407,7 +330,6 @@ abstract class Repository {
     return exitcode == 0;
   }
 
-  /// Determines if a given commit has a tag.
   Future<bool> isCommitTagged(String commit) async {
     final int exitcode = await git.run(
       <String>['describe', '--exact-match', '--tags', commit],
@@ -418,7 +340,6 @@ abstract class Repository {
     return exitcode == 0;
   }
 
-  /// Resets repository HEAD to [ref].
   Future<void> reset(String ref) async {
     await git.run(
       <String>['reset', ref, '--hard'],
@@ -427,7 +348,6 @@ abstract class Repository {
     );
   }
 
-  /// Push [commit] to the release channel [branch].
   Future<void> pushRef({
     required String fromRef,
     required String remote,
@@ -506,7 +426,6 @@ abstract class Repository {
     return reverseParse('HEAD');
   }
 
-  /// Create an empty commit and return the revision.
   @visibleForTesting
   Future<String> authorEmptyCommit([String message = 'An empty commit']) async {
     await git.run(
@@ -526,12 +445,6 @@ abstract class Repository {
     return reverseParse('HEAD');
   }
 
-  /// Create a new clone of the current repository.
-  ///
-  /// The returned repository will inherit all properties from this one, except
-  /// for the upstream, which will be the path to this repository on disk.
-  ///
-  /// This method is for testing purposes.
   @visibleForTesting
   Future<Repository> cloneRepository(String cloneName);
 }
@@ -559,10 +472,6 @@ class FrameworkRepository extends Repository {
           ],
         );
 
-  /// A [FrameworkRepository] with the host conductor's repo set as upstream.
-  ///
-  /// This is useful when testing a commit that has not been merged upstream
-  /// yet.
   factory FrameworkRepository.localRepoAsUpstream(
     Checkouts checkouts, {
     String name = 'framework',
@@ -682,12 +591,6 @@ class FrameworkRepository extends Repository {
     return Version.fromString(versionJson['frameworkVersion'] as String);
   }
 
-  /// Create a release candidate branch version file.
-  ///
-  /// This file allows for easily traversing what candidate branch was used
-  /// from a release channel.
-  ///
-  /// Returns [true] if the version file was updated and a commit is needed.
   Future<bool> updateCandidateBranchVersion(
     String branch, {
     @visibleForTesting File? versionFile,
@@ -715,9 +618,6 @@ class FrameworkRepository extends Repository {
     return true;
   }
 
-  /// Update this framework's engine version file.
-  ///
-  /// Returns [true] if the version file was updated and a commit is needed.
   Future<bool> updateEngineRevision(
     String newEngine, {
     @visibleForTesting File? engineVersionFile,
@@ -745,10 +645,6 @@ class FrameworkRepository extends Repository {
   }
 }
 
-/// A wrapper around the host repository that is executing the conductor.
-///
-/// [Repository] methods that mutate the underlying repository will throw a
-/// [ConductorException].
 class HostFrameworkRepository extends FrameworkRepository {
   HostFrameworkRepository({
     required Checkouts checkouts,
@@ -835,7 +731,6 @@ class EngineRepository extends Repository {
   static const String defaultUpstream = 'git@github.com:flutter/engine.git';
   static const String defaultBranch = 'main';
 
-  /// Update the `dart_revision` entry in the DEPS file.
   Future<void> updateDartRevision(
     String newRevision, {
     @visibleForTesting File? depsFile,
@@ -874,7 +769,6 @@ class EngineRepository extends Repository {
   }
 }
 
-/// An enum of all the repositories that the Conductor supports.
 enum RepositoryType {
   framework,
   engine,

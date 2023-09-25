@@ -13,7 +13,6 @@ import '../convert.dart';
 import 'flutter_adapter_args.dart';
 import 'flutter_base_adapter.dart';
 
-/// A DAP Debug Adapter for running and debugging Flutter tests.
 class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
   FlutterTestDebugAdapter(
     super.channel, {
@@ -26,17 +25,12 @@ class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
     super.onError,
   });
 
-  /// Called by [attachRequest] to request that we actually connect to the app to be debugged.
   @override
   Future<void> attachImpl() async {
     sendOutput('console', '\nAttach is not currently supported');
     handleSessionTerminate();
   }
 
-  /// Called by [launchRequest] to request that we actually start the tests to be run/debugged.
-  ///
-  /// For debugging, this should start paused, connect to the VM Service, set
-  /// breakpoints, and resume.
   @override
   Future<void> launchImpl() async {
     final FlutterLaunchRequestArguments args = this.args as FlutterLaunchRequestArguments;
@@ -77,14 +71,12 @@ class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
     }
   }
 
-  /// Called by [terminateRequest] to request that we gracefully shut down the app being run (or in the case of an attach, disconnect).
   @override
   Future<void> terminateImpl() async {
     terminatePids(ProcessSignal.sigterm);
     await process?.exitCode;
   }
 
-  /// Handles the Flutter process exiting, terminating the debug session if it has not already begun terminating.
   @override
   void handleExitCode(int code) {
     final String codeSuffix = code == 0 ? '' : ' ($code)';
@@ -92,7 +84,6 @@ class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
     handleSessionTerminate(codeSuffix);
   }
 
-  /// Handles incoming JSON events from `flutter test --machine`.
   bool _handleJsonEvent(String event, Map<String, Object?>? params) {
     params ??= <String, Object?>{};
     switch (event) {
@@ -110,7 +101,6 @@ class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
     sendOutput('stderr', utf8.decode(data));
   }
 
-  /// Handles stdout from the `flutter test --machine` process, decoding the JSON and calling the appropriate handlers.
   @override
   void handleStdout(String data) {
     // Output to stdout from `flutter test --machine` is either:
@@ -151,7 +141,6 @@ class FlutterTestDebugAdapter extends FlutterBaseDebugAdapter with TestAdapter {
     }
   }
 
-  /// Handles the test.processStarted event from Flutter that provides the VM Service URL.
   void _handleTestStartedProcess(Map<String, Object?> params) {
     final String? vmServiceUriString = params['vmServiceUri'] as String?;
     // For no-debug mode, this event may be still sent so ignore it if we know

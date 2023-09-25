@@ -9,19 +9,7 @@ import 'inherited_theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// The selection style to apply to descendant [EditableText] widgets which
-/// don't have an explicit style.
-///
-/// {@macro flutter.cupertino.CupertinoApp.defaultSelectionStyle}
-///
-/// {@macro flutter.material.MaterialApp.defaultSelectionStyle}
-///
-/// See also:
-///  * [TextSelectionTheme]: which also creates a [DefaultSelectionStyle] for
-///    the subtree.
 class DefaultSelectionStyle extends InheritedTheme {
-  /// Creates a default selection style widget that specifies the selection
-  /// properties for all widgets below it in the widget tree.
   const DefaultSelectionStyle({
     super.key,
     this.cursorColor,
@@ -30,25 +18,12 @@ class DefaultSelectionStyle extends InheritedTheme {
     required super.child,
   });
 
-  /// A const-constructable default selection style that provides fallback
-  /// values (null).
-  ///
-  /// Returned from [of] when the given [BuildContext] doesn't have an enclosing
-  /// default selection style.
-  ///
-  /// This constructor creates a [DefaultTextStyle] with an invalid [child],
-  /// which means the constructed value cannot be incorporated into the tree.
   const DefaultSelectionStyle.fallback({ super.key })
     : cursorColor = null,
       selectionColor = null,
       mouseCursor = null,
       super(child: const _NullWidget());
 
-  /// Creates a default selection style that overrides the selection styles in
-  /// scope at this point in the widget tree.
-  ///
-  /// Any Arguments that are not null replace the corresponding properties on the
-  /// default selection style for the [BuildContext] where the widget is inserted.
   static Widget merge({
     Key? key,
     Color? cursorColor,
@@ -70,36 +45,14 @@ class DefaultSelectionStyle extends InheritedTheme {
     );
   }
 
-  /// The default cursor and selection color (semi-transparent grey).
-  ///
-  /// This is the color that the [Text] widget uses when the specified selection
-  /// color is null.
   static const Color defaultColor = Color(0x80808080);
 
-  /// The color of the text field's cursor.
-  ///
-  /// The cursor indicates the current location of the text insertion point in
-  /// the field.
   final Color? cursorColor;
 
-  /// The background color of selected text.
   final Color? selectionColor;
 
-  /// The [MouseCursor] for mouse pointers hovering over selectable Text widgets.
-  ///
-  /// If this property is null, [SystemMouseCursors.text] will be used.
   final MouseCursor? mouseCursor;
 
-  /// The closest instance of this class that encloses the given context.
-  ///
-  /// If no such instance exists, returns an instance created by
-  /// [DefaultSelectionStyle.fallback], which contains fallback values.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// DefaultSelectionStyle style = DefaultSelectionStyle.of(context);
-  /// ```
   static DefaultSelectionStyle of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<DefaultSelectionStyle>() ?? const DefaultSelectionStyle.fallback();
   }

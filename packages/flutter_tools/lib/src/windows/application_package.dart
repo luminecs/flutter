@@ -15,16 +15,12 @@ import '../globals.dart' as globals;
 abstract class WindowsApp extends ApplicationPackage {
   WindowsApp({required String projectBundleId}) : super(id: projectBundleId);
 
-  /// Creates a new [WindowsApp] from a windows sub project.
   factory WindowsApp.fromWindowsProject(WindowsProject project) {
     return BuildableWindowsApp(
       project: project,
     );
   }
 
-  /// Creates a new [WindowsApp] from an existing executable or a zip archive.
-  ///
-  /// `applicationBinary` is the path to the executable or the zipped archive.
   static WindowsApp? fromPrebuiltApp(FileSystemEntity applicationBinary) {
     if (!applicationBinary.existsSync()) {
       globals.printError('File "${applicationBinary.path}" does not exist.');

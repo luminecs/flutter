@@ -86,7 +86,6 @@ Widget builds: $_widgetBuilds''';
 
   static const int calibrationTickCount = 600;
 
-  /// Measures Flutter's frame rate.
   Future<void> _calibrate() async {
     debugPrint('Awaiting calm (3 second pause)...');
     await Future<void>.delayed(const Duration(milliseconds: 3000));

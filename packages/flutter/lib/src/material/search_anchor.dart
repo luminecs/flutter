@@ -36,79 +36,13 @@ const Curve _kViewIconsFadeOnInterval = Interval(1/6, 2/6);
 const Curve _kViewDividerFadeOnInterval = Interval(0.0, 1/6);
 const Curve _kViewListFadeOnInterval = Interval(133 / _kOpenViewMilliseconds, 233 / _kOpenViewMilliseconds);
 
-/// Signature for a function that creates a [Widget] which is used to open a search view.
-///
-/// The `controller` callback provided to [SearchAnchor.builder] can be used
-/// to open the search view and control the editable field on the view.
 typedef SearchAnchorChildBuilder = Widget Function(BuildContext context, SearchController controller);
 
-/// Signature for a function that creates a [Widget] to build the suggestion list
-/// based on the input in the search bar.
-///
-/// The `controller` callback provided to [SearchAnchor.suggestionsBuilder] can be used
-/// to close the search view and control the editable field on the view.
 typedef SuggestionsBuilder = FutureOr<Iterable<Widget>> Function(BuildContext context, SearchController controller);
 
-/// Signature for a function that creates a [Widget] to layout the suggestion list.
-///
-/// Parameter `suggestions` is the content list that this function wants to lay out.
 typedef ViewBuilder = Widget Function(Iterable<Widget> suggestions);
 
-/// Manages a "search view" route that allows the user to select one of the
-/// suggested completions for a search query.
-///
-/// The search view's route can either be shown by creating a [SearchController]
-/// and then calling [SearchController.openView] or by tapping on an anchor.
-/// When the anchor is tapped or [SearchController.openView] is called, the search view either
-/// grows to a specific size, or grows to fill the entire screen. By default,
-/// the search view only shows full screen on mobile platforms. Use [SearchAnchor.isFullScreen]
-/// to override the default setting.
-///
-/// The search view is usually opened by a [SearchBar], an [IconButton] or an [Icon].
-/// If [builder] returns an Icon, or any un-tappable widgets, we don't have
-/// to explicitly call [SearchController.openView].
-///
-/// The search view route will be popped if the window size is changed and the
-/// search view route is not in full-screen mode. However, if the search view route
-/// is in full-screen mode, changing the window size, such as rotating a mobile
-/// device from portrait mode to landscape mode, will not close the search view.
-///
-/// {@tool dartpad}
-/// This example shows how to use an IconButton to open a search view in a [SearchAnchor].
-/// It also shows how to use [SearchController] to open or close the search view route.
-///
-/// ** See code in examples/api/lib/material/search_anchor/search_anchor.2.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows how to set up a floating (or pinned) AppBar with a
-/// [SearchAnchor] for a title.
-///
-/// ** See code in examples/api/lib/material/search_anchor/search_anchor.1.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example shows how to fetch the search suggestions from a remote API.
-///
-/// ** See code in examples/api/lib/material/search_anchor/search_anchor.3.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// This example demonstrates fetching the search suggestions asynchronously and
-/// debouncing network calls.
-///
-/// ** See code in examples/api/lib/material/search_anchor/search_anchor.4.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-/// * [SearchBar], a widget that defines a search bar.
-/// * [SearchBarTheme], a widget that overrides the default configuration of a search bar.
-/// * [SearchViewTheme], a widget that overrides the default configuration of a search view.
 class SearchAnchor extends StatefulWidget {
-  /// Creates a const [SearchAnchor].
-  ///
-  /// The [builder] and [suggestionsBuilder] arguments are required.
   const SearchAnchor({
     super.key,
     this.isFullScreen,
@@ -131,17 +65,6 @@ class SearchAnchor extends StatefulWidget {
     required this.suggestionsBuilder,
   });
 
-  /// Create a [SearchAnchor] that has a [SearchBar] which opens a search view.
-  ///
-  /// All the barX parameters are used to customize the anchor. Similarly, all the
-  /// viewX parameters are used to override the view's defaults.
-  ///
-  /// {@tool dartpad}
-  /// This example shows how to use a [SearchAnchor.bar] which uses a default search
-  /// bar to open a search view route.
-  ///
-  /// ** See code in examples/api/lib/material/search_anchor/search_anchor.0.dart **
-  /// {@end-tool}
   factory SearchAnchor.bar({
     Widget? barLeading,
     Iterable<Widget>? barTrailing,
@@ -173,132 +96,40 @@ class SearchAnchor extends StatefulWidget {
     required SuggestionsBuilder suggestionsBuilder
   }) = _SearchAnchorWithSearchBar;
 
-  /// Whether the search view grows to fill the entire screen when the
-  /// [SearchAnchor] is tapped.
-  ///
-  /// By default, the search view is full-screen on mobile devices. On other
-  /// platforms, the search view only grows to a specific size that is determined
-  /// by the anchor and the default size.
   final bool? isFullScreen;
 
-  /// An optional controller that allows opening and closing of the search view from
-  /// other widgets.
-  ///
-  /// If this is null, one internal search controller is created automatically
-  /// and it is used to open the search view when the user taps on the anchor.
   final SearchController? searchController;
 
-  /// Optional callback to obtain a widget to lay out the suggestion list of the
-  /// search view.
-  ///
-  /// Default view uses a [ListView] with a vertical scroll direction.
   final ViewBuilder? viewBuilder;
 
-  /// An optional widget to display before the text input field when the search
-  /// view is open.
-  ///
-  /// Typically the [viewLeading] widget is an [Icon] or an [IconButton].
-  ///
-  /// Defaults to a back button which pops the view.
   final Widget? viewLeading;
 
-  /// An optional widget list to display after the text input field when the search
-  /// view is open.
-  ///
-  /// Typically the [viewTrailing] widget list only has one or two widgets.
-  ///
-  /// Defaults to an icon button which clears the text in the input field.
   final Iterable<Widget>? viewTrailing;
 
-  /// Text that is displayed when the search bar's input field is empty.
   final String? viewHintText;
 
-  /// The search view's background fill color.
-  ///
-  /// If null, the value of [SearchViewThemeData.backgroundColor] will be used.
-  /// If this is also null, then the default value is [ColorScheme.surface].
   final Color? viewBackgroundColor;
 
-  /// The elevation of the search view's [Material].
-  ///
-  /// If null, the value of [SearchViewThemeData.elevation] will be used. If this
-  /// is also null, then default value is 6.0.
   final double? viewElevation;
 
-  /// The surface tint color of the search view's [Material].
-  ///
-  /// See [Material.surfaceTintColor] for more details.
-  ///
-  /// If null, the value of [SearchViewThemeData.surfaceTintColor] will be used.
-  /// If this is also null, then the default value is [ColorScheme.surfaceTint].
   final Color? viewSurfaceTintColor;
 
-  /// The color and weight of the search view's outline.
-  ///
-  /// This value is combined with [viewShape] to create a shape decorated
-  /// with an outline. This will be ignored if the view is full-screen.
-  ///
-  /// If null, the value of [SearchViewThemeData.side] will be used. If this is
-  /// also null, the search view doesn't have a side by default.
   final BorderSide? viewSide;
 
-  /// The shape of the search view's underlying [Material].
-  ///
-  /// This shape is combined with [viewSide] to create a shape decorated
-  /// with an outline.
-  ///
-  /// If null, the value of [SearchViewThemeData.shape] will be used.
-  /// If this is also null, then the default value is a rectangle shape for full-screen
-  /// mode and a [RoundedRectangleBorder] shape with a 28.0 radius otherwise.
   final OutlinedBorder? viewShape;
 
-  /// The style to use for the text being edited on the search view.
-  ///
-  /// If null, defaults to the `bodyLarge` text style from the current [Theme].
-  /// The default text color is [ColorScheme.onSurface].
   final TextStyle? headerTextStyle;
 
-  /// The style to use for the [viewHintText] on the search view.
-  ///
-  /// If null, the value of [SearchViewThemeData.headerHintStyle] will be used.
-  /// If this is also null, the value of [headerTextStyle] will be used. If this is also null,
-  /// defaults to the `bodyLarge` text style from the current [Theme]. The default
-  /// text color is [ColorScheme.onSurfaceVariant].
   final TextStyle? headerHintStyle;
 
-  /// The color of the divider on the search view.
-  ///
-  /// If this property is null, then [SearchViewThemeData.dividerColor] is used.
-  /// If that is also null, the default value is [ColorScheme.outline].
   final Color? dividerColor;
 
-  /// Optional size constraints for the search view.
-  ///
-  /// By default, the search view has the same width as the anchor and is 2/3
-  /// the height of the screen. If the width and height of the view are within
-  /// the [viewConstraints], the view will show its default size. Otherwise,
-  /// the size of the view will be constrained by this property.
-  ///
-  /// If null, the value of [SearchViewThemeData.constraints] will be used. If
-  /// this is also null, then the constraints defaults to:
-  /// ```dart
-  /// const BoxConstraints(minWidth: 360.0, minHeight: 240.0)
-  /// ```
   final BoxConstraints? viewConstraints;
 
-  /// {@macro flutter.widgets.editableText.textCapitalization}
   final TextCapitalization? textCapitalization;
 
-  /// Called to create a widget which can open a search view route when it is tapped.
-  ///
-  /// The widget returned by this builder is faded out when it is tapped.
-  /// At the same time a search view route is faded in.
   final SearchAnchorChildBuilder builder;
 
-  /// Called to get the suggestion list for the search view.
-  ///
-  /// By default, the list returned by this builder is laid out in a [ListView].
-  /// To get a different layout, use [viewBuilder] to override.
   final SuggestionsBuilder suggestionsBuilder;
 
   @override
@@ -926,16 +757,6 @@ class _SearchAnchorWithSearchBar extends SearchAnchor {
   );
 }
 
-/// A controller to manage a search view created by [SearchAnchor].
-///
-/// A [SearchController] is used to control a menu after it has been created,
-/// with methods such as [openView] and [closeView]. It can also control the text in the
-/// input field.
-///
-/// See also:
-///
-/// * [SearchAnchor], a widget that defines a region that opens a search view.
-/// * [TextEditingController], A controller for an editable text field.
 class SearchController extends TextEditingController {
   // The anchor that this controller controls.
   //
@@ -943,22 +764,16 @@ class SearchController extends TextEditingController {
   // it controls.
   _SearchAnchorState? _anchor;
 
-  /// Whether or not the associated search view is currently open.
   bool get isOpen {
     assert(_anchor != null);
     return _anchor!._viewIsOpen;
   }
 
-  /// Opens the search view that this controller is associated with.
   void openView() {
     assert(_anchor != null);
     _anchor!._openView();
   }
 
-  /// Close the search view that this search controller is associated with.
-  ///
-  /// If `selectedText` is given, then the text value of the controller is set to
-  /// `selectedText`.
   void closeView(String? selectedText) {
     assert(_anchor != null);
     _anchor!._closeView(selectedText);
@@ -976,41 +791,7 @@ class SearchController extends TextEditingController {
   }
 }
 
-/// A Material Design search bar.
-///
-/// A [SearchBar] looks like a [TextField]. Tapping a SearchBar typically shows a
-/// "search view" route: a route with the search bar at the top and a list of
-/// suggested completions for the search bar's text below. [SearchBar]s are
-/// usually created by a [SearchAnchor.builder]. The builder provides a
-/// [SearchController] that's used by the search bar's [SearchBar.onTap] or
-/// [SearchBar.onChanged] callbacks to show the search view and to hide it
-/// when the user selects a suggestion.
-///
-/// For [TextDirection.ltr], the [leading] widget is on the left side of the bar.
-/// It should contain either a navigational action (such as a menu or up-arrow)
-/// or a non-functional search icon.
-///
-/// The [trailing] is an optional list that appears at the other end of
-/// the search bar. Typically only one or two action icons are included.
-/// These actions can represent additional modes of searching (like voice search),
-/// a separate high-level action (such as current location) or an overflow menu.
-///
-/// {@tool dartpad}
-/// This example demonstrates how to use a [SearchBar] as the return value of the
-/// [SearchAnchor.builder] property. The [SearchBar] also includes a leading search
-/// icon and a trailing action to toggle the brightness.
-///
-/// ** See code in examples/api/lib/material/search_anchor/search_bar.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-/// * [SearchAnchor], a widget that typically uses an [IconButton] or a [SearchBar]
-/// to manage a "search view" route.
-/// * [SearchBarTheme], a widget that overrides the default configuration of a search bar.
-/// * [SearchViewTheme], a widget that overrides the default configuration of a search view.
 class SearchBar extends StatefulWidget {
-  /// Creates a Material Design search bar.
   const SearchBar({
     super.key,
     this.controller,
@@ -1035,123 +816,44 @@ class SearchBar extends StatefulWidget {
     this.textCapitalization,
   });
 
-  /// Controls the text being edited in the search bar's text field.
-  ///
-  /// If null, this widget will create its own [TextEditingController].
   final TextEditingController? controller;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// Text that suggests what sort of input the field accepts.
-  ///
-  /// Displayed at the same location on the screen where text may be entered
-  /// when the input is empty.
-  ///
-  /// Defaults to null.
   final String? hintText;
 
-  /// A widget to display before the text input field.
-  ///
-  /// Typically the [leading] widget is an [Icon] or an [IconButton].
   final Widget? leading;
 
-  /// A list of Widgets to display in a row after the text field.
-  ///
-  /// Typically these actions can represent additional modes of searching
-  /// (like voice search), an avatar, a separate high-level action (such as
-  /// current location) or an overflow menu. There should not be more than
-  /// two trailing actions.
   final Iterable<Widget>? trailing;
 
-  /// Called when the user taps this search bar.
   final GestureTapCallback? onTap;
 
-  /// Invoked upon user input.
   final ValueChanged<String>? onChanged;
 
-  /// Called when the user indicates that they are done editing the text in the
-  /// field.
   final ValueChanged<String>? onSubmitted;
 
-  /// Optional size constraints for the search bar.
-  ///
-  /// If null, the value of [SearchBarThemeData.constraints] will be used. If
-  /// this is also null, then the constraints defaults to:
-  /// ```dart
-  /// const BoxConstraints(minWidth: 360.0, maxWidth: 800.0, minHeight: 56.0)
-  /// ```
   final BoxConstraints? constraints;
 
-  /// The elevation of the search bar's [Material].
-  ///
-  /// If null, the value of [SearchBarThemeData.elevation] will be used. If this
-  /// is also null, then default value is 6.0.
   final MaterialStateProperty<double?>? elevation;
 
-  /// The search bar's background fill color.
-  ///
-  /// If null, the value of [SearchBarThemeData.backgroundColor] will be used.
-  /// If this is also null, then the default value is [ColorScheme.surface].
   final MaterialStateProperty<Color?>? backgroundColor;
 
-  /// The shadow color of the search bar's [Material].
-  ///
-  /// If null, the value of [SearchBarThemeData.shadowColor] will be used.
-  /// If this is also null, then the default value is [ColorScheme.shadow].
   final MaterialStateProperty<Color?>? shadowColor;
 
-  /// The surface tint color of the search bar's [Material].
-  ///
-  /// See [Material.surfaceTintColor] for more details.
-  ///
-  /// If null, the value of [SearchBarThemeData.surfaceTintColor] will be used.
-  /// If this is also null, then the default value is [ColorScheme.surfaceTint].
   final MaterialStateProperty<Color?>? surfaceTintColor;
 
-  /// The highlight color that's typically used to indicate that
-  /// the search bar is focused, hovered, or pressed.
   final MaterialStateProperty<Color?>? overlayColor;
 
-  /// The color and weight of the search bar's outline.
-  ///
-  /// This value is combined with [shape] to create a shape decorated
-  /// with an outline.
-  ///
-  /// If null, the value of [SearchBarThemeData.side] will be used. If this is
-  /// also null, the search bar doesn't have a side by default.
   final MaterialStateProperty<BorderSide?>? side;
 
-  /// The shape of the search bar's underlying [Material].
-  ///
-  /// This shape is combined with [side] to create a shape decorated
-  /// with an outline.
-  ///
-  /// If null, the value of [SearchBarThemeData.shape] will be used.
-  /// If this is also null, defaults to [StadiumBorder].
   final MaterialStateProperty<OutlinedBorder?>? shape;
 
-  /// The padding between the search bar's boundary and its contents.
-  ///
-  /// If null, the value of [SearchBarThemeData.padding] will be used.
-  /// If this is also null, then the default value is 16.0 horizontally.
   final MaterialStateProperty<EdgeInsetsGeometry?>? padding;
 
-  /// The style to use for the text being edited.
-  ///
-  /// If null, defaults to the `bodyLarge` text style from the current [Theme].
-  /// The default text color is [ColorScheme.onSurface].
   final MaterialStateProperty<TextStyle?>? textStyle;
 
-  /// The style to use for the [hintText].
-  ///
-  /// If null, the value of [SearchBarThemeData.hintStyle] will be used. If this
-  /// is also null, the value of [textStyle] will be used. If this is also null,
-  /// defaults to the `bodyLarge` text style from the current [Theme].
-  /// The default text color is [ColorScheme.onSurfaceVariant].
   final MaterialStateProperty<TextStyle?>? hintStyle;
 
-  /// {@macro flutter.widgets.editableText.textCapitalization}
   final TextCapitalization? textCapitalization;
 
   @override

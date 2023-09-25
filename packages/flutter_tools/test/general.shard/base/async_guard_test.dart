@@ -16,7 +16,6 @@ Future<void> asyncError() {
   return completer.future;
 }
 
-/// Specialized exception to be caught.
 class _CustomException implements Exception {
   _CustomException(this.message);
 

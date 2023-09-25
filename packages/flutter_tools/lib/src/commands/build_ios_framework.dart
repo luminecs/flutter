@@ -171,10 +171,6 @@ abstract class BuildFrameworkCommand extends BuildSubCommand {
   }
 }
 
-/// Produces a .framework for integration into a host iOS app. The .framework
-/// contains the Flutter engine and framework code as well as plugins. It can
-/// be integrated into plain Xcode projects without using or other package
-/// managers.
 class BuildIOSFrameworkCommand extends BuildFrameworkCommand {
   BuildIOSFrameworkCommand({
     required super.logger,
@@ -331,8 +327,6 @@ class BuildIOSFrameworkCommand extends BuildFrameworkCommand {
     return FlutterCommandResult.success();
   }
 
-  /// Create podspec that will download and unzip remote engine assets so host apps can leverage CocoaPods
-  /// vendored framework caching.
   @visibleForTesting
   void produceFlutterPodspec(BuildMode mode, Directory modeDirectory, { bool force = false }) {
     final Status status = globals.logger.startProgress(' ├─Creating Flutter.podspec...');

@@ -15,27 +15,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines default property values for descendant [SearchBar] widgets.
-///
-/// Descendant widgets obtain the current [SearchBarThemeData] object using
-/// `SearchBarTheme.of(context)`. Instances of [SearchBarThemeData] can be customized
-/// with [SearchBarThemeData.copyWith].
-///
-/// Typically a [SearchBarThemeData] is specified as part of the overall [Theme]
-/// with [ThemeData.searchBarTheme].
-///
-/// All [SearchBarThemeData] properties are `null` by default. When null, the
-/// [SearchBar] will use the values from [ThemeData] if they exist, otherwise it
-/// will provide its own defaults based on the overall [Theme]'s colorScheme.
-/// See the individual [SearchBar] properties for details.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class SearchBarThemeData with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.searchBarTheme].
   const SearchBarThemeData({
     this.elevation,
     this.backgroundColor,
@@ -51,44 +32,30 @@ class SearchBarThemeData with Diagnosticable {
     this.textCapitalization,
   });
 
-  /// Overrides the default value of the [SearchBar.elevation].
   final MaterialStateProperty<double?>? elevation;
 
-  /// Overrides the default value of the [SearchBar.backgroundColor].
   final MaterialStateProperty<Color?>? backgroundColor;
 
-  /// Overrides the default value of the [SearchBar.shadowColor].
   final MaterialStateProperty<Color?>? shadowColor;
 
-  /// Overrides the default value of the [SearchBar.surfaceTintColor].
   final MaterialStateProperty<Color?>? surfaceTintColor;
 
-  /// Overrides the default value of the [SearchBar.overlayColor].
   final MaterialStateProperty<Color?>? overlayColor;
 
-  /// Overrides the default value of the [SearchBar.side].
   final MaterialStateProperty<BorderSide?>? side;
 
-  /// Overrides the default value of the [SearchBar.shape].
   final MaterialStateProperty<OutlinedBorder?>? shape;
 
-  /// Overrides the default value for [SearchBar.padding].
   final MaterialStateProperty<EdgeInsetsGeometry?>? padding;
 
-  /// Overrides the default value for [SearchBar.textStyle].
   final MaterialStateProperty<TextStyle?>? textStyle;
 
-  /// Overrides the default value for [SearchBar.hintStyle].
   final MaterialStateProperty<TextStyle?>? hintStyle;
 
-  /// Overrides the value of size constraints for [SearchBar].
   final BoxConstraints? constraints;
 
-  /// Overrides the value of [SearchBar.textCapitalization].
   final TextCapitalization? textCapitalization;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   SearchBarThemeData copyWith({
     MaterialStateProperty<double?>? elevation,
     MaterialStateProperty<Color?>? backgroundColor,
@@ -119,9 +86,6 @@ class SearchBarThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two [SearchBarThemeData]s.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static SearchBarThemeData? lerp(SearchBarThemeData? a, SearchBarThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -231,38 +195,15 @@ class _LerpSides implements MaterialStateProperty<BorderSide?> {
   }
 }
 
-/// Applies a search bar theme to descendant [SearchBar] widgets.
-///
-/// Descendant widgets obtain the current theme's [SearchBarTheme] object using
-/// [SearchBarTheme.of]. When a widget uses [SearchBarTheme.of], it is automatically
-/// rebuilt if the theme later changes.
-///
-/// A search bar theme can be specified as part of the overall Material theme using
-/// [ThemeData.searchBarTheme].
-///
-/// See also:
-///
-///  * [SearchBarThemeData], which describes the actual configuration of a search bar
-///    theme.
 class SearchBarTheme extends InheritedWidget {
-  /// Constructs a search bar theme that configures all descendant [SearchBar] widgets.
   const SearchBarTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties used for all descendant [SearchBar] widgets.
   final SearchBarThemeData data;
 
-  /// Returns the configuration [data] from the closest [SearchBarTheme] ancestor.
-  /// If there is no ancestor, it returns [ThemeData.searchBarTheme].
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// SearchBarThemeData theme = SearchBarTheme.of(context);
-  /// ```
   static SearchBarThemeData of(BuildContext context) {
     final SearchBarTheme? searchBarTheme = context.dependOnInheritedWidgetOfExactType<SearchBarTheme>();
     return searchBarTheme?.data ?? Theme.of(context).searchBarTheme;

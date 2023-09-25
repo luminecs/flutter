@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [FocusNode.unfocus].
 
 void main() => runApp(const UnfocusExampleApp());
 

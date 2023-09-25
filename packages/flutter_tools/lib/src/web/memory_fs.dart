@@ -8,11 +8,6 @@ import '../base/file_system.dart';
 import '../base/utils.dart';
 import '../convert.dart';
 
-/// A pseudo-filesystem stored in memory.
-///
-/// To support output to arbitrary multi-root file schemes, the frontend server
-/// will output web sources, sourcemaps, and metadata to concatenated single files
-/// with an additional manifest file containing the correct offsets.
 class WebMemoryFS {
   final Map<String, Uint8List> metadataFiles = <String, Uint8List>{};
   final Map<String, Uint8List> files = <String, Uint8List>{};
@@ -21,9 +16,6 @@ class WebMemoryFS {
   String? get mergedMetadata => _mergedMetadata;
   String? _mergedMetadata;
 
-  /// Update the filesystem with the provided source and manifest files.
-  ///
-  /// Returns the list of updated files.
   List<String> write(
     File codeFile,
     File manifestFile,

@@ -14,27 +14,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines default property values for descendant [BottomNavigationBar]
-/// widgets.
-///
-/// Descendant widgets obtain the current [BottomNavigationBarThemeData] object
-/// using `BottomNavigationBarTheme.of(context)`. Instances of
-/// [BottomNavigationBarThemeData] can be customized with
-/// [BottomNavigationBarThemeData.copyWith].
-///
-/// Typically a [BottomNavigationBarThemeData] is specified as part of the
-/// overall [Theme] with [ThemeData.bottomNavigationBarTheme].
-///
-/// All [BottomNavigationBarThemeData] properties are `null` by default. When
-/// null, the [BottomNavigationBar]'s build method provides defaults.
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class BottomNavigationBarThemeData with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.bottomNavigationBarTheme].
   const BottomNavigationBarThemeData({
     this.backgroundColor,
     this.elevation,
@@ -52,88 +33,34 @@ class BottomNavigationBarThemeData with Diagnosticable {
     this.mouseCursor,
   });
 
-  /// The color of the [BottomNavigationBar] itself.
-  ///
-  /// See [BottomNavigationBar.backgroundColor].
   final Color? backgroundColor;
 
-  /// The z-coordinate of the [BottomNavigationBar].
-  ///
-  /// See [BottomNavigationBar.elevation].
   final double? elevation;
 
-  /// The size, opacity, and color of the icon in the currently selected
-  /// [BottomNavigationBarItem.icon].
-  ///
-  /// If [BottomNavigationBar.selectedIconTheme] is non-null on the widget,
-  /// the whole [IconThemeData] from the widget will be used over this
-  /// [selectedIconTheme].
-  ///
-  /// See [BottomNavigationBar.selectedIconTheme].
   final IconThemeData? selectedIconTheme;
 
-  /// The size, opacity, and color of the icon in the currently unselected
-  /// [BottomNavigationBarItem.icon]s.
-  ///
-  /// If [BottomNavigationBar.unselectedIconTheme] is non-null on the widget,
-  /// the whole [IconThemeData] from the widget will be used over this
-  /// [unselectedIconTheme].
-  ///
-  /// See [BottomNavigationBar.unselectedIconTheme].
   final IconThemeData? unselectedIconTheme;
 
-  /// The color of the selected [BottomNavigationBarItem.icon] and
-  /// [BottomNavigationBarItem.label].
-  ///
-  /// See [BottomNavigationBar.selectedItemColor].
   final Color? selectedItemColor;
 
-  /// The color of the unselected [BottomNavigationBarItem.icon] and
-  /// [BottomNavigationBarItem.label]s.
-  ///
-  /// See [BottomNavigationBar.unselectedItemColor].
   final Color? unselectedItemColor;
 
-  /// The [TextStyle] of the [BottomNavigationBarItem] labels when they are
-  /// selected.
-  ///
-  /// See [BottomNavigationBar.selectedLabelStyle].
   final TextStyle? selectedLabelStyle;
 
-  /// The [TextStyle] of the [BottomNavigationBarItem] labels when they are not
-  /// selected.
-  ///
-  /// See [BottomNavigationBar.unselectedLabelStyle].
   final TextStyle? unselectedLabelStyle;
 
-  /// Whether the labels are shown for the selected [BottomNavigationBarItem].
-  ///
-  /// See [BottomNavigationBar.showSelectedLabels].
   final bool? showSelectedLabels;
 
-  /// Whether the labels are shown for the unselected [BottomNavigationBarItem]s.
-  ///
-  /// See [BottomNavigationBar.showUnselectedLabels].
   final bool? showUnselectedLabels;
 
-  /// Defines the layout and behavior of a [BottomNavigationBar].
-  ///
-  /// See [BottomNavigationBar.type].
   final BottomNavigationBarType? type;
 
-  /// If specified, defines the feedback property for [BottomNavigationBar].
-  ///
-  /// If [BottomNavigationBar.enableFeedback] is provided, [enableFeedback] is ignored.
   final bool? enableFeedback;
 
-  /// If non-null, overrides the [BottomNavigationBar.landscapeLayout] property.
   final BottomNavigationBarLandscapeLayout? landscapeLayout;
 
-  /// If specified, overrides the default value of [BottomNavigationBar.mouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 
-  /// Creates a copy of this object but with the given fields replaced with the
-  /// new values.
   BottomNavigationBarThemeData copyWith({
     Color? backgroundColor,
     double? elevation,
@@ -168,9 +95,6 @@ class BottomNavigationBarThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two [BottomNavigationBarThemeData].
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static BottomNavigationBarThemeData lerp(BottomNavigationBarThemeData? a, BottomNavigationBarThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
@@ -256,43 +180,15 @@ class BottomNavigationBarThemeData with Diagnosticable {
   }
 }
 
-/// Applies a bottom navigation bar theme to descendant [BottomNavigationBar]
-/// widgets.
-///
-/// Descendant widgets obtain the current theme's [BottomNavigationBarTheme]
-/// object using [BottomNavigationBarTheme.of]. When a widget uses
-/// [BottomNavigationBarTheme.of], it is automatically rebuilt if the theme
-/// later changes.
-///
-/// A bottom navigation theme can be specified as part of the overall Material
-/// theme using [ThemeData.bottomNavigationBarTheme].
-///
-/// See also:
-///
-///  * [BottomNavigationBarThemeData], which describes the actual configuration
-///    of a bottom navigation bar theme.
 class BottomNavigationBarTheme extends InheritedWidget {
-  /// Constructs a bottom navigation bar theme that configures all descendant
-  /// [BottomNavigationBar] widgets.
   const BottomNavigationBarTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties used for all descendant [BottomNavigationBar] widgets.
   final BottomNavigationBarThemeData data;
 
-  /// Returns the configuration [data] from the closest
-  /// [BottomNavigationBarTheme] ancestor. If there is no ancestor, it returns
-  /// [ThemeData.bottomNavigationBarTheme]. Applications can assume that the
-  /// returned value will not be null.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// BottomNavigationBarThemeData theme = BottomNavigationBarTheme.of(context);
-  /// ```
   static BottomNavigationBarThemeData of(BuildContext context) {
     final BottomNavigationBarTheme? bottomNavTheme = context.dependOnInheritedWidgetOfExactType<BottomNavigationBarTheme>();
     return bottomNavTheme?.data ?? Theme.of(context).bottomNavigationBarTheme;

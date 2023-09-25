@@ -20,7 +20,6 @@ List<Color> _kColors = <Color>[
   Colors.lime,
 ];
 
-/// A simple model object for a dot that reacts to pointer pressure.
 class Dot {
   Dot({ required Color color }) : _paint = Paint()..color = color;
 
@@ -38,32 +37,22 @@ class Dot {
   }
 }
 
-/// A render object that draws dots under each pointer.
 class RenderDots extends RenderBox {
   RenderDots();
 
-  /// State to remember which dots to paint.
   final Map<int, Dot> _dots = <int, Dot>{};
 
-  /// Indicates that the size of this render object depends only on the
-  /// layout constraints provided by the parent.
   @override
   bool get sizedByParent => true;
 
-  /// By selecting the biggest value permitted by the incoming constraints
-  /// during layout, this function makes this render object as large as
-  /// possible (i.e., fills the entire screen).
   @override
   void performResize() {
     size = constraints.biggest;
   }
 
-  /// Makes this render object hittable so that it receives pointer events.
   @override
   bool hitTestSelf(Offset position) => true;
 
-  /// Processes pointer events by mutating state and invalidating its previous
-  /// painting commands.
   @override
   void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
     if (event is PointerDownEvent) {
@@ -83,7 +72,6 @@ class RenderDots extends RenderBox {
     }
   }
 
-  /// Issues new painting commands.
   @override
   void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;

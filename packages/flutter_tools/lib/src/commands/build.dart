@@ -104,10 +104,6 @@ abstract class BuildSubCommand extends FlutterCommand {
 
   bool get supported => true;
 
-  /// Display a message describing the current null safety runtime mode
-  /// that was selected.
-  ///
-  /// This is similar to the run message in run_hot.dart
   @protected
   void displayNullSafetyMode(BuildInfo buildInfo) {
     if (buildInfo.nullSafetyMode != NullSafetyMode.sound) {

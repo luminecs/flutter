@@ -13,18 +13,7 @@ import 'basic.dart';
 import 'framework.dart';
 import 'scroll_delegate.dart';
 
-/// A base class for slivers that have [KeepAlive] children.
-///
-/// See also:
-///
-/// * [KeepAlive], which marks whether its child widget should be kept alive.
-/// * [SliverChildBuilderDelegate] and [SliverChildListDelegate], slivers
-///    which make use of the keep alive functionality through the
-///    `addAutomaticKeepAlives` property.
-/// * [SliverGrid] and [SliverList], two sliver widgets that are commonly
-///    wrapped with [KeepAlive] widgets to preserve their sliver child subtrees.
 abstract class SliverWithKeepAliveWidget extends RenderObjectWidget {
-  /// Initializes fields for subclasses.
   const SliverWithKeepAliveWidget({
     super.key,
   });
@@ -33,41 +22,12 @@ abstract class SliverWithKeepAliveWidget extends RenderObjectWidget {
   RenderSliverWithKeepAliveMixin createRenderObject(BuildContext context);
 }
 
-/// A base class for slivers that have multiple box children.
-///
-/// Helps subclasses build their children lazily using a [SliverChildDelegate].
-///
-/// The widgets returned by the [delegate] are cached and the delegate is only
-/// consulted again if it changes and the new delegate's
-/// [SliverChildDelegate.shouldRebuild] method returns true.
 abstract class SliverMultiBoxAdaptorWidget extends SliverWithKeepAliveWidget {
-  /// Initializes fields for subclasses.
   const SliverMultiBoxAdaptorWidget({
     super.key,
     required this.delegate,
   });
 
-  /// {@template flutter.widgets.SliverMultiBoxAdaptorWidget.delegate}
-  /// The delegate that provides the children for this widget.
-  ///
-  /// The children are constructed lazily using this delegate to avoid creating
-  /// more children than are visible through the [Viewport].
-  ///
-  /// ## Using more than one delegate in a [Viewport]
-  ///
-  /// If multiple delegates are used in a single scroll view, the first child of
-  /// each delegate will always be laid out, even if it extends beyond the
-  /// currently viewable area. This is because at least one child is required in
-  /// order to estimate the max scroll offset for the whole scroll view, as it
-  /// uses the currently built children to estimate the remaining children's
-  /// extent.
-  ///
-  /// See also:
-  ///
-  ///  * [SliverChildBuilderDelegate] and [SliverChildListDelegate], which are
-  ///    commonly used subclasses of [SliverChildDelegate] that use a builder
-  ///    callback and an explicit child list, respectively.
-  /// {@endtemplate}
   final SliverChildDelegate delegate;
 
   @override
@@ -76,16 +36,6 @@ abstract class SliverMultiBoxAdaptorWidget extends SliverWithKeepAliveWidget {
   @override
   RenderSliverMultiBoxAdaptor createRenderObject(BuildContext context);
 
-  /// Returns an estimate of the max scroll extent for all the children.
-  ///
-  /// Subclasses should override this function if they have additional
-  /// information about their max scroll extent.
-  ///
-  /// This is used by [SliverMultiBoxAdaptorElement] to implement part of the
-  /// [RenderSliverBoxChildManager] API.
-  ///
-  /// The default implementation defers to [delegate] via its
-  /// [SliverChildDelegate.estimateMaxScrollOffset] method.
   double? estimateMaxScrollOffset(
     SliverConstraints? constraints,
     int firstIndex,
@@ -109,89 +59,12 @@ abstract class SliverMultiBoxAdaptorWidget extends SliverWithKeepAliveWidget {
   }
 }
 
-/// A sliver that places multiple box children in a linear array along the main
-/// axis.
-///
-/// _To learn more about slivers, see [CustomScrollView.slivers]._
-///
-/// Each child is forced to have the [SliverConstraints.crossAxisExtent] in the
-/// cross axis but determines its own main axis extent.
-///
-/// [SliverList] determines its scroll offset by "dead reckoning" because
-/// children outside the visible part of the sliver are not materialized, which
-/// means [SliverList] cannot learn their main axis extent. Instead, newly
-/// materialized children are placed adjacent to existing children.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=ORiTTaVY6mM}
-///
-/// If the children have a fixed extent in the main axis, consider using
-/// [SliverFixedExtentList] rather than [SliverList] because
-/// [SliverFixedExtentList] does not need to perform layout on its children to
-/// obtain their extent in the main axis and is therefore more efficient.
-///
-/// {@macro flutter.widgets.SliverChildDelegate.lifecycle}
-///
-/// See also:
-///
-///  * <https://flutter.dev/docs/development/ui/advanced/slivers>, a description
-///    of what slivers are and how to use them.
-///  * [SliverFixedExtentList], which is more efficient for children with
-///    the same extent in the main axis.
-///  * [SliverPrototypeExtentList], which is similar to [SliverFixedExtentList]
-///    except that it uses a prototype list item instead of a pixel value to define
-///    the main axis extent of each item.
-///  * [SliverAnimatedList], which animates items added to or removed from a
-///    list.
-///  * [SliverGrid], which places multiple children in a two dimensional grid.
-///  * [SliverAnimatedGrid], a sliver which animates items when they are
-///    inserted into or removed from a grid.
 class SliverList extends SliverMultiBoxAdaptorWidget {
-  /// Creates a sliver that places box children in a linear array.
   const SliverList({
     super.key,
     required super.delegate,
   });
 
-  /// A sliver that places multiple box children in a linear array along the main
-  /// axis.
-  ///
-  /// This constructor is appropriate for sliver lists with a large (or
-  /// infinite) number of children because the builder is called only for those
-  /// children that are actually visible.
-  ///
-  /// Providing a non-null `itemCount` improves the ability of the [SliverGrid]
-  /// to estimate the maximum scroll extent.
-  ///
-  /// `itemBuilder` will be called only with indices greater than or equal to
-  /// zero and less than `itemCount`.
-  ///
-  /// {@macro flutter.widgets.ListView.builder.itemBuilder}
-  ///
-  /// {@macro flutter.widgets.PageView.findChildIndexCallback}
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property.
-  ///
-  /// {@tool snippet}
-  /// This example, which would be provided in [CustomScrollView.slivers],
-  /// shows an infinite number of items in varying shades of blue:
-  ///
-  /// ```dart
-  /// SliverList.builder(
-  ///   itemBuilder: (BuildContext context, int index) {
-  ///     return Container(
-  ///       alignment: Alignment.center,
-  ///       color: Colors.lightBlue[100 * (index % 9)],
-  ///       child: Text('list item $index'),
-  ///     );
-  ///   },
-  /// )
-  /// ```
-  /// {@end-tool}
   SliverList.builder({
     super.key,
     required NullableIndexedWidgetBuilder itemBuilder,
@@ -209,52 +82,6 @@ class SliverList extends SliverMultiBoxAdaptorWidget {
          addSemanticIndexes: addSemanticIndexes,
        ));
 
-  /// A sliver that places multiple box children, separated by box widgets, in a
-  /// linear array along the main axis.
-  ///
-  /// This constructor is appropriate for sliver lists with a large (or
-  /// infinite) number of children because the builder is called only for those
-  /// children that are actually visible.
-  ///
-  /// Providing a non-null `itemCount` improves the ability of the [SliverGrid]
-  /// to estimate the maximum scroll extent.
-  ///
-  /// `itemBuilder` will be called only with indices greater than or equal to
-  /// zero and less than `itemCount`.
-  ///
-  /// {@macro flutter.widgets.ListView.builder.itemBuilder}
-  ///
-  /// {@macro flutter.widgets.PageView.findChildIndexCallback}
-  ///
-  ///
-  /// The `separatorBuilder` is similar to `itemBuilder`, except it is the widget
-  /// that gets placed between itemBuilder(context, index) and itemBuilder(context, index + 1).
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property.
-  ///
-  /// {@tool snippet}
-  /// This example shows how to create a [SliverList] whose [Container] items
-  /// are separated by [Divider]s. The [SliverList] would be provided in
-  /// [CustomScrollView.slivers].
-  ///
-  /// ```dart
-  /// SliverList.separated(
-  ///   itemBuilder: (BuildContext context, int index) {
-  ///     return Container(
-  ///       alignment: Alignment.center,
-  ///       color: Colors.lightBlue[100 * (index % 9)],
-  ///       child: Text('list item $index'),
-  ///     );
-  ///   },
-  ///   separatorBuilder: (BuildContext context, int index) => const Divider(),
-  /// )
-  /// ```
-  /// {@end-tool}
   SliverList.separated({
     super.key,
     required NullableIndexedWidgetBuilder itemBuilder,
@@ -291,31 +118,6 @@ class SliverList extends SliverMultiBoxAdaptorWidget {
          },
        ));
 
-  /// A sliver that places multiple box children in a linear array along the main
-  /// axis.
-  ///
-  /// This constructor uses a list of [Widget]s to build the sliver.
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property.
-  ///
-  /// {@tool snippet}
-  /// This example, which would be provided in [CustomScrollView.slivers],
-  /// shows a list containing two [Text] widgets:
-  ///
-  /// ```dart
-  /// SliverList.list(
-  ///   children: const <Widget>[
-  ///     Text('Hello'),
-  ///     Text('World!'),
-  ///   ],
-  /// );
-  /// ```
-  /// {@end-tool}
   SliverList.list({
     super.key,
     required List<Widget> children,
@@ -339,108 +141,13 @@ class SliverList extends SliverMultiBoxAdaptorWidget {
   }
 }
 
-/// A sliver that places multiple box children with the same main axis extent in
-/// a linear array.
-///
-/// _To learn more about slivers, see [CustomScrollView.slivers]._
-///
-/// [SliverFixedExtentList] places its children in a linear array along the main
-/// axis starting at offset zero and without gaps. Each child is forced to have
-/// the [itemExtent] in the main axis and the
-/// [SliverConstraints.crossAxisExtent] in the cross axis.
-///
-/// [SliverFixedExtentList] is more efficient than [SliverList] because
-/// [SliverFixedExtentList] does not need to perform layout on its children to
-/// obtain their extent in the main axis.
-///
-/// {@tool snippet}
-///
-/// This example, which would be inserted into a [CustomScrollView.slivers]
-/// list, shows an infinite number of items in varying shades of blue:
-///
-/// ```dart
-/// SliverFixedExtentList(
-///   itemExtent: 50.0,
-///   delegate: SliverChildBuilderDelegate(
-///     (BuildContext context, int index) {
-///       return Container(
-///         alignment: Alignment.center,
-///         color: Colors.lightBlue[100 * (index % 9)],
-///         child: Text('list item $index'),
-///       );
-///     },
-///   ),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// {@macro flutter.widgets.SliverChildDelegate.lifecycle}
-///
-/// See also:
-///
-///  * [SliverPrototypeExtentList], which is similar to [SliverFixedExtentList]
-///    except that it uses a prototype list item instead of a pixel value to define
-///    the main axis extent of each item.
-///  * [SliverFillViewport], which determines the [itemExtent] based on
-///    [SliverConstraints.viewportMainAxisExtent].
-///  * [SliverList], which does not require its children to have the same
-///    extent in the main axis.
 class SliverFixedExtentList extends SliverMultiBoxAdaptorWidget {
-  /// Creates a sliver that places box children with the same main axis extent
-  /// in a linear array.
   const SliverFixedExtentList({
     super.key,
     required super.delegate,
     required this.itemExtent,
   });
 
-  /// A sliver that places multiple box children in a linear array along the main
-  /// axis.
-  ///
-  /// [SliverFixedExtentList] places its children in a linear array along the main
-  /// axis starting at offset zero and without gaps. Each child is forced to have
-  /// the [itemExtent] in the main axis and the
-  /// [SliverConstraints.crossAxisExtent] in the cross axis.
-  ///
-  /// This constructor is appropriate for sliver lists with a large (or
-  /// infinite) number of children whose extent is already determined.
-  ///
-  /// Providing a non-null `itemCount` improves the ability of the [SliverGrid]
-  /// to estimate the maximum scroll extent.
-  ///
-  /// `itemBuilder` will be called only with indices greater than or equal to
-  /// zero and less than `itemCount`.
-  ///
-  /// {@macro flutter.widgets.ListView.builder.itemBuilder}
-  ///
-  /// The `itemExtent` argument is the extent of each item.
-  ///
-  /// {@macro flutter.widgets.PageView.findChildIndexCallback}
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property.
-  /// {@tool snippet}
-  ///
-  /// This example, which would be inserted into a [CustomScrollView.slivers]
-  /// list, shows an infinite number of items in varying shades of blue:
-  ///
-  /// ```dart
-  /// SliverFixedExtentList.builder(
-  ///   itemExtent: 50.0,
-  ///   itemBuilder: (BuildContext context, int index) {
-  ///     return Container(
-  ///       alignment: Alignment.center,
-  ///       color: Colors.lightBlue[100 * (index % 9)],
-  ///       child: Text('list item $index'),
-  ///     );
-  ///   },
-  /// )
-  /// ```
-  /// {@end-tool}
   SliverFixedExtentList.builder({
     super.key,
     required NullableIndexedWidgetBuilder itemBuilder,
@@ -459,37 +166,6 @@ class SliverFixedExtentList extends SliverMultiBoxAdaptorWidget {
          addSemanticIndexes: addSemanticIndexes,
        ));
 
-  /// A sliver that places multiple box children in a linear array along the main
-  /// axis.
-  ///
-  /// [SliverFixedExtentList] places its children in a linear array along the main
-  /// axis starting at offset zero and without gaps. Each child is forced to have
-  /// the [itemExtent] in the main axis and the
-  /// [SliverConstraints.crossAxisExtent] in the cross axis.
-  ///
-  /// This constructor uses a list of [Widget]s to build the sliver.
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property.
-  ///
-  /// {@tool snippet}
-  /// This example, which would be inserted into a [CustomScrollView.slivers]
-  /// list, shows an infinite number of items in varying shades of blue:
-  ///
-  /// ```dart
-  /// SliverFixedExtentList.list(
-  ///   itemExtent: 50.0,
-  ///   children: const <Widget>[
-  ///     Text('Hello'),
-  ///     Text('World!'),
-  ///   ],
-  /// );
-  /// ```
-  /// {@end-tool}
   SliverFixedExtentList.list({
     super.key,
     required List<Widget> children,
@@ -504,7 +180,6 @@ class SliverFixedExtentList extends SliverMultiBoxAdaptorWidget {
          addSemanticIndexes: addSemanticIndexes,
        ));
 
-  /// The extent the children are forced to have in the main axis.
   final double itemExtent;
 
   @override
@@ -519,89 +194,13 @@ class SliverFixedExtentList extends SliverMultiBoxAdaptorWidget {
   }
 }
 
-/// A sliver that places multiple box children in a two dimensional arrangement.
-///
-/// _To learn more about slivers, see [CustomScrollView.slivers]._
-///
-/// [SliverGrid] places its children in arbitrary positions determined by
-/// [gridDelegate]. Each child is forced to have the size specified by the
-/// [gridDelegate].
-///
-/// The main axis direction of a grid is the direction in which it scrolls; the
-/// cross axis direction is the orthogonal direction.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=ORiTTaVY6mM}
-///
-/// {@tool snippet}
-///
-/// This example, which would be inserted into a [CustomScrollView.slivers]
-/// list, shows twenty boxes in a pretty teal grid:
-///
-/// ```dart
-/// SliverGrid(
-///   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-///     maxCrossAxisExtent: 200.0,
-///     mainAxisSpacing: 10.0,
-///     crossAxisSpacing: 10.0,
-///     childAspectRatio: 4.0,
-///   ),
-///   delegate: SliverChildBuilderDelegate(
-///     (BuildContext context, int index) {
-///       return Container(
-///         alignment: Alignment.center,
-///         color: Colors.teal[100 * (index % 9)],
-///         child: Text('grid item $index'),
-///       );
-///     },
-///     childCount: 20,
-///   ),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// {@macro flutter.widgets.SliverChildDelegate.lifecycle}
-///
-/// See also:
-///
-///  * [SliverList], which places its children in a linear array.
-///  * [SliverFixedExtentList], which places its children in a linear
-///    array with a fixed extent in the main axis.
-///  * [SliverPrototypeExtentList], which is similar to [SliverFixedExtentList]
-///    except that it uses a prototype list item instead of a pixel value to define
-///    the main axis extent of each item.
 class SliverGrid extends SliverMultiBoxAdaptorWidget {
-  /// Creates a sliver that places multiple box children in a two dimensional
-  /// arrangement.
   const SliverGrid({
     super.key,
     required super.delegate,
     required this.gridDelegate,
   });
 
-  /// A sliver that creates a 2D array of widgets that are created on demand.
-  ///
-  /// This constructor is appropriate for sliver grids with a large (or
-  /// infinite) number of children because the builder is called only for those
-  /// children that are actually visible.
-  ///
-  /// Providing a non-null `itemCount` improves the ability of the [SliverGrid]
-  /// to estimate the maximum scroll extent.
-  ///
-  /// `itemBuilder` will be called only with indices greater than or equal to
-  /// zero and less than `itemCount`.
-  ///
-  /// {@macro flutter.widgets.ListView.builder.itemBuilder}
-  ///
-  /// {@macro flutter.widgets.PageView.findChildIndexCallback}
-  ///
-  /// The [gridDelegate] argument is required.
-  ///
-  /// The `addAutomaticKeepAlives` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addAutomaticKeepAlives] property. The
-  /// `addRepaintBoundaries` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addRepaintBoundaries] property. The
-  /// `addSemanticIndexes` argument corresponds to the
-  /// [SliverChildBuilderDelegate.addSemanticIndexes] property.
   SliverGrid.builder({
     super.key,
     required this.gridDelegate,
@@ -620,15 +219,6 @@ class SliverGrid extends SliverMultiBoxAdaptorWidget {
          addSemanticIndexes: addSemanticIndexes,
        ));
 
-  /// Creates a sliver that places multiple box children in a two dimensional
-  /// arrangement with a fixed number of tiles in the cross axis.
-  ///
-  /// Uses a [SliverGridDelegateWithFixedCrossAxisCount] as the [gridDelegate],
-  /// and a [SliverChildListDelegate] as the [delegate].
-  ///
-  /// See also:
-  ///
-  ///  * [GridView.count], the equivalent constructor for [GridView] widgets.
   SliverGrid.count({
     super.key,
     required int crossAxisCount,
@@ -644,15 +234,6 @@ class SliverGrid extends SliverMultiBoxAdaptorWidget {
        ),
        super(delegate: SliverChildListDelegate(children));
 
-  /// Creates a sliver that places multiple box children in a two dimensional
-  /// arrangement with tiles that each have a maximum cross-axis extent.
-  ///
-  /// Uses a [SliverGridDelegateWithMaxCrossAxisExtent] as the [gridDelegate],
-  /// and a [SliverChildListDelegate] as the [delegate].
-  ///
-  /// See also:
-  ///
-  ///  * [GridView.extent], the equivalent constructor for [GridView] widgets.
   SliverGrid.extent({
     super.key,
     required double maxCrossAxisExtent,
@@ -668,7 +249,6 @@ class SliverGrid extends SliverMultiBoxAdaptorWidget {
        ),
        super(delegate: SliverChildListDelegate(children));
 
-  /// The delegate that controls the size and position of the children.
   final SliverGridDelegate gridDelegate;
 
   @override
@@ -700,22 +280,7 @@ class SliverGrid extends SliverMultiBoxAdaptorWidget {
   }
 }
 
-/// An element that lazily builds children for a [SliverMultiBoxAdaptorWidget].
-///
-/// Implements [RenderSliverBoxChildManager], which lets this element manage
-/// the children of subclasses of [RenderSliverMultiBoxAdaptor].
 class SliverMultiBoxAdaptorElement extends RenderObjectElement implements RenderSliverBoxChildManager {
-  /// Creates an element that lazily builds children for the given widget.
-  ///
-  /// If `replaceMovedChildren` is set to true, a new child is proactively
-  /// inflate for the index that was previously occupied by a child that moved
-  /// to a new index. The layout offset of the moved child is copied over to the
-  /// new child. RenderObjects, that depend on the layout offset of existing
-  /// children during [RenderObject.performLayout] should set this to true
-  /// (example: [RenderSliverList]). For RenderObjects that figure out the
-  /// layout offset of their children without looking at the layout offset of
-  /// existing children this should be set to false (example:
-  /// [RenderSliverFixedExtentList]) to avoid inflating unnecessary children.
   SliverMultiBoxAdaptorElement(SliverMultiBoxAdaptorWidget super.widget, {bool replaceMovedChildren = false})
      : _replaceMovedChildren = replaceMovedChildren;
 
@@ -935,15 +500,6 @@ class SliverMultiBoxAdaptorElement extends RenderObjectElement implements Render
     );
   }
 
-  /// The best available estimate of [childCount], or null if no estimate is available.
-  ///
-  /// This differs from [childCount] in that [childCount] never returns null (and must
-  /// not be accessed if the child count is not yet available, meaning the [createChild]
-  /// method has not been provided an index that does not create a child).
-  ///
-  /// See also:
-  ///
-  ///  * [SliverChildDelegate.estimatedChildCount], to which this getter defers.
   int? get estimatedChildCount => (widget as SliverMultiBoxAdaptorWidget).delegate.estimatedChildCount;
 
   @override
@@ -1076,44 +632,7 @@ class SliverMultiBoxAdaptorElement extends RenderObjectElement implements Render
   }
 }
 
-/// A sliver widget that makes its sliver child partially transparent.
-///
-/// This class paints its sliver child into an intermediate buffer and then
-/// blends the sliver back into the scene partially transparent.
-///
-/// For values of opacity other than 0.0 and 1.0, this class is relatively
-/// expensive because it requires painting the sliver child into an intermediate
-/// buffer. For the value 0.0, the sliver child is not painted at all.
-/// For the value 1.0, the sliver child is painted immediately without an
-/// intermediate buffer.
-///
-/// {@tool dartpad}
-///
-/// This example shows a [SliverList] when the `_visible` member field is true,
-/// and hides it when it is false.
-///
-/// This is more efficient than adding and removing the sliver child widget from
-/// the tree on demand, but it does not affect how much the list scrolls (the
-/// [SliverList] is still present, merely invisible).
-///
-/// ** See code in examples/api/lib/widgets/sliver/sliver_opacity.1.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [Opacity], which can apply a uniform alpha effect to its child using the
-///    [RenderBox] layout protocol.
-///  * [AnimatedOpacity], which uses an animation internally to efficiently
-///    animate [Opacity].
-///  * [SliverVisibility], which can hide a child more efficiently (albeit less
-///    subtly, because it is either visible or hidden, rather than allowing
-///    fractional opacity values). Specifically, the [SliverVisibility.maintain]
-///    constructor is equivalent to using a sliver opacity widget with values of
-///    `0.0` or `1.0`.
 class SliverOpacity extends SingleChildRenderObjectWidget {
-  /// Creates a sliver that makes its sliver child partially transparent.
-  ///
-  /// The [opacity] argument must be between zero and one, inclusive.
   const SliverOpacity({
     super.key,
     required this.opacity,
@@ -1122,24 +641,8 @@ class SliverOpacity extends SingleChildRenderObjectWidget {
   }) : assert(opacity >= 0.0 && opacity <= 1.0),
        super(child: sliver);
 
-  /// The fraction to scale the sliver child's alpha value.
-  ///
-  /// An opacity of 1.0 is fully opaque. An opacity of 0.0 is fully transparent
-  /// (i.e. invisible).
-  ///
-  /// Values 1.0 and 0.0 are painted with a fast path. Other values
-  /// require painting the sliver child into an intermediate buffer, which is
-  /// expensive.
   final double opacity;
 
-  /// Whether the semantic information of the sliver child is always included.
-  ///
-  /// Defaults to false.
-  ///
-  /// When true, regardless of the opacity settings, the sliver child semantic
-  /// information is exposed as if the widget were fully visible. This is
-  /// useful in cases where labels may be hidden during animations that
-  /// would otherwise contribute relevant semantics.
   final bool alwaysIncludeSemantics;
 
   @override
@@ -1169,27 +672,7 @@ class SliverOpacity extends SingleChildRenderObjectWidget {
   }
 }
 
-/// A sliver widget that is invisible during hit testing.
-///
-/// When [ignoring] is true, this widget (and its subtree) is invisible
-/// to hit testing. It still consumes space during layout and paints its sliver
-/// child as usual. It just cannot be the target of located events, because it
-/// returns false from [RenderSliver.hitTest].
-///
-/// ## Semantics
-///
-/// Using this class may also affect how the semantics subtree underneath is
-/// collected.
-///
-/// {@macro flutter.widgets.IgnorePointer.semantics}
-///
-/// {@macro flutter.widgets.IgnorePointer.ignoringSemantics}
-///
-/// See also:
-///
-///  * [IgnorePointer], the equivalent widget for boxes.
 class SliverIgnorePointer extends SingleChildRenderObjectWidget {
-  /// Creates a sliver widget that is invisible to hit testing.
   const SliverIgnorePointer({
     super.key,
     this.ignoring = true,
@@ -1201,18 +684,8 @@ class SliverIgnorePointer extends SingleChildRenderObjectWidget {
     Widget? sliver,
   }) : super(child: sliver);
 
-  /// Whether this sliver is ignored during hit testing.
-  ///
-  /// Regardless of whether this sliver is ignored during hit testing, it will
-  /// still consume space during layout and be visible during painting.
-  ///
-  /// {@macro flutter.widgets.IgnorePointer.semantics}
   final bool ignoring;
 
-  /// Whether the semantics of this sliver is ignored when compiling the
-  /// semantics tree.
-  ///
-  /// {@macro flutter.widgets.IgnorePointer.ignoringSemantics}
   @Deprecated(
     'Create a custom sliver ignore pointer widget instead. '
     'This feature was deprecated after v3.8.0-12.0.pre.'
@@ -1242,36 +715,13 @@ class SliverIgnorePointer extends SingleChildRenderObjectWidget {
   }
 }
 
-/// A sliver that lays its sliver child out as if it was in the tree, but
-/// without painting anything, without making the sliver child available for hit
-/// testing, and without taking any room in the parent.
-///
-/// Animations continue to run in offstage sliver children, and therefore use
-/// battery and CPU time, regardless of whether the animations end up being
-/// visible.
-///
-/// To hide a sliver widget from view while it is
-/// not needed, prefer removing the widget from the tree entirely rather than
-/// keeping it alive in an [Offstage] subtree.
-///
-/// See also:
-///
-///  * [Offstage], the equivalent widget for boxes.
 class SliverOffstage extends SingleChildRenderObjectWidget {
-  /// Creates a sliver that visually hides its sliver child.
   const SliverOffstage({
     super.key,
     this.offstage = true,
     Widget? sliver,
   }) : super(child: sliver);
 
-  /// Whether the sliver child is hidden from the rest of the tree.
-  ///
-  /// If true, the sliver child is laid out as if it was in the tree, but
-  /// without painting anything, without making the child available for hit
-  /// testing, and without taking any room in the parent.
-  ///
-  /// If false, the sliver child is included in the tree as normal.
   final bool offstage;
 
   @override
@@ -1303,40 +753,13 @@ class _SliverOffstageElement extends SingleChildRenderObjectElement {
   }
 }
 
-/// Mark a child as needing to stay alive even when it's in a lazy list that
-/// would otherwise remove it.
-///
-/// This widget is for use in a [RenderAbstractViewport]s, such as
-/// [Viewport] or [TwoDimensionalViewport].
-///
-/// This widget is rarely used directly. The [SliverChildBuilderDelegate] and
-/// [SliverChildListDelegate] delegates, used with [SliverList] and
-/// [SliverGrid], as well as the scroll view counterparts [ListView] and
-/// [GridView], have an `addAutomaticKeepAlives` feature, which is enabled by
-/// default, and which causes [AutomaticKeepAlive] widgets to be inserted around
-/// each child, causing [KeepAlive] widgets to be automatically added and
-/// configured in response to [KeepAliveNotification]s.
-///
-/// The same `addAutomaticKeepAlives` feature is supported by the
-/// [TwoDimensionalChildBuilderDelegate] and [TwoDimensionalChildListDelegate].
-///
-/// Therefore, to keep a widget alive, it is more common to use those
-/// notifications than to directly deal with [KeepAlive] widgets.
-///
-/// In practice, the simplest way to deal with these notifications is to mix
-/// [AutomaticKeepAliveClientMixin] into one's [State]. See the documentation
-/// for that mixin class for details.
 class KeepAlive extends ParentDataWidget<KeepAliveParentDataMixin> {
-  /// Marks a child as needing to remain alive.
   const KeepAlive({
     super.key,
     required this.keepAlive,
     required super.child,
   });
 
-  /// Whether to keep the child alive.
-  ///
-  /// If this is false, it is as if this widget was omitted.
   final bool keepAlive;
 
   @override
@@ -1373,48 +796,15 @@ class KeepAlive extends ParentDataWidget<KeepAliveParentDataMixin> {
   }
 }
 
-/// A sliver that constrains the cross axis extent of its sliver child.
-///
-/// The [SliverConstrainedCrossAxis] takes a [maxExtent] parameter and uses it as
-/// the cross axis extent of the [SliverConstraints] passed to the sliver child.
-/// The widget ensures that the [maxExtent] is a nonnegative value.
-///
-/// This is useful when you want to apply a custom cross-axis extent constraint
-/// to a sliver child, as slivers typically consume the full cross axis extent.
-///
-/// This widget also sets its parent data's [SliverPhysicalParentData.crossAxisFlex]
-/// to 0, so that it informs [SliverCrossAxisGroup] that it should not flex
-/// in the cross axis direction.
-///
-/// {@tool dartpad}
-/// In this sample the [SliverConstrainedCrossAxis] sizes its child so that the
-/// cross axis extent takes up less space than the actual viewport.
-///
-/// ** See code in examples/api/lib/widgets/sliver/sliver_constrained_cross_axis.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [SliverCrossAxisGroup], the widget which makes use of 0 flex factor set by
-///    this widget.
 class SliverConstrainedCrossAxis extends StatelessWidget {
-  /// Creates a sliver that constrains the cross axis extent of its sliver child.
-  ///
-  /// The [maxExtent] parameter is required and must be nonnegative.
   const SliverConstrainedCrossAxis({
     super.key,
     required this.maxExtent,
     required this.sliver,
   });
 
-  /// The cross axis extent to apply to the sliver child.
-  ///
-  /// This value must be nonnegative.
   final double maxExtent;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// Must be a sliver.
   final Widget sliver;
 
   @override
@@ -1462,9 +852,6 @@ class _SliverConstrainedCrossAxis extends SingleChildRenderObjectWidget {
   }) : assert(maxExtent >= 0.0),
        super(child: sliver);
 
-  /// The cross axis extent to apply to the sliver child.
-  ///
-  /// This value must be nonnegative.
   final double maxExtent;
 
   @override
@@ -1478,17 +865,7 @@ class _SliverConstrainedCrossAxis extends SingleChildRenderObjectWidget {
   }
 }
 
-/// Set a flex factor for allocating space in the cross axis direction.
-///
-/// This is a [ParentDataWidget] to be used in [SliverCrossAxisGroup].
-/// After all slivers with null or zero flex (e.g. [SliverConstrainedCrossAxis])
-/// are laid out (which should determine their own [SliverGeometry.crossAxisExtent]),
-/// the remaining space is laid out among the slivers with nonzero flex
-/// proportionally to their flex value.
 class SliverCrossAxisExpanded extends ParentDataWidget<SliverPhysicalContainerParentData> {
-  /// Creates an object that assigns a [flex] value to the child sliver.
-  ///
-  /// The provided [flex] value must be greater than 0.
   const SliverCrossAxisExpanded({
     super.key,
     required this.flex,
@@ -1496,10 +873,6 @@ class SliverCrossAxisExpanded extends ParentDataWidget<SliverPhysicalContainerPa
   }): assert(flex > 0 && flex < double.infinity),
       super(child: sliver);
 
-  /// Flex value for allocating cross axis extent left after laying out the children with
-  /// constrained cross axis. The children with flex values will have the remaining extent
-  /// allocated proportionally to their flex value. This must an integer between
-  /// 0 and infinity, exclusive.
   final int flex;
 
   @override
@@ -1527,52 +900,7 @@ class SliverCrossAxisExpanded extends ParentDataWidget<SliverPhysicalContainerPa
 }
 
 
-/// A sliver that places multiple sliver children in a linear array along
-/// the cross axis.
-///
-/// ## Layout algorithm
-///
-/// _This section describes how the framework causes [RenderSliverCrossAxisGroup]
-/// to position its children._
-///
-/// Layout for a [RenderSliverCrossAxisGroup] has four steps:
-///
-/// 1. Layout each child with a null or zero flex factor with cross axis constraint
-///    being whatever cross axis space is remaining after laying out any previous
-///    sliver. Slivers with null or zero flex factor should determine their own
-///    [SliverGeometry.crossAxisExtent]. For example, the [SliverConstrainedCrossAxis]
-///    widget uses either [SliverConstrainedCrossAxis.maxExtent] or
-///    [SliverConstraints.crossAxisExtent], deciding between whichever is smaller.
-/// 2. Divide up the remaining cross axis space among the children with non-zero flex
-///    factors according to their flex factor. For example, a child with a flex
-///    factor of 2.0 will receive twice the amount of cross axis space as a child
-///    with a flex factor 1.0.
-/// 3. Layout each of the remaining children with the cross axis constraint
-///    allocated in the previous step.
-/// 4. Set the geometry to that of whichever child has the longest
-///    [SliverGeometry.scrollExtent] with the [SliverGeometry.crossAxisExtent] adjusted
-///    to [SliverConstraints.crossAxisExtent].
-///
-/// {@tool dartpad}
-/// In this sample the [SliverCrossAxisGroup] sizes its three [children] so that
-/// the first normal [SliverList] has a flex factor of 1, the second [SliverConstrainedCrossAxis]
-/// has a flex factor of 0 and a maximum cross axis extent of 200.0, and the third
-/// [SliverCrossAxisExpanded] has a flex factor of 2.
-///
-/// ** See code in examples/api/lib/widgets/sliver/sliver_cross_axis_group.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [SliverCrossAxisExpanded], which is the [ParentDataWidget] for setting a flex
-///    value to a widget.
-///  * [SliverConstrainedCrossAxis], which is a [RenderObjectWidget] for setting
-///    an extent to constrain the widget to.
-///  * [SliverMainAxisGroup], which is the [RenderObjectWidget] for laying out
-///    multiple slivers along the main axis.
 class SliverCrossAxisGroup extends MultiChildRenderObjectWidget {
-  /// Creates a sliver that places sliver children in a linear array along
-  /// the cross axis.
   const SliverCrossAxisGroup({
     super.key,
     required List<Widget> slivers,
@@ -1584,53 +912,7 @@ class SliverCrossAxisGroup extends MultiChildRenderObjectWidget {
   }
 }
 
-/// A sliver that places multiple sliver children in a linear array along
-/// the main axis, one after another.
-///
-/// ## Layout algorithm
-///
-/// _This section describes how the framework causes [RenderSliverMainAxisGroup]
-/// to position its children._
-///
-/// Layout for a [RenderSliverMainAxisGroup] has four steps:
-///
-/// 1. Keep track of an offset variable which is the total [SliverGeometry.scrollExtent]
-///    of the slivers laid out so far.
-/// 2. To determine the constraints for the next sliver child to layout, calculate the
-///    amount of paint extent occupied from 0.0 to the offset variable and subtract this from
-///    [SliverConstraints.remainingPaintExtent] minus to use as the child's
-///    [SliverConstraints.remainingPaintExtent]. For the [SliverConstraints.scrollOffset],
-///    take the provided constraint's value and subtract out the offset variable, using
-///    0.0 if negative.
-/// 3. Once we finish laying out all the slivers, this offset variable represents
-///    the total [SliverGeometry.scrollExtent] of the sliver group. Since it is possible
-///    for specialized slivers to try to paint itself outside of the bounds of the
-///    sliver group's scroll extent (see [SliverPersistentHeader]), we must do a
-///    second pass to set a [SliverPhysicalParentData.paintOffset] to make sure it
-///    is within the bounds of the sliver group.
-/// 4. Finally, set the [RenderSliverMainAxisGroup.geometry] with the total
-///    [SliverGeometry.scrollExtent], [SliverGeometry.paintExtent] calculated from
-///    the constraints and [SliverGeometry.scrollExtent], and [SliverGeometry.maxPaintExtent].
-///
-/// {@tool dartpad}
-/// In this sample the [CustomScrollView] renders a [SliverMainAxisGroup] and a
-/// [SliverToBoxAdapter] with some content. The [SliverMainAxisGroup] renders a
-/// [SliverAppBar], [SliverList], and [SliverToBoxAdapter]. Notice that when the
-/// [SliverMainAxisGroup] goes out of view, so does the pinned [SliverAppBar].
-///
-/// ** See code in examples/api/lib/widgets/sliver/sliver_main_axis_group.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [SliverPersistentHeader], which is a [RenderObjectWidget] which may require
-///    adjustment to its [SliverPhysicalParentData.paintOffset] to make it fit
-///    within the computed [SliverGeometry.scrollExtent] of the [SliverMainAxisGroup].
-///  * [SliverCrossAxisGroup], which is the [RenderObjectWidget] for laying out
-///    multiple slivers along the cross axis.
 class SliverMainAxisGroup extends MultiChildRenderObjectWidget {
-  /// Creates a sliver that places sliver children in a linear array along
-  /// the main axis.
   const SliverMainAxisGroup({
     super.key,
     required List<Widget> slivers,

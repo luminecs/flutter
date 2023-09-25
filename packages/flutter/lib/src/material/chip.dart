@@ -43,525 +43,92 @@ const Duration _kDisableDuration = Duration(milliseconds: 75);
 const Color _kSelectScrimColor = Color(0x60191919);
 const Icon _kDefaultDeleteIcon = Icon(Icons.cancel, size: _kDeleteIconSize);
 
-/// An interface defining the base attributes for a Material Design chip.
-///
-/// Chips are compact elements that represent an attribute, text, entity, or
-/// action.
-///
-/// The defaults mentioned in the documentation for each attribute are what
-/// the implementing classes typically use for defaults (but this class doesn't
-/// provide or enforce them).
-///
-/// See also:
-///
-///  * [Chip], a chip that displays information and can be deleted.
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [FilterChip], uses tags or descriptive words as a way to filter content.
-///  * [ActionChip], represents an action related to primary content.
-///  * <https://material.io/design/components/chips.html>
 abstract interface class ChipAttributes {
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
   Widget get label;
 
-  /// A widget to display prior to the chip's label.
-  ///
-  /// Typically a [CircleAvatar] widget.
   Widget? get avatar;
 
-  /// The style to be applied to the chip's label.
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is true, then
-  /// [TextTheme.labelLarge] is used. Otherwise, [TextTheme.bodyLarge]
-  /// is used.
   //
-  /// This only has an effect on widgets that respect the [DefaultTextStyle],
-  /// such as [Text].
-  ///
-  /// If [TextStyle.color] is a [MaterialStateProperty<Color>], [MaterialStateProperty.resolve]
-  /// is used for the following [MaterialState]s:
-  ///
-  ///  * [MaterialState.disabled].
-  ///  * [MaterialState.selected].
-  ///  * [MaterialState.hovered].
-  ///  * [MaterialState.focused].
-  ///  * [MaterialState.pressed].
   TextStyle? get labelStyle;
 
-  /// The color and weight of the chip's outline.
-  ///
-  /// Defaults to the border side in the ambient [ChipThemeData]. If the theme
-  /// border side resolves to null and [ThemeData.useMaterial3] is true, then
-  /// [BorderSide] with a [ColorScheme.outline] color is used when the chip is
-  /// enabled, and [BorderSide] with a [ColorScheme.onSurface] color with an
-  /// opacity of 0.12 is used when the chip is disabled. Otherwise, it defaults
-  /// to null.
-  ///
-  /// This value is combined with [shape] to create a shape decorated with an
-  /// outline. To omit the outline entirely, pass [BorderSide.none] to [side].
-  ///
-  /// If it is a [MaterialStateBorderSide], [MaterialStateProperty.resolve] is
-  /// used for the following [MaterialState]s:
-  ///
-  ///  * [MaterialState.disabled].
-  ///  * [MaterialState.selected].
-  ///  * [MaterialState.hovered].
-  ///  * [MaterialState.focused].
-  ///  * [MaterialState.pressed].
   BorderSide? get side;
 
-  /// The [OutlinedBorder] to draw around the chip.
-  ///
-  /// Defaults to the shape in the ambient [ChipThemeData]. If the theme
-  /// shape resolves to null and [ThemeData.useMaterial3] is true, then
-  /// [RoundedRectangleBorder] with a circular border radius of 8.0 is used.
-  /// Otherwise, [StadiumBorder] is used.
-  ///
-  /// This shape is combined with [side] to create a shape decorated with an
-  /// outline. To omit the outline entirely, pass [BorderSide.none] to [side].
-  ///
-  /// If it is a [MaterialStateOutlinedBorder], [MaterialStateProperty.resolve]
-  /// is used for the following [MaterialState]s:
-  ///
-  ///  * [MaterialState.disabled].
-  ///  * [MaterialState.selected].
-  ///  * [MaterialState.hovered].
-  ///  * [MaterialState.focused].
-  ///  * [MaterialState.pressed].
   OutlinedBorder? get shape;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.none].
   Clip get clipBehavior;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   FocusNode? get focusNode;
 
-  /// {@macro flutter.widgets.Focus.autofocus}
   bool get autofocus;
 
-  /// The color that fills the chip, in all [MaterialState]s.
-  ///
-  /// Defaults to null.
-  ///
-  /// Resolves in the following states:
-  ///  * [MaterialState.selected].
-  ///  * [MaterialState.disabled].
   MaterialStateProperty<Color?>? get color;
 
-  /// Color to be used for the unselected, enabled chip's background.
-  ///
-  /// The default is light grey.
   Color? get backgroundColor;
 
-  /// The padding between the contents of the chip and the outside [shape].
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is true, then
-  /// a padding of 8.0 logical pixels on all sides is used. Otherwise,
-  /// it defaults to a padding of 4.0 logical pixels on all sides.
   EdgeInsetsGeometry? get padding;
 
-  /// Defines how compact the chip's layout will be.
-  ///
-  /// Chips are unaffected by horizontal density changes.
-  ///
-  /// {@macro flutter.material.themedata.visualDensity}
-  ///
-  /// See also:
-  ///
-  ///  * [ThemeData.visualDensity], which specifies the [visualDensity] for all
-  ///    widgets within a [Theme].
   VisualDensity? get visualDensity;
 
-  /// The padding around the [label] widget.
-  ///
-  /// By default, this is 4 logical pixels at the beginning and the end of the
-  /// label, and zero on top and bottom.
   EdgeInsetsGeometry? get labelPadding;
 
-  /// Configures the minimum size of the tap target.
-  ///
-  /// Defaults to [ThemeData.materialTapTargetSize].
-  ///
-  /// See also:
-  ///
-  ///  * [MaterialTapTargetSize], for a description of how this affects tap targets.
   MaterialTapTargetSize? get materialTapTargetSize;
 
-  /// Elevation to be applied on the chip relative to its parent.
-  ///
-  /// This controls the size of the shadow below the chip.
-  ///
-  /// Defaults to 0. The value is always non-negative.
   double? get elevation;
 
-  /// Color of the chip's shadow when the elevation is greater than 0.
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is true, then
-  /// [Colors.transparent] color is used. Otherwise, it defaults to null.
   Color? get shadowColor;
 
-  /// Color of the chip's surface tint overlay when its elevation is
-  /// greater than 0.
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is true, then
-  /// [ColorScheme.surfaceTint] color is used. Otherwise, it defaults
-  /// to null.
   Color? get surfaceTintColor;
 
-  /// Theme used for all icons in the chip.
-  ///
-  /// If this is null and [ThemeData.useMaterial3] is true, then [IconThemeData]
-  /// with a [ColorScheme.primary] color and a size of 18.0 is used when
-  /// the chip is enabled, and [IconThemeData] with a [ColorScheme.onSurface]
-  /// color and a size of 18.0 is used when the chip is disabled. Otherwise,
-  /// it defaults to null.
   IconThemeData? get iconTheme;
 }
 
-/// An interface for Material Design chips that can be deleted.
-///
-/// The defaults mentioned in the documentation for each attribute are what
-/// the implementing classes typically use for defaults (but this class doesn't
-/// provide or enforce them).
-///
-/// See also:
-///
-///  * [Chip], a chip that displays information and can be deleted.
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * <https://material.io/design/components/chips.html>
 abstract interface class DeletableChipAttributes {
-  /// The icon displayed when [onDeleted] is set.
-  ///
-  /// Defaults to an [Icon] widget set to use [Icons.cancel].
   Widget? get deleteIcon;
 
-  /// Called when the user taps the [deleteIcon] to delete the chip.
-  ///
-  /// If null, the delete button will not appear on the chip.
-  ///
-  /// The chip will not automatically remove itself: this just tells the app
-  /// that the user tapped the delete button. In order to delete the chip, you
-  /// have to do something similar to the following sample:
-  ///
-  /// {@tool dartpad}
-  /// This sample shows how to use [onDeleted] to remove an entry when the
-  /// delete button is tapped.
-  ///
-  /// ** See code in examples/api/lib/material/chip/deletable_chip_attributes.on_deleted.0.dart **
-  /// {@end-tool}
   VoidCallback? get onDeleted;
 
-  /// Used to define the delete icon's color with an [IconTheme] that
-  /// contains the icon.
-  ///
-  /// The default is `Color(0xde000000)`
-  /// (slightly transparent black) for light themes, and `Color(0xdeffffff)`
-  /// (slightly transparent white) for dark themes.
-  ///
-  /// The delete icon appears if [DeletableChipAttributes.onDeleted] is
-  /// non-null.
   Color? get deleteIconColor;
 
-  /// The message to be used for the chip's delete button tooltip.
-  ///
-  /// If provided with an empty string, the tooltip of the delete button will be
-  /// disabled.
-  ///
-  /// If null, the default [MaterialLocalizations.deleteButtonTooltip] will be
-  /// used.
   String? get deleteButtonTooltipMessage;
 }
 
-/// An interface for Material Design chips that can have check marks.
-///
-/// The defaults mentioned in the documentation for each attribute are what
-/// the implementing classes typically use for defaults (but this class doesn't
-/// provide or enforce them).
-///
-/// See also:
-///
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [FilterChip], uses tags or descriptive words as a way to filter content.
-///  * <https://material.io/design/components/chips.html>
 abstract interface class CheckmarkableChipAttributes {
-  /// Whether or not to show a check mark when
-  /// [SelectableChipAttributes.selected] is true.
-  ///
-  /// Defaults to true.
   bool? get showCheckmark;
 
-  /// [Color] of the chip's check mark when a check mark is visible.
-  ///
-  /// This will override the color set by the platform's brightness setting.
-  ///
-  /// If null, it will defer to a color selected by the platform's brightness
-  /// setting.
   Color? get checkmarkColor;
 }
 
-/// An interface for Material Design chips that can be selected.
-///
-/// The defaults mentioned in the documentation for each attribute are what
-/// the implementing classes typically use for defaults (but this class doesn't
-/// provide or enforce them).
-///
-/// See also:
-///
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [FilterChip], uses tags or descriptive words as a way to filter content.
-///  * <https://material.io/design/components/chips.html>
 abstract interface class SelectableChipAttributes {
-  /// Whether or not this chip is selected.
-  ///
-  /// If [onSelected] is not null, this value will be used to determine if the
-  /// select check mark will be shown or not.
-  ///
-  /// Defaults to false.
   bool get selected;
 
-  /// Called when the chip should change between selected and de-selected
-  /// states.
-  ///
-  /// When the chip is tapped, then the [onSelected] callback, if set, will be
-  /// applied to `!selected` (see [selected]).
-  ///
-  /// The chip passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the chip with the new
-  /// value.
-  ///
-  /// The callback provided to [onSelected] should update the state of the
-  /// parent [StatefulWidget] using the [State.setState] method, so that the
-  /// parent gets rebuilt.
-  ///
-  /// The [onSelected] and [TappableChipAttributes.onPressed] callbacks must not
-  /// both be specified at the same time.
-  ///
-  /// {@tool snippet}
-  ///
-  /// A [StatefulWidget] that illustrates use of onSelected in an [InputChip].
-  ///
-  /// ```dart
-  /// class Wood extends StatefulWidget {
-  ///   const Wood({super.key});
-  ///
-  ///   @override
-  ///   State<StatefulWidget> createState() => WoodState();
-  /// }
-  ///
-  /// class WoodState extends State<Wood> {
-  ///   bool _useChisel = false;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return InputChip(
-  ///       label: const Text('Use Chisel'),
-  ///       selected: _useChisel,
-  ///       onSelected: (bool newValue) {
-  ///         setState(() {
-  ///           _useChisel = newValue;
-  ///         });
-  ///       },
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
   ValueChanged<bool>? get onSelected;
 
-  /// Elevation to be applied on the chip relative to its parent during the
-  /// press motion.
-  ///
-  /// This controls the size of the shadow below the chip.
-  ///
-  /// Defaults to 8. The value is always non-negative.
   double? get pressElevation;
 
-  /// Color to be used for the chip's background, indicating that it is
-  /// selected.
-  ///
-  /// The chip is selected when [selected] is true.
   Color? get selectedColor;
 
-  /// Color of the chip's shadow when the elevation is greater than 0 and the
-  /// chip is selected.
-  ///
-  /// The default is [Colors.black].
   Color? get selectedShadowColor;
 
-  /// Tooltip string to be used for the body area (where the label and avatar
-  /// are) of the chip.
   String? get tooltip;
 
-  /// The shape of the translucent highlight painted over the avatar when the
-  /// [selected] property is true.
-  ///
-  /// Only the outer path of the shape is used.
-  ///
-  /// Defaults to [CircleBorder].
   ShapeBorder get avatarBorder;
 }
 
-/// An interface for Material Design chips that can be enabled and disabled.
-///
-/// The defaults mentioned in the documentation for each attribute are what
-/// the implementing classes typically use for defaults (but this class doesn't
-/// provide or enforce them).
-///
-/// See also:
-///
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [FilterChip], uses tags or descriptive words as a way to filter content.
-///  * <https://material.io/design/components/chips.html>
 abstract interface class DisabledChipAttributes {
-  /// Whether or not this chip is enabled for input.
-  ///
-  /// If this is true, but all of the user action callbacks are null (i.e.
-  /// [SelectableChipAttributes.onSelected], [TappableChipAttributes.onPressed],
-  /// and [DeletableChipAttributes.onDeleted]), then the
-  /// control will still be shown as disabled.
-  ///
-  /// This is typically used if you want the chip to be disabled, but also show
-  /// a delete button.
-  ///
-  /// For classes which don't have this as a constructor argument, [isEnabled]
-  /// returns true if their user action callback is set.
-  ///
-  /// Defaults to true.
   bool get isEnabled;
 
-  /// The color used for the chip's background to indicate that it is not
-  /// enabled.
-  ///
-  /// The chip is disabled when [isEnabled] is false, or all three of
-  /// [SelectableChipAttributes.onSelected], [TappableChipAttributes.onPressed],
-  /// and [DeletableChipAttributes.onDeleted] are null.
-  ///
-  /// It defaults to [Colors.black38].
   Color? get disabledColor;
 }
 
-/// An interface for Material Design chips that can be tapped.
-///
-/// The defaults mentioned in the documentation for each attribute are what
-/// the implementing classes typically use for defaults (but this class doesn't
-/// provide or enforce them).
-///
-/// See also:
-///
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [FilterChip], uses tags or descriptive words as a way to filter content.
-///  * [ActionChip], represents an action related to primary content.
-///  * <https://material.io/design/components/chips.html>
 abstract interface class TappableChipAttributes {
-  /// Called when the user taps the chip.
-  ///
-  /// If [onPressed] is set, then this callback will be called when the user
-  /// taps on the label or avatar parts of the chip. If [onPressed] is null,
-  /// then the chip will be disabled.
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// class Blacksmith extends StatelessWidget {
-  ///   const Blacksmith({super.key});
-  ///
-  ///   void startHammering() {
-  ///     print('bang bang bang');
-  ///   }
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return InputChip(
-  ///       label: const Text('Apply Hammer'),
-  ///       onPressed: startHammering,
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
   VoidCallback? get onPressed;
 
-  /// Elevation to be applied on the chip relative to its parent during the
-  /// press motion.
-  ///
-  /// This controls the size of the shadow below the chip.
-  ///
-  /// Defaults to 8. The value is always non-negative.
   double? get pressElevation;
 
-  /// Tooltip string to be used for the body area (where the label and avatar
-  /// are) of the chip.
   String? get tooltip;
 }
 
-/// A Material Design chip.
-///
-/// Chips are compact elements that represent an attribute, text, entity, or
-/// action.
-///
-/// Supplying a non-null [onDeleted] callback will cause the chip to include a
-/// button for deleting the chip.
-///
-/// Its ancestors must include [Material], [MediaQuery], [Directionality], and
-/// [MaterialLocalizations]. Typically all of these widgets are provided by
-/// [MaterialApp] and [Scaffold]. The [label] and [clipBehavior] arguments must
-/// not be null.
-///
-/// {@tool snippet}
-///
-/// ```dart
-/// Chip(
-///   avatar: CircleAvatar(
-///     backgroundColor: Colors.grey.shade800,
-///     child: const Text('AB'),
-///   ),
-///   label: const Text('Aaron Burr'),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [FilterChip], uses tags or descriptive words as a way to filter content.
-///  * [ActionChip], represents an action related to primary content.
-///  * [CircleAvatar], which shows images or initials of entities.
-///  * [Wrap], A widget that displays its children in multiple horizontal or
-///    vertical runs.
-///  * <https://material.io/design/components/chips.html>
 class Chip extends StatelessWidget implements ChipAttributes, DeletableChipAttributes {
-  /// Creates a Material Design chip.
-  ///
-  /// The [elevation] must be null or non-negative.
   const Chip({
     super.key,
     this.avatar,
@@ -663,36 +230,6 @@ class Chip extends StatelessWidget implements ChipAttributes, DeletableChipAttri
   }
 }
 
-/// A raw Material Design chip.
-///
-/// This serves as the basis for all of the chip widget types to aggregate.
-/// It is typically not created directly, one of the other chip types
-/// that are appropriate for the use case are used instead:
-///
-///  * [Chip] a simple chip that can only display information and be deleted.
-///  * [InputChip] represents a complex piece of information, such as an entity
-///    (person, place, or thing) or conversational text, in a compact form.
-///  * [ChoiceChip] allows a single selection from a set of options.
-///  * [FilterChip] a chip that uses tags or descriptive words as a way to
-///    filter content.
-///  * [ActionChip]s display a set of actions related to primary content.
-///
-/// Raw chips are typically only used if you want to create your own custom chip
-/// type.
-///
-/// Raw chips can be selected by setting [onSelected], deleted by setting
-/// [onDeleted], and pushed like a button with [onPressed]. They have a [label],
-/// and they can have a leading icon (see [avatar]) and a trailing icon
-/// ([deleteIcon]). Colors and padding can be customized.
-///
-/// Requires one of its ancestors to be a [Material] widget.
-///
-/// See also:
-///
-///  * [CircleAvatar], which shows images or initials of people.
-///  * [Wrap], A widget that displays its children in multiple horizontal or
-///    vertical runs.
-///  * <https://material.io/design/components/chips.html>
 class RawChip extends StatefulWidget
     implements
         ChipAttributes,
@@ -701,13 +238,6 @@ class RawChip extends StatefulWidget
         CheckmarkableChipAttributes,
         DisabledChipAttributes,
         TappableChipAttributes {
-  /// Creates a RawChip.
-  ///
-  /// The [onPressed] and [onSelected] callbacks must not both be specified at
-  /// the same time.
-  ///
-  /// The [pressElevation] and [elevation] must be null or non-negative.
-  /// Typically, [pressElevation] is greater than [elevation].
   const RawChip({
     super.key,
     this.defaultProperties,
@@ -750,11 +280,6 @@ class RawChip extends StatefulWidget
        assert(elevation == null || elevation >= 0.0),
        deleteIcon = deleteIcon ?? _kDefaultDeleteIcon;
 
-  /// Defines the defaults for the chip properties if
-  /// they are not specified elsewhere.
-  ///
-  /// If null then [ChipThemeData.fromDefaults] will be used
-  /// for the default properties.
   final ChipThemeData? defaultProperties;
 
   @override
@@ -826,14 +351,6 @@ class RawChip extends StatefulWidget
   @override
   final ShapeBorder avatarBorder;
 
-  /// If set, this indicates that the chip should be disabled if all of the
-  /// tap callbacks ([onSelected], [onPressed]) are null.
-  ///
-  /// For example, the [Chip] class sets this to false because it can't be
-  /// disabled, even if no callbacks are set on it, since it is used for
-  /// displaying information only.
-  ///
-  /// Defaults to true.
   final bool tapEnabled;
 
   @override
@@ -1008,8 +525,6 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
     ).resolve(materialStates) ?? defaultColor?.resolve(materialStates);
   }
 
-  /// Picks between three different colors, depending upon the state of two
-  /// different animations.
   Color? _getBackgroundColor(ThemeData theme, ChipThemeData chipTheme, ChipThemeData chipDefaults) {
     if (theme.useMaterial3) {
       final Color? disabledColor = resolveColor(
@@ -1153,10 +668,6 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
     assert(debugCheckHasDirectionality(context));
     assert(debugCheckHasMaterialLocalizations(context));
 
-    /// The chip at text scale 1 starts with 8px on each side and as text scaling
-    /// gets closer to 2 the label padding is linearly interpolated from 8px to 4px.
-    /// Once the widget has a text scaling of 2 or higher than the label padding
-    /// remains 4px.
     final EdgeInsetsGeometry defaultLabelPadding = EdgeInsets.lerp(
       const EdgeInsets.symmetric(horizontal: 8.0),
       const EdgeInsets.symmetric(horizontal: 4.0),
@@ -1355,11 +866,6 @@ class _IndividualOverrides extends MaterialStateProperty<Color?> {
   }
 }
 
-/// Redirects the [buttonRect.dy] passed to [RenderBox.hitTest] to the vertical
-/// center of the widget.
-///
-/// The primary purpose of this widget is to allow padding around the [RawChip]
-/// to trigger the child ink feature without increasing the size of the material.
 class _ChipRedirectingHitDetectionWidget extends SingleChildRenderObjectWidget {
   const _ChipRedirectingHitDetectionWidget({
     super.child,
@@ -2284,10 +1790,6 @@ class _ChipDefaultsM3 extends ChipThemeData {
   @override
   EdgeInsetsGeometry? get padding => const EdgeInsets.all(8.0);
 
-  /// The chip at text scale 1 starts with 8px on each side and as text scaling
-  /// gets closer to 2, the label padding is linearly interpolated from 8px to 4px.
-  /// Once the widget has a text scaling of 2 or higher than the label padding
-  /// remains 4px.
   @override
   EdgeInsetsGeometry? get labelPadding => EdgeInsets.lerp(
     const EdgeInsets.symmetric(horizontal: 8.0),

@@ -7,7 +7,6 @@ import '../../base/logger.dart';
 import '../../base/project_migrator.dart';
 import '../../project.dart';
 
-/// Remove lib/generated_plugin_registrant.dart if it exists.
 class ScrubGeneratedPluginRegistrant extends ProjectMigrator {
   ScrubGeneratedPluginRegistrant(
     WebProject project,

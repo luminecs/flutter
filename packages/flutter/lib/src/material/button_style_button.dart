@@ -16,21 +16,7 @@ import 'material.dart';
 import 'material_state.dart';
 import 'theme_data.dart';
 
-/// The base [StatefulWidget] class for buttons whose style is defined by a [ButtonStyle] object.
-///
-/// Concrete subclasses must override [defaultStyleOf] and [themeStyleOf].
-///
-/// See also:
-///  * [ElevatedButton], a filled button whose material elevates when pressed.
-///  * [FilledButton], a filled button that doesn't elevate when pressed.
-///  * [FilledButton.tonal], a filled button variant that uses a secondary fill color.
-///  * [OutlinedButton], a button with an outlined border and no fill color.
-///  * [TextButton], a button with no outline or fill color.
-///  * <https://m3.material.io/components/buttons/overview>, an overview of each of
-///    the Material Design button types and how they should be used in designs.
 abstract class ButtonStyleButton extends StatefulWidget {
-  /// Abstract const constructor. This constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
   const ButtonStyleButton({
     super.key,
     required this.onPressed,
@@ -46,112 +32,34 @@ abstract class ButtonStyleButton extends StatefulWidget {
     required this.child,
   });
 
-  /// Called when the button is tapped or otherwise activated.
-  ///
-  /// If this callback and [onLongPress] are null, then the button will be disabled.
-  ///
-  /// See also:
-  ///
-  ///  * [enabled], which is true if the button is enabled.
   final VoidCallback? onPressed;
 
-  /// Called when the button is long-pressed.
-  ///
-  /// If this callback and [onPressed] are null, then the button will be disabled.
-  ///
-  /// See also:
-  ///
-  ///  * [enabled], which is true if the button is enabled.
   final VoidCallback? onLongPress;
 
-  /// Called when a pointer enters or exits the button response area.
-  ///
-  /// The value passed to the callback is true if a pointer has entered this
-  /// part of the material and false if a pointer has exited this part of the
-  /// material.
   final ValueChanged<bool>? onHover;
 
-  /// Handler called when the focus changes.
-  ///
-  /// Called with true if this widget's node gains focus, and false if it loses
-  /// focus.
   final ValueChanged<bool>? onFocusChange;
 
-  /// Customizes this button's appearance.
-  ///
-  /// Non-null properties of this style override the corresponding
-  /// properties in [themeStyleOf] and [defaultStyleOf]. [MaterialStateProperty]s
-  /// that resolve to non-null values will similarly override the corresponding
-  /// [MaterialStateProperty]s in [themeStyleOf] and [defaultStyleOf].
-  ///
-  /// Null by default.
   final ButtonStyle? style;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.none].
   final Clip clipBehavior;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// {@macro flutter.material.inkwell.statesController}
   final MaterialStatesController? statesController;
 
-  /// Determine whether this subtree represents a button.
-  ///
-  /// If this is null, the screen reader will not announce "button" when this
-  /// is focused. This is useful for [MenuItemButton] and [SubmenuButton] when we
-  /// traverse the menu system.
-  ///
-  /// Defaults to true.
   final bool? isSemanticButton;
 
-  /// Typically the button's label.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget? child;
 
-  /// Returns a non-null [ButtonStyle] that's based primarily on the [Theme]'s
-  /// [ThemeData.textTheme] and [ThemeData.colorScheme].
-  ///
-  /// The returned style can be overridden by the [style] parameter and
-  /// by the style returned by [themeStyleOf]. For example the default
-  /// style of the [TextButton] subclass can be overridden with its
-  /// [TextButton.style] constructor parameter, or with a
-  /// [TextButtonTheme].
-  ///
-  /// Concrete button subclasses should return a ButtonStyle that
-  /// has no null properties, and where all of the [MaterialStateProperty]
-  /// properties resolve to non-null values.
-  ///
-  /// See also:
-  ///
-  ///  * [themeStyleOf], Returns the ButtonStyle of this button's component theme.
   @protected
   ButtonStyle defaultStyleOf(BuildContext context);
 
-  /// Returns the ButtonStyle that belongs to the button's component theme.
-  ///
-  /// The returned style can be overridden by the [style] parameter.
-  ///
-  /// Concrete button subclasses should return the ButtonStyle for the
-  /// nearest subclass-specific inherited theme, and if no such theme
-  /// exists, then the same value from the overall [Theme].
-  ///
-  /// See also:
-  ///
-  ///  * [defaultStyleOf], Returns the default [ButtonStyle] for this button.
   @protected
   ButtonStyle? themeStyleOf(BuildContext context);
 
-  /// Whether the button is enabled or disabled.
-  ///
-  /// Buttons are disabled by default. To enable a button, set its [onPressed]
-  /// or [onLongPress] properties to a non-null value.
   bool get enabled => onPressed != null || onLongPress != null;
 
   @override
@@ -165,19 +73,8 @@ abstract class ButtonStyleButton extends StatefulWidget {
     properties.add(DiagnosticsProperty<FocusNode>('focusNode', focusNode, defaultValue: null));
   }
 
-  /// Returns null if [value] is null, otherwise `MaterialStatePropertyAll<T>(value)`.
-  ///
-  /// A convenience method for subclasses.
   static MaterialStateProperty<T>? allOrNull<T>(T? value) => value == null ? null : MaterialStatePropertyAll<T>(value);
 
-  /// Returns an interpolated value based on the [textScaleFactor] parameter:
-  ///
-  ///  * 0 - 1 [geometry1x]
-  ///  * 1 - 2 lerp([geometry1x], [geometry2x], [textScaleFactor] - 1)
-  ///  * 2 - 3 lerp([geometry2x], [geometry3x], [textScaleFactor] - 2)
-  ///  * otherwise [geometry3x]
-  ///
-  /// A convenience method for subclasses.
   static EdgeInsetsGeometry scaledPadding(
     EdgeInsetsGeometry geometry1x,
     EdgeInsetsGeometry geometry2x,
@@ -193,15 +90,6 @@ abstract class ButtonStyleButton extends StatefulWidget {
   }
 }
 
-/// The base [State] class for buttons whose style is defined by a [ButtonStyle] object.
-///
-/// See also:
-///
-///  * [ButtonStyleButton], the [StatefulWidget] subclass for which this class is the [State].
-///  * [ElevatedButton], a filled button whose material elevates when pressed.
-///  * [FilledButton], a filled ButtonStyleButton that doesn't elevate when pressed.
-///  * [OutlinedButton], similar to [TextButton], but with an outline.
-///  * [TextButton], a simple button without a shadow.
 class _ButtonStyleState extends State<ButtonStyleButton> with TickerProviderStateMixin {
   AnimationController? controller;
   double? elevation;
@@ -454,11 +342,6 @@ class _MouseCursor extends MaterialStateMouseCursor {
   String get debugDescription => 'ButtonStyleButton_MouseCursor';
 }
 
-/// A widget to pad the area around a [ButtonStyleButton]'s inner [Material].
-///
-/// Redirect taps that occur in the padded area around the child to the center
-/// of the child. This increases the size of the button and the button's
-/// "tap target", but not its material or its ink splashes.
 class _InputPadding extends SingleChildRenderObjectWidget {
   const _InputPadding({
     super.child,

@@ -23,13 +23,10 @@ import '../dart/package_map.dart';
 import '../project.dart';
 import '../reporting/reporting.dart';
 
-/// The [Pub] instance.
 Pub get pub => context.get<Pub>()!;
 
-/// The console environment key used by the pub tool.
 const String _kPubEnvironmentKey = 'PUB_ENVIRONMENT';
 
-/// The console environment key used by the pub tool to find the cache directory.
 const String _kPubCacheEnvironmentKey = 'PUB_CACHE';
 
 typedef MessageFilter = String? Function(String message);
@@ -46,9 +43,6 @@ bool _tryDeleteDirectory(Directory directory, Logger logger) {
   return true;
 }
 
-/// Represents Flutter-specific data that is added to the `PUB_ENVIRONMENT`
-/// environment variable and allows understanding the type of requests made to
-/// the package site on Flutter's behalf.
 // DO NOT update without contacting kevmoo.
 // We have server-side tooling that assumes the values are consistent.
 class PubContext {
@@ -90,20 +84,13 @@ class PubContext {
   }
 }
 
-/// Describes the amount of output that should get printed from a `pub` command.
-/// [PubOutputMode.all] indicates that the complete output is printed. This is
-/// typically the default.
-/// [PubOutputMode.none] indicates that no output should be printed.
-/// [PubOutputMode.summaryOnly] indicates that only summary information should be printed.
 enum PubOutputMode {
   none,
   all,
   summaryOnly,
 }
 
-/// A handle for interacting with the pub tool.
 abstract class Pub {
-  /// Create a default [Pub] instance.
   factory Pub({
     required FileSystem fileSystem,
     required Logger logger,
@@ -113,7 +100,6 @@ abstract class Pub {
     required Usage usage,
   }) = _DefaultPub;
 
-  /// Create a [Pub] instance with a mocked [stdio].
   @visibleForTesting
   factory Pub.test({
     required FileSystem fileSystem,
@@ -125,23 +111,6 @@ abstract class Pub {
     required Stdio stdio,
   }) = _DefaultPub.test;
 
-  /// Runs `pub get` for [project].
-  ///
-  /// [context] provides extra information to package server requests to
-  /// understand usage.
-  ///
-  /// If [shouldSkipThirdPartyGenerator] is true, the overall pub get will be
-  /// skipped if the package config file has a "generator" other than "pub".
-  /// Defaults to true.
-  ///
-  /// [outputMode] determines how verbose the output from `pub get` will be.
-  /// If [PubOutputMode.all] is used, `pub get` will print its typical output
-  /// which includes information about all changed dependencies. If
-  /// [PubOutputMode.summaryOnly] is used, only summary information will be printed.
-  /// This is useful for cases where the user is typically not interested in
-  /// what dependencies were changed, such as when running `flutter create`.
-  ///
-  /// Will also resolve dependencies in the example folder if present.
   Future<void> get({
     required PubContext context,
     required FlutterProject project,
@@ -153,17 +122,6 @@ abstract class Pub {
     PubOutputMode outputMode = PubOutputMode.all
   });
 
-  /// Runs pub in 'batch' mode.
-  ///
-  /// forwarding complete lines written by pub to its stdout/stderr streams to
-  /// the corresponding stream of this process, optionally applying filtering.
-  /// The pub process will not receive anything on its stdin stream.
-  ///
-  /// The `--trace` argument is passed to `pub` when `showTraceForErrors`
-  /// `isRunningOnBot` is true.
-  ///
-  /// [context] provides extra information to package server requests to
-  /// understand usage.
   Future<void> batch(
     List<String> arguments, {
     required PubContext context,
@@ -172,17 +130,6 @@ abstract class Pub {
     String failureMessage = 'pub failed',
   });
 
-  /// Runs pub in 'interactive' mode.
-  ///
-  /// This will run the pub process with StdioInherited (unless [_stdio] is set
-  /// for testing).
-  ///
-  /// The pub process will be run in current working directory, so `--directory`
-  /// should be passed appropriately in [arguments]. This ensures output from
-  /// pub will refer to relative paths correctly.
-  ///
-  /// [touchesPackageConfig] should be true if this is a command expected to
-  /// create a new `.dart_tool/package_config.json` file.
   Future<void> interactively(
     List<String> arguments, {
     FlutterProject? project,
@@ -332,15 +279,6 @@ class _DefaultPub implements Pub {
     await _updateVersionAndPackageConfig(project);
   }
 
-  /// Runs pub with [arguments] and [ProcessStartMode.inheritStdio] mode.
-  ///
-  /// Uses [ProcessStartMode.normal] and [Pub._stdio] if [Pub.test] constructor
-  /// was used.
-  ///
-  /// Prints the stdout and stderr of the whole run, unless silenced using
-  /// [printProgress].
-  ///
-  /// Sends an analytics event.
   Future<void> _runWithStdioInherited(
     List<String> arguments, {
     required String command,
@@ -539,7 +477,6 @@ class _DefaultPub implements Pub {
     }
   }
 
-  /// The command used for running pub.
   late final List<String> _pubCommand = _computePubCommand();
 
   List<String> _computePubCommand() {
@@ -581,13 +518,6 @@ class _DefaultPub implements Pub {
     return values.join(':');
   }
 
-  /// There are 2 ways to get the pub cache location
-  ///
-  /// 1) Provide the _kPubCacheEnvironmentKey.
-  /// 2) The pub default user-level pub cache.
-  ///
-  /// If we are using 2, check if there are pre-packaged packages in
-  /// $FLUTTER_ROOT/.pub-preload-cache and install them in the user-level cache.
   String? _getPubCacheIfAvailable() {
     if (_platform.environment.containsKey(_kPubCacheEnvironmentKey)) {
       return _platform.environment[_kPubCacheEnvironmentKey];
@@ -597,18 +527,11 @@ class _DefaultPub implements Pub {
     return null;
   }
 
-  /// Load any package-files stored in FLUTTER_ROOT/.pub-preload-cache into the
-  /// pub cache if it exists.
-  ///
-  /// Deletes the [preloadCacheDir].
   void _preloadPubCache() {
     final String flutterRootPath = Cache.flutterRoot!;
     final Directory flutterRoot = _fileSystem.directory(flutterRootPath);
     final Directory preloadCacheDir = flutterRoot.childDirectory('.pub-preload-cache');
     if (preloadCacheDir.existsSync()) {
-      /// We only want to inform about existing caches on first run of a freshly
-      /// downloaded Flutter SDK. Therefore it is conditioned on the existence
-      /// of the .pub-preload-cache dir.
       _informAboutExistingCaches();
       final Iterable<String> cacheFiles =
             preloadCacheDir
@@ -620,8 +543,6 @@ class _DefaultPub implements Pub {
     }
   }
 
-  /// Issues a log message if there is an existing pub cache and or an existing
-  /// Dart Analysis Server cache.
   void _informAboutExistingCaches() {
     final String? pubCachePath = _pubCacheDefaultLocation();
     if (pubCachePath != null) {
@@ -644,10 +565,6 @@ It can be reset by deleting $dartServerCachePath.''');
       }
   }
 
-  /// The default location of the Pub cache if the PUB_CACHE environment variable
-  /// is not set.
-  ///
-  /// Returns null if the appropriate environment variables are unset.
   String? _pubCacheDefaultLocation () {
     if (_platform.isWindows) {
       final String? localAppData = _platform.environment['LOCALAPPDATA'];
@@ -664,10 +581,6 @@ It can be reset by deleting $dartServerCachePath.''');
     }
   }
 
-  /// The full environment used when running pub.
-  ///
-  /// [context] provides extra information to package server requests to
-  /// understand usage.
   Future<Map<String, String>> _createPubEnvironment({
     required PubContext context,
     String? flutterRootOverride,
@@ -685,14 +598,6 @@ It can be reset by deleting $dartServerCachePath.''');
     return environment;
   }
 
-  /// Updates the .dart_tool/version file to be equal to current Flutter
-  /// version.
-  ///
-  /// Calls [_updatePackageConfig] for [project] and [project.example] (if it
-  /// exists).
-  ///
-  /// This should be called after pub invocations that are expected to update
-  /// the packageConfig.
   Future<void> _updateVersionAndPackageConfig(FlutterProject project) async {
     if (!project.packageConfigFile.existsSync()) {
       throwToolExit('${project.directory}: pub did not create .dart_tools/package_config.json file.');
@@ -710,19 +615,6 @@ It can be reset by deleting $dartServerCachePath.''');
     }
   }
 
-  /// Update the package configuration file in [project].
-  ///
-  /// Creates a corresponding `package_config_subset` file that is used by the
-  /// build system to avoid rebuilds caused by an updated pub timestamp.
-  ///
-  /// if `project.generateSyntheticPackage` is `true` then insert flutter_gen
-  /// synthetic package into the package configuration. This is used by the l10n
-  /// localization tooling to insert a new reference into the package_config
-  /// file, allowing the import of a package URI that is not specified in the
-  /// pubspec.yaml
-  ///
-  /// For more information, see:
-  ///   * [generateLocalizations], `in lib/src/localizations/gen_l10n.dart`
   Future<void> _updatePackageConfig(FlutterProject project) async {
     final File packageConfigFile = project.packageConfigFile;
     final PackageConfig packageConfig = await loadPackageConfigWithLogging(packageConfigFile, logger: _logger);

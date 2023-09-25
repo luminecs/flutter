@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoSearchTextField].
 
 void main() => runApp(const SearchTextFieldApp());
 

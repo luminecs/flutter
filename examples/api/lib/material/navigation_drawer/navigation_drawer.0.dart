@@ -9,7 +9,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigationDrawer].
 
 void main() => runApp(const NavigationDrawerApp());
 

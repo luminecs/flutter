@@ -33,8 +33,6 @@ import 'test_device.dart';
 import 'test_time_recorder.dart';
 import 'watcher.dart';
 
-/// The address at which our WebSocket server resides and at which the sky_shell
-/// processes will host the VmService server.
 final Map<InternetAddressType, InternetAddress> _kHosts = <InternetAddressType, InternetAddress>{
   InternetAddressType.IPv4: InternetAddress.loopbackIPv4,
   InternetAddressType.IPv6: InternetAddress.loopbackIPv6,
@@ -42,11 +40,6 @@ final Map<InternetAddressType, InternetAddress> _kHosts = <InternetAddressType, 
 
 typedef PlatformPluginRegistration = void Function(FlutterPlatform platform);
 
-/// Configure the `test` package to work with Flutter.
-///
-/// On systems where each [FlutterPlatform] is only used to run one test suite
-/// (that is, one Dart file with a `*_test.dart` file name and a single `void
-/// main()`), you can set a VM Service port explicitly.
 FlutterPlatform installHook({
   TestWrapper testWrapper = const TestWrapper(),
   required String shellPath,
@@ -104,25 +97,6 @@ FlutterPlatform installHook({
   return platform;
 }
 
-/// Generates the bootstrap entry point script that will be used to launch an
-/// individual test file.
-///
-/// The [testUrl] argument specifies the path to the test file that is being
-/// launched.
-///
-/// The [host] argument specifies the address at which the test harness is
-/// running.
-///
-/// If [testConfigFile] is specified, it must follow the conventions of test
-/// configuration files as outlined in the [flutter_test] library. By default,
-/// the test file will be launched directly.
-///
-/// The [updateGoldens] argument will set the [autoUpdateGoldens] global
-/// variable in the [flutter_test] package before invoking the test.
-///
-/// The [integrationTest] argument can be specified to generate the bootstrap
-/// for integration tests.
-///
 // This API is used by the Fuchsia source tree, do not add new
 // required or position parameters.
 String generateTestBootstrap({
@@ -174,7 +148,6 @@ import '${Uri.file(testConfigFile.path)}' as test_config;
   }
   buffer.write('''
 
-/// Returns a serialized test suite.
 StreamChannel<dynamic> serializeSuite(Function getMain()) {
   return RemoteListener.start(getMain);
 }
@@ -193,8 +166,6 @@ Future<void> _testMain() async {
   await Future(test.main);
 }
 
-/// Capture any top-level errors (mostly lazy syntax errors, since other are
-/// caught below) and report them to the parent isolate.
 void catchIsolateErrors() {
   final ReceivePort errorPort = ReceivePort();
   // Treat errors non-fatal because otherwise they'll be double-printed.
@@ -272,7 +243,6 @@ void main() {
 
 typedef Finalizer = Future<void> Function();
 
-/// The flutter test platform used to integrate with package:test.
 class FlutterPlatform extends PlatformPlugin {
   FlutterPlatform({
     required this.shellPath,
@@ -312,10 +282,6 @@ class FlutterPlatform extends PlatformPlugin {
   // This can be used by internal projects that require custom logic for converting package: URIs to local paths.
   final UriConverter? uriConverter;
 
-  /// The device to run the test on for Integration Tests.
-  ///
-  /// If this is null, the test will run as a regular test with the Flutter
-  /// Tester; otherwise it will run as a Integration Test on this device.
   final Device? integrationTestDevice;
   bool get _isIntegrationTest => integrationTestDevice != null;
 
@@ -323,10 +289,6 @@ class FlutterPlatform extends PlatformPlugin {
 
   final FontConfigManager _fontConfigManager = FontConfigManager();
 
-  /// The test compiler produces dill files for each test main.
-  ///
-  /// To speed up compilation, each compile is initialized from an existing
-  /// dill file from previous runs, if possible.
   TestCompiler? compiler;
 
   // Each time loadChannel() is called, we spin up a local WebSocket server,
@@ -704,10 +666,6 @@ class _AsyncError {
   final StackTrace stack;
 }
 
-/// Bridges the package:test harness and the remote device.
-///
-/// The returned future completes when either side is closed, which also
-/// indicates when the tests have finished.
 Future<void> _pipeHarnessToRemote({
   required int id,
   required StreamChannel<dynamic> harnessChannel,

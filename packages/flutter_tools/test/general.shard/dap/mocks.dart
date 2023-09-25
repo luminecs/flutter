@@ -12,7 +12,6 @@ import 'package:flutter_tools/src/convert.dart';
 import 'package:flutter_tools/src/debug_adapters/flutter_adapter.dart';
 import 'package:flutter_tools/src/debug_adapters/flutter_test_adapter.dart';
 
-/// A [FlutterDebugAdapter] that captures what process/args will be launched.
 class MockFlutterDebugAdapter extends FlutterDebugAdapter {
   factory MockFlutterDebugAdapter({
     required FileSystem fileSystem,
@@ -61,17 +60,13 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
   late List<String> processArgs;
   late Map<String, String>? env;
 
-  /// Overrides base implementation of [sendLogsToClient] which requires valid
-  /// `args` to have been set which may not be the case for mocks.
   @override
   bool get sendLogsToClient => false;
 
   final StreamController<Map<String, Object?>> _dapToClientMessagesController = StreamController<Map<String, Object?>>.broadcast();
 
-  /// A stream of all messages sent from the adapter back to the client.
   Stream<Map<String, Object?>> get dapToClientMessages => _dapToClientMessagesController.stream;
 
-  /// A stream of all progress events sent from the adapter back to the client.
   Stream<Map<String, Object?>> get dapToClientProgressEvents {
     const List<String> progressEventTypes = <String>['progressStart', 'progressUpdate', 'progressEnd'];
 
@@ -79,17 +74,13 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
         .where((Map<String, Object?> message) => progressEventTypes.contains(message['event'] as String?));
   }
 
-  /// A list of all messages sent from the adapter to the `flutter run` processes `stdin`.
   final List<Map<String, Object?>> dapToFlutterMessages = <Map<String, Object?>>[];
 
-  /// The `method`s of all messages sent to the `flutter run` processes `stdin`
-  /// by the debug adapter.
   List<String> get dapToFlutterRequests => dapToFlutterMessages
       .map((Map<String, Object?> message) => message['method'] as String?)
       .whereNotNull()
       .toList();
 
-  /// A handler for the 'app.exposeUrl' reverse-request.
   String Function(String)? exposeUrlHandler;
 
   @override
@@ -122,7 +113,6 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
     }
   }
 
-  /// Handles messages sent from the debug adapter back to the client.
   void _handleDapToClientMessage(ProtocolMessage message) {
     _dapToClientMessagesController.add(message.toJson());
 
@@ -157,20 +147,12 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
     }
   }
 
-  /// Simulates a message emitted by the `flutter run` process by directly
-  /// calling the debug adapters [handleStdout] method.
-  ///
-  /// Use [simulateRawStdout] to simulate non-daemon text output.
   void simulateStdoutMessage(Map<String, Object?> message) {
     // Messages are wrapped in a list because Flutter only processes messages
     // wrapped in brackets.
     handleStdout(jsonEncode(<Object?>[message]));
   }
 
-  /// Simulates a string emitted by the `flutter run` process by directly
-  /// calling the debug adapters [handleStdout] method.
-  ///
-  /// Use [simulateStdoutMessage] to simulate a daemon JSON message.
   void simulateRawStdout(String output) {
     handleStdout(output);
   }
@@ -191,7 +173,6 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
   }
 }
 
-/// A [FlutterTestDebugAdapter] that captures what process/args will be launched.
 class MockFlutterTestDebugAdapter extends FlutterTestDebugAdapter {
   factory MockFlutterTestDebugAdapter({
     required FileSystem fileSystem,

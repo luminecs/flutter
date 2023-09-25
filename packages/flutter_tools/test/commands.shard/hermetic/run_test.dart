@@ -1439,13 +1439,11 @@ class CapturingAppDomain extends AppDomain {
 }
 
 class FakeAnsiTerminal extends Fake implements AnsiTerminal {
-  /// Setting to false will cause operations to Stdin to throw a [StdinException].
   bool hasStdin = true;
 
   @override
   bool usesTerminalUi = false;
 
-  /// A list of all the calls to the [singleCharMode] setter.
   List<bool> setSingleCharModeHistory = <bool>[];
 
   @override

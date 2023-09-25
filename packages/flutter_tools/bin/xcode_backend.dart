@@ -17,10 +17,6 @@ void main(List<String> arguments) {
   ).run();
 }
 
-/// Container for script arguments and environment variables.
-///
-/// All interactions with the platform are broken into individual methods that
-/// can be overridden in tests.
 class Context {
   Context({
     required this.arguments,
@@ -68,9 +64,6 @@ class Context {
     return file.existsSync();
   }
 
-  /// Run given command in a synchronous subprocess.
-  ///
-  /// Will throw [Exception] if the exit code is not 0.
   ProcessResult runSync(
     String bin,
     List<String> args, {
@@ -107,24 +100,18 @@ class Context {
     return result;
   }
 
-  /// Log message to stderr.
   void echoError(String message) {
     stderr.writeln(message);
   }
 
-  /// Log message to stdout.
   void echo(String message) {
     stdout.write(message);
   }
 
-  /// Exit the application with the given exit code.
-  ///
-  /// Exists to allow overriding in tests.
   Never exitApp(int code) {
     exit(code);
   }
 
-  /// Return value from environment if it exists, else throw [Exception].
   String environmentEnsure(String key) {
     final String? value = environment[key];
     if (value == null) {
@@ -171,11 +158,6 @@ class Context {
     exitApp(-1);
   }
 
-  /// Copies all files from [source] to [destination].
-  ///
-  /// Does not copy `.DS_Store`.
-  ///
-  /// If [delete], delete extraneous files from [destination].
   void runRsync(
     String source,
     String destination, {

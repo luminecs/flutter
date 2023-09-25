@@ -11,85 +11,38 @@ import 'utils.dart';
 
 export 'tolerance.dart' show Tolerance;
 
-/// Structure that describes a spring's constants.
-///
-/// Used to configure a [SpringSimulation].
 class SpringDescription {
-  /// Creates a spring given the mass, stiffness, and the damping coefficient.
-  ///
-  /// See [mass], [stiffness], and [damping] for the units of the arguments.
   const SpringDescription({
     required this.mass,
     required this.stiffness,
     required this.damping,
   });
 
-  /// Creates a spring given the mass (m), stiffness (k), and damping ratio (ζ).
-  /// The damping ratio is especially useful trying to determining the type of
-  /// spring to create. A ratio of 1.0 creates a critically damped spring, > 1.0
-  /// creates an overdamped spring and < 1.0 an underdamped one.
-  ///
-  /// See [mass] and [stiffness] for the units for those arguments. The damping
-  /// ratio is unitless.
   SpringDescription.withDampingRatio({
     required this.mass,
     required this.stiffness,
     double ratio = 1.0,
   }) : damping = ratio * 2.0 * math.sqrt(mass * stiffness);
 
-  /// The mass of the spring (m). The units are arbitrary, but all springs
-  /// within a system should use the same mass units.
   final double mass;
 
-  /// The spring constant (k). The units of stiffness are M/T², where M is the
-  /// mass unit used for the value of the [mass] property, and T is the time
-  /// unit used for driving the [SpringSimulation].
   final double stiffness;
 
-  /// The damping coefficient (c).
-  ///
-  /// Do not confuse the damping _coefficient_ (c) with the damping _ratio_ (ζ).
-  /// To create a [SpringDescription] with a damping ratio, use the [
-  /// SpringDescription.withDampingRatio] constructor.
-  ///
-  /// The units of the damping coefficient are M/T, where M is the mass unit
-  /// used for the value of the [mass] property, and T is the time unit used for
-  /// driving the [SpringSimulation].
   final double damping;
 
   @override
   String toString() => '${objectRuntimeType(this, 'SpringDescription')}(mass: ${mass.toStringAsFixed(1)}, stiffness: ${stiffness.toStringAsFixed(1)}, damping: ${damping.toStringAsFixed(1)})';
 }
 
-/// The kind of spring solution that the [SpringSimulation] is using to simulate the spring.
-///
-/// See [SpringSimulation.type].
 enum SpringType {
-  /// A spring that does not bounce and returns to its rest position in the
-  /// shortest possible time.
   criticallyDamped,
 
-  /// A spring that bounces.
   underDamped,
 
-  /// A spring that does not bounce but takes longer to return to its rest
-  /// position than a [criticallyDamped] one.
   overDamped,
 }
 
-/// A spring simulation.
-///
-/// Models a particle attached to a spring that follows Hooke's law.
 class SpringSimulation extends Simulation {
-  /// Creates a spring simulation from the provided spring description, start
-  /// distance, end distance, and initial velocity.
-  ///
-  /// The units for the start and end distance arguments are arbitrary, but must
-  /// be consistent with the units used for other lengths in the system.
-  ///
-  /// The units for the velocity are L/T, where L is the aforementioned
-  /// arbitrary unit of length, and T is the time unit used for driving the
-  /// [SpringSimulation].
   SpringSimulation(
     SpringDescription spring,
     double start,
@@ -102,10 +55,6 @@ class SpringSimulation extends Simulation {
   final double _endPosition;
   final _SpringSolution _solution;
 
-  /// The kind of spring being simulated, for debugging purposes.
-  ///
-  /// This is derived from the [SpringDescription] provided to the [
-  /// SpringSimulation] constructor.
   SpringType get type => _solution.type;
 
   @override
@@ -124,14 +73,7 @@ class SpringSimulation extends Simulation {
   String toString() => '${objectRuntimeType(this, 'SpringSimulation')}(end: ${_endPosition.toStringAsFixed(1)}, $type)';
 }
 
-/// A [SpringSimulation] where the value of [x] is guaranteed to have exactly the
-/// end value when the simulation [isDone].
 class ScrollSpringSimulation extends SpringSimulation {
-  /// Creates a spring simulation from the provided spring description, start
-  /// distance, end distance, and initial velocity.
-  ///
-  /// See the [SpringSimulation.new] constructor on the superclass for a
-  /// discussion of the arguments' units.
   ScrollSpringSimulation(
     super.spring,
     super.start,

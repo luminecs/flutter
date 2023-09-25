@@ -17,25 +17,20 @@ void main() {
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pumpAndSettle();
 
-    /// NavigationDestinations must be rendered
     expect(find.text('Messages'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
     expect(find.text('Settings'), findsOneWidget);
 
-    /// Initial index must be zero
     expect(find.text('Page: '), findsOneWidget);
 
-    /// Switch to second tab
     await tester.tap(find.ancestor(of: find.text('Messages'), matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Page: Messages'), findsOneWidget);
 
-    /// Switch to third tab
     await tester.tap(find.ancestor(of: find.text('Profile'), matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Page: Profile'), findsOneWidget);
 
-    /// Switch to fourth tab
     await tester.tap(find.ancestor(of: find.text('Settings'), matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Page: Settings'), findsOneWidget);

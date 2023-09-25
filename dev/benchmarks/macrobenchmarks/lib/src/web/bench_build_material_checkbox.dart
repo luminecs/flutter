@@ -6,9 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'recorder.dart';
 
-/// Measures how expensive it is to construct material checkboxes.
-///
-/// Creates a 10x10 grid of tristate checkboxes.
 class BenchBuildMaterialCheckbox extends WidgetBuildRecorder {
   BenchBuildMaterialCheckbox() : super(name: benchmarkName);
 

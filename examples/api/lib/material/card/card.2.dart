@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [Card].
 
 void main() {
   runApp(const CardExamplesApp());
@@ -33,12 +32,6 @@ class CardExamplesApp extends StatelessWidget {
   }
 }
 
-/// An example of the elevated card type.
-///
-/// The default settings for [Card] will provide an elevated
-/// card matching the spec:
-///
-/// https://m3.material.io/components/cards/specs#a012d40d-7a5c-4b07-8740-491dec79d58b
 class ElevatedCardExample extends StatelessWidget {
   const ElevatedCardExample({super.key});
 
@@ -56,12 +49,6 @@ class ElevatedCardExample extends StatelessWidget {
   }
 }
 
-/// An example of the filled card type.
-///
-/// To make a [Card] match the filled type, the default elevation and color
-/// need to be changed to the values from the spec:
-///
-/// https://m3.material.io/components/cards/specs#0f55bf62-edf2-4619-b00d-b9ed462f2c5a
 class FilledCardExample extends StatelessWidget {
   const FilledCardExample({super.key});
 
@@ -81,12 +68,6 @@ class FilledCardExample extends StatelessWidget {
   }
 }
 
-/// An example of the outlined card type.
-///
-/// To make a [Card] match the outlined type, the default elevation and shape
-/// need to be changed to the values from the spec:
-///
-/// https://m3.material.io/components/cards/specs#0f55bf62-edf2-4619-b00d-b9ed462f2c5a
 class OutlinedCardExample extends StatelessWidget {
   const OutlinedCardExample({super.key});
 

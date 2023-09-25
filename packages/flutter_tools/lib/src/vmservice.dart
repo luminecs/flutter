@@ -41,59 +41,32 @@ const String kCompileExpressionServiceName = 'compileExpression';
 const String kFlutterMemoryInfoServiceName = 'flutterMemoryInfo';
 const String kFlutterGetSkSLServiceName = 'flutterGetSkSL';
 
-/// The error response code from an unrecoverable compilation failure.
 const int kIsolateReloadBarred = 1005;
 
-/// Override `WebSocketConnector` in [context] to use a different constructor
-/// for [WebSocket]s (used by tests).
 typedef WebSocketConnector = Future<io.WebSocket> Function(String url, {io.CompressionOptions compression, required Logger logger});
 
 typedef PrintStructuredErrorLogMethod = void Function(vm_service.Event);
 
 WebSocketConnector _openChannel = _defaultOpenChannel;
 
-/// A testing only override of the WebSocket connector.
-///
-/// Provide a `null` value to restore the original connector.
 @visibleForTesting
 set openChannelForTesting(WebSocketConnector? connector) {
   _openChannel = connector ?? _defaultOpenChannel;
 }
 
-/// The error codes for the JSON-RPC standard, including VM service specific
-/// error codes.
-///
-/// See also: https://www.jsonrpc.org/specification#error_object
 abstract class RPCErrorCodes {
-  /// The method does not exist or is not available.
   static const int kMethodNotFound = -32601;
 
-  /// Invalid method parameter(s), such as a mismatched type.
   static const int kInvalidParams = -32602;
 
-  /// Internal JSON-RPC error.
   static const int kInternalError = -32603;
 
-  /// Application specific error codes.
   static const int kServerError = -32000;
 
-  /// Non-standard JSON-RPC error codes:
 
-  /// The VM service or extension service has disappeared.
   static const int kServiceDisappeared = 112;
 }
 
-/// A function that reacts to the invocation of the 'reloadSources' service.
-///
-/// The VM Service Protocol allows clients to register custom services that
-/// can be invoked by other clients through the service protocol itself.
-///
-/// Clients like VmService use external 'reloadSources' services,
-/// when available, instead of the VM internal one. This allows these clients to
-/// invoke Flutter HotReload when connected to a Flutter Application started in
-/// hot mode.
-///
-/// See: https://github.com/dart-lang/sdk/issues/30023
 typedef ReloadSources = Future<void> Function(
   String isolateId, {
   bool force,
@@ -116,9 +89,6 @@ typedef CompileExpression = Future<String> Function(
   bool isStatic,
 );
 
-/// A method that pulls an SkSL shader from the device and writes it to a file.
-///
-/// The name of the file returned as a result.
 typedef GetSkSLMethod = Future<String?> Function();
 
 Future<io.WebSocket> _defaultOpenChannel(String url, {
@@ -177,8 +147,6 @@ Future<io.WebSocket> _defaultOpenChannel(String url, {
   return socket;
 }
 
-/// Override `VMServiceConnector` in [context] to return a different VMService
-/// from [VMService.connect] (used by tests).
 typedef VMServiceConnector = Future<FlutterVmService> Function(Uri httpUri, {
   ReloadSources? reloadSources,
   Restart? restart,
@@ -191,10 +159,6 @@ typedef VMServiceConnector = Future<FlutterVmService> Function(Uri httpUri, {
   required Logger logger,
 });
 
-/// Set up the VM Service client by attaching services for each of the provided
-/// callbacks.
-///
-/// All parameters besides [vmService] may be null.
 Future<vm_service.VmService> setUpVmService({
   ReloadSources? reloadSources,
   Restart? restart,
@@ -338,14 +302,6 @@ Future<vm_service.VmService> setUpVmService({
   return vmService;
 }
 
-/// Connect to a Dart VM Service at [httpUri].
-///
-/// If the [reloadSources] parameter is not null, the 'reloadSources' service
-/// will be registered. The VM Service Protocol allows clients to register
-/// custom services that can be invoked by other clients through the service
-/// protocol itself.
-///
-/// See: https://github.com/dart-lang/sdk/commit/df8bf384eb815cf38450cb50a0f4b62230fba217
 Future<FlutterVmService> connectToVmService(
   Uri httpUri, {
   ReloadSources? reloadSources,
@@ -445,7 +401,6 @@ bool _validateRpcBoolParam(String methodName, Map<String, Object?> params, Strin
   return (value as bool?) ?? false;
 }
 
-/// Peered to an Android/iOS FlutterView widget on a device.
 class FlutterView {
   FlutterView({
     required this.id,
@@ -481,7 +436,6 @@ class FlutterView {
   }
 }
 
-/// Flutter specific VM Service functionality.
 class FlutterVmService {
   FlutterVmService(
     this.service, {
@@ -512,7 +466,6 @@ class FlutterVmService {
     }
   }
 
-  /// Set the asset directory for the an attached Flutter view.
   Future<void> setAssetDirectory({
     required Uri assetsDirectory,
     required String? viewId,
@@ -527,10 +480,6 @@ class FlutterVmService {
       });
   }
 
-  /// Retrieve the cached SkSL shaders from an attached Flutter view.
-  ///
-  /// This method will only return data if `--cache-sksl` was provided as a
-  /// flutter run argument, and only then on physical devices.
   Future<Map<String, Object?>?> getSkSLs({
     required String viewId,
   }) async {
@@ -546,9 +495,6 @@ class FlutterVmService {
     return response.json?['SkSLs'] as Map<String, Object?>?;
   }
 
-  /// Flush all tasks on the UI thread for an attached Flutter view.
-  ///
-  /// This method is currently used only for benchmarking.
   Future<void> flushUIThreadTasks({
     required String uiIsolateId,
   }) async {
@@ -560,11 +506,6 @@ class FlutterVmService {
     );
   }
 
-  /// Launch the Dart isolate with entrypoint [main] in the Flutter engine [viewId]
-  /// with [assetsDirectory] as the devFS.
-  ///
-  /// This method is used by the tool to hot restart an already running Flutter
-  /// engine.
   Future<void> runInView({
     required String viewId,
     required Uri main,
@@ -589,12 +530,6 @@ class FlutterVmService {
     await onRunnable;
   }
 
-  /// Renders the last frame with additional raster tracing enabled.
-  ///
-  /// When a frame is rendered using this method it will incur additional cost
-  /// for rasterization which is not reflective of how long the frame takes in
-  /// production. This is primarily intended to be used to identify the layers
-  /// that result in the most raster perf degradation.
   Future<Map<String, Object?>?> renderFrameWithRasterStats({
     required String? viewId,
     required String? uiIsolateId,
@@ -789,10 +724,6 @@ class FlutterVmService {
   }
 
 
-  /// Exit the application by calling [exit] from `dart:io`.
-  ///
-  /// This method is only supported by certain embedders. This is
-  /// described by [Device.supportsFlutterExit].
   Future<bool> flutterExit({
     required String isolateId,
   }) async {
@@ -815,11 +746,6 @@ class FlutterVmService {
     return true;
   }
 
-  /// Return the current platform override for the flutter view running with
-  /// the main isolate [isolateId].
-  ///
-  /// If a non-null value is provided for [platform], the platform override
-  /// is updated with this value.
   Future<String> flutterPlatformOverride({
     String? platform,
     required String isolateId,
@@ -837,11 +763,6 @@ class FlutterVmService {
     return 'unknown';
   }
 
-  /// Return the current brightness value for the flutter view running with
-  /// the main isolate [isolateId].
-  ///
-  /// If a non-null value is provided for [brightness], the brightness override
-  /// is updated with this value.
   Future<Brightness?> flutterBrightnessOverride({
     Brightness? brightness,
     required String isolateId,
@@ -878,8 +799,6 @@ class FlutterVmService {
     }
   }
 
-  /// Invoke a flutter extension method, if the flutter extension is not
-  /// available, returns null.
   Future<Map<String, Object?>?> invokeFlutterExtensionRpcRaw(
     String method, {
     required String isolateId,
@@ -895,12 +814,6 @@ class FlutterVmService {
     return response?.json;
   }
 
-  /// List all [FlutterView]s attached to the current VM.
-  ///
-  /// If this returns an empty list, it will poll forever unless [returnEarly]
-  /// is set to true.
-  ///
-  /// By default, the poll duration is 50 milliseconds.
   Future<List<FlutterView>> getFlutterViews({
     bool returnEarly = false,
     Duration delay = const Duration(milliseconds: 50),
@@ -928,8 +841,6 @@ class FlutterVmService {
     }
   }
 
-  /// Tell the provided flutter view that the font manifest has been updated
-  /// and asset fonts should be reloaded.
   Future<void> reloadAssetFonts({
     required String isolateId,
     required String viewId,
@@ -942,16 +853,6 @@ class FlutterVmService {
     );
   }
 
-  /// Waits for a signal from the VM service that [extensionName] is registered.
-  ///
-  /// Looks at the list of loaded extensions for first Flutter view, as well as
-  /// the stream of added extensions to avoid races.
-  ///
-  /// If [webIsolate] is true, this uses the VM Service isolate list instead of
-  /// the `_flutter.listViews` method, which is not implemented by DWDS.
-  ///
-  /// Throws a [VmServiceDisappearedException] should the VM Service disappear
-  /// while making calls to it.
   Future<vm_service.IsolateRef> findExtensionIsolate(String extensionName) async {
     try {
       await service.streamListen(vm_service.EventStreams.kIsolate);
@@ -1004,8 +905,6 @@ class FlutterVmService {
     return refs;
   }
 
-  /// Attempt to retrieve the isolate with id [isolateId], or `null` if it has
-  /// been collected.
   Future<vm_service.Isolate?> getIsolateOrNull(String isolateId) async {
     return service.getIsolate(isolateId)
       .then<vm_service.Isolate?>(
@@ -1020,8 +919,6 @@ class FlutterVmService {
         });
   }
 
-  /// Attempt to retrieve the isolate pause event with id [isolateId], or `null` if it has
-  /// been collected.
   Future<vm_service.Event?> getIsolatePauseEventOrNull(String isolateId) async {
     return service.getIsolatePauseEvent(isolateId)
       .then<vm_service.Event?>(
@@ -1036,7 +933,6 @@ class FlutterVmService {
         });
   }
 
-  /// Create a new development file system on the device.
   Future<vm_service.Response> createDevFS(String fsName) {
     // Call the unchecked version of `callServiceExtension` because the caller
     // has custom handling of certain RPCErrors.
@@ -1046,7 +942,6 @@ class FlutterVmService {
     );
   }
 
-  /// Delete an existing file system.
   Future<void> deleteDevFS(String fsName) async {
     await _checkedCallServiceExtension(
       '_deleteDevFS',
@@ -1062,7 +957,6 @@ class FlutterVmService {
     return _checkedCallServiceExtension(kScreenshotSkpMethod);
   }
 
-  /// Set the VM timeline flags.
   Future<void> setTimelineFlags(List<String> recordedStreams) async {
     await _checkedCallServiceExtension(
       'setVMTimelineFlags',
@@ -1081,11 +975,8 @@ class FlutterVmService {
   }
 }
 
-/// Thrown when the VM Service disappears while calls are being made to it.
 class VmServiceDisappearedException implements Exception { }
 
-/// Whether the event attached to an [Isolate.pauseEvent] should be considered
-/// a "pause" event.
 bool isPauseEvent(String kind) {
   return kind == vm_service.EventKind.kPauseStart ||
          kind == vm_service.EventKind.kPauseExit ||
@@ -1096,23 +987,12 @@ bool isPauseEvent(String kind) {
          kind == vm_service.EventKind.kNone;
 }
 
-/// A brightness enum that matches the values https://github.com/flutter/engine/blob/3a96741247528133c0201ab88500c0c3c036e64e/lib/ui/window.dart#L1328
-/// Describes the contrast of a theme or color palette.
 enum Brightness {
-  /// The color is dark and will require a light text color to achieve readable
-  /// contrast.
-  ///
-  /// For example, the color might be dark grey, requiring white text.
   dark,
 
-  /// The color is light and will require a dark text color to achieve readable
-  /// contrast.
-  ///
-  /// For example, the color might be bright white, requiring black text.
   light,
 }
 
-/// Process a VM service log event into a string message.
 String processVmServiceMessage(vm_service.Event event) {
   final String message = utf8.decode(base64.decode(event.bytes!));
   // Remove extra trailing newlines appended by the vm service.

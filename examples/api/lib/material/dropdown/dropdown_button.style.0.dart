@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [DropdownButton.style].
 
 void main() => runApp(const DropdownButtonApp());
 

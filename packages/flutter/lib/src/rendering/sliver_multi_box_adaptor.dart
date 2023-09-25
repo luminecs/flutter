@@ -9,56 +9,11 @@ import 'box.dart';
 import 'object.dart';
 import 'sliver.dart';
 
-/// A delegate used by [RenderSliverMultiBoxAdaptor] to manage its children.
-///
-/// [RenderSliverMultiBoxAdaptor] objects reify their children lazily to avoid
-/// spending resources on children that are not visible in the viewport. This
-/// delegate lets these objects create and remove children as well as estimate
-/// the total scroll offset extent occupied by the full child list.
 abstract class RenderSliverBoxChildManager {
-  /// Called during layout when a new child is needed. The child should be
-  /// inserted into the child list in the appropriate position, after the
-  /// `after` child (at the start of the list if `after` is null). Its index and
-  /// scroll offsets will automatically be set appropriately.
-  ///
-  /// The `index` argument gives the index of the child to show. It is possible
-  /// for negative indices to be requested. For example: if the user scrolls
-  /// from child 0 to child 10, and then those children get much smaller, and
-  /// then the user scrolls back up again, this method will eventually be asked
-  /// to produce a child for index -1.
-  ///
-  /// If no child corresponds to `index`, then do nothing.
-  ///
-  /// Which child is indicated by index zero depends on the [GrowthDirection]
-  /// specified in the `constraints` of the [RenderSliverMultiBoxAdaptor]. For
-  /// example if the children are the alphabet, then if
-  /// [SliverConstraints.growthDirection] is [GrowthDirection.forward] then
-  /// index zero is A, and index 25 is Z. On the other hand if
-  /// [SliverConstraints.growthDirection] is [GrowthDirection.reverse] then
-  /// index zero is Z, and index 25 is A.
-  ///
-  /// During a call to [createChild] it is valid to remove other children from
-  /// the [RenderSliverMultiBoxAdaptor] object if they were not created during
-  /// this frame and have not yet been updated during this frame. It is not
-  /// valid to add any other children to this render object.
   void createChild(int index, { required RenderBox? after });
 
-  /// Remove the given child from the child list.
-  ///
-  /// Called by [RenderSliverMultiBoxAdaptor.collectGarbage], which itself is
-  /// called from [RenderSliverMultiBoxAdaptor]'s `performLayout`.
-  ///
-  /// The index of the given child can be obtained using the
-  /// [RenderSliverMultiBoxAdaptor.indexOf] method, which reads it from the
-  /// [SliverMultiBoxAdaptorParentData.index] field of the child's
-  /// [RenderObject.parentData].
   void removeChild(RenderBox child);
 
-  /// Called to estimate the total scrollable extents of this object.
-  ///
-  /// Must return the total distance from the start of the child with the
-  /// earliest possible index to the end of the child with the last possible
-  /// index.
   double estimateMaxScrollOffset(
     SliverConstraints constraints, {
     int? firstIndex,
@@ -67,83 +22,33 @@ abstract class RenderSliverBoxChildManager {
     double? trailingScrollOffset,
   });
 
-  /// Called to obtain a precise measure of the total number of children.
-  ///
-  /// Must return the number that is one greater than the greatest `index` for
-  /// which `createChild` will actually create a child.
-  ///
-  /// This is used when [createChild] cannot add a child for a positive `index`,
-  /// to determine the precise dimensions of the sliver. It must return an
-  /// accurate and precise non-null value. It will not be called if
-  /// [createChild] is always able to create a child (e.g. for an infinite
-  /// list).
   int get childCount;
 
-  /// Called during [RenderSliverMultiBoxAdaptor.adoptChild] or
-  /// [RenderSliverMultiBoxAdaptor.move].
-  ///
-  /// Subclasses must ensure that the [SliverMultiBoxAdaptorParentData.index]
-  /// field of the child's [RenderObject.parentData] accurately reflects the
-  /// child's index in the child list after this function returns.
   void didAdoptChild(RenderBox child);
 
-  /// Called during layout to indicate whether this object provided insufficient
-  /// children for the [RenderSliverMultiBoxAdaptor] to fill the
-  /// [SliverConstraints.remainingPaintExtent].
-  ///
-  /// Typically called unconditionally at the start of layout with false and
-  /// then later called with true when the [RenderSliverMultiBoxAdaptor]
-  /// fails to create a child required to fill the
-  /// [SliverConstraints.remainingPaintExtent].
-  ///
-  /// Useful for subclasses to determine whether newly added children could
-  /// affect the visible contents of the [RenderSliverMultiBoxAdaptor].
   void setDidUnderflow(bool value);
 
-  /// Called at the beginning of layout to indicate that layout is about to
-  /// occur.
   void didStartLayout() { }
 
-  /// Called at the end of layout to indicate that layout is now complete.
   void didFinishLayout() { }
 
-  /// In debug mode, asserts that this manager is not expecting any
-  /// modifications to the [RenderSliverMultiBoxAdaptor]'s child list.
-  ///
-  /// This function always returns true.
-  ///
-  /// The manager is not required to track whether it is expecting modifications
-  /// to the [RenderSliverMultiBoxAdaptor]'s child list and can return
-  /// true without making any assertions.
   bool debugAssertChildListLocked() => true;
 }
 
-/// Parent data structure used by [RenderSliverWithKeepAliveMixin].
 mixin KeepAliveParentDataMixin implements ParentData {
-  /// Whether to keep the child alive even when it is no longer visible.
   bool keepAlive = false;
 
-  /// Whether the widget is currently being kept alive, i.e. has [keepAlive] set
-  /// to true and is offscreen.
   bool get keptAlive;
 }
 
-/// This class exists to dissociate [KeepAlive] from [RenderSliverMultiBoxAdaptor].
-///
-/// [RenderSliverWithKeepAliveMixin.setupParentData] must be implemented to use
-/// a parentData class that uses the right mixin or whatever is appropriate.
 mixin RenderSliverWithKeepAliveMixin implements RenderSliver {
-  /// Alerts the developer that the child's parentData needs to be of type
-  /// [KeepAliveParentDataMixin].
   @override
   void setupParentData(RenderObject child) {
     assert(child.parentData is KeepAliveParentDataMixin);
   }
 }
 
-/// Parent data structure used by [RenderSliverMultiBoxAdaptor].
 class SliverMultiBoxAdaptorParentData extends SliverLogicalParentData with ContainerParentDataMixin<RenderBox>, KeepAliveParentDataMixin {
-  /// The index of this child according to the [RenderSliverBoxChildManager].
   int? index;
 
   @override
@@ -154,36 +59,10 @@ class SliverMultiBoxAdaptorParentData extends SliverLogicalParentData with Conta
   String toString() => 'index=$index; ${keepAlive ? "keepAlive; " : ""}${super.toString()}';
 }
 
-/// A sliver with multiple box children.
-///
-/// [RenderSliverMultiBoxAdaptor] is a base class for slivers that have multiple
-/// box children. The children are managed by a [RenderSliverBoxChildManager],
-/// which lets subclasses create children lazily during layout. Typically
-/// subclasses will create only those children that are actually needed to fill
-/// the [SliverConstraints.remainingPaintExtent].
-///
-/// The contract for adding and removing children from this render object is
-/// more strict than for normal render objects:
-///
-/// * Children can be removed except during a layout pass if they have already
-///   been laid out during that layout pass.
-/// * Children cannot be added except during a call to [childManager], and
-///   then only if there is no child corresponding to that index (or the child
-///   corresponding to that index was first removed).
-///
-/// See also:
-///
-///  * [RenderSliverToBoxAdapter], which has a single box child.
-///  * [RenderSliverList], which places its children in a linear
-///    array.
-///  * [RenderSliverFixedExtentList], which places its children in a linear
-///    array with a fixed extent in the main axis.
-///  * [RenderSliverGrid], which places its children in arbitrary positions.
 abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
   with ContainerRenderObjectMixin<RenderBox, SliverMultiBoxAdaptorParentData>,
        RenderSliverHelpers, RenderSliverWithKeepAliveMixin {
 
-  /// Creates a sliver with multiple box children.
   RenderSliverMultiBoxAdaptor({
     required RenderSliverBoxChildManager childManager,
   }) : _childManager = childManager {
@@ -200,29 +79,14 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     }
   }
 
-  /// The delegate that manages the children of this object.
-  ///
-  /// Rather than having a concrete list of children, a
-  /// [RenderSliverMultiBoxAdaptor] uses a [RenderSliverBoxChildManager] to
-  /// create children during layout in order to fill the
-  /// [SliverConstraints.remainingPaintExtent].
   @protected
   RenderSliverBoxChildManager get childManager => _childManager;
   final RenderSliverBoxChildManager _childManager;
 
-  /// The nodes being kept alive despite not being visible.
   final Map<int, RenderBox> _keepAliveBucket = <int, RenderBox>{};
 
   late List<RenderBox> _debugDanglingKeepAlives;
 
-  /// Indicates whether integrity check is enabled.
-  ///
-  /// Setting this property to true will immediately perform an integrity check.
-  ///
-  /// The integrity check consists of:
-  ///
-  /// 1. Verify that the children index in childList is in ascending order.
-  /// 2. Verify that there is no dangling keepalive child as the result of [move].
   bool get debugChildIntegrityEnabled => _debugChildIntegrityEnabled;
   bool _debugChildIntegrityEnabled = true;
   set debugChildIntegrityEnabled(bool enabled) {
@@ -244,9 +108,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
 
   bool _debugAssertChildListLocked() => childManager.debugAssertChildListLocked();
 
-  /// Verify that the child list index is in strictly increasing order.
-  ///
-  /// This has no effect in release builds.
   bool _debugVerifyChildOrder() {
     if (_debugChildIntegrityEnabled) {
       RenderBox? child = firstChild;
@@ -401,22 +262,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     // Do not visit children in [_keepAliveBucket].
   }
 
-  /// Called during layout to create and add the child with the given index and
-  /// scroll offset.
-  ///
-  /// Calls [RenderSliverBoxChildManager.createChild] to actually create and add
-  /// the child if necessary. The child may instead be obtained from a cache;
-  /// see [SliverMultiBoxAdaptorParentData.keepAlive].
-  ///
-  /// Returns false if there was no cached child and `createChild` did not add
-  /// any child, otherwise returns true.
-  ///
-  /// Does not layout the new child.
-  ///
-  /// When this is called, there are no visible children, so no children can be
-  /// removed during the call to `createChild`. No child should be added during
-  /// that call either, except for the one that is created and returned by
-  /// `createChild`.
   @protected
   bool addInitialChild({ int index = 0, double layoutOffset = 0.0 }) {
     assert(_debugAssertChildListLocked());
@@ -433,19 +278,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     return false;
   }
 
-  /// Called during layout to create, add, and layout the child before
-  /// [firstChild].
-  ///
-  /// Calls [RenderSliverBoxChildManager.createChild] to actually create and add
-  /// the child if necessary. The child may instead be obtained from a cache;
-  /// see [SliverMultiBoxAdaptorParentData.keepAlive].
-  ///
-  /// Returns the new child or null if no child was obtained.
-  ///
-  /// The child that was previously the first child, as well as any subsequent
-  /// children, may be removed by this call if they have not yet been laid out
-  /// during this layout pass. No child should be added during that call except
-  /// for the one that is created and returned by `createChild`.
   @protected
   RenderBox? insertAndLayoutLeadingChild(
     BoxConstraints childConstraints, {
@@ -462,18 +294,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     return null;
   }
 
-  /// Called during layout to create, add, and layout the child after
-  /// the given child.
-  ///
-  /// Calls [RenderSliverBoxChildManager.createChild] to actually create and add
-  /// the child if necessary. The child may instead be obtained from a cache;
-  /// see [SliverMultiBoxAdaptorParentData.keepAlive].
-  ///
-  /// Returns the new child. It is the responsibility of the caller to configure
-  /// the child's scroll offset.
-  ///
-  /// Children after the `after` child may be removed in the process. Only the
-  /// new child may be added.
   @protected
   RenderBox? insertAndLayoutChild(
     BoxConstraints childConstraints, {
@@ -493,15 +313,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     return null;
   }
 
-  /// Called after layout with the number of children that can be garbage
-  /// collected at the head and tail of the child list.
-  ///
-  /// Children whose [SliverMultiBoxAdaptorParentData.keepAlive] property is
-  /// set to true will be removed to a cache instead of being dropped.
-  ///
-  /// This method also collects any children that were previously kept alive but
-  /// are now no longer necessary. As such, it should be called every time
-  /// [performLayout] is run, even if the arguments are both zero.
   @protected
   void collectGarbage(int leadingGarbage, int trailingGarbage) {
     assert(_debugAssertChildListLocked());
@@ -529,16 +340,12 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     });
   }
 
-  /// Returns the index of the given child, as given by the
-  /// [SliverMultiBoxAdaptorParentData.index] field of the child's [parentData].
   int indexOf(RenderBox child) {
     final SliverMultiBoxAdaptorParentData childParentData = child.parentData! as SliverMultiBoxAdaptorParentData;
     assert(childParentData.index != null);
     return childParentData.index!;
   }
 
-  /// Returns the dimension of the given child in the main axis, as given by the
-  /// child's [RenderBox.size] property. This is only valid after layout.
   @protected
   double paintExtentOf(RenderBox child) {
     assert(child.hasSize);
@@ -657,10 +464,6 @@ abstract class RenderSliverMultiBoxAdaptor extends RenderSliver
     properties.add(DiagnosticsNode.message(firstChild != null ? 'currently live children: ${indexOf(firstChild!)} to ${indexOf(lastChild!)}' : 'no children current live'));
   }
 
-  /// Asserts that the reified child list is not empty and has a contiguous
-  /// sequence of indices.
-  ///
-  /// Always returns true.
   bool debugAssertChildListIsNonEmptyAndContiguous() {
     assert(() {
       assert(firstChild != null);

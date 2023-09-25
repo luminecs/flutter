@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [MenuAcceleratorLabel].
 
 void main() => runApp(const MenuAcceleratorApp());
 

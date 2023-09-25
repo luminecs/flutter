@@ -13,7 +13,6 @@ import 'package:xml/xml.dart';
 // String to use for a single indentation.
 const String kIndent = '  ';
 
-/// Represents an animation, and provides logic to generate dart code for it.
 class Animation {
   const Animation(this.size, this.paths);
 
@@ -27,10 +26,8 @@ class Animation {
     return Animation(size, paths);
   }
 
-  /// The size of the animation (width, height) in pixels.
   final Point<double> size;
 
-  /// List of paths in the animation.
   final List<PathAnimation> paths;
 
   static void _validateFramesData(List<FrameData> frames) {
@@ -69,7 +66,6 @@ class Animation {
   }
 }
 
-/// Represents the animation of a single path.
 class PathAnimation {
   const PathAnimation(this.commands, {required this.opacities});
 
@@ -106,9 +102,7 @@ class PathAnimation {
     return PathAnimation(commands, opacities: opacities);
   }
 
-  /// List of commands for drawing the path.
   final List<PathCommandAnimation> commands;
-  /// The path opacity for each animation frame.
   final List<double> opacities;
 
   @override
@@ -134,16 +128,11 @@ class PathAnimation {
   }
 }
 
-/// Represents the animation of a single path command.
 class PathCommandAnimation {
   const PathCommandAnimation(this.type, this.points);
 
-  /// The command type.
   final String type;
 
-  /// A matrix with the command's points in different frames.
-  ///
-  /// points[i][j] is the i-th point of the command at frame j.
   final List<List<Point<double>>> points;
 
   @override
@@ -179,16 +168,6 @@ class PathCommandAnimation {
   }
 }
 
-/// Interprets some subset of an SVG file.
-///
-/// Recursively goes over the SVG tree, applying transforms and opacities,
-/// and build a FrameData which is a flat representation of the paths in the SVG
-/// file, after applying transformations and converting relative coordinates to
-/// absolute.
-///
-/// This does not support the SVG specification, but is just built to
-/// support SVG files exported by a specific tool the motion design team is
-/// using.
 FrameData interpretSvg(String svgFilePath) {
   final File file = File(svgFilePath);
   final String fileData = file.readAsStringSync();
@@ -245,11 +224,6 @@ List<SvgPath> _interpretSvgGroup(List<XmlNode> children, _Transform transform) {
 // Commas are optional.
 final RegExp _pointMatcher = RegExp(r'^ *([\-\.0-9]+) *,? *([\-\.0-9]+)(.*)');
 
-/// Parse a string with a list of points, e.g:
-/// '25.0, 1.0 12.0, 12.0 23.0, 9.0' will be parsed to:
-/// [Point(25.0, 1.0), Point(12.0, 12.0), Point(23.0, 9.0)].
-///
-/// Commas are optional.
 List<Point<double>> parsePoints(String points) {
   String unParsed = points;
   final List<Point<double>> result = <Point<double>>[];
@@ -264,7 +238,6 @@ List<Point<double>> parsePoints(String points) {
   return result;
 }
 
-/// Data for a single animation frame.
 @immutable
 class FrameData {
   const FrameData(this.size, this.paths);
@@ -291,7 +264,6 @@ class FrameData {
   }
 }
 
-/// Represents an SVG path element.
 @immutable
 class SvgPath {
   const SvgPath(this.id, this.commands, {this.opacity = 1.0});
@@ -348,24 +320,12 @@ class SvgPath {
 
 }
 
-/// Represents a single SVG path command from an SVG d element.
-///
-/// This class normalizes all the 'd' commands into a single type, that has
-/// a command type and a list of points.
-///
-/// Some examples of how d commands translated to SvgPathCommand:
-///   * "M 0.0, 1.0" => SvgPathCommand('M', [Point(0.0, 1.0)])
-///   * "Z" => SvgPathCommand('Z', [])
-///   * "C 1.0, 1.0 2.0, 2.0 3.0, 3.0" SvgPathCommand('C', [Point(1.0, 1.0),
-///      Point(2.0, 2.0), Point(3.0, 3.0)])
 @immutable
 class SvgPathCommand {
   const SvgPathCommand(this.type, this.points);
 
-  /// The command type.
   final String type;
 
-  /// List of points used by this command.
   final List<Point<double>> points;
 
   SvgPathCommand _applyTransform(_Transform transform) {
@@ -452,13 +412,8 @@ List<Point<double>> _vector3ArrayToPoints(List<double> vector) {
   return points;
 }
 
-/// Represents a transformation to apply on an SVG subtree.
-///
-/// This includes more transforms than the ones described by the SVG transform
-/// attribute, e.g opacity.
 class _Transform {
 
-  /// Constructs a new _Transform, default arguments create a no-op transform.
   _Transform({Matrix3? transformMatrix, this.opacity = 1.0}) :
       transformMatrix = transformMatrix ?? Matrix3.identity();
 
@@ -539,8 +494,6 @@ Matrix3 _matrix(double a, double b, double c, double d, double e, double f) {
 // First group is just the number.
 final RegExp _pixelsExp = RegExp(r'^([0-9]+)px$');
 
-/// Parses a pixel expression, e.g "14px", and returns the number.
-/// Throws an [ArgumentError] if the given string doesn't match the pattern.
 int parsePixels(String pixels) {
   if (!_pixelsExp.hasMatch(pixels)) {
     throw ArgumentError(

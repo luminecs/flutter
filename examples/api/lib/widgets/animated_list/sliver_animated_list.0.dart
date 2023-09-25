@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [SliverAnimatedList].
 
 void main() => runApp(const SliverAnimatedListSample());
 
@@ -48,13 +47,6 @@ class _SliverAnimatedListSampleState extends State<SliverAnimatedListSample> {
     );
   }
 
-  /// The builder function used to build items that have been removed.
-  ///
-  /// Used to build an item after it has been removed from the list. This method
-  /// is needed because a removed item remains visible until its animation has
-  /// completed (even though it's gone as far this ListModel is concerned). The
-  /// widget will be used by the [AnimatedListState.removeItem] method's
-  /// [AnimatedRemovedItemBuilder] parameter.
   Widget _buildRemovedItem(int item, BuildContext context, Animation<double> animation) {
     return CardItem(
       animation: animation,

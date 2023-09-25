@@ -21,9 +21,6 @@ const String _kDefaultHtml  = '''
 ''';
 
 abstract class Project {
-  /// Creates a flutter Project for testing.
-  ///
-  /// If passed, `indexHtml` is used as the contents of the web/index.html file.
   Project({this.indexHtml = _kDefaultHtml});
 
   late Directory dir;
@@ -36,11 +33,6 @@ abstract class Project {
 
   Uri get mainDart => Uri.parse('package:test/main.dart');
 
-  /// The contents for the index.html file of this `Project`.
-  ///
-  /// Defaults to [_kDefaultHtml] via the Project constructor.
-  ///
-  /// (Used by [HotReloadProject].)
   final String indexHtml;
 
   Future<void> setUpIn(Directory dir) async {

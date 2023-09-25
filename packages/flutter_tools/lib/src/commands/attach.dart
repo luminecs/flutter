@@ -34,31 +34,6 @@ import '../runner/flutter_command.dart';
 import '../runner/flutter_command_runner.dart';
 import '../vmservice.dart';
 
-/// A Flutter-command that attaches to applications that have been launched
-/// without `flutter run`.
-///
-/// With an application already running, a HotRunner can be attached to it
-/// with:
-/// ```
-/// $ flutter attach --debug-url http://127.0.0.1:12345/QqL7EFEDNG0=/
-/// ```
-///
-/// If `--disable-service-auth-codes` was provided to the application at startup
-/// time, a HotRunner can be attached with just a port:
-/// ```
-/// $ flutter attach --debug-port 12345
-/// ```
-///
-/// Alternatively, the attach command can start listening and scan for new
-/// programs that become active:
-/// ```
-/// $ flutter attach
-/// ```
-/// As soon as a new VM Service is detected the command attaches to it and
-/// enables hot reloading.
-///
-/// To attach to a flutter mod running on a fuchsia device, `--module` must
-/// also be provided.
 class AttachCommand extends FlutterCommand {
   AttachCommand({
     bool verboseHelp = false,

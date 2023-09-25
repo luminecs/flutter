@@ -5,7 +5,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [ErrorWidget].
 
 void main() {
   // Set the ErrorWidget's builder before the app is started.

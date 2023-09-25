@@ -11,96 +11,21 @@ import 'typography.dart';
 
 export 'theme_data.dart' show Brightness, ThemeData;
 
-/// The duration over which theme changes animate by default.
 const Duration kThemeAnimationDuration = Duration(milliseconds: 200);
 
-/// Applies a theme to descendant widgets.
-///
-/// A theme describes the colors and typographic choices of an application.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=oTvQDJOBXmM}
-///
-/// Descendant widgets obtain the current theme's [ThemeData] object using
-/// [Theme.of]. When a widget uses [Theme.of], it is automatically rebuilt if
-/// the theme later changes, so that the changes can be applied.
-///
-/// The [Theme] widget implies an [IconTheme] widget, set to the value of the
-/// [ThemeData.iconTheme] of the [data] for the [Theme].
-///
-/// See also:
-///
-///  * [ThemeData], which describes the actual configuration of a theme.
-///  * [AnimatedTheme], which animates the [ThemeData] when it changes rather
-///    than changing the theme all at once.
-///  * [MaterialApp], which includes an [AnimatedTheme] widget configured via
-///    the [MaterialApp.theme] argument.
 class Theme extends StatelessWidget {
-  /// Applies the given theme [data] to [child].
   const Theme({
     super.key,
     required this.data,
     required this.child,
   });
 
-  /// Specifies the color and typography values for descendant widgets.
   final ThemeData data;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
   static final ThemeData _kFallbackTheme = ThemeData.fallback();
 
-  /// The data from the closest [Theme] instance that encloses the given
-  /// context.
-  ///
-  /// If the given context is enclosed in a [Localizations] widget providing
-  /// [MaterialLocalizations], the returned data is localized according to the
-  /// nearest available [MaterialLocalizations].
-  ///
-  /// Defaults to [ThemeData.fallback] if there is no [Theme] in the given
-  /// build context.
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// @override
-  /// Widget build(BuildContext context) {
-  ///   return Text(
-  ///     'Example',
-  ///     style: Theme.of(context).textTheme.titleLarge,
-  ///   );
-  /// }
-  /// ```
-  ///
-  /// When the [Theme] is actually created in the same `build` function
-  /// (possibly indirectly, e.g. as part of a [MaterialApp]), the `context`
-  /// argument to the `build` function can't be used to find the [Theme] (since
-  /// it's "above" the widget being returned). In such cases, the following
-  /// technique with a [Builder] can be used to provide a new scope with a
-  /// [BuildContext] that is "under" the [Theme]:
-  ///
-  /// ```dart
-  /// @override
-  /// Widget build(BuildContext context) {
-  ///   return MaterialApp(
-  ///     theme: ThemeData.light(),
-  ///     home: Builder(
-  ///       // Create an inner BuildContext so that we can refer to
-  ///       // the Theme with Theme.of().
-  ///       builder: (BuildContext context) {
-  ///         return Center(
-  ///           child: Text(
-  ///             'Example',
-  ///             style: Theme.of(context).textTheme.titleLarge,
-  ///           ),
-  ///         );
-  ///       },
-  ///     ),
-  ///   );
-  /// }
-  /// ```
   static ThemeData of(BuildContext context) {
     final _InheritedTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedTheme>();
     final MaterialLocalizations? localizations = Localizations.of<MaterialLocalizations>(context, MaterialLocalizations);
@@ -164,42 +89,14 @@ class _InheritedTheme extends InheritedTheme {
   bool updateShouldNotify(_InheritedTheme old) => theme.data != old.theme.data;
 }
 
-/// An interpolation between two [ThemeData]s.
-///
-/// This class specializes the interpolation of [Tween<ThemeData>] to call the
-/// [ThemeData.lerp] method.
-///
-/// See [Tween] for a discussion on how to use interpolation objects.
 class ThemeDataTween extends Tween<ThemeData> {
-  /// Creates a [ThemeData] tween.
-  ///
-  /// The [begin] and [end] properties must be non-null before the tween is
-  /// first used, but the arguments can be null if the values are going to be
-  /// filled in later.
   ThemeDataTween({ super.begin, super.end });
 
   @override
   ThemeData lerp(double t) => ThemeData.lerp(begin!, end!, t);
 }
 
-/// Animated version of [Theme] which automatically transitions the colors,
-/// etc, over a given duration whenever the given theme changes.
-///
-/// Here's an illustration of what using this widget looks like, using a [curve]
-/// of [Curves.elasticInOut].
-/// {@animation 250 266 https://flutter.github.io/assets-for-api-docs/assets/widgets/animated_theme.mp4}
-///
-/// See also:
-///
-///  * [Theme], which [AnimatedTheme] uses to actually apply the interpolated
-///    theme.
-///  * [ThemeData], which describes the actual configuration of a theme.
-///  * [MaterialApp], which includes an [AnimatedTheme] widget configured via
-///    the [MaterialApp.theme] argument.
 class AnimatedTheme extends ImplicitlyAnimatedWidget {
-  /// Creates an animated theme.
-  ///
-  /// By default, the theme transition uses a linear curve.
   const AnimatedTheme({
     super.key,
     required this.data,
@@ -209,12 +106,8 @@ class AnimatedTheme extends ImplicitlyAnimatedWidget {
     required this.child,
   });
 
-  /// Specifies the color and typography values for descendant widgets.
   final ThemeData data;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
   @override

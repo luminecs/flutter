@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [NavigatorState.restorablePushAndRemoveUntil].
 
 void main() => runApp(const RestorablePushAndRemoveUntilExampleApp());
 

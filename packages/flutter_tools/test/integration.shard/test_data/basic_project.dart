@@ -53,10 +53,6 @@ class BasicProject extends Project {
   int get topLevelFunctionBreakpointLine => lineContaining(main, '// TOP LEVEL BREAKPOINT');
 }
 
-/// A project that throws multiple exceptions during Widget builds.
-///
-/// A repro for the issue at https://github.com/Dart-Code/Dart-Code/issues/3448
-/// where Hot Restart could become stuck on exceptions and never complete.
 class BasicProjectThatThrows extends Project {
 
   @override

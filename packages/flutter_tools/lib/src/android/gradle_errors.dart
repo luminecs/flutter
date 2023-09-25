@@ -16,7 +16,6 @@ import 'multidex.dart';
 
 typedef GradleErrorTest = bool Function(String);
 
-/// A Gradle error handled by the tool.
 class GradleHandledError {
   const GradleHandledError({
     required this.test,
@@ -24,11 +23,8 @@ class GradleHandledError {
     this.eventLabel,
   });
 
-  /// The test function.
-  /// Returns [true] if the current error message should be handled.
   final GradleErrorTest test;
 
-  /// The handler function.
   final Future<GradleBuildStatus> Function({
     required String line,
     required FlutterProject project,
@@ -36,35 +32,20 @@ class GradleHandledError {
     required bool multidexEnabled,
   }) handler;
 
-  /// The [BuildEvent] label is named gradle-[eventLabel].
-  /// If not empty, the build event is logged along with
-  /// additional metadata such as the attempt number.
   final String? eventLabel;
 }
 
-/// The status of the Gradle build.
 enum GradleBuildStatus {
-  /// The tool cannot recover from the failure and should exit.
   exit,
-  /// The tool can retry the exact same build.
   retry,
 }
 
-/// Returns a simple test function that evaluates to `true` if at least one of
-/// `errorMessages` is contained in the error message.
 GradleErrorTest _lineMatcher(List<String> errorMessages) {
   return (String line) {
     return errorMessages.any((String errorMessage) => line.contains(errorMessage));
   };
 }
 
-/// The list of Gradle errors that the tool can handle.
-///
-/// The handlers are executed in the order in which they appear in the list.
-///
-/// Only the first error handler for which the [test] function returns [true]
-/// is handled. As a result, sort error handlers based on how strict the [test]
-/// function is to eliminate false positives.
 final List<GradleHandledError> gradleErrors = <GradleHandledError>[
   licenseNotAcceptedHandler,
   networkErrorHandler,
@@ -207,8 +188,6 @@ final GradleHandledError permissionDeniedErrorHandler = GradleHandledError(
   eventLabel: 'permission-denied',
 );
 
-/// Gradle crashes for several known reasons when downloading that are not
-/// actionable by Flutter.
 @visibleForTesting
 final GradleHandledError networkErrorHandler = GradleHandledError(
   test: _lineMatcher(const <String>[
@@ -236,17 +215,6 @@ final GradleHandledError networkErrorHandler = GradleHandledError(
   eventLabel: 'network',
 );
 
-/// Handles corrupted jar or other types of zip files.
-///
-/// If a terminal is attached, this handler prompts the user if they would like to
-/// delete the $HOME/.gradle directory prior to retrying the build.
-///
-/// If this handler runs on a bot (e.g. a CI bot), the $HOME/.gradle is automatically deleted.
-///
-/// See also:
-///  * https://github.com/flutter/flutter/issues/51195
-///  * https://github.com/flutter/flutter/issues/89959
-///  * https://docs.gradle.org/current/userguide/directory_layout.html#dir:gradle_user_home
 @visibleForTesting
 final GradleHandledError zipExceptionHandler = GradleHandledError(
   test: _lineMatcher(const <String>[
@@ -321,9 +289,6 @@ final GradleHandledError r8FailureHandler = GradleHandledError(
   eventLabel: 'r8',
 );
 
-/// Handle Gradle error thrown when Gradle needs to download additional
-/// Android SDK components (e.g. Platform Tools), and the license
-/// for that component has not been accepted.
 @visibleForTesting
 final GradleHandledError licenseNotAcceptedHandler = GradleHandledError(
   test: _lineMatcher(const <String>[
@@ -357,7 +322,6 @@ final RegExp _undefinedTaskPattern = RegExp(r'Task .+ not found in root project.
 
 final RegExp _assembleTaskPattern = RegExp(r'assemble(\S+)');
 
-/// Handler when a flavor is undefined.
 @visibleForTesting
 final GradleHandledError flavorUndefinedHandler = GradleHandledError(
   test: (String line) {
@@ -429,7 +393,6 @@ final GradleHandledError flavorUndefinedHandler = GradleHandledError(
 
 final RegExp _minSdkVersionPattern = RegExp(r'uses-sdk:minSdkVersion ([0-9]+) cannot be smaller than version ([0-9]+) declared in library \[\:(.+)\]');
 
-/// Handler when a plugin requires a higher Android API level.
 @visibleForTesting
 final GradleHandledError minSdkVersionHandler = GradleHandledError(
   test: (String line) {
@@ -470,8 +433,6 @@ final GradleHandledError minSdkVersionHandler = GradleHandledError(
   eventLabel: 'plugin-min-sdk',
 );
 
-/// Handler when https://issuetracker.google.com/issues/141126614 or
-/// https://github.com/flutter/flutter/issues/58247 is triggered.
 @visibleForTesting
 final GradleHandledError transformInputIssueHandler = GradleHandledError(
   test: (String line) {
@@ -505,7 +466,6 @@ final GradleHandledError transformInputIssueHandler = GradleHandledError(
   eventLabel: 'transform-input-issue',
 );
 
-/// Handler when a dependency is missing in the lockfile.
 @visibleForTesting
 final GradleHandledError lockFileDepMissingHandler = GradleHandledError(
   test: (String line) {
@@ -647,7 +607,6 @@ final GradleHandledError jvm11RequiredHandler = GradleHandledError(
   eventLabel: 'java11-required',
 );
 
-/// Handles SSL exceptions: https://github.com/flutter/flutter/issues/104628
 @visibleForTesting
 final GradleHandledError sslExceptionHandler = GradleHandledError(
   test: _lineMatcher(const <String>[
@@ -669,9 +628,6 @@ final GradleHandledError sslExceptionHandler = GradleHandledError(
   eventLabel: 'ssl-exception-tag-mismatch',
 );
 
-/// If an incompatible Java and Gradle versions error is caught, we expect an
-/// error specifying that the Java major class file version, one of
-/// https://javaalmanac.io/bytecode/versions/, is unsupported by Gradle.
 final RegExp _unsupportedClassFileMajorVersionPattern = RegExp(r'Unsupported class file major version\s+\d+');
 
 @visibleForTesting

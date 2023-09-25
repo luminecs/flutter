@@ -4,8 +4,6 @@
 
 import 'dart:typed_data';
 
-/// Data from a non-linear mathematical function that functions as
-/// reproducible noise.
 final Uint32List _noise = Uint32List.fromList(<int>[
   0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a,
   0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -20,7 +18,6 @@ final Uint32List _noise = Uint32List.fromList(<int>[
   0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391,
 ]);
 
-/// Per-round shift amounts.
 const List<int> _shiftAmounts = <int>[
   07, 12, 17, 22, 07, 12, 17, 22, 07, 12, 17, 22, 07, 12, 17, 22, 05, 09, 14,
   20, 05, 09, 14, 20, 05, 09, 14, 20, 05, 09, 14, 20, 04, 11, 16, 23, 04, 11,
@@ -28,10 +25,8 @@ const List<int> _shiftAmounts = <int>[
   10, 15, 21, 06, 10, 15, 21,
 ];
 
-/// A bitmask that limits an integer to 32 bits.
 const int _mask32 = 0xFFFFFFFF;
 
-/// An incremental hash computation of md5.
 class Md5Hash {
   Md5Hash() {
     _digest[0] = 0x67452301;
@@ -43,7 +38,6 @@ class Md5Hash {
   // 64 bytes is 512 bits.
   static const int _kChunkSize = 64;
 
-  /// The current hash digest.
   final Uint32List _digest = Uint32List(4);
   final Uint8List _scratchSpace = Uint8List(_kChunkSize);
   int _remainingLength = 0;
@@ -157,11 +151,8 @@ class Md5Hash {
     return _digest;
   }
 
-  /// Adds [x] and [y] with 32-bit overflow semantics.
   int _add32(int x, int y) => (x + y) & _mask32;
 
-  /// Bitwise rotates [val] to the left by [shift], obeying 32-bit overflow
-  /// semantics.
   int _rotl32(int val, int shift) {
     final int modShift = shift & 31;
     return ((val << modShift) & _mask32) | ((val & _mask32) >> (32 - modShift));

@@ -5,11 +5,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-/// Merges the values in a stream that are sent less than [duration] apart.
-///
-/// To minimize latency, the merged stream will always emit the first value that
-/// is sent after a pause of at least [duration] long. After the first message,
-/// all values that are sent within [duration] will be merged into one.
 Stream<Uint8List> debounceDataStream(Stream<Uint8List> stream, [Duration duration = const Duration(milliseconds: 100)]) {
   final StreamController<Uint8List> controller = StreamController<Uint8List>();
   final BytesBuilder buffer = BytesBuilder(copy: false);

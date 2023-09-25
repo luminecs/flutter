@@ -52,18 +52,10 @@ Future<void> main() async {
   });
 }
 
-/// Runs a test script and returns the [IntegrationTestWidgetsFlutterBinding.result].
-///
-/// [scriptPath] is relative to the package root.
 Future<Map<String, dynamic>?> _runTest(String scriptPath) async {
   final Process process =
       await Process.start(_flutterBin, <String>['test', '--machine', scriptPath]);
 
-  /// In the test [tearDownAll] block, the test results are encoded into JSON and
-  /// are printed with the [_integrationResultsPrefix] prefix.
-  ///
-  /// See the following for the test event spec which we parse the printed lines
-  /// out of: https://github.com/dart-lang/test/blob/master/pkgs/test/doc/json_reporter.md
   final String testResults = (await process.stdout
           .transform(utf8.decoder)
           .expand((String text) => text.split('\n'))

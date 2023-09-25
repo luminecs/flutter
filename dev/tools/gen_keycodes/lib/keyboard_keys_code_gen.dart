@@ -10,8 +10,6 @@ import 'logical_key_data.dart';
 import 'physical_key_data.dart';
 import 'utils.dart';
 
-/// Given an [input] string, wraps the text at 80 characters and prepends each
-/// line with the [prefix] string. Use for generated comments.
 String _wrapString(String input) {
   return wrapString(input, prefix: '  /// ');
 }
@@ -46,12 +44,9 @@ class SynonymKeyInfo {
   String get constantName => upperCamelToLowerCamel(name);
 }
 
-/// Generates the keyboard_key.g.dart based on the information in the key data
-/// structure given to it.
 class KeyboardKeysCodeGenerator extends BaseCodeGenerator {
   KeyboardKeysCodeGenerator(super.keyData, super.logicalData);
 
-  /// Gets the generated definitions of PhysicalKeyboardKeys.
   String get _physicalDefinitions {
     final OutputLines<int> lines = OutputLines<int>('Physical Key Definition');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -76,7 +71,6 @@ $otherComments  static const PhysicalKeyboardKey ${entry.constantName} = Physica
     return lines.sortedJoin().trimRight();
   }
 
-  /// Gets the generated definitions of LogicalKeyboardKeys.
   String get _logicalDefinitions {
     final OutputLines<int> lines = OutputLines<int>('Logical debug names', behavior: DeduplicateBehavior.kSkip);
     void printKey(int flutterId, String constantName, String commentName, {String? otherComments}) {
@@ -130,7 +124,6 @@ $otherComments  static const LogicalKeyboardKey $constantName = LogicalKeyboardK
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map of USB HID codes to physical keys.
   String get _predefinedHidCodeMap {
     final OutputLines<int> lines = OutputLines<int>('Physical key map');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -139,7 +132,6 @@ $otherComments  static const LogicalKeyboardKey $constantName = LogicalKeyboardK
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map of Flutter key codes to logical keys.
   String get _predefinedKeyCodeMap {
     final OutputLines<int> lines = OutputLines<int>('Logical key map', behavior: DeduplicateBehavior.kSkip);
     for (final LogicalKeyEntry entry in logicalData.entries) {
@@ -153,7 +145,6 @@ $otherComments  static const LogicalKeyboardKey $constantName = LogicalKeyboardK
     for (final MaskConstant constant in _maskConstants) {
       lines.add(constant.value, '''
 ${_wrapString(constant.description)}  ///
-  /// This is used by platform-specific code to generate Flutter key codes.
   static const int ${constant.lowerCamelName} = ${toHex(constant.value, digits: 11)};
 ''');
     }

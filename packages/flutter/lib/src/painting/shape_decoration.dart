@@ -18,56 +18,7 @@ import 'gradient.dart';
 import 'image_provider.dart';
 import 'rounded_rectangle_border.dart';
 
-/// An immutable description of how to paint an arbitrary shape.
-///
-/// The [ShapeDecoration] class provides a way to draw a [ShapeBorder],
-/// optionally filling it with a color or a gradient, optionally painting an
-/// image into it, and optionally casting a shadow.
-///
-/// {@tool snippet}
-///
-/// The following example uses the [Container] widget from the widgets layer to
-/// draw a white rectangle with a 24-pixel multicolor outline, with the text
-/// "RGB" inside it:
-///
-/// ```dart
-/// Container(
-///   decoration: ShapeDecoration(
-///     color: Colors.white,
-///     shape: Border.all(
-///       color: Colors.red,
-///       width: 8.0,
-///     ) + Border.all(
-///       color: Colors.green,
-///       width: 8.0,
-///     ) + Border.all(
-///       color: Colors.blue,
-///       width: 8.0,
-///     ),
-///   ),
-///   child: const Text('RGB', textAlign: TextAlign.center),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [DecoratedBox] and [Container], widgets that can be configured with
-///    [ShapeDecoration] objects.
-///  * [BoxDecoration], a similar [Decoration] that is optimized for rectangles
-///    specifically.
-///  * [ShapeBorder], the base class for the objects that are used in the
-///    [shape] property.
 class ShapeDecoration extends Decoration {
-  /// Creates a shape decoration.
-  ///
-  /// * If [color] is null, this decoration does not paint a background color.
-  /// * If [gradient] is null, this decoration does not paint gradients.
-  /// * If [image] is null, this decoration does not paint a background image.
-  /// * If [shadows] is null, this decoration does not paint a shadow.
-  ///
-  /// The [color] and [gradient] properties are mutually exclusive, one (or
-  /// both) of them must be null.
   const ShapeDecoration({
     this.color,
     this.image,
@@ -76,16 +27,6 @@ class ShapeDecoration extends Decoration {
     required this.shape,
   }) : assert(!(color != null && gradient != null));
 
-  /// Creates a shape decoration configured to match a [BoxDecoration].
-  ///
-  /// The [BoxDecoration] class is more efficient for shapes that it can
-  /// describe than the [ShapeDecoration] class is for those same shapes,
-  /// because [ShapeDecoration] has to be more general as it can support any
-  /// shape. However, having a [ShapeDecoration] is sometimes necessary, for
-  /// example when calling [ShapeDecoration.lerp] to transition between
-  /// different shapes (e.g. from a [CircleBorder] to a
-  /// [RoundedRectangleBorder]; the [BoxDecoration] class cannot animate the
-  /// transition from a [BoxShape.circle] to [BoxShape.rectangle]).
   factory ShapeDecoration.fromBoxDecoration(BoxDecoration source) {
     final ShapeBorder shape;
     switch (source.shape) {
@@ -121,60 +62,16 @@ class ShapeDecoration extends Decoration {
     return shape.getOuterPath(rect, textDirection: textDirection);
   }
 
-  /// The color to fill in the background of the shape.
-  ///
-  /// The color is under the [image].
-  ///
-  /// If a [gradient] is specified, [color] must be null.
   final Color? color;
 
-  /// A gradient to use when filling the shape.
-  ///
-  /// The gradient is under the [image].
-  ///
-  /// If a [color] is specified, [gradient] must be null.
   final Gradient? gradient;
 
-  /// An image to paint inside the shape (clipped to its outline).
-  ///
-  /// The image is drawn over the [color] or [gradient].
   final DecorationImage? image;
 
-  /// A list of shadows cast by the [shape].
-  ///
-  /// See also:
-  ///
-  ///  * [kElevationToShadow], for some predefined shadows used in Material
-  ///    Design.
-  ///  * [PhysicalModel], a widget for showing shadows.
   final List<BoxShadow>? shadows;
 
-  /// The shape to fill the [color], [gradient], and [image] into and to cast as
-  /// the [shadows].
-  ///
-  /// Shapes can be stacked (using the `+` operator). The color, gradient, and
-  /// image are drawn into the inner-most shape specified.
-  ///
-  /// The [shape] property specifies the outline (border) of the decoration.
-  ///
-  /// ## Directionality-dependent shapes
-  ///
-  /// Some [ShapeBorder] subclasses are sensitive to the [TextDirection]. The
-  /// direction that is provided to the border (e.g. for its [ShapeBorder.paint]
-  /// method) is the one specified in the [ImageConfiguration]
-  /// ([ImageConfiguration.textDirection]) provided to the [BoxPainter] (via its
-  /// [BoxPainter.paint method). The [BoxPainter] is obtained when
-  /// [createBoxPainter] is called.
-  ///
-  /// When a [ShapeDecoration] is used with a [Container] widget or a
-  /// [DecoratedBox] widget (which is what [Container] uses), the
-  /// [TextDirection] specified in the [ImageConfiguration] is obtained from the
-  /// ambient [Directionality], using [createLocalImageConfiguration].
   final ShapeBorder shape;
 
-  /// The inset space occupied by the [shape]'s border.
-  ///
-  /// This value may be misleading. See the discussion at [ShapeBorder.dimensions].
   @override
   EdgeInsetsGeometry get padding => shape.dimensions;
 
@@ -201,24 +98,6 @@ class ShapeDecoration extends Decoration {
     return super.lerpTo(b, t) as ShapeDecoration?;
   }
 
-  /// Linearly interpolate between two shapes.
-  ///
-  /// Interpolates each parameter of the decoration separately.
-  ///
-  /// If both values are null, this returns null. Otherwise, it returns a
-  /// non-null value, with null arguments treated like a [ShapeDecoration] whose
-  /// fields are all null (including the [shape], which cannot normally be
-  /// null).
-  ///
-  /// {@macro dart.ui.shadow.lerp}
-  ///
-  /// See also:
-  ///
-  ///  * [Decoration.lerp], which can interpolate between any two types of
-  ///    [Decoration]s, not just [ShapeDecoration]s.
-  ///  * [lerpFrom] and [lerpTo], which are used to implement [Decoration.lerp]
-  ///    and which use [ShapeDecoration.lerp] when interpolating two
-  ///    [ShapeDecoration]s or a [ShapeDecoration] to or from null.
   static ShapeDecoration? lerp(ShapeDecoration? a, ShapeDecoration? b, double t) {
     if (identical(a, b)) {
       return a;
@@ -288,7 +167,6 @@ class ShapeDecoration extends Decoration {
   }
 }
 
-/// An object that paints a [ShapeDecoration] into a canvas.
 class _ShapeDecorationPainter extends BoxPainter {
   _ShapeDecorationPainter(this._decoration, VoidCallback onChanged)
     : super(onChanged);

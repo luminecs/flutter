@@ -10,11 +10,6 @@ import '../base/common.dart';
 import '../base/file_system.dart';
 import '../base/logger.dart';
 
-/// Load the package configuration from [file] or throws a [ToolExit]
-/// if the operation would fail.
-///
-/// If [throwOnError] is false, in the event of an error an empty package
-/// config is returned.
 Future<PackageConfig> loadPackageConfigWithLogging(File file, {
   required Logger logger,
   bool throwOnError = true,

@@ -20,12 +20,6 @@ export 'package:flutter_goldens_client/skia_client.dart';
 
 const String _kFlutterRootKey = 'FLUTTER_ROOT';
 
-/// Main method that can be used in a `flutter_test_config.dart` file to set
-/// [goldenFileComparator] to an instance of [FlutterGoldenFileComparator] that
-/// works for the current test. _Which_ FlutterGoldenFileComparator is
-/// instantiated is based on the current testing environment.
-///
-/// When set, the `namePrefix` is prepended to the names of all gold images.
 Future<void> testExecutable(FutureOr<void> Function() testMain, {String? namePrefix}) async {
   const Platform platform = LocalPlatform();
   if (FlutterPostSubmitFileComparator.isAvailableForEnvironment(platform)) {
@@ -44,49 +38,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain, {String? namePre
   await testMain();
 }
 
-/// Abstract base class golden file comparator specific to the `flutter/flutter`
-/// repository.
-///
-/// Golden file testing for the `flutter/flutter` repository is handled by three
-/// different [FlutterGoldenFileComparator]s, depending on the current testing
-/// environment.
-///
-///   * The [FlutterPostSubmitFileComparator] is utilized during post-submit
-///     testing, after a pull request has landed on the master branch. This
-///     comparator uses the [SkiaGoldClient] and the `goldctl` tool to upload
-///     tests to the [Flutter Gold dashboard](https://flutter-gold.skia.org).
-///     Flutter Gold manages the master golden files for the `flutter/flutter`
-///     repository.
-///
-///   * The [FlutterPreSubmitFileComparator] is utilized in pre-submit testing,
-///     before a pull request lands on the master branch. This
-///     comparator uses the [SkiaGoldClient] to execute tryjobs, allowing
-///     contributors to view and check in visual differences before landing the
-///     change.
-///
-///   * The [FlutterLocalFileComparator] is used for local development testing.
-///     This comparator will use the [SkiaGoldClient] to request baseline images
-///     from [Flutter Gold](https://flutter-gold.skia.org) and manually compare
-///     pixels. If a difference is detected, this comparator will
-///     generate failure output illustrating the found difference. If a baseline
-///     is not found for a given test image, it will consider it a new test and
-///     output the new image for verification.
-///
-///  The [FlutterSkippingFileComparator] is utilized to skip tests outside
-///  of the appropriate environments described above. Currently, some Luci
-///  environments do not execute golden file testing, and as such do not require
-///  a comparator. This comparator is also used when an internet connection is
-///  unavailable.
 abstract class FlutterGoldenFileComparator extends GoldenFileComparator {
-  /// Creates a [FlutterGoldenFileComparator] that will resolve golden file
-  /// URIs relative to the specified [basedir], and retrieve golden baselines
-  /// using the [skiaClient]. The [basedir] is used for writing and accessing
-  /// information and files for interacting with the [skiaClient]. When testing
-  /// locally, the [basedir] will also contain any diffs from failed tests, or
-  /// goldens generated from newly introduced tests.
-  ///
-  /// The [fs] and [platform] parameters are useful in tests, where the default
-  /// file system and platform can be replaced by mock instances.
   @visibleForTesting
   FlutterGoldenFileComparator(
     this.basedir,
@@ -96,23 +48,16 @@ abstract class FlutterGoldenFileComparator extends GoldenFileComparator {
     this.namePrefix,
   });
 
-  /// The directory to which golden file URIs will be resolved in [compare] and
-  /// [update].
   final Uri basedir;
 
-  /// A client for uploading image tests and making baseline requests to the
-  /// Flutter Gold Dashboard.
   final SkiaGoldClient skiaClient;
 
-  /// The file system used to perform file access.
   @visibleForTesting
   final FileSystem fs;
 
-  /// A wrapper for the [dart:io.Platform] API.
   @visibleForTesting
   final Platform platform;
 
-  /// The prefix that is added to all golden names.
   final String? namePrefix;
 
   @override
@@ -125,12 +70,6 @@ abstract class FlutterGoldenFileComparator extends GoldenFileComparator {
   @override
   Uri getTestUri(Uri key, int? version) => key;
 
-  /// Calculate the appropriate basedir for the current test context.
-  ///
-  /// The optional [suffix] argument is used by the
-  /// [FlutterPostSubmitFileComparator] and the [FlutterPreSubmitFileComparator].
-  /// These [FlutterGoldenFileComparators] randomize their base directories to
-  /// maintain thread safety while using the `goldctl` tool.
   @protected
   @visibleForTesting
   static Directory getBaseDirectory(
@@ -163,15 +102,12 @@ abstract class FlutterGoldenFileComparator extends GoldenFileComparator {
     return comparisonRoot.childDirectory(testDirectoryRelativePath);
   }
 
-  /// Returns the golden [File] identified by the given [Uri].
   @protected
   File getGoldenFile(Uri uri) {
     final File goldenFile = fs.directory(basedir).childFile(fs.file(uri).path);
     return goldenFile;
   }
 
-  /// Prepends the golden URL with the library name that encloses the current
-  /// test.
   Uri _addPrefix(Uri golden) {
     // Ensure the Uri ends in .png as the SkiaClient expects
     assert(
@@ -188,28 +124,7 @@ abstract class FlutterGoldenFileComparator extends GoldenFileComparator {
   }
 }
 
-/// A [FlutterGoldenFileComparator] for testing golden images with Skia Gold in
-/// post-submit.
-///
-/// For testing across all platforms, the [SkiaGoldClient] is used to upload
-/// images for framework-related golden tests and process results.
-///
-/// See also:
-///
-///  * [GoldenFileComparator], the abstract class that
-///    [FlutterGoldenFileComparator] implements.
-///  * [FlutterPreSubmitFileComparator], another
-///    [FlutterGoldenFileComparator] that tests golden images before changes are
-///    merged into the master branch.
-///  * [FlutterLocalFileComparator], another
-///    [FlutterGoldenFileComparator] that tests golden images locally on your
-///    current machine.
 class FlutterPostSubmitFileComparator extends FlutterGoldenFileComparator {
-  /// Creates a [FlutterPostSubmitFileComparator] that will test golden file
-  /// images against Skia Gold.
-  ///
-  /// The [fs] and [platform] parameters are useful in tests, where the default
-  /// file system and platform can be replaced by mock instances.
   FlutterPostSubmitFileComparator(
     super.basedir,
     super.skiaClient, {
@@ -218,11 +133,6 @@ class FlutterPostSubmitFileComparator extends FlutterGoldenFileComparator {
     super.namePrefix,
   });
 
-  /// Creates a new [FlutterPostSubmitFileComparator] that mirrors the relative
-  /// path resolution of the default [goldenFileComparator].
-  ///
-  /// The [goldens] and [defaultComparator] parameters are visible for testing
-  /// purposes only.
   static Future<FlutterPostSubmitFileComparator> fromDefaultComparator(
     final Platform platform, {
     SkiaGoldClient? goldens,
@@ -253,8 +163,6 @@ class FlutterPostSubmitFileComparator extends FlutterGoldenFileComparator {
     return skiaClient.imgtestAdd(golden.path, goldenFile);
   }
 
-  /// Decides based on the current environment if goldens tests should be
-  /// executed through Skia Gold.
   static bool isAvailableForEnvironment(Platform platform) {
     final bool luciPostSubmit = platform.environment.containsKey('SWARMING_TASK_ID')
       && platform.environment.containsKey('GOLDCTL')
@@ -265,26 +173,7 @@ class FlutterPostSubmitFileComparator extends FlutterGoldenFileComparator {
   }
 }
 
-/// A [FlutterGoldenFileComparator] for testing golden images before changes are
-/// merged into the master branch. The comparator executes tryjobs using the
-/// [SkiaGoldClient].
-///
-/// See also:
-///
-///  * [GoldenFileComparator], the abstract class that
-///    [FlutterGoldenFileComparator] implements.
-///  * [FlutterPostSubmitFileComparator], another
-///    [FlutterGoldenFileComparator] that uploads tests to the Skia Gold
-///    dashboard in post-submit.
-///  * [FlutterLocalFileComparator], another
-///    [FlutterGoldenFileComparator] that tests golden images locally on your
-///    current machine.
 class FlutterPreSubmitFileComparator extends FlutterGoldenFileComparator {
-  /// Creates a [FlutterPreSubmitFileComparator] that will test golden file
-  /// images against baselines requested from Flutter Gold.
-  ///
-  /// The [fs] and [platform] parameters are useful in tests, where the default
-  /// file system and platform can be replaced by mock instances.
   FlutterPreSubmitFileComparator(
     super.basedir,
     super.skiaClient, {
@@ -293,11 +182,6 @@ class FlutterPreSubmitFileComparator extends FlutterGoldenFileComparator {
     super.namePrefix,
   });
 
-  /// Creates a new [FlutterPreSubmitFileComparator] that mirrors the
-  /// relative path resolution of the default [goldenFileComparator].
-  ///
-  /// The [goldens] and [defaultComparator] parameters are visible for testing
-  /// purposes only.
   static Future<FlutterGoldenFileComparator> fromDefaultComparator(
     final Platform platform, {
     SkiaGoldClient? goldens,
@@ -341,8 +225,6 @@ class FlutterPreSubmitFileComparator extends FlutterGoldenFileComparator {
     return true;
   }
 
-  /// Decides based on the current environment if goldens tests should be
-  /// executed as pre-submit tests with Skia Gold.
   static bool isAvailableForEnvironment(Platform platform) {
     final bool luciPreSubmit = platform.environment.containsKey('SWARMING_TASK_ID')
       && platform.environment.containsKey('GOLDCTL')
@@ -351,25 +233,7 @@ class FlutterPreSubmitFileComparator extends FlutterGoldenFileComparator {
   }
 }
 
-/// A [FlutterGoldenFileComparator] for testing conditions that do not execute
-/// golden file tests.
-///
-/// Currently, this comparator is used on Cirrus, or in Luci environments when executing tests
-/// outside of the flutter/flutter repository.
-///
-/// See also:
-///
-///  * [FlutterPostSubmitFileComparator], another [FlutterGoldenFileComparator]
-///    that tests golden images through Skia Gold.
-///  * [FlutterPreSubmitFileComparator], another
-///    [FlutterGoldenFileComparator] that tests golden images before changes are
-///    merged into the master branch.
-///  * [FlutterLocalFileComparator], another
-///    [FlutterGoldenFileComparator] that tests golden images locally on your
-///    current machine.
 class FlutterSkippingFileComparator extends FlutterGoldenFileComparator {
-  /// Creates a [FlutterSkippingFileComparator] that will skip tests that
-  /// are not in the right environment for golden file testing.
   FlutterSkippingFileComparator(
     super.basedir,
     super.skiaClient,
@@ -377,11 +241,8 @@ class FlutterSkippingFileComparator extends FlutterGoldenFileComparator {
     super.namePrefix,
   });
 
-  /// Describes the reason for using the [FlutterSkippingFileComparator].
   final String reason;
 
-  /// Creates a new [FlutterSkippingFileComparator] that mirrors the
-  /// relative path resolution of the default [goldenFileComparator].
   static FlutterSkippingFileComparator fromDefaultComparator(
     String reason, {
     LocalFileComparator? defaultComparator,
@@ -407,11 +268,6 @@ class FlutterSkippingFileComparator extends FlutterGoldenFileComparator {
   @override
   Future<void> update(Uri golden, Uint8List imageBytes) async {}
 
-  /// Decides, based on the current environment, if this comparator should be
-  /// used.
-  ///
-  /// If we are in a CI environment, LUCI or Cirrus, but are not using the other
-  /// comparators, we skip.
   static bool isAvailableForEnvironment(Platform platform) {
     return platform.environment.containsKey('SWARMING_TASK_ID')
       // Some builds are still being run on Cirrus, we should skip these.
@@ -419,38 +275,7 @@ class FlutterSkippingFileComparator extends FlutterGoldenFileComparator {
   }
 }
 
-/// A [FlutterGoldenFileComparator] for testing golden images locally on your
-/// current machine.
-///
-/// This comparator utilizes the [SkiaGoldClient] to request baseline images for
-/// the given device under test for comparison. This comparator is initialized
-/// when conditions for all other [FlutterGoldenFileComparators] have not been
-/// met, see the `isAvailableForEnvironment` method for each one listed below.
-///
-/// The [FlutterLocalFileComparator] is intended to run on local machines and
-/// serve as a smoke test during development. As such, it will not be able to
-/// detect unintended changes on environments other than the currently executing
-/// machine, until they are tested using the [FlutterPreSubmitFileComparator].
-///
-/// See also:
-///
-///  * [GoldenFileComparator], the abstract class that
-///    [FlutterGoldenFileComparator] implements.
-///  * [FlutterPostSubmitFileComparator], another
-///    [FlutterGoldenFileComparator] that uploads tests to the Skia Gold
-///    dashboard.
-///  * [FlutterPreSubmitFileComparator], another
-///    [FlutterGoldenFileComparator] that tests golden images before changes are
-///    merged into the master branch.
-///  * [FlutterSkippingFileComparator], another
-///    [FlutterGoldenFileComparator] that controls post-submit testing
-///    conditions that do not execute golden file tests.
 class FlutterLocalFileComparator extends FlutterGoldenFileComparator with LocalComparisonOutput {
-  /// Creates a [FlutterLocalFileComparator] that will test golden file
-  /// images against baselines requested from Flutter Gold.
-  ///
-  /// The [fs] and [platform] parameters are useful in tests, where the default
-  /// file system and platform can be replaced by mock instances.
   FlutterLocalFileComparator(
     super.basedir,
     super.skiaClient, {
@@ -458,11 +283,6 @@ class FlutterLocalFileComparator extends FlutterGoldenFileComparator with LocalC
     super.platform,
   });
 
-  /// Creates a new [FlutterLocalFileComparator] that mirrors the
-  /// relative path resolution of the default [goldenFileComparator].
-  ///
-  /// The [goldens], [defaultComparator], and [baseDirectory] parameters are
-  /// visible for testing purposes only.
   static Future<FlutterGoldenFileComparator> fromDefaultComparator(
     final Platform platform, {
     SkiaGoldClient? goldens,

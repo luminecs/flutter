@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AutofillGroup].
 
 void main() => runApp(const AutofillGroupExampleApp());
 

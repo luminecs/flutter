@@ -13,26 +13,8 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
-/// Defines default property values for descendant [Scrollbar] widgets.
-///
-/// Descendant widgets obtain the current [ScrollbarThemeData] object with
-/// `ScrollbarTheme.of(context)`. Instances of [ScrollbarThemeData] can be
-/// customized with [ScrollbarThemeData.copyWith].
-///
-/// Typically the [ScrollbarThemeData] of a [ScrollbarTheme] is specified as
-/// part of the overall [Theme] with [ThemeData.scrollbarTheme].
-///
-/// All [ScrollbarThemeData] properties are `null` by default. When null, the
-/// [Scrollbar] computes its own default values, typically based on the overall
-/// theme's [ThemeData.colorScheme].
-///
-/// See also:
-///
-///  * [ThemeData], which describes the overall theme information for the
-///    application.
 @immutable
 class ScrollbarThemeData with Diagnosticable {
-  /// Creates a theme that can be used for [ThemeData.scrollbarTheme].
   const ScrollbarThemeData({
     this.thumbVisibility,
     this.thickness,
@@ -52,90 +34,34 @@ class ScrollbarThemeData with Diagnosticable {
     this.showTrackOnHover,
   });
 
-  /// Overrides the default value of [Scrollbar.thumbVisibility] in all
-  /// descendant [Scrollbar] widgets.
   final MaterialStateProperty<bool?>? thumbVisibility;
 
-  /// Overrides the default value of [Scrollbar.thickness] in all
-  /// descendant [Scrollbar] widgets.
-  ///
-  /// Resolves in the following states:
-  ///  * [MaterialState.hovered] on web and desktop platforms.
   final MaterialStateProperty<double?>? thickness;
 
-  /// Overrides the default value of [Scrollbar.trackVisibility] in all
-  /// descendant [Scrollbar] widgets.
   final MaterialStateProperty<bool?>? trackVisibility;
 
-  /// Overrides the default value of [Scrollbar.showTrackOnHover] in all
-  /// descendant [Scrollbar] widgets.
   @Deprecated(
     'Use ScrollbarThemeData.trackVisibility to resolve based on the current state instead. '
     'This feature was deprecated after v3.4.0-19.0.pre.',
   )
   final bool? showTrackOnHover;
 
-  /// Overrides the default value of [Scrollbar.interactive] in all
-  /// descendant [Scrollbar] widgets.
   final bool? interactive;
 
-  /// Overrides the default value of [Scrollbar.radius] in all
-  /// descendant widgets.
   final Radius? radius;
 
-  /// Overrides the default [Color] of the [Scrollbar] thumb in all descendant
-  /// [Scrollbar] widgets.
-  ///
-  /// Resolves in the following states:
-  ///  * [MaterialState.dragged].
-  ///  * [MaterialState.hovered] on web and desktop platforms.
   final MaterialStateProperty<Color?>? thumbColor;
 
-  /// Overrides the default [Color] of the [Scrollbar] track when
-  /// [showTrackOnHover] is true in all descendant [Scrollbar] widgets.
-  ///
-  /// Resolves in the following states:
-  ///  * [MaterialState.hovered] on web and desktop platforms.
   final MaterialStateProperty<Color?>? trackColor;
 
-  /// Overrides the default [Color] of the [Scrollbar] track border when
-  /// [showTrackOnHover] is true in all descendant [Scrollbar] widgets.
-  ///
-  /// Resolves in the following states:
-  ///  * [MaterialState.hovered] on web and desktop platforms.
   final MaterialStateProperty<Color?>? trackBorderColor;
 
-  /// Overrides the default value of the [ScrollbarPainter.crossAxisMargin]
-  /// property in all descendant [Scrollbar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [ScrollbarPainter.crossAxisMargin], which sets the distance from the
-  ///    scrollbar's side to the nearest edge in logical pixels.
   final double? crossAxisMargin;
 
-  /// Overrides the default value of the [ScrollbarPainter.mainAxisMargin]
-  /// property in all descendant [Scrollbar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [ScrollbarPainter.mainAxisMargin], which sets the distance from the
-  ///    scrollbar's start and end to the edge of the viewport in logical pixels.
   final double? mainAxisMargin;
 
-  /// Overrides the default value of the [ScrollbarPainter.minLength]
-  /// property in all descendant [Scrollbar] widgets.
-  ///
-  /// See also:
-  ///
-  ///  * [ScrollbarPainter.minLength], which sets the preferred smallest size
-  ///    the scrollbar can shrink to when the total scrollable extent is large,
-  ///    the current visible viewport is small, and the viewport is not
-  ///    overscrolled.
   final double? minThumbLength;
 
-  /// Creates a copy of this object with the given fields replaced with the
-  /// new values.
   ScrollbarThemeData copyWith({
     MaterialStateProperty<bool?>? thumbVisibility,
     MaterialStateProperty<double?>? thickness,
@@ -170,9 +96,6 @@ class ScrollbarThemeData with Diagnosticable {
     );
   }
 
-  /// Linearly interpolate between two Scrollbar themes.
-  ///
-  /// {@macro dart.ui.shadow.lerp}
   static ScrollbarThemeData lerp(ScrollbarThemeData? a, ScrollbarThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
@@ -252,39 +175,15 @@ class ScrollbarThemeData with Diagnosticable {
 
 bool? _lerpBool(bool? a, bool? b, double t) => t < 0.5 ? a : b;
 
-/// Applies a scrollbar theme to descendant [Scrollbar] widgets.
-///
-/// Descendant widgets obtain the current theme's [ScrollbarThemeData] using
-/// [ScrollbarTheme.of]. When a widget uses [ScrollbarTheme.of], it is
-/// automatically rebuilt if the theme later changes.
-///
-/// A scrollbar theme can be specified as part of the overall Material theme
-/// using [ThemeData.scrollbarTheme].
-///
-/// See also:
-///
-///  * [ScrollbarThemeData], which describes the configuration of a
-///    scrollbar theme.
 class ScrollbarTheme extends InheritedTheme {
-  /// Constructs a scrollbar theme that configures all descendant [Scrollbar]
-  /// widgets.
   const ScrollbarTheme({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// The properties used for all descendant [Scrollbar] widgets.
   final ScrollbarThemeData data;
 
-  /// Returns the configuration [data] from the closest [ScrollbarTheme]
-  /// ancestor. If there is no ancestor, it returns [ThemeData.scrollbarTheme].
-  ///
-  /// Typical usage is as follows:
-  ///
-  /// ```dart
-  /// ScrollbarThemeData theme = ScrollbarTheme.of(context);
-  /// ```
   static ScrollbarThemeData of(BuildContext context) {
     final ScrollbarTheme? scrollbarTheme = context.dependOnInheritedWidgetOfExactType<ScrollbarTheme>();
     return scrollbarTheme?.data ?? Theme.of(context).scrollbarTheme;

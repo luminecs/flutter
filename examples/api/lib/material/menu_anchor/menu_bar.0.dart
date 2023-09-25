@@ -5,14 +5,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [MenuBar].
 
 void main() => runApp(const MenuBarApp());
 
-/// A class for consolidating the definition of menu entries.
-///
-/// This sort of class is not required, but illustrates one way that defining
-/// menus could be done.
 class MenuEntry {
   const MenuEntry({required this.label, this.shortcut, this.onPressed, this.menuChildren})
       : assert(menuChildren == null || onPressed == null, 'onPressed is ignored if menuChildren are provided');

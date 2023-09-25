@@ -17,53 +17,12 @@ import 'theme_data.dart';
 
 enum _ChipVariant { flat, elevated }
 
-/// A Material Design filter chip.
-///
-/// Filter chips use tags or descriptive words as a way to filter content.
-///
-/// Filter chips are a good alternative to [Checkbox] or [Switch] widgets.
-/// Unlike these alternatives, filter chips allow for clearly delineated and
-/// exposed options in a compact area.
-///
-/// Requires one of its ancestors to be a [Material] widget.
-///
-/// {@tool dartpad}
-/// This example shows how to use [FilterChip]s to filter through exercises.
-///
-/// ** See code in examples/api/lib/material/filter_chip/filter_chip.0.dart **
-/// {@end-tool}
-///
-/// ## Material Design 3
-///
-/// [FilterChip] can be used for multiple select Filter chip from
-/// Material Design 3. If [ThemeData.useMaterial3] is true, then [FilterChip]
-/// will be styled to match the Material Design 3 specification for Filter
-/// chips. Use [ChoiceChip] for single select Filter chips.
-///
-/// See also:
-///
-///  * [Chip], a chip that displays information and can be deleted.
-///  * [InputChip], a chip that represents a complex piece of information, such
-///    as an entity (person, place, or thing) or conversational text, in a
-///    compact form.
-///  * [ChoiceChip], allows a single selection from a set of options. Choice
-///    chips contain related descriptive text or categories.
-///  * [ActionChip], represents an action related to primary content.
-///  * [CircleAvatar], which shows images or initials of people.
-///  * [Wrap], A widget that displays its children in multiple horizontal or
-///    vertical runs.
-///  * <https://material.io/design/components/chips.html>
 class FilterChip extends StatelessWidget
     implements
         ChipAttributes,
         SelectableChipAttributes,
         CheckmarkableChipAttributes,
         DisabledChipAttributes {
-  /// Create a chip that acts like a checkbox.
-  ///
-  /// The [selected], [label], [autofocus], and [clipBehavior] arguments must
-  /// not be null. The [pressElevation] and [elevation] must be null or
-  /// non-negative. Typically, [pressElevation] is greater than [elevation].
   const FilterChip({
     super.key,
     this.avatar,
@@ -98,11 +57,6 @@ class FilterChip extends StatelessWidget
        assert(elevation == null || elevation >= 0.0),
        _chipVariant = _ChipVariant.flat;
 
-  /// Create an elevated chip that acts like a checkbox.
-  ///
-  /// The [selected], [label], [autofocus], and [clipBehavior] arguments must
-  /// not be null. The [pressElevation] and [elevation] must be null or
-  /// non-negative. Typically, [pressElevation] is greater than [elevation].
   const FilterChip.elevated({
     super.key,
     this.avatar,
@@ -330,10 +284,6 @@ class _FilterChipDefaultsM3 extends ChipThemeData {
   @override
   EdgeInsetsGeometry? get padding => const EdgeInsets.all(8.0);
 
-  /// The chip at text scale 1 starts with 8px on each side and as text scaling
-  /// gets closer to 2 the label padding is linearly interpolated from 8px to 4px.
-  /// Once the widget has a text scaling of 2 or higher than the label padding
-  /// remains 4px.
   @override
   EdgeInsetsGeometry? get labelPadding => EdgeInsets.lerp(
     const EdgeInsets.symmetric(horizontal: 8.0),

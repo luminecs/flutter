@@ -13,9 +13,6 @@ import '../../src/fake_process_manager.dart';
 const int kLollipopVersionCode = 21;
 const String kLastLogcatTimestamp = '11-27 15:39:04.506';
 
-/// By default the android log reader accepts lines that match no patterns
-/// if the previous line was a match. Include an intentionally non-matching
-/// line as the first input to disable this behavior.
 const String kDummyLine = 'Contents are not important\n';
 
 void main() {

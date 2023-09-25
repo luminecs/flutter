@@ -14,12 +14,6 @@ import '../base/io.dart';
 import '../convert.dart';
 import '../runner/flutter_command.dart';
 
-/// Support for symbolizing a Dart stack trace.
-///
-/// This command accepts either paths to an input file containing the
-/// stack trace and an output file for the symbolizing trace to be
-/// written, or it accepts a stack trace over stdin and outputs it
-/// over stdout.
 class SymbolizeCommand extends FlutterCommand {
   SymbolizeCommand({
     required Stdio stdio,
@@ -162,13 +156,11 @@ StreamTransformer<String, String> _testTransformer(Uint8List buffer) {
   );
 }
 
-/// A service which decodes stack traces from Dart applications.
 class DwarfSymbolizationService {
   const DwarfSymbolizationService({
     SymbolsTransformer symbolsTransformer = _defaultTransformer,
   }) : _transformer = symbolsTransformer;
 
-  /// Create a DwarfSymbolizationService with a no-op transformer for testing.
   @visibleForTesting
   factory DwarfSymbolizationService.test() {
     return const DwarfSymbolizationService(
@@ -178,13 +170,6 @@ class DwarfSymbolizationService {
 
   final SymbolsTransformer _transformer;
 
-  /// Decode a stack trace from [input] and place the results in [output].
-  ///
-  /// Requires [symbols] to be a buffer created from the `--split-debug-info`
-  /// command line flag.
-  ///
-  /// Throws a [ToolExit] if the symbols cannot be parsed or the stack trace
-  /// cannot be decoded.
   Future<void> decode({
     required Stream<List<int>> input,
     required IOSink output,

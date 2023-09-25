@@ -7,7 +7,6 @@ import 'dart:convert' show jsonDecode;
 // JSON Event samples taken from running an instrumented version of the
 // integration tests of this package that dumped all the data as captured.
 
-/// To test isBeginFrame. (Sampled from Chrome 89+)
 final Map<String, Object?> beginMainFrameJson_89plus = jsonDecode('''
 {
     "args": {
@@ -25,7 +24,6 @@ final Map<String, Object?> beginMainFrameJson_89plus = jsonDecode('''
 }
 ''') as Map<String, Object?>;
 
-/// To test isUpdateAllLifecyclePhases. (Sampled from Chrome 89+)
 final Map<String, Object?> updateLifecycleJson_89plus = jsonDecode('''
 {
     "args": {},
@@ -41,7 +39,6 @@ final Map<String, Object?> updateLifecycleJson_89plus = jsonDecode('''
 }
 ''') as Map<String, Object?>;
 
-/// To test isBeginMeasuredFrame. (Sampled from Chrome 89+)
 final Map<String, Object?> beginMeasuredFrameJson_89plus = jsonDecode('''
 {
     "args": {},
@@ -56,7 +53,6 @@ final Map<String, Object?> beginMeasuredFrameJson_89plus = jsonDecode('''
 }
 ''') as Map<String, Object?>;
 
-/// To test isEndMeasuredFrame. (Sampled from Chrome 89+)
 final Map<String, Object?> endMeasuredFrameJson_89plus = jsonDecode('''
 {
     "args": {},
@@ -71,7 +67,6 @@ final Map<String, Object?> endMeasuredFrameJson_89plus = jsonDecode('''
 }
 ''') as Map<String, Object?>;
 
-/// An unrelated data frame to test negative cases.
 final Map<String, Object?> unrelatedPhXJson = jsonDecode('''
 {
     "args": {},
@@ -87,7 +82,6 @@ final Map<String, Object?> unrelatedPhXJson = jsonDecode('''
 }
 ''') as Map<String, Object?>;
 
-/// Another unrelated data frame to test negative cases.
 final Map<String, Object?> anotherUnrelatedJson = jsonDecode('''
 {
     "args": {

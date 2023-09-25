@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoPageScaffold].
 
 void main() => runApp(const PageScaffoldApp());
 

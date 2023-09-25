@@ -4,7 +4,6 @@
 
 import 'package:flutter/cupertino.dart';
 
-/// Flutter code sample for [CupertinoTabScaffold].
 
 void main() => runApp(const TabScaffoldApp());
 

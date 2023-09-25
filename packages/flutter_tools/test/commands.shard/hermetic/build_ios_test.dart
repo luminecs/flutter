@@ -47,7 +47,6 @@ class FakeXcodeProjectInterpreterWithBuildSettings extends FakeXcodeProjectInter
     };
   }
 
-  /// The value of 'PRODUCT_BUNDLE_IDENTIFIER'.
   final String? productBundleIdentifier;
 
   final String? developmentTeam;

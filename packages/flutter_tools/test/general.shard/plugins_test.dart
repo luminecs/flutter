@@ -27,8 +27,6 @@ import '../src/context.dart';
 import '../src/fakes.dart' hide FakeOperatingSystemUtils;
 import '../src/pubspec_schema.dart';
 
-/// Information for a platform entry in the 'platforms' section of a plugin's
-/// pubspec.yaml.
 class _PluginPlatformInfo {
   const _PluginPlatformInfo({
     this.pluginClass,
@@ -39,22 +37,16 @@ class _PluginPlatformInfo {
   }) : assert(pluginClass != null || dartPluginClass != null),
        assert(androidPackage == null || pluginClass != null);
 
-  /// The pluginClass entry, if any.
   final String? pluginClass;
 
-  /// The dartPluginClass entry, if any.
   final String? dartPluginClass;
 
-  /// The package entry for an Android plugin implementation using pluginClass.
   final String? androidPackage;
 
   final bool sharedDarwinSource;
 
-  /// The fileName entry for a web plugin implementation.
   final String? fileName;
 
-  /// Returns the body of a platform section for a plugin's pubspec, properly
-  /// indented.
   String get indentedPubspecSection {
     const String indentation = '        ';
     return <String>[

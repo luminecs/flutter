@@ -6,7 +6,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [StreamBuilder].
 
 void main() => runApp(const StreamBuilderExampleApp());
 

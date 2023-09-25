@@ -10,15 +10,8 @@ import 'package:flutter/services.dart'
 import 'editable_text.dart' show EditableTextContextMenuBuilder;
 import 'framework.dart' show immutable;
 
-/// Controls how spell check is performed for text input.
-///
-/// This configuration determines the [SpellCheckService] used to fetch the
-/// [List<SuggestionSpan>] spell check results and the [TextStyle] used to
-/// mark misspelled words within text input.
 @immutable
 class SpellCheckConfiguration {
-  /// Creates a configuration that specifies the service and suggestions handler
-  /// for spell check.
   const SpellCheckConfiguration({
     this.spellCheckService,
     this.misspelledSelectionColor,
@@ -26,7 +19,6 @@ class SpellCheckConfiguration {
     this.spellCheckSuggestionsToolbarBuilder,
   }) : _spellCheckEnabled = true;
 
-  /// Creates a configuration that disables spell check.
   const SpellCheckConfiguration.disabled()
     :  _spellCheckEnabled = false,
        spellCheckService = null,
@@ -34,35 +26,18 @@ class SpellCheckConfiguration {
        misspelledTextStyle = null,
        misspelledSelectionColor = null;
 
-  /// The service used to fetch spell check results for text input.
   final SpellCheckService? spellCheckService;
 
-  /// The color the paint the selection highlight when spell check is showing
-  /// suggestions for a misspelled word.
-  ///
-  /// For example, on iOS, the selection appears red while the spell check menu
-  /// is showing.
   final Color? misspelledSelectionColor;
 
-  /// Style used to indicate misspelled words.
-  ///
-  /// This is nullable to allow style-specific wrappers of [EditableText]
-  /// to infer this, but this must be specified if this configuration is
-  /// provided directly to [EditableText] or its construction will fail with an
-  /// assertion error.
   final TextStyle? misspelledTextStyle;
 
-  /// Builds the toolbar used to display spell check suggestions for misspelled
-  /// words.
   final EditableTextContextMenuBuilder? spellCheckSuggestionsToolbarBuilder;
 
   final bool _spellCheckEnabled;
 
-  /// Whether or not the configuration should enable or disable spell check.
   bool get spellCheckEnabled => _spellCheckEnabled;
 
-  /// Returns a copy of the current [SpellCheckConfiguration] instance with
-  /// specified overrides.
   SpellCheckConfiguration copyWith({
     SpellCheckService? spellCheckService,
     Color? misspelledSelectionColor,
@@ -111,12 +86,6 @@ class SpellCheckConfiguration {
 
 // Methods for displaying spell check results:
 
-/// Adjusts spell check results to correspond to [newText] if the only results
-/// that the handler has access to are the [results] corresponding to
-/// [resultsText].
-///
-/// Used in the case where the request for the spell check results of the
-/// [newText] is lagging in order to avoid display of incorrect results.
 List<SuggestionSpan> _correctSpellCheckResults(
     String newText, String resultsText, List<SuggestionSpan> results) {
   final List<SuggestionSpan> correctedSpellCheckResults = <SuggestionSpan>[];
@@ -180,16 +149,6 @@ List<SuggestionSpan> _correctSpellCheckResults(
   return correctedSpellCheckResults;
 }
 
-/// Builds the [TextSpan] tree given the current state of the text input and
-/// spell check results.
-///
-/// The [value] is the current [TextEditingValue] requested to be rendered
-/// by a text input widget. The [composingWithinCurrentTextRange] value
-/// represents whether or not there is a valid composing region in the
-/// [value]. The [style] is the [TextStyle] to render the [value]'s text with,
-/// and the [misspelledTextStyle] is the [TextStyle] to render misspelled
-/// words within the [value]'s text with. The [spellCheckResults] are the
-/// results of spell checking the [value]'s text.
 TextSpan buildTextSpanWithSpellCheckSuggestions(
     TextEditingValue value,
     bool composingWithinCurrentTextRange,
@@ -236,10 +195,6 @@ TextSpan buildTextSpanWithSpellCheckSuggestions(
   );
 }
 
-/// Builds the [TextSpan] tree for spell check without considering the composing
-/// region. Instead, uses the cursor to identify the word that's actively being
-/// edited and shouldn't be spell checked. This is useful for platforms and IMEs
-/// that don't use the composing region for the active word.
 List<TextSpan> _buildSubtreesWithoutComposingRegion(
     List<SuggestionSpan>? spellCheckSuggestions,
     TextEditingValue value,
@@ -306,8 +261,6 @@ List<TextSpan> _buildSubtreesWithoutComposingRegion(
   return textSpanTreeChildren;
 }
 
-/// Builds [TextSpan] subtree for text with misspelled words with logic based on
-/// a valid composing region.
 List<TextSpan> _buildSubtreesWithComposingRegion(
     List<SuggestionSpan>? spellCheckSuggestions,
     TextEditingValue value,
@@ -412,8 +365,6 @@ List<TextSpan> _buildSubtreesWithComposingRegion(
   return textSpanTreeChildren;
 }
 
-/// Helper method to create [TextSpan] tree children for specified range of
-/// text up to and including the composing region.
 void _addComposingRegionTextSpans(
     List<TextSpan> treeChildren,
     String text,

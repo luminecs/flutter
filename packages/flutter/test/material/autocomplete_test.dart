@@ -291,9 +291,6 @@ void main() {
       ),
     )));
 
-    /// entering "a" returns 9 items from kOptions so basically the
-    /// height of 9 options would be beyond `desiredHeight=150`,
-    /// so height gets restricted to desiredHeight.
     final Finder listFinder = find.byType(ListView);
     final Finder inputFinder = find.byType(TextFormField);
     await tester.tap(inputFinder);
@@ -302,7 +299,6 @@ void main() {
     final Size baseSize = tester.getSize(listFinder);
     final double resultingHeight = baseSize.height;
 
-    /// expected desired Height =150.0
     expect(resultingHeight, equals(desiredHeight));
   });
 

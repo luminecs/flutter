@@ -57,8 +57,6 @@ void main() {
   });
 
   group('copyDirectorySync', () {
-    /// Test file_systems.copyDirectorySync() using MemoryFileSystem.
-    /// Copies between 2 instances of file systems which is also supported by copyDirectorySync().
     testWithoutContext('test directory copy', () async {
       final MemoryFileSystem sourceMemoryFs = MemoryFileSystem.test();
       const String sourcePath = '/some/origin';

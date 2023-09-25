@@ -2,9 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Maps iOS's special key labels to logical key names.
-///
-/// See https://developer.apple.com/documentation/uikit/uikeycommand/input_strings_for_special_keys?language=objc
 const Map<String, String> kIosSpecialKeyMapping = <String, String>{
   'UIKeyInputEscape': 'Escape',
   'UIKeyInputF1': 'F1',

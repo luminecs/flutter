@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [RawScrollbar.shape].
 
 void main() => runApp(const ShapeExampleApp());
 

@@ -21,7 +21,6 @@ File _getMultiDexApplicationFile(Directory projectDir) {
     .childFile('FlutterMultiDexApplication.java');
 }
 
-/// Creates the FlutterMultiDexApplication.java if it does not exist.
 void ensureMultiDexApplicationExists(final Directory projectDir) {
   final File applicationFile = _getMultiDexApplicationFile(projectDir);
   if (applicationFile.existsSync()) {
@@ -65,9 +64,6 @@ public class FlutterMultiDexApplication extends Application {
   applicationFile.writeAsStringSync(buffer.toString(), flush: true);
 }
 
-/// Returns true if FlutterMultiDexApplication.java exists.
-///
-/// This function does not verify the contents of the file.
 bool multiDexApplicationExists(final Directory projectDir) {
   if (_getMultiDexApplicationFile(projectDir).existsSync()) {
     return true;
@@ -83,8 +79,6 @@ File _getManifestFile(Directory projectDir) {
     .childFile('AndroidManifest.xml');
 }
 
-/// Returns true if the `app` module AndroidManifest.xml includes the
-/// <application android:name="${applicationName}"> attribute.
 bool androidManifestHasNameVariable(final Directory projectDir) {
   final File manifestFile = _getManifestFile(projectDir);
   if (!manifestFile.existsSync()) {

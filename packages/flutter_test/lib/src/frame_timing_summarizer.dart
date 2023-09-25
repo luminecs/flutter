@@ -4,19 +4,10 @@
 
 import 'dart:ui';
 
-/// The maximum amount of time considered safe to spend for a frame's build
-/// phase. Anything past that is in the danger of missing the frame as 60FPS.
-///
-/// Changing this doesn't re-evaluate existing summary.
 Duration kBuildBudget = const Duration(milliseconds: 16);
 // TODO(CareF): Automatically calculate the refresh budget (#61958)
 
-/// This class and summarizes a list of [FrameTiming] for the performance
-/// metrics.
 class FrameTimingSummarizer {
-  /// Summarize `data` to frame build time and frame rasterizer time statistics.
-  ///
-  /// See [TimelineSummary.summaryJson] for detail.
   factory FrameTimingSummarizer(
     List<FrameTiming> data, {
     int? newGenGCCount,
@@ -137,115 +128,76 @@ class FrameTimingSummarizer {
     required this.oldGenGCCount,
   });
 
-  /// List of frame build time in microseconds
   final List<Duration> frameBuildTime;
 
-  /// List of frame rasterizer time in microseconds
   final List<Duration> frameRasterizerTime;
 
-  /// List of the time difference between vsync signal and frame building start
-  /// time
   final List<Duration> vsyncOverhead;
 
-  /// The average value of [frameBuildTime] in milliseconds.
   final Duration averageFrameBuildTime;
 
-  /// The 90-th percentile value of [frameBuildTime] in milliseconds
   final Duration p90FrameBuildTime;
 
-  /// The 99-th percentile value of [frameBuildTime] in milliseconds
   final Duration p99FrameBuildTime;
 
-  /// The largest value of [frameBuildTime] in milliseconds
   final Duration worstFrameBuildTime;
 
-  /// Number of items in [frameBuildTime] that's greater than [kBuildBudget]
   final int missedFrameBuildBudget;
 
-  /// The average value of [frameRasterizerTime] in milliseconds.
   final Duration averageFrameRasterizerTime;
 
-  /// The 90-th percentile value of [frameRasterizerTime] in milliseconds.
   final Duration p90FrameRasterizerTime;
 
-  /// The 99-th percentile value of [frameRasterizerTime] in milliseconds.
   final Duration p99FrameRasterizerTime;
 
-  /// The largest value of [frameRasterizerTime] in milliseconds.
   final Duration worstFrameRasterizerTime;
 
-  /// The average number of layers cached across all frames.
   final double averageLayerCacheCount;
 
-  /// The 90-th percentile number of layers cached across all frames.
   final int p90LayerCacheCount;
 
-  /// The 90-th percentile number of layers cached across all frames.
   final int p99LayerCacheCount;
 
-  /// The most number of layers cached across all frames.
   final int worstLayerCacheCount;
 
-  /// The average number of bytes consumed by cached layers across all frames.
   final double averageLayerCacheBytes;
 
-  /// The 90-th percentile number of bytes consumed by cached layers across all frames.
   final int p90LayerCacheBytes;
 
-  /// The 90-th percentile number of bytes consumed by cached layers across all frames.
   final int p99LayerCacheBytes;
 
-  /// The highest number of bytes consumed by cached layers across all frames.
   final int worstLayerCacheBytes;
 
-  /// The average number of pictures cached across all frames.
   final double averagePictureCacheCount;
 
-  /// The 90-th percentile number of pictures cached across all frames.
   final int p90PictureCacheCount;
 
-  /// The 90-th percentile number of pictures cached across all frames.
   final int p99PictureCacheCount;
 
-  /// The most number of pictures cached across all frames.
   final int worstPictureCacheCount;
 
-  /// The average number of bytes consumed by cached pictures across all frames.
   final double averagePictureCacheBytes;
 
-  /// The 90-th percentile number of bytes consumed by cached pictures across all frames.
   final int p90PictureCacheBytes;
 
-  /// The 90-th percentile number of bytes consumed by cached pictures across all frames.
   final int p99PictureCacheBytes;
 
-  /// The highest number of bytes consumed by cached pictures across all frames.
   final int worstPictureCacheBytes;
 
-  /// Number of items in [frameRasterizerTime] that's greater than [kBuildBudget]
   final int missedFrameRasterizerBudget;
 
-  /// The average value of [vsyncOverhead];
   final Duration averageVsyncOverhead;
 
-  /// The 90-th percentile value of [vsyncOverhead] in milliseconds
   final Duration p90VsyncOverhead;
 
-  /// The 99-th percentile value of [vsyncOverhead] in milliseconds
   final Duration p99VsyncOverhead;
 
-  /// The largest value of [vsyncOverhead] in milliseconds.
   final Duration worstVsyncOverhead;
 
-  /// The number of new generation GCs.
   final int newGenGCCount;
 
-  /// The number of old generation GCs.
   final int oldGenGCCount;
 
-  /// Convert the summary result to a json object.
-  ///
-  /// See [TimelineSummary.summaryJson] for detail.
   Map<String, dynamic> get summary => <String, dynamic>{
         'average_frame_build_time_millis':
             averageFrameBuildTime.inMicroseconds / 1E3,
@@ -293,17 +245,11 @@ class FrameTimingSummarizer {
       };
 }
 
-/// Returns the 100*p-th percentile of [data].
-///
-/// [data] must be sorted in ascending order.
 T _findPercentile<T>(List<T> data, double p) {
   assert(p >= 0 && p <= 1);
   return data[((data.length - 1) * p).round()];
 }
 
-/// Returns the number of elements in [data] that exceed [threshold].
-///
-/// [data] must be sorted in ascending order.
 int _countExceed<T extends Comparable<T>>(List<T> data, T threshold) {
   final int exceedsThresholdIndex = data.indexWhere((T datum) => datum.compareTo(threshold) > 0);
   if (exceedsThresholdIndex == -1) {

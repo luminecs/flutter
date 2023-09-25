@@ -2,10 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/// Simple one-dimensional physics simulations, such as springs, friction, and
-/// gravity, for use in user interface animations.
-///
-/// To use, import `package:flutter/physics.dart`.
 library physics;
 
 export 'src/physics/clamped_simulation.dart';

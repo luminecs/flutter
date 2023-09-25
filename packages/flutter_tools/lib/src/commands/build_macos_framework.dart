@@ -21,10 +21,6 @@ import '../runner/flutter_command.dart' show DevelopmentArtifact, FlutterCommand
 import '../version.dart';
 import 'build_ios_framework.dart';
 
-/// Produces a .framework for integration into a host macOS app. The .framework
-/// contains the Flutter engine and framework code as well as plugins. It can
-/// be integrated into plain Xcode projects without using or other package
-/// managers.
 class BuildMacOSFrameworkCommand extends BuildFrameworkCommand {
   BuildMacOSFrameworkCommand({
     super.flutterVersion,
@@ -137,8 +133,6 @@ class BuildMacOSFrameworkCommand extends BuildFrameworkCommand {
     return FlutterCommandResult.success();
   }
 
-  /// Create podspec that will download and unzip remote engine assets so host apps can leverage CocoaPods
-  /// vendored framework caching.
   @visibleForTesting
   void produceFlutterPodspec(BuildMode mode, Directory modeDirectory, {bool force = false}) {
     final Status status = globals.logger.startProgress(' ├─Creating FlutterMacOS.podspec...');

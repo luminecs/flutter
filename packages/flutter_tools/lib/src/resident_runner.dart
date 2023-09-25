@@ -76,7 +76,6 @@ class FlutterDevice {
          fileSystem: globals.fs,
        );
 
-  /// Create a [FlutterDevice] with optional code generation enabled.
   static Future<FlutterDevice> create(
     Device device, {
     required String? target,
@@ -233,18 +232,8 @@ class FlutterDevice {
   StreamSubscription<String>? _loggingSubscription;
   bool? _isListeningForVmServiceUri;
 
-  /// Whether the stream [vmServiceUris] is still open.
   bool get isWaitingForVmService => _isListeningForVmServiceUri ?? false;
 
-  /// If the [reloadSources] parameter is not null the 'reloadSources' service
-  /// will be registered.
-  /// The 'reloadSources' service can be used by other Service Protocol clients
-  /// connected to the VM (e.g. VmService) to request a reload of the source
-  /// code of the running application (a.k.a. HotReload).
-  /// The 'compileExpression' service can be used to compile user-provided
-  /// expressions requested during debugging of the application.
-  /// This ensures that the reload process follows the normal orchestration of
-  /// the Flutter Tools and not just the VM internal service.
   Future<void> connect({
     ReloadSources? reloadSources,
     Restart? restart,
@@ -614,40 +603,25 @@ class FlutterDevice {
   }
 }
 
-/// A subset of the [ResidentRunner] for delegating to attached flutter devices.
 abstract class ResidentHandlers {
   List<FlutterDevice?> get flutterDevices;
 
-  /// Whether the resident runner has hot reload and restart enabled.
   bool get hotMode;
 
-  /// Whether the resident runner is connect to the device's VM Service.
   bool get supportsServiceProtocol;
 
-  /// The application is running in debug mode.
   bool get isRunningDebug;
 
-  /// The application is running in profile mode.
   bool get isRunningProfile;
 
-  /// The application is running in release mode.
   bool get isRunningRelease;
 
-  /// The resident runner should stay resident after establishing a connection with the
-  /// application.
   bool get stayResident;
 
-  /// Whether all of the connected devices support hot restart.
-  ///
-  /// To prevent scenarios where only a subset of devices are hot restarted,
-  /// the runner requires that all attached devices can support hot restart
-  /// before enabling it.
   bool get supportsRestart;
 
-  /// Whether all of the connected devices support gathering SkSL.
   bool get supportsWriteSkSL;
 
-  /// Whether all of the connected devices support hot reload.
   bool get canHotReload;
 
   ResidentDevtoolsHandler? get residentDevtoolsHandler;
@@ -658,20 +632,13 @@ abstract class ResidentHandlers {
   @protected
   FileSystem? get fileSystem;
 
-  /// Called to print help to the terminal.
   void printHelp({ required bool details });
 
-  /// Perform a hot reload or hot restart of all attached applications.
-  ///
-  /// If [fullRestart] is true, a hot restart is performed. Otherwise a hot reload
-  /// is run instead. On web devices, this only performs a hot restart regardless of
-  /// the value of [fullRestart].
   Future<OperationResult> restart({ bool fullRestart = false, bool pause = false, String? reason }) {
     final String mode = isRunningProfile ? 'profile' :isRunningRelease ? 'release' : 'this';
     throw Exception('${fullRestart ? 'Restart' : 'Reload'} is not supported in $mode mode');
   }
 
-  /// Dump the application's current widget tree to the terminal.
   Future<bool> debugDumpApp() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -688,7 +655,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Dump the application's current render tree to the terminal.
   Future<bool> debugDumpRenderTree() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -705,13 +671,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Dump frame rasterization metrics for the last rendered frame.
-  ///
-  /// The last frames gets re-painted while recording additional tracing info
-  /// pertaining to the various draw calls issued by the frame. The timings
-  /// recorded here are not indicative of production performance. The intended
-  /// use case is to look at the various layers in proportion to see what
-  /// contributes the most towards raster performance.
   Future<bool> debugFrameJankMetrics() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -744,7 +703,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Dump the application's current layer tree to the terminal.
   Future<bool> debugDumpLayerTree() async {
     if (!supportsServiceProtocol || !isRunningDebug) {
       return false;
@@ -777,9 +735,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Dump the application's current semantics tree to the terminal.
-  ///
-  /// If semantics are not enabled, nothing is returned.
   Future<bool> debugDumpSemanticsTreeInTraversalOrder() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -796,9 +751,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Dump the application's current semantics tree to the terminal.
-  ///
-  /// If semantics are not enabled, nothing is returned.
   Future<bool> debugDumpSemanticsTreeInInverseHitTestOrder() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -815,7 +767,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Toggle the "paint size" debugging feature.
   Future<bool> debugToggleDebugPaintSizeEnabled() async {
     if (!supportsServiceProtocol || !isRunningDebug) {
       return false;
@@ -831,9 +782,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Toggle the performance overlay.
-  ///
-  /// This is not supported in web mode.
   Future<bool> debugTogglePerformanceOverlayOverride() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -852,7 +800,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Toggle the widget inspector.
   Future<bool> debugToggleWidgetInspector() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -868,7 +815,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Toggle the "invert images" debugging feature.
   Future<bool> debugToggleInvertOversizedImages() async {
     if (!supportsServiceProtocol || !isRunningDebug) {
       return false;
@@ -884,7 +830,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Toggle the "profile widget builds" debugging feature.
   Future<bool> debugToggleProfileWidgetBuilds() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -900,7 +845,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Toggle the operating system brightness (light or dark).
   Future<bool> debugToggleBrightness() async {
     if (!supportsServiceProtocol) {
       return false;
@@ -928,7 +872,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Rotate the application through different `defaultTargetPlatform` values.
   Future<bool> debugTogglePlatform() async {
     if (!supportsServiceProtocol || !isRunningDebug) {
       return false;
@@ -952,9 +895,6 @@ abstract class ResidentHandlers {
     return true;
   }
 
-  /// Write the SkSL shaders to a zip file in build directory.
-  ///
-  /// Returns the name of the file, or `null` on failures.
   Future<String?> writeSkSL() async {
     if (!supportsWriteSkSL) {
       throw Exception('writeSkSL is not supported by this runner.');
@@ -969,19 +909,6 @@ abstract class ResidentHandlers {
     return sharedSkSlWriter(device, data);
   }
 
-  /// Take a screenshot on the provided [device].
-  ///
-  /// If the device has a connected vmservice, this method will attempt to hide
-  /// and restore the debug banner before taking the screenshot.
-  ///
-  /// If the device type does not support a "native" screenshot, then this
-  /// will fallback to a rasterizer screenshot from the engine. This has the
-  /// downside of being unable to display the contents of platform views.
-  ///
-  /// This method will return without writing the screenshot file if any
-  /// RPC errors are encountered, printing them to stderr. This is true even
-  /// if an error occurs after the data has already been received, such as
-  /// from restoring the debug banner.
   Future<void> screenshot(FlutterDevice device) async {
     if (!device.device!.supportsScreenshot && !supportsServiceProtocol) {
       return;
@@ -1067,22 +994,12 @@ abstract class ResidentHandlers {
   }
 
 
-  /// Remove sigusr signal handlers.
   Future<void> cleanupAfterSignal();
 
-  /// Tear down the runner and leave the application running.
-  ///
-  /// This is not supported on web devices where the runner is running
-  /// the application server as well.
   Future<void> detach();
 
-  /// Tear down the runner and exit the application.
   Future<void> exit();
 
-  /// Run any source generators, such as localizations.
-  ///
-  /// These are automatically run during hot restart, but can be
-  /// triggered manually to see the updated generated code.
   Future<void> runSourceGenerators();
 }
 
@@ -1135,7 +1052,6 @@ abstract class ResidentRunner extends ResidentHandlers {
   final bool stayResident;
   final bool? ipv6;
   final String? _dillOutputPath;
-  /// The parent location of the incremental artifacts.
   final Directory artifactDirectory;
   final String packagesFilePath;
   final String projectRootPath;
@@ -1157,7 +1073,6 @@ abstract class ResidentRunner extends ResidentHandlers {
   @override
   bool hotMode;
 
-  /// Returns true if every device is streaming vmService URIs.
   bool get isWaitingForVmService {
     return flutterDevices.every((FlutterDevice? device) {
       return device!.isWaitingForVmService;
@@ -1194,8 +1109,6 @@ abstract class ResidentRunner extends ResidentHandlers {
 
   bool get trackWidgetCreation => debuggingOptions.buildInfo.trackWidgetCreation;
 
-  /// True if the shared Dart plugin registry (which is different than the one
-  /// used for web) should be generated during source generation.
   bool get generateDartPluginRegistry => true;
 
   // Returns the Uri of the first connected device for mobile,
@@ -1205,7 +1118,6 @@ abstract class ResidentRunner extends ResidentHandlers {
   // there is no devFS associated with the first device.
   Uri? get uri => flutterDevices.first.devFS?.baseUri;
 
-  /// Returns [true] if the resident runner exited after invoking [exit()].
   bool get exited => _exited;
 
   @override
@@ -1218,10 +1130,6 @@ abstract class ResidentRunner extends ResidentHandlers {
   @override
   bool get canHotReload => hotMode;
 
-  /// Start the app and keep the process running during its lifetime.
-  ///
-  /// Returns the exit code that we should use for the flutter tool process; 0
-  /// for success, 1 for user error (e.g. bad arguments), 2 for other failures.
   Future<int?> run({
     Completer<DebugConnectionInfo>? connectionInfoCompleter,
     Completer<void>? appStartedCompleter,
@@ -1229,10 +1137,6 @@ abstract class ResidentRunner extends ResidentHandlers {
     String? route,
   });
 
-  /// Connect to a flutter application.
-  ///
-  /// [needsFullRestart] defaults to `true`, and controls if the frontend server should
-  /// compile a full dill. This should be set to `false` if this is called in [ResidentRunner.run], since that method already performs an initial compilation.
   Future<int?> attach({
     Completer<DebugConnectionInfo>? connectionInfoCompleter,
     Completer<void>? appStartedCompleter,
@@ -1378,8 +1282,6 @@ abstract class ResidentRunner extends ResidentHandlers {
     }
   }
 
-  /// If the [reloadSources] parameter is not null the 'reloadSources' service
-  /// will be registered.
   //
   // Failures should be indicated by completing the future with an error, using
   // a string as the error object, which will be used by the caller (attach())
@@ -1574,23 +1476,18 @@ abstract class ResidentRunner extends ResidentHandlers {
   @override
   Future<void> cleanupAfterSignal();
 
-  /// Called right before we exit.
   Future<void> cleanupAtFinish();
 }
 
 class OperationResult {
   OperationResult(this.code, this.message, { this.fatal = false, this.updateFSReport, this.extraTimings = const <OperationResultExtraTiming>[] });
 
-  /// The result of the operation; a non-zero code indicates a failure.
   final int code;
 
-  /// A user facing message about the results of the operation.
   final String message;
 
-  /// User facing extra timing information about the operation.
   final List<OperationResultExtraTiming> extraTimings;
 
-  /// Whether this error should cause the runner to exit.
   final bool fatal;
 
   final UpdateFSReport? updateFSReport;
@@ -1603,10 +1500,8 @@ class OperationResult {
 class OperationResultExtraTiming {
   const OperationResultExtraTiming(this.description, this.timeInMs);
 
-  /// A user facing short description of this timing.
   final String description;
 
-  /// The time this operation took in milliseconds.
   final int timeInMs;
 }
 
@@ -1634,7 +1529,6 @@ Future<String?> getMissingPackageHintForPlatform(TargetPlatform platform) async 
   }
 }
 
-/// Redirects terminal commands to the correct resident runner methods.
 class TerminalHandler {
   TerminalHandler(this.residentRunner, {
     required Logger logger,
@@ -1665,7 +1559,6 @@ class TerminalHandler {
   @visibleForTesting
   String? lastReceivedCommand;
 
-  /// This is only a buffer logger in unit tests
   @visibleForTesting
   BufferLogger get logger => _logger as BufferLogger;
 
@@ -1698,7 +1591,6 @@ class TerminalHandler {
     }
   }
 
-  /// Unregisters terminal signal and keystroke handlers.
   void stop() {
     assert(residentRunner.stayResident);
     if (_actualPidFile != null) {
@@ -1717,7 +1609,6 @@ class TerminalHandler {
     subscription?.cancel();
   }
 
-  /// Returns [true] if the input has been handled by this function.
   Future<bool> _commonTerminalInputHandler(String character) async {
     _logger.printStatus(''); // the key the user tapped might be on this line
     switch (character) {
@@ -1875,10 +1766,6 @@ class DebugConnectionInfo {
   final String? baseUri;
 }
 
-/// Returns the next platform value for the switcher.
-///
-/// These values must match what is available in
-/// `packages/flutter/lib/src/foundation/binding.dart`.
 String nextPlatform(String currentPlatform) {
   const List<String> platforms = <String>[
     'android',
@@ -1893,38 +1780,17 @@ String nextPlatform(String currentPlatform) {
   return platforms[(index + 1) % platforms.length];
 }
 
-/// A launcher for the devtools debugger and analysis tool.
 abstract class DevtoolsLauncher {
   static DevtoolsLauncher? get instance => context.get<DevtoolsLauncher>();
 
-  /// Serve Dart DevTools and return the host and port they are available on.
-  ///
-  /// This method must return a future that is guaranteed not to fail, because it
-  /// will be used in unawaited contexts. It may, however, return null.
   Future<DevToolsServerAddress?> serve();
 
-  /// Launch a Dart DevTools process, optionally targeting a specific VM Service
-  /// URI if [vmServiceUri] is non-null.
-  ///
-  /// [additionalArguments] may be optionally specified and are passed directly
-  /// to the devtools run command.
-  ///
-  /// This method must return a future that is guaranteed not to fail, because it
-  /// will be used in unawaited contexts.
   Future<void> launch(Uri vmServiceUri, {List<String>? additionalArguments});
 
   Future<void> close();
 
-  /// When measuring devtools memory via additional arguments, the launch process
-  /// will technically never complete.
-  ///
-  /// Us this as an indicator that the process has started.
   Future<void>? processStart;
 
-  /// Returns a future that completes when the DevTools server is ready.
-  ///
-  /// Completes when [devToolsUrl] is set. That can be set either directly, or
-  /// by calling [serve].
   Future<void> get ready => _readyCompleter.future;
   Completer<void> _readyCompleter = Completer<void>();
 
@@ -1940,9 +1806,6 @@ abstract class DevtoolsLauncher {
     }
   }
 
-  /// The URL of the current DevTools server.
-  ///
-  /// Returns null if [ready] is not complete.
   DevToolsServerAddress? get activeDevToolsServer {
     if (_devToolsUrl == null) {
       return null;

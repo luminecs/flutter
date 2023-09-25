@@ -10,8 +10,6 @@ import 'logical_key_data.dart';
 import 'physical_key_data.dart';
 import 'utils.dart';
 
-/// Generates the key mapping for Web, based on the information in the key
-/// data structure given to it.
 class WebCodeGenerator extends PlatformCodeGenerator {
   WebCodeGenerator(
     super.keyData,
@@ -19,7 +17,6 @@ class WebCodeGenerator extends PlatformCodeGenerator {
     String logicalLocationMap,
   ) : _logicalLocationMap = parseMapOfListOfNullableString(logicalLocationMap);
 
-  /// This generates the map of Web KeyboardEvent codes to logical key ids.
   String get _webLogicalKeyCodeMap {
     final OutputLines<String> lines = OutputLines<String>('Web logical map');
     for (final LogicalKeyEntry entry in logicalData.entries) {
@@ -33,7 +30,6 @@ class WebCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map of Web KeyboardEvent codes to physical key USB HID codes.
   String get _webPhysicalKeyCodeMap {
     final OutputLines<String> lines = OutputLines<String>('Web physical map');
     for (final PhysicalKeyEntry entry in keyData.entries) {
@@ -45,7 +41,6 @@ class WebCodeGenerator extends PlatformCodeGenerator {
     return lines.sortedJoin().trimRight();
   }
 
-  /// This generates the map of Web number pad codes to logical key ids.
   String get _webLogicalLocationMap {
     final OutputLines<String> lines = OutputLines<String>('Web logical location map');
     _logicalLocationMap.forEach((String webKey, List<String?> locations) {

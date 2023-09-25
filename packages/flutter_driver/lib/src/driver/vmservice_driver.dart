@@ -14,10 +14,7 @@ import 'package:webdriver/async_io.dart' as async_io;
 
 import '../../flutter_driver.dart';
 
-/// An implementation of the Flutter Driver over the vmservice protocol.
 class VMServiceFlutterDriver extends FlutterDriver {
-  /// Creates a driver that uses a connection provided by the given
-  /// [serviceClient] and [appIsolate].
   VMServiceFlutterDriver.connectedTo(
     this._serviceClient,
     this._appIsolate, {
@@ -30,9 +27,6 @@ class VMServiceFlutterDriver extends FlutterDriver {
       _logFilePathName = p.join(testOutputsDirectory, 'flutter_driver_commands_$_driverId.log');
     }
 
-  /// Connects to a Flutter application.
-  ///
-  /// See [FlutterDriver.connect] for more documentation.
   static Future<FlutterDriver> connect({
     String? dartVmServiceUrl,
     bool printCommunication = false,
@@ -168,10 +162,6 @@ class VMServiceFlutterDriver extends FlutterDriver {
       });
     }
 
-    /// Waits for a signal from the VM service that the extension is registered.
-    ///
-    /// Looks at the list of loaded extensions for the current [isolateRef], as
-    /// well as the stream of added extensions.
     Future<void> waitForServiceExtension() async {
       await client.streamListen(vms.EventStreams.kIsolate);
 
@@ -273,18 +263,11 @@ class VMServiceFlutterDriver extends FlutterDriver {
 │                                                       ┊
 └─────────────────────────────────────────────────╌┄┈  🐢
 ''';
-  /// The unique ID of this driver instance.
   final int _driverId;
 
   @override
   vms.Isolate get appIsolate => _appIsolate;
 
-  /// Client connected to the Dart VM running the Flutter application.
-  ///
-  /// You can use [VMServiceClient] to check VM version, flags and get
-  /// notified when a new isolate has been instantiated. That could be
-  /// useful if your application spawns multiple isolates that you
-  /// would like to instrument.
   final vms.VmService _serviceClient;
 
   @override
@@ -293,23 +276,14 @@ class VMServiceFlutterDriver extends FlutterDriver {
   @override
   async_io.WebDriver get webDriver => throw UnsupportedError('VMServiceFlutterDriver does not support webDriver');
 
-  /// The main isolate hosting the Flutter application.
-  ///
-  /// If you used the [registerExtension] API to instrument your application,
-  /// you can use this [vms.Isolate] to call these extension methods via
-  /// [invokeExtension].
   final vms.Isolate _appIsolate;
 
-  /// Whether to print communication between host and app to `stdout`.
   final bool _printCommunication;
 
-  /// Whether to log communication between host and app to `flutter_driver_commands.log`.
   final bool _logCommunicationToFile;
 
-  /// Logs are written here when _logCommunicationToFile is true.
   late final String _logFilePathName;
 
-  /// Getter for file pathname where logs are written when _logCommunicationToFile is true.
   String get logFilePathName => _logFilePathName;
 
 
@@ -529,13 +503,8 @@ class VMServiceFlutterDriver extends FlutterDriver {
   }
 }
 
-/// The connection function used by [FlutterDriver.connect].
-///
-/// Overwrite this function if you require a custom method for connecting to
-/// the VM service.
 VMServiceConnectFunction vmServiceConnectFunction = _waitAndConnect;
 
-/// Restores [vmServiceConnectFunction] to its default value.
 void restoreVmServiceConnectFunction() {
   vmServiceConnectFunction = _waitAndConnect;
 }
@@ -553,8 +522,6 @@ String _getWebSocketUrl(String url) {
   return uri.toString();
 }
 
-/// Waits for a real Dart VM service to become available, then connects using
-/// the [VMServiceClient].
 Future<vms.VmService> _waitAndConnect(String url, Map<String, dynamic>? headers) async {
   final String webSocketUrl = _getWebSocketUrl(url);
   int attempts = 0;
@@ -591,11 +558,8 @@ Future<vms.VmService> _waitAndConnect(String url, Map<String, dynamic>? headers)
   }
 }
 
-/// The amount of time we wait prior to making the next attempt to connect to
-/// the VM service.
 const Duration _kPauseBetweenReconnectAttempts = Duration(seconds: 1);
 
-/// The amount of time we wait prior to refreshing the isolate state.
 const Duration _kPauseBetweenIsolateRefresh = Duration(milliseconds: 100);
 
 // See `timeline_streams` in
@@ -639,5 +603,4 @@ Future<T> _warnIfSlow<T>({
   return future;
 }
 
-/// A function that connects to a Dart VM service given the `url` and `headers`.
 typedef VMServiceConnectFunction = Future<vms.VmService> Function(String url, Map<String, dynamic>? headers);

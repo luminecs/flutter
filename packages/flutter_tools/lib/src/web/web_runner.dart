@@ -18,7 +18,6 @@ WebRunnerFactory? get webRunnerFactory => context.get<WebRunnerFactory>();
 abstract class WebRunnerFactory {
   const WebRunnerFactory();
 
-  /// Create a [ResidentRunner] for the web.
   ResidentRunner createWebRunner(
     FlutterDevice device, {
     String? target,

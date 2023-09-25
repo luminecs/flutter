@@ -23,8 +23,6 @@ Future<dds.DartDevelopmentService> Function(
   dds.UriConverter? uriConverter,
 }) ddsLauncherCallback = dds.DartDevelopmentService.startDartDevelopmentService;
 
-/// Helper class to launch a [dds.DartDevelopmentService]. Allows for us to
-/// mock out this functionality for testing purposes.
 class DartDevelopmentService {
   dds.DartDevelopmentService? _ddsInstance;
 

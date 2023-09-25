@@ -25,17 +25,10 @@ import 'tooltip.dart';
 // late List<DataColumn> _columns;
 // late List<DataRow> _rows;
 
-/// Signature for [DataColumn.onSort] callback.
 typedef DataColumnSortCallback = void Function(int columnIndex, bool ascending);
 
-/// Column configuration for a [DataTable].
-///
-/// One column configuration must be provided for each column to
-/// display in the table. The list of [DataColumn] objects is passed
-/// as the `columns` argument to the [DataTable.new] constructor.
 @immutable
 class DataColumn {
-  /// Creates the configuration for a column of a [DataTable].
   const DataColumn({
     required this.label,
     this.tooltip,
@@ -44,72 +37,21 @@ class DataColumn {
     this.mouseCursor,
   });
 
-  /// The column heading.
-  ///
-  /// Typically, this will be a [Text] widget. It could also be an
-  /// [Icon] (typically using size 18), or a [Row] with an icon and
-  /// some text.
-  ///
-  /// The [label] is placed within a [Row] along with the
-  /// sort indicator (if applicable). By default, [label] only occupy minimal
-  /// space. It is recommended to place the label content in an [Expanded] or
-  /// [Flexible] as [label] to control how the content flexes. Otherwise,
-  /// an exception will occur when the available space is insufficient.
-  ///
-  /// By default, [DefaultTextStyle.softWrap] of this subtree will be set to false.
-  /// Use [DefaultTextStyle.merge] to override it if needed.
-  ///
-  /// The label should not include the sort indicator.
   final Widget label;
 
-  /// The column heading's tooltip.
-  ///
-  /// This is a longer description of the column heading, for cases
-  /// where the heading might have been abbreviated to keep the column
-  /// width to a reasonable size.
   final String? tooltip;
 
-  /// Whether this column represents numeric data or not.
-  ///
-  /// The contents of cells of columns containing numeric data are
-  /// right-aligned.
   final bool numeric;
 
-  /// Called when the user asks to sort the table using this column.
-  ///
-  /// If null, the column will not be considered sortable.
-  ///
-  /// See [DataTable.sortColumnIndex] and [DataTable.sortAscending].
   final DataColumnSortCallback? onSort;
 
   bool get _debugInteractive => onSort != null;
 
-  /// The cursor for a mouse pointer when it enters or is hovering over the
-  /// heading row.
-  ///
-  /// [MaterialStateProperty.resolve] is used for the following [MaterialState]s:
-  ///
-  ///  * [MaterialState.disabled].
-  ///
-  /// If this is null, then the value of [DataTableThemeData.headingCellCursor]
-  /// is used. If that's null, then [MaterialStateMouseCursor.clickable] is used.
-  ///
-  /// See also:
-  ///  * [MaterialStateMouseCursor], which can be used to create a [MouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 }
 
-/// Row configuration and cell data for a [DataTable].
-///
-/// One row configuration must be provided for each row to
-/// display in the table. The list of [DataRow] objects is passed
-/// as the `rows` argument to the [DataTable.new] constructor.
-///
-/// The data for this row of the table is provided in the [cells]
-/// property of the [DataRow] object.
 @immutable
 class DataRow {
-  /// Creates the configuration for a row of a [DataTable].
   const DataRow({
     this.key,
     this.selected = false,
@@ -120,8 +62,6 @@ class DataRow {
     required this.cells,
   });
 
-  /// Creates the configuration for a row of a [DataTable], deriving
-  /// the key from a row index.
   DataRow.byIndex({
     int? index,
     this.selected = false,
@@ -132,121 +72,25 @@ class DataRow {
     required this.cells,
   }) : key = ValueKey<int?>(index);
 
-  /// A [Key] that uniquely identifies this row. This is used to
-  /// ensure that if a row is added or removed, any stateful widgets
-  /// related to this row (e.g. an in-progress checkbox animation)
-  /// remain on the right row visually.
-  ///
-  /// If the table never changes once created, no key is necessary.
   final LocalKey? key;
 
-  /// Called when the user selects or unselects a selectable row.
-  ///
-  /// If this is not null, then the row is selectable. The current
-  /// selection state of the row is given by [selected].
-  ///
-  /// If any row is selectable, then the table's heading row will have
-  /// a checkbox that can be checked to select all selectable rows
-  /// (and which is checked if all the rows are selected), and each
-  /// subsequent row will have a checkbox to toggle just that row.
-  ///
-  /// A row whose [onSelectChanged] callback is null is ignored for
-  /// the purposes of determining the state of the "all" checkbox,
-  /// and its checkbox is disabled.
-  ///
-  /// If a [DataCell] in the row has its [DataCell.onTap] callback defined,
-  /// that callback behavior overrides the gesture behavior of the row for
-  /// that particular cell.
   final ValueChanged<bool?>? onSelectChanged;
 
-  /// Called if the row is long-pressed.
-  ///
-  /// If a [DataCell] in the row has its [DataCell.onTap], [DataCell.onDoubleTap],
-  /// [DataCell.onLongPress], [DataCell.onTapCancel] or [DataCell.onTapDown] callback defined,
-  /// that callback behavior overrides the gesture behavior of the row for
-  /// that particular cell.
   final GestureLongPressCallback? onLongPress;
 
-  /// Whether the row is selected.
-  ///
-  /// If [onSelectChanged] is non-null for any row in the table, then
-  /// a checkbox is shown at the start of each row. If the row is
-  /// selected (true), the checkbox will be checked and the row will
-  /// be highlighted.
-  ///
-  /// Otherwise, the checkbox, if present, will not be checked.
   final bool selected;
 
-  /// The data for this row.
-  ///
-  /// There must be exactly as many cells as there are columns in the
-  /// table.
   final List<DataCell> cells;
 
-  /// The color for the row.
-  ///
-  /// By default, the color is transparent unless selected. Selected rows has
-  /// a grey translucent color.
-  ///
-  /// The effective color can depend on the [MaterialState] state, if the
-  /// row is selected, pressed, hovered, focused, disabled or enabled. The
-  /// color is painted as an overlay to the row. To make sure that the row's
-  /// [InkWell] is visible (when pressed, hovered and focused), it is
-  /// recommended to use a translucent color.
-  ///
-  /// ```dart
-  /// DataRow(
-  ///   color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-  ///     if (states.contains(MaterialState.selected)) {
-  ///       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
-  ///     }
-  ///     return null;  // Use the default value.
-  ///   }),
-  ///   cells: const <DataCell>[
-  ///     // ...
-  ///   ],
-  /// )
-  /// ```
-  ///
-  /// See also:
-  ///
-  ///  * The Material Design specification for overlay colors and how they
-  ///    match a component's state:
-  ///    <https://material.io/design/interaction/states.html#anatomy>.
   final MaterialStateProperty<Color?>? color;
 
-  /// The cursor for a mouse pointer when it enters or is hovering over the
-  /// data row.
-  ///
-  /// [MaterialStateProperty.resolve] is used for the following [MaterialState]s:
-  ///
-  ///  * [MaterialState.selected].
-  ///
-  /// If this is null, then the value of [DataTableThemeData.dataRowCursor]
-  /// is used. If that's null, then [MaterialStateMouseCursor.clickable] is used.
-  ///
-  /// See also:
-  ///  * [MaterialStateMouseCursor], which can be used to create a [MouseCursor].
   final MaterialStateProperty<MouseCursor?>? mouseCursor;
 
   bool get _debugInteractive => onSelectChanged != null || cells.any((DataCell cell) => cell._debugInteractive);
 }
 
-/// The data for a cell of a [DataTable].
-///
-/// One list of [DataCell] objects must be provided for each [DataRow]
-/// in the [DataTable], in the new [DataRow] constructor's `cells`
-/// argument.
 @immutable
 class DataCell {
-  /// Creates an object to hold the data for a cell in a [DataTable].
-  ///
-  /// The first argument is the widget to show for the cell, typically
-  /// a [Text] or [DropdownButton] widget.
-  ///
-  /// If the cell has no data, then a [Text] widget with placeholder
-  /// text should be provided instead, and then the [placeholder]
-  /// argument should be set to true.
   const DataCell(
     this.child, {
     this.placeholder = false,
@@ -258,74 +102,22 @@ class DataCell {
     this.onTapCancel,
   });
 
-  /// A cell that has no content and has zero width and height.
   static const DataCell empty = DataCell(SizedBox.shrink());
 
-  /// The data for the row.
-  ///
-  /// Typically a [Text] widget or a [DropdownButton] widget.
-  ///
-  /// If the cell has no data, then a [Text] widget with placeholder
-  /// text should be provided instead, and [placeholder] should be set
-  /// to true.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
-  /// Whether the [child] is actually a placeholder.
-  ///
-  /// If this is true, the default text style for the cell is changed
-  /// to be appropriate for placeholder text.
   final bool placeholder;
 
-  /// Whether to show an edit icon at the end of the cell.
-  ///
-  /// This does not make the cell actually editable; the caller must
-  /// implement editing behavior if desired (initiated from the
-  /// [onTap] callback).
-  ///
-  /// If this is set, [onTap] should also be set, otherwise tapping
-  /// the icon will have no effect.
   final bool showEditIcon;
 
-  /// Called if the cell is tapped.
-  ///
-  /// If non-null, tapping the cell will call this callback. If
-  /// null (including [onDoubleTap], [onLongPress], [onTapCancel] and [onTapDown]),
-  /// tapping the cell will attempt to select the row (if
-  /// [DataRow.onSelectChanged] is provided).
   final GestureTapCallback? onTap;
 
-  /// Called when the cell is double tapped.
-  ///
-  /// If non-null, tapping the cell will call this callback. If
-  /// null (including [onTap], [onLongPress], [onTapCancel] and [onTapDown]),
-  /// tapping the cell will attempt to select the row (if
-  /// [DataRow.onSelectChanged] is provided).
   final GestureTapCallback? onDoubleTap;
 
-  /// Called if the cell is long-pressed.
-  ///
-  /// If non-null, tapping the cell will invoke this callback. If
-  /// null (including [onDoubleTap], [onTap], [onTapCancel] and [onTapDown]),
-  /// tapping the cell will attempt to select the row (if
-  /// [DataRow.onSelectChanged] is provided).
   final GestureLongPressCallback? onLongPress;
 
-  /// Called if the cell is tapped down.
-  ///
-  /// If non-null, tapping the cell will call this callback. If
-  /// null (including [onTap] [onDoubleTap], [onLongPress] and [onTapCancel]),
-  /// tapping the cell will attempt to select the row (if
-  /// [DataRow.onSelectChanged] is provided).
   final GestureTapDownCallback? onTapDown;
 
-  /// Called if the user cancels a tap was started on cell.
-  ///
-  /// If non-null, canceling the tap gesture will invoke this callback.
-  /// If null (including [onTap], [onDoubleTap] and [onLongPress]),
-  /// tapping the cell will attempt to select the
-  /// row (if [DataRow.onSelectChanged] is provided).
   final GestureTapCancelCallback? onTapCancel;
 
   bool get _debugInteractive => onTap != null ||
@@ -335,85 +127,7 @@ class DataCell {
       onTapCancel != null;
 }
 
-/// A Material Design data table.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=ktTajqbhIcY}
-///
-/// Displaying data in a table is expensive, because to lay out the
-/// table all the data must be measured twice, once to negotiate the
-/// dimensions to use for each column, and once to actually lay out
-/// the table given the results of the negotiation.
-///
-/// For this reason, if you have a lot of data (say, more than a dozen
-/// rows with a dozen columns, though the precise limits depend on the
-/// target device), it is suggested that you use a
-/// [PaginatedDataTable] which automatically splits the data into
-/// multiple pages.
-///
-/// ## Performance considerations when wrapping [DataTable] with [SingleChildScrollView]
-///
-/// Wrapping a [DataTable] with [SingleChildScrollView] is expensive as [SingleChildScrollView]
-/// mounts and paints the entire [DataTable] even when only some rows are visible. If scrolling in
-/// one direction is necessary, then consider using a [CustomScrollView], otherwise use [PaginatedDataTable]
-/// to split the data into smaller pages.
-///
-/// {@tool dartpad}
-/// This sample shows how to display a [DataTable] with three columns: name, age, and
-/// role. The columns are defined by three [DataColumn] objects. The table
-/// contains three rows of data for three example users, the data for which
-/// is defined by three [DataRow] objects.
-///
-/// ![](https://flutter.github.io/assets-for-api-docs/assets/material/data_table.png)
-///
-/// ** See code in examples/api/lib/material/data_table/data_table.0.dart **
-/// {@end-tool}
-///
-///
-/// {@tool dartpad}
-/// This sample shows how to display a [DataTable] with alternate colors per
-/// row, and a custom color for when the row is selected.
-///
-/// ** See code in examples/api/lib/material/data_table/data_table.1.dart **
-/// {@end-tool}
-///
-/// [DataTable] can be sorted on the basis of any column in [columns] in
-/// ascending or descending order. If [sortColumnIndex] is non-null, then the
-/// table will be sorted by the values in the specified column. The boolean
-/// [sortAscending] flag controls the sort order.
-///
-/// See also:
-///
-///  * [DataColumn], which describes a column in the data table.
-///  * [DataRow], which contains the data for a row in the data table.
-///  * [DataCell], which contains the data for a single cell in the data table.
-///  * [PaginatedDataTable], which shows part of the data in a data table and
-///    provides controls for paging through the remainder of the data.
-///  * <https://material.io/design/components/data-tables.html>
 class DataTable extends StatelessWidget {
-  /// Creates a widget describing a data table.
-  ///
-  /// The [columns] argument must be a list of as many [DataColumn]
-  /// objects as the table is to have columns, ignoring the leading
-  /// checkbox column if any. The [columns] argument must have a
-  /// length greater than zero.
-  ///
-  /// The [rows] argument must be a list of as many [DataRow] objects
-  /// as the table is to have rows, ignoring the leading heading row
-  /// that contains the column headings (derived from the [columns]
-  /// argument). There may be zero rows, but the rows argument must
-  /// not be null.
-  ///
-  /// Each [DataRow] object in [rows] must have as many [DataCell]
-  /// objects in the [DataRow.cells] list as the table has columns.
-  ///
-  /// If the table is sorted, the column that provides the current
-  /// primary key should be specified by index in [sortColumnIndex], 0
-  /// meaning the first column in [columns], 1 being the next one, and
-  /// so forth.
-  ///
-  /// The actual sort order can be specified using [sortAscending]; if
-  /// the sort order is ascending, this should be true (the default),
-  /// otherwise it should be false.
   DataTable({
     super.key,
     required this.columns,
@@ -453,259 +167,52 @@ class DataTable extends StatelessWidget {
        dataRowMaxHeight = dataRowHeight ?? dataRowMaxHeight,
        _onlyTextColumn = _initOnlyTextColumn(columns);
 
-  /// The configuration and labels for the columns in the table.
   final List<DataColumn> columns;
 
-  /// The current primary sort key's column.
-  ///
-  /// If non-null, indicates that the indicated column is the column
-  /// by which the data is sorted. The number must correspond to the
-  /// index of the relevant column in [columns].
-  ///
-  /// Setting this will cause the relevant column to have a sort
-  /// indicator displayed.
-  ///
-  /// When this is null, it implies that the table's sort order does
-  /// not correspond to any of the columns.
-  ///
-  /// The direction of the sort is specified using [sortAscending].
   final int? sortColumnIndex;
 
-  /// Whether the column mentioned in [sortColumnIndex], if any, is sorted
-  /// in ascending order.
-  ///
-  /// If true, the order is ascending (meaning the rows with the
-  /// smallest values for the current sort column are first in the
-  /// table).
-  ///
-  /// If false, the order is descending (meaning the rows with the
-  /// smallest values for the current sort column are last in the
-  /// table).
-  ///
-  /// Ascending order is represented by an upwards-facing arrow.
   final bool sortAscending;
 
-  /// Invoked when the user selects or unselects every row, using the
-  /// checkbox in the heading row.
-  ///
-  /// If this is null, then the [DataRow.onSelectChanged] callback of
-  /// every row in the table is invoked appropriately instead.
-  ///
-  /// To control whether a particular row is selectable or not, see
-  /// [DataRow.onSelectChanged]. This callback is only relevant if any
-  /// row is selectable.
   final ValueSetter<bool?>? onSelectAll;
 
-  /// {@template flutter.material.dataTable.decoration}
-  /// The background and border decoration for the table.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.decoration] is used. By default there is no
-  /// decoration.
   final Decoration? decoration;
 
-  /// {@template flutter.material.dataTable.dataRowColor}
-  /// The background color for the data rows.
-  ///
-  /// The effective background color can be made to depend on the
-  /// [MaterialState] state, i.e. if the row is selected, pressed, hovered,
-  /// focused, disabled or enabled. The color is painted as an overlay to the
-  /// row. To make sure that the row's [InkWell] is visible (when pressed,
-  /// hovered and focused), it is recommended to use a translucent background
-  /// color.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.dataRowColor] is used. By default, the
-  /// background color is transparent unless selected. Selected rows have a grey
-  /// translucent color. To set a different color for individual rows, see
-  /// [DataRow.color].
-  ///
-  /// {@template flutter.material.DataTable.dataRowColor}
-  /// ```dart
-  /// DataTable(
-  ///   dataRowColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-  ///     if (states.contains(MaterialState.selected)) {
-  ///       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
-  ///     }
-  ///     return null;  // Use the default value.
-  ///   }),
-  ///   columns: _columns,
-  ///   rows: _rows,
-  /// )
-  /// ```
-  ///
-  /// See also:
-  ///
-  ///  * The Material Design specification for overlay colors and how they
-  ///    match a component's state:
-  ///    <https://material.io/design/interaction/states.html#anatomy>.
-  /// {@endtemplate}
   final MaterialStateProperty<Color?>? dataRowColor;
 
-  /// {@template flutter.material.dataTable.dataRowHeight}
-  /// The height of each row (excluding the row that contains column headings).
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.dataRowHeight] is used. This value defaults
-  /// to [kMinInteractiveDimension] to adhere to the Material Design
-  /// specifications.
   @Deprecated(
     'Migrate to use dataRowMinHeight and dataRowMaxHeight instead. '
     'This feature was deprecated after v3.7.0-5.0.pre.',
   )
   double? get dataRowHeight => dataRowMinHeight == dataRowMaxHeight ? dataRowMinHeight : null;
 
-  /// {@template flutter.material.dataTable.dataRowMinHeight}
-  /// The minimum height of each row (excluding the row that contains column headings).
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.dataRowMinHeight] is used. This value defaults
-  /// to [kMinInteractiveDimension] to adhere to the Material Design
-  /// specifications.
   final double? dataRowMinHeight;
 
-  /// {@template flutter.material.dataTable.dataRowMaxHeight}
-  /// The maximum height of each row (excluding the row that contains column headings).
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.dataRowMaxHeight] is used. This value defaults
-  /// to [kMinInteractiveDimension] to adhere to the Material Design
-  /// specifications.
   final double? dataRowMaxHeight;
 
-  /// {@template flutter.material.dataTable.dataTextStyle}
-  /// The text style for data rows.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.dataTextStyle] is used. By default, the text
-  /// style is [TextTheme.bodyMedium].
   final TextStyle? dataTextStyle;
 
-  /// {@template flutter.material.dataTable.headingRowColor}
-  /// The background color for the heading row.
-  ///
-  /// The effective background color can be made to depend on the
-  /// [MaterialState] state, i.e. if the row is pressed, hovered, focused when
-  /// sorted. The color is painted as an overlay to the row. To make sure that
-  /// the row's [InkWell] is visible (when pressed, hovered and focused), it is
-  /// recommended to use a translucent color.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.headingRowColor] is used.
-  ///
-  /// {@template flutter.material.DataTable.headingRowColor}
-  /// ```dart
-  /// DataTable(
-  ///   columns: _columns,
-  ///   rows: _rows,
-  ///   headingRowColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-  ///     if (states.contains(MaterialState.hovered)) {
-  ///       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
-  ///     }
-  ///     return null;  // Use the default value.
-  ///   }),
-  /// )
-  /// ```
-  ///
-  /// See also:
-  ///
-  ///  * The Material Design specification for overlay colors and how they
-  ///    match a component's state:
-  ///    <https://material.io/design/interaction/states.html#anatomy>.
-  /// {@endtemplate}
   final MaterialStateProperty<Color?>? headingRowColor;
 
-  /// {@template flutter.material.dataTable.headingRowHeight}
-  /// The height of the heading row.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.headingRowHeight] is used. This value
-  /// defaults to 56.0 to adhere to the Material Design specifications.
   final double? headingRowHeight;
 
-  /// {@template flutter.material.dataTable.headingTextStyle}
-  /// The text style for the heading row.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.headingTextStyle] is used. By default, the
-  /// text style is [TextTheme.titleSmall].
   final TextStyle? headingTextStyle;
 
-  /// {@template flutter.material.dataTable.horizontalMargin}
-  /// The horizontal margin between the edges of the table and the content
-  /// in the first and last cells of each row.
-  ///
-  /// When a checkbox is displayed, it is also the margin between the checkbox
-  /// the content in the first data column.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.horizontalMargin] is used. This value
-  /// defaults to 24.0 to adhere to the Material Design specifications.
-  ///
-  /// If [checkboxHorizontalMargin] is null, then [horizontalMargin] is also the
-  /// margin between the edge of the table and the checkbox, as well as the
-  /// margin between the checkbox and the content in the first data column.
   final double? horizontalMargin;
 
-  /// {@template flutter.material.dataTable.columnSpacing}
-  /// The horizontal margin between the contents of each data column.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.columnSpacing] is used. This value defaults
-  /// to 56.0 to adhere to the Material Design specifications.
   final double? columnSpacing;
 
-  /// {@template flutter.material.dataTable.showCheckboxColumn}
-  /// Whether the widget should display checkboxes for selectable rows.
-  ///
-  /// If true, a [Checkbox] will be placed at the beginning of each row that is
-  /// selectable. However, if [DataRow.onSelectChanged] is not set for any row,
-  /// checkboxes will not be placed, even if this value is true.
-  ///
-  /// If false, all rows will not display a [Checkbox].
-  /// {@endtemplate}
   final bool showCheckboxColumn;
 
-  /// The data to show in each row (excluding the row that contains
-  /// the column headings).
-  ///
-  /// The list may be empty.
   final List<DataRow> rows;
 
-  /// {@template flutter.material.dataTable.dividerThickness}
-  /// The width of the divider that appears between [TableRow]s.
-  ///
-  /// Must be greater than or equal to zero.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.dividerThickness] is used. This value
-  /// defaults to 1.0.
   final double? dividerThickness;
 
-  /// Whether a border at the bottom of the table is displayed.
-  ///
-  /// By default, a border is not shown at the bottom to allow for a border
-  /// around the table defined by [decoration].
   final bool showBottomBorder;
 
-  /// {@template flutter.material.dataTable.checkboxHorizontalMargin}
-  /// Horizontal margin around the checkbox, if it is displayed.
-  /// {@endtemplate}
-  ///
-  /// If null, [DataTableThemeData.checkboxHorizontalMargin] is used. If that is
-  /// also null, then [horizontalMargin] is used as the margin between the edge
-  /// of the table and the checkbox, as well as the margin between the checkbox
-  /// and the content in the first data column. This value defaults to 24.0.
   final double? checkboxHorizontalMargin;
 
-  /// The style to use when painting the boundary and interior divisions of the table.
   final TableBorder? border;
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// This can be used to clip the content within the border of the [DataTable].
-  ///
-  /// Defaults to [Clip.none].
   final Clip clipBehavior;
 
   // Set by the constructor to the index of the only Column that is
@@ -747,20 +254,14 @@ class DataTable extends StatelessWidget {
     }
   }
 
-  /// The default height of the heading row.
   static const double _headingRowHeight = 56.0;
 
-  /// The default horizontal margin between the edges of the table and the content
-  /// in the first and last cells of each row.
   static const double _horizontalMargin = 24.0;
 
-  /// The default horizontal margin between the contents of each data column.
   static const double _columnSpacing = 56.0;
 
-  /// The default padding between the heading content and sort arrow.
   static const double _sortArrowPadding = 2.0;
 
-  /// The default divider thickness.
   static const double _dividerThickness = 1.0;
 
   static const Duration _sortArrowAnimationDuration = Duration(milliseconds: 150);
@@ -1164,27 +665,7 @@ class DataTable extends StatelessWidget {
   }
 }
 
-/// A rectangular area of a Material that responds to touch but clips
-/// its ink splashes to the current table row of the nearest table.
-///
-/// Must have an ancestor [Material] widget in which to cause ink
-/// reactions and an ancestor [Table] widget to establish a row.
-///
-/// The [TableRowInkWell] must be in the same coordinate space (modulo
-/// translations) as the [Table]. If it's rotated or scaled or
-/// otherwise transformed, it will not be able to describe the
-/// rectangle of the row in its own coordinate system as a [Rect], and
-/// thus the splash will not occur. (In general, this is easy to
-/// achieve: just put the [TableRowInkWell] as the direct child of the
-/// [Table], and put the other contents of the cell inside it.)
-///
-/// See also:
-///
-///  * [DataTable], which makes use of [TableRowInkWell] when
-///    [DataRow.onSelectChanged] is defined and [DataCell.onTap]
-///    is not.
 class TableRowInkWell extends InkResponse {
-  /// Creates an ink well for a table row.
   const TableRowInkWell({
     super.key,
     super.child,

@@ -64,13 +64,6 @@ class AndroidWorkflow implements Workflow {
   bool get canListEmulators => canListDevices && _androidSdk?.emulatorPath != null;
 }
 
-/// A validator that checks if the Android SDK and Java SDK are available and
-/// installed correctly.
-///
-/// Android development requires the Android SDK, and at least one Java SDK. While
-/// newer Java compilers can be used to compile the Java application code, the SDK
-/// tools themselves required JDK 1.8. This older JDK is normally bundled with
-/// Android Studio.
 class AndroidValidator extends DoctorValidator {
   AndroidValidator({
     required Java? java,
@@ -95,8 +88,6 @@ class AndroidValidator extends DoctorValidator {
   String get slowWarning => '${_task ?? 'This'} is taking a long time...';
   String? _task;
 
-  /// Returns false if we cannot determine the Java version or if the version
-  /// is older that the minimum allowed version of 1.8.
   Future<bool> _checkJavaVersion(List<ValidationMessage> messages) async {
     _task = 'Checking Java status';
     try {
@@ -217,8 +208,6 @@ class AndroidValidator extends DoctorValidator {
   }
 }
 
-/// A subvalidator that checks if the licenses within the detected Android
-/// SDK have been accepted.
 class AndroidLicenseValidator extends DoctorValidator {
   AndroidLicenseValidator({
     required Java? java,
@@ -355,7 +344,6 @@ class AndroidLicenseValidator extends DoctorValidator {
     }
   }
 
-  /// Run the Android SDK manager tool in order to accept SDK licenses.
   Future<bool> runLicenseManager() async {
     if (_androidSdk == null) {
       _logger.printStatus(_userMessages.androidSdkShort);

@@ -4,15 +4,10 @@
 
 import 'timeline.dart';
 
-/// Event name for refresh rate related timeline events.
 const String kUIThreadVsyncProcessEvent = 'VsyncProcessCallback';
 
-/// A summary of [TimelineEvents]s corresponding to `kUIThreadVsyncProcessEvent` events.
-///
-/// `RefreshRate` is the time between the start of a vsync pulse and the target time of that vsync.
 class RefreshRateSummary {
 
-  /// Creates a [RefreshRateSummary] given the timeline events.
   factory RefreshRateSummary({required List<TimelineEvent> vsyncEvents}) {
     return RefreshRateSummary._(refreshRates: _computeRefreshRates(vsyncEvents));
   }
@@ -56,50 +51,26 @@ class RefreshRateSummary {
   // Can be adjusted if necessary.
   static const double _kErrorMargin = 6.0;
 
-  /// The percentage of 30hz frames.
-  ///
-  /// For example, if this value is 20, it means there are 20 percent of total
-  /// frames are 30hz. 0 means no frames are 30hz, 100 means all frames are 30hz.
   double get percentageOf30HzFrames => _numberOfTotalFrames > 0
       ? _numberOf30HzFrames / _numberOfTotalFrames * 100
       : 0;
 
-  /// The percentage of 60hz frames.
-  ///
-  /// For example, if this value is 20, it means there are 20 percent of total
-  /// frames are 60hz. 0 means no frames are 60hz, 100 means all frames are 60hz.
   double get percentageOf60HzFrames => _numberOfTotalFrames > 0
       ? _numberOf60HzFrames / _numberOfTotalFrames * 100
       : 0;
 
-  /// The percentage of 80hz frames.
-  ///
-  /// For example, if this value is 20, it means there are 20 percent of total
-  /// frames are 80hz. 0 means no frames are 80hz, 100 means all frames are 80hz.
   double get percentageOf80HzFrames => _numberOfTotalFrames > 0
       ? _numberOf80HzFrames / _numberOfTotalFrames * 100
       : 0;
 
-  /// The percentage of 90hz frames.
-  ///
-  /// For example, if this value is 20, it means there are 20 percent of total
-  /// frames are 90hz. 0 means no frames are 90hz, 100 means all frames are 90hz.
   double get percentageOf90HzFrames => _numberOfTotalFrames > 0
       ? _numberOf90HzFrames / _numberOfTotalFrames * 100
       : 0;
 
-  /// The percentage of 120hz frames.
-  ///
-  /// For example, if this value is 20, it means there are 20 percent of total
-  /// frames are 120hz. 0 means no frames are 120hz, 100 means all frames are 120hz.
   double get percentageOf120HzFrames => _numberOfTotalFrames > 0
       ? _numberOf120HzFrames / _numberOfTotalFrames * 100
       : 0;
 
-  /// A list of all the frames with Illegal refresh rate.
-  ///
-  /// A refresh rate is consider illegal if it does not belong to anyone of the refresh rate this class is
-  /// explicitly tracking.
   List<double> get framesWithIllegalRefreshRate =>
       _framesWithIllegalRefreshRate;
 

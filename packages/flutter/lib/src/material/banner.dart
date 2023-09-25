@@ -18,83 +18,17 @@ import 'theme.dart';
 const Duration _materialBannerTransitionDuration = Duration(milliseconds: 250);
 const Curve _materialBannerHeightCurve = Curves.fastOutSlowIn;
 
-/// Specify how a [MaterialBanner] was closed.
-///
-/// The [ScaffoldMessengerState.showMaterialBanner] function returns a
-/// [ScaffoldFeatureController]. The value of the controller's closed property
-/// is a Future that resolves to a MaterialBannerClosedReason. Applications that need
-/// to know how a [MaterialBanner] was closed can use this value.
-///
-/// Example:
-///
-/// ```dart
-/// ScaffoldMessenger.of(context).showMaterialBanner(
-///   const MaterialBanner(
-///     content: Text('Message...'),
-///     actions: <Widget>[
-///       // ...
-///     ],
-///   )
-/// ).closed.then((MaterialBannerClosedReason reason) {
-///    // ...
-/// });
-/// ```
 enum MaterialBannerClosedReason {
-  /// The material banner was closed through a [SemanticsAction.dismiss].
   dismiss,
 
-  /// The material banner was closed by a user's swipe.
   swipe,
 
-  /// The material banner was closed by the [ScaffoldFeatureController] close callback
-  /// or by calling [ScaffoldMessengerState.hideCurrentMaterialBanner] directly.
   hide,
 
-  /// The material banner was closed by a call to [ScaffoldMessengerState.removeCurrentMaterialBanner].
   remove,
 }
 
-/// A Material Design banner.
-///
-/// A banner displays an important, succinct message, and provides actions for
-/// users to address (or dismiss the banner). A user action is required for it
-/// to be dismissed.
-///
-/// Banners should be displayed at the top of the screen, below a top app bar.
-/// They are persistent and non-modal, allowing the user to either ignore them or
-/// interact with them at any time.
-///
-/// {@tool dartpad}
-/// Banners placed directly into the widget tree are static.
-///
-/// ** See code in examples/api/lib/material/banner/material_banner.0.dart **
-/// {@end-tool}
-///
-/// {@tool dartpad}
-/// MaterialBanner's can also be presented through a [ScaffoldMessenger].
-/// Here is an example where ScaffoldMessengerState.showMaterialBanner() is used to show the MaterialBanner.
-///
-/// ** See code in examples/api/lib/material/banner/material_banner.1.dart **
-/// {@end-tool}
-///
-/// The [actions] will be placed beside the [content] if there is only one.
-/// Otherwise, the [actions] will be placed below the [content]. Use
-/// [forceActionsBelow] to override this behavior.
-///
-/// If the [actions] placed below the [content], they will be laid out in a row.
-/// If there isn't sufficient room to display everything, they are laid out
-/// in a column instead.
-///
-/// The [actions] and [content] must be provided. An optional leading widget
-/// (typically an [Image]) can also be provided. The [contentTextStyle] and
-/// [backgroundColor] can be provided to customize the banner.
-///
-/// This widget is unrelated to the widgets library [Banner] widget.
 class MaterialBanner extends StatefulWidget {
-  /// Creates a [MaterialBanner].
-  ///
-  /// The length of the [actions] list must not be empty. The [elevation] must
-  /// be null or non-negative.
   const MaterialBanner({
     super.key,
     required this.content,
@@ -115,114 +49,40 @@ class MaterialBanner extends StatefulWidget {
     this.onVisible,
   }) : assert(elevation == null || elevation >= 0.0);
 
-  /// The content of the [MaterialBanner].
-  ///
-  /// Typically a [Text] widget.
   final Widget content;
 
-  /// Style for the text in the [content] of the [MaterialBanner].
-  ///
-  /// If `null`, [MaterialBannerThemeData.contentTextStyle] is used. If that is
-  /// also `null`, [TextTheme.bodyMedium] of [ThemeData.textTheme] is used.
   final TextStyle? contentTextStyle;
 
-  /// The set of actions that are displayed at the bottom or trailing side of
-  /// the [MaterialBanner].
-  ///
-  /// Typically this is a list of [TextButton] widgets.
   final List<Widget> actions;
 
-  /// The z-coordinate at which to place the material banner.
-  ///
-  /// This controls the size of the shadow below the material banner.
-  ///
-  /// Defines the banner's [Material.elevation].
-  ///
-  /// If this property is null, then [MaterialBannerThemeData.elevation] of
-  /// [ThemeData.bannerTheme] is used, if that is also null, the default value is 0.
-  /// If the elevation is 0, the [Scaffold]'s body will be pushed down by the
-  /// MaterialBanner when used with [ScaffoldMessenger].
   final double? elevation;
 
-  /// The (optional) leading widget of the [MaterialBanner].
-  ///
-  /// Typically an [Icon] widget.
   final Widget? leading;
 
-  /// The color of the surface of this [MaterialBanner].
-  ///
-  /// If `null`, [MaterialBannerThemeData.backgroundColor] is used. If that is
-  /// also `null`, [ColorScheme.surface] of [ThemeData.colorScheme] is used.
   final Color? backgroundColor;
 
-  /// The color used as an overlay on [backgroundColor] to indicate elevation.
-  ///
-  /// If null, [MaterialBannerThemeData.surfaceTintColor] is used. If that
-  /// is also null, the default value is [ColorScheme.surfaceTint].
-  ///
-  /// See [Material.surfaceTintColor] for more details on how this
-  /// overlay is applied.
   final Color? surfaceTintColor;
 
-  /// The color of the shadow below the [MaterialBanner].
-  ///
-  /// If this property is null, then [MaterialBannerThemeData.shadowColor] of
-  /// [ThemeData.bannerTheme] is used. If that is also null, the default value
-  /// is null.
   final Color? shadowColor;
 
-  /// The color of the divider.
-  ///
-  /// If this property is null, then [MaterialBannerThemeData.dividerColor] of
-  /// [ThemeData.bannerTheme] is used. If that is also null, the default value
-  /// is [ColorScheme.surfaceVariant].
   final Color? dividerColor;
 
-  /// The amount of space by which to inset the [content].
-  ///
-  /// If the [actions] are below the [content], this defaults to
-  /// `EdgeInsetsDirectional.only(start: 16.0, top: 24.0, end: 16.0, bottom: 4.0)`.
-  ///
-  /// If the [actions] are trailing the [content], this defaults to
-  /// `EdgeInsetsDirectional.only(start: 16.0, top: 2.0)`.
   final EdgeInsetsGeometry? padding;
 
-  /// Empty space to surround the [MaterialBanner].
-  ///
-  /// If the [margin] is null then this defaults to
-  /// 0 if the banner's [elevation] is 0, 10 otherwise.
   final EdgeInsetsGeometry? margin;
 
-  /// The amount of space by which to inset the [leading] widget.
-  ///
-  /// This defaults to `EdgeInsetsDirectional.only(end: 16.0)`.
   final EdgeInsetsGeometry? leadingPadding;
 
-  /// An override to force the [actions] to be below the [content] regardless of
-  /// how many there are.
-  ///
-  /// If this is true, the [actions] will be placed below the [content]. If
-  /// this is false, the [actions] will be placed on the trailing side of the
-  /// [content] if [actions]'s length is 1 and below the [content] if greater
-  /// than 1.
-  ///
-  /// Defaults to false.
   final bool forceActionsBelow;
 
-  /// The horizontal alignment of the [actions] when the [actions] laid out in a column.
-  ///
-  /// Defaults to [OverflowBarAlignment.end].
   final OverflowBarAlignment overflowAlignment;
 
-  /// The animation driving the entrance and exit of the material banner when presented by the [ScaffoldMessenger].
   final Animation<double>? animation;
 
-  /// Called the first time that the material banner is visible within a [Scaffold] when presented by the [ScaffoldMessenger].
   final VoidCallback? onVisible;
 
   // API for ScaffoldMessengerState.showMaterialBanner():
 
-  /// Creates an animation controller useful for driving a [MaterialBanner]'s entrance and exit animation.
   static AnimationController createAnimationController({ required TickerProvider vsync }) {
     return AnimationController(
       duration: _materialBannerTransitionDuration,
@@ -231,10 +91,6 @@ class MaterialBanner extends StatefulWidget {
     );
   }
 
-  /// Creates a copy of this material banner but with the animation replaced with the given animation.
-  ///
-  /// If the original material banner lacks a key, the newly created material banner will
-  /// use the given fallback key.
   MaterialBanner withAnimation(Animation<double> newAnimation, { Key? fallbackKey }) {
     return MaterialBanner(
       key: key ?? fallbackKey,

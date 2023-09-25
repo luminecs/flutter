@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Examples for [LinearBorder] and [LinearBorderEdge].
 
 void main() {
   runApp(const ExampleApp());

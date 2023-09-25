@@ -45,35 +45,11 @@ class _SaltedKey<S, V> extends LocalKey {
   }
 }
 
-/// Signature for the callback that's called when an [ExpansionPanel] is
-/// expanded or collapsed.
-///
-/// The position of the panel within an [ExpansionPanelList] is given by
-/// [panelIndex].
 typedef ExpansionPanelCallback = void Function(int panelIndex, bool isExpanded);
 
-/// Signature for the callback that's called when the header of the
-/// [ExpansionPanel] needs to rebuild.
 typedef ExpansionPanelHeaderBuilder = Widget Function(BuildContext context, bool isExpanded);
 
-/// A material expansion panel. It has a header and a body and can be either
-/// expanded or collapsed. The body of the panel is only visible when it is
-/// expanded.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=2aJZzRMziJc}
-///
-/// Expansion panels are only intended to be used as children for
-/// [ExpansionPanelList].
-///
-/// See [ExpansionPanelList] for a sample implementation.
-///
-/// See also:
-///
-///  * [ExpansionPanelList]
-///  * <https://material.io/design/components/lists.html#types>
 class ExpansionPanel {
-  /// Creates an expansion panel to be used as a child for [ExpansionPanelList].
-  /// See [ExpansionPanelList] for an example on how to use this widget.
   ExpansionPanel({
     required this.headerBuilder,
     required this.body,
@@ -82,43 +58,18 @@ class ExpansionPanel {
     this.backgroundColor,
   });
 
-  /// The widget builder that builds the expansion panels' header.
   final ExpansionPanelHeaderBuilder headerBuilder;
 
-  /// The body of the expansion panel that's displayed below the header.
-  ///
-  /// This widget is visible only when the panel is expanded.
   final Widget body;
 
-  /// Whether the panel is expanded.
-  ///
-  /// Defaults to false.
   final bool isExpanded;
 
-  /// Whether tapping on the panel's header will expand/collapse it.
-  ///
-  /// Defaults to false.
   final bool canTapOnHeader;
 
-  /// Defines the background color of the panel.
-  ///
-  /// Defaults to [ThemeData.cardColor].
   final Color? backgroundColor;
 }
 
-/// An expansion panel that allows for radio-like functionality.
-/// This means that at any given time, at most, one [ExpansionPanelRadio]
-/// can remain expanded.
-///
-/// A unique identifier [value] must be assigned to each panel.
-/// This identifier allows the [ExpansionPanelList] to determine
-/// which [ExpansionPanelRadio] instance should be expanded.
-///
-/// See [ExpansionPanelList.radio] for a sample implementation.
 class ExpansionPanelRadio extends ExpansionPanel {
-  /// An expansion panel that allows for radio functionality.
-  ///
-  /// A unique [value] must be passed into the constructor.
   ExpansionPanelRadio({
     required this.value,
     required super.headerBuilder,
@@ -127,36 +78,10 @@ class ExpansionPanelRadio extends ExpansionPanel {
     super.backgroundColor,
   });
 
-  /// The value that uniquely identifies a radio panel so that the currently
-  /// selected radio panel can be identified.
   final Object value;
 }
 
-/// A material expansion panel list that lays out its children and animates
-/// expansions.
-///
-/// The [expansionCallback] is called when the expansion state changes. For
-/// normal [ExpansionPanelList] widgets, it is the responsibility of the parent
-/// widget to rebuild the [ExpansionPanelList] with updated values for
-/// [ExpansionPanel.isExpanded]. For [ExpansionPanelList.radio] widgets, the
-/// open state is tracked internally and the callback is invoked both for the
-/// previously open panel, which is closing, and the previously closed panel,
-/// which is opening.
-///
-/// {@tool dartpad}
-/// Here is a simple example of how to use [ExpansionPanelList].
-///
-/// ** See code in examples/api/lib/material/expansion_panel/expansion_panel_list.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [ExpansionPanel], which is used in the [children] property.
-///  * [ExpansionPanelList.radio], a variant of this widget where only one panel is open at a time.
-///  * <https://material.io/design/components/lists.html#types>
 class ExpansionPanelList extends StatefulWidget {
-  /// Creates an expansion panel list widget. The [expansionCallback] is
-  /// triggered when an expansion panel expand/collapse button is pushed.
   const ExpansionPanelList({
     super.key,
     this.children = const <ExpansionPanel>[],
@@ -170,18 +95,6 @@ class ExpansionPanelList extends StatefulWidget {
   }) : _allowOnlyOnePanelOpen = false,
        initialOpenPanelValue = null;
 
-  /// Creates a radio expansion panel list widget.
-  ///
-  /// This widget allows for at most one panel in the list to be open. The
-  /// expansion panel callback is triggered when an expansion panel
-  /// expand/collapse button is pushed. The [children] objects must be instances
-  /// of [ExpansionPanelRadio].
-  ///
-  /// {@tool dartpad}
-  /// Here is a simple example of how to implement ExpansionPanelList.radio.
-  ///
-  /// ** See code in examples/api/lib/material/expansion_panel/expansion_panel_list.expansion_panel_list_radio.0.dart **
-  /// {@end-tool}
   const ExpansionPanelList.radio({
     super.key,
     this.children = const <ExpansionPanelRadio>[],
@@ -195,64 +108,25 @@ class ExpansionPanelList extends StatefulWidget {
     this.materialGapSize = 16.0,
   }) : _allowOnlyOnePanelOpen = true;
 
-  /// The children of the expansion panel list. They are laid out in a similar
-  /// fashion to [ListBody].
   final List<ExpansionPanel> children;
 
-  /// The callback that gets called whenever one of the expand/collapse buttons
-  /// is pressed. The arguments passed to the callback are the index of the
-  /// pressed panel and whether the panel is currently expanded or not.
-  ///
-  /// If [ExpansionPanelList.radio] is used, the callback may be called a
-  /// second time if a different panel was previously open. The arguments
-  /// passed to the second callback are the index of the panel that will close
-  /// and false, marking that it will be closed.
-  ///
-  /// For [ExpansionPanelList], the callback should call [State.setState] when
-  /// it is notified about the closing/opening panel. On the other hand, the
-  /// callback for [ExpansionPanelList.radio] is intended to inform the parent
-  /// widget of changes, as the radio panels' open/close states are managed
-  /// internally.
-  ///
-  /// This callback is useful in order to keep track of the expanded/collapsed
-  /// panels in a parent widget that may need to react to these changes.
   final ExpansionPanelCallback? expansionCallback;
 
-  /// The duration of the expansion animation.
   final Duration animationDuration;
 
   // Whether multiple panels can be open simultaneously
   final bool _allowOnlyOnePanelOpen;
 
-  /// The value of the panel that initially begins open. (This value is
-  /// only used when initializing with the [ExpansionPanelList.radio]
-  /// constructor.)
   final Object? initialOpenPanelValue;
 
-  /// The padding that surrounds the panel header when expanded.
-  ///
-  /// By default, 16px of space is added to the header vertically (above and below)
-  /// during expansion.
   final EdgeInsets expandedHeaderPadding;
 
-  /// Defines color for the divider when [ExpansionPanel.isExpanded] is false.
-  ///
-  /// If [dividerColor] is null, then [DividerThemeData.color] is used. If that
-  /// is null, then [ThemeData.dividerColor] is used.
   final Color? dividerColor;
 
-  /// Defines elevation for the [ExpansionPanel] while it's expanded.
-  ///
-  /// By default, the value of elevation is 2.
   final double elevation;
 
-  /// {@macro flutter.material.ExpandIcon.color}
   final Color? expandIconColor;
 
-  /// Defines the [MaterialGap.size] of the [MaterialGap] which is placed
-  /// between the [ExpansionPanelList.children] when they're expanded.
-  ///
-  /// Defaults to `16.0`.
   final double materialGapSize;
 
   @override

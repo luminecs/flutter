@@ -6,7 +6,6 @@ import 'package:flutter_devicelab/framework/devices.dart';
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/tasks/integration_tests.dart';
 
-/// Verify that dart defines work on iOS.
 Future<void> main() async {
   deviceOperatingSystem = DeviceOperatingSystem.ios;
   await task(dartDefinesTask());

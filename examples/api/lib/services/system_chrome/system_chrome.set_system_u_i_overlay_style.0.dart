@@ -7,7 +7,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Flutter code sample for [AppBar.systemOverlayStyle].
 
 void main() => runApp(const SystemOverlayStyleApp());
 

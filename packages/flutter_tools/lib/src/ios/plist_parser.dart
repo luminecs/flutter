@@ -40,11 +40,6 @@ class PlistParser {
 
   static const String _plutilExecutable = '/usr/bin/plutil';
 
-  /// Returns the content, converted to XML, of the plist file located at
-  /// [plistFilePath].
-  ///
-  /// If [plistFilePath] points to a non-existent file or a file that's not a
-  /// valid property list file, this will return null.
   String? plistXmlContent(String plistFilePath) {
     if (!_fileSystem.isFileSync(_plutilExecutable)) {
       throw const FileNotFoundException(_plutilExecutable);
@@ -64,11 +59,6 @@ class PlistParser {
     }
   }
 
-  /// Replaces the string key in the given plist file with the given value.
-  ///
-  /// If the value is null, then the key will be removed.
-  ///
-  /// Returns true if successful.
   bool replaceKey(String plistFilePath, {required String key, String? value }) {
     if (!_fileSystem.isFileSync(_plutilExecutable)) {
       throw const FileNotFoundException(_plutilExecutable);
@@ -95,11 +85,6 @@ class PlistParser {
     return true;
   }
 
-  /// Parses the plist file located at [plistFilePath] and returns the
-  /// associated map of key/value property list pairs.
-  ///
-  /// If [plistFilePath] points to a non-existent file or a file that's not a
-  /// valid property list file, this will return an empty map.
   Map<String, Object> parseFile(String plistFilePath) {
     if (!_fileSystem.isFileSync(plistFilePath)) {
       return const <String, Object>{};
@@ -166,13 +151,6 @@ class PlistParser {
     return null;
   }
 
-  /// Parses the Plist file located at [plistFilePath] and returns the value
-  /// that's associated with the specified [key] within the property list.
-  ///
-  /// If [plistFilePath] points to a non-existent file or a file that's not a
-  /// valid property list file, this will return null.
-  ///
-  /// If [key] is not found in the property list, this will return null.
   T? getValueFromFile<T>(String plistFilePath, String key) {
     final Map<String, dynamic> parsed = parseFile(plistFilePath);
     return parsed[key] as T?;

@@ -1436,8 +1436,6 @@ class FakeGradleUtils extends Fake implements GradleUtils {
   }
 }
 
-/// Simple terminal that returns the specified string when
-/// promptForCharInput is called.
 class _TestPromptTerminal extends Fake implements AnsiTerminal {
   _TestPromptTerminal(this.promptResult);
 

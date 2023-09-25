@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AnimatedAlign].
 
 void main() => runApp(const AnimatedAlignExampleApp());
 

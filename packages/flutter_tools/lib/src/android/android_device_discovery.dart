@@ -17,13 +17,6 @@ import 'android_device.dart';
 import 'android_sdk.dart';
 import 'android_workflow.dart';
 
-/// Device discovery for Android physical devices and emulators.
-///
-/// This class primarily delegates to the `adb` command line tool provided by
-/// the Android SDK to discover instances of connected android devices.
-///
-/// See also:
-///   * [AndroidDevice], the type of discovered device.
 class AndroidDevices extends PollingDeviceDiscovery {
   AndroidDevices({
     required AndroidWorkflow androidWorkflow,
@@ -112,9 +105,6 @@ class AndroidDevices extends PollingDeviceDiscovery {
   // 015d172c98400a03       device usb:340787200X product:nakasi model:Nexus_7 device:grouper
   static final RegExp _kDeviceRegex = RegExp(r'^(\S+)\s+(\S+)(.*)');
 
-  /// Parse the given `adb devices` output in [text], and fill out the given list
-  /// of devices and possible device issue diagnostics. Either argument can be null,
-  /// in which case information for that parameter won't be populated.
   void _parseADBDeviceOutput(
     String text, {
     List<AndroidDevice>? devices,

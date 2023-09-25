@@ -6,7 +6,6 @@ import '../base/platform.dart';
 import '../doctor_validator.dart';
 import 'chrome.dart';
 
-/// A validator for Chromium-based browsers.
 abstract class ChromiumValidator extends DoctorValidator {
   const ChromiumValidator(super.title);
 
@@ -45,7 +44,6 @@ abstract class ChromiumValidator extends DoctorValidator {
   }
 }
 
-/// A validator that checks whether Chrome is installed and can run.
 class ChromeValidator extends ChromiumValidator {
   const ChromeValidator({
     required Platform platform,
@@ -64,7 +62,6 @@ class ChromeValidator extends ChromiumValidator {
   String get _name => 'Chrome';
 }
 
-/// A validator that checks whether Edge is installed and can run.
 class EdgeValidator extends ChromiumValidator {
   const EdgeValidator({
     required Platform platform,

@@ -21,50 +21,7 @@ import 'thumb_painter.dart';
 // bool _lights = false;
 // void setState(VoidCallback fn) { }
 
-/// An iOS-style switch.
-///
-/// Used to toggle the on/off state of a single setting.
-///
-/// The switch itself does not maintain any state. Instead, when the state of
-/// the switch changes, the widget calls the [onChanged] callback. Most widgets
-/// that use a switch will listen for the [onChanged] callback and rebuild the
-/// switch with a new [value] to update the visual appearance of the switch.
-///
-/// {@tool dartpad}
-/// This example shows a toggleable [CupertinoSwitch]. When the thumb slides to
-/// the other side of the track, the switch is toggled between on/off.
-///
-/// ** See code in examples/api/lib/cupertino/switch/cupertino_switch.0.dart **
-/// {@end-tool}
-///
-/// {@tool snippet}
-///
-/// This sample shows how to use a [CupertinoSwitch] in a [ListTile]. The
-/// [MergeSemantics] is used to turn the entire [ListTile] into a single item
-/// for accessibility tools.
-///
-/// ```dart
-/// MergeSemantics(
-///   child: ListTile(
-///     title: const Text('Lights'),
-///     trailing: CupertinoSwitch(
-///       value: _lights,
-///       onChanged: (bool value) { setState(() { _lights = value; }); },
-///     ),
-///     onTap: () { setState(() { _lights = !_lights; }); },
-///   ),
-/// )
-/// ```
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [Switch], the Material Design equivalent.
-///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/switches/>
 class CupertinoSwitch extends StatefulWidget {
-  /// Creates an iOS-style switch.
-  ///
-  /// The [dragStartBehavior] parameter defaults to [DragStartBehavior.start].
   const CupertinoSwitch({
     super.key,
     required this.value,
@@ -82,106 +39,31 @@ class CupertinoSwitch extends StatefulWidget {
     this.dragStartBehavior = DragStartBehavior.start,
   });
 
-  /// Whether this switch is on or off.
   final bool value;
 
-  /// Called when the user toggles with switch on or off.
-  ///
-  /// The switch passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the switch with the new
-  /// value.
-  ///
-  /// If null, the switch will be displayed as disabled, which has a reduced opacity.
-  ///
-  /// The callback provided to onChanged should update the state of the parent
-  /// [StatefulWidget] using the [State.setState] method, so that the parent
-  /// gets rebuilt; for example:
-  ///
-  /// ```dart
-  /// CupertinoSwitch(
-  ///   value: _giveVerse,
-  ///   onChanged: (bool newValue) {
-  ///     setState(() {
-  ///       _giveVerse = newValue;
-  ///     });
-  ///   },
-  /// )
-  /// ```
   final ValueChanged<bool>? onChanged;
 
-  /// The color to use for the track when the switch is on.
-  ///
-  /// If null and [applyTheme] is false, defaults to [CupertinoColors.systemGreen]
-  /// in accordance to native iOS behavior. Otherwise, defaults to
-  /// [CupertinoThemeData.primaryColor].
   final Color? activeColor;
 
 
-  /// The color to use for the track when the switch is off.
-  ///
-  /// Defaults to [CupertinoColors.secondarySystemFill] when null.
   final Color? trackColor;
 
-  /// The color to use for the thumb of the switch.
-  ///
-  /// Defaults to [CupertinoColors.white] when null.
   final Color? thumbColor;
 
-  /// The color to use for the focus highlight for keyboard interactions.
-  ///
-  /// Defaults to a slightly transparent [activeColor].
   final Color? focusColor;
 
-  /// The color to use for the accessibility label when the switch is on.
-  ///
-  /// Defaults to [CupertinoColors.white] when null.
   final Color? onLabelColor;
 
-  /// The color to use for the accessibility label when the switch is off.
-  ///
-  /// Defaults to [Color.fromARGB(255, 179, 179, 179)]
-  /// (or [Color.fromARGB(255, 255, 255, 255)] in high contrast) when null.
   final Color? offLabelColor;
 
-  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// {@macro flutter.material.inkwell.onFocusChange}
   final ValueChanged<bool>? onFocusChange;
 
-  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// {@template flutter.cupertino.CupertinoSwitch.applyTheme}
-  /// Whether to apply the ambient [CupertinoThemeData].
-  ///
-  /// If true, the track uses [CupertinoThemeData.primaryColor] for the track
-  /// when the switch is on.
-  ///
-  /// Defaults to [CupertinoThemeData.applyThemeToAll].
-  /// {@endtemplate}
   final bool? applyTheme;
 
-  /// {@template flutter.cupertino.CupertinoSwitch.dragStartBehavior}
-  /// Determines the way that drag start behavior is handled.
-  ///
-  /// If set to [DragStartBehavior.start], the drag behavior used to move the
-  /// switch from on to off will begin at the position where the drag gesture won
-  /// the arena. If set to [DragStartBehavior.down] it will begin at the position
-  /// where a down event was first detected.
-  ///
-  /// In general, setting this to [DragStartBehavior.start] will make drag
-  /// animation smoother and setting it to [DragStartBehavior.down] will make
-  /// drag behavior feel slightly more reactive.
-  ///
-  /// By default, the drag start behavior is [DragStartBehavior.start].
-  ///
-  /// See also:
-  ///
-  ///  * [DragGestureRecognizer.dragStartBehavior], which gives an example for
-  ///    the different behaviors.
-  ///
-  /// {@endtemplate}
   final DragStartBehavior dragStartBehavior;
 
   @override

@@ -13,18 +13,9 @@ import 'layer.dart';
 import 'object.dart';
 import 'stack.dart' show RelativeRect;
 
-/// Signature for a function that transforms a [BoxConstraints] to another
-/// [BoxConstraints].
-///
-/// Used by [RenderConstraintsTransformBox] and [ConstraintsTransformBox].
-/// Typically the caller requires the returned [BoxConstraints] to be
-/// [BoxConstraints.isNormalized].
 typedef BoxConstraintsTransform = BoxConstraints Function(BoxConstraints);
 
-/// Abstract class for one-child-layout render boxes that provide control over
-/// the child's position.
 abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
-  /// Initializes the [child] property for subclasses.
   RenderShiftedBox(RenderBox? child) {
     this.child = child;
   }
@@ -93,16 +84,7 @@ abstract class RenderShiftedBox extends RenderBox with RenderObjectWithChildMixi
   }
 }
 
-/// Insets its child by the given padding.
-///
-/// When passing layout constraints to its child, padding shrinks the
-/// constraints by the given padding, causing the child to layout at a smaller
-/// size. Padding then sizes itself to its child's size, inflated by the
-/// padding, effectively creating empty space around the child.
 class RenderPadding extends RenderShiftedBox {
-  /// Creates a render object that insets its child.
-  ///
-  /// The [padding] argument must have non-negative insets.
   RenderPadding({
     required EdgeInsetsGeometry padding,
     TextDirection? textDirection,
@@ -127,10 +109,6 @@ class RenderPadding extends RenderShiftedBox {
     markNeedsLayout();
   }
 
-  /// The amount to pad the child in each dimension.
-  ///
-  /// If this is set to an [EdgeInsetsDirectional] object, then [textDirection]
-  /// must not be null.
   EdgeInsetsGeometry get padding => _padding;
   EdgeInsetsGeometry _padding;
   set padding(EdgeInsetsGeometry value) {
@@ -142,10 +120,6 @@ class RenderPadding extends RenderShiftedBox {
     _markNeedResolution();
   }
 
-  /// The text direction with which to resolve [padding].
-  ///
-  /// This may be changed to null, but only after the [padding] has been changed
-  /// to a value that does not depend on the direction.
   TextDirection? get textDirection => _textDirection;
   TextDirection? _textDirection;
   set textDirection(TextDirection? value) {
@@ -262,13 +236,7 @@ class RenderPadding extends RenderShiftedBox {
   }
 }
 
-/// Abstract class for one-child-layout render boxes that use a
-/// [AlignmentGeometry] to align their children.
 abstract class RenderAligningShiftedBox extends RenderShiftedBox {
-  /// Initializes member variables for subclasses.
-  ///
-  /// The [textDirection] must be non-null if the [alignment] is
-  /// direction-sensitive.
   RenderAligningShiftedBox({
     AlignmentGeometry alignment = Alignment.center,
     required TextDirection? textDirection,
@@ -291,21 +259,8 @@ abstract class RenderAligningShiftedBox extends RenderShiftedBox {
     markNeedsLayout();
   }
 
-  /// How to align the child.
-  ///
-  /// The x and y values of the alignment control the horizontal and vertical
-  /// alignment, respectively. An x value of -1.0 means that the left edge of
-  /// the child is aligned with the left edge of the parent whereas an x value
-  /// of 1.0 means that the right edge of the child is aligned with the right
-  /// edge of the parent. Other values interpolate (and extrapolate) linearly.
-  /// For example, a value of 0.0 means that the center of the child is aligned
-  /// with the center of the parent.
-  ///
-  /// If this is set to an [AlignmentDirectional] object, then
-  /// [textDirection] must not be null.
   AlignmentGeometry get alignment => _alignment;
   AlignmentGeometry _alignment;
-  /// Sets the alignment to a new value, and triggers a layout update.
   set alignment(AlignmentGeometry value) {
     if (_alignment == value) {
       return;
@@ -314,10 +269,6 @@ abstract class RenderAligningShiftedBox extends RenderShiftedBox {
     _markNeedResolution();
   }
 
-  /// The text direction with which to resolve [alignment].
-  ///
-  /// This may be changed to null, but only after [alignment] has been changed
-  /// to a value that does not depend on the direction.
   TextDirection? get textDirection => _textDirection;
   TextDirection? _textDirection;
   set textDirection(TextDirection? value) {
@@ -328,14 +279,6 @@ abstract class RenderAligningShiftedBox extends RenderShiftedBox {
     _markNeedResolution();
   }
 
-  /// Apply the current [alignment] to the [child].
-  ///
-  /// Subclasses should call this method if they have a child, to have
-  /// this class perform the actual alignment. If there is no child,
-  /// do not call this method.
-  ///
-  /// This method must be called after the child has been laid out and
-  /// this object's own size has been set.
   @protected
   void alignChild() {
     _resolve();
@@ -356,18 +299,7 @@ abstract class RenderAligningShiftedBox extends RenderShiftedBox {
   }
 }
 
-/// Positions its child using an [AlignmentGeometry].
-///
-/// For example, to align a box at the bottom right, you would pass this box a
-/// tight constraint that is bigger than the child's natural size,
-/// with an alignment of [Alignment.bottomRight].
-///
-/// By default, sizes to be as big as possible in both axes. If either axis is
-/// unconstrained, then in that direction it will be sized to fit the child's
-/// dimensions. Using widthFactor and heightFactor you can force this latter
-/// behavior in all cases.
 class RenderPositionedBox extends RenderAligningShiftedBox {
-  /// Creates a render object that positions its child.
   RenderPositionedBox({
     super.child,
     double? widthFactor,
@@ -379,9 +311,6 @@ class RenderPositionedBox extends RenderAligningShiftedBox {
        _widthFactor = widthFactor,
        _heightFactor = heightFactor;
 
-  /// If non-null, sets its width to the child's width multiplied by this factor.
-  ///
-  /// Can be both greater and less than 1.0 but must be positive.
   double? get widthFactor => _widthFactor;
   double? _widthFactor;
   set widthFactor(double? value) {
@@ -393,9 +322,6 @@ class RenderPositionedBox extends RenderAligningShiftedBox {
     markNeedsLayout();
   }
 
-  /// If non-null, sets its height to the child's height multiplied by this factor.
-  ///
-  /// Can be both greater and less than 1.0 but must be positive.
   double? get heightFactor => _heightFactor;
   double? _heightFactor;
   set heightFactor(double? value) {
@@ -511,38 +437,7 @@ class RenderPositionedBox extends RenderAligningShiftedBox {
   }
 }
 
-/// A render object that imposes different constraints on its child than it gets
-/// from its parent, possibly allowing the child to overflow the parent.
-///
-/// A render overflow box proxies most functions in the render box protocol to
-/// its child, except that when laying out its child, it passes constraints
-/// based on the minWidth, maxWidth, minHeight, and maxHeight fields instead of
-/// just passing the parent's constraints in. Specifically, it overrides any of
-/// the equivalent fields on the constraints given by the parent with the
-/// constraints given by these fields for each such field that is not null. It
-/// then sizes itself based on the parent's constraints' maxWidth and maxHeight,
-/// ignoring the child's dimensions.
-///
-/// For example, if you wanted a box to always render 50 pixels high, regardless
-/// of where it was rendered, you would wrap it in a
-/// RenderConstrainedOverflowBox with minHeight and maxHeight set to 50.0.
-/// Generally speaking, to avoid confusing behavior around hit testing, a
-/// RenderConstrainedOverflowBox should usually be wrapped in a RenderClipRect.
-///
-/// The child is positioned according to [alignment]. To position a smaller
-/// child inside a larger parent, use [RenderPositionedBox] and
-/// [RenderConstrainedBox] rather than RenderConstrainedOverflowBox.
-///
-/// See also:
-///
-///  * [RenderConstraintsTransformBox] for a render object that applies an
-///    arbitrary transform to its constraints before sizing its child using
-///    the new constraints, treating any overflow as error.
-///  * [RenderSizedOverflowBox], a render object that is a specific size but
-///    passes its original constraints through to its child, which it allows to
-///    overflow.
 class RenderConstrainedOverflowBox extends RenderAligningShiftedBox {
-  /// Creates a render object that lets its child overflow itself.
   RenderConstrainedOverflowBox({
     super.child,
     double? minWidth,
@@ -556,8 +451,6 @@ class RenderConstrainedOverflowBox extends RenderAligningShiftedBox {
        _minHeight = minHeight,
        _maxHeight = maxHeight;
 
-  /// The minimum width constraint to give the child. Set this to null (the
-  /// default) to use the constraint from the parent instead.
   double? get minWidth => _minWidth;
   double? _minWidth;
   set minWidth(double? value) {
@@ -568,8 +461,6 @@ class RenderConstrainedOverflowBox extends RenderAligningShiftedBox {
     markNeedsLayout();
   }
 
-  /// The maximum width constraint to give the child. Set this to null (the
-  /// default) to use the constraint from the parent instead.
   double? get maxWidth => _maxWidth;
   double? _maxWidth;
   set maxWidth(double? value) {
@@ -580,8 +471,6 @@ class RenderConstrainedOverflowBox extends RenderAligningShiftedBox {
     markNeedsLayout();
   }
 
-  /// The minimum height constraint to give the child. Set this to null (the
-  /// default) to use the constraint from the parent instead.
   double? get minHeight => _minHeight;
   double? _minHeight;
   set minHeight(double? value) {
@@ -592,8 +481,6 @@ class RenderConstrainedOverflowBox extends RenderAligningShiftedBox {
     markNeedsLayout();
   }
 
-  /// The maximum height constraint to give the child. Set this to null (the
-  /// default) to use the constraint from the parent instead.
   double? get maxHeight => _maxHeight;
   double? _maxHeight;
   set maxHeight(double? value) {
@@ -639,48 +526,7 @@ class RenderConstrainedOverflowBox extends RenderAligningShiftedBox {
   }
 }
 
-/// A [RenderBox] that applies an arbitrary transform to its constraints,
-/// and sizes its child using the resulting [BoxConstraints], optionally
-/// clipping, or treating the overflow as an error.
-///
-/// This [RenderBox] sizes its child using a [BoxConstraints] created by
-/// applying [constraintsTransform] to this [RenderBox]'s own [constraints].
-/// This box will then attempt to adopt the same size, within the limits of its
-/// own constraints. If it ends up with a different size, it will align the
-/// child based on [alignment]. If the box cannot expand enough to accommodate
-/// the entire child, the child will be clipped if [clipBehavior] is not
-/// [Clip.none].
-///
-/// In debug mode, if [clipBehavior] is [Clip.none] and the child overflows the
-/// container, a warning will be printed on the console, and black and yellow
-/// striped areas will appear where the overflow occurs.
-///
-/// When [child] is null, this [RenderBox] takes the smallest possible size and
-/// never overflows.
-///
-/// This [RenderBox] can be used to ensure some of [child]'s natural dimensions
-/// are honored, and get an early warning during development otherwise. For
-/// instance, if [child] requires a minimum height to fully display its content,
-/// [constraintsTransform] can be set to a function that removes the `maxHeight`
-/// constraint from the incoming [BoxConstraints], so that if the parent
-/// [RenderObject] fails to provide enough vertical space, a warning will be
-/// displayed in debug mode, while still allowing [child] to grow vertically.
-///
-/// See also:
-///
-///  * [ConstraintsTransformBox], the widget that makes use of this
-///    [RenderObject] and exposes the same functionality.
-///  * [RenderConstrainedBox], which renders a box which imposes constraints
-///    on its child.
-///  * [RenderConstrainedOverflowBox], which renders a box that imposes different
-///    constraints on its child than it gets from its parent, possibly allowing
-///    the child to overflow the parent.
-///  * [RenderConstraintsTransformBox] for a render object that applies an
-///    arbitrary transform to its constraints before sizing its child using
-///    the new constraints, treating any overflow as error.
 class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugOverflowIndicatorMixin {
-  /// Creates a [RenderBox] that sizes itself to the child and modifies the
-  /// [constraints] before passing it down to that child.
   RenderConstraintsTransformBox({
     required super.alignment,
     required super.textDirection,
@@ -690,7 +536,6 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
   }) : _constraintsTransform = constraintsTransform,
        _clipBehavior = clipBehavior;
 
-  /// {@macro flutter.widgets.constraintsTransform}
   BoxConstraintsTransform get constraintsTransform => _constraintsTransform;
   BoxConstraintsTransform _constraintsTransform;
   set constraintsTransform(BoxConstraintsTransform value) {
@@ -708,11 +553,6 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
     }
   }
 
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// {@macro flutter.widgets.ConstraintsTransformBox.clipBehavior}
-  ///
-  /// Defaults to [Clip.none].
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior;
   set clipBehavior(Clip value) {
@@ -854,25 +694,7 @@ class RenderConstraintsTransformBox extends RenderAligningShiftedBox with DebugO
   }
 }
 
-/// A render object that is a specific size but passes its original constraints
-/// through to its child, which it allows to overflow.
-///
-/// If the child's resulting size differs from this render object's size, then
-/// the child is aligned according to the [alignment] property.
-///
-/// See also:
-///
-///  * [RenderConstraintsTransformBox] for a render object that applies an
-///    arbitrary transform to its constraints before sizing its child using
-///    the new constraints, treating any overflow as error.
-///  * [RenderConstrainedOverflowBox] for a render object that imposes
-///    different constraints on its child than it gets from its parent,
-///    possibly allowing the child to overflow the parent.
 class RenderSizedOverflowBox extends RenderAligningShiftedBox {
-  /// Creates a render box of a given size that lets its child overflow.
-  ///
-  /// The [textDirection] argument must not be null if the [alignment] is
-  /// direction-sensitive.
   RenderSizedOverflowBox({
     super.child,
     required Size requestedSize,
@@ -880,7 +702,6 @@ class RenderSizedOverflowBox extends RenderAligningShiftedBox {
     super.textDirection,
   }) : _requestedSize = requestedSize;
 
-  /// The size this render box should attempt to be.
   Size get requestedSize => _requestedSize;
   Size _requestedSize;
   set requestedSize(Size value) {
@@ -934,25 +755,7 @@ class RenderSizedOverflowBox extends RenderAligningShiftedBox {
   }
 }
 
-/// Sizes its child to a fraction of the total available space.
-///
-/// For both its width and height, this render object imposes a tight
-/// constraint on its child that is a multiple (typically less than 1.0) of the
-/// maximum constraint it received from its parent on that axis. If the factor
-/// for a given axis is null, then the constraints from the parent are just
-/// passed through instead.
-///
-/// It then tries to size itself to the size of its child. Where this is not
-/// possible (e.g. if the constraints from the parent are themselves tight), the
-/// child is aligned according to [alignment].
 class RenderFractionallySizedOverflowBox extends RenderAligningShiftedBox {
-  /// Creates a render box that sizes its child to a fraction of the total available space.
-  ///
-  /// If non-null, the [widthFactor] and [heightFactor] arguments must be
-  /// non-negative.
-  ///
-  /// The [textDirection] must be non-null if the [alignment] is
-  /// direction-sensitive.
   RenderFractionallySizedOverflowBox({
     super.child,
     double? widthFactor,
@@ -965,11 +768,6 @@ class RenderFractionallySizedOverflowBox extends RenderAligningShiftedBox {
     assert(_heightFactor == null || _heightFactor! >= 0.0);
   }
 
-  /// If non-null, the factor of the incoming width to use.
-  ///
-  /// If non-null, the child is given a tight width constraint that is the max
-  /// incoming width constraint multiplied by this factor. If null, the child is
-  /// given the incoming width constraints.
   double? get widthFactor => _widthFactor;
   double? _widthFactor;
   set widthFactor(double? value) {
@@ -981,11 +779,6 @@ class RenderFractionallySizedOverflowBox extends RenderAligningShiftedBox {
     markNeedsLayout();
   }
 
-  /// If non-null, the factor of the incoming height to use.
-  ///
-  /// If non-null, the child is given a tight height constraint that is the max
-  /// incoming width constraint multiplied by this factor. If null, the child is
-  /// given the incoming width constraints.
   double? get heightFactor => _heightFactor;
   double? _heightFactor;
   set heightFactor(double? value) {
@@ -1096,104 +889,27 @@ class RenderFractionallySizedOverflowBox extends RenderAligningShiftedBox {
   }
 }
 
-/// A delegate for computing the layout of a render object with a single child.
-///
-/// Used by [CustomSingleChildLayout] (in the widgets library) and
-/// [RenderCustomSingleChildLayoutBox] (in the rendering library).
-///
-/// When asked to layout, [CustomSingleChildLayout] first calls [getSize] with
-/// its incoming constraints to determine its size. It then calls
-/// [getConstraintsForChild] to determine the constraints to apply to the child.
-/// After the child completes its layout, [RenderCustomSingleChildLayoutBox]
-/// calls [getPositionForChild] to determine the child's position.
-///
-/// The [shouldRelayout] method is called when a new instance of the class
-/// is provided, to check if the new instance actually represents different
-/// information.
-///
-/// The most efficient way to trigger a relayout is to supply a `relayout`
-/// argument to the constructor of the [SingleChildLayoutDelegate]. The custom
-/// layout will listen to this value and relayout whenever the Listenable
-/// notifies its listeners, such as when an [Animation] ticks. This allows
-/// the custom layout to avoid the build phase of the pipeline.
-///
-/// See also:
-///
-///  * [CustomSingleChildLayout], the widget that uses this delegate.
-///  * [RenderCustomSingleChildLayoutBox], render object that uses this
-///    delegate.
 abstract class SingleChildLayoutDelegate {
-  /// Creates a layout delegate.
-  ///
-  /// The layout will update whenever [relayout] notifies its listeners.
   const SingleChildLayoutDelegate({ Listenable? relayout }) : _relayout = relayout;
 
   final Listenable? _relayout;
 
-  /// The size of this object given the incoming constraints.
-  ///
-  /// Defaults to the biggest size that satisfies the given constraints.
   Size getSize(BoxConstraints constraints) => constraints.biggest;
 
-  /// The constraints for the child given the incoming constraints.
-  ///
-  /// During layout, the child is given the layout constraints returned by this
-  /// function. The child is required to pick a size for itself that satisfies
-  /// these constraints.
-  ///
-  /// Defaults to the given constraints.
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) => constraints;
 
-  /// The position where the child should be placed.
-  ///
-  /// The `size` argument is the size of the parent, which might be different
-  /// from the value returned by [getSize] if that size doesn't satisfy the
-  /// constraints passed to [getSize]. The `childSize` argument is the size of
-  /// the child, which will satisfy the constraints returned by
-  /// [getConstraintsForChild].
-  ///
-  /// Defaults to positioning the child in the upper left corner of the parent.
   Offset getPositionForChild(Size size, Size childSize) => Offset.zero;
 
-  /// Called whenever a new instance of the custom layout delegate class is
-  /// provided to the [RenderCustomSingleChildLayoutBox] object, or any time
-  /// that a new [CustomSingleChildLayout] object is created with a new instance
-  /// of the custom layout delegate class (which amounts to the same thing,
-  /// because the latter is implemented in terms of the former).
-  ///
-  /// If the new instance represents different information than the old
-  /// instance, then the method should return true, otherwise it should return
-  /// false.
-  ///
-  /// If the method returns false, then the [getSize],
-  /// [getConstraintsForChild], and [getPositionForChild] calls might be
-  /// optimized away.
-  ///
-  /// It's possible that the layout methods will get called even if
-  /// [shouldRelayout] returns false (e.g. if an ancestor changed its layout).
-  /// It's also possible that the layout method will get called
-  /// without [shouldRelayout] being called at all (e.g. if the parent changes
-  /// size).
   bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate);
 }
 
-/// Defers the layout of its single child to a delegate.
-///
-/// The delegate can determine the layout constraints for the child and can
-/// decide where to position the child. The delegate can also determine the size
-/// of the parent, but the size of the parent cannot depend on the size of the
-/// child.
 class RenderCustomSingleChildLayoutBox extends RenderShiftedBox {
-  /// Creates a render box that defers its layout to a delegate.
-  ///
-  /// The [delegate] argument must not be null.
   RenderCustomSingleChildLayoutBox({
     RenderBox? child,
     required SingleChildLayoutDelegate delegate,
   }) : _delegate = delegate,
        super(child);
 
-  /// A delegate that controls this object's layout.
   SingleChildLayoutDelegate get delegate => _delegate;
   SingleChildLayoutDelegate _delegate;
   set delegate(SingleChildLayoutDelegate newDelegate) {
@@ -1285,24 +1001,7 @@ class RenderCustomSingleChildLayoutBox extends RenderShiftedBox {
   }
 }
 
-/// Shifts the child down such that the child's baseline (or the
-/// bottom of the child, if the child has no baseline) is [baseline]
-/// logical pixels below the top of this box, then sizes this box to
-/// contain the child.
-///
-/// If [baseline] is less than the distance from the top of the child
-/// to the baseline of the child, then the child will overflow the top
-/// of the box. This is typically not desirable, in particular, that
-/// part of the child will not be found when doing hit tests, so the
-/// user cannot interact with that part of the child.
-///
-/// This box will be sized so that its bottom is coincident with the
-/// bottom of the child. This means if this box shifts the child down,
-/// there will be space between the top of this box and the top of the
-/// child, but there is never space between the bottom of the child
-/// and the bottom of the box.
 class RenderBaseline extends RenderShiftedBox {
-  /// Creates a [RenderBaseline] object.
   RenderBaseline({
     RenderBox? child,
     required double baseline,
@@ -1311,8 +1010,6 @@ class RenderBaseline extends RenderShiftedBox {
        _baselineType = baselineType,
        super(child);
 
-  /// The number of logical pixels from the top of this box at which to position
-  /// the child's baseline.
   double get baseline => _baseline;
   double _baseline;
   set baseline(double value) {
@@ -1323,7 +1020,6 @@ class RenderBaseline extends RenderShiftedBox {
     markNeedsLayout();
   }
 
-  /// The type of baseline to use for positioning the child.
   TextBaseline get baselineType => _baselineType;
   TextBaseline _baselineType;
   set baselineType(TextBaseline value) {
