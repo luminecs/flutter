@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter_devicelab/framework/devices.dart';

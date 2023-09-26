@@ -1,4 +1,3 @@
-
 const String textFieldRoute = 'textField';
 
 const String normalTextFieldKeyValue = 'textFieldNormal';

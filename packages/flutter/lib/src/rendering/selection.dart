@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -103,17 +102,22 @@ abstract final class SelectionUtils {
         : SelectionResult.previous;
   }
 
-  static Offset adjustDragOffset(Rect targetRect, Offset point, {TextDirection direction = TextDirection.ltr}) {
+  static Offset adjustDragOffset(Rect targetRect, Offset point,
+      {TextDirection direction = TextDirection.ltr}) {
     if (targetRect.contains(point)) {
       return point;
     }
     if (point.dy <= targetRect.top ||
         point.dy <= targetRect.bottom && point.dx <= targetRect.left) {
       // Area 1
-      return direction == TextDirection.ltr ? targetRect.topLeft : targetRect.topRight;
+      return direction == TextDirection.ltr
+          ? targetRect.topLeft
+          : targetRect.topRight;
     } else {
       // Area 2
-      return direction == TextDirection.ltr ? targetRect.bottomRight : targetRect.bottomLeft;
+      return direction == TextDirection.ltr
+          ? targetRect.bottomRight
+          : targetRect.bottomLeft;
     }
   }
 }
@@ -151,29 +155,30 @@ abstract class SelectionEvent {
 }
 
 class SelectAllSelectionEvent extends SelectionEvent {
-  const SelectAllSelectionEvent(): super._(SelectionEventType.selectAll);
+  const SelectAllSelectionEvent() : super._(SelectionEventType.selectAll);
 }
 
 class ClearSelectionEvent extends SelectionEvent {
-  const ClearSelectionEvent(): super._(SelectionEventType.clear);
+  const ClearSelectionEvent() : super._(SelectionEventType.clear);
 }
 
 class SelectWordSelectionEvent extends SelectionEvent {
-  const SelectWordSelectionEvent({required this.globalPosition}): super._(SelectionEventType.selectWord);
+  const SelectWordSelectionEvent({required this.globalPosition})
+      : super._(SelectionEventType.selectWord);
 
   final Offset globalPosition;
 }
 
 class SelectionEdgeUpdateEvent extends SelectionEvent {
-  const SelectionEdgeUpdateEvent.forStart({
-    required this.globalPosition,
-    TextGranularity? granularity
-  }) : granularity = granularity ?? TextGranularity.character, super._(SelectionEventType.startEdgeUpdate);
+  const SelectionEdgeUpdateEvent.forStart(
+      {required this.globalPosition, TextGranularity? granularity})
+      : granularity = granularity ?? TextGranularity.character,
+        super._(SelectionEventType.startEdgeUpdate);
 
-  const SelectionEdgeUpdateEvent.forEnd({
-    required this.globalPosition,
-    TextGranularity? granularity
-  }) : granularity = granularity ?? TextGranularity.character, super._(SelectionEventType.endEdgeUpdate);
+  const SelectionEdgeUpdateEvent.forEnd(
+      {required this.globalPosition, TextGranularity? granularity})
+      : granularity = granularity ?? TextGranularity.character,
+        super._(SelectionEventType.endEdgeUpdate);
 
   final Offset globalPosition;
 
@@ -252,7 +257,8 @@ class SelectionGeometry {
     this.selectionRects = const <Rect>[],
     required this.status,
     required this.hasContent,
-  }) : assert((startSelectionPoint == null && endSelectionPoint == null) || status != SelectionStatus.none);
+  }) : assert((startSelectionPoint == null && endSelectionPoint == null) ||
+            status != SelectionStatus.none);
 
   final SelectionPoint? startSelectionPoint;
 
@@ -290,12 +296,12 @@ class SelectionGeometry {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SelectionGeometry
-        && other.startSelectionPoint == startSelectionPoint
-        && other.endSelectionPoint == endSelectionPoint
-        && other.selectionRects == selectionRects
-        && other.status == status
-        && other.hasContent == hasContent;
+    return other is SelectionGeometry &&
+        other.startSelectionPoint == startSelectionPoint &&
+        other.endSelectionPoint == endSelectionPoint &&
+        other.selectionRects == selectionRects &&
+        other.status == status &&
+        other.hasContent == hasContent;
   }
 
   @override
@@ -332,10 +338,10 @@ class SelectionPoint with Diagnosticable {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SelectionPoint
-        && other.localPosition == localPosition
-        && other.lineHeight == lineHeight
-        && other.handleType == handleType;
+    return other is SelectionPoint &&
+        other.localPosition == localPosition &&
+        other.lineHeight == lineHeight &&
+        other.handleType == handleType;
   }
 
   @override
@@ -352,7 +358,8 @@ class SelectionPoint with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<Offset>('localPosition', localPosition));
     properties.add(DoubleProperty('lineHeight', lineHeight));
-    properties.add(EnumProperty<TextSelectionHandleType>('handleType', handleType));
+    properties
+        .add(EnumProperty<TextSelectionHandleType>('handleType', handleType));
   }
 }
 

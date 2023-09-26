@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/widgets.dart';
 
@@ -50,9 +49,9 @@ class ChoiceChip extends StatelessWidget
     this.showCheckmark,
     this.checkmarkColor,
     this.avatarBorder = const CircleBorder(),
-  }) : assert(pressElevation == null || pressElevation >= 0.0),
-       assert(elevation == null || elevation >= 0.0),
-       _chipVariant = _ChipVariant.flat;
+  })  : assert(pressElevation == null || pressElevation >= 0.0),
+        assert(elevation == null || elevation >= 0.0),
+        _chipVariant = _ChipVariant.flat;
 
   const ChoiceChip.elevated({
     super.key,
@@ -84,9 +83,9 @@ class ChoiceChip extends StatelessWidget
     this.showCheckmark,
     this.checkmarkColor,
     this.avatarBorder = const CircleBorder(),
-  }) : assert(pressElevation == null || pressElevation >= 0.0),
-       assert(elevation == null || elevation >= 0.0),
-       _chipVariant = _ChipVariant.elevated;
+  })  : assert(pressElevation == null || pressElevation >= 0.0),
+        assert(elevation == null || elevation >= 0.0),
+        _chipVariant = _ChipVariant.elevated;
 
   @override
   final Widget? avatar;
@@ -155,18 +154,21 @@ class ChoiceChip extends StatelessWidget
     assert(debugCheckHasMaterial(context));
     final ChipThemeData chipTheme = ChipTheme.of(context);
     final ChipThemeData? defaults = Theme.of(context).useMaterial3
-      ? _ChoiceChipDefaultsM3(context, isEnabled, selected, _chipVariant)
-      : null;
+        ? _ChoiceChipDefaultsM3(context, isEnabled, selected, _chipVariant)
+        : null;
     return RawChip(
       defaultProperties: defaults,
       avatar: avatar,
       label: label,
-      labelStyle: labelStyle ?? (selected ? chipTheme.secondaryLabelStyle : null),
+      labelStyle:
+          labelStyle ?? (selected ? chipTheme.secondaryLabelStyle : null),
       labelPadding: labelPadding,
       onSelected: onSelected,
       pressElevation: pressElevation,
       selected: selected,
-      showCheckmark: showCheckmark ?? chipTheme.showCheckmark ?? Theme.of(context).useMaterial3,
+      showCheckmark: showCheckmark ??
+          chipTheme.showCheckmark ??
+          Theme.of(context).useMaterial3,
       checkmarkColor: checkmarkColor,
       tooltip: tooltip,
       side: side,
@@ -206,9 +208,10 @@ class _ChoiceChipDefaultsM3 extends ChipThemeData {
     this.isSelected,
     this._chipVariant,
   ) : super(
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        showCheckmark: true,
-      );
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          showCheckmark: true,
+        );
 
   final BuildContext context;
   final bool isEnabled;
@@ -219,8 +222,10 @@ class _ChoiceChipDefaultsM3 extends ChipThemeData {
 
   @override
   double? get elevation => _chipVariant == _ChipVariant.flat
-    ? 0.0
-    : isEnabled ? 1.0 : 0.0;
+      ? 0.0
+      : isEnabled
+          ? 1.0
+          : 0.0;
 
   @override
   double? get pressElevation => 1.0;
@@ -230,31 +235,29 @@ class _ChoiceChipDefaultsM3 extends ChipThemeData {
 
   @override
   MaterialStateProperty<Color?>? get color =>
-    MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-      if (states.contains(MaterialState.selected) && states.contains(MaterialState.disabled)) {
-        return _chipVariant == _ChipVariant.flat
-          ? _colors.onSurface.withOpacity(0.12)
-          : _colors.onSurface.withOpacity(0.12);
-      }
-      if (states.contains(MaterialState.disabled)) {
-        return _chipVariant == _ChipVariant.flat
-          ? null
-          : _colors.onSurface.withOpacity(0.12);
-      }
-      if (states.contains(MaterialState.selected)) {
-        return _chipVariant == _ChipVariant.flat
-          ? _colors.secondaryContainer
-          : _colors.secondaryContainer;
-      }
-      return _chipVariant == _ChipVariant.flat
-        ? null
-        : null;
-    });
+      MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected) &&
+            states.contains(MaterialState.disabled)) {
+          return _chipVariant == _ChipVariant.flat
+              ? _colors.onSurface.withOpacity(0.12)
+              : _colors.onSurface.withOpacity(0.12);
+        }
+        if (states.contains(MaterialState.disabled)) {
+          return _chipVariant == _ChipVariant.flat
+              ? null
+              : _colors.onSurface.withOpacity(0.12);
+        }
+        if (states.contains(MaterialState.selected)) {
+          return _chipVariant == _ChipVariant.flat
+              ? _colors.secondaryContainer
+              : _colors.secondaryContainer;
+        }
+        return _chipVariant == _ChipVariant.flat ? null : null;
+      });
 
   @override
-  Color? get shadowColor => _chipVariant == _ChipVariant.flat
-    ? Colors.transparent
-    : _colors.shadow;
+  Color? get shadowColor =>
+      _chipVariant == _ChipVariant.flat ? Colors.transparent : _colors.shadow;
 
   @override
   Color? get surfaceTintColor => _colors.surfaceTint;
@@ -267,28 +270,27 @@ class _ChoiceChipDefaultsM3 extends ChipThemeData {
 
   @override
   BorderSide? get side => _chipVariant == _ChipVariant.flat && !isSelected
-    ? isEnabled
-      ? BorderSide(color: _colors.outline)
-      : BorderSide(color: _colors.onSurface.withOpacity(0.12))
-    : const BorderSide(color: Colors.transparent);
+      ? isEnabled
+          ? BorderSide(color: _colors.outline)
+          : BorderSide(color: _colors.onSurface.withOpacity(0.12))
+      : const BorderSide(color: Colors.transparent);
 
   @override
   IconThemeData? get iconTheme => IconThemeData(
-    color: isEnabled
-      ? null
-      : _colors.onSurface,
-    size: 18.0,
-  );
+        color: isEnabled ? null : _colors.onSurface,
+        size: 18.0,
+      );
 
   @override
   EdgeInsetsGeometry? get padding => const EdgeInsets.all(8.0);
 
   @override
   EdgeInsetsGeometry? get labelPadding => EdgeInsets.lerp(
-    const EdgeInsets.symmetric(horizontal: 8.0),
-    const EdgeInsets.symmetric(horizontal: 4.0),
-    clampDouble(MediaQuery.textScalerOf(context).textScaleFactor - 1.0, 0.0, 1.0),
-  )!;
+        const EdgeInsets.symmetric(horizontal: 8.0),
+        const EdgeInsets.symmetric(horizontal: 4.0),
+        clampDouble(
+            MediaQuery.textScalerOf(context).textScaleFactor - 1.0, 0.0, 1.0),
+      )!;
 }
 
 // END GENERATED TOKEN PROPERTIES - ChoiceChip

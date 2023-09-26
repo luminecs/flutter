@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
@@ -151,7 +150,8 @@ class ScaleTransition extends MatrixTransition {
 
   Animation<double> get scale => animation;
 
-  static Matrix4 _handleScaleMatrix(double value) => Matrix4.diagonal3Values(value, value, 1.0);
+  static Matrix4 _handleScaleMatrix(double value) =>
+      Matrix4.diagonal3Values(value, value, 1.0);
 }
 
 class RotationTransition extends MatrixTransition {
@@ -165,7 +165,8 @@ class RotationTransition extends MatrixTransition {
 
   Animation<double> get turns => animation;
 
-  static Matrix4 _handleTurnsMatrix(double value) => Matrix4.rotationZ(value * math.pi * 2.0);
+  static Matrix4 _handleTurnsMatrix(double value) =>
+      Matrix4.rotationZ(value * math.pi * 2.0);
 }
 
 class SizeTransition extends AnimatedWidget {
@@ -196,8 +197,10 @@ class SizeTransition extends AnimatedWidget {
     return ClipRect(
       child: Align(
         alignment: alignment,
-        heightFactor: axis == Axis.vertical ? math.max(sizeFactor.value, 0.0) : null,
-        widthFactor: axis == Axis.horizontal ? math.max(sizeFactor.value, 0.0) : null,
+        heightFactor:
+            axis == Axis.vertical ? math.max(sizeFactor.value, 0.0) : null,
+        widthFactor:
+            axis == Axis.horizontal ? math.max(sizeFactor.value, 0.0) : null,
         child: child,
       ),
     );
@@ -225,7 +228,8 @@ class FadeTransition extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderAnimatedOpacity renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderAnimatedOpacity renderObject) {
     renderObject
       ..opacity = opacity
       ..alwaysIncludeSemantics = alwaysIncludeSemantics;
@@ -235,7 +239,8 @@ class FadeTransition extends SingleChildRenderObjectWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<Animation<double>>('opacity', opacity));
-    properties.add(FlagProperty('alwaysIncludeSemantics', value: alwaysIncludeSemantics, ifTrue: 'alwaysIncludeSemantics'));
+    properties.add(FlagProperty('alwaysIncludeSemantics',
+        value: alwaysIncludeSemantics, ifTrue: 'alwaysIncludeSemantics'));
   }
 }
 
@@ -260,7 +265,8 @@ class SliverFadeTransition extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderSliverAnimatedOpacity renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderSliverAnimatedOpacity renderObject) {
     renderObject
       ..opacity = opacity
       ..alwaysIncludeSemantics = alwaysIncludeSemantics;
@@ -270,12 +276,13 @@ class SliverFadeTransition extends SingleChildRenderObjectWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<Animation<double>>('opacity', opacity));
-    properties.add(FlagProperty('alwaysIncludeSemantics', value: alwaysIncludeSemantics, ifTrue: 'alwaysIncludeSemantics'));
+    properties.add(FlagProperty('alwaysIncludeSemantics',
+        value: alwaysIncludeSemantics, ifTrue: 'alwaysIncludeSemantics'));
   }
 }
 
 class RelativeRectTween extends Tween<RelativeRect> {
-  RelativeRectTween({ super.begin, super.end });
+  RelativeRectTween({super.begin, super.end});
 
   @override
   RelativeRect lerp(double t) => RelativeRect.lerp(begin, end, t)!;
@@ -317,7 +324,8 @@ class RelativePositionedTransition extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RelativeRect offsets = RelativeRect.fromSize(rect.value ?? Rect.zero, size);
+    final RelativeRect offsets =
+        RelativeRect.fromSize(rect.value ?? Rect.zero, size);
     return Positioned(
       top: offsets.top,
       right: offsets.right,
@@ -361,7 +369,8 @@ class AlignTransition extends AnimatedWidget {
     this.heightFactor,
   }) : super(listenable: alignment);
 
-  Animation<AlignmentGeometry> get alignment => listenable as Animation<AlignmentGeometry>;
+  Animation<AlignmentGeometry> get alignment =>
+      listenable as Animation<AlignmentGeometry>;
 
   final double? widthFactor;
 

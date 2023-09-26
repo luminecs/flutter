@@ -1,4 +1,3 @@
-
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stocks/main.dart' as stocks;
@@ -27,7 +26,8 @@ class BenchmarkingBinding extends LiveTestWidgetsFlutterBinding {
 }
 
 Future<void> main() async {
-  assert(false, "Don't run benchmarks in debug mode! Use 'flutter run --release'.");
+  assert(false,
+      "Don't run benchmarks in debug mode! Use 'flutter run --release'.");
   stock_data.StockData.actuallyFetchData = false;
 
   final Stopwatch wallClockWatch = Stopwatch();
@@ -94,7 +94,8 @@ Future<void> main() async {
   );
   printer.addResult(
     description: '  Subsequent frames average time',
-    value: totalSubsequentFramesElapsedMicroseconds / totalSubsequentFramesIterationCount,
+    value: totalSubsequentFramesElapsedMicroseconds /
+        totalSubsequentFramesIterationCount,
     unit: 'µs per frame ($totalSubsequentFramesIterationCount frames)',
     name: 'stock_animation_subsequent_frame_average',
   );

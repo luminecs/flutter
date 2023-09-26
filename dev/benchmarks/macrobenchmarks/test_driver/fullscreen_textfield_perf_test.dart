@@ -1,4 +1,3 @@
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:macrobenchmarks/common.dart';
 
@@ -10,7 +9,8 @@ void main() {
     kFullscreenTextRouteName,
     pageDelay: const Duration(seconds: 1),
     driverOps: (FlutterDriver driver) async {
-      final SerializableFinder textfield = find.byValueKey('fullscreen-textfield');
+      final SerializableFinder textfield =
+          find.byValueKey('fullscreen-textfield');
       driver.tap(textfield);
       await Future<void>.delayed(const Duration(milliseconds: 5000));
     },

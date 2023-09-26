@@ -1,4 +1,3 @@
-
 import 'package:flutter_driver/flutter_driver.dart';
 
 class StubFinder extends SerializableFinder {

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/services.dart';
@@ -9,14 +8,16 @@ abstract class MockStreamHandler {
   factory MockStreamHandler.inline({
     required MockStreamHandlerOnListenCallback onListen,
     MockStreamHandlerOnCancelCallback? onCancel,
-  }) => _InlineMockStreamHandler(onListen: onListen, onCancel: onCancel);
+  }) =>
+      _InlineMockStreamHandler(onListen: onListen, onCancel: onCancel);
 
   void onListen(Object? arguments, MockStreamHandlerEventSink events);
 
   void onCancel(Object? arguments);
 }
 
-typedef MockStreamHandlerOnListenCallback = void Function(Object? arguments, MockStreamHandlerEventSink events);
+typedef MockStreamHandlerOnListenCallback = void Function(
+    Object? arguments, MockStreamHandlerEventSink events);
 
 typedef MockStreamHandlerOnCancelCallback = void Function(Object? arguments);
 
@@ -31,7 +32,8 @@ class _InlineMockStreamHandler extends MockStreamHandler {
   final MockStreamHandlerOnCancelCallback? _onCancelInline;
 
   @override
-  void onListen(Object? arguments, MockStreamHandlerEventSink events) => _onListenInline(arguments, events);
+  void onListen(Object? arguments, MockStreamHandlerEventSink events) =>
+      _onListenInline(arguments, events);
 
   @override
   void onCancel(Object? arguments) => _onCancelInline?.call(arguments);
@@ -48,7 +50,9 @@ class MockStreamHandlerEventSink {
     required String code,
     String? message,
     Object? details,
-  }) => _sink.addError(PlatformException(code: code, message: message, details: details));
+  }) =>
+      _sink.addError(
+          PlatformException(code: code, message: message, details: details));
 
   void endOfStream() => _sink.close();
 }

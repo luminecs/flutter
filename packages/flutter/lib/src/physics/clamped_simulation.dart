@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'simulation.dart';
@@ -12,8 +11,8 @@ class ClampedSimulation extends Simulation {
     this.xMax = double.infinity,
     this.dxMin = double.negativeInfinity,
     this.dxMax = double.infinity,
-  }) : assert(xMax >= xMin),
-       assert(dxMax >= dxMin);
+  })  : assert(xMax >= xMin),
+        assert(dxMax >= dxMin);
 
   final Simulation simulation;
 
@@ -35,5 +34,6 @@ class ClampedSimulation extends Simulation {
   bool isDone(double time) => simulation.isDone(time);
 
   @override
-  String toString() => '${objectRuntimeType(this, 'ClampedSimulation')}(simulation: $simulation, x: ${xMin.toStringAsFixed(1)}..${xMax.toStringAsFixed(1)}, dx: ${dxMin.toStringAsFixed(1)}..${dxMax.toStringAsFixed(1)})';
+  String toString() =>
+      '${objectRuntimeType(this, 'ClampedSimulation')}(simulation: $simulation, x: ${xMin.toStringAsFixed(1)}..${xMax.toStringAsFixed(1)}, dx: ${dxMin.toStringAsFixed(1)}..${dxMax.toStringAsFixed(1)})';
 }

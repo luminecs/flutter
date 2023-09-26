@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
@@ -8,10 +7,11 @@ import 'framework.dart';
 import 'selection_container.dart';
 import 'two_dimensional_viewport.dart';
 
-export 'package:flutter/rendering.dart' show
-  SliverGridDelegate,
-  SliverGridDelegateWithFixedCrossAxisCount,
-  SliverGridDelegateWithMaxCrossAxisExtent;
+export 'package:flutter/rendering.dart'
+    show
+        SliverGridDelegate,
+        SliverGridDelegateWithFixedCrossAxisCount,
+        SliverGridDelegateWithMaxCrossAxisExtent;
 
 // Examples can assume:
 // late SliverGridDelegateWithMaxCrossAxisExtent _gridDelegate;
@@ -34,9 +34,10 @@ abstract class SliverChildDelegate {
     int lastIndex,
     double leadingScrollOffset,
     double trailingScrollOffset,
-  ) => null;
+  ) =>
+      null;
 
-  void didFinishLayout(int firstIndex, int lastIndex) { }
+  void didFinishLayout(int firstIndex, int lastIndex) {}
 
   bool shouldRebuild(covariant SliverChildDelegate oldDelegate);
 
@@ -135,7 +136,8 @@ class SliverChildBuilderDelegate extends SliverChildDelegate {
     if (addSemanticIndexes) {
       final int? semanticIndex = semanticIndexCallback(child, index);
       if (semanticIndex != null) {
-        child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+        child = IndexedSemantics(
+            index: semanticIndex + semanticIndexOffset, child: child);
       }
     }
     if (addAutomaticKeepAlives) {
@@ -230,14 +232,15 @@ class SliverChildListDelegate extends SliverChildDelegate {
       return null;
     }
     Widget child = children[index];
-    final Key? key = child.key != null? _SaltedValueKey(child.key!) : null;
+    final Key? key = child.key != null ? _SaltedValueKey(child.key!) : null;
     if (addRepaintBoundaries) {
       child = RepaintBoundary(child: child);
     }
     if (addSemanticIndexes) {
       final int? semanticIndex = semanticIndexCallback(child, index);
       if (semanticIndex != null) {
-        child = IndexedSemantics(index: semanticIndex + semanticIndexOffset, child: child);
+        child = IndexedSemantics(
+            index: semanticIndex + semanticIndexOffset, child: child);
       }
     }
     if (addAutomaticKeepAlives) {
@@ -267,7 +270,9 @@ class _SelectionKeepAlive extends StatefulWidget {
   State<_SelectionKeepAlive> createState() => _SelectionKeepAliveState();
 }
 
-class _SelectionKeepAliveState extends State<_SelectionKeepAlive> with AutomaticKeepAliveClientMixin implements SelectionRegistrar {
+class _SelectionKeepAliveState extends State<_SelectionKeepAlive>
+    with AutomaticKeepAliveClientMixin
+    implements SelectionRegistrar {
   Set<Selectable>? _selectablesWithSelections;
   Map<Selectable, VoidCallback>? _selectableAttachments;
   SelectionRegistrar? _registrar;
@@ -292,7 +297,8 @@ class _SelectionKeepAliveState extends State<_SelectionKeepAlive> with Automatic
     };
   }
 
-  void _updateSelectablesWithSelections(Selectable selectable, {required bool add}) {
+  void _updateSelectablesWithSelections(Selectable selectable,
+      {required bool add}) {
     if (add) {
       assert(selectable.value.hasSelection);
       _selectablesWithSelections ??= <Selectable>{};
@@ -306,7 +312,8 @@ class _SelectionKeepAliveState extends State<_SelectionKeepAlive> with Automatic
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final SelectionRegistrar? newRegistrar = SelectionContainer.maybeOf(context);
+    final SelectionRegistrar? newRegistrar =
+        SelectionContainer.maybeOf(context);
     if (_registrar != newRegistrar) {
       if (_registrar != null) {
         _selectableAttachments?.keys.forEach(_registrar!.remove);
@@ -393,10 +400,10 @@ class TwoDimensionalChildBuilderDelegate extends TwoDimensionalChildDelegate {
     int? maxYIndex,
     this.addRepaintBoundaries = true,
     this.addAutomaticKeepAlives = true,
-  }) : assert(maxYIndex == null || maxYIndex >= -1),
-       assert(maxXIndex == null || maxXIndex >= -1),
-       _maxYIndex = maxYIndex,
-       _maxXIndex = maxXIndex;
+  })  : assert(maxYIndex == null || maxYIndex >= -1),
+        assert(maxXIndex == null || maxXIndex >= -1),
+        _maxYIndex = maxYIndex,
+        _maxXIndex = maxXIndex;
 
   final TwoDimensionalIndexedWidgetBuilder builder;
 
@@ -429,10 +436,12 @@ class TwoDimensionalChildBuilderDelegate extends TwoDimensionalChildDelegate {
   @override
   Widget? build(BuildContext context, ChildVicinity vicinity) {
     // If we have exceeded explicit upper bounds, return null.
-    if (vicinity.xIndex < 0 || (maxXIndex != null && vicinity.xIndex > maxXIndex!)) {
+    if (vicinity.xIndex < 0 ||
+        (maxXIndex != null && vicinity.xIndex > maxXIndex!)) {
       return null;
     }
-    if (vicinity.yIndex < 0 || (maxYIndex != null && vicinity.yIndex > maxYIndex!)) {
+    if (vicinity.yIndex < 0 ||
+        (maxYIndex != null && vicinity.yIndex > maxYIndex!)) {
       return null;
     }
 
@@ -477,7 +486,8 @@ class TwoDimensionalChildListDelegate extends TwoDimensionalChildDelegate {
     if (vicinity.yIndex < 0 || vicinity.yIndex >= children.length) {
       return null;
     }
-    if (vicinity.xIndex < 0 || vicinity.xIndex >= children[vicinity.yIndex].length) {
+    if (vicinity.xIndex < 0 ||
+        vicinity.xIndex >= children[vicinity.yIndex].length) {
       return null;
     }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'platform_channel.dart';
@@ -21,7 +20,8 @@ class MethodCall {
   final dynamic arguments;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'MethodCall')}($method, $arguments)';
+  String toString() =>
+      '${objectRuntimeType(this, 'MethodCall')}($method, $arguments)';
 }
 
 abstract class MethodCodec {
@@ -33,7 +33,8 @@ abstract class MethodCodec {
 
   ByteData encodeSuccessEnvelope(Object? result);
 
-  ByteData encodeErrorEnvelope({ required String code, String? message, Object? details});
+  ByteData encodeErrorEnvelope(
+      {required String code, String? message, Object? details});
 }
 
 class PlatformException implements Exception {
@@ -53,7 +54,8 @@ class PlatformException implements Exception {
   final String? stacktrace;
 
   @override
-  String toString() => 'PlatformException($code, $message, $details, $stacktrace)';
+  String toString() =>
+      'PlatformException($code, $message, $details, $stacktrace)';
 }
 
 class MissingPluginException implements Exception {

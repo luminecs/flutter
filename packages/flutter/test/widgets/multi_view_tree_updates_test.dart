@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Widgets in view update as expected', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Widgets in view update as expected',
+      (WidgetTester tester) async {
     final Widget widget = View(
       view: tester.view,
       child: const TestWidget(),
@@ -19,13 +19,23 @@ void main() {
     );
 
     expect(find.text('Hello'), findsOneWidget);
-    expect(tester.renderObject<RenderParagraph>(find.byType(Text)).text.toPlainText(), 'Hello');
+    expect(
+        tester
+            .renderObject<RenderParagraph>(find.byType(Text))
+            .text
+            .toPlainText(),
+        'Hello');
 
     tester.state<TestWidgetState>(find.byType(TestWidget)).text = 'World';
     await tester.pump();
     expect(find.text('Hello'), findsNothing);
     expect(find.text('World'), findsOneWidget);
-    expect(tester.renderObject<RenderParagraph>(find.byType(Text)).text.toPlainText(), 'World');
+    expect(
+        tester
+            .renderObject<RenderParagraph>(find.byType(Text))
+            .text
+            .toPlainText(),
+        'World');
 
     await pumpWidgetWithoutViewWrapper(
       tester: tester,
@@ -35,7 +45,12 @@ void main() {
     );
     expect(find.text('Hello'), findsNothing);
     expect(find.text('World'), findsOneWidget);
-    expect(tester.renderObject<RenderParagraph>(find.byType(Text)).text.toPlainText(), 'World');
+    expect(
+        tester
+            .renderObject<RenderParagraph>(find.byType(Text))
+            .text
+            .toPlainText(),
+        'World');
 
     tester.state<TestWidgetState>(find.byType(TestWidget)).text = 'FooBar';
     await pumpWidgetWithoutViewWrapper(
@@ -44,12 +59,20 @@ void main() {
     );
     expect(find.text('World'), findsNothing);
     expect(find.text('FooBar'), findsOneWidget);
-    expect(tester.renderObject<RenderParagraph>(find.byType(Text)).text.toPlainText(), 'FooBar');
+    expect(
+        tester
+            .renderObject<RenderParagraph>(find.byType(Text))
+            .text
+            .toPlainText(),
+        'FooBar');
   });
 
-  testWidgetsWithLeakTracking('Views in ViewCollection update as expected', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Views in ViewCollection update as expected',
+      (WidgetTester tester) async {
     Iterable<String> renderParagraphTexts() {
-      return tester.renderObjectList<RenderParagraph>(find.byType(Text)).map((RenderParagraph r) => r.text.toPlainText());
+      return tester
+          .renderObjectList<RenderParagraph>(find.byType(Text))
+          .map((RenderParagraph r) => r.text.toPlainText());
     }
 
     final Key key1 = UniqueKey();
@@ -92,7 +115,10 @@ void main() {
     await pumpWidgetWithoutViewWrapper(
       tester: tester,
       widget: ViewCollection(
-        views: <Widget>[view1, ViewCollection(views: <Widget>[view2])],
+        views: <Widget>[
+          view1,
+          ViewCollection(views: <Widget>[view2])
+        ],
       ),
     );
     expect(find.text('Abend'), findsNothing);
@@ -101,9 +127,12 @@ void main() {
     expect(renderParagraphTexts(), <String>['Guten', 'Morgen']);
   });
 
-  testWidgetsWithLeakTracking('Views in ViewAnchor update as expected', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Views in ViewAnchor update as expected',
+      (WidgetTester tester) async {
     Iterable<String> renderParagraphTexts() {
-      return tester.renderObjectList<RenderParagraph>(find.byType(Text)).map((RenderParagraph r) => r.text.toPlainText());
+      return tester
+          .renderObjectList<RenderParagraph>(find.byType(Text))
+          .map((RenderParagraph r) => r.text.toPlainText());
     }
 
     final Key insideAnchoredViewKey = UniqueKey();
@@ -123,29 +152,34 @@ void main() {
     expect(find.text('Hello'), findsNWidgets(2));
     expect(renderParagraphTexts(), <String>['Hello', 'Hello']);
 
-    tester.state<TestWidgetState>(find.byKey(outsideAnchoredViewKey)).text = 'Guten';
-    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text = 'Tag';
+    tester.state<TestWidgetState>(find.byKey(outsideAnchoredViewKey)).text =
+        'Guten';
+    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text =
+        'Tag';
     await tester.pump();
     expect(find.text('Hello'), findsNothing);
     expect(find.text('Guten'), findsOneWidget);
     expect(find.text('Tag'), findsOneWidget);
     expect(renderParagraphTexts(), <String>['Guten', 'Tag']);
 
-    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text = 'Abend';
+    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text =
+        'Abend';
     await tester.pump();
     expect(find.text('Tag'), findsNothing);
     expect(find.text('Guten'), findsOneWidget);
     expect(find.text('Abend'), findsOneWidget);
     expect(renderParagraphTexts(), <String>['Guten', 'Abend']);
 
-    tester.state<TestWidgetState>(find.byKey(outsideAnchoredViewKey)).text = 'Schönen';
+    tester.state<TestWidgetState>(find.byKey(outsideAnchoredViewKey)).text =
+        'Schönen';
     await tester.pump();
     expect(find.text('Guten'), findsNothing);
     expect(find.text('Schönen'), findsOneWidget);
     expect(find.text('Abend'), findsOneWidget);
     expect(renderParagraphTexts(), <String>['Schönen', 'Abend']);
 
-    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text = 'Tag';
+    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text =
+        'Tag';
     await tester.pumpWidget(
       ViewAnchor(
         view: ViewCollection(views: <Widget>[view]),
@@ -158,7 +192,8 @@ void main() {
     expect(find.text('Tag'), findsOneWidget);
     expect(renderParagraphTexts(), <String>['Schönen', 'Tag']);
 
-    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text = 'Morgen';
+    tester.state<TestWidgetState>(find.byKey(insideAnchoredViewKey)).text =
+        'Morgen';
     await tester.pumpWidget(
       SizedBox(
         child: ViewAnchor(
@@ -168,7 +203,8 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('Schönen'), findsNothing); // The `outsideAnchoredViewKey` is not a global key, its state is lost in the move above.
+    expect(find.text('Schönen'),
+        findsNothing); // The `outsideAnchoredViewKey` is not a global key, its state is lost in the move above.
     expect(find.text('Tag'), findsNothing);
     expect(find.text('Hello'), findsOneWidget);
     expect(find.text('Morgen'), findsOneWidget);
@@ -201,18 +237,20 @@ class TestWidgetState extends State<TestWidget> {
   }
 }
 
-Future<void> pumpWidgetWithoutViewWrapper({required WidgetTester tester, required  Widget widget}) {
+Future<void> pumpWidgetWithoutViewWrapper(
+    {required WidgetTester tester, required Widget widget}) {
   tester.binding.attachRootWidget(widget);
   tester.binding.scheduleFrame();
   return tester.binding.pump();
 }
 
-class FakeView extends TestFlutterView{
-  FakeView(FlutterView view, { this.viewId = 100 }) : super(
-    view: view,
-    platformDispatcher: view.platformDispatcher as TestPlatformDispatcher,
-    display: view.display as TestDisplay,
-  );
+class FakeView extends TestFlutterView {
+  FakeView(FlutterView view, {this.viewId = 100})
+      : super(
+          view: view,
+          platformDispatcher: view.platformDispatcher as TestPlatformDispatcher,
+          display: view.display as TestDisplay,
+        );
 
   @override
   final int viewId;

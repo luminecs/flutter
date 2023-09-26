@@ -1,11 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 @optionalTypeArgs
-mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin<S> {
-
+mixin ToggleableStateMixin<S extends StatefulWidget>
+    on TickerProviderStateMixin<S> {
   bool get isInteractive => onChanged != null;
 
   ValueChanged<bool?>? get onChanged;
@@ -42,14 +41,18 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
 
   void _handleTapEnd([TapUpDetails? _]) {
     if (_downPosition != null) {
-      setState(() { _downPosition = null; });
+      setState(() {
+        _downPosition = null;
+      });
     }
   }
 
   bool _focused = false;
   void _handleFocusHighlightChanged(bool focused) {
     if (focused != _focused) {
-      setState(() { _focused = focused; });
+      setState(() {
+        _focused = focused;
+      });
     }
   }
 
@@ -89,7 +92,8 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
   }
 }
 
-abstract class ToggleablePainter extends ChangeNotifier implements CustomPainter {
+abstract class ToggleablePainter extends ChangeNotifier
+    implements CustomPainter {
   Color get activeColor => _activeColor!;
   Color? _activeColor;
   set activeColor(Color value) {

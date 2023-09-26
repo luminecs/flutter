@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/animated_icon/animated_icon.0.dart'
     as example;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/animation.dart';
 
 // The easing curves of the Material Library

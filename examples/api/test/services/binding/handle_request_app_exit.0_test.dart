@@ -1,5 +1,5 @@
-
-import 'package:flutter_api_samples/services/binding/handle_request_app_exit.0.dart' as example;
+import 'package:flutter_api_samples/services/binding/handle_request_app_exit.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

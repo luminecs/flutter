@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io' show ProcessResult, systemEncoding;
 
@@ -18,10 +17,10 @@ void main() {
       expect(newCommandRunner, throwsArgumentError);
     });
 
-    test('throws exception from injection constructor with invalid addr', () async {
+    test('throws exception from injection constructor with invalid addr',
+        () async {
       SshCommandRunner newCommandRunner() {
-        return SshCommandRunner.withProcessManager(
-            const LocalProcessManager(),
+        return SshCommandRunner.withProcessManager(const LocalProcessManager(),
             address: '192.168.1.1.1');
       }
 
@@ -47,11 +46,13 @@ void main() {
         sshConfigPath: '/whatever',
       );
       fakeProcessManager.fakeResult = ProcessResult(23, 0, 'somestuff', null);
-            await runner.run('ls /whatever');
-      expect(fakeProcessManager.runCommands.single, contains('$ipV6Addr%$interface'));
+      await runner.run('ls /whatever');
+      expect(fakeProcessManager.runCommands.single,
+          contains('$ipV6Addr%$interface'));
     });
 
-    test('verify no percentage symbol is added when no ipv6 interface', () async {
+    test('verify no percentage symbol is added when no ipv6 interface',
+        () async {
       const String ipV6Addr = 'fe80::8eae:4cff:fef4:9247';
       runner = SshCommandRunner.withProcessManager(
         fakeProcessManager,
@@ -101,7 +102,8 @@ void main() {
       );
       fakeProcessManager.fakeResult = ProcessResult(23, 0, 'somestuff', null);
       await runner.run('ls /whatever');
-      final List<String?> passedCommand = fakeProcessManager.runCommands.single as List<String?>;
+      final List<String?> passedCommand =
+          fakeProcessManager.runCommands.single as List<String?>;
       expect(passedCommand, contains('-F'));
       final int indexOfFlag = passedCommand.indexOf('-F');
       final String? passedConfig = passedCommand[indexOfFlag + 1];
@@ -116,7 +118,8 @@ void main() {
       );
       fakeProcessManager.fakeResult = ProcessResult(23, 0, 'somestuff', null);
       await runner.run('ls /whatever');
-      final List<String?> passedCommand = fakeProcessManager.runCommands.single as List<String?>;
+      final List<String?> passedCommand =
+          fakeProcessManager.runCommands.single as List<String?>;
       final int indexOfFlag = passedCommand.indexOf('-F');
       expect(indexOfFlag, equals(-1));
     });
@@ -129,7 +132,8 @@ class FakeProcessManager extends Fake implements ProcessManager {
   List<List<dynamic>> runCommands = <List<dynamic>>[];
 
   @override
-  Future<ProcessResult> run(List<dynamic> command, {
+  Future<ProcessResult> run(
+    List<dynamic> command, {
     String? workingDirectory,
     Map<String, String>? environment,
     bool includeParentEnvironment = true,

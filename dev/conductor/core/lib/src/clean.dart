@@ -1,4 +1,3 @@
-
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:file/file.dart';
@@ -45,9 +44,11 @@ class CleanCommand extends Command<void> {
   @override
   Future<void> run() {
     final ArgResults argumentResults = argResults!;
-    final File stateFile = checkouts.fileSystem.file(argumentResults[kStateOption]);
+    final File stateFile =
+        checkouts.fileSystem.file(argumentResults[kStateOption]);
     if (!stateFile.existsSync()) {
-      throw ConductorException('No persistent state file found at ${stateFile.path}!');
+      throw ConductorException(
+          'No persistent state file found at ${stateFile.path}!');
     }
 
     if (!(argumentResults[kYesFlag] as bool)) {

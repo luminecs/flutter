@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/widgets/animated_grid/animated_grid.0.dart'
     as example;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -28,7 +27,7 @@ class RenderFixedSize extends RenderBox {
 }
 
 class RenderParentSize extends RenderProxyBox {
-  RenderParentSize({ required RenderBox child }) : super(child);
+  RenderParentSize({required RenderBox child}) : super(child);
 
   @override
   bool get sizedByParent => true;
@@ -45,7 +44,7 @@ class RenderParentSize extends RenderProxyBox {
 }
 
 class RenderIntrinsicSize extends RenderProxyBox {
-  RenderIntrinsicSize({ required RenderBox child }) : super(child);
+  RenderIntrinsicSize({required RenderBox child}) : super(child);
 
   @override
   void performLayout() {
@@ -129,7 +128,8 @@ void main() {
         maxHeight: 1000.0,
       ),
       onErrors: () {
-        errorDetails.addAll(TestRenderingFlutterBinding.instance.takeAllFlutterErrorDetails());
+        errorDetails.addAll(
+            TestRenderingFlutterBinding.instance.takeAllFlutterErrorDetails());
       },
     );
 

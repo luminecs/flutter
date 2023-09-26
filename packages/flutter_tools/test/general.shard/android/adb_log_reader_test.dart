@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter_tools/src/android/android_device.dart';
@@ -15,34 +14,34 @@ const String kDummyLine = 'Contents are not important\n';
 void main() {
   testWithoutContext('AdbLogReader ignores spam from SurfaceSyncer', () async {
     const int appPid = 1;
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       FakeCommand(
-        command: const <String>[
-          'adb',
-          '-s',
-          '1234',
-          'shell',
-          '-x',
-          'logcat',
-          '-v',
-          'time',
-        ],
-        completer: Completer<void>.sync(),
-        stdout:
-          '$kDummyLine'
-          '05-11 12:54:46.665 W/flutter($appPid): Hello there!\n'
-          '05-11 12:54:46.665 E/SurfaceSyncer($appPid): Failed to find sync for id=9\n'
-          '05-11 12:54:46.665 E/SurfaceSyncer($appPid): Failed to find sync for id=10\n'
-      ),
+          command: const <String>[
+            'adb',
+            '-s',
+            '1234',
+            'shell',
+            '-x',
+            'logcat',
+            '-v',
+            'time',
+          ],
+          completer: Completer<void>.sync(),
+          stdout: '$kDummyLine'
+              '05-11 12:54:46.665 W/flutter($appPid): Hello there!\n'
+              '05-11 12:54:46.665 E/SurfaceSyncer($appPid): Failed to find sync for id=9\n'
+              '05-11 12:54:46.665 E/SurfaceSyncer($appPid): Failed to find sync for id=10\n'),
     ]);
     final AdbLogReader logReader = await AdbLogReader.createLogReader(
       createFakeDevice(null),
       processManager,
-    )..appPid = appPid;
+    )
+      ..appPid = appPid;
     final Completer<void> onDone = Completer<void>.sync();
     final List<String> emittedLines = <String>[];
     logReader.logLines.listen((String line) {
-        emittedLines.add(line);
+      emittedLines.add(line);
     }, onDone: onDone.complete);
     await null;
     logReader.dispose();
@@ -50,8 +49,11 @@ void main() {
     expect(emittedLines, const <String>['W/flutter($appPid): Hello there!']);
   });
 
-  testWithoutContext('AdbLogReader calls adb logcat with expected flags apiVersion 21', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'AdbLogReader calls adb logcat with expected flags apiVersion 21',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           'adb',
@@ -75,8 +77,11 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('AdbLogReader calls adb logcat with expected flags apiVersion < 21', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'AdbLogReader calls adb logcat with expected flags apiVersion < 21',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           'adb',
@@ -98,8 +103,11 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('AdbLogReader calls adb logcat with expected flags null apiVersion', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'AdbLogReader calls adb logcat with expected flags null apiVersion',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           'adb',
@@ -121,8 +129,11 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('AdbLogReader calls adb logcat with expected flags when requesting past logs', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'AdbLogReader calls adb logcat with expected flags when requesting past logs',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           'adb',
@@ -148,7 +159,8 @@ void main() {
   });
 
   testWithoutContext('AdbLogReader handles process early exit', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       FakeCommand(
         command: const <String>[
           'adb',
@@ -169,14 +181,17 @@ void main() {
       processManager,
     );
     final Completer<void> onDone = Completer<void>.sync();
-    logReader.logLines.listen((String _) { }, onDone: onDone.complete);
+    logReader.logLines.listen((String _) {}, onDone: onDone.complete);
 
     logReader.dispose();
     await onDone.future;
   });
 
-  testWithoutContext('AdbLogReader does not filter output from AndroidRuntime crashes', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'AdbLogReader does not filter output from AndroidRuntime crashes',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       FakeCommand(
         command: const <String>[
           'adb',
@@ -190,23 +205,24 @@ void main() {
         ],
         completer: Completer<void>.sync(),
         // Example stack trace from an incorrectly named application:name in the AndroidManifest.xml
-        stdout:
-          '$kDummyLine'
-          '05-11 12:54:46.665 E/AndroidRuntime(11787): FATAL EXCEPTION: main\n'
-          '05-11 12:54:46.665 E/AndroidRuntime(11787): Process: com.example.foobar, PID: 11787\n'
-          '05-11 12:54:46.665 java.lang.RuntimeException: Unable to instantiate application '
-          'io.flutter.app.FlutterApplication2: java.lang.ClassNotFoundException:\n',
+        stdout: '$kDummyLine'
+            '05-11 12:54:46.665 E/AndroidRuntime(11787): FATAL EXCEPTION: main\n'
+            '05-11 12:54:46.665 E/AndroidRuntime(11787): Process: com.example.foobar, PID: 11787\n'
+            '05-11 12:54:46.665 java.lang.RuntimeException: Unable to instantiate application '
+            'io.flutter.app.FlutterApplication2: java.lang.ClassNotFoundException:\n',
       ),
     ]);
     final AdbLogReader logReader = await AdbLogReader.createLogReader(
       createFakeDevice(null),
       processManager,
     );
-    await expectLater(logReader.logLines, emitsInOrder(<String>[
-      'E/AndroidRuntime(11787): FATAL EXCEPTION: main',
-      'E/AndroidRuntime(11787): Process: com.example.foobar, PID: 11787',
-      'java.lang.RuntimeException: Unable to instantiate application io.flutter.app.FlutterApplication2: java.lang.ClassNotFoundException:',
-    ]));
+    await expectLater(
+        logReader.logLines,
+        emitsInOrder(<String>[
+          'E/AndroidRuntime(11787): FATAL EXCEPTION: main',
+          'E/AndroidRuntime(11787): Process: com.example.foobar, PID: 11787',
+          'java.lang.RuntimeException: Unable to instantiate application io.flutter.app.FlutterApplication2: java.lang.ClassNotFoundException:',
+        ]));
 
     logReader.dispose();
   });
@@ -240,7 +256,10 @@ class FakeAndroidDevice extends Fake implements AndroidDevice {
   @override
   List<String> adbCommandForDevice(List<String> command) {
     return <String>[
-      'adb', '-s', '1234', ...command,
+      'adb',
+      '-s',
+      '1234',
+      ...command,
     ];
   }
 }

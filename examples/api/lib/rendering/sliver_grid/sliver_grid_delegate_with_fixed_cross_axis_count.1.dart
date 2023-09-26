@@ -1,17 +1,19 @@
-
 import 'package:flutter/material.dart';
 
+void main() =>
+    runApp(const SliverGridDelegateWithFixedCrossAxisCountExampleApp());
 
-void main() => runApp(const SliverGridDelegateWithFixedCrossAxisCountExampleApp());
-
-class SliverGridDelegateWithFixedCrossAxisCountExampleApp extends StatelessWidget {
+class SliverGridDelegateWithFixedCrossAxisCountExampleApp
+    extends StatelessWidget {
   const SliverGridDelegateWithFixedCrossAxisCountExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('SliverGridDelegateWithFixedCrossAxisCount Sample')),
+        appBar: AppBar(
+            title:
+                const Text('SliverGridDelegateWithFixedCrossAxisCount Sample')),
         body: const SliverGridDelegateWithFixedCrossAxisCountExample(),
       ),
     );

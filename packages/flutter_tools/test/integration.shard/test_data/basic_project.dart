@@ -1,8 +1,6 @@
-
 import 'project.dart';
 
 class BasicProject extends Project {
-
   @override
   final String pubspec = '''
   name: test
@@ -44,14 +42,15 @@ class BasicProject extends Project {
   ''';
 
   Uri get buildMethodBreakpointUri => mainDart;
-  int get buildMethodBreakpointLine => lineContaining(main, '// BUILD BREAKPOINT');
+  int get buildMethodBreakpointLine =>
+      lineContaining(main, '// BUILD BREAKPOINT');
 
   Uri get topLevelFunctionBreakpointUri => mainDart;
-  int get topLevelFunctionBreakpointLine => lineContaining(main, '// TOP LEVEL BREAKPOINT');
+  int get topLevelFunctionBreakpointLine =>
+      lineContaining(main, '// TOP LEVEL BREAKPOINT');
 }
 
 class BasicProjectThatThrows extends Project {
-
   @override
   final String pubspec = '''
   name: test
@@ -182,7 +181,6 @@ class BasicProjectWithFlutterGen extends Project {
 }
 
 class BasicProjectWithUnaryMain extends Project {
-
   @override
   final String pubspec = '''
   name: test

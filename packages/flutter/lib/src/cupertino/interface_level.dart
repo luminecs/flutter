@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import '../widgets/framework.dart';
@@ -19,10 +18,12 @@ class CupertinoUserInterfaceLevel extends InheritedWidget {
   final CupertinoUserInterfaceLevelData _data;
 
   @override
-  bool updateShouldNotify(CupertinoUserInterfaceLevel oldWidget) => oldWidget._data != _data;
+  bool updateShouldNotify(CupertinoUserInterfaceLevel oldWidget) =>
+      oldWidget._data != _data;
 
   static CupertinoUserInterfaceLevelData of(BuildContext context) {
-    final CupertinoUserInterfaceLevel? query = context.dependOnInheritedWidgetOfExactType<CupertinoUserInterfaceLevel>();
+    final CupertinoUserInterfaceLevel? query = context
+        .dependOnInheritedWidgetOfExactType<CupertinoUserInterfaceLevel>();
     if (query != null) {
       return query._data;
     }
@@ -38,7 +39,8 @@ class CupertinoUserInterfaceLevel extends InheritedWidget {
   }
 
   static CupertinoUserInterfaceLevelData? maybeOf(BuildContext context) {
-    final CupertinoUserInterfaceLevel? query = context.dependOnInheritedWidgetOfExactType<CupertinoUserInterfaceLevel>();
+    final CupertinoUserInterfaceLevel? query = context
+        .dependOnInheritedWidgetOfExactType<CupertinoUserInterfaceLevel>();
     if (query != null) {
       return query._data;
     }
@@ -48,6 +50,7 @@ class CupertinoUserInterfaceLevel extends InheritedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(EnumProperty<CupertinoUserInterfaceLevelData>('user interface level', _data));
+    properties.add(EnumProperty<CupertinoUserInterfaceLevelData>(
+        'user interface level', _data));
   }
 }

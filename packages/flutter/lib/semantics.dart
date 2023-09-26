@@ -1,4 +1,3 @@
-
 library semantics;
 
 export 'dart:ui' show LocaleStringAttribute, SpellOutStringAttribute;

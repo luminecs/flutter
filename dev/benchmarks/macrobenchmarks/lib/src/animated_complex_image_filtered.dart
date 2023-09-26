@@ -1,4 +1,3 @@
-
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
@@ -6,15 +5,20 @@ import 'package:flutter/material.dart';
 // dirty children even without explicit repaint boundaries. These intentionally use
 // text to ensure we don't measure the opacity peephole case.
 class AnimatedComplexImageFiltered extends StatefulWidget {
-  const AnimatedComplexImageFiltered({ super.key });
+  const AnimatedComplexImageFiltered({super.key});
 
   @override
-  State<AnimatedComplexImageFiltered> createState() => _AnimatedComplexImageFilteredState();
+  State<AnimatedComplexImageFiltered> createState() =>
+      _AnimatedComplexImageFilteredState();
 }
 
-class _AnimatedComplexImageFilteredState extends State<AnimatedComplexImageFiltered> with SingleTickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 5000));
-  late final Animation<double> animation = controller.drive(Tween<double>(begin: 0.0, end: 1.0));
+class _AnimatedComplexImageFilteredState
+    extends State<AnimatedComplexImageFiltered>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController controller = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 5000));
+  late final Animation<double> animation =
+      controller.drive(Tween<double>(begin: 0.0, end: 1.0));
   ui.ImageFilter imageFilter = ui.ImageFilter.blur();
 
   @override
@@ -23,7 +27,8 @@ class _AnimatedComplexImageFilteredState extends State<AnimatedComplexImageFilte
     controller.repeat();
     animation.addListener(() {
       setState(() {
-        imageFilter = ui.ImageFilter.blur(sigmaX: animation.value * 5, sigmaY: animation.value * 5);
+        imageFilter = ui.ImageFilter.blur(
+            sigmaX: animation.value * 5, sigmaY: animation.value * 5);
       });
     });
   }
@@ -41,12 +46,13 @@ class _AnimatedComplexImageFilteredState extends State<AnimatedComplexImageFilte
         body: ListView(
           children: <Widget>[
             for (int i = 0; i < 20; i++)
-            ImageFiltered(
-              imageFilter: imageFilter,
-              child: Center(
-                child: Transform.scale(scale: 1.01, child: const ModeratelyComplexWidget()),
+              ImageFiltered(
+                imageFilter: imageFilter,
+                child: Center(
+                  child: Transform.scale(
+                      scale: 1.01, child: const ModeratelyComplexWidget()),
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -55,7 +61,7 @@ class _AnimatedComplexImageFilteredState extends State<AnimatedComplexImageFilte
 }
 
 class ModeratelyComplexWidget extends StatelessWidget {
-  const ModeratelyComplexWidget({ super.key });
+  const ModeratelyComplexWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +70,9 @@ class ModeratelyComplexWidget extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: ListTile(
         leading: Icon(Icons.abc, size: 24),
-        title: DecoratedBox(decoration: BoxDecoration(color: Colors.red), child: Text('Hello World')),
+        title: DecoratedBox(
+            decoration: BoxDecoration(color: Colors.red),
+            child: Text('Hello World')),
         trailing: FlutterLogo(),
       ),
     );

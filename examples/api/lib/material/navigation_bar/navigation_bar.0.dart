@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const NavigationBarApp());
 
@@ -108,7 +106,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                   child: Text(
                     'Hello',
                     style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.onPrimary),
+                        .copyWith(color: theme.colorScheme.onPrimary),
                   ),
                 ),
               );
@@ -119,13 +117,13 @@ class _NavigationExampleState extends State<NavigationExample> {
                 margin: const EdgeInsets.all(8.0),
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-               color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
                   'Hi!',
                   style: theme.textTheme.bodyLarge!
-                    .copyWith(color: theme.colorScheme.onPrimary),
+                      .copyWith(color: theme.colorScheme.onPrimary),
                 ),
               ),
             );

@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -12,13 +11,15 @@ void main() {
     );
     expect(
       annotation1.toString(),
-      equals('MouseTrackerAnnotation#${shortHash(annotation1)}(callbacks: [enter, exit])'),
+      equals(
+          'MouseTrackerAnnotation#${shortHash(annotation1)}(callbacks: [enter, exit])'),
     );
 
     const MouseTrackerAnnotation annotation2 = MouseTrackerAnnotation();
     expect(
       annotation2.toString(),
-      equals('MouseTrackerAnnotation#${shortHash(annotation2)}(callbacks: <none>)'),
+      equals(
+          'MouseTrackerAnnotation#${shortHash(annotation2)}(callbacks: <none>)'),
     );
 
     final MouseTrackerAnnotation annotation3 = MouseTrackerAnnotation(
@@ -27,7 +28,8 @@ void main() {
     );
     expect(
       annotation3.toString(),
-      equals('MouseTrackerAnnotation#${shortHash(annotation3)}(callbacks: [enter], cursor: SystemMouseCursor(grab))'),
+      equals(
+          'MouseTrackerAnnotation#${shortHash(annotation3)}(callbacks: [enter], cursor: SystemMouseCursor(grab))'),
     );
   });
 }

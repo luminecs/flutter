@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/animated_icon/animated_icons_data.0.dart'
     as example;
@@ -11,7 +10,8 @@ void main() {
     );
 
     // Check if the total number of AnimatedIcons matches the icons list.
-    expect(find.byType(AnimatedIcon, skipOffstage: false), findsNWidgets(example.iconsList.length));
+    expect(find.byType(AnimatedIcon, skipOffstage: false),
+        findsNWidgets(example.iconsList.length));
 
     // Test the AnimatedIcon size.
     final Size iconSize = tester.getSize(find.byType(AnimatedIcon).first);

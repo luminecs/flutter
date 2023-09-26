@@ -1,4 +1,3 @@
-
 const Set<String> kCorePackageAllowList = <String>{
   // Please keep this list in alphabetical order.
   'async',

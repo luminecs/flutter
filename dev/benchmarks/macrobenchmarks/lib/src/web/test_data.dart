@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -7,23 +6,25 @@ import 'dart:ui';
 // Using constant seed for reproducibility.
 final math.Random _random = math.Random(0);
 
-final List<String> lipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing '
-  'elit. Vivamus ut ligula a neque mattis posuere. Sed suscipit lobortis '
-  'sodales. Morbi sed neque molestie, hendrerit odio ac, aliquam velit. '
-  'Curabitur non quam sit amet nibh sollicitudin ultrices. Fusce '
-  'ullamcorper bibendum commodo. In et feugiat nisl. Aenean vulputate in '
-  'odio vestibulum ultricies. Nunc dolor libero, hendrerit eu urna sit '
-  'amet, pretium iaculis nulla. Ut porttitor nisl et leo iaculis, vel '
-  'fringilla odio pulvinar. Ut eget ligula id odio auctor egestas nec a '
-  'nisl. Aliquam luctus dolor et magna posuere mattis. '
-  'Suspendisse fringilla nisl et massa congue, eget '
-  'imperdiet lectus porta. Vestibulum sed dui sed dui porta imperdiet ut in risus. '
-  'Fusce diam purus, faucibus id accumsan sit amet, semper a sem. Sed aliquam '
-  'lacus eget libero ultricies, quis hendrerit tortor posuere. Pellentesque '
-  'sagittis eu est in maximus. Proin auctor fringilla dolor in hendrerit. Nam '
-  'pulvinar rhoncus tellus. Nullam vel mauris semper, volutpat tellus at, sagittis '
-  'lectus. Donec vitae nibh mauris. Morbi posuere sem id eros tristique tempus. '
-  'Vivamus lacinia sapien neque, eu semper purus gravida ut.'.split(' ');
+final List<
+    String> lipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing '
+        'elit. Vivamus ut ligula a neque mattis posuere. Sed suscipit lobortis '
+        'sodales. Morbi sed neque molestie, hendrerit odio ac, aliquam velit. '
+        'Curabitur non quam sit amet nibh sollicitudin ultrices. Fusce '
+        'ullamcorper bibendum commodo. In et feugiat nisl. Aenean vulputate in '
+        'odio vestibulum ultricies. Nunc dolor libero, hendrerit eu urna sit '
+        'amet, pretium iaculis nulla. Ut porttitor nisl et leo iaculis, vel '
+        'fringilla odio pulvinar. Ut eget ligula id odio auctor egestas nec a '
+        'nisl. Aliquam luctus dolor et magna posuere mattis. '
+        'Suspendisse fringilla nisl et massa congue, eget '
+        'imperdiet lectus porta. Vestibulum sed dui sed dui porta imperdiet ut in risus. '
+        'Fusce diam purus, faucibus id accumsan sit amet, semper a sem. Sed aliquam '
+        'lacus eget libero ultricies, quis hendrerit tortor posuere. Pellentesque '
+        'sagittis eu est in maximus. Proin auctor fringilla dolor in hendrerit. Nam '
+        'pulvinar rhoncus tellus. Nullam vel mauris semper, volutpat tellus at, sagittis '
+        'lectus. Donec vitae nibh mauris. Morbi posuere sem id eros tristique tempus. '
+        'Vivamus lacinia sapien neque, eu semper purus gravida ut.'
+    .split(' ');
 
 List<Paragraph> generateLaidOutParagraphs({
   required int paragraphCount,
@@ -36,7 +37,8 @@ List<Paragraph> generateLaidOutParagraphs({
   int wordPointer = 0; // points to the next word in lipsum to extract
   for (int i = 0; i < paragraphCount; i++) {
     final int wordCount = minWordCountPerParagraph +
-        _random.nextInt(maxWordCountPerParagraph - minWordCountPerParagraph + 1);
+        _random
+            .nextInt(maxWordCountPerParagraph - minWordCountPerParagraph + 1);
     final List<String> string = <String>[];
     for (int j = 0; j < wordCount; j++) {
       string.add(lipsum[wordPointer]);

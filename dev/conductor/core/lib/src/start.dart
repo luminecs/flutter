@@ -1,4 +1,3 @@
-
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:file/file.dart';
@@ -117,8 +116,7 @@ class StartCommand extends Command<void> {
       argumentResults,
       platform.environment,
     )!;
-    final String frameworkMirror =
-        'git@github.com:$githubUsername/flutter.git';
+    final String frameworkMirror = 'git@github.com:$githubUsername/flutter.git';
     final String engineUpstream = getValueFromEnvOrArgs(
       kEngineUpstreamOption,
       argumentResults,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 // A generic widget for a list of selectable colors.
@@ -16,7 +15,7 @@ class ColorPicker extends StatelessWidget {
   final ValueChanged<Color>? onColorSelection;
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: colors.map((Color color) {
@@ -46,7 +45,7 @@ class _ColorPickerSwatch extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return Container(
       width: 60.0,
       height: 60.0,
@@ -56,10 +55,12 @@ class _ColorPickerSwatch extends StatelessWidget {
         onPressed: () {
           onTap?.call();
         },
-        child: !selected ? null : const Icon(
-          Icons.check,
-          color: Colors.white,
-        ),
+        child: !selected
+            ? null
+            : const Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
       ),
     );
   }

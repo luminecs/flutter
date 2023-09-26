@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('collectAllElements goes in LTR DFS', (WidgetTester tester) async {
+  testWidgets('collectAllElements goes in LTR DFS',
+      (WidgetTester tester) async {
     final GlobalKey key = GlobalKey();
     await tester.pumpWidget(Directionality(
       key: key,

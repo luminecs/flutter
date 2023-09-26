@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -47,11 +46,9 @@ enum _TestMode {
 }
 
 class BenchTextLayout extends RawRecorder {
-  BenchTextLayout.canvas()
-      : super(name: canvasBenchmarkName);
+  BenchTextLayout.canvas() : super(name: canvasBenchmarkName);
 
-  BenchTextLayout.canvasKit()
-      : super(name: canvasKitBenchmarkName);
+  BenchTextLayout.canvasKit() : super(name: canvasKitBenchmarkName);
 
   static const String canvasBenchmarkName = 'text_canvas_layout';
   static const String canvasKitBenchmarkName = 'text_canvaskit_layout';
@@ -127,23 +124,22 @@ class BenchTextLayout extends RawRecorder {
 }
 
 class BenchTextCachedLayout extends RawRecorder {
-  BenchTextCachedLayout.canvas()
-      : super(name: canvasBenchmarkName);
+  BenchTextCachedLayout.canvas() : super(name: canvasBenchmarkName);
 
-  BenchTextCachedLayout.canvasKit()
-      : super(name: canvasKitBenchmarkName);
+  BenchTextCachedLayout.canvasKit() : super(name: canvasKitBenchmarkName);
 
   static const String canvasBenchmarkName = 'text_canvas_cached_layout';
   static const String canvasKitBenchmarkName = 'text_canvas_kit_cached_layout';
 
   @override
   void body(Profile profile) {
-    final ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(fontFamily: 'sans-serif'))
-        ..pushStyle(ui.TextStyle(fontSize: 12.0))
-        ..addText(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
-          'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        );
+    final ui.ParagraphBuilder builder =
+        ui.ParagraphBuilder(ui.ParagraphStyle(fontFamily: 'sans-serif'))
+          ..pushStyle(ui.TextStyle(fontSize: 12.0))
+          ..addText(
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+            'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          );
     final ui.Paragraph paragraph = builder.build();
     profile.record('layout', () {
       paragraph.layout(const ui.ParagraphConstraints(width: double.infinity));
@@ -155,10 +151,12 @@ int _counter = 0;
 
 class BenchBuildColorsGrid extends WidgetBuildRecorder {
   BenchBuildColorsGrid.canvas()
-      : _mode = _TestMode.useCanvasTextLayout, super(name: canvasBenchmarkName);
+      : _mode = _TestMode.useCanvasTextLayout,
+        super(name: canvasBenchmarkName);
 
   BenchBuildColorsGrid.canvasKit()
-      : _mode = _TestMode.useCanvasKit, super(name: canvasKitBenchmarkName);
+      : _mode = _TestMode.useCanvasKit,
+        super(name: canvasKitBenchmarkName);
 
   @override
   bool get isTracingEnabled => false;
@@ -217,7 +215,11 @@ class BenchBuildColorsGrid extends WidgetBuildRecorder {
 const double kColorItemHeight = 48.0;
 
 class Palette {
-  Palette({required this.name, required this.primary, this.accent, this.threshold = 900});
+  Palette(
+      {required this.name,
+      required this.primary,
+      this.accent,
+      this.threshold = 900});
 
   final String name;
   final MaterialColor primary;

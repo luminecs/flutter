@@ -1,4 +1,3 @@
-
 String replaceFirst(String originalContents, String before, String after) {
   final String result = originalContents.replaceFirst(before, after);
   if (result != originalContents) {

@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,7 +7,8 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import 'semantics_tester.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Can set opacity for an Icon', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Can set opacity for an Icon',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -25,7 +25,8 @@ void main() {
     expect(text.text.style!.color, const Color(0xFF666666).withOpacity(0.5));
   });
 
-  testWidgetsWithLeakTracking('Icon sizing - no theme, default size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon sizing - no theme, default size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -39,7 +40,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(24.0)));
   });
 
-  testWidgetsWithLeakTracking('Icon sizing - no theme, explicit size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon sizing - no theme, explicit size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -56,7 +58,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(96.0)));
   });
 
-  testWidgetsWithLeakTracking('Icon sizing - sized theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon sizing - sized theme',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -73,7 +76,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(36.0)));
   });
 
-  testWidgetsWithLeakTracking('Icon sizing - sized theme, explicit size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon sizing - sized theme, explicit size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -93,7 +97,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(48.0)));
   });
 
-  testWidgetsWithLeakTracking('Icon sizing - sizeless theme, default size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon sizing - sizeless theme, default size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -110,8 +115,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(24.0)));
   });
 
-
-  testWidgetsWithLeakTracking('Icon with custom font', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon with custom font',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -125,21 +130,25 @@ void main() {
     expect(richText.text.style!.fontFamily, equals('Roboto'));
   });
 
-  testWidgetsWithLeakTracking('Icon with custom fontFamilyFallback', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon with custom fontFamilyFallback',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
         child: Center(
-          child: Icon(IconData(0x41, fontFamilyFallback: <String>['FallbackFont'])),
+          child: Icon(
+              IconData(0x41, fontFamilyFallback: <String>['FallbackFont'])),
         ),
       ),
     );
 
     final RichText richText = tester.firstWidget(find.byType(RichText));
-    expect(richText.text.style!.fontFamilyFallback, equals(<String>['FallbackFont']));
+    expect(richText.text.style!.fontFamilyFallback,
+        equals(<String>['FallbackFont']));
   });
 
-  testWidgetsWithLeakTracking('Icon with semantic label', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Icon with semantic label',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(
@@ -159,7 +168,8 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgetsWithLeakTracking('Null icon with semantic label', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Null icon with semantic label',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(
@@ -179,7 +189,9 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgetsWithLeakTracking("Changing semantic label from null doesn't rebuild tree ", (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      "Changing semantic label from null doesn't rebuild tree ",
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -210,20 +222,26 @@ void main() {
     expect(richText2, same(richText1));
   });
 
-  testWidgetsWithLeakTracking('IconData comparison', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('IconData comparison',
+      (WidgetTester tester) async {
     expect(const IconData(123), const IconData(123));
-    expect(const IconData(123), isNot(const IconData(123, matchTextDirection: true)));
+    expect(const IconData(123),
+        isNot(const IconData(123, matchTextDirection: true)));
     expect(const IconData(123), isNot(const IconData(123, fontFamily: 'f')));
     expect(const IconData(123), isNot(const IconData(123, fontPackage: 'p')));
     expect(const IconData(123).hashCode, const IconData(123).hashCode);
-    expect(const IconData(123).hashCode, isNot(const IconData(123, matchTextDirection: true).hashCode));
-    expect(const IconData(123).hashCode, isNot(const IconData(123, fontFamily: 'f').hashCode));
-    expect(const IconData(123).hashCode, isNot(const IconData(123, fontPackage: 'p').hashCode));
+    expect(const IconData(123).hashCode,
+        isNot(const IconData(123, matchTextDirection: true).hashCode));
+    expect(const IconData(123).hashCode,
+        isNot(const IconData(123, fontFamily: 'f').hashCode));
+    expect(const IconData(123).hashCode,
+        isNot(const IconData(123, fontPackage: 'p').hashCode));
     expect(const IconData(123).toString(), 'IconData(U+0007B)');
   });
 
-
-  testWidgetsWithLeakTracking('Fill, weight, grade, and optical size variations are passed', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Fill, weight, grade, and optical size variations are passed',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -242,7 +260,8 @@ void main() {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
-        child: Icon(Icons.abc, fill: 0.5, weight: 300, grade: 200, opticalSize: 48),
+        child: Icon(Icons.abc,
+            fill: 0.5, weight: 300, grade: 200, opticalSize: 48),
       ),
     );
 
@@ -256,7 +275,9 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Fill, weight, grade, and optical size can be set at the theme-level', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Fill, weight, grade, and optical size can be set at the theme-level',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -281,7 +302,9 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Theme-level fill, weight, grade, and optical size can be overridden', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Theme-level fill, weight, grade, and optical size can be overridden',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -292,7 +315,8 @@ void main() {
             grade: 4.0,
             opticalSize: 5.0,
           ),
-          child: Icon(Icons.abc, fill: 0.6, weight: 7.0, grade: 8.0, opticalSize: 9.0),
+          child: Icon(Icons.abc,
+              fill: 0.6, weight: 7.0, grade: 8.0, opticalSize: 9.0),
         ),
       ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart' hide TypeMatcher, isInstanceOf;
 
 import '../../../raw/canvas.dart' as demo;

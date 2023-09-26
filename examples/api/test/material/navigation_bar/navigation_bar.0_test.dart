@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/navigation_bar/navigation_bar.0.dart'
     as example;
@@ -10,7 +9,8 @@ void main() {
     await tester.pumpWidget(
       const example.NavigationBarApp(),
     );
-    final NavigationBar navigationBarWidget = tester.firstWidget(find.byType(NavigationBar));
+    final NavigationBar navigationBarWidget =
+        tester.firstWidget(find.byType(NavigationBar));
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Notifications'), findsOneWidget);

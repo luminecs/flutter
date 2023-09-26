@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/widgets/tap_region/text_field_tap_region.0.dart' as example;
+import 'package:flutter_api_samples/widgets/tap_region/text_field_tap_region.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('shows a text field with a zero count, and the spinner buttons', (WidgetTester tester) async {
+  testWidgets('shows a text field with a zero count, and the spinner buttons',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.TapRegionApp(),
     );
@@ -48,7 +49,8 @@ void main() {
     );
   });
 
-  testWidgets('entering text and then incrementing/decrementing works', (WidgetTester tester) async {
+  testWidgets('entering text and then incrementing/decrementing works',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.TapRegionApp(),
     );

@@ -1,4 +1,3 @@
-
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/gestures.dart';
@@ -38,18 +37,18 @@ class ReorderableListView extends StatefulWidget {
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
     this.autoScrollerVelocityScalar,
-  }) : assert(
-        (itemExtent == null && prototypeItem == null) ||
-        (itemExtent == null && itemExtentBuilder == null) ||
-        (prototypeItem == null && itemExtentBuilder == null),
-        'You can only pass one of itemExtent, prototypeItem and itemExtentBuilder.',
-       ),
-       assert(
-         children.every((Widget w) => w.key != null),
-         'All children of this widget must have a key.',
-       ),
-       itemBuilder = ((BuildContext context, int index) => children[index]),
-       itemCount = children.length;
+  })  : assert(
+          (itemExtent == null && prototypeItem == null) ||
+              (itemExtent == null && itemExtentBuilder == null) ||
+              (prototypeItem == null && itemExtentBuilder == null),
+          'You can only pass one of itemExtent, prototypeItem and itemExtentBuilder.',
+        ),
+        assert(
+          children.every((Widget w) => w.key != null),
+          'All children of this widget must have a key.',
+        ),
+        itemBuilder = ((BuildContext context, int index) => children[index]),
+        itemCount = children.length;
 
   const ReorderableListView.builder({
     super.key,
@@ -79,13 +78,13 @@ class ReorderableListView extends StatefulWidget {
     this.restorationId,
     this.clipBehavior = Clip.hardEdge,
     this.autoScrollerVelocityScalar,
-  }) : assert(itemCount >= 0),
-       assert(
-         (itemExtent == null && prototypeItem == null) ||
-         (itemExtent == null && itemExtentBuilder == null) ||
-         (prototypeItem == null && itemExtentBuilder == null),
-         'You can only pass one of itemExtent, prototypeItem and itemExtentBuilder.',
-       );
+  })  : assert(itemCount >= 0),
+        assert(
+          (itemExtent == null && prototypeItem == null) ||
+              (itemExtent == null && itemExtentBuilder == null) ||
+              (prototypeItem == null && itemExtentBuilder == null),
+          'You can only pass one of itemExtent, prototypeItem and itemExtentBuilder.',
+        );
 
   final IndexedWidgetBuilder itemBuilder;
 
@@ -112,7 +111,6 @@ class ReorderableListView extends StatefulWidget {
   final bool reverse;
 
   final ScrollController? scrollController;
-
 
   final bool? primary;
 
@@ -156,7 +154,8 @@ class _ReorderableListViewState extends State<ReorderableListView> {
       return true;
     }());
 
-    final Key itemGlobalKey = _ReorderableListViewChildGlobalKey(item.key!, this);
+    final Key itemGlobalKey =
+        _ReorderableListViewChildGlobalKey(item.key!, this);
 
     if (widget.buildDefaultDragHandles) {
       switch (Theme.of(context).platform) {
@@ -258,23 +257,47 @@ class _ReorderableListViewState extends State<ReorderableListView> {
       switch (widget.scrollDirection) {
         case Axis.horizontal:
           if (widget.reverse) {
-            headerPadding = EdgeInsets.fromLTRB(0, padding.top, padding.right, padding.bottom);
-            listPadding = EdgeInsets.fromLTRB(widget.footer != null ? 0 : padding.left, padding.top, widget.header != null ? 0 : padding.right, padding.bottom);
-            footerPadding = EdgeInsets.fromLTRB(padding.left, padding.top, 0, padding.bottom);
+            headerPadding = EdgeInsets.fromLTRB(
+                0, padding.top, padding.right, padding.bottom);
+            listPadding = EdgeInsets.fromLTRB(
+                widget.footer != null ? 0 : padding.left,
+                padding.top,
+                widget.header != null ? 0 : padding.right,
+                padding.bottom);
+            footerPadding = EdgeInsets.fromLTRB(
+                padding.left, padding.top, 0, padding.bottom);
           } else {
-            headerPadding = EdgeInsets.fromLTRB(padding.left, padding.top, 0, padding.bottom);
-            listPadding = EdgeInsets.fromLTRB(widget.header != null ? 0 : padding.left, padding.top, widget.footer != null ? 0 : padding.right, padding.bottom);
-            footerPadding = EdgeInsets.fromLTRB(0, padding.top, padding.right, padding.bottom);
+            headerPadding = EdgeInsets.fromLTRB(
+                padding.left, padding.top, 0, padding.bottom);
+            listPadding = EdgeInsets.fromLTRB(
+                widget.header != null ? 0 : padding.left,
+                padding.top,
+                widget.footer != null ? 0 : padding.right,
+                padding.bottom);
+            footerPadding = EdgeInsets.fromLTRB(
+                0, padding.top, padding.right, padding.bottom);
           }
         case Axis.vertical:
           if (widget.reverse) {
-            headerPadding = EdgeInsets.fromLTRB(padding.left, 0, padding.right, padding.bottom);
-            listPadding = EdgeInsets.fromLTRB(padding.left, widget.footer != null ? 0 : padding.top, padding.right, widget.header != null ? 0 : padding.bottom);
-            footerPadding = EdgeInsets.fromLTRB(padding.left, padding.top, padding.right, 0);
+            headerPadding = EdgeInsets.fromLTRB(
+                padding.left, 0, padding.right, padding.bottom);
+            listPadding = EdgeInsets.fromLTRB(
+                padding.left,
+                widget.footer != null ? 0 : padding.top,
+                padding.right,
+                widget.header != null ? 0 : padding.bottom);
+            footerPadding = EdgeInsets.fromLTRB(
+                padding.left, padding.top, padding.right, 0);
           } else {
-            headerPadding = EdgeInsets.fromLTRB(padding.left, padding.top, padding.right, 0);
-            listPadding = EdgeInsets.fromLTRB(padding.left, widget.header != null ? 0 : padding.top, padding.right, widget.footer != null ? 0 : padding.bottom);
-            footerPadding = EdgeInsets.fromLTRB(padding.left, 0, padding.right, padding.bottom);
+            headerPadding = EdgeInsets.fromLTRB(
+                padding.left, padding.top, padding.right, 0);
+            listPadding = EdgeInsets.fromLTRB(
+                padding.left,
+                widget.header != null ? 0 : padding.top,
+                padding.right,
+                widget.footer != null ? 0 : padding.bottom);
+            footerPadding = EdgeInsets.fromLTRB(
+                padding.left, 0, padding.right, padding.bottom);
           }
       }
     }
@@ -330,7 +353,8 @@ class _ReorderableListViewState extends State<ReorderableListView> {
 // of the objects used to generate widgets.
 @optionalTypeArgs
 class _ReorderableListViewChildGlobalKey extends GlobalObjectKey {
-  const _ReorderableListViewChildGlobalKey(this.subKey, this.state) : super(subKey);
+  const _ReorderableListViewChildGlobalKey(this.subKey, this.state)
+      : super(subKey);
 
   final Key subKey;
   final State state;
@@ -340,9 +364,9 @@ class _ReorderableListViewChildGlobalKey extends GlobalObjectKey {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is _ReorderableListViewChildGlobalKey
-        && other.subKey == subKey
-        && other.state == state;
+    return other is _ReorderableListViewChildGlobalKey &&
+        other.subKey == subKey &&
+        other.state == state;
   }
 
   @override

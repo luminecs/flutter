@@ -1,4 +1,3 @@
-
 import 'package:flutter_api_samples/material/progress_indicator/circular_progress_indicator.0.dart'
     as example;
 import 'package:flutter_test/flutter_test.dart';

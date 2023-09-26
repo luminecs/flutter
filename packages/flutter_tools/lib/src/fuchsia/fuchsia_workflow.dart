@@ -1,4 +1,3 @@
-
 import '../base/context.dart';
 import '../base/platform.dart';
 import '../doctor_validator.dart';
@@ -12,16 +11,18 @@ class FuchsiaWorkflow implements Workflow {
     required Platform platform,
     required FeatureFlags featureFlags,
     required FuchsiaArtifacts fuchsiaArtifacts,
-  }) : _platform = platform,
-       _featureFlags = featureFlags,
-       _fuchsiaArtifacts = fuchsiaArtifacts;
+  })  : _platform = platform,
+        _featureFlags = featureFlags,
+        _fuchsiaArtifacts = fuchsiaArtifacts;
 
   final Platform _platform;
   final FeatureFlags _featureFlags;
   final FuchsiaArtifacts _fuchsiaArtifacts;
 
   @override
-  bool get appliesToHostPlatform => _featureFlags.isFuchsiaEnabled && (_platform.isLinux || _platform.isMacOS);
+  bool get appliesToHostPlatform =>
+      _featureFlags.isFuchsiaEnabled &&
+      (_platform.isLinux || _platform.isMacOS);
 
   @override
   bool get canListDevices {

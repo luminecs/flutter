@@ -1,4 +1,3 @@
-
 import 'gallery/home.dart';
 import 'main.dart' as other_main;
 

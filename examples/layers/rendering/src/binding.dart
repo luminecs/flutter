@@ -1,10 +1,9 @@
-
 import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
 
 class ViewRenderingFlutterBinding extends RenderingFlutterBinding {
-  ViewRenderingFlutterBinding({ RenderBox? root }) : _root = root;
+  ViewRenderingFlutterBinding({RenderBox? root}) : _root = root;
 
   @override
   void initInstances() {

@@ -1,4 +1,3 @@
-
 // ATTENTION!
 //
 // This file is not named "*_test.dart", and as such will not run when you run
@@ -17,7 +16,8 @@ import 'package:flutter_gallery/gallery/demos.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Reports success or failure to the native code.
-const MethodChannel _kTestChannel = MethodChannel('io.flutter.demo.gallery/TestLifecycleListener');
+const MethodChannel _kTestChannel =
+    MethodChannel('io.flutter.demo.gallery/TestLifecycleListener');
 
 // We don't want to wait for animations to complete before tapping the
 // back button in the demos with these titles.
@@ -47,17 +47,22 @@ Future<void> main() async {
   try {
     // Verify that _kUnsynchronizedDemos and _kSkippedDemos identify
     // demos that actually exist.
-    final List<String> allDemoTitles = kAllGalleryDemos.map((GalleryDemo demo) => demo.title).toList();
-    if (!Set<String>.from(allDemoTitles).containsAll(_kUnsynchronizedDemoTitles)) {
-      fail('Unrecognized demo titles in _kUnsynchronizedDemosTitles: $_kUnsynchronizedDemoTitles');
+    final List<String> allDemoTitles =
+        kAllGalleryDemos.map((GalleryDemo demo) => demo.title).toList();
+    if (!Set<String>.from(allDemoTitles)
+        .containsAll(_kUnsynchronizedDemoTitles)) {
+      fail(
+          'Unrecognized demo titles in _kUnsynchronizedDemosTitles: $_kUnsynchronizedDemoTitles');
     }
     if (!Set<String>.from(allDemoTitles).containsAll(_kSkippedDemoTitles)) {
-      fail('Unrecognized demo names in _kSkippedDemoTitles: $_kSkippedDemoTitles');
+      fail(
+          'Unrecognized demo names in _kSkippedDemoTitles: $_kSkippedDemoTitles');
     }
 
     print('Starting app...');
     runApp(const GalleryApp(testMode: true));
-    final _LiveWidgetController controller = _LiveWidgetController(WidgetsBinding.instance);
+    final _LiveWidgetController controller =
+        _LiveWidgetController(WidgetsBinding.instance);
     for (final GalleryDemoCategory category in kAllGalleryDemoCategories) {
       print('Tapping "${category.name}" section...');
       await controller.tap(find.text(category.name));
@@ -71,7 +76,8 @@ Future<void> main() async {
         for (int i = 0; i < 2; i += 1) {
           print('Tapping "${demo.title}"...');
           await controller.tap(demoItem); // Launch the demo
-          controller.frameSync = !_kUnsynchronizedDemoTitles.contains(demo.title);
+          controller.frameSync =
+              !_kUnsynchronizedDemoTitles.contains(demo.title);
           print('Going back to demo list...');
           await controller.tap(backFinder);
           controller.frameSync = true;
@@ -107,7 +113,8 @@ class _LiveWidgetController extends LiveWidgetController {
 
   bool frameSync = true;
 
-  Future<void> _waitUntilFrame(bool Function() condition, [Completer<void>? completer]) {
+  Future<void> _waitUntilFrame(bool Function() condition,
+      [Completer<void>? completer]) {
     completer ??= Completer<void>();
     if (!condition()) {
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
@@ -119,7 +126,8 @@ class _LiveWidgetController extends LiveWidgetController {
     return completer.future;
   }
 
-  Future<FinderBase<Element>> _waitForElement(FinderBase<Element> finder) async {
+  Future<FinderBase<Element>> _waitForElement(
+      FinderBase<Element> finder) async {
     if (frameSync) {
       await _waitUntilFrame(() => binding.transientCallbackCount == 0);
     }
@@ -131,12 +139,18 @@ class _LiveWidgetController extends LiveWidgetController {
   }
 
   @override
-  Future<void> tap(FinderBase<Element> finder, { int? pointer, int buttons = kPrimaryButton, bool warnIfMissed = true }) async {
-    await super.tap(await _waitForElement(finder), pointer: pointer, buttons: buttons, warnIfMissed: warnIfMissed);
+  Future<void> tap(FinderBase<Element> finder,
+      {int? pointer,
+      int buttons = kPrimaryButton,
+      bool warnIfMissed = true}) async {
+    await super.tap(await _waitForElement(finder),
+        pointer: pointer, buttons: buttons, warnIfMissed: warnIfMissed);
   }
 
-  Future<void> scrollIntoView(FinderBase<Element> finder, {required double alignment}) async {
+  Future<void> scrollIntoView(FinderBase<Element> finder,
+      {required double alignment}) async {
     final FinderBase<Element> target = await _waitForElement(finder);
-    await Scrollable.ensureVisible(target.evaluate().single, duration: const Duration(milliseconds: 100), alignment: alignment);
+    await Scrollable.ensureVisible(target.evaluate().single,
+        duration: const Duration(milliseconds: 100), alignment: alignment);
   }
 }

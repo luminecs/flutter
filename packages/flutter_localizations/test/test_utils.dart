@@ -1,4 +1,3 @@
-
 // Encodes ARB file resource values with Unicode escapes.
 void encodeBundleTranslations(Map<String, dynamic> bundle) {
   for (final String key in bundle.keys) {
@@ -21,7 +20,8 @@ String generateArbString(Map<String, dynamic> bundle) {
   final StringBuffer contents = StringBuffer();
   contents.writeln('{');
   for (final String key in bundle.keys) {
-    contents.writeln('  "$key": "${bundle[key]}"${key == bundle.keys.last ? '' : ','}');
+    contents.writeln(
+        '  "$key": "${bundle[key]}"${key == bundle.keys.last ? '' : ','}');
   }
   contents.writeln('}');
   return contents.toString();

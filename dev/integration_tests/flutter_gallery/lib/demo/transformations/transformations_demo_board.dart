@@ -1,4 +1,3 @@
-
 import 'dart:collection' show IterableMixin;
 import 'dart:math';
 import 'dart:ui' show Vertices;
@@ -15,9 +14,9 @@ class Board extends IterableMixin<BoardPoint?> {
     required this.hexagonMargin,
     this.selected,
     List<BoardPoint>? boardPoints,
-  }) : assert(boardRadius > 0),
-       assert(hexagonRadius > 0),
-       assert(hexagonMargin >= 0) {
+  })  : assert(boardRadius > 0),
+        assert(hexagonRadius > 0),
+        assert(hexagonMargin >= 0) {
     // Set up the positions for the center hexagon where the entire board is
     // centered on the origin.
     // Start point of hexagon (top vertex).
@@ -78,7 +77,7 @@ class Board extends IterableMixin<BoardPoint?> {
   // Get the BoardPoint that comes after the given BoardPoint. If given null,
   // returns the origin BoardPoint. If given BoardPoint is the last, returns
   // null.
-  BoardPoint? _getNextBoardPoint (BoardPoint? boardPoint) {
+  BoardPoint? _getNextBoardPoint(BoardPoint? boardPoint) {
     // If before the first element.
     if (boardPoint == null) {
       return BoardPoint(-boardRadius, 0);
@@ -111,8 +110,8 @@ class Board extends IterableMixin<BoardPoint?> {
   static int getDistance(BoardPoint a, BoardPoint b) {
     final Vector3 a3 = a.cubeCoordinates;
     final Vector3 b3 = b.cubeCoordinates;
-    return
-      ((a3.x - b3.x).abs() + (a3.y - b3.y).abs() + (a3.z - b3.z).abs()) ~/ 2;
+    return ((a3.x - b3.x).abs() + (a3.y - b3.y).abs() + (a3.z - b3.z).abs()) ~/
+        2;
   }
 
   // Return the q,r BoardPoint for a point in the scene, where the origin is in
@@ -136,7 +135,8 @@ class Board extends IterableMixin<BoardPoint?> {
   // Return a scene point for the center of a hexagon given its q,r point.
   Point<double> boardPointToPoint(BoardPoint boardPoint) {
     return Point<double>(
-      sqrt(3) * hexagonRadius * boardPoint.q + sqrt(3) / 2 * hexagonRadius * boardPoint.r,
+      sqrt(3) * hexagonRadius * boardPoint.q +
+          sqrt(3) / 2 * hexagonRadius * boardPoint.r,
       1.5 * hexagonRadius * boardPoint.r,
     );
   }
@@ -145,7 +145,8 @@ class Board extends IterableMixin<BoardPoint?> {
   Vertices getVerticesForBoardPoint(BoardPoint boardPoint, Color color) {
     final Point<double> centerOfHexZeroCenter = boardPointToPoint(boardPoint);
 
-    final List<Offset> positions = positionsForHexagonAtOrigin.map((Offset offset) {
+    final List<Offset> positions =
+        positionsForHexagonAtOrigin.map((Offset offset) {
       return offset.translate(centerOfHexZeroCenter.x, centerOfHexZeroCenter.y);
     }).toList();
 
@@ -174,19 +175,19 @@ class Board extends IterableMixin<BoardPoint?> {
   // Return a new board where boardPoint has the given color.
   Board copyWithBoardPointColor(BoardPoint boardPoint, Color color) {
     final BoardPoint nextBoardPoint = boardPoint.copyWithColor(color);
-    final int boardPointIndex = _boardPoints.indexWhere((BoardPoint boardPointI) =>
-      boardPointI.q == boardPoint.q && boardPointI.r == boardPoint.r
-    );
+    final int boardPointIndex = _boardPoints.indexWhere(
+        (BoardPoint boardPointI) =>
+            boardPointI.q == boardPoint.q && boardPointI.r == boardPoint.r);
 
     if (elementAt(boardPointIndex) == boardPoint && boardPoint.color == color) {
       return this;
     }
 
-    final List<BoardPoint> nextBoardPoints = List<BoardPoint>.from(_boardPoints);
+    final List<BoardPoint> nextBoardPoints =
+        List<BoardPoint>.from(_boardPoints);
     nextBoardPoints[boardPointIndex] = nextBoardPoint;
-    final BoardPoint? selectedBoardPoint = boardPoint == selected
-      ? nextBoardPoint
-      : selected;
+    final BoardPoint? selectedBoardPoint =
+        boardPoint == selected ? nextBoardPoint : selected;
     return Board(
       boardRadius: boardRadius,
       hexagonRadius: hexagonRadius,
@@ -228,8 +229,7 @@ class _BoardIterator implements Iterator<BoardPoint?> {
 // A range of q/r board coordinate values.
 @immutable
 class _Range {
-  const _Range(this.min, this.max)
-    : assert(min <= max);
+  const _Range(this.min, this.max) : assert(min <= max);
 
   final int min;
   final int max;
@@ -247,7 +247,9 @@ final Set<Color> boardPointColors = <Color>{
 // https://www.redblobgames.com/grids/hexagons/#coordinates-axial
 @immutable
 class BoardPoint {
-  const BoardPoint(this.q, this.r, {
+  const BoardPoint(
+    this.q,
+    this.r, {
     this.color = Colors.grey,
   });
 
@@ -266,15 +268,14 @@ class BoardPoint {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is BoardPoint
-        && other.q == q
-        && other.r == r;
+    return other is BoardPoint && other.q == q && other.r == r;
   }
 
   @override
   int get hashCode => Object.hash(q, r);
 
-  BoardPoint copyWithColor(Color nextColor) => BoardPoint(q, r, color: nextColor);
+  BoardPoint copyWithColor(Color nextColor) =>
+      BoardPoint(q, r, color: nextColor);
 
   // Convert from q,r axial coords to x,y,z cube coords.
   Vector3 get cubeCoordinates {

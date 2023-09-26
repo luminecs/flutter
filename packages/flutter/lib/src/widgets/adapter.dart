@@ -1,10 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 import 'framework.dart';
 
-class RenderObjectToWidgetAdapter<T extends RenderObject> extends RenderObjectWidget {
+class RenderObjectToWidgetAdapter<T extends RenderObject>
+    extends RenderObjectWidget {
   RenderObjectToWidgetAdapter({
     this.child,
     required this.container,
@@ -18,15 +18,18 @@ class RenderObjectToWidgetAdapter<T extends RenderObject> extends RenderObjectWi
   final String? debugShortDescription;
 
   @override
-  RenderObjectToWidgetElement<T> createElement() => RenderObjectToWidgetElement<T>(this);
+  RenderObjectToWidgetElement<T> createElement() =>
+      RenderObjectToWidgetElement<T>(this);
 
   @override
-  RenderObjectWithChildMixin<T> createRenderObject(BuildContext context) => container;
+  RenderObjectWithChildMixin<T> createRenderObject(BuildContext context) =>
+      container;
 
   @override
-  void updateRenderObject(BuildContext context, RenderObject renderObject) { }
+  void updateRenderObject(BuildContext context, RenderObject renderObject) {}
 
-  RenderObjectToWidgetElement<T> attachToRenderTree(BuildOwner owner, [ RenderObjectToWidgetElement<T>? element ]) {
+  RenderObjectToWidgetElement<T> attachToRenderTree(BuildOwner owner,
+      [RenderObjectToWidgetElement<T>? element]) {
     if (element == null) {
       owner.lockState(() {
         element = createElement();
@@ -47,7 +50,8 @@ class RenderObjectToWidgetAdapter<T extends RenderObject> extends RenderObjectWi
   String toStringShort() => debugShortDescription ?? super.toStringShort();
 }
 
-class RenderObjectToWidgetElement<T extends RenderObject> extends RenderTreeRootElement with RootElementMixin {
+class RenderObjectToWidgetElement<T extends RenderObject>
+    extends RenderTreeRootElement with RootElementMixin {
   RenderObjectToWidgetElement(RenderObjectToWidgetAdapter<T> super.widget);
 
   Element? _child;
@@ -103,7 +107,8 @@ class RenderObjectToWidgetElement<T extends RenderObject> extends RenderTreeRoot
   @pragma('vm:notify-debugger-on-exception')
   void _rebuild() {
     try {
-      _child = updateChild(_child, (widget as RenderObjectToWidgetAdapter<T>).child, _rootChildSlot);
+      _child = updateChild(_child,
+          (widget as RenderObjectToWidgetAdapter<T>).child, _rootChildSlot);
     } catch (exception, stack) {
       final FlutterErrorDetails details = FlutterErrorDetails(
         exception: exception,
@@ -118,7 +123,8 @@ class RenderObjectToWidgetElement<T extends RenderObject> extends RenderTreeRoot
   }
 
   @override
-  RenderObjectWithChildMixin<T> get renderObject => super.renderObject as RenderObjectWithChildMixin<T>;
+  RenderObjectWithChildMixin<T> get renderObject =>
+      super.renderObject as RenderObjectWithChildMixin<T>;
 
   @override
   void insertRenderObjectChild(RenderObject child, Object? slot) {
@@ -128,7 +134,8 @@ class RenderObjectToWidgetElement<T extends RenderObject> extends RenderTreeRoot
   }
 
   @override
-  void moveRenderObjectChild(RenderObject child, Object? oldSlot, Object? newSlot) {
+  void moveRenderObjectChild(
+      RenderObject child, Object? oldSlot, Object? newSlot) {
     assert(false);
   }
 

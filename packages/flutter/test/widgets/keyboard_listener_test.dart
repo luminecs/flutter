@@ -1,15 +1,17 @@
-
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Can dispose without keyboard', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Can dispose without keyboard',
+      (WidgetTester tester) async {
     final FocusNode focusNode = FocusNode();
     addTearDown(focusNode.dispose);
-    await tester.pumpWidget(KeyboardListener(focusNode: focusNode, child: Container()));
-    await tester.pumpWidget(KeyboardListener(focusNode: focusNode, child: Container()));
+    await tester
+        .pumpWidget(KeyboardListener(focusNode: focusNode, child: Container()));
+    await tester
+        .pumpWidget(KeyboardListener(focusNode: focusNode, child: Container()));
     await tester.pumpWidget(Container());
   });
 
@@ -69,7 +71,8 @@ void main() {
     await tester.pumpWidget(Container());
   });
 
-  testWidgetsWithLeakTracking('Defunct listeners do not receive events', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Defunct listeners do not receive events',
+      (WidgetTester tester) async {
     final List<KeyEvent> events = <KeyEvent>[];
 
     final FocusNode focusNode = FocusNode();

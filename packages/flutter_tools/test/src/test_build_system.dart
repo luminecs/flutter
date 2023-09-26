@@ -1,21 +1,20 @@
-
 import 'dart:async';
 
 import 'package:flutter_tools/src/build_system/build_system.dart';
 
 class TestBuildSystem implements BuildSystem {
   TestBuildSystem.list(this._results, [this._onRun])
-    : _exception = null,
-      _singleResult = null;
+      : _exception = null,
+        _singleResult = null;
 
   TestBuildSystem.all(this._singleResult, [this._onRun])
-    : _exception = null,
-      _results = <BuildResult>[];
+      : _exception = null,
+        _results = <BuildResult>[];
 
   TestBuildSystem.error(this._exception)
-    : _singleResult = null,
-      _results = <BuildResult>[],
-      _onRun = null;
+      : _singleResult = null,
+        _results = <BuildResult>[],
+        _onRun = null;
 
   final List<BuildResult> _results;
   final BuildResult? _singleResult;
@@ -24,7 +23,8 @@ class TestBuildSystem implements BuildSystem {
   int _nextResult = 0;
 
   @override
-  Future<BuildResult> build(Target target, Environment environment, {BuildSystemConfig buildSystemConfig = const BuildSystemConfig()}) async {
+  Future<BuildResult> build(Target target, Environment environment,
+      {BuildSystemConfig buildSystemConfig = const BuildSystemConfig()}) async {
     if (_onRun != null) {
       _onRun.call(target, environment);
     }
@@ -41,7 +41,8 @@ class TestBuildSystem implements BuildSystem {
   }
 
   @override
-  Future<BuildResult> buildIncremental(Target target, Environment environment, BuildResult? previousBuild) async {
+  Future<BuildResult> buildIncremental(Target target, Environment environment,
+      BuildResult? previousBuild) async {
     if (_onRun != null) {
       _onRun.call(target, environment);
     }

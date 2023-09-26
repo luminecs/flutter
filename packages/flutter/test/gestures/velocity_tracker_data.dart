@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 
 const List<PointerEvent> velocityEventData = <PointerEvent>[

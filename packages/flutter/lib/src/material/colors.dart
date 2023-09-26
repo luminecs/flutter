@@ -1,4 +1,3 @@
-
 import 'package:flutter/painting.dart';
 
 class MaterialColor extends ColorSwatch<int> {
@@ -75,7 +74,7 @@ abstract final class Colors {
   static const MaterialColor red = MaterialColor(
     _redPrimaryValue,
     <int, Color>{
-       50: Color(0xFFFFEBEE),
+      50: Color(0xFFFFEBEE),
       100: Color(0xFFFFCDD2),
       200: Color(0xFFEF9A9A),
       300: Color(0xFFE57373),
@@ -103,7 +102,7 @@ abstract final class Colors {
   static const MaterialColor pink = MaterialColor(
     _pinkPrimaryValue,
     <int, Color>{
-       50: Color(0xFFFCE4EC),
+      50: Color(0xFFFCE4EC),
       100: Color(0xFFF8BBD0),
       200: Color(0xFFF48FB1),
       300: Color(0xFFF06292),
@@ -131,7 +130,7 @@ abstract final class Colors {
   static const MaterialColor purple = MaterialColor(
     _purplePrimaryValue,
     <int, Color>{
-       50: Color(0xFFF3E5F5),
+      50: Color(0xFFF3E5F5),
       100: Color(0xFFE1BEE7),
       200: Color(0xFFCE93D8),
       300: Color(0xFFBA68C8),
@@ -159,7 +158,7 @@ abstract final class Colors {
   static const MaterialColor deepPurple = MaterialColor(
     _deepPurplePrimaryValue,
     <int, Color>{
-       50: Color(0xFFEDE7F6),
+      50: Color(0xFFEDE7F6),
       100: Color(0xFFD1C4E9),
       200: Color(0xFFB39DDB),
       300: Color(0xFF9575CD),
@@ -187,7 +186,7 @@ abstract final class Colors {
   static const MaterialColor indigo = MaterialColor(
     _indigoPrimaryValue,
     <int, Color>{
-       50: Color(0xFFE8EAF6),
+      50: Color(0xFFE8EAF6),
       100: Color(0xFFC5CAE9),
       200: Color(0xFF9FA8DA),
       300: Color(0xFF7986CB),
@@ -215,7 +214,7 @@ abstract final class Colors {
   static const MaterialColor blue = MaterialColor(
     _bluePrimaryValue,
     <int, Color>{
-       50: Color(0xFFE3F2FD),
+      50: Color(0xFFE3F2FD),
       100: Color(0xFFBBDEFB),
       200: Color(0xFF90CAF9),
       300: Color(0xFF64B5F6),
@@ -243,7 +242,7 @@ abstract final class Colors {
   static const MaterialColor lightBlue = MaterialColor(
     _lightBluePrimaryValue,
     <int, Color>{
-       50: Color(0xFFE1F5FE),
+      50: Color(0xFFE1F5FE),
       100: Color(0xFFB3E5FC),
       200: Color(0xFF81D4FA),
       300: Color(0xFF4FC3F7),
@@ -271,7 +270,7 @@ abstract final class Colors {
   static const MaterialColor cyan = MaterialColor(
     _cyanPrimaryValue,
     <int, Color>{
-       50: Color(0xFFE0F7FA),
+      50: Color(0xFFE0F7FA),
       100: Color(0xFFB2EBF2),
       200: Color(0xFF80DEEA),
       300: Color(0xFF4DD0E1),
@@ -299,7 +298,7 @@ abstract final class Colors {
   static const MaterialColor teal = MaterialColor(
     _tealPrimaryValue,
     <int, Color>{
-       50: Color(0xFFE0F2F1),
+      50: Color(0xFFE0F2F1),
       100: Color(0xFFB2DFDB),
       200: Color(0xFF80CBC4),
       300: Color(0xFF4DB6AC),
@@ -327,7 +326,7 @@ abstract final class Colors {
   static const MaterialColor green = MaterialColor(
     _greenPrimaryValue,
     <int, Color>{
-       50: Color(0xFFE8F5E9),
+      50: Color(0xFFE8F5E9),
       100: Color(0xFFC8E6C9),
       200: Color(0xFFA5D6A7),
       300: Color(0xFF81C784),
@@ -355,7 +354,7 @@ abstract final class Colors {
   static const MaterialColor lightGreen = MaterialColor(
     _lightGreenPrimaryValue,
     <int, Color>{
-       50: Color(0xFFF1F8E9),
+      50: Color(0xFFF1F8E9),
       100: Color(0xFFDCEDC8),
       200: Color(0xFFC5E1A5),
       300: Color(0xFFAED581),
@@ -383,7 +382,7 @@ abstract final class Colors {
   static const MaterialColor lime = MaterialColor(
     _limePrimaryValue,
     <int, Color>{
-       50: Color(0xFFF9FBE7),
+      50: Color(0xFFF9FBE7),
       100: Color(0xFFF0F4C3),
       200: Color(0xFFE6EE9C),
       300: Color(0xFFDCE775),
@@ -411,7 +410,7 @@ abstract final class Colors {
   static const MaterialColor yellow = MaterialColor(
     _yellowPrimaryValue,
     <int, Color>{
-       50: Color(0xFFFFFDE7),
+      50: Color(0xFFFFFDE7),
       100: Color(0xFFFFF9C4),
       200: Color(0xFFFFF59D),
       300: Color(0xFFFFF176),
@@ -439,7 +438,7 @@ abstract final class Colors {
   static const MaterialColor amber = MaterialColor(
     _amberPrimaryValue,
     <int, Color>{
-       50: Color(0xFFFFF8E1),
+      50: Color(0xFFFFF8E1),
       100: Color(0xFFFFECB3),
       200: Color(0xFFFFE082),
       300: Color(0xFFFFD54F),
@@ -467,7 +466,7 @@ abstract final class Colors {
   static const MaterialColor orange = MaterialColor(
     _orangePrimaryValue,
     <int, Color>{
-       50: Color(0xFFFFF3E0),
+      50: Color(0xFFFFF3E0),
       100: Color(0xFFFFE0B2),
       200: Color(0xFFFFCC80),
       300: Color(0xFFFFB74D),
@@ -495,7 +494,7 @@ abstract final class Colors {
   static const MaterialColor deepOrange = MaterialColor(
     _deepOrangePrimaryValue,
     <int, Color>{
-       50: Color(0xFFFBE9E7),
+      50: Color(0xFFFBE9E7),
       100: Color(0xFFFFCCBC),
       200: Color(0xFFFFAB91),
       300: Color(0xFFFF8A65),
@@ -523,7 +522,7 @@ abstract final class Colors {
   static const MaterialColor brown = MaterialColor(
     _brownPrimaryValue,
     <int, Color>{
-       50: Color(0xFFEFEBE9),
+      50: Color(0xFFEFEBE9),
       100: Color(0xFFD7CCC8),
       200: Color(0xFFBCAAA4),
       300: Color(0xFFA1887F),
@@ -540,11 +539,12 @@ abstract final class Colors {
   static const MaterialColor grey = MaterialColor(
     _greyPrimaryValue,
     <int, Color>{
-       50: Color(0xFFFAFAFA),
+      50: Color(0xFFFAFAFA),
       100: Color(0xFFF5F5F5),
       200: Color(0xFFEEEEEE),
       300: Color(0xFFE0E0E0),
-      350: Color(0xFFD6D6D6), // only for raised button while pressed in light theme
+      350: Color(
+          0xFFD6D6D6), // only for raised button while pressed in light theme
       400: Color(0xFFBDBDBD),
       500: Color(_greyPrimaryValue),
       600: Color(0xFF757575),
@@ -559,7 +559,7 @@ abstract final class Colors {
   static const MaterialColor blueGrey = MaterialColor(
     _blueGreyPrimaryValue,
     <int, Color>{
-       50: Color(0xFFECEFF1),
+      50: Color(0xFFECEFF1),
       100: Color(0xFFCFD8DC),
       200: Color(0xFFB0BEC5),
       300: Color(0xFF90A4AE),

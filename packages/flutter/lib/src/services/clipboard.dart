@@ -1,11 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'system_channels.dart';
 
 @immutable
 class ClipboardData {
-  const ClipboardData({ required String this.text });
+  const ClipboardData({required String this.text});
 
   // This is nullable as other clipboard data variants, like images, may be
   // added in the future. Currently, plain text is the only supported variant
@@ -28,7 +27,8 @@ abstract final class Clipboard {
   }
 
   static Future<ClipboardData?> getData(String format) async {
-    final Map<String, dynamic>? result = await SystemChannels.platform.invokeMethod(
+    final Map<String, dynamic>? result =
+        await SystemChannels.platform.invokeMethod(
       'Clipboard.getData',
       format,
     );
@@ -39,7 +39,8 @@ abstract final class Clipboard {
   }
 
   static Future<bool> hasStrings() async {
-    final Map<String, dynamic>? result = await SystemChannels.platform.invokeMethod(
+    final Map<String, dynamic>? result =
+        await SystemChannels.platform.invokeMethod(
       'Clipboard.hasStrings',
       Clipboard.kTextPlain,
     );

@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const TransformationControllerExampleApp());
 
@@ -19,12 +17,15 @@ class TransformationControllerExample extends StatefulWidget {
   const TransformationControllerExample({super.key});
 
   @override
-  State<TransformationControllerExample> createState() => _TransformationControllerExampleState();
+  State<TransformationControllerExample> createState() =>
+      _TransformationControllerExampleState();
 }
 
-class _TransformationControllerExampleState extends State<TransformationControllerExample>
+class _TransformationControllerExampleState
+    extends State<TransformationControllerExample>
     with TickerProviderStateMixin {
-  final TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController =
+      TransformationController();
   Animation<Matrix4>? _animationReset;
   late final AnimationController _controllerReset;
 

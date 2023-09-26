@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 
@@ -48,16 +47,19 @@ class _MyHomePageState extends State<MyHomePage> {
         alignment: Alignment.bottomCenter,
         children: <Widget>[
           LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return Center(child: Text('${constraints.biggest.height}', key: const Key(keys.kHeightText)));
-            }
-          ),
+              builder: (BuildContext context, BoxConstraints constraints) {
+            return Center(
+                child: Text('${constraints.biggest.height}',
+                    key: const Key(keys.kHeightText)));
+          }),
           textField,
         ],
       ),
       floatingActionButton: FloatingActionButton(
         key: const Key(keys.kUnfocusButton),
-        onPressed: () { textField.focusNode!.unfocus(); },
+        onPressed: () {
+          textField.focusNode!.unfocus();
+        },
         tooltip: 'Unfocus',
         child: const Icon(Icons.done),
       ),

@@ -1,4 +1,3 @@
-
 import 'dart:ui' as ui show Image;
 
 import 'package:flutter/animation.dart';
@@ -6,9 +5,7 @@ import 'package:flutter/animation.dart';
 import 'box.dart';
 import 'object.dart';
 
-export 'package:flutter/painting.dart' show
-  BoxFit,
-  ImageRepeat;
+export 'package:flutter/painting.dart' show BoxFit, ImageRepeat;
 
 class RenderImage extends RenderBox {
   RenderImage({
@@ -29,22 +26,22 @@ class RenderImage extends RenderBox {
     bool invertColors = false,
     bool isAntiAlias = false,
     FilterQuality filterQuality = FilterQuality.low,
-  }) : _image = image,
-       _width = width,
-       _height = height,
-       _scale = scale,
-       _color = color,
-       _opacity = opacity,
-       _colorBlendMode = colorBlendMode,
-       _fit = fit,
-       _alignment = alignment,
-       _repeat = repeat,
-       _centerSlice = centerSlice,
-       _matchTextDirection = matchTextDirection,
-       _invertColors = invertColors,
-       _textDirection = textDirection,
-       _isAntiAlias = isAntiAlias,
-       _filterQuality = filterQuality {
+  })  : _image = image,
+        _width = width,
+        _height = height,
+        _scale = scale,
+        _color = color,
+        _opacity = opacity,
+        _colorBlendMode = colorBlendMode,
+        _fit = fit,
+        _alignment = alignment,
+        _repeat = repeat,
+        _centerSlice = centerSlice,
+        _matchTextDirection = matchTextDirection,
+        _invertColors = invertColors,
+        _textDirection = textDirection,
+        _isAntiAlias = isAntiAlias,
+        _filterQuality = filterQuality {
     _updateColorFilter();
   }
 
@@ -56,7 +53,8 @@ class RenderImage extends RenderBox {
       return;
     }
     _resolvedAlignment = alignment.resolve(textDirection);
-    _flipHorizontally = matchTextDirection && textDirection == TextDirection.rtl;
+    _flipHorizontally =
+        matchTextDirection && textDirection == TextDirection.rtl;
   }
 
   void _markNeedResolution() {
@@ -123,7 +121,8 @@ class RenderImage extends RenderBox {
     if (_color == null) {
       _colorFilter = null;
     } else {
-      _colorFilter = ColorFilter.mode(_color!, _colorBlendMode ?? BlendMode.srcIn);
+      _colorFilter =
+          ColorFilter.mode(_color!, _colorBlendMode ?? BlendMode.srcIn);
     }
   }
 
@@ -163,7 +162,6 @@ class RenderImage extends RenderBox {
     _filterQuality = value;
     markNeedsPaint();
   }
-
 
   BlendMode? get colorBlendMode => _colorBlendMode;
   BlendMode? _colorBlendMode;
@@ -280,13 +278,15 @@ class RenderImage extends RenderBox {
     if (_width == null && _height == null) {
       return 0.0;
     }
-    return _sizeForConstraints(BoxConstraints.tightForFinite(height: height)).width;
+    return _sizeForConstraints(BoxConstraints.tightForFinite(height: height))
+        .width;
   }
 
   @override
   double computeMaxIntrinsicWidth(double height) {
     assert(height >= 0.0);
-    return _sizeForConstraints(BoxConstraints.tightForFinite(height: height)).width;
+    return _sizeForConstraints(BoxConstraints.tightForFinite(height: height))
+        .width;
   }
 
   @override
@@ -295,13 +295,15 @@ class RenderImage extends RenderBox {
     if (_width == null && _height == null) {
       return 0.0;
     }
-    return _sizeForConstraints(BoxConstraints.tightForFinite(width: width)).height;
+    return _sizeForConstraints(BoxConstraints.tightForFinite(width: width))
+        .height;
   }
 
   @override
   double computeMaxIntrinsicHeight(double width) {
     assert(width >= 0.0);
-    return _sizeForConstraints(BoxConstraints.tightForFinite(width: width)).height;
+    return _sizeForConstraints(BoxConstraints.tightForFinite(width: width))
+        .height;
   }
 
   @override
@@ -371,14 +373,22 @@ class RenderImage extends RenderBox {
     properties.add(DoubleProperty('height', height, defaultValue: null));
     properties.add(DoubleProperty('scale', scale, defaultValue: 1.0));
     properties.add(ColorProperty('color', color, defaultValue: null));
-    properties.add(DiagnosticsProperty<Animation<double>?>('opacity', opacity, defaultValue: null));
-    properties.add(EnumProperty<BlendMode>('colorBlendMode', colorBlendMode, defaultValue: null));
+    properties.add(DiagnosticsProperty<Animation<double>?>('opacity', opacity,
+        defaultValue: null));
+    properties.add(EnumProperty<BlendMode>('colorBlendMode', colorBlendMode,
+        defaultValue: null));
     properties.add(EnumProperty<BoxFit>('fit', fit, defaultValue: null));
-    properties.add(DiagnosticsProperty<AlignmentGeometry>('alignment', alignment, defaultValue: null));
-    properties.add(EnumProperty<ImageRepeat>('repeat', repeat, defaultValue: ImageRepeat.noRepeat));
-    properties.add(DiagnosticsProperty<Rect>('centerSlice', centerSlice, defaultValue: null));
-    properties.add(FlagProperty('matchTextDirection', value: matchTextDirection, ifTrue: 'match text direction'));
-    properties.add(EnumProperty<TextDirection>('textDirection', textDirection, defaultValue: null));
+    properties.add(DiagnosticsProperty<AlignmentGeometry>(
+        'alignment', alignment,
+        defaultValue: null));
+    properties.add(EnumProperty<ImageRepeat>('repeat', repeat,
+        defaultValue: ImageRepeat.noRepeat));
+    properties.add(DiagnosticsProperty<Rect>('centerSlice', centerSlice,
+        defaultValue: null));
+    properties.add(FlagProperty('matchTextDirection',
+        value: matchTextDirection, ifTrue: 'match text direction'));
+    properties.add(EnumProperty<TextDirection>('textDirection', textDirection,
+        defaultValue: null));
     properties.add(DiagnosticsProperty<bool>('invertColors', invertColors));
     properties.add(EnumProperty<FilterQuality>('filterQuality', filterQuality));
   }

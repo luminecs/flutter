@@ -1,4 +1,3 @@
-
 import 'package:file/file.dart';
 import 'package:flutter_tools/src/android/gradle_utils.dart'
     show getGradlewFileName;

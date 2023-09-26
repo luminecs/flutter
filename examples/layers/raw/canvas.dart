@@ -1,4 +1,3 @@
-
 // This example shows how to use the ui.Canvas interface to draw various shapes
 // with gradients and transforms.
 
@@ -51,7 +50,7 @@ ui.Picture paint(ui.Rect paintBounds) {
 
   // Shifts the coordinate space of and rotates the current transform.
   canvas.translate(mid.dx, mid.dy);
-  canvas.rotate(math.pi/4);
+  canvas.rotate(math.pi / 4);
 
   final ui.Gradient yellowBlue = ui.Gradient.linear(
     ui.Offset(-radius, -radius),
@@ -70,10 +69,22 @@ ui.Picture paint(ui.Rect paintBounds) {
 
   // Scale x and y by 0.5.
   final Float64List scaleMatrix = Float64List.fromList(<double>[
-      0.5, 0.0, 0.0, 0.0,
-      0.0, 0.5, 0.0, 0.0,
-      0.0, 0.0, 1.0, 0.0,
-      0.0, 0.0, 0.0, 1.0,
+    0.5,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.5,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
   ]);
   canvas.transform(scaleMatrix);
 
@@ -115,7 +126,8 @@ ui.Scene composite(ui.Picture picture, ui.Rect paintBounds) {
 }
 
 void beginFrame(Duration timeStamp) {
-  final ui.Rect paintBounds = ui.Offset.zero & (view.physicalSize / view.devicePixelRatio);
+  final ui.Rect paintBounds =
+      ui.Offset.zero & (view.physicalSize / view.devicePixelRatio);
   final ui.Picture picture = paint(paintBounds);
   final ui.Scene scene = composite(picture, paintBounds);
   view.render(scene);

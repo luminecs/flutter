@@ -1,4 +1,3 @@
-
 import 'package:args/command_runner.dart';
 import 'package:file/file.dart';
 import 'package:platform/platform.dart';

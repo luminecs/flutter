@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-
 
 @immutable
 class MyColors extends ThemeExtension<MyColors> {
@@ -47,7 +45,8 @@ class ThemeExtensionExampleApp extends StatefulWidget {
   const ThemeExtensionExampleApp({super.key});
 
   @override
-  State<ThemeExtensionExampleApp> createState() => _ThemeExtensionExampleAppState();
+  State<ThemeExtensionExampleApp> createState() =>
+      _ThemeExtensionExampleAppState();
 }
 
 class _ThemeExtensionExampleAppState extends State<ThemeExtensionExampleApp> {

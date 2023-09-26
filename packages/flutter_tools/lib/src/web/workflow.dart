@@ -1,4 +1,3 @@
-
 import '../base/platform.dart';
 import '../doctor_validator.dart';
 import '../features.dart';
@@ -7,17 +6,16 @@ class WebWorkflow extends Workflow {
   const WebWorkflow({
     required Platform platform,
     required FeatureFlags featureFlags,
-  }) : _platform = platform,
-       _featureFlags = featureFlags;
+  })  : _platform = platform,
+        _featureFlags = featureFlags;
 
   final Platform _platform;
   final FeatureFlags _featureFlags;
 
   @override
-  bool get appliesToHostPlatform => _featureFlags.isWebEnabled &&
-    (_platform.isWindows ||
-       _platform.isMacOS ||
-       _platform.isLinux);
+  bool get appliesToHostPlatform =>
+      _featureFlags.isWebEnabled &&
+      (_platform.isWindows || _platform.isMacOS || _platform.isLinux);
 
   @override
   bool get canLaunchDevices => _featureFlags.isWebEnabled;

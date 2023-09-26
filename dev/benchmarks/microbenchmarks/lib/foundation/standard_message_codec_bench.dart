@@ -1,4 +1,3 @@
-
 import 'package:flutter/services.dart';
 
 import '../common.dart';
@@ -57,7 +56,8 @@ void main() {
   watch.reset();
   watch.start();
   for (int i = 0; i < _kNumIterations; i += 1) {
-    codec.encodeMessage(<Object>[1234, 'This is a performance test.', 1.25, true]);
+    codec.encodeMessage(
+        <Object>[1234, 'This is a performance test.', 1.25, true]);
   }
   watch.stop();
 

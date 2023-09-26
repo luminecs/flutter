@@ -1,4 +1,3 @@
-
 // A test script that invokes compute() to start an isolate.
 
 import 'dart:isolate';

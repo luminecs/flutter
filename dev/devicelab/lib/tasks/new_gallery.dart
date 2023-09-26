@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import '../framework/task_result.dart';
@@ -15,11 +14,11 @@ class NewGalleryPerfTest extends PerfTest {
     super.timeoutSeconds,
     super.forceOpenGLES,
   }) : super(
-    galleryDir.path,
-    'test_driver/transitions_perf.dart',
-    timelineFileName,
-    dartDefine: dartDefine,
-  );
+          galleryDir.path,
+          'test_driver/transitions_perf.dart',
+          timelineFileName,
+          dartDefine: dartDefine,
+        );
 
   @override
   Future<TaskResult> run() async {

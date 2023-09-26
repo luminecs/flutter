@@ -1,10 +1,10 @@
-
 import 'base/context.dart';
 import 'base/file_system.dart';
 import 'build_info.dart';
 
 abstract class ApplicationPackageFactory {
-  static ApplicationPackageFactory? get instance => context.get<ApplicationPackageFactory>();
+  static ApplicationPackageFactory? get instance =>
+      context.get<ApplicationPackageFactory>();
 
   Future<ApplicationPackage?> getPackageForPlatform(
     TargetPlatform platform, {
@@ -14,7 +14,7 @@ abstract class ApplicationPackageFactory {
 }
 
 abstract class ApplicationPackage {
-  ApplicationPackage({ required this.id });
+  ApplicationPackage({required this.id});
 
   final String id;
 

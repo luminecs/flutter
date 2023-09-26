@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,7 +5,7 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import '../widgets/semantics_tester.dart';
 import 'feedback_tester.dart';
 
-void main () {
+void main() {
   const Duration kWaitDuration = Duration(seconds: 1);
 
   late FeedbackTester feedback;
@@ -24,14 +23,19 @@ void main () {
 
     setUp(() {
       semanticEvents = <Map<String, Object>>[];
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockDecodedMessageHandler<dynamic>(SystemChannels.accessibility, (dynamic message) async {
-        final Map<dynamic, dynamic> typedMessage = message as Map<dynamic, dynamic>;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockDecodedMessageHandler<dynamic>(SystemChannels.accessibility,
+              (dynamic message) async {
+        final Map<dynamic, dynamic> typedMessage =
+            message as Map<dynamic, dynamic>;
         semanticEvents.add(typedMessage.cast<String, Object>());
       });
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockDecodedMessageHandler<dynamic>(SystemChannels.accessibility, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockDecodedMessageHandler<dynamic>(
+              SystemChannels.accessibility, null);
     });
 
     testWidgetsWithLeakTracking('forTap', (WidgetTester tester) async {
@@ -49,7 +53,8 @@ void main () {
 
       await tester.tap(find.text('X'));
       await tester.pumpAndSettle(kWaitDuration);
-      final RenderObject object = tester.firstRenderObject(find.byType(GestureDetector));
+      final RenderObject object =
+          tester.firstRenderObject(find.byType(GestureDetector));
 
       expect(feedback.hapticCount, 0);
       expect(feedback.clickSoundCount, 1);
@@ -58,7 +63,11 @@ void main () {
         'nodeId': object.debugSemantics!.id,
         'data': <String, dynamic>{},
       });
-      expect(object.debugSemantics!.getSemanticsData().hasAction(SemanticsAction.tap), true);
+      expect(
+          object.debugSemantics!
+              .getSemanticsData()
+              .hasAction(SemanticsAction.tap),
+          true);
 
       semanticsTester.dispose();
     });
@@ -83,7 +92,8 @@ void main () {
 
       await tester.tap(find.text('X'));
       await tester.pumpAndSettle(kWaitDuration);
-      final RenderObject object = tester.firstRenderObject(find.byType(GestureDetector));
+      final RenderObject object =
+          tester.firstRenderObject(find.byType(GestureDetector));
 
       expect(feedback.hapticCount, 0);
       expect(feedback.clickSoundCount, 1);
@@ -93,7 +103,11 @@ void main () {
         'nodeId': object.debugSemantics!.id,
         'data': <String, dynamic>{},
       });
-      expect(object.debugSemantics!.getSemanticsData().hasAction(SemanticsAction.tap), true);
+      expect(
+          object.debugSemantics!
+              .getSemanticsData()
+              .hasAction(SemanticsAction.tap),
+          true);
 
       semanticsTester.dispose();
     });
@@ -112,7 +126,8 @@ void main () {
 
       await tester.longPress(find.text('X'));
       await tester.pumpAndSettle(kWaitDuration);
-      final RenderObject object = tester.firstRenderObject(find.byType(GestureDetector));
+      final RenderObject object =
+          tester.firstRenderObject(find.byType(GestureDetector));
 
       expect(feedback.hapticCount, 1);
       expect(feedback.clickSoundCount, 0);
@@ -121,12 +136,17 @@ void main () {
         'nodeId': object.debugSemantics!.id,
         'data': <String, dynamic>{},
       });
-      expect(object.debugSemantics!.getSemanticsData().hasAction(SemanticsAction.longPress), true);
+      expect(
+          object.debugSemantics!
+              .getSemanticsData()
+              .hasAction(SemanticsAction.longPress),
+          true);
 
       semanticsTester.dispose();
     });
 
-    testWidgetsWithLeakTracking('forLongPress Wrapper', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('forLongPress Wrapper',
+        (WidgetTester tester) async {
       final SemanticsTester semanticsTester = SemanticsTester(tester);
       int callbackCount = 0;
       void callback() {
@@ -139,7 +159,8 @@ void main () {
         },
       ));
       await tester.pumpAndSettle(kWaitDuration);
-      final RenderObject object = tester.firstRenderObject(find.byType(GestureDetector));
+      final RenderObject object =
+          tester.firstRenderObject(find.byType(GestureDetector));
 
       expect(feedback.hapticCount, 0);
       expect(feedback.clickSoundCount, 0);
@@ -155,11 +176,14 @@ void main () {
         'nodeId': object.debugSemantics!.id,
         'data': <String, dynamic>{},
       });
-      expect(object.debugSemantics!.getSemanticsData().hasAction(SemanticsAction.longPress), true);
+      expect(
+          object.debugSemantics!
+              .getSemanticsData()
+              .hasAction(SemanticsAction.longPress),
+          true);
 
       semanticsTester.dispose();
     });
-
   });
 
   group('Feedback on iOS', () {
@@ -212,9 +236,9 @@ class TestWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: tapHandler(context),
-        onLongPress: longPressHandler(context),
-        child: const Text('X', textDirection: TextDirection.ltr),
+      onTap: tapHandler(context),
+      onLongPress: longPressHandler(context),
+      child: const Text('X', textDirection: TextDirection.ltr),
     );
   }
 }

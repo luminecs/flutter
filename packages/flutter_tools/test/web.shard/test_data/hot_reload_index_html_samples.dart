@@ -1,4 +1,3 @@
-
 // This file contains a bunch of different index.html "styles" that can be written
 // by Flutter Web users.
 // This should be somewhat kept in sync with the different index.html files present

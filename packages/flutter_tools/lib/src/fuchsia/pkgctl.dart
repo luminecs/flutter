@@ -1,4 +1,3 @@
-
 import '../base/process.dart';
 
 import 'fuchsia_device.dart';

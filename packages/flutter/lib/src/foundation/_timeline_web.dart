@@ -1,4 +1,3 @@
-
 import 'dart:js_interop';
 
 double get performanceTimestamp => 1000 * _performance.now();

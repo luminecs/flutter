@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart' show ValueListenable, clampDouble;
 import 'package:flutter/widgets.dart';
 
@@ -6,8 +5,9 @@ import 'desktop_text_selection_toolbar.dart';
 import 'desktop_text_selection_toolbar_button.dart';
 import 'localizations.dart';
 
-class _CupertinoDesktopTextSelectionHandleControls extends CupertinoDesktopTextSelectionControls with TextSelectionHandleControls {
-}
+class _CupertinoDesktopTextSelectionHandleControls
+    extends CupertinoDesktopTextSelectionControls
+    with TextSelectionHandleControls {}
 
 class CupertinoDesktopTextSelectionControls extends TextSelectionControls {
   @override
@@ -37,7 +37,8 @@ class CupertinoDesktopTextSelectionControls extends TextSelectionControls {
       handleCut: canCut(delegate) ? () => handleCut(delegate) : null,
       handleCopy: canCopy(delegate) ? () => handleCopy(delegate) : null,
       handlePaste: canPaste(delegate) ? () => handlePaste(delegate) : null,
-      handleSelectAll: canSelectAll(delegate) ? () => handleSelectAll(delegate) : null,
+      handleSelectAll:
+          canSelectAll(delegate) ? () => handleSelectAll(delegate) : null,
       selectionMidpoint: selectionMidpoint,
       lastSecondaryTapDownPosition: lastSecondaryTapDownPosition,
       textLineHeight: textLineHeight,
@@ -45,7 +46,9 @@ class CupertinoDesktopTextSelectionControls extends TextSelectionControls {
   }
 
   @override
-  Widget buildHandle(BuildContext context, TextSelectionHandleType type, double textLineHeight, [VoidCallback? onTap]) {
+  Widget buildHandle(
+      BuildContext context, TextSelectionHandleType type, double textLineHeight,
+      [VoidCallback? onTap]) {
     return const SizedBox.shrink();
   }
 
@@ -102,10 +105,12 @@ class _CupertinoDesktopTextSelectionControlsToolbar extends StatefulWidget {
   final double textLineHeight;
 
   @override
-  _CupertinoDesktopTextSelectionControlsToolbarState createState() => _CupertinoDesktopTextSelectionControlsToolbarState();
+  _CupertinoDesktopTextSelectionControlsToolbarState createState() =>
+      _CupertinoDesktopTextSelectionControlsToolbarState();
 }
 
-class _CupertinoDesktopTextSelectionControlsToolbarState extends State<_CupertinoDesktopTextSelectionControlsToolbar> {
+class _CupertinoDesktopTextSelectionControlsToolbarState
+    extends State<_CupertinoDesktopTextSelectionControlsToolbar> {
   void _onChangedClipboardStatus() {
     setState(() {
       // Inform the widget that the value of clipboardStatus has changed.
@@ -119,7 +124,8 @@ class _CupertinoDesktopTextSelectionControlsToolbarState extends State<_Cupertin
   }
 
   @override
-  void didUpdateWidget(_CupertinoDesktopTextSelectionControlsToolbar oldWidget) {
+  void didUpdateWidget(
+      _CupertinoDesktopTextSelectionControlsToolbar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.clipboardStatus != widget.clipboardStatus) {
       oldWidget.clipboardStatus?.removeListener(_onChangedClipboardStatus);
@@ -136,7 +142,8 @@ class _CupertinoDesktopTextSelectionControlsToolbarState extends State<_Cupertin
   @override
   Widget build(BuildContext context) {
     // Don't render the menu until the state of the clipboard is known.
-    if (widget.handlePaste != null && widget.clipboardStatus?.value == ClipboardStatus.unknown) {
+    if (widget.handlePaste != null &&
+        widget.clipboardStatus?.value == ClipboardStatus.unknown) {
       return const SizedBox.shrink();
     }
 
@@ -144,7 +151,8 @@ class _CupertinoDesktopTextSelectionControlsToolbarState extends State<_Cupertin
     final EdgeInsets mediaQueryPadding = MediaQuery.paddingOf(context);
 
     final Offset midpointAnchor = Offset(
-      clampDouble(widget.selectionMidpoint.dx - widget.globalEditableRegion.left,
+      clampDouble(
+        widget.selectionMidpoint.dx - widget.globalEditableRegion.left,
         mediaQueryPadding.left,
         MediaQuery.sizeOf(context).width - mediaQueryPadding.right,
       ),
@@ -152,7 +160,8 @@ class _CupertinoDesktopTextSelectionControlsToolbarState extends State<_Cupertin
     );
 
     final List<Widget> items = <Widget>[];
-    final CupertinoLocalizations localizations = CupertinoLocalizations.of(context);
+    final CupertinoLocalizations localizations =
+        CupertinoLocalizations.of(context);
     final Widget onePhysicalPixelVerticalDivider =
         SizedBox(width: 1.0 / MediaQuery.devicePixelRatioOf(context));
 
@@ -176,12 +185,13 @@ class _CupertinoDesktopTextSelectionControlsToolbarState extends State<_Cupertin
     if (widget.handleCopy != null) {
       addToolbarButton(localizations.copyButtonLabel, widget.handleCopy!);
     }
-    if (widget.handlePaste != null
-        && widget.clipboardStatus?.value == ClipboardStatus.pasteable) {
+    if (widget.handlePaste != null &&
+        widget.clipboardStatus?.value == ClipboardStatus.pasteable) {
       addToolbarButton(localizations.pasteButtonLabel, widget.handlePaste!);
     }
     if (widget.handleSelectAll != null) {
-      addToolbarButton(localizations.selectAllButtonLabel, widget.handleSelectAll!);
+      addToolbarButton(
+          localizations.selectAllButtonLabel, widget.handleSelectAll!);
     }
 
     // If there is no option available, build an empty widget.

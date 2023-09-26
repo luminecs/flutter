@@ -1,10 +1,10 @@
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class FeedbackTester {
   FeedbackTester() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, _handler);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, _handler);
   }
 
   int get hapticCount => _hapticCount;
@@ -24,7 +24,9 @@ class FeedbackTester {
   }
 
   void dispose() {
-    assert(TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.checkMockMessageHandler(SystemChannels.platform.name, _handler));
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null);
+    assert(TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .checkMockMessageHandler(SystemChannels.platform.name, _handler));
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null);
   }
 }

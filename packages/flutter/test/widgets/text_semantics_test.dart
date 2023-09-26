@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,11 +7,12 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import 'semantics_tester.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('SemanticsNode ids are stable', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('SemanticsNode ids are stable',
+      (WidgetTester tester) async {
     // Regression test for b/151732341.
     final SemanticsTester semantics = SemanticsTester(tester);
     await tester.pumpWidget(Directionality(
-    textDirection: TextDirection.ltr,
+      textDirection: TextDirection.ltr,
       child: Text.rich(
         TextSpan(
           text: 'Hallo ',
@@ -35,7 +35,7 @@ void main() {
     final Map<String, int> labelToNodeId = <String, int>{};
     node.visitChildren((SemanticsNode node) {
       labelToNodeId[node.label] = node.id;
-       return true;
+      return true;
     });
     expect(node.id, 1);
     expect(labelToNodeId['Hallo '], 2);
@@ -47,7 +47,8 @@ void main() {
     tester.renderObject(find.text('Hallo Welt !!!')).markNeedsSemanticsUpdate();
     await tester.pump();
 
-    final SemanticsNode nodeAfterRebuild = tester.getSemantics(find.text('Hallo Welt !!!'));
+    final SemanticsNode nodeAfterRebuild =
+        tester.getSemantics(find.text('Hallo Welt !!!'));
     final Map<String, int> labelToNodeIdAfterRebuild = <String, int>{};
     nodeAfterRebuild.visitChildren((SemanticsNode node) {
       labelToNodeIdAfterRebuild[node.label] = node.id;
@@ -78,7 +79,8 @@ void main() {
       ),
     ));
 
-    final SemanticsNode nodeAfterRemoval = tester.getSemantics(find.text('Hallo Welt '));
+    final SemanticsNode nodeAfterRemoval =
+        tester.getSemantics(find.text('Hallo Welt '));
     final Map<String, int> labelToNodeIdAfterRemoval = <String, int>{};
     nodeAfterRemoval.visitChildren((SemanticsNode node) {
       labelToNodeIdAfterRemoval[node.label] = node.id;
@@ -111,7 +113,8 @@ void main() {
       ),
     ));
     expect(find.text('Hallo Welt !!!'), findsOneWidget);
-    final SemanticsNode nodeAfterAddition = tester.getSemantics(find.text('Hallo Welt !!!'));
+    final SemanticsNode nodeAfterAddition =
+        tester.getSemantics(find.text('Hallo Welt !!!'));
     final Map<String, int> labelToNodeIdAfterAddition = <String, int>{};
     nodeAfterAddition.visitChildren((SemanticsNode node) {
       labelToNodeIdAfterAddition[node.label] = node.id;

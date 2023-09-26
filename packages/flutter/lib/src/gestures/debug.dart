@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 // Any changes to this file should be reflected in the debugAssertAllGesturesVarsUnset()

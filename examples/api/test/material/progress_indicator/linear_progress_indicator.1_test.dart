@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/progress_indicator/linear_progress_indicator.1.dart'
     as example;

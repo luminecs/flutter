@@ -1,4 +1,3 @@
-
 library android_semantics_testing;
 
 export 'src/common.dart';

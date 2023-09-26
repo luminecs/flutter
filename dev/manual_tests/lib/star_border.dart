@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +31,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>();
   final OptionModel _model = OptionModel();
   final TextEditingController textController = TextEditingController();
 
@@ -76,7 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.blue.shade100,
                       shape: lerpBorder(
                         StarBorder.polygon(
-                          side: const BorderSide(strokeAlign: BorderSide.strokeAlignCenter, width: 2),
+                          side: const BorderSide(
+                              strokeAlign: BorderSide.strokeAlignCenter,
+                              width: 2),
                           sides: _model.points,
                           pointRounding: _model.pointRounding,
                           rotation: _model.rotation,
@@ -97,7 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.blue.shade100,
                       shape: lerpBorder(
                         StarBorder(
-                          side: const BorderSide(strokeAlign: BorderSide.strokeAlignCenter, width: 2),
+                          side: const BorderSide(
+                              strokeAlign: BorderSide.strokeAlignCenter,
+                              width: 2),
                           points: _model.points,
                           innerRadiusRatio: _model.innerRadiusRatio,
                           pointRounding: _model.pointRounding,
@@ -333,7 +337,8 @@ class _OptionsState extends State<Options> {
                     OutlinedButton(
                         child: const Text('Nearest'),
                         onPressed: () {
-                          widget.model.points = widget.model.points.roundToDouble();
+                          widget.model.points =
+                              widget.model.points.roundToDouble();
                         }),
                   ],
                 ),
@@ -365,7 +370,8 @@ class _OptionsState extends State<Options> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.only(start: 8.0, end: 20.0),
+                padding:
+                    const EdgeInsetsDirectional.only(start: 8.0, end: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -395,8 +401,11 @@ class _OptionsState extends State<Options> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButton<LerpTarget>(
-                        items: LerpTarget.values.map<DropdownMenuItem<LerpTarget>>((LerpTarget target) {
-                          return DropdownMenuItem<LerpTarget>(value: target, child: Text(target.name));
+                        items: LerpTarget.values
+                            .map<DropdownMenuItem<LerpTarget>>(
+                                (LerpTarget target) {
+                          return DropdownMenuItem<LerpTarget>(
+                              value: target, child: Text(target.name));
                         }).toList(),
                         value: widget.model.lerpTarget,
                         onChanged: (LerpTarget? value) {
@@ -470,13 +479,16 @@ class ControlSlider extends StatelessWidget {
 const Color lerpToColor = Colors.red;
 const BorderSide lerpToBorder = BorderSide(width: 5, color: lerpToColor);
 
-ShapeBorder? lerpBorder(StarBorder border, LerpTarget target, double t, {bool to = true}) {
+ShapeBorder? lerpBorder(StarBorder border, LerpTarget target, double t,
+    {bool to = true}) {
   switch (target) {
     case LerpTarget.circle:
       if (to) {
-        return border.lerpTo(const CircleBorder(side: lerpToBorder, eccentricity: 0.5), t);
+        return border.lerpTo(
+            const CircleBorder(side: lerpToBorder, eccentricity: 0.5), t);
       } else {
-        return border.lerpFrom(const CircleBorder(side: lerpToBorder, eccentricity: 0.5), t);
+        return border.lerpFrom(
+            const CircleBorder(side: lerpToBorder, eccentricity: 0.5), t);
       }
     case LerpTarget.roundedRect:
       if (to) {
@@ -502,9 +514,11 @@ ShapeBorder? lerpBorder(StarBorder border, LerpTarget target, double t, {bool to
       }
     case LerpTarget.rect:
       if (to) {
-        return border.lerpTo(const RoundedRectangleBorder(side: lerpToBorder), t);
+        return border.lerpTo(
+            const RoundedRectangleBorder(side: lerpToBorder), t);
       } else {
-        return border.lerpFrom(const RoundedRectangleBorder(side: lerpToBorder), t);
+        return border.lerpFrom(
+            const RoundedRectangleBorder(side: lerpToBorder), t);
       }
     case LerpTarget.stadium:
       if (to) {
@@ -514,15 +528,19 @@ ShapeBorder? lerpBorder(StarBorder border, LerpTarget target, double t, {bool to
       }
     case LerpTarget.polygon:
       if (to) {
-        return border.lerpTo(const StarBorder.polygon(side: lerpToBorder, sides: 4), t);
+        return border.lerpTo(
+            const StarBorder.polygon(side: lerpToBorder, sides: 4), t);
       } else {
-        return border.lerpFrom(const StarBorder.polygon(side: lerpToBorder, sides: 4), t);
+        return border.lerpFrom(
+            const StarBorder.polygon(side: lerpToBorder, sides: 4), t);
       }
     case LerpTarget.star:
       if (to) {
-        return border.lerpTo(const StarBorder(side: lerpToBorder, innerRadiusRatio: .5), t);
+        return border.lerpTo(
+            const StarBorder(side: lerpToBorder, innerRadiusRatio: .5), t);
       } else {
-        return border.lerpFrom(const StarBorder(side: lerpToBorder, innerRadiusRatio: .5), t);
+        return border.lerpFrom(
+            const StarBorder(side: lerpToBorder, innerRadiusRatio: .5), t);
       }
   }
 }

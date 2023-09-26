@@ -1,4 +1,3 @@
-
 import 'package:flutter/physics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -25,7 +24,8 @@ void main() {
   });
 
   test('Friction simulation negative velocity', () {
-    final FrictionSimulation friction = FrictionSimulation(0.135, 100.0, -100.0);
+    final FrictionSimulation friction =
+        FrictionSimulation(0.135, 100.0, -100.0);
 
     expect(friction.x(0.0), moreOrLessEquals(100.0));
     expect(friction.dx(0.0), moreOrLessEquals(-100.0));
@@ -46,7 +46,8 @@ void main() {
   });
 
   test('Friction simulation constant deceleration', () {
-    final FrictionSimulation friction = FrictionSimulation(0.135, 100.0, -100.0, constantDeceleration: 100);
+    final FrictionSimulation friction =
+        FrictionSimulation(0.135, 100.0, -100.0, constantDeceleration: 100);
 
     expect(friction.x(0.0), moreOrLessEquals(100.0));
     expect(friction.dx(0.0), moreOrLessEquals(-100.0));

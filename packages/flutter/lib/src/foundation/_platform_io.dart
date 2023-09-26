@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'assertions.dart';
 import 'platform.dart' as platform;

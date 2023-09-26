@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const ListTileApp());
 
@@ -43,7 +41,8 @@ class _ListTileExampleState extends State<ListTileExample> {
           },
           // This sets text color and icon color to red when list tile is disabled and
           // green when list tile is selected, otherwise sets it to black.
-          iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+          iconColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return Colors.red;
             }
@@ -54,7 +53,8 @@ class _ListTileExampleState extends State<ListTileExample> {
           }),
           // This sets text color and icon color to red when list tile is disabled and
           // green when list tile is selected, otherwise sets it to black.
-          textColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+          textColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return Colors.red;
             }

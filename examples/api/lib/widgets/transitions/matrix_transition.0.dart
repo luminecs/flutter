@@ -1,8 +1,6 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const MatrixTransitionExampleApp());
 
@@ -21,10 +19,12 @@ class MatrixTransitionExample extends StatefulWidget {
   const MatrixTransitionExample({super.key});
 
   @override
-  State<MatrixTransitionExample> createState() => _MatrixTransitionExampleState();
+  State<MatrixTransitionExample> createState() =>
+      _MatrixTransitionExampleState();
 }
 
-class _MatrixTransitionExampleState extends State<MatrixTransitionExample> with TickerProviderStateMixin {
+class _MatrixTransitionExampleState extends State<MatrixTransitionExample>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 

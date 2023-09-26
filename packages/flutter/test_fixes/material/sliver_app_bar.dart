@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,5 +15,6 @@ void main() {
   SliverAppBar sliverAppBar = SliverAppBar();
   sliverAppBar = SliverAppBar(backwardsCompatibility: true);
   sliverAppBar = SliverAppBar(backwardsCompatibility: false);
-  sliverAppBar.backwardsCompatibility; // Removing field reference not supported.
+  sliverAppBar
+      .backwardsCompatibility; // Removing field reference not supported.
 }

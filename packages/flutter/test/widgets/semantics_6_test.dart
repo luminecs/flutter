@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,7 +6,9 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import 'semantics_tester.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('can change semantics in a branch blocked by BlockSemantics', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'can change semantics in a branch blocked by BlockSemantics',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     final TestSemantics expectedSemantics = TestSemantics.root(
@@ -29,7 +30,7 @@ void main() {
 
     // The purpose of the test is to ensure that this change does not throw.
     await tester.pumpWidget(buildWidget(
-        blockedText: 'two',
+      blockedText: 'two',
     ));
 
     expect(semantics, hasSemantics(expectedSemantics));
@@ -39,34 +40,35 @@ void main() {
       blockedText: 'two',
       blocking: false,
     ));
-    expect(semantics, includesNodeWith(label: 'two', textDirection: TextDirection.ltr));
+    expect(semantics,
+        includesNodeWith(label: 'two', textDirection: TextDirection.ltr));
 
     semantics.dispose();
   });
 }
 
-Widget buildWidget({ required String blockedText, bool blocking = true }) {
+Widget buildWidget({required String blockedText, bool blocking = true}) {
   return Directionality(
     textDirection: TextDirection.ltr,
     child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Semantics(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Semantics(
+          container: true,
+          child: ListView(
+            children: <Widget>[
+              Text(blockedText),
+            ],
+          ),
+        ),
+        BlockSemantics(
+          blocking: blocking,
+          child: Semantics(
+            label: 'hello',
             container: true,
-            child: ListView(
-              children: <Widget>[
-                Text(blockedText),
-              ],
-            ),
           ),
-          BlockSemantics(
-            blocking: blocking,
-            child: Semantics(
-              label: 'hello',
-              container: true,
-            ),
-          ),
-        ],
+        ),
+      ],
     ),
   );
 }

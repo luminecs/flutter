@@ -1,4 +1,3 @@
-
 // This would fail analysis, but it is ignored
 // flutter_ignore_for_file: golden_tag (see analyze.dart)
 

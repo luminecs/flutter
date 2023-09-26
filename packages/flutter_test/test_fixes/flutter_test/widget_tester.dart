@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -11,8 +10,8 @@ void main() {
     // The `timeout` will remain unchanged, but `initialTimeout` will be removed
     // Changes made in https://github.com/flutter/flutter/pull/89952
   },
-  timeout: Timeout(Duration(minutes: 45)),
-  initialTimeout: Duration(minutes: 30));
+      timeout: Timeout(Duration(minutes: 45)),
+      initialTimeout: Duration(minutes: 30));
 
   testWidgets('test', (WidgetTester tester) async {
     // initialTimeout will be wrapped in a Timeout and changed to `timeout`

@@ -1,11 +1,11 @@
-
 import 'package:flutter/physics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Gravity simulation 1', () {
     expect(GravitySimulation(9.81, 10.0, 0.0, 0.0), hasOneLineDescription);
-    expect(GravitySimulation(9.81, 10.0, 0.0, 0.0).x(10.0), moreOrLessEquals(50.0 * 9.81 + 10.0));
+    expect(GravitySimulation(9.81, 10.0, 0.0, 0.0).x(10.0),
+        moreOrLessEquals(50.0 * 9.81 + 10.0));
   });
 
   test('Gravity simulation 2', () {

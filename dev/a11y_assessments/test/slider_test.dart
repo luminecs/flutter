@@ -1,4 +1,3 @@
-
 import 'package:a11y_assessments/use_cases/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,7 +12,8 @@ void main() {
     await tester.tapAt(tester.getCenter(find.byType(Slider)));
     await tester.pumpAndSettle();
 
-    final MainWidgetState state = tester.state<MainWidgetState>(find.byType(MainWidget));
+    final MainWidgetState state =
+        tester.state<MainWidgetState>(find.byType(MainWidget));
     expect(state.currentSliderValue, 60);
   });
 }

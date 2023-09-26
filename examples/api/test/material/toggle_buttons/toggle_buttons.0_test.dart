@@ -1,14 +1,14 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/toggle_buttons/toggle_buttons.0.dart' as example;
+import 'package:flutter_api_samples/material/toggle_buttons/toggle_buttons.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-
   testWidgets('Single-select ToggleButtons', (WidgetTester tester) async {
     TextButton findButton(String text) {
       return tester.widget<TextButton>(find.widgetWithText(TextButton, text));
     }
+
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -25,8 +25,10 @@ void main() {
     const Color unselectedColor = Color(0x00fffbfe);
 
     expect(firstButton.style!.backgroundColor!.resolve(enabled), selectedColor);
-    expect(secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
-    expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
 
     await tester.tap(find.widgetWithText(TextButton, 'Banana'));
     await tester.pumpAndSettle();
@@ -35,15 +37,19 @@ void main() {
     secondButton = findButton('Banana');
     thirdButton = findButton('Orange');
 
-    expect(firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
-    expect(secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
-    expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
+    expect(
+        thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
   });
 
   testWidgets('Multi-select ToggleButtons', (WidgetTester tester) async {
     TextButton findButton(String text) {
       return tester.widget<TextButton>(find.widgetWithText(TextButton, text));
     }
+
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -59,9 +65,12 @@ void main() {
     const Color selectedColor = Color(0xffa5d6a7);
     const Color unselectedColor = Color(0x00fffbfe);
 
-    expect(firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
-    expect(secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
-    expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
+    expect(
+        thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
 
     await tester.tap(find.widgetWithText(TextButton, 'Tomatoes'));
     await tester.tap(find.widgetWithText(TextButton, 'Carrots'));
@@ -72,14 +81,17 @@ void main() {
     thirdButton = findButton('Carrots');
 
     expect(firstButton.style!.backgroundColor!.resolve(enabled), selectedColor);
-    expect(secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
+    expect(
+        secondButton.style!.backgroundColor!.resolve(enabled), selectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), selectedColor);
   });
 
   testWidgets('Icon-only ToggleButtons', (WidgetTester tester) async {
     TextButton findButton(IconData iconData) {
-      return tester.widget<TextButton>(find.widgetWithIcon(TextButton, iconData));
+      return tester
+          .widget<TextButton>(find.widgetWithIcon(TextButton, iconData));
     }
+
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -92,12 +104,13 @@ void main() {
     TextButton secondButton = findButton(Icons.cloud);
     TextButton thirdButton = findButton(Icons.ac_unit);
 
-    const Color selectedColor =  Color(0xff90caf9);
+    const Color selectedColor = Color(0xff90caf9);
     const Color unselectedColor = Color(0x00fffbfe);
 
-
-    expect(firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
-    expect(secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        firstButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
     expect(thirdButton.style!.backgroundColor!.resolve(enabled), selectedColor);
 
     await tester.tap(find.widgetWithIcon(TextButton, Icons.sunny));
@@ -108,9 +121,11 @@ void main() {
     thirdButton = findButton(Icons.ac_unit);
 
     expect(firstButton.style!.backgroundColor!.resolve(enabled), selectedColor);
-    expect(secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
-    expect(thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        secondButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
+    expect(
+        thirdButton.style!.backgroundColor!.resolve(enabled), unselectedColor);
   });
 }
 
-Set<MaterialState> enabled = <MaterialState>{ };
+Set<MaterialState> enabled = <MaterialState>{};

@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const WidgetBindingObserverExampleApp());
 
@@ -22,10 +20,12 @@ class WidgetBindingsObserverSample extends StatefulWidget {
   const WidgetBindingsObserverSample({super.key});
 
   @override
-  State<WidgetBindingsObserverSample> createState() => _WidgetBindingsObserverSampleState();
+  State<WidgetBindingsObserverSample> createState() =>
+      _WidgetBindingsObserverSampleState();
 }
 
-class _WidgetBindingsObserverSampleState extends State<WidgetBindingsObserverSample> with WidgetsBindingObserver {
+class _WidgetBindingsObserverSampleState
+    extends State<WidgetBindingsObserverSample> with WidgetsBindingObserver {
   final List<AppLifecycleState> _stateHistoryList = <AppLifecycleState>[];
 
   @override
@@ -62,6 +62,7 @@ class _WidgetBindingsObserverSampleState extends State<WidgetBindingsObserverSam
       );
     }
 
-    return const Center(child: Text('There are no AppLifecycleStates to show.'));
+    return const Center(
+        child: Text('There are no AppLifecycleStates to show.'));
   }
 }

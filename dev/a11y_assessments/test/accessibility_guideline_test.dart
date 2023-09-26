@@ -1,4 +1,3 @@
-
 import 'package:a11y_assessments/main.dart';
 import 'package:a11y_assessments/use_cases/use_cases.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   for (final UseCase useCase in useCases) {
-    testWidgets('testing accessibility guideline for ${useCase.name}', (WidgetTester tester) async {
+    testWidgets('testing accessibility guideline for ${useCase.name}',
+        (WidgetTester tester) async {
       await tester.pumpWidget(const App());
       await tester.tap(find.byKey(Key(useCase.name)));
       await tester.pumpAndSettle();

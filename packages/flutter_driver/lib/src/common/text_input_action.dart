@@ -1,4 +1,3 @@
-
 import 'enum_util.dart';
 import 'message.dart';
 

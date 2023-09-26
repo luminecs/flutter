@@ -1,4 +1,3 @@
-
 // This example demonstrates how to create a custom toolbar that retains the
 // look of the default buttons for the current platform.
 
@@ -12,12 +11,15 @@ class EditableTextToolbarBuilderExampleApp extends StatefulWidget {
   const EditableTextToolbarBuilderExampleApp({super.key});
 
   @override
-  State<EditableTextToolbarBuilderExampleApp> createState() => _EditableTextToolbarBuilderExampleAppState();
+  State<EditableTextToolbarBuilderExampleApp> createState() =>
+      _EditableTextToolbarBuilderExampleAppState();
 }
 
-class _EditableTextToolbarBuilderExampleAppState extends State<EditableTextToolbarBuilderExampleApp> {
+class _EditableTextToolbarBuilderExampleAppState
+    extends State<EditableTextToolbarBuilderExampleApp> {
   final TextEditingController _controller = TextEditingController(
-    text: 'Right click (desktop) or long press (mobile) to see the menu with a custom toolbar.',
+    text:
+        'Right click (desktop) or long press (mobile) to see the menu with a custom toolbar.',
   );
 
   @override
@@ -51,7 +53,8 @@ class _EditableTextToolbarBuilderExampleAppState extends State<EditableTextToolb
               const SizedBox(height: 20.0),
               TextField(
                 controller: _controller,
-                contextMenuBuilder: (BuildContext context, EditableTextState editableTextState) {
+                contextMenuBuilder: (BuildContext context,
+                    EditableTextState editableTextState) {
                   return _MyTextSelectionToolbar(
                     anchor: editableTextState.contextMenuAnchors.primaryAnchor,
                     // getAdaptiveButtons creates the default button widgets for

@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 
 import 'checkbox.dart';
@@ -50,9 +49,9 @@ class CheckboxListTile extends StatelessWidget {
     this.onFocusChange,
     this.enableFeedback,
     this.checkboxSemanticLabel,
-  }) : _checkboxType = _CheckboxType.material,
-       assert(tristate || value != null),
-       assert(!isThreeLine || subtitle != null);
+  })  : _checkboxType = _CheckboxType.material,
+        assert(tristate || value != null),
+        assert(!isThreeLine || subtitle != null);
 
   const CheckboxListTile.adaptive({
     super.key,
@@ -88,9 +87,9 @@ class CheckboxListTile extends StatelessWidget {
     this.onFocusChange,
     this.enableFeedback,
     this.checkboxSemanticLabel,
-  }) : _checkboxType = _CheckboxType.adaptive,
-       assert(tristate || value != null),
-       assert(!isThreeLine || subtitle != null);
+  })  : _checkboxType = _CheckboxType.adaptive,
+        assert(tristate || value != null),
+        assert(!isThreeLine || subtitle != null);
 
   final bool? value;
 
@@ -113,7 +112,6 @@ class CheckboxListTile extends StatelessWidget {
   final MaterialTapTargetSize? materialTapTargetSize;
 
   final VisualDensity? visualDensity;
-
 
   final FocusNode? focusNode;
 
@@ -187,7 +185,8 @@ class CheckboxListTile extends StatelessWidget {
           hoverColor: hoverColor,
           overlayColor: overlayColor,
           splashRadius: splashRadius,
-          materialTapTargetSize: materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
+          materialTapTargetSize:
+              materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
           autofocus: autofocus,
           tristate: tristate,
           shape: checkboxShape,
@@ -206,7 +205,8 @@ class CheckboxListTile extends StatelessWidget {
           hoverColor: hoverColor,
           overlayColor: overlayColor,
           splashRadius: splashRadius,
-          materialTapTargetSize: materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
+          materialTapTargetSize:
+              materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
           autofocus: autofocus,
           tristate: tristate,
           shape: checkboxShape,
@@ -231,9 +231,9 @@ class CheckboxListTile extends StatelessWidget {
     final Set<MaterialState> states = <MaterialState>{
       if (selected) MaterialState.selected,
     };
-    final Color effectiveActiveColor = activeColor
-      ?? checkboxTheme.fillColor?.resolve(states)
-      ?? theme.colorScheme.secondary;
+    final Color effectiveActiveColor = activeColor ??
+        checkboxTheme.fillColor?.resolve(states) ??
+        theme.colorScheme.secondary;
     return MergeSemantics(
       child: ListTile(
         selectedColor: effectiveActiveColor,

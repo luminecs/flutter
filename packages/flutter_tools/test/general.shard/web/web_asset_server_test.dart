@@ -1,4 +1,3 @@
-
 import 'package:file/memory.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
 import 'package:flutter_tools/src/base/io.dart';
@@ -9,11 +8,70 @@ import 'package:shelf/shelf.dart';
 import '../../src/common.dart';
 
 const List<int> kTransparentImage = <int>[
-  0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49,
-  0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06,
-  0x00, 0x00, 0x00, 0x1F, 0x15, 0xC4, 0x89, 0x00, 0x00, 0x00, 0x0A, 0x49, 0x44,
-  0x41, 0x54, 0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0D,
-  0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE,
+  0x89,
+  0x50,
+  0x4E,
+  0x47,
+  0x0D,
+  0x0A,
+  0x1A,
+  0x0A,
+  0x00,
+  0x00,
+  0x00,
+  0x0D,
+  0x49,
+  0x48,
+  0x44,
+  0x52,
+  0x00,
+  0x00,
+  0x00,
+  0x01,
+  0x00,
+  0x00,
+  0x00,
+  0x01,
+  0x08,
+  0x06,
+  0x00,
+  0x00,
+  0x00,
+  0x1F,
+  0x15,
+  0xC4,
+  0x89,
+  0x00,
+  0x00,
+  0x00,
+  0x0A,
+  0x49,
+  0x44,
+  0x41,
+  0x54,
+  0x78,
+  0x9C,
+  0x63,
+  0x00,
+  0x01,
+  0x00,
+  0x00,
+  0x05,
+  0x00,
+  0x01,
+  0x0D,
+  0x0A,
+  0x2D,
+  0xB4,
+  0x00,
+  0x00,
+  0x00,
+  0x00,
+  0x49,
+  0x45,
+  0x4E,
+  0x44,
+  0xAE,
 ];
 
 final Platform platform = FakePlatform(
@@ -27,8 +85,7 @@ void main() {
 
   setUp(() {
     fileSystem = MemoryFileSystem.test();
-    fileSystem.file('lib/main.dart')
-      .createSync(recursive: true);
+    fileSystem.file('lib/main.dart').createSync(recursive: true);
     fileSystem.file('web/index.html')
       ..createSync(recursive: true)
       ..writeAsStringSync('hello');
@@ -40,8 +97,11 @@ void main() {
       ..writeAsBytesSync(<int>[1, 2, 3]);
   });
 
-  testWithoutContext('release asset server serves correct mime type and content length for png', () async {
-    final ReleaseAssetServer assetServer = ReleaseAssetServer(Uri.base,
+  testWithoutContext(
+      'release asset server serves correct mime type and content length for png',
+      () async {
+    final ReleaseAssetServer assetServer = ReleaseAssetServer(
+      Uri.base,
       fileSystem: fileSystem,
       platform: platform,
       flutterRoot: '/flutter',
@@ -50,8 +110,8 @@ void main() {
     fileSystem.file('build/web/assets/foo.png')
       ..createSync(recursive: true)
       ..writeAsBytesSync(kTransparentImage);
-    final Response response = await assetServer
-      .handle(Request('GET', Uri.parse('http://localhost:8080/assets/foo.png')));
+    final Response response = await assetServer.handle(
+        Request('GET', Uri.parse('http://localhost:8080/assets/foo.png')));
 
     expect(response.headers, <String, String>{
       'Content-Type': 'image/png',
@@ -59,8 +119,11 @@ void main() {
     });
   });
 
-  testWithoutContext('release asset server serves correct mime type and content length for JavaScript', () async {
-    final ReleaseAssetServer assetServer = ReleaseAssetServer(Uri.base,
+  testWithoutContext(
+      'release asset server serves correct mime type and content length for JavaScript',
+      () async {
+    final ReleaseAssetServer assetServer = ReleaseAssetServer(
+      Uri.base,
       fileSystem: fileSystem,
       platform: platform,
       flutterRoot: '/flutter',
@@ -69,8 +132,8 @@ void main() {
     fileSystem.file('build/web/assets/foo.js')
       ..createSync(recursive: true)
       ..writeAsStringSync('function main() {}');
-    final Response response = await assetServer
-      .handle(Request('GET', Uri.parse('http://localhost:8080/assets/foo.js')));
+    final Response response = await assetServer.handle(
+        Request('GET', Uri.parse('http://localhost:8080/assets/foo.js')));
 
     expect(response.headers, <String, String>{
       'Content-Type': 'text/javascript',
@@ -78,8 +141,11 @@ void main() {
     });
   });
 
-  testWithoutContext('release asset server serves correct mime type and content length for html', () async {
-    final ReleaseAssetServer assetServer = ReleaseAssetServer(Uri.base,
+  testWithoutContext(
+      'release asset server serves correct mime type and content length for html',
+      () async {
+    final ReleaseAssetServer assetServer = ReleaseAssetServer(
+      Uri.base,
       fileSystem: fileSystem,
       platform: platform,
       flutterRoot: '/flutter',
@@ -88,8 +154,8 @@ void main() {
     fileSystem.file('build/web/assets/foo.html')
       ..createSync(recursive: true)
       ..writeAsStringSync('<!doctype html><html></html>');
-    final Response response = await assetServer
-      .handle(Request('GET', Uri.parse('http://localhost:8080/assets/foo.html')));
+    final Response response = await assetServer.handle(
+        Request('GET', Uri.parse('http://localhost:8080/assets/foo.html')));
 
     expect(response.headers, <String, String>{
       'Content-Type': 'text/html',
@@ -97,8 +163,10 @@ void main() {
     });
   });
 
-  testWithoutContext('release asset server serves content from flutter root', () async {
-    final ReleaseAssetServer assetServer = ReleaseAssetServer(Uri.base,
+  testWithoutContext('release asset server serves content from flutter root',
+      () async {
+    final ReleaseAssetServer assetServer = ReleaseAssetServer(
+      Uri.base,
       fileSystem: fileSystem,
       platform: platform,
       flutterRoot: '/flutter',
@@ -107,14 +175,16 @@ void main() {
     fileSystem.file('flutter/bar.dart')
       ..createSync(recursive: true)
       ..writeAsStringSync('void main() { }');
-    final Response response = await assetServer
-      .handle(Request('GET', Uri.parse('http://localhost:8080/flutter/bar.dart')));
+    final Response response = await assetServer.handle(
+        Request('GET', Uri.parse('http://localhost:8080/flutter/bar.dart')));
 
     expect(response.statusCode, HttpStatus.ok);
   });
 
-  testWithoutContext('release asset server serves content from project directory', () async {
-    final ReleaseAssetServer assetServer = ReleaseAssetServer(Uri.base,
+  testWithoutContext(
+      'release asset server serves content from project directory', () async {
+    final ReleaseAssetServer assetServer = ReleaseAssetServer(
+      Uri.base,
       fileSystem: fileSystem,
       platform: platform,
       flutterRoot: '/flutter',
@@ -124,7 +194,7 @@ void main() {
       ..createSync(recursive: true)
       ..writeAsStringSync('void main() { }');
     final Response response = await assetServer
-      .handle(Request('GET', Uri.parse('http://localhost:8080/bar.dart')));
+        .handle(Request('GET', Uri.parse('http://localhost:8080/bar.dart')));
 
     expect(response.statusCode, HttpStatus.ok);
   });

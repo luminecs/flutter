@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/input_chip/input_chip.1.dart'
     as example;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(const SliverMainAxisGroupExampleApp());
@@ -51,7 +50,8 @@ class SliverMainAxisGroupExample extends StatelessWidget {
                 color: Colors.cyan,
                 height: 100,
                 child: const Center(
-                  child: Text('Another sliver child', style: TextStyle(fontSize: 24)),
+                  child: Text('Another sliver child',
+                      style: TextStyle(fontSize: 24)),
                 ),
               ),
             )

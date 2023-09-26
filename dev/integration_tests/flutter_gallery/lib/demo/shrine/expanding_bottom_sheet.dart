@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -28,13 +27,15 @@ class ExpandingBottomSheet extends StatefulWidget {
   @override
   ExpandingBottomSheetState createState() => ExpandingBottomSheetState();
 
-  static ExpandingBottomSheetState? of(BuildContext context, {bool isNullOk = false}) {
-    final ExpandingBottomSheetState? result = context.findAncestorStateOfType<ExpandingBottomSheetState>();
+  static ExpandingBottomSheetState? of(BuildContext context,
+      {bool isNullOk = false}) {
+    final ExpandingBottomSheetState? result =
+        context.findAncestorStateOfType<ExpandingBottomSheetState>();
     if (isNullOk || result != null) {
       return result;
     }
     throw FlutterError(
-      'ExpandingBottomSheet.of() called with a context that does not contain a ExpandingBottomSheet.\n');
+        'ExpandingBottomSheet.of() called with a context that does not contain a ExpandingBottomSheet.\n');
   }
 }
 
@@ -93,8 +94,10 @@ double _getPeakPoint({required double begin, required double end}) {
   return begin + (end - begin) * _kPeakVelocityProgress;
 }
 
-class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerProviderStateMixin {
-  final GlobalKey _expandingBottomSheetKey = GlobalKey(debugLabel: 'Expanding bottom sheet');
+class ExpandingBottomSheetState extends State<ExpandingBottomSheet>
+    with TickerProviderStateMixin {
+  final GlobalKey _expandingBottomSheetKey =
+      GlobalKey(debugLabel: 'Expanding bottom sheet');
 
   // The width of the Material, calculated by _widthFor() & based on the number
   // of products in the cart. 64.0 is the width when there are 0 products
@@ -143,7 +146,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
         peak: _getPeakPoint(begin: _width, end: screenWidth),
         end: screenWidth,
         isForward: false,
-        parent: CurvedAnimation(parent: _controller.view, curve: const Interval(0.0, 0.87)),
+        parent: CurvedAnimation(
+            parent: _controller.view, curve: const Interval(0.0, 0.87)),
       );
     }
   }
@@ -154,7 +158,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
 
       return _getEmphasizedEasingAnimation(
         begin: _kCartHeight,
-        peak: _kCartHeight + (screenHeight - _kCartHeight) * _kPeakVelocityProgress,
+        peak: _kCartHeight +
+            (screenHeight - _kCartHeight) * _kPeakVelocityProgress,
         end: screenHeight,
         isForward: true,
         parent: _controller.view,
@@ -169,7 +174,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
           parent: _controller.view,
           curve: const Interval(0.434, 1.0), // not used
           // only the reverseCurve will be used
-          reverseCurve: Interval(0.434, 1.0, curve: Curves.fastOutSlowIn.flipped),
+          reverseCurve:
+              Interval(0.434, 1.0, curve: Curves.fastOutSlowIn.flipped),
         ),
       );
     }
@@ -200,8 +206,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
       CurvedAnimation(
         parent: _controller.view,
         curve: _controller.status == AnimationStatus.forward
-          ? const Interval(0.0, 0.3)
-          : const Interval(0.532, 0.766),
+            ? const Interval(0.0, 0.3)
+            : const Interval(0.532, 0.766),
       ),
     );
   }
@@ -210,8 +216,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
     return CurvedAnimation(
       parent: _controller.view,
       curve: _controller.status == AnimationStatus.forward
-        ? const Interval(0.3, 0.6)
-        : const Interval(0.766, 1.0),
+          ? const Interval(0.3, 0.6)
+          : const Interval(0.766, 1.0),
     );
   }
 
@@ -235,7 +241,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
   // Returns true if the cart is open or opening and false otherwise.
   bool get _isOpen {
     final AnimationStatus status = _controller.status;
-    return status == AnimationStatus.completed || status == AnimationStatus.forward;
+    return status == AnimationStatus.completed ||
+        status == AnimationStatus.forward;
   }
 
   // Opens the ExpandingBottomSheet if it's closed, otherwise does nothing.
@@ -257,8 +264,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
   // products.)
   EdgeInsetsDirectional _cartPaddingFor(int numProducts) {
     return (numProducts == 0)
-      ? const EdgeInsetsDirectional.only(start: 20.0, end: 8.0)
-      : const EdgeInsetsDirectional.only(start: 32.0, end: 8.0);
+        ? const EdgeInsetsDirectional.only(start: 20.0, end: 8.0)
+        : const EdgeInsetsDirectional.only(start: 32.0, end: 8.0);
   }
 
   bool get _cartIsVisible => _thumbnailOpacityAnimation.value == 0.0;
@@ -332,8 +339,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
           elevation: 4.0,
           color: kShrinePink50,
           child: _cartIsVisible
-            ? _buildShoppingCartPage()
-            : _buildThumbnails(numProducts),
+              ? _buildShoppingCartPage()
+              : _buildThumbnails(numProducts),
         ),
       ),
     );
@@ -382,7 +389,8 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> with TickerP
             behavior: HitTestBehavior.opaque,
             onTap: open,
             child: ScopedModelDescendant<AppStateModel>(
-              builder: (BuildContext context, Widget? child, AppStateModel model) {
+              builder:
+                  (BuildContext context, Widget? child, AppStateModel model) {
                 return AnimatedBuilder(
                   builder: _buildCart,
                   animation: _controller,
@@ -418,7 +426,8 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
     super.initState();
     _list = _ListModel(
       listKey: _listKey,
-      initialItems: ScopedModel.of<AppStateModel>(context).productsInCart.keys.toList(),
+      initialItems:
+          ScopedModel.of<AppStateModel>(context).productsInCart.keys.toList(),
       removedItemBuilder: _buildRemovedThumbnail,
     );
     _internalList = List<int>.from(_list.list);
@@ -430,12 +439,15 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
     return product;
   }
 
-  Widget _buildRemovedThumbnail(int item, BuildContext context, Animation<double> animation) {
+  Widget _buildRemovedThumbnail(
+      int item, BuildContext context, Animation<double> animation) {
     return ProductThumbnail(animation, animation, _productWithId(item));
   }
 
-  Widget _buildThumbnail(BuildContext context, int index, Animation<double> animation) {
-    final Animation<double> thumbnailSize = Tween<double>(begin: 0.8, end: 1.0).animate(
+  Widget _buildThumbnail(
+      BuildContext context, int index, Animation<double> animation) {
+    final Animation<double> thumbnailSize =
+        Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(
         curve: const Interval(0.33, 1.0, curve: Curves.easeIn),
         parent: animation,
@@ -447,7 +459,8 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
       parent: animation,
     );
 
-    return ProductThumbnail(thumbnailSize, opacity, _productWithId(_list[index]));
+    return ProductThumbnail(
+        thumbnailSize, opacity, _productWithId(_list[index]));
   }
 
   // If the lists are the same length, assume nothing has changed.
@@ -455,7 +468,8 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
   // If the internalList is longer, then an item has been added.
   void _updateLists() {
     // Update _internalList based on the model
-    _internalList = ScopedModel.of<AppStateModel>(context).productsInCart.keys.toList();
+    _internalList =
+        ScopedModel.of<AppStateModel>(context).productsInCart.keys.toList();
     final Set<int> internalSet = Set<int>.from(_internalList);
     final Set<int> listSet = Set<int>.from(_list.list);
 
@@ -500,7 +514,8 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
   Widget build(BuildContext context) {
     _updateLists();
     return ScopedModelDescendant<AppStateModel>(
-      builder: (BuildContext context, Widget? child, AppStateModel model) => _buildAnimatedList(),
+      builder: (BuildContext context, Widget? child, AppStateModel model) =>
+          _buildAnimatedList(),
     );
   }
 }
@@ -534,7 +549,8 @@ class ExtraProductsNumber extends StatelessWidget {
 
     final int numOverflowProducts = _calculateOverflow(model);
     // Maximum of 99 so padding doesn't get messy.
-    final int displayedOverflowProducts = numOverflowProducts <= 99 ? numOverflowProducts : 99;
+    final int displayedOverflowProducts =
+        numOverflowProducts <= 99 ? numOverflowProducts : 99;
     return Text(
       '+$displayedOverflowProducts',
       style: Theme.of(context).primaryTextTheme.labelLarge,
@@ -544,13 +560,15 @@ class ExtraProductsNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
-      builder: (BuildContext builder, Widget? child, AppStateModel model) => _buildOverflow(model, context),
+      builder: (BuildContext builder, Widget? child, AppStateModel model) =>
+          _buildOverflow(model, context),
     );
   }
 }
 
 class ProductThumbnail extends StatelessWidget {
-  const ProductThumbnail(this.animation, this.opacityAnimation, this.product, {super.key});
+  const ProductThumbnail(this.animation, this.opacityAnimation, this.product,
+      {super.key});
 
   final Animation<double> animation;
   final Animation<double> opacityAnimation;
@@ -591,7 +609,9 @@ class _ListModel {
   }) : _items = initialItems?.toList() ?? <int>[];
 
   final GlobalKey<AnimatedListState> listKey;
-  final Widget Function(int item, BuildContext context, Animation<double> animation) removedItemBuilder;
+  final Widget Function(
+          int item, BuildContext context, Animation<double> animation)
+      removedItemBuilder;
   final List<int> _items;
 
   AnimatedListState? get _animatedList => listKey.currentState;
@@ -602,7 +622,8 @@ class _ListModel {
 
   void _insert(int index, int item) {
     _items.insert(index, item);
-    _animatedList!.insertItem(index, duration: const Duration(milliseconds: 225));
+    _animatedList!
+        .insertItem(index, duration: const Duration(milliseconds: 225));
   }
 
   void remove(int product) {
@@ -614,7 +635,8 @@ class _ListModel {
 
   void _removeAt(int index) {
     final int removedItem = _items.removeAt(index);
-    _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
+    _animatedList!.removeItem(index,
+        (BuildContext context, Animation<double> animation) {
       return removedItemBuilder(removedItem, context, animation);
     });
   }

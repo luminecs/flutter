@@ -1,4 +1,3 @@
-
 import 'dart:ui' show TextRange;
 
 import 'text_editing.dart';

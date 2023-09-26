@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter_devicelab/framework/devices.dart';

@@ -1,4 +1,3 @@
-
 // Examples can assume:
 // class Cat { }
 

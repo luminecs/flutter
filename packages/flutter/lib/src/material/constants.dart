@@ -1,4 +1,3 @@
-
 import 'package:flutter/painting.dart';
 
 const double kMinInteractiveDimension = 48.0;

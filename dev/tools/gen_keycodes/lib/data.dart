@@ -1,4 +1,3 @@
-
 const Map<String, String> kIosSpecialKeyMapping = <String, String>{
   'UIKeyInputEscape': 'Escape',
   'UIKeyInputF1': 'F1',

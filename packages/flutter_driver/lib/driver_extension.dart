@@ -1,4 +1,3 @@
-
 library flutter_driver_extension;
 
 export 'src/common/deserialization_factory.dart';

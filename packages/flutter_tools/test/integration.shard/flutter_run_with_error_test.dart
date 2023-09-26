@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:file/file.dart';
@@ -14,7 +13,8 @@ import 'test_utils.dart';
 void main() {
   late Directory tempDir;
   final ProjectWithEarlyError project = ProjectWithEarlyError();
-  const String exceptionStart = '══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞══════════════════';
+  const String exceptionStart =
+      '══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞══════════════════';
   late FlutterRunTestDriver flutter;
 
   setUp(() async {
@@ -27,7 +27,9 @@ void main() {
     tryToDelete(tempDir);
   });
 
-  testWithoutContext('flutter run in non-machine mode reports an early error in an application', () async {
+  testWithoutContext(
+      'flutter run in non-machine mode reports an early error in an application',
+      () async {
     final String flutterBin = fileSystem.path.join(
       getFlutterRoot(),
       'bin',
@@ -71,7 +73,8 @@ void main() {
     expect(stdout.toString(), contains(exceptionStart));
   });
 
-  testWithoutContext('flutter run in machine mode does not print an error', () async {
+  testWithoutContext('flutter run in machine mode does not print an error',
+      () async {
     final StringBuffer stdout = StringBuffer();
 
     await flutter.run(

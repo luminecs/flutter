@@ -1,10 +1,10 @@
-
 import 'framework.dart';
 
 @optionalTypeArgs
 class DisposableBuildContext<T extends State> {
   DisposableBuildContext(T this._state)
-      : assert(_state.mounted, 'A DisposableBuildContext was given a BuildContext for an Element that is not mounted.');
+      : assert(_state.mounted,
+            'A DisposableBuildContext was given a BuildContext for an Element that is not mounted.');
 
   T? _state;
 
@@ -25,7 +25,6 @@ class DisposableBuildContext<T extends State> {
     );
     return true;
   }
-
 
   void dispose() {
     _state = null;

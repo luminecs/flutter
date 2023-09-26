@@ -1,4 +1,3 @@
-
 void main(List<String> args) {
   String type = '';
   if (args[0] == '--material') {

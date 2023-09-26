@@ -1,4 +1,3 @@
-
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
@@ -27,7 +26,8 @@ class TestGestureFlutterBinding extends BindingBase with GestureBinding {
 
   Future<void> test(VoidCallback callback) {
     return _binding.lockEvents(() async {
-      GestureBinding.instance.platformDispatcher.onPointerDataPacket?.call(packet);
+      GestureBinding.instance.platformDispatcher.onPointerDataPacket
+          ?.call(packet);
       callback();
     });
   }

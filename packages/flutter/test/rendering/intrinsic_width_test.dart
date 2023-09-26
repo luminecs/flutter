@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -36,8 +35,11 @@ class RenderTestBox extends RenderBox {
   @override
   void performResize() {
     size = constraints.constrain(Size(
-      _intrinsicDimensions.minWidth + (_intrinsicDimensions.maxWidth - _intrinsicDimensions.minWidth) / 2.0,
-      _intrinsicDimensions.minHeight + (_intrinsicDimensions.maxHeight - _intrinsicDimensions.minHeight) / 2.0,
+      _intrinsicDimensions.minWidth +
+          (_intrinsicDimensions.maxWidth - _intrinsicDimensions.minWidth) / 2.0,
+      _intrinsicDimensions.minHeight +
+          (_intrinsicDimensions.maxHeight - _intrinsicDimensions.minHeight) /
+              2.0,
     ));
   }
 }
@@ -130,7 +132,8 @@ void main() {
       minHeight: 20.0,
       maxHeight: 200.0,
     ));
-    final RenderBox parent = RenderIntrinsicWidth(child: child, stepWidth: 47.0);
+    final RenderBox parent =
+        RenderIntrinsicWidth(child: child, stepWidth: 47.0);
     layout(
       parent,
       constraints: const BoxConstraints(
@@ -173,7 +176,8 @@ void main() {
       minHeight: 20.0,
       maxHeight: 200.0,
     ));
-    final RenderBox parent = RenderIntrinsicWidth(child: child, stepHeight: 47.0);
+    final RenderBox parent =
+        RenderIntrinsicWidth(child: child, stepHeight: 47.0);
     layout(
       parent,
       constraints: const BoxConstraints(
@@ -214,7 +218,8 @@ void main() {
       minHeight: 20.0,
       maxHeight: 200.0,
     ));
-    final RenderBox parent = RenderIntrinsicWidth(child: child, stepHeight: 47.0, stepWidth: 37.0);
+    final RenderBox parent =
+        RenderIntrinsicWidth(child: child, stepHeight: 47.0, stepWidth: 37.0);
     layout(
       parent,
       constraints: const BoxConstraints(
@@ -248,7 +253,9 @@ void main() {
     expect(parent.getMaxIntrinsicHeight(double.infinity), equals(5.0 * 47.0));
   });
 
-  test('RenderIntrinsicWidth when parent is given loose constraints smaller than intrinsic width of child', () {
+  test(
+      'RenderIntrinsicWidth when parent is given loose constraints smaller than intrinsic width of child',
+      () {
     final RenderBox child = RenderTestBox(const BoxConstraints(
       minWidth: 10.0,
       maxWidth: 100.0,
@@ -271,9 +278,11 @@ void main() {
     expect(child.size.height, equals(110));
   });
 
-  test('RenderIntrinsicWidth when parent is given tight constraints larger than intrinsic width of child', () {
-    final RenderBox child =
-        RenderTestBox(const BoxConstraints(minWidth: 10.0, maxWidth: 100.0, minHeight: 20.0, maxHeight: 200.0));
+  test(
+      'RenderIntrinsicWidth when parent is given tight constraints larger than intrinsic width of child',
+      () {
+    final RenderBox child = RenderTestBox(const BoxConstraints(
+        minWidth: 10.0, maxWidth: 100.0, minHeight: 20.0, maxHeight: 200.0));
     final RenderBox parent = RenderIntrinsicWidth(child: child);
     layout(
       parent,
@@ -290,7 +299,9 @@ void main() {
     expect(child.size.height, equals(110));
   });
 
-  test('RenderIntrinsicWidth when parent is given tight constraints smaller than intrinsic width of child', () {
+  test(
+      'RenderIntrinsicWidth when parent is given tight constraints smaller than intrinsic width of child',
+      () {
     final RenderBox child = RenderTestBox(const BoxConstraints(
       minWidth: 10.0,
       maxWidth: 100.0,
@@ -389,7 +400,9 @@ void main() {
     expect(parent.getMaxIntrinsicHeight(double.infinity), equals(0.0));
   });
 
-  test('RenderIntrinsicHeight when parent is given loose constraints smaller than intrinsic height of child', () {
+  test(
+      'RenderIntrinsicHeight when parent is given loose constraints smaller than intrinsic height of child',
+      () {
     final RenderBox child = RenderTestBox(const BoxConstraints(
       minWidth: 10.0,
       maxWidth: 100.0,
@@ -412,7 +425,9 @@ void main() {
     expect(child.size.height, equals(80));
   });
 
-  test('RenderIntrinsicHeight when parent is given tight constraints larger than intrinsic height of child', () {
+  test(
+      'RenderIntrinsicHeight when parent is given tight constraints larger than intrinsic height of child',
+      () {
     final RenderBox child = RenderTestBox(const BoxConstraints(
       minWidth: 10.0,
       maxWidth: 100.0,
@@ -435,7 +450,9 @@ void main() {
     expect(child.size.height, equals(400));
   });
 
-  test('RenderIntrinsicHeight when parent is given tight constraints smaller than intrinsic height of child', () {
+  test(
+      'RenderIntrinsicHeight when parent is given tight constraints smaller than intrinsic height of child',
+      () {
     final RenderBox child = RenderTestBox(const BoxConstraints(
       minWidth: 10.0,
       maxWidth: 100.0,

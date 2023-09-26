@@ -1,4 +1,3 @@
-
 import 'package:meta/meta.dart';
 
 import '../base/logger.dart';

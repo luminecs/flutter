@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -44,36 +43,36 @@ void main() {
     });
 
     testWidgets(
-      'Multiple text with same label but Nodes excluded from '
-      'semantic tree have failing contrast should pass a11y guideline ',
-      (WidgetTester tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
-        await tester.pumpWidget(
-          _boilerplate(
-            const Column(
-              children: <Widget>[
-                Text(
+        'Multiple text with same label but Nodes excluded from '
+        'semantic tree have failing contrast should pass a11y guideline ',
+        (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _boilerplate(
+          const Column(
+            children: <Widget>[
+              Text(
+                'this is a test',
+                style: TextStyle(fontSize: 14.0, color: Colors.black),
+              ),
+              SizedBox(height: 50),
+              Text(
+                'this is a test',
+                style: TextStyle(fontSize: 14.0, color: Colors.black),
+              ),
+              SizedBox(height: 50),
+              ExcludeSemantics(
+                child: Text(
                   'this is a test',
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                  style: TextStyle(fontSize: 14.0, color: Colors.white),
                 ),
-                SizedBox(height: 50),
-                Text(
-                  'this is a test',
-                  style: TextStyle(fontSize: 14.0, color: Colors.black),
-                ),
-                SizedBox(height: 50),
-                ExcludeSemantics(
-                  child: Text(
-                    'this is a test',
-                    style: TextStyle(fontSize: 14.0, color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-        await expectLater(tester, meetsGuideline(textContrastGuideline));
-        handle.dispose();
+        ),
+      );
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      handle.dispose();
     });
 
     testWidgets('white text on black background - Text Widget - direct style',
@@ -97,38 +96,38 @@ void main() {
     });
 
     testWidgets('White text on white background fails contrast test',
-      (WidgetTester tester) async {
-    final SemanticsHandle handle = tester.ensureSemantics();
-    await tester.pumpWidget(
-      _boilerplate(
-        Container(
-          width: 200.0,
-          height: 300.0,
-          color: Colors.white,
-          child: const Column(
-            children: <Widget>[
-              Text(
-                'this is a white text',
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
-              ),
-              SizedBox(height: 50),
-              Text(
-                'this is a black text test1',
-                style: TextStyle(fontSize: 14.0, color: Colors.black),
-              ),
-              SizedBox(height: 50),
-              Text(
-                'this is a black text test2',
-                style: TextStyle(fontSize: 14.0, color: Colors.black),
-              ),
-            ],
+        (WidgetTester tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _boilerplate(
+          Container(
+            width: 200.0,
+            height: 300.0,
+            color: Colors.white,
+            child: const Column(
+              children: <Widget>[
+                Text(
+                  'this is a white text',
+                  style: TextStyle(fontSize: 14.0, color: Colors.white),
+                ),
+                SizedBox(height: 50),
+                Text(
+                  'this is a black text test1',
+                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                ),
+                SizedBox(height: 50),
+                Text(
+                  'this is a black text test2',
+                  style: TextStyle(fontSize: 14.0, color: Colors.black),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-    await expectLater(tester, doesNotMeetGuideline(textContrastGuideline));
-    handle.dispose();
-  });
+      );
+      await expectLater(tester, doesNotMeetGuideline(textContrastGuideline));
+      handle.dispose();
+    });
 
     const Color surface = Color(0xFFF0F0F0);
 
@@ -137,7 +136,11 @@ void main() {
     const Color blue45 = Color(0xFF5252FF);
     const List<TextStyle> textStylesMeetingGuideline = <TextStyle>[
       TextStyle(color: blue44, backgroundColor: surface, fontSize: 18),
-      TextStyle(color: blue44, backgroundColor: surface, fontSize: 14, fontWeight: FontWeight.bold),
+      TextStyle(
+          color: blue44,
+          backgroundColor: surface,
+          fontSize: 14,
+          fontWeight: FontWeight.bold),
       TextStyle(color: blue45, backgroundColor: surface),
     ];
     const List<TextStyle> textStylesDoesNotMeetingGuideline = <TextStyle>[
@@ -146,8 +149,8 @@ void main() {
     ];
 
     Widget appWithTextWidget(TextStyle style) => _boilerplate(
-      Text('this is text', style: style.copyWith(height: 30.0)),
-    );
+          Text('this is text', style: style.copyWith(height: 30.0)),
+        );
 
     for (final TextStyle style in textStylesMeetingGuideline) {
       testWidgets('text with style $style', (WidgetTester tester) async {
@@ -222,7 +225,8 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('Correctly identify failures in complex transforms', (WidgetTester tester) async {
+    testWidgets('Correctly identify failures in complex transforms',
+        (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
       await tester.pumpWidget(
         _boilerplate(
@@ -271,7 +275,8 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('Material2: yellow text on yellow background fails with correct message',
+    testWidgets(
+        'Material2: yellow text on yellow background fails with correct message',
         (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
       await tester.pumpWidget(
@@ -298,12 +303,13 @@ void main() {
         'size of 14.0.\n'
         'The computed colors was:\n'
         'light - Color(0xfffafafa), dark - Color(0xffffeb3b)\n'
-         'See also: https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html',
+        'See also: https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html',
       );
       handle.dispose();
     });
 
-    testWidgets('Material3: yellow text on yellow background fails with correct message',
+    testWidgets(
+        'Material3: yellow text on yellow background fails with correct message',
         (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
       await tester.pumpWidget(
@@ -330,7 +336,7 @@ void main() {
         'size of 14.0.\n'
         'The computed colors was:\n'
         'light - Color(0xfffffbfe), dark - Color(0xffffeb3b)\n'
-         'See also: https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html',
+        'See also: https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html',
       );
       handle.dispose();
     });
@@ -371,7 +377,8 @@ void main() {
                   color: Colors.yellow,
                   child: const Text(
                     'this is a test',
-                    style: TextStyle(fontSize: 14.0, color: Colors.yellowAccent),
+                    style:
+                        TextStyle(fontSize: 14.0, color: Colors.yellowAccent),
                   ),
                 ),
               ),
@@ -435,11 +442,15 @@ void main() {
       );
     }
 
-    Widget rowWidget(List<Widget> widgets) => _boilerplate(Row(children: widgets));
+    Widget rowWidget(List<Widget> widgets) =>
+        _boilerplate(Row(children: widgets));
 
-    final Finder findIcons = find.byWidgetPredicate((Widget widget) => widget is Icon);
-    final Finder findTexts = find.byWidgetPredicate((Widget widget) => widget is Text);
-    final Finder findIconsAndTexts = find.byWidgetPredicate((Widget widget) => widget is Icon || widget is Text);
+    final Finder findIcons =
+        find.byWidgetPredicate((Widget widget) => widget is Icon);
+    final Finder findTexts =
+        find.byWidgetPredicate((Widget widget) => widget is Text);
+    final Finder findIconsAndTexts = find
+        .byWidgetPredicate((Widget widget) => widget is Icon || widget is Text);
 
     testWidgets('Black icons on white background', (WidgetTester tester) async {
       await tester.pumpWidget(rowWidget(<Widget>[
@@ -480,10 +491,20 @@ void main() {
 
     testWidgets('Using different icons', (WidgetTester tester) async {
       await tester.pumpWidget(rowWidget(<Widget>[
-        iconWidget(color: Colors.black, background: Colors.white, icon: Icons.more_horiz),
-        iconWidget(color: Colors.black, background: Colors.white, icon: Icons.description),
-        iconWidget(color: Colors.black, background: Colors.white, icon: Icons.image),
-        iconWidget(color: Colors.black, background: Colors.white, icon: Icons.beach_access),
+        iconWidget(
+            color: Colors.black,
+            background: Colors.white,
+            icon: Icons.more_horiz),
+        iconWidget(
+            color: Colors.black,
+            background: Colors.white,
+            icon: Icons.description),
+        iconWidget(
+            color: Colors.black, background: Colors.white, icon: Icons.image),
+        iconWidget(
+            color: Colors.black,
+            background: Colors.white,
+            icon: Icons.beach_access),
       ]));
 
       await expectLater(
@@ -508,10 +529,22 @@ void main() {
     testWidgets('White on different colors, passing',
         (WidgetTester tester) async {
       await tester.pumpWidget(rowWidget(<Widget>[
-        iconWidget(color: Colors.white, background: Colors.red[800]!, icon: Icons.more_horiz),
-        iconWidget(color: Colors.white, background: Colors.green[800]!, icon: Icons.description),
-        iconWidget(color: Colors.white, background: Colors.blue[800]!, icon: Icons.image),
-        iconWidget(color: Colors.white, background: Colors.purple[800]!, icon: Icons.beach_access),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.red[800]!,
+            icon: Icons.more_horiz),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.green[800]!,
+            icon: Icons.description),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.blue[800]!,
+            icon: Icons.image),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.purple[800]!,
+            icon: Icons.beach_access),
       ]));
 
       await expectLater(tester,
@@ -521,10 +554,22 @@ void main() {
     testWidgets('White on different colors, failing',
         (WidgetTester tester) async {
       await tester.pumpWidget(rowWidget(<Widget>[
-        iconWidget(color: Colors.white, background: Colors.red[200]!, icon: Icons.more_horiz),
-        iconWidget(color: Colors.white, background: Colors.green[400]!, icon: Icons.description),
-        iconWidget(color: Colors.white, background: Colors.blue[600]!, icon: Icons.image),
-        iconWidget(color: Colors.white, background: Colors.purple[800]!, icon: Icons.beach_access),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.red[200]!,
+            icon: Icons.more_horiz),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.green[400]!,
+            icon: Icons.description),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.blue[600]!,
+            icon: Icons.image),
+        iconWidget(
+            color: Colors.white,
+            background: Colors.purple[800]!,
+            icon: Icons.beach_access),
       ]));
 
       await expectLater(
@@ -574,7 +619,8 @@ void main() {
       );
       await expectLater(
         tester,
-        doesNotMeetGuideline(CustomMinimumContrastGuideline(finder: findIconsAndTexts)),
+        doesNotMeetGuideline(
+            CustomMinimumContrastGuideline(finder: findIconsAndTexts)),
       );
     });
 
@@ -590,7 +636,8 @@ void main() {
       );
       await expectLater(
         tester,
-        meetsGuideline(CustomMinimumContrastGuideline(finder: findIcons, minimumRatio: 3.0)),
+        meetsGuideline(CustomMinimumContrastGuideline(
+            finder: findIcons, minimumRatio: 3.0)),
       );
     });
 
@@ -606,7 +653,8 @@ void main() {
       );
       await expectLater(
         tester,
-        meetsGuideline(CustomMinimumContrastGuideline(finder: findTexts, minimumRatio: 3.0)),
+        meetsGuideline(CustomMinimumContrastGuideline(
+            finder: findTexts, minimumRatio: 3.0)),
       );
     });
 
@@ -626,7 +674,8 @@ void main() {
       );
       await expectLater(
         tester,
-        meetsGuideline(CustomMinimumContrastGuideline(finder: findTexts, minimumRatio: 3.0)),
+        meetsGuideline(CustomMinimumContrastGuideline(
+            finder: findTexts, minimumRatio: 3.0)),
       );
     });
   });
@@ -707,7 +756,8 @@ void main() {
           child: GestureDetector(onTap: () {}),
         ),
       ));
-      final Evaluation result = await androidTapTargetGuideline.evaluate(tester);
+      final Evaluation result =
+          await androidTapTargetGuideline.evaluate(tester);
       expect(result.passed, false);
       expect(
         result.reason,
@@ -742,7 +792,8 @@ void main() {
         ),
       );
 
-      final Evaluation overlappingTopResult = await androidTapTargetGuideline.evaluate(tester);
+      final Evaluation overlappingTopResult =
+          await androidTapTargetGuideline.evaluate(tester);
       expect(overlappingTopResult.passed, true);
 
       await tester.pumpWidget(
@@ -759,7 +810,8 @@ void main() {
         ),
       );
 
-      final Evaluation overlappingLeftResult = await androidTapTargetGuideline.evaluate(tester);
+      final Evaluation overlappingLeftResult =
+          await androidTapTargetGuideline.evaluate(tester);
       expect(overlappingLeftResult.passed, true);
 
       await tester.pumpWidget(
@@ -775,7 +827,8 @@ void main() {
         ),
       );
 
-      final Evaluation overlappingBottomResult = await androidTapTargetGuideline.evaluate(tester);
+      final Evaluation overlappingBottomResult =
+          await androidTapTargetGuideline.evaluate(tester);
       expect(overlappingBottomResult.passed, true);
 
       await tester.pumpWidget(
@@ -791,7 +844,8 @@ void main() {
         ),
       );
 
-      final Evaluation overlappingRightResult = await androidTapTargetGuideline.evaluate(tester);
+      final Evaluation overlappingRightResult =
+          await androidTapTargetGuideline.evaluate(tester);
       expect(overlappingRightResult.passed, true);
       handle.dispose();
     });
@@ -816,7 +870,8 @@ void main() {
         ),
       )));
 
-      final Evaluation overlappingRightResult = await androidTapTargetGuideline.evaluate(tester);
+      final Evaluation overlappingRightResult =
+          await androidTapTargetGuideline.evaluate(tester);
       expect(overlappingRightResult.passed, true);
       handle.dispose();
     });
@@ -847,31 +902,30 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('Tap size test can handle partially off-screen items', (WidgetTester tester) async {
+    testWidgets('Tap size test can handle partially off-screen items',
+        (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-      await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              appBar: AppBar(title: const Text('Foo')),
-              body: ListView(
-                  controller: controller,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Semantics(container: true, onTap: () {}, child: const Text('hello'))),
-                    ),
-                    Container(
-                      height: 1000,
-                      color: Colors.red,
-                    ),
-                  ]
-              ),
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(title: const Text('Foo')),
+          body: ListView(controller: controller, children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Semantics(
+                      container: true,
+                      onTap: () {},
+                      child: const Text('hello'))),
             ),
-          )
-      );
+            Container(
+              height: 1000,
+              color: Colors.red,
+            ),
+          ]),
+        ),
+      ));
       controller.jumpTo(90);
       await tester.pump();
       await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
@@ -887,7 +941,8 @@ void main() {
         label: 'test',
         child: const SizedBox(width: 10.0, height: 10.0),
       )));
-      final Evaluation result = await labeledTapTargetGuideline.evaluate(tester);
+      final Evaluation result =
+          await labeledTapTargetGuideline.evaluate(tester);
       expect(result.passed, true);
       handle.dispose();
     });
@@ -900,7 +955,8 @@ void main() {
         label: '',
         child: const SizedBox(width: 10.0, height: 10.0),
       )));
-      final Evaluation result = await labeledTapTargetGuideline.evaluate(tester);
+      final Evaluation result =
+          await labeledTapTargetGuideline.evaluate(tester);
       expect(result.passed, false);
       handle.dispose();
     });
@@ -913,7 +969,8 @@ void main() {
         label: '',
         child: const SizedBox(width: 10.0, height: 10.0),
       )));
-      final Evaluation result = await labeledTapTargetGuideline.evaluate(tester);
+      final Evaluation result =
+          await labeledTapTargetGuideline.evaluate(tester);
       expect(result.passed, false);
       handle.dispose();
     });
@@ -930,15 +987,18 @@ void main() {
           child: const SizedBox(width: 10.0, height: 10.0),
         ),
       )));
-      final Evaluation result = await labeledTapTargetGuideline.evaluate(tester);
+      final Evaluation result =
+          await labeledTapTargetGuideline.evaluate(tester);
       expect(result.passed, true);
       handle.dispose();
     });
 
-    testWidgets('Passes if text field does not have label', (WidgetTester tester) async {
+    testWidgets('Passes if text field does not have label',
+        (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
       await tester.pumpWidget(_boilerplate(const TextField()));
-      final Evaluation result = await labeledTapTargetGuideline.evaluate(tester);
+      final Evaluation result =
+          await labeledTapTargetGuideline.evaluate(tester);
       expect(result.passed, true);
       handle.dispose();
     });
@@ -966,7 +1026,7 @@ void main() {
   });
 }
 
-Widget _boilerplate(Widget child, { bool? useMaterial3 }) {
+Widget _boilerplate(Widget child, {bool? useMaterial3}) {
   return MaterialApp(
     theme: ThemeData(useMaterial3: useMaterial3),
     home: Scaffold(

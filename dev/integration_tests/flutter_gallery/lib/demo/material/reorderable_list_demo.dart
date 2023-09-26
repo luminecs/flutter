@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../gallery/demo.dart';
@@ -12,7 +11,7 @@ enum _ReorderableListType {
 }
 
 class ReorderableListDemo extends StatefulWidget {
-  const ReorderableListDemo({ super.key });
+  const ReorderableListDemo({super.key});
 
   static const String routeName = '/material/reorderable-list';
 
@@ -29,14 +28,28 @@ class _ListItem {
 }
 
 class _ListDemoState extends State<ReorderableListDemo> {
-  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      GlobalKey<ScaffoldState>();
 
   PersistentBottomSheetController<void>? _bottomSheet;
   _ReorderableListType? _itemType = _ReorderableListType.threeLine;
   bool? _reverse = false;
   bool _reverseSort = false;
   final List<_ListItem> _items = <String>[
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
   ].map<_ListItem>((String item) => _ListItem(item, false)).toList();
 
   void changeItemType(_ReorderableListType? type) {
@@ -65,7 +78,8 @@ class _ListDemoState extends State<ReorderableListDemo> {
 
   void _showConfigurationSheet() {
     setState(() {
-      _bottomSheet = scaffoldKey.currentState!.showBottomSheet<void>((BuildContext bottomSheetContext) {
+      _bottomSheet = scaffoldKey.currentState!
+          .showBottomSheet<void>((BuildContext bottomSheetContext) {
         return DecoratedBox(
           decoration: const BoxDecoration(
             border: Border(top: BorderSide(color: Colors.black26)),
@@ -167,7 +181,6 @@ class _ListDemoState extends State<ReorderableListDemo> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,7 +195,9 @@ class _ListDemoState extends State<ReorderableListDemo> {
             onPressed: () {
               setState(() {
                 _reverseSort = !_reverseSort;
-                _items.sort((_ListItem a, _ListItem b) => _reverseSort ? b.value.compareTo(a.value) : a.value.compareTo(b.value));
+                _items.sort((_ListItem a, _ListItem b) => _reverseSort
+                    ? b.value.compareTo(a.value)
+                    : a.value.compareTo(b.value));
               });
             },
           ),
@@ -203,11 +218,14 @@ class _ListDemoState extends State<ReorderableListDemo> {
           header: _itemType != _ReorderableListType.threeLine
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Header of the list', style: Theme.of(context).textTheme.headlineSmall))
+                  child: Text('Header of the list',
+                      style: Theme.of(context).textTheme.headlineSmall))
               : null,
           onReorder: _onReorder,
           reverse: _reverse!,
-          scrollDirection: _itemType == _ReorderableListType.horizontalAvatar ? Axis.horizontal : Axis.vertical,
+          scrollDirection: _itemType == _ReorderableListType.horizontalAvatar
+              ? Axis.horizontal
+              : Axis.vertical,
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           children: _items.map<Widget>(buildListTile).toList(),
         ),

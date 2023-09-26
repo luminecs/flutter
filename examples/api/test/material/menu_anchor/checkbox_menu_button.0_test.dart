@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/menu_anchor/checkbox_menu_button.0.dart' as example;
+import 'package:flutter_api_samples/material/menu_anchor/checkbox_menu_button.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -22,7 +22,8 @@ void main() {
     expect(find.text(example.MenuApp.kMessage), findsOneWidget);
   });
 
-  testWidgets('MenuAnchor is wrapped in a SafeArea', (WidgetTester tester) async {
+  testWidgets('MenuAnchor is wrapped in a SafeArea',
+      (WidgetTester tester) async {
     const double safeAreaPadding = 100.0;
     await tester.pumpWidget(
       const MediaQuery(
@@ -33,6 +34,7 @@ void main() {
       ),
     );
 
-    expect(tester.getTopLeft(find.byType(MenuAnchor)), const Offset(0.0, safeAreaPadding));
+    expect(tester.getTopLeft(find.byType(MenuAnchor)),
+        const Offset(0.0, safeAreaPadding));
   });
 }

@@ -1,13 +1,13 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Texture with freeze set to true', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Texture with freeze set to true',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
-        const Center(child: Texture(textureId: 1, freeze: true)),
+      const Center(child: Texture(textureId: 1, freeze: true)),
     );
 
     final Texture texture = tester.firstWidget(find.byType(Texture));
@@ -15,7 +15,8 @@ void main() {
     expect(texture.textureId, 1);
     expect(texture.freeze, true);
 
-    final RenderObject renderObject = tester.firstRenderObject(find.byType(Texture));
+    final RenderObject renderObject =
+        tester.firstRenderObject(find.byType(Texture));
     expect(renderObject, isNotNull);
     final TextureBox textureBox = renderObject as TextureBox;
     expect(textureBox, isNotNull);
@@ -24,7 +25,8 @@ void main() {
 
     final ContainerLayer containerLayer = ContainerLayer();
     addTearDown(containerLayer.dispose);
-    final PaintingContext paintingContext = PaintingContext(containerLayer, Rect.zero);
+    final PaintingContext paintingContext =
+        PaintingContext(containerLayer, Rect.zero);
     textureBox.paint(paintingContext, Offset.zero);
     final Layer layer = containerLayer.lastChild!;
     expect(layer, isNotNull);
@@ -34,9 +36,10 @@ void main() {
     expect(textureLayer.freeze, true);
   });
 
-  testWidgetsWithLeakTracking('Texture with default FilterQuality', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Texture with default FilterQuality',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
-        const Center(child: Texture(textureId: 1)),
+      const Center(child: Texture(textureId: 1)),
     );
 
     final Texture texture = tester.firstWidget(find.byType(Texture));
@@ -44,7 +47,8 @@ void main() {
     expect(texture.textureId, 1);
     expect(texture.filterQuality, FilterQuality.low);
 
-    final RenderObject renderObject = tester.firstRenderObject(find.byType(Texture));
+    final RenderObject renderObject =
+        tester.firstRenderObject(find.byType(Texture));
     expect(renderObject, isNotNull);
     final TextureBox textureBox = renderObject as TextureBox;
     expect(textureBox, isNotNull);
@@ -53,7 +57,8 @@ void main() {
 
     final ContainerLayer containerLayer = ContainerLayer();
     addTearDown(containerLayer.dispose);
-    final PaintingContext paintingContext = PaintingContext(containerLayer, Rect.zero);
+    final PaintingContext paintingContext =
+        PaintingContext(containerLayer, Rect.zero);
     textureBox.paint(paintingContext, Offset.zero);
     final Layer layer = containerLayer.lastChild!;
     expect(layer, isNotNull);
@@ -63,10 +68,11 @@ void main() {
     expect(textureLayer.filterQuality, FilterQuality.low);
   });
 
-
-  testWidgetsWithLeakTracking('Texture with FilterQuality.none', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Texture with FilterQuality.none',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
-        const Center(child: Texture(textureId: 1, filterQuality: FilterQuality.none)),
+      const Center(
+          child: Texture(textureId: 1, filterQuality: FilterQuality.none)),
     );
 
     final Texture texture = tester.firstWidget(find.byType(Texture));
@@ -74,7 +80,8 @@ void main() {
     expect(texture.textureId, 1);
     expect(texture.filterQuality, FilterQuality.none);
 
-    final RenderObject renderObject = tester.firstRenderObject(find.byType(Texture));
+    final RenderObject renderObject =
+        tester.firstRenderObject(find.byType(Texture));
     expect(renderObject, isNotNull);
     final TextureBox textureBox = renderObject as TextureBox;
     expect(textureBox, isNotNull);
@@ -83,7 +90,8 @@ void main() {
 
     final ContainerLayer containerLayer = ContainerLayer();
     addTearDown(containerLayer.dispose);
-    final PaintingContext paintingContext = PaintingContext(containerLayer, Rect.zero);
+    final PaintingContext paintingContext =
+        PaintingContext(containerLayer, Rect.zero);
     textureBox.paint(paintingContext, Offset.zero);
     final Layer layer = containerLayer.lastChild!;
     expect(layer, isNotNull);
@@ -93,9 +101,10 @@ void main() {
     expect(textureLayer.filterQuality, FilterQuality.none);
   });
 
-  testWidgetsWithLeakTracking('Texture with FilterQuality.low', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Texture with FilterQuality.low',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
-        const Center(child: Texture(textureId: 1)),
+      const Center(child: Texture(textureId: 1)),
     );
 
     final Texture texture = tester.firstWidget(find.byType(Texture));
@@ -103,7 +112,8 @@ void main() {
     expect(texture.textureId, 1);
     expect(texture.filterQuality, FilterQuality.low);
 
-    final RenderObject renderObject = tester.firstRenderObject(find.byType(Texture));
+    final RenderObject renderObject =
+        tester.firstRenderObject(find.byType(Texture));
     expect(renderObject, isNotNull);
     final TextureBox textureBox = renderObject as TextureBox;
     expect(textureBox, isNotNull);
@@ -112,7 +122,8 @@ void main() {
 
     final ContainerLayer containerLayer = ContainerLayer();
     addTearDown(containerLayer.dispose);
-    final PaintingContext paintingContext = PaintingContext(containerLayer, Rect.zero);
+    final PaintingContext paintingContext =
+        PaintingContext(containerLayer, Rect.zero);
     textureBox.paint(paintingContext, Offset.zero);
     final Layer layer = containerLayer.lastChild!;
     expect(layer, isNotNull);

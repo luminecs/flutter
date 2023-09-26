@@ -1,4 +1,3 @@
-
 import 'package:args/args.dart';
 import 'package:conductor_core/src/globals.dart';
 import 'package:conductor_core/src/proto/conductor_state.pb.dart' as pb;
@@ -189,7 +188,7 @@ class FakeArgs implements ArgResults {
   }
 
   @override
-  Object? operator[](String name) {
+  Object? operator [](String name) {
     return results[name];
   }
 }

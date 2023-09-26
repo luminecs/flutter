@@ -1,4 +1,3 @@
-
 enum Category {
   all,
   accessories,

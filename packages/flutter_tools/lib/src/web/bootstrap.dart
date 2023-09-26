@@ -1,4 +1,3 @@
-
 import 'package:package_config/package_config.dart';
 
 String generateBootstrapScript({

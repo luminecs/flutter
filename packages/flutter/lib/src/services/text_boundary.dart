@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:characters/characters.dart' show CharacterRange;
@@ -45,7 +44,9 @@ class CharacterBoundary extends TextBoundary {
     if (position < 0) {
       return null;
     }
-    final int graphemeStart = CharacterRange.at(_text, min(position, _text.length)).stringBeforeLength;
+    final int graphemeStart =
+        CharacterRange.at(_text, min(position, _text.length))
+            .stringBeforeLength;
     assert(CharacterRange.at(_text, graphemeStart).isEmpty);
     return graphemeStart;
   }
@@ -55,24 +56,34 @@ class CharacterBoundary extends TextBoundary {
     if (position >= _text.length) {
       return null;
     }
-    final CharacterRange rangeAtPosition = CharacterRange.at(_text, max(0, position + 1));
-    final int nextBoundary = rangeAtPosition.stringBeforeLength + rangeAtPosition.current.length;
-    assert(nextBoundary == _text.length || CharacterRange.at(_text, nextBoundary).isEmpty);
+    final CharacterRange rangeAtPosition =
+        CharacterRange.at(_text, max(0, position + 1));
+    final int nextBoundary =
+        rangeAtPosition.stringBeforeLength + rangeAtPosition.current.length;
+    assert(nextBoundary == _text.length ||
+        CharacterRange.at(_text, nextBoundary).isEmpty);
     return nextBoundary;
   }
 
   @override
   TextRange getTextBoundaryAt(int position) {
     if (position < 0) {
-      return TextRange(start: -1, end: getTrailingTextBoundaryAt(position) ?? -1);
+      return TextRange(
+          start: -1, end: getTrailingTextBoundaryAt(position) ?? -1);
     } else if (position >= _text.length) {
-      return TextRange(start: getLeadingTextBoundaryAt(position) ?? -1, end: -1);
+      return TextRange(
+          start: getLeadingTextBoundaryAt(position) ?? -1, end: -1);
     }
     final CharacterRange rangeAtPosition = CharacterRange.at(_text, position);
     return rangeAtPosition.isNotEmpty
-      ? TextRange(start: rangeAtPosition.stringBeforeLength, end: rangeAtPosition.stringBeforeLength + rangeAtPosition.current.length)
-      // rangeAtPosition is empty means `position` is a grapheme boundary.
-      : TextRange(start: rangeAtPosition.stringBeforeLength, end: getTrailingTextBoundaryAt(position) ?? -1);
+        ? TextRange(
+            start: rangeAtPosition.stringBeforeLength,
+            end: rangeAtPosition.stringBeforeLength +
+                rangeAtPosition.current.length)
+        // rangeAtPosition is empty means `position` is a grapheme boundary.
+        : TextRange(
+            start: rangeAtPosition.stringBeforeLength,
+            end: getTrailingTextBoundaryAt(position) ?? -1);
   }
 }
 
@@ -82,7 +93,8 @@ class LineBoundary extends TextBoundary {
   final TextLayoutMetrics _textLayout;
 
   @override
-  TextRange getTextBoundaryAt(int position) => _textLayout.getLineAtOffset(TextPosition(offset: max(position, 0)));
+  TextRange getTextBoundaryAt(int position) =>
+      _textLayout.getLineAtOffset(TextPosition(offset: max(position, 0)));
 }
 
 class ParagraphBoundary extends TextBoundary {
@@ -106,7 +118,9 @@ class ParagraphBoundary extends TextBoundary {
 
     int index = position;
 
-    if (index > 1 && _text.codeUnitAt(index) == 0x0A && _text.codeUnitAt(index - 1) == 0x0D) {
+    if (index > 1 &&
+        _text.codeUnitAt(index) == 0x0A &&
+        _text.codeUnitAt(index - 1) == 0x0D) {
       index -= 2;
     } else if (TextLayoutMetrics.isLineTerminator(_text.codeUnitAt(index))) {
       index -= 1;
@@ -141,11 +155,11 @@ class ParagraphBoundary extends TextBoundary {
       }
     }
 
-    return index < _text.length - 1
-                && _text.codeUnitAt(index) == 0x0D
-                && _text.codeUnitAt(index + 1) == 0x0A
-                ? index + 2
-                : index + 1;
+    return index < _text.length - 1 &&
+            _text.codeUnitAt(index) == 0x0D &&
+            _text.codeUnitAt(index + 1) == 0x0A
+        ? index + 2
+        : index + 1;
   }
 }
 
@@ -157,5 +171,6 @@ class DocumentBoundary extends TextBoundary {
   @override
   int? getLeadingTextBoundaryAt(int position) => position < 0 ? null : 0;
   @override
-  int? getTrailingTextBoundaryAt(int position) => position >= _text.length ? null : _text.length;
+  int? getTrailingTextBoundaryAt(int position) =>
+      position >= _text.length ? null : _text.length;
 }

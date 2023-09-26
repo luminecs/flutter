@@ -1,4 +1,3 @@
-
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -95,7 +94,8 @@ class _FixedViewportOffset extends ViewportOffset {
   bool applyViewportDimension(double viewportDimension) => true;
 
   @override
-  bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) => true;
+  bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) =>
+      true;
 
   @override
   void correctBy(double correction) {
@@ -112,7 +112,7 @@ class _FixedViewportOffset extends ViewportOffset {
     double to, {
     required Duration duration,
     required Curve curve,
-  }) async { }
+  }) async {}
 
   @override
   ScrollDirection get userScrollDirection => ScrollDirection.idle;

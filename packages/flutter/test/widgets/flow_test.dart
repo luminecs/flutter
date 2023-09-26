@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,7 +23,8 @@ class TestFlowDelegate extends FlowDelegate {
   }
 
   @override
-  bool shouldRepaint(TestFlowDelegate oldDelegate) => startOffset == oldDelegate.startOffset;
+  bool shouldRepaint(TestFlowDelegate oldDelegate) =>
+      startOffset == oldDelegate.startOffset;
 }
 
 class OpacityFlowDelegate extends FlowDelegate {
@@ -40,7 +40,8 @@ class OpacityFlowDelegate extends FlowDelegate {
   }
 
   @override
-  bool shouldRepaint(OpacityFlowDelegate oldDelegate) => opacity != oldDelegate.opacity;
+  bool shouldRepaint(OpacityFlowDelegate oldDelegate) =>
+      opacity != oldDelegate.opacity;
 }
 
 // OpacityFlowDelegate that paints one of its children twice
@@ -113,7 +114,8 @@ void main() {
     expect(log, equals(<int>[0]));
   });
 
-  testWidgetsWithLeakTracking('paintChild gets called twice', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('paintChild gets called twice',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Flow(
         delegate: DuplicatePainterOpacityFlowDelegate(1.0),
@@ -126,16 +128,19 @@ void main() {
     final dynamic exception = tester.takeException();
     expect(exception, isFlutterError);
     final FlutterError error = exception as FlutterError;
-    expect(error.toStringDeep(), equalsIgnoringHashCodes(
-      'FlutterError\n'
-      '   Cannot call paintChild twice for the same child.\n'
-      '   The flow delegate of type DuplicatePainterOpacityFlowDelegate\n'
-      '   attempted to paint child 0 multiple times, which is not\n'
-      '   permitted.\n',
-    ));
+    expect(
+        error.toStringDeep(),
+        equalsIgnoringHashCodes(
+          'FlutterError\n'
+          '   Cannot call paintChild twice for the same child.\n'
+          '   The flow delegate of type DuplicatePainterOpacityFlowDelegate\n'
+          '   attempted to paint child 0 multiple times, which is not\n'
+          '   permitted.\n',
+        ));
   });
 
-  testWidgetsWithLeakTracking('Flow opacity layer', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Flow opacity layer',
+      (WidgetTester tester) async {
     const double opacity = 0.2;
     await tester.pumpWidget(
       Flow(
@@ -155,7 +160,8 @@ void main() {
     expect(layer!.firstChild, isA<TransformLayer>());
   });
 
-  testWidgetsWithLeakTracking('Flow can set and update clipBehavior', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Flow can set and update clipBehavior',
+      (WidgetTester tester) async {
     const double opacity = 0.2;
     await tester.pumpWidget(
       Flow(
@@ -184,7 +190,8 @@ void main() {
     }
   });
 
-  testWidgetsWithLeakTracking('Flow.unwrapped can set and update clipBehavior', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Flow.unwrapped can set and update clipBehavior',
+      (WidgetTester tester) async {
     const double opacity = 0.2;
     await tester.pumpWidget(
       Flow.unwrapped(

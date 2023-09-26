@@ -1,4 +1,3 @@
-
 import '../base/file_system.dart';
 import '../base/project_migrator.dart';
 import '../xcode_project.dart';
@@ -18,12 +17,14 @@ class XcodeProjectObjectVersionMigration extends ProjectMigrator {
     if (_xcodeProjectInfoFile.existsSync()) {
       processFileLines(_xcodeProjectInfoFile);
     } else {
-      logger.printTrace('Xcode project not found, skipping Xcode compatibility migration.');
+      logger.printTrace(
+          'Xcode project not found, skipping Xcode compatibility migration.');
     }
     if (_xcodeProjectSchemeFile.existsSync()) {
       processFileLines(_xcodeProjectSchemeFile);
     } else {
-      logger.printTrace('Runner scheme not found, skipping Xcode compatibility migration.');
+      logger.printTrace(
+          'Runner scheme not found, skipping Xcode compatibility migration.');
     }
   }
 

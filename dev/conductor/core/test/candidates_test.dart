@@ -1,4 +1,3 @@
-
 import 'package:args/command_runner.dart';
 import 'package:conductor_core/src/candidates.dart';
 import 'package:conductor_core/src/repository.dart';

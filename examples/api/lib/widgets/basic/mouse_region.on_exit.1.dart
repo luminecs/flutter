@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const MouseRegionApp());
 
@@ -22,7 +20,8 @@ class MouseRegionApp extends StatelessWidget {
 
 // A region that hides its content one second after being hovered.
 class MyTimedButton extends StatefulWidget {
-  const MyTimedButton({super.key, required this.onEnterButton, required this.onExitButton});
+  const MyTimedButton(
+      {super.key, required this.onEnterButton, required this.onExitButton});
 
   final VoidCallback onEnterButton;
   final VoidCallback onExitButton;

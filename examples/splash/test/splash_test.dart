@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,6 +8,9 @@ void main() {
     entrypoint.main();
 
     expect(find.byType(FlutterLogo), findsOneWidget);
-    expect(find.text('This app is only meant to be run under the Flutter debugger'), findsOneWidget);
+    expect(
+        find.text(
+            'This app is only meant to be run under the Flutter debugger'),
+        findsOneWidget);
   });
 }

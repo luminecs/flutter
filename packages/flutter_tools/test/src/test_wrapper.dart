@@ -1,4 +1,3 @@
-
 import 'package:test/test.dart' hide isInstanceOf;
 
 export 'package:test/test.dart' hide isInstanceOf;

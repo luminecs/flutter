@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const RestorableValueExampleApp());
 
@@ -30,7 +28,8 @@ class RestorableValueExample extends StatefulWidget {
   State<RestorableValueExample> createState() => _RestorableValueExampleState();
 }
 
-class _RestorableValueExampleState extends State<RestorableValueExample> with RestorationMixin {
+class _RestorableValueExampleState extends State<RestorableValueExample>
+    with RestorationMixin {
   // In this example, the restoration ID for the mixin is passed in through
   // the [StatefulWidget]'s constructor.
   @override

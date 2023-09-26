@@ -1,4 +1,3 @@
-
 import 'package:flutter_devicelab/framework/task_result.dart';
 
 import 'common.dart';

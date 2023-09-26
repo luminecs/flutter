@@ -1,4 +1,3 @@
-
 // This is a template file for illustrating best practices when creating a
 // Flutter API example that uses the Cupertino library. To use it, copy the file
 // to your destination filename, search/replace 'Placeholder' with the name of
@@ -27,7 +26,6 @@
 // named for.
 
 import 'package:flutter/cupertino.dart';
-
 
 void main() {
   runApp(const SampleApp());

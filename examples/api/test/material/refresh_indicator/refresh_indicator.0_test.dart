@@ -1,10 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/refresh_indicator/refresh_indicator.0.dart' as example;
+import 'package:flutter_api_samples/material/refresh_indicator/refresh_indicator.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Trigger RefreshIndicator - Pull from top', (WidgetTester tester) async {
+  testWidgets('Trigger RefreshIndicator - Pull from top',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.RefreshIndicatorExampleApp(),
     );
@@ -13,7 +14,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     await tester.pump(const Duration(seconds: 1));
-    expect(tester.getCenter(find.byType(RefreshProgressIndicator)).dy, lessThan(300.0));
+    expect(tester.getCenter(find.byType(RefreshProgressIndicator)).dy,
+        lessThan(300.0));
     await tester.pumpAndSettle(); // Advance pending time
   });
 
@@ -26,7 +28,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     await tester.pump(const Duration(seconds: 1));
-    expect(tester.getCenter(find.byType(RefreshProgressIndicator)).dy, lessThan(300.0));
+    expect(tester.getCenter(find.byType(RefreshProgressIndicator)).dy,
+        lessThan(300.0));
     await tester.pumpAndSettle(); // Advance pending time
   });
 }

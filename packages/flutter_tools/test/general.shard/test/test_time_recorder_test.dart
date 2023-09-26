@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/test/test_time_recorder.dart';
 
 import '../../src/common.dart';

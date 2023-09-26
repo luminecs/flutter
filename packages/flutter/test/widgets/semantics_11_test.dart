@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -8,7 +7,9 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import 'semantics_tester.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('markNeedsSemanticsUpdate() called on non-boundary with non-boundary parent', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'markNeedsSemanticsUpdate() called on non-boundary with non-boundary parent',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(
@@ -26,27 +27,32 @@ void main() {
       ),
     );
 
-    expect(semantics, hasSemantics(TestSemantics.root(
-      children: <TestSemantics>[
-        TestSemantics.rootChild(
-          id: 1,
-          actions: SemanticsAction.tap.index,
-          children: <TestSemantics>[
-            TestSemantics(
-              id: 2,
-              actions: SemanticsAction.tap.index,
+    expect(
+        semantics,
+        hasSemantics(
+            TestSemantics.root(
               children: <TestSemantics>[
-                TestSemantics(
-                  id: 3,
+                TestSemantics.rootChild(
+                  id: 1,
                   actions: SemanticsAction.tap.index,
-                  label: 'foo',
+                  children: <TestSemantics>[
+                    TestSemantics(
+                      id: 2,
+                      actions: SemanticsAction.tap.index,
+                      children: <TestSemantics>[
+                        TestSemantics(
+                          id: 3,
+                          actions: SemanticsAction.tap.index,
+                          label: 'foo',
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ],
-    ), ignoreRect: true, ignoreTransform: true));
+            ignoreRect: true,
+            ignoreTransform: true));
 
     // make a change causing call to markNeedsSemanticsUpdate()
 
@@ -66,30 +72,35 @@ void main() {
       ),
     );
 
-    expect(semantics, hasSemantics(TestSemantics.root(
-      children: <TestSemantics>[
-        TestSemantics.rootChild(
-          id: 1,
-          actions: SemanticsAction.tap.index,
-          children: <TestSemantics>[
-            TestSemantics(
-              id: 2,
-              actions: SemanticsAction.tap.index,
+    expect(
+        semantics,
+        hasSemantics(
+            TestSemantics.root(
               children: <TestSemantics>[
-                TestSemantics(
-                  id: 3,
+                TestSemantics.rootChild(
+                  id: 1,
                   actions: SemanticsAction.tap.index,
-                  label: 'bar',
+                  children: <TestSemantics>[
+                    TestSemantics(
+                      id: 2,
+                      actions: SemanticsAction.tap.index,
+                      children: <TestSemantics>[
+                        TestSemantics(
+                          id: 3,
+                          actions: SemanticsAction.tap.index,
+                          label: 'bar',
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ],
-    ), ignoreRect: true, ignoreTransform: true));
+            ignoreRect: true,
+            ignoreTransform: true));
 
     semantics.dispose();
   });
 }
 
-void dummyTapHandler() { }
+void dummyTapHandler() {}

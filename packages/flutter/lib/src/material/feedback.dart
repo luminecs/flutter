@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +20,8 @@ abstract final class Feedback {
     }
   }
 
-  static GestureTapCallback? wrapForTap(GestureTapCallback? callback, BuildContext context) {
+  static GestureTapCallback? wrapForTap(
+      GestureTapCallback? callback, BuildContext context) {
     if (callback == null) {
       return null;
     }
@@ -32,7 +32,9 @@ abstract final class Feedback {
   }
 
   static Future<void> forLongPress(BuildContext context) {
-    context.findRenderObject()!.sendSemanticsEvent(const LongPressSemanticsEvent());
+    context
+        .findRenderObject()!
+        .sendSemanticsEvent(const LongPressSemanticsEvent());
     switch (_platform(context)) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -45,7 +47,8 @@ abstract final class Feedback {
     }
   }
 
-  static GestureLongPressCallback? wrapForLongPress(GestureLongPressCallback? callback, BuildContext context) {
+  static GestureLongPressCallback? wrapForLongPress(
+      GestureLongPressCallback? callback, BuildContext context) {
     if (callback == null) {
       return null;
     }
@@ -55,5 +58,6 @@ abstract final class Feedback {
     };
   }
 
-  static TargetPlatform _platform(BuildContext context) => Theme.of(context).platform;
+  static TargetPlatform _platform(BuildContext context) =>
+      Theme.of(context).platform;
 }

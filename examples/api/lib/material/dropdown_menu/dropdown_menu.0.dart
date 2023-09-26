@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 // has the default outlined border and demos using the
@@ -81,18 +80,18 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
                           selectedColor = color;
                         });
                       },
-                      dropdownMenuEntries: ColorLabel.values.map<DropdownMenuEntry<ColorLabel>>(
-                        (ColorLabel color) {
-                          return DropdownMenuEntry<ColorLabel>(
-                            value: color,
-                            label: color.label,
-                            enabled: color.label != 'Grey',
-                            style: MenuItemButton.styleFrom(
-                              foregroundColor: color.color,
-                            ),
-                          );
-                        }
-                      ).toList(),
+                      dropdownMenuEntries: ColorLabel.values
+                          .map<DropdownMenuEntry<ColorLabel>>(
+                              (ColorLabel color) {
+                        return DropdownMenuEntry<ColorLabel>(
+                          value: color,
+                          label: color.label,
+                          enabled: color.label != 'Grey',
+                          style: MenuItemButton.styleFrom(
+                            foregroundColor: color.color,
+                          ),
+                        );
+                      }).toList(),
                     ),
                     const SizedBox(width: 24),
                     DropdownMenu<IconLabel>(
@@ -110,7 +109,8 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
                           selectedIcon = icon;
                         });
                       },
-                      dropdownMenuEntries: IconLabel.values.map<DropdownMenuEntry<IconLabel>>(
+                      dropdownMenuEntries:
+                          IconLabel.values.map<DropdownMenuEntry<IconLabel>>(
                         (IconLabel icon) {
                           return DropdownMenuEntry<IconLabel>(
                             value: icon,
@@ -127,7 +127,8 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('You selected a ${selectedColor?.label} ${selectedIcon?.label}'),
+                    Text(
+                        'You selected a ${selectedColor?.label} ${selectedIcon?.label}'),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: Icon(

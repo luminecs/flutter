@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/widgets/basic/clip_rrect.0.dart' as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('ClipRRect adds rounded corners to containers', (WidgetTester tester) async {
+  testWidgets('ClipRRect adds rounded corners to containers',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.ClipRRectApp(),
     );

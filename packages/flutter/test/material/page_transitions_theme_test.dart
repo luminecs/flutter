@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Default PageTransitionsTheme platform', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Default PageTransitionsTheme platform',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(home: Text('home')));
-    final PageTransitionsTheme theme = Theme.of(tester.element(find.text('home'))).pageTransitionsTheme;
+    final PageTransitionsTheme theme =
+        Theme.of(tester.element(find.text('home'))).pageTransitionsTheme;
     expect(theme.builders, isNotNull);
     for (final TargetPlatform platform in TargetPlatform.values) {
       switch (platform) {
@@ -33,14 +34,18 @@ void main() {
     }
   });
 
-  testWidgetsWithLeakTracking('Default PageTransitionsTheme builds a CupertinoPageTransition', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Default PageTransitionsTheme builds a CupertinoPageTransition',
+      (WidgetTester tester) async {
     final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
       '/': (BuildContext context) => Material(
-        child: TextButton(
-          child: const Text('push'),
-          onPressed: () { Navigator.of(context).pushNamed('/b'); },
-        ),
-      ),
+            child: TextButton(
+              child: const Text('push'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/b');
+              },
+            ),
+          ),
       '/b': (BuildContext context) => const Text('page b'),
     };
 
@@ -50,23 +55,30 @@ void main() {
       ),
     );
 
-    expect(Theme.of(tester.element(find.text('push'))).platform, debugDefaultTargetPlatformOverride);
+    expect(Theme.of(tester.element(find.text('push'))).platform,
+        debugDefaultTargetPlatformOverride);
     expect(find.byType(CupertinoPageTransition), findsOneWidget);
 
     await tester.tap(find.text('push'));
     await tester.pumpAndSettle();
     expect(find.text('page b'), findsOneWidget);
     expect(find.byType(CupertinoPageTransition), findsOneWidget);
-  }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS,  TargetPlatform.macOS }));
+  },
+      variant: const TargetPlatformVariant(
+          <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
 
-  testWidgetsWithLeakTracking('Default PageTransitionsTheme builds a _ZoomPageTransition for android', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Default PageTransitionsTheme builds a _ZoomPageTransition for android',
+      (WidgetTester tester) async {
     final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
       '/': (BuildContext context) => Material(
-        child: TextButton(
-          child: const Text('push'),
-          onPressed: () { Navigator.of(context).pushNamed('/b'); },
-        ),
-      ),
+            child: TextButton(
+              child: const Text('push'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/b');
+              },
+            ),
+          ),
       '/b': (BuildContext context) => const Text('page b'),
     };
 
@@ -79,11 +91,13 @@ void main() {
     Finder findZoomPageTransition() {
       return find.descendant(
         of: find.byType(MaterialApp),
-        matching: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_ZoomPageTransition'),
+        matching: find.byWidgetPredicate(
+            (Widget w) => '${w.runtimeType}' == '_ZoomPageTransition'),
       );
     }
 
-    expect(Theme.of(tester.element(find.text('push'))).platform, debugDefaultTargetPlatformOverride);
+    expect(Theme.of(tester.element(find.text('push'))).platform,
+        debugDefaultTargetPlatformOverride);
     expect(findZoomPageTransition(), findsOneWidget);
 
     await tester.tap(find.text('push'));
@@ -92,14 +106,18 @@ void main() {
     expect(findZoomPageTransition(), findsOneWidget);
   }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-  testWidgetsWithLeakTracking('PageTransitionsTheme override builds a _OpenUpwardsPageTransition', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'PageTransitionsTheme override builds a _OpenUpwardsPageTransition',
+      (WidgetTester tester) async {
     final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
       '/': (BuildContext context) => Material(
-        child: TextButton(
-          child: const Text('push'),
-          onPressed: () { Navigator.of(context).pushNamed('/b'); },
-        ),
-      ),
+            child: TextButton(
+              child: const Text('push'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/b');
+              },
+            ),
+          ),
       '/b': (BuildContext context) => const Text('page b'),
     };
 
@@ -108,7 +126,8 @@ void main() {
         theme: ThemeData(
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(), // creates a _OpenUpwardsPageTransition
+              TargetPlatform.android:
+                  OpenUpwardsPageTransitionsBuilder(), // creates a _OpenUpwardsPageTransition
             },
           ),
         ),
@@ -119,11 +138,13 @@ void main() {
     Finder findOpenUpwardsPageTransition() {
       return find.descendant(
         of: find.byType(MaterialApp),
-        matching: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_OpenUpwardsPageTransition'),
+        matching: find.byWidgetPredicate(
+            (Widget w) => '${w.runtimeType}' == '_OpenUpwardsPageTransition'),
       );
     }
 
-    expect(Theme.of(tester.element(find.text('push'))).platform, debugDefaultTargetPlatformOverride);
+    expect(Theme.of(tester.element(find.text('push'))).platform,
+        debugDefaultTargetPlatformOverride);
     expect(findOpenUpwardsPageTransition(), findsOneWidget);
 
     await tester.tap(find.text('push'));
@@ -132,14 +153,18 @@ void main() {
     expect(findOpenUpwardsPageTransition(), findsOneWidget);
   }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-  testWidgetsWithLeakTracking('PageTransitionsTheme override builds a _FadeUpwardsTransition', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'PageTransitionsTheme override builds a _FadeUpwardsTransition',
+      (WidgetTester tester) async {
     final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
       '/': (BuildContext context) => Material(
-        child: TextButton(
-          child: const Text('push'),
-          onPressed: () { Navigator.of(context).pushNamed('/b'); },
-        ),
-      ),
+            child: TextButton(
+              child: const Text('push'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/b');
+              },
+            ),
+          ),
       '/b': (BuildContext context) => const Text('page b'),
     };
 
@@ -148,7 +173,8 @@ void main() {
         theme: ThemeData(
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(), // creates a _FadeUpwardsTransition
+              TargetPlatform.android:
+                  FadeUpwardsPageTransitionsBuilder(), // creates a _FadeUpwardsTransition
             },
           ),
         ),
@@ -159,11 +185,13 @@ void main() {
     Finder findFadeUpwardsPageTransition() {
       return find.descendant(
         of: find.byType(MaterialApp),
-        matching: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_FadeUpwardsPageTransition'),
+        matching: find.byWidgetPredicate(
+            (Widget w) => '${w.runtimeType}' == '_FadeUpwardsPageTransition'),
       );
     }
 
-    expect(Theme.of(tester.element(find.text('push'))).platform, debugDefaultTargetPlatformOverride);
+    expect(Theme.of(tester.element(find.text('push'))).platform,
+        debugDefaultTargetPlatformOverride);
     expect(findFadeUpwardsPageTransition(), findsOneWidget);
 
     await tester.tap(find.text('push'));
@@ -205,14 +233,18 @@ void main() {
     final Iterable<Layer> layers = tester.layerListOf(
       find.ancestor(of: of, matching: find.byType(SnapshotWidget)).first,
     );
-    final bool hasOneOpacityLayer = layers.whereType<OpacityLayer>().length == 1;
-    final bool hasOneTransformLayer = layers.whereType<TransformLayer>().length == 1;
+    final bool hasOneOpacityLayer =
+        layers.whereType<OpacityLayer>().length == 1;
+    final bool hasOneTransformLayer =
+        layers.whereType<TransformLayer>().length == 1;
     // When snapshotting is on, the OpacityLayer and TransformLayer will not be
     // applied directly.
     return !(hasOneOpacityLayer && hasOneTransformLayer);
   }
 
-  testWidgetsWithLeakTracking('ZoomPageTransitionsBuilder default route snapshotting behavior', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'ZoomPageTransitionsBuilder default route snapshotting behavior',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       boilerplate(themeAllowSnapshotting: true),
     );
@@ -243,9 +275,13 @@ void main() {
 
     // Entering route should be snapshotted.
     expect(isTransitioningWithSnapshotting(tester, page1), isTrue);
-  }, variant: TargetPlatformVariant.only(TargetPlatform.android), skip: kIsWeb); // [intended] rasterization is not used on the web.
+  },
+      variant: TargetPlatformVariant.only(TargetPlatform.android),
+      skip: kIsWeb); // [intended] rasterization is not used on the web.
 
-  testWidgetsWithLeakTracking('ZoomPageTransitionsBuilder.allowSnapshotting can disable route snapshotting', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'ZoomPageTransitionsBuilder.allowSnapshotting can disable route snapshotting',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       boilerplate(themeAllowSnapshotting: false),
     );
@@ -276,9 +312,13 @@ void main() {
 
     // Entering route should not be snapshotted.
     expect(isTransitioningWithSnapshotting(tester, page1), isFalse);
-  }, variant: TargetPlatformVariant.only(TargetPlatform.android), skip: kIsWeb); // [intended] rasterization is not used on the web.
+  },
+      variant: TargetPlatformVariant.only(TargetPlatform.android),
+      skip: kIsWeb); // [intended] rasterization is not used on the web.
 
-  testWidgetsWithLeakTracking('Setting PageRoute.allowSnapshotting to false overrides ZoomPageTransitionsBuilder.allowSnapshotting = true', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Setting PageRoute.allowSnapshotting to false overrides ZoomPageTransitionsBuilder.allowSnapshotting = true',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       boilerplate(
         themeAllowSnapshotting: true,
@@ -301,29 +341,37 @@ void main() {
     expect(isTransitioningWithSnapshotting(tester, page2), isFalse);
 
     await tester.pumpAndSettle();
-  }, variant: TargetPlatformVariant.only(TargetPlatform.android), skip: kIsWeb); // [intended] rasterization is not used on the web.
+  },
+      variant: TargetPlatformVariant.only(TargetPlatform.android),
+      skip: kIsWeb); // [intended] rasterization is not used on the web.
 
-  testWidgetsWithLeakTracking('_ZoomPageTransition only causes child widget built once', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      '_ZoomPageTransition only causes child widget built once',
+      (WidgetTester tester) async {
     // Regression test for https://github.com/flutter/flutter/issues/58345
 
     int builtCount = 0;
 
     final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
       '/': (BuildContext context) => Material(
-        child: TextButton(
-          child: const Text('push'),
-          onPressed: () { Navigator.of(context).pushNamed('/b'); },
-        ),
-      ),
+            child: TextButton(
+              child: const Text('push'),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/b');
+              },
+            ),
+          ),
       '/b': (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          builtCount++; // Increase [builtCount] each time the widget build
-          return TextButton(
-            child: const Text('pop'),
-            onPressed: () { Navigator.pop(context); },
-          );
-        },
-      ),
+            builder: (BuildContext context, StateSetter setState) {
+              builtCount++; // Increase [builtCount] each time the widget build
+              return TextButton(
+                child: const Text('pop'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
     };
 
     await tester.pumpWidget(
@@ -331,7 +379,8 @@ void main() {
         theme: ThemeData(
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android: ZoomPageTransitionsBuilder(), // creates a _ZoomPageTransition
+              TargetPlatform.android:
+                  ZoomPageTransitionsBuilder(), // creates a _ZoomPageTransition
             },
           ),
         ),

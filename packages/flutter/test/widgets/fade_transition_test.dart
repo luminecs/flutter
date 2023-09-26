@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,7 +7,7 @@ void main() {
   testWidgetsWithLeakTracking('FadeTransition', (WidgetTester tester) async {
     final DebugPrintCallback oldPrint = debugPrint;
     final List<String> log = <String>[];
-    debugPrint = (String? message, { int? wrapWidth }) {
+    debugPrint = (String? message, {int? wrapWidth}) {
       log.add(message!);
     };
     debugPrintBuildScope = true;

@@ -1,4 +1,3 @@
-
 import 'base/context.dart';
 
 FeatureFlags get featureFlags => context.get<FeatureFlags>()!;
@@ -45,7 +44,8 @@ const List<Feature> allFeatures = <Feature>[
   nativeAssets,
 ];
 
-Iterable<Feature> get allConfigurableFeatures => allFeatures.where((Feature feature) => feature.configSetting != null);
+Iterable<Feature> get allConfigurableFeatures =>
+    allFeatures.where((Feature feature) => feature.configSetting != null);
 
 const Feature flutterWebFeature = Feature.fullyEnabled(
   name: 'Flutter for web',
@@ -129,15 +129,14 @@ const Feature nativeAssets = Feature(
 );
 
 class Feature {
-  const Feature({
-    required this.name,
-    this.environmentOverride,
-    this.configSetting,
-    this.extraHelpText,
-    this.master = const FeatureChannelSetting(),
-    this.beta = const FeatureChannelSetting(),
-    this.stable = const FeatureChannelSetting()
-  });
+  const Feature(
+      {required this.name,
+      this.environmentOverride,
+      this.configSetting,
+      this.extraHelpText,
+      this.master = const FeatureChannelSetting(),
+      this.beta = const FeatureChannelSetting(),
+      this.stable = const FeatureChannelSetting()});
 
   const Feature.fullyEnabled(
       {required this.name,
@@ -183,9 +182,11 @@ class Feature {
     ];
     // Add channel info for settings only on some channels.
     if (channels.length == 1) {
-      buffer.write('\nThis setting applies only to the ${channels.single} channel.');
+      buffer.write(
+          '\nThis setting applies only to the ${channels.single} channel.');
     } else if (channels.length == 2) {
-      buffer.write('\nThis setting applies only to the ${channels.join(' and ')} channels.');
+      buffer.write(
+          '\nThis setting applies only to the ${channels.join(' and ')} channels.');
     }
     if (extraHelpText != null) {
       buffer.write(' $extraHelpText');

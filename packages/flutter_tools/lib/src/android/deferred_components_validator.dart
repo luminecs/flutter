@@ -1,4 +1,3 @@
-
 import '../base/common.dart';
 import '../base/deferred_component.dart';
 import '../base/file_system.dart';
@@ -7,19 +6,22 @@ import '../base/platform.dart';
 import '../base/terminal.dart';
 
 abstract class DeferredComponentsValidator {
-  DeferredComponentsValidator(this.projectDir, this.logger, this.platform, {
+  DeferredComponentsValidator(
+    this.projectDir,
+    this.logger,
+    this.platform, {
     this.exitOnFail = true,
     String? title,
-  }) : outputDir = projectDir
-        .childDirectory('build')
-        .childDirectory(kDeferredComponentsTempDirectory),
-      inputs = <File>[],
-      outputs = <File>[],
-      title = title ?? 'Deferred components setup verification',
-      generatedFiles = <String>[],
-      modifiedFiles = <String>[],
-      invalidFiles = <String, String>{},
-      diffLines = <String>[];
+  })  : outputDir = projectDir
+            .childDirectory('build')
+            .childDirectory(kDeferredComponentsTempDirectory),
+        inputs = <File>[],
+        outputs = <File>[],
+        title = title ?? 'Deferred components setup verification',
+        generatedFiles = <String>[],
+        modifiedFiles = <String>[],
+        invalidFiles = <String, String>{},
+        diffLines = <String>[];
 
   final Logger logger;
 
@@ -27,8 +29,10 @@ abstract class DeferredComponentsValidator {
 
   final bool exitOnFail;
 
-  static const String kLoadingUnitsCacheFileName = 'deferred_components_loading_units.yaml';
-  static const String kDeferredComponentsTempDirectory = 'android_deferred_components_setup_files';
+  static const String kLoadingUnitsCacheFileName =
+      'deferred_components_loading_units.yaml';
+  static const String kDeferredComponentsTempDirectory =
+      'android_deferred_components_setup_files';
 
   final String title;
 
@@ -50,34 +54,41 @@ abstract class DeferredComponentsValidator {
   final List<File> inputs;
   final List<File> outputs;
 
-  bool get changesNeeded => generatedFiles.isNotEmpty
-    || modifiedFiles.isNotEmpty
-    || invalidFiles.isNotEmpty
-    || (loadingUnitComparisonResults != null && !(loadingUnitComparisonResults!['match'] as bool));
+  bool get changesNeeded =>
+      generatedFiles.isNotEmpty ||
+      modifiedFiles.isNotEmpty ||
+      invalidFiles.isNotEmpty ||
+      (loadingUnitComparisonResults != null &&
+          !(loadingUnitComparisonResults!['match'] as bool));
 
   void handleResults() {
     displayResults();
     attemptToolExit();
   }
 
-  static const String _thickDivider = '=================================================================================';
-  static const String _thinDivider = '---------------------------------------------------------------------------------';
+  static const String _thickDivider =
+      '=================================================================================';
+  static const String _thinDivider =
+      '---------------------------------------------------------------------------------';
 
   void displayResults() {
     if (changesNeeded) {
       logger.printStatus(_thickDivider);
-      logger.printStatus(title, indent: (_thickDivider.length - title.length) ~/ 2, emphasis: true);
+      logger.printStatus(title,
+          indent: (_thickDivider.length - title.length) ~/ 2, emphasis: true);
       logger.printStatus(_thickDivider);
       // Log any file reading/existence errors.
       if (invalidFiles.isNotEmpty) {
-        logger.printStatus('Errors checking the following files:\n', emphasis: true);
+        logger.printStatus('Errors checking the following files:\n',
+            emphasis: true);
         for (final String key in invalidFiles.keys) {
           logger.printStatus('  - $key: ${invalidFiles[key]}\n');
         }
       }
       // Log diff file contents, with color highlighting
       if (diffLines.isNotEmpty) {
-        logger.printStatus('Diff between `android` and expected files:', emphasis: true);
+        logger.printStatus('Diff between `android` and expected files:',
+            emphasis: true);
         logger.printStatus('');
         for (final String line in diffLines) {
           // We only care about diffs in files that have
@@ -99,7 +110,8 @@ abstract class DeferredComponentsValidator {
       if (generatedFiles.isNotEmpty) {
         logger.printStatus('Newly generated android files:', emphasis: true);
         for (final String filePath in generatedFiles) {
-          final String shortenedPath = filePath.substring(projectDir.parent.path.length + 1);
+          final String shortenedPath =
+              filePath.substring(projectDir.parent.path.length + 1);
           logger.printStatus('  - $shortenedPath', color: TerminalColor.grey);
         }
         logger.printStatus('');
@@ -107,7 +119,8 @@ abstract class DeferredComponentsValidator {
       if (modifiedFiles.isNotEmpty) {
         logger.printStatus('Modified android files:', emphasis: true);
         for (final String filePath in modifiedFiles) {
-          final String shortenedPath = filePath.substring(projectDir.parent.path.length + 1);
+          final String shortenedPath =
+              filePath.substring(projectDir.parent.path.length + 1);
           logger.printStatus('  - $shortenedPath', color: TerminalColor.grey);
         }
         logger.printStatus('');
@@ -129,17 +142,25 @@ The recommended changes can be quickly applied by running:
       }
       // Log loading unit golden changes, if any.
       if (loadingUnitComparisonResults != null) {
-        if ((loadingUnitComparisonResults!['new'] as List<LoadingUnit>).isNotEmpty) {
+        if ((loadingUnitComparisonResults!['new'] as List<LoadingUnit>)
+            .isNotEmpty) {
           logger.printStatus('New loading units were found:', emphasis: true);
-          for (final LoadingUnit unit in loadingUnitComparisonResults!['new'] as List<LoadingUnit>) {
-            logger.printStatus(unit.toString(), color: TerminalColor.grey, indent: 2);
+          for (final LoadingUnit unit
+              in loadingUnitComparisonResults!['new'] as List<LoadingUnit>) {
+            logger.printStatus(unit.toString(),
+                color: TerminalColor.grey, indent: 2);
           }
           logger.printStatus('');
         }
-        if ((loadingUnitComparisonResults!['missing'] as Set<LoadingUnit>).isNotEmpty) {
-          logger.printStatus('Previously existing loading units no longer exist:', emphasis: true);
-          for (final LoadingUnit unit in loadingUnitComparisonResults!['missing'] as Set<LoadingUnit>) {
-            logger.printStatus(unit.toString(), color: TerminalColor.grey, indent: 2);
+        if ((loadingUnitComparisonResults!['missing'] as Set<LoadingUnit>)
+            .isNotEmpty) {
+          logger.printStatus(
+              'Previously existing loading units no longer exist:',
+              emphasis: true);
+          for (final LoadingUnit unit
+              in loadingUnitComparisonResults!['missing'] as Set<LoadingUnit>) {
+            logger.printStatus(unit.toString(),
+                color: TerminalColor.grey, indent: 2);
           }
           logger.printStatus('');
         }
@@ -171,7 +192,9 @@ $_thickDivider''');
 
   void attemptToolExit() {
     if (exitOnFail && changesNeeded) {
-      throwToolExit('Setup for deferred components incomplete. See recommended actions.', exitCode: 1);
+      throwToolExit(
+          'Setup for deferred components incomplete. See recommended actions.',
+          exitCode: 1);
     }
   }
 }

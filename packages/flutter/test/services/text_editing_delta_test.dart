@@ -1,4 +1,3 @@
-
 import 'dart:convert' show jsonDecode;
 
 import 'package:flutter/foundation.dart';
@@ -7,7 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TextEditingDeltaInsertion', () {
-    test('Verify creation of insertion delta when inserting at a collapsed selection.', () {
+    test(
+        'Verify creation of insertion delta when inserting at a collapsed selection.',
+        () {
       const String jsonInsertionDelta = '{'
           '"oldText": "",'
           ' "deltaText": "let there be text",'
@@ -19,10 +20,13 @@ void main() {
           ' "selectionIsDirectional": false,'
           ' "composingBase": -1,'
           ' "composingExtent": -1}';
-      final TextEditingDeltaInsertion delta = TextEditingDelta.fromJSON(jsonDecode(jsonInsertionDelta) as Map<String, dynamic>) as TextEditingDeltaInsertion;
+      final TextEditingDeltaInsertion delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonInsertionDelta) as Map<String, dynamic>)
+          as TextEditingDeltaInsertion;
       const TextRange expectedComposing = TextRange.empty;
       const int expectedInsertionOffset = 0;
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 17);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 17);
 
       expect(delta.oldText, '');
       expect(delta.textInserted, 'let there be text');
@@ -31,7 +35,9 @@ void main() {
       expect(delta.composing, expectedComposing);
     });
 
-    test('Verify creation of insertion delta when inserting at end of composing region.', () {
+    test(
+        'Verify creation of insertion delta when inserting at end of composing region.',
+        () {
       const String jsonInsertionDelta = '{'
           '"oldText": "hello worl",'
           ' "deltaText": "world",'
@@ -44,10 +50,13 @@ void main() {
           ' "composingBase": 6,'
           ' "composingExtent": 11}';
 
-      final TextEditingDeltaInsertion delta = TextEditingDelta.fromJSON(jsonDecode(jsonInsertionDelta) as Map<String, dynamic>) as TextEditingDeltaInsertion;
+      final TextEditingDeltaInsertion delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonInsertionDelta) as Map<String, dynamic>)
+          as TextEditingDeltaInsertion;
       const TextRange expectedComposing = TextRange(start: 6, end: 11);
       const int expectedInsertionOffset = 10;
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 11);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 11);
 
       expect(delta.oldText, 'hello worl');
       expect(delta.textInserted, 'd');
@@ -57,33 +66,37 @@ void main() {
     });
 
     test('Verify invalid TextEditingDeltaInsertion fails to apply', () {
-      const TextEditingDeltaInsertion delta =
-              TextEditingDeltaInsertion(
-                oldText: 'hello worl',
-                textInserted: 'd',
-                insertionOffset: 11,
-                selection: TextSelection.collapsed(offset: 11),
-                composing: TextRange.empty,
-              );
+      const TextEditingDeltaInsertion delta = TextEditingDeltaInsertion(
+        oldText: 'hello worl',
+        textInserted: 'd',
+        insertionOffset: 11,
+        selection: TextSelection.collapsed(offset: 11),
+        composing: TextRange.empty,
+      );
 
-      expect(() { delta.apply(TextEditingValue.empty); }, throwsAssertionError);
+      expect(() {
+        delta.apply(TextEditingValue.empty);
+      }, throwsAssertionError);
     });
 
     test('Verify TextEditingDeltaInsertion debugFillProperties', () {
       final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
-      const TextEditingDeltaInsertion insertionDelta = TextEditingDeltaInsertion(
-          oldText: 'hello worl',
-          textInserted: 'd',
-          insertionOffset: 10,
-          selection: TextSelection.collapsed(offset: 11),
-          composing: TextRange.empty,
+      const TextEditingDeltaInsertion insertionDelta =
+          TextEditingDeltaInsertion(
+        oldText: 'hello worl',
+        textInserted: 'd',
+        insertionOffset: 10,
+        selection: TextSelection.collapsed(offset: 11),
+        composing: TextRange.empty,
       );
 
       insertionDelta.debugFillProperties(builder);
 
       final List<String> description = builder.properties
-        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-        .map((DiagnosticsNode node) => node.toString()).toList();
+          .where(
+              (DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+          .map((DiagnosticsNode node) => node.toString())
+          .toList();
 
       expect(
         description,
@@ -112,10 +125,13 @@ void main() {
           ' "composingBase": -1,'
           ' "composingExtent": -1}';
 
-      final TextEditingDeltaDeletion delta = TextEditingDelta.fromJSON(jsonDecode(jsonDeletionDelta) as Map<String, dynamic>) as TextEditingDeltaDeletion;
+      final TextEditingDeltaDeletion delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonDeletionDelta) as Map<String, dynamic>)
+          as TextEditingDeltaDeletion;
       const TextRange expectedComposing = TextRange.empty;
       const TextRange expectedDeletedRange = TextRange(start: 1, end: 2);
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 1);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 1);
 
       expect(delta.oldText, 'let there be text.');
       expect(delta.textDeleted, 'e');
@@ -124,7 +140,9 @@ void main() {
       expect(delta.composing, expectedComposing);
     });
 
-    test('Verify creation of deletion delta when deleting at end of composing region.', () {
+    test(
+        'Verify creation of deletion delta when deleting at end of composing region.',
+        () {
       const String jsonDeletionDelta = '{'
           '"oldText": "hello world",'
           ' "deltaText": "worl",'
@@ -137,10 +155,13 @@ void main() {
           ' "composingBase": 6,'
           ' "composingExtent": 10}';
 
-      final TextEditingDeltaDeletion delta = TextEditingDelta.fromJSON(jsonDecode(jsonDeletionDelta) as Map<String, dynamic>) as TextEditingDeltaDeletion;
+      final TextEditingDeltaDeletion delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonDeletionDelta) as Map<String, dynamic>)
+          as TextEditingDeltaDeletion;
       const TextRange expectedComposing = TextRange(start: 6, end: 10);
       const TextRange expectedDeletedRange = TextRange(start: 10, end: 11);
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 10);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 10);
 
       expect(delta.oldText, 'hello world');
       expect(delta.textDeleted, 'd');
@@ -150,15 +171,16 @@ void main() {
     });
 
     test('Verify invalid TextEditingDeltaDeletion fails to apply', () {
-      const TextEditingDeltaDeletion delta =
-              TextEditingDeltaDeletion(
-                oldText: 'hello world',
-                deletedRange: TextRange(start: 5, end: 12),
-                selection: TextSelection.collapsed(offset: 5),
-                composing: TextRange.empty,
-              );
+      const TextEditingDeltaDeletion delta = TextEditingDeltaDeletion(
+        oldText: 'hello world',
+        deletedRange: TextRange(start: 5, end: 12),
+        selection: TextSelection.collapsed(offset: 5),
+        composing: TextRange.empty,
+      );
 
-      expect(() { delta.apply(TextEditingValue.empty); }, throwsAssertionError);
+      expect(() {
+        delta.apply(TextEditingValue.empty);
+      }, throwsAssertionError);
     });
 
     test('Verify TextEditingDeltaDeletion debugFillProperties', () {
@@ -173,8 +195,10 @@ void main() {
       deletionDelta.debugFillProperties(builder);
 
       final List<String> description = builder.properties
-        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-        .map((DiagnosticsNode node) => node.toString()).toList();
+          .where(
+              (DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+          .map((DiagnosticsNode node) => node.toString())
+          .toList();
 
       expect(
         description,
@@ -190,7 +214,8 @@ void main() {
   });
 
   group('TextEditingDeltaReplacement', () {
-    test('Verify creation of replacement delta when replacing with longer.', () {
+    test('Verify creation of replacement delta when replacing with longer.',
+        () {
       const String jsonReplacementDelta = '{'
           '"oldText": "hello worfi",'
           ' "deltaText": "working",'
@@ -203,10 +228,13 @@ void main() {
           ' "composingBase": 6,'
           ' "composingExtent": 13}';
 
-      final TextEditingDeltaReplacement delta = TextEditingDelta.fromJSON(jsonDecode(jsonReplacementDelta) as Map<String, dynamic>) as TextEditingDeltaReplacement;
+      final TextEditingDeltaReplacement delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonReplacementDelta) as Map<String, dynamic>)
+          as TextEditingDeltaReplacement;
       const TextRange expectedComposing = TextRange(start: 6, end: 13);
       const TextRange expectedReplacedRange = TextRange(start: 6, end: 11);
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 13);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 13);
 
       expect(delta.oldText, 'hello worfi');
       expect(delta.textReplaced, 'worfi');
@@ -216,7 +244,8 @@ void main() {
       expect(delta.composing, expectedComposing);
     });
 
-    test('Verify creation of replacement delta when replacing with shorter.', () {
+    test('Verify creation of replacement delta when replacing with shorter.',
+        () {
       const String jsonReplacementDelta = '{'
           '"oldText": "hello world",'
           ' "deltaText": "h",'
@@ -229,10 +258,13 @@ void main() {
           ' "composingBase": 6,'
           ' "composingExtent": 7}';
 
-      final TextEditingDeltaReplacement delta = TextEditingDelta.fromJSON(jsonDecode(jsonReplacementDelta) as Map<String, dynamic>) as TextEditingDeltaReplacement;
+      final TextEditingDeltaReplacement delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonReplacementDelta) as Map<String, dynamic>)
+          as TextEditingDeltaReplacement;
       const TextRange expectedComposing = TextRange(start: 6, end: 7);
       const TextRange expectedReplacedRange = TextRange(start: 6, end: 11);
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 7);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 7);
 
       expect(delta.oldText, 'hello world');
       expect(delta.textReplaced, 'world');
@@ -255,10 +287,13 @@ void main() {
           ' "composingBase": 6,'
           ' "composingExtent": 11}';
 
-      final TextEditingDeltaReplacement delta = TextEditingDelta.fromJSON(jsonDecode(jsonReplacementDelta) as Map<String, dynamic>) as TextEditingDeltaReplacement;
+      final TextEditingDeltaReplacement delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonReplacementDelta) as Map<String, dynamic>)
+          as TextEditingDeltaReplacement;
       const TextRange expectedComposing = TextRange(start: 6, end: 11);
       const TextRange expectedReplacedRange = TextRange(start: 6, end: 11);
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 11);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 11);
 
       expect(delta.oldText, 'hello world');
       expect(delta.textReplaced, 'world');
@@ -269,21 +304,23 @@ void main() {
     });
 
     test('Verify invalid TextEditingDeltaReplacement fails to apply', () {
-      const TextEditingDeltaReplacement delta =
-              TextEditingDeltaReplacement(
-                oldText: 'hello worl',
-                replacementText: 'world',
-                replacedRange: TextRange(start: 5, end: 11),
-                selection: TextSelection.collapsed(offset: 11),
-                composing: TextRange.empty,
-              );
+      const TextEditingDeltaReplacement delta = TextEditingDeltaReplacement(
+        oldText: 'hello worl',
+        replacementText: 'world',
+        replacedRange: TextRange(start: 5, end: 11),
+        selection: TextSelection.collapsed(offset: 11),
+        composing: TextRange.empty,
+      );
 
-      expect(() { delta.apply(TextEditingValue.empty); }, throwsAssertionError);
+      expect(() {
+        delta.apply(TextEditingValue.empty);
+      }, throwsAssertionError);
     });
 
     test('Verify TextEditingDeltaReplacement debugFillProperties', () {
       final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
-      const TextEditingDeltaReplacement replacementDelta = TextEditingDeltaReplacement(
+      const TextEditingDeltaReplacement replacementDelta =
+          TextEditingDeltaReplacement(
         oldText: 'hello world',
         replacementText: 'h',
         replacedRange: TextRange(start: 6, end: 11),
@@ -294,8 +331,10 @@ void main() {
       replacementDelta.debugFillProperties(builder);
 
       final List<String> description = builder.properties
-        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-        .map((DiagnosticsNode node) => node.toString()).toList();
+          .where(
+              (DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+          .map((DiagnosticsNode node) => node.toString())
+          .toList();
 
       expect(
         description,
@@ -325,9 +364,12 @@ void main() {
           ' "composingBase": 6,'
           ' "composingExtent": 11}';
 
-      final TextEditingDeltaNonTextUpdate delta = TextEditingDelta.fromJSON(jsonDecode(jsonNonTextUpdateDelta) as Map<String, dynamic>) as TextEditingDeltaNonTextUpdate;
+      final TextEditingDeltaNonTextUpdate delta = TextEditingDelta.fromJSON(
+              jsonDecode(jsonNonTextUpdateDelta) as Map<String, dynamic>)
+          as TextEditingDeltaNonTextUpdate;
       const TextRange expectedComposing = TextRange(start: 6, end: 11);
-      const TextSelection expectedSelection = TextSelection.collapsed(offset: 10);
+      const TextSelection expectedSelection =
+          TextSelection.collapsed(offset: 10);
 
       expect(delta.oldText, 'hello world');
       expect(delta.selection, expectedSelection);
@@ -335,19 +377,21 @@ void main() {
     });
 
     test('Verify invalid TextEditingDeltaNonTextUpdate fails to apply', () {
-      const TextEditingDeltaNonTextUpdate delta =
-              TextEditingDeltaNonTextUpdate(
-                oldText: 'hello world',
-                selection: TextSelection.collapsed(offset: 12),
-                composing: TextRange.empty,
-              );
+      const TextEditingDeltaNonTextUpdate delta = TextEditingDeltaNonTextUpdate(
+        oldText: 'hello world',
+        selection: TextSelection.collapsed(offset: 12),
+        composing: TextRange.empty,
+      );
 
-      expect(() { delta.apply(TextEditingValue.empty); }, throwsAssertionError);
+      expect(() {
+        delta.apply(TextEditingValue.empty);
+      }, throwsAssertionError);
     });
 
     test('Verify TextEditingDeltaNonTextUpdate debugFillProperties', () {
       final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
-      const TextEditingDeltaNonTextUpdate nonTextUpdateDelta = TextEditingDeltaNonTextUpdate(
+      const TextEditingDeltaNonTextUpdate nonTextUpdateDelta =
+          TextEditingDeltaNonTextUpdate(
         oldText: 'hello world',
         selection: TextSelection.collapsed(offset: 7),
         composing: TextRange(start: 6, end: 7),
@@ -356,8 +400,10 @@ void main() {
       nonTextUpdateDelta.debugFillProperties(builder);
 
       final List<String> description = builder.properties
-        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-        .map((DiagnosticsNode node) => node.toString()).toList();
+          .where(
+              (DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+          .map((DiagnosticsNode node) => node.toString())
+          .toList();
 
       expect(
         description,

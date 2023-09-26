@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,11 +9,12 @@ import 'theme.dart';
 
 @immutable
 class ElevatedButtonThemeData with Diagnosticable {
-  const ElevatedButtonThemeData({ this.style });
+  const ElevatedButtonThemeData({this.style});
 
   final ButtonStyle? style;
 
-  static ElevatedButtonThemeData? lerp(ElevatedButtonThemeData? a, ElevatedButtonThemeData? b, double t) {
+  static ElevatedButtonThemeData? lerp(
+      ElevatedButtonThemeData? a, ElevatedButtonThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
     }
@@ -40,7 +40,8 @@ class ElevatedButtonThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
   }
 }
 
@@ -54,7 +55,8 @@ class ElevatedButtonTheme extends InheritedTheme {
   final ElevatedButtonThemeData data;
 
   static ElevatedButtonThemeData of(BuildContext context) {
-    final ElevatedButtonTheme? buttonTheme = context.dependOnInheritedWidgetOfExactType<ElevatedButtonTheme>();
+    final ElevatedButtonTheme? buttonTheme =
+        context.dependOnInheritedWidgetOfExactType<ElevatedButtonTheme>();
     return buttonTheme?.data ?? Theme.of(context).elevatedButtonTheme;
   }
 
@@ -64,5 +66,6 @@ class ElevatedButtonTheme extends InheritedTheme {
   }
 
   @override
-  bool updateShouldNotify(ElevatedButtonTheme oldWidget) => data != oldWidget.data;
+  bool updateShouldNotify(ElevatedButtonTheme oldWidget) =>
+      data != oldWidget.data;
 }

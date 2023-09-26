@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/painting/gradient/linear_gradient.0.dart'
     as example;

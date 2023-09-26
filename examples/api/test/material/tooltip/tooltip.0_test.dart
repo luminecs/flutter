@@ -1,18 +1,19 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/tooltip/tooltip.0.dart' as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Tooltip is visible when hovering over text', (WidgetTester tester) async {
+  testWidgets('Tooltip is visible when hovering over text',
+      (WidgetTester tester) async {
     const String tooltipText = 'I am a Tooltip';
 
     await tester.pumpWidget(
       const example.TooltipExampleApp(),
     );
 
-    TestGesture? gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    TestGesture? gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse);
     addTearDown(() async {
       if (gesture != null) {
         return gesture.removePointer();

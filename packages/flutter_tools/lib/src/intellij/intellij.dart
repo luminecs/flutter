@@ -1,4 +1,3 @@
-
 import 'package:archive/archive.dart';
 
 import '../base/file_system.dart';
@@ -7,16 +6,17 @@ import '../convert.dart';
 import '../doctor_validator.dart';
 
 class IntelliJPlugins {
-  IntelliJPlugins(this.pluginsPath, {
-    required FileSystem fileSystem
-  }) : _fileSystem = fileSystem;
+  IntelliJPlugins(this.pluginsPath, {required FileSystem fileSystem})
+      : _fileSystem = fileSystem;
 
   final FileSystem _fileSystem;
   final String pluginsPath;
 
   static final Version kMinFlutterPluginVersion = Version(16, 0, 0);
-  static const String kIntellijDartPluginUrl = 'https://plugins.jetbrains.com/plugin/6351-dart';
-  static const String kIntellijFlutterPluginUrl = 'https://plugins.jetbrains.com/plugin/9212-flutter';
+  static const String kIntellijDartPluginUrl =
+      'https://plugins.jetbrains.com/plugin/6351-dart';
+  static const String kIntellijFlutterPluginUrl =
+      'https://plugins.jetbrains.com/plugin/9212-flutter';
 
   void validatePackage(
     List<ValidationMessage> messages,
@@ -33,12 +33,14 @@ class IntelliJPlugins {
       final String? versionText = _readPackageVersion(packageName);
       final Version? version = Version.parse(versionText);
       if (version != null && minVersion != null && version < minVersion) {
-        messages.add(ValidationMessage.error(
-          '$title plugin version $versionText - the recommended minimum version is $minVersion'),
+        messages.add(
+          ValidationMessage.error(
+              '$title plugin version $versionText - the recommended minimum version is $minVersion'),
         );
       } else {
-        messages.add(ValidationMessage(
-          '$title plugin ${version != null ? "version $version" : "installed"}'),
+        messages.add(
+          ValidationMessage(
+              '$title plugin ${version != null ? "version $version" : "installed"}'),
         );
       }
       return;
@@ -61,7 +63,8 @@ class IntelliJPlugins {
     final List<File> mainJarFileList = <File>[];
     if (packageName.endsWith('.jar')) {
       // package exists (checked in _hasPackage)
-      mainJarFileList.add(_fileSystem.file(_fileSystem.path.join(pluginsPath, packageName)));
+      mainJarFileList.add(
+          _fileSystem.file(_fileSystem.path.join(pluginsPath, packageName)));
     } else {
       final String packageLibPath =
           _fileSystem.path.join(pluginsPath, packageName, 'lib');
@@ -74,10 +77,9 @@ class IntelliJPlugins {
           .listSync()
           .whereType<File>()
           .where((File file) {
-            final String fileExt= _fileSystem.path.extension(file.path);
-            return fileExt == '.jar' || fileExt == '.zip';
-          })
-          .toList();
+        final String fileExt = _fileSystem.path.extension(file.path);
+        return fileExt == '.jar' || fileExt == '.zip';
+      }).toList();
 
       if (pluginJarFiles.isEmpty) {
         return null;

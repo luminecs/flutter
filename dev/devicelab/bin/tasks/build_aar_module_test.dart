@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter_devicelab/framework/apk_utils.dart';
@@ -7,11 +6,10 @@ import 'package:flutter_devicelab/framework/task_result.dart';
 import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:path/path.dart' as path;
 
-final String platformLineSep = Platform.isWindows ? '\r\n': '\n';
+final String platformLineSep = Platform.isWindows ? '\r\n' : '\n';
 
 Future<void> main() async {
   await task(() async {
-
     section('Find Java');
 
     final String? javaHome = await findJavaHome();
@@ -20,7 +18,8 @@ Future<void> main() async {
     }
     print('\nUsing JAVA_HOME=$javaHome');
 
-    final Directory tempDir = Directory.systemTemp.createTempSync('flutter_module_test.');
+    final Directory tempDir =
+        Directory.systemTemp.createTempSync('flutter_module_test.');
     final Directory projectDir = Directory(path.join(tempDir.path, 'hello'));
     try {
       section('Create module project');
@@ -28,7 +27,13 @@ Future<void> main() async {
       await inDirectory(tempDir, () async {
         await flutter(
           'create',
-          options: <String>['--org', 'io.flutter.devicelab', '--template', 'module', 'hello'],
+          options: <String>[
+            '--org',
+            'io.flutter.devicelab',
+            '--template',
+            'module',
+            'hello'
+          ],
         );
       });
 
@@ -37,7 +42,14 @@ Future<void> main() async {
       await inDirectory(tempDir, () async {
         await flutter(
           'create',
-          options: <String>['--org', 'io.flutter.devicelab', '--template', 'plugin', '--platforms=android', 'plugin_with_android'],
+          options: <String>[
+            '--org',
+            'io.flutter.devicelab',
+            '--template',
+            'plugin',
+            '--platforms=android',
+            'plugin_with_android'
+          ],
         );
       });
 
@@ -46,22 +58,30 @@ Future<void> main() async {
       await inDirectory(tempDir, () async {
         await flutter(
           'create',
-          options: <String>['--org', 'io.flutter.devicelab', '--template', 'plugin', '--platforms=ios', 'plugin_without_android'],
+          options: <String>[
+            '--org',
+            'io.flutter.devicelab',
+            '--template',
+            'plugin',
+            '--platforms=ios',
+            'plugin_without_android'
+          ],
         );
       });
 
       section('Add plugins to pubspec.yaml');
 
-      final File modulePubspec = File(path.join(projectDir.path, 'pubspec.yaml'));
+      final File modulePubspec =
+          File(path.join(projectDir.path, 'pubspec.yaml'));
       String content = modulePubspec.readAsStringSync();
       content = content.replaceFirst(
         '${platformLineSep}dependencies:$platformLineSep',
         '${platformLineSep}dependencies:$platformLineSep'
-          '  plugin_with_android:$platformLineSep'
-          '    path: ../plugin_with_android$platformLineSep'
-          '  plugin_without_android:$platformLineSep'
-          '    path: ../plugin_without_android$platformLineSep'
-          '  webcrypto: 0.5.2$platformLineSep', // Plugin that uses NDK.
+            '  plugin_with_android:$platformLineSep'
+            '    path: ../plugin_with_android$platformLineSep'
+            '  plugin_without_android:$platformLineSep'
+            '    path: ../plugin_without_android$platformLineSep'
+            '  webcrypto: 0.5.2$platformLineSep', // Plugin that uses NDK.
       );
       modulePubspec.writeAsStringSync(content, flush: true);
 
@@ -152,15 +172,14 @@ Future<void> main() async {
       section('Check assets in release AAR');
 
       checkCollectionContains<String>(
-        <String>[
-          ...flutterAssets,
-          // AOT snapshots
-          'jni/arm64-v8a/libapp.so',
-          'jni/armeabi-v7a/libapp.so',
-          'jni/x86_64/libapp.so',
-        ],
-        await getFilesInAar(
-          path.join(
+          <String>[
+            ...flutterAssets,
+            // AOT snapshots
+            'jni/arm64-v8a/libapp.so',
+            'jni/armeabi-v7a/libapp.so',
+            'jni/x86_64/libapp.so',
+          ],
+          await getFilesInAar(path.join(
             repoPath,
             'io',
             'flutter',
@@ -169,9 +188,7 @@ Future<void> main() async {
             'flutter_release',
             '1.0',
             'flutter_release-1.0.aar',
-          )
-        )
-      );
+          )));
 
       section('Check debug Maven artifacts');
 

@@ -1,4 +1,3 @@
-
 library flutter_localizations;
 
 export 'src/cupertino_localizations.dart';

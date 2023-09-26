@@ -1,4 +1,3 @@
-
 import 'package:file/file.dart';
 import 'package:file_testing/file_testing.dart';
 import 'package:flutter_tools/src/base/io.dart';
@@ -17,7 +16,9 @@ void main() {
     tryToDelete(tempDir);
   });
 
-  testWithoutContext('Flutter app that depends on a non-Android plugin can still build for Android', () {
+  testWithoutContext(
+      'Flutter app that depends on a non-Android plugin can still build for Android',
+      () {
     final String flutterRoot = getFlutterRoot();
     final String flutterBin = fileSystem.path.join(
       flutterRoot,

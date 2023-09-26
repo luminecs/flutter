@@ -1,7 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const AdaptiveAlertDialogApp());
 
@@ -26,11 +24,10 @@ class AdaptiveAlertDialogApp extends StatelessWidget {
 class AdaptiveDialogExample extends StatelessWidget {
   const AdaptiveDialogExample({super.key});
 
-  Widget adaptiveAction({
-    required BuildContext context,
-    required VoidCallback onPressed,
-    required Widget child
-  }) {
+  Widget adaptiveAction(
+      {required BuildContext context,
+      required VoidCallback onPressed,
+      required Widget child}) {
     final ThemeData theme = Theme.of(context);
     switch (theme.platform) {
       case TargetPlatform.android:

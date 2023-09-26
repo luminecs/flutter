@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'system_channels.dart';
@@ -16,18 +15,22 @@ class BrowserContextMenu {
 
   static Future<void> disableContextMenu() {
     assert(kIsWeb, 'This has no effect on platforms other than web.');
-    return _instance._channel.invokeMethod<void>(
+    return _instance._channel
+        .invokeMethod<void>(
       'disableContextMenu',
-    ).then((_) {
+    )
+        .then((_) {
       _instance._enabled = false;
     });
   }
 
   static Future<void> enableContextMenu() {
     assert(kIsWeb, 'This has no effect on platforms other than web.');
-    return _instance._channel.invokeMethod<void>(
+    return _instance._channel
+        .invokeMethod<void>(
       'enableContextMenu',
-    ).then((_) {
+    )
+        .then((_) {
       _instance._enabled = true;
     });
   }

@@ -1,6 +1,5 @@
-
-import '_platform_io.dart'
-  if (dart.library.js_util) '_platform_web.dart' as platform;
+import '_platform_io.dart' if (dart.library.js_util) '_platform_web.dart'
+    as platform;
 
 //
 // When adding support for a new platform (e.g. Windows Phone, Raspberry Pi),

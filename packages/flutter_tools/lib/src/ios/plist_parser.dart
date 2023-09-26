@@ -1,4 +1,3 @@
-
 import 'package:process/process.dart';
 import 'package:xml/xml.dart';
 
@@ -13,9 +12,10 @@ class PlistParser {
     required FileSystem fileSystem,
     required Logger logger,
     required ProcessManager processManager,
-  }) : _fileSystem = fileSystem,
-       _logger = logger,
-       _processUtils = ProcessUtils(logger: logger, processManager: processManager);
+  })  : _fileSystem = fileSystem,
+        _logger = logger,
+        _processUtils =
+            ProcessUtils(logger: logger, processManager: processManager);
 
   final FileSystem _fileSystem;
   final Logger _logger;
@@ -23,7 +23,8 @@ class PlistParser {
 
   // info.pList keys
   static const String kCFBundleIdentifierKey = 'CFBundleIdentifier';
-  static const String kCFBundleShortVersionStringKey = 'CFBundleShortVersionString';
+  static const String kCFBundleShortVersionStringKey =
+      'CFBundleShortVersionString';
   static const String kCFBundleExecutableKey = 'CFBundleExecutable';
   static const String kCFBundleVersionKey = 'CFBundleVersion';
   static const String kCFBundleDisplayNameKey = 'CFBundleDisplayName';
@@ -33,7 +34,8 @@ class PlistParser {
   static const String kNSPrincipalClassKey = 'NSPrincipalClass';
 
   // entitlement file keys
-  static const String kAssociatedDomainsKey = 'com.apple.developer.associated-domains';
+  static const String kAssociatedDomainsKey =
+      'com.apple.developer.associated-domains';
 
   static const String _plutilExecutable = '/usr/bin/plutil';
 
@@ -42,13 +44,21 @@ class PlistParser {
       throw const FileNotFoundException(_plutilExecutable);
     }
     final List<String> args = <String>[
-      _plutilExecutable, '-convert', 'xml1', '-o', '-', plistFilePath,
+      _plutilExecutable,
+      '-convert',
+      'xml1',
+      '-o',
+      '-',
+      plistFilePath,
     ];
     try {
-      final String xmlContent = _processUtils.runSync(
-        args,
-        throwOnError: true,
-      ).stdout.trim();
+      final String xmlContent = _processUtils
+          .runSync(
+            args,
+            throwOnError: true,
+          )
+          .stdout
+          .trim();
       return xmlContent;
     } on ProcessException catch (error) {
       _logger.printError('$error');
@@ -56,18 +66,26 @@ class PlistParser {
     }
   }
 
-  bool replaceKey(String plistFilePath, {required String key, String? value }) {
+  bool replaceKey(String plistFilePath, {required String key, String? value}) {
     if (!_fileSystem.isFileSync(_plutilExecutable)) {
       throw const FileNotFoundException(_plutilExecutable);
     }
     final List<String> args;
     if (value == null) {
       args = <String>[
-        _plutilExecutable, '-remove', key, plistFilePath,
+        _plutilExecutable,
+        '-remove',
+        key,
+        plistFilePath,
       ];
     } else {
       args = <String>[
-        _plutilExecutable, '-replace', key, '-string', value, plistFilePath,
+        _plutilExecutable,
+        '-replace',
+        key,
+        '-string',
+        value,
+        plistFilePath,
       ];
     }
     try {
@@ -100,7 +118,8 @@ class PlistParser {
   Map<String, Object> _parseXml(String xmlContent) {
     final XmlDocument document = XmlDocument.parse(xmlContent);
     // First element child is <plist>. The first element child of plist is <dict>.
-    final XmlElement dictObject = document.firstElementChild!.firstElementChild!;
+    final XmlElement dictObject =
+        document.firstElementChild!.firstElementChild!;
     return _parseXmlDict(dictObject);
   }
 
@@ -125,7 +144,7 @@ class PlistParser {
   static final RegExp _nonBase64Pattern = RegExp('[^a-zA-Z0-9+/=]+');
 
   Object? _parseXmlNode(XmlElement node) {
-    switch (node.name.local){
+    switch (node.name.local) {
       case 'string':
         return node.innerText;
       case 'real':
@@ -141,7 +160,11 @@ class PlistParser {
       case 'data':
         return base64.decode(node.innerText.replaceAll(_nonBase64Pattern, ''));
       case 'array':
-        return node.children.whereType<XmlElement>().map<Object?>(_parseXmlNode).whereType<Object>().toList();
+        return node.children
+            .whereType<XmlElement>()
+            .map<Object?>(_parseXmlNode)
+            .whereType<Object>()
+            .toList();
       case 'dict':
         return _parseXmlDict(node);
     }

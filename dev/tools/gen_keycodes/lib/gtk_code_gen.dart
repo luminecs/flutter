@@ -1,4 +1,3 @@
-
 import 'package:path/path.dart' as path;
 
 import 'base_code_gen.dart';
@@ -7,7 +6,6 @@ import 'logical_key_data.dart';
 import 'physical_key_data.dart';
 import 'utils.dart';
 
-
 class GtkCodeGenerator extends PlatformCodeGenerator {
   GtkCodeGenerator(
     super.keyData,
@@ -15,15 +13,15 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
     String modifierBitMapping,
     String lockBitMapping,
     this._layoutGoals,
-  ) : _modifierBitMapping = parseMapOfListOfString(modifierBitMapping),
-      _lockBitMapping = parseMapOfListOfString(lockBitMapping);
+  )   : _modifierBitMapping = parseMapOfListOfString(modifierBitMapping),
+        _lockBitMapping = parseMapOfListOfString(lockBitMapping);
 
   String get _xkbScanCodeMap {
     final OutputLines<int> lines = OutputLines<int>('GTK scancode map');
     for (final PhysicalKeyEntry entry in keyData.entries) {
       if (entry.xKbScanCode != null) {
         lines.add(entry.xKbScanCode!,
-          '    {${toHex(entry.xKbScanCode)}, ${toHex(entry.usbHidCode)}},  // ${entry.constantName}');
+            '    {${toHex(entry.xKbScanCode)}, ${toHex(entry.usbHidCode)}},  // ${entry.constantName}');
       }
     }
     return lines.sortedJoin().trimRight();
@@ -34,29 +32,35 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
     for (final LogicalKeyEntry entry in logicalData.entries) {
       zipStrict(entry.gtkValues, entry.gtkNames, (int value, String name) {
         lines.add(value,
-          '    {${toHex(value)}, ${toHex(entry.value, digits: 11)}},  // $name');
+            '    {${toHex(value)}, ${toHex(entry.value, digits: 11)}},  // $name');
       });
     }
     return lines.sortedJoin().trimRight();
   }
 
   static String constructMapFromModToKeys(
-      Map<String, List<String>> source,
-      PhysicalKeyData physicalData,
-      LogicalKeyData logicalData,
-      String debugFunctionName,
+    Map<String, List<String>> source,
+    PhysicalKeyData physicalData,
+    LogicalKeyData logicalData,
+    String debugFunctionName,
   ) {
     final StringBuffer result = StringBuffer();
     source.forEach((String modifierBitName, List<String> keyNames) {
       assert(keyNames.length == 2 || keyNames.length == 3);
       final String primaryPhysicalName = keyNames[0];
       final String primaryLogicalName = keyNames[1];
-      final String? secondaryLogicalName = keyNames.length == 3 ? keyNames[2] : null;
-      final PhysicalKeyEntry primaryPhysical = physicalData.entryByName(primaryPhysicalName);
-      final LogicalKeyEntry primaryLogical = logicalData.entryByName(primaryLogicalName);
-      final LogicalKeyEntry? secondaryLogical = secondaryLogicalName == null ? null : logicalData.entryByName(secondaryLogicalName);
+      final String? secondaryLogicalName =
+          keyNames.length == 3 ? keyNames[2] : null;
+      final PhysicalKeyEntry primaryPhysical =
+          physicalData.entryByName(primaryPhysicalName);
+      final LogicalKeyEntry primaryLogical =
+          logicalData.entryByName(primaryLogicalName);
+      final LogicalKeyEntry? secondaryLogical = secondaryLogicalName == null
+          ? null
+          : logicalData.entryByName(secondaryLogicalName);
       if (secondaryLogical == null && secondaryLogicalName != null) {
-        print('Unrecognized secondary logical key $secondaryLogicalName specified for $debugFunctionName.');
+        print(
+            'Unrecognized secondary logical key $secondaryLogicalName specified for $debugFunctionName.');
         return;
       }
       final String pad = secondaryLogical == null ? '' : '  ';
@@ -76,13 +80,17 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
   }
 
   String get _gtkModifierBitMap {
-    return constructMapFromModToKeys(_modifierBitMapping, keyData, logicalData, 'gtkModifierBitMap');
+    return constructMapFromModToKeys(
+        _modifierBitMapping, keyData, logicalData, 'gtkModifierBitMap');
   }
+
   final Map<String, List<String>> _modifierBitMapping;
 
   String get _gtkModeBitMap {
-    return constructMapFromModToKeys(_lockBitMapping, keyData, logicalData, 'gtkModeBitMap');
+    return constructMapFromModToKeys(
+        _lockBitMapping, keyData, logicalData, 'gtkModeBitMap');
   }
+
   final Map<String, List<String>> _lockBitMapping;
 
   final Map<String, bool> _layoutGoals;
@@ -96,7 +104,8 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
           '${toHex(logicalEntry.value, digits: 2)}, '
           '${mandatory ? 'true' : 'false'}'
           '},';
-      lines.add(logicalEntry.value,
+      lines.add(
+          logicalEntry.value,
           '    ${line.padRight(39)}'
           '// ${logicalEntry.name}');
     });
@@ -111,7 +120,8 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
       kGtkPlane,
     ];
     for (final MaskConstant constant in maskConstants) {
-      buffer.writeln('const uint64_t k${constant.upperCamelName} = ${toHex(constant.value, digits: 11)};');
+      buffer.writeln(
+          'const uint64_t k${constant.upperCamelName} = ${toHex(constant.value, digits: 11)};');
     }
     return buffer.toString().trimRight();
   }
@@ -120,8 +130,12 @@ class GtkCodeGenerator extends PlatformCodeGenerator {
   String get templatePath => path.join(dataRoot, 'gtk_key_mapping_cc.tmpl');
 
   @override
-  String outputPath(String platform) => path.join(PlatformCodeGenerator.engineRoot,
-      'shell', 'platform', 'linux', 'key_mapping.g.cc');
+  String outputPath(String platform) => path.join(
+      PlatformCodeGenerator.engineRoot,
+      'shell',
+      'platform',
+      'linux',
+      'key_mapping.g.cc');
 
   @override
   Map<String, String> mappings() {

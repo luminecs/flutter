@@ -1,4 +1,3 @@
-
 import 'package:file/memory.dart';
 import 'package:flutter_tools/src/artifacts.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
@@ -12,7 +11,20 @@ import '../../../src/common.dart';
 import '../../../src/fake_process_manager.dart';
 import '../../../src/fakes.dart';
 
-const List<int> _kTtfHeaderBytes = <int>[0, 1, 0, 0, 0, 15, 0, 128, 0, 3, 0, 112];
+const List<int> _kTtfHeaderBytes = <int>[
+  0,
+  1,
+  0,
+  0,
+  0,
+  15,
+  0,
+  128,
+  0,
+  3,
+  0,
+  112
+];
 
 const String inputPath = '/input/fonts/MaterialIcons-Regular.otf';
 const String outputPath = '/output/fonts/MaterialIcons-Regular.otf';
@@ -33,15 +45,20 @@ void main() {
   late List<String> fontSubsetArgs;
 
   List<String> getConstFinderArgs(String appDillPath) => <String>[
-    dartPath,
-    '--disable-dart-dev',
-    constFinderPath,
-    '--kernel-file', appDillPath,
-    '--class-library-uri', 'package:flutter/src/widgets/icon_data.dart',
-    '--class-name', 'IconData',
-    '--annotation-class-name', '_StaticIconProvider',
-    '--annotation-class-library-uri', 'package:flutter/src/widgets/icon_data.dart',
-  ];
+        dartPath,
+        '--disable-dart-dev',
+        constFinderPath,
+        '--kernel-file',
+        appDillPath,
+        '--class-library-uri',
+        'package:flutter/src/widgets/icon_data.dart',
+        '--class-name',
+        'IconData',
+        '--annotation-class-name',
+        '_StaticIconProvider',
+        '--annotation-class-library-uri',
+        'package:flutter/src/widgets/icon_data.dart',
+      ];
 
   void addConstFinderInvocation(
     String appDillPath, {
@@ -237,11 +254,11 @@ void main() {
     resetFontSubsetInvocation(stdinSink: stdinSink);
     // Font starts out 2500 bytes long
     final File inputFont = fileSystem.file(inputPath)
-        ..writeAsBytesSync(List<int>.filled(2500, 0));
+      ..writeAsBytesSync(List<int>.filled(2500, 0));
     // after subsetting, font is 1200 bytes long
     fileSystem.file(outputPath)
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(List<int>.filled(1200, 0));
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(List<int>.filled(1200, 0));
     bool subsetted = await iconTreeShaker.subsetFont(
       input: inputFont,
       outputPath: outputPath,
@@ -261,7 +278,8 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
     expect(
       logger.statusText,
-      contains('Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 2500 to 1200 bytes (52.0% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.'),
+      contains(
+          'Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 2500 to 1200 bytes (52.0% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.'),
     );
   });
 
@@ -331,7 +349,10 @@ void main() {
     expect(subsetted, false);
   });
 
-  for (final TargetPlatform platform in <TargetPlatform>[TargetPlatform.android_arm, TargetPlatform.web_javascript]) {
+  for (final TargetPlatform platform in <TargetPlatform>[
+    TargetPlatform.android_arm,
+    TargetPlatform.web_javascript
+  ]) {
     testWithoutContext('Non-constant instances $platform', () async {
       final Environment environment = createEnvironment(<String, String>{
         kIconTreeShakerFlag: 'true',
@@ -350,7 +371,8 @@ void main() {
         targetPlatform: platform,
       );
 
-      addConstFinderInvocation(appDill.path, stdout: constFinderResultWithInvalid);
+      addConstFinderInvocation(appDill.path,
+          stdout: constFinderResultWithInvalid);
 
       await expectLater(
         () => iconTreeShaker.subsetFont(
@@ -359,9 +381,8 @@ void main() {
           relativePath: relativePath,
         ),
         throwsToolExit(
-          message:
-            'Avoid non-constant invocations of IconData or try to build'
-            ' again with --no-tree-shake-icons.',
+          message: 'Avoid non-constant invocations of IconData or try to build'
+              ' again with --no-tree-shake-icons.',
         ),
       );
       expect(processManager, hasNoRemainingExpectations);
@@ -395,10 +416,10 @@ void main() {
     resetFontSubsetInvocation(stdinSink: stdinSink);
     expect(processManager.hasRemainingExpectations, isTrue);
     final File inputFont = fileSystem.file(inputPath)
-        ..writeAsBytesSync(List<int>.filled(2500, 0));
+      ..writeAsBytesSync(List<int>.filled(2500, 0));
     fileSystem.file(outputPath)
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(List<int>.filled(1200, 0));
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(List<int>.filled(1200, 0));
 
     final bool result = await iconTreeShaker.subsetFont(
       input: inputFont,
@@ -407,7 +428,8 @@ void main() {
     );
 
     expect(result, isTrue);
-    final List<String> codePoints = stdinSink.getAndClear().trim().split(whitespace);
+    final List<String> codePoints =
+        stdinSink.getAndClear().trim().split(whitespace);
     expect(codePoints, isNot(contains('optional:32')));
 
     expect(processManager, hasNoRemainingExpectations);
@@ -440,10 +462,10 @@ void main() {
     resetFontSubsetInvocation(stdinSink: stdinSink);
     expect(processManager.hasRemainingExpectations, isTrue);
     final File inputFont = fileSystem.file(inputPath)
-        ..writeAsBytesSync(List<int>.filled(2500, 0));
+      ..writeAsBytesSync(List<int>.filled(2500, 0));
     fileSystem.file(outputPath)
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(List<int>.filled(1200, 0));
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(List<int>.filled(1200, 0));
 
     final bool result = await iconTreeShaker.subsetFont(
       input: inputFont,
@@ -452,8 +474,10 @@ void main() {
     );
 
     expect(result, isTrue);
-    final List<String> codePoints = stdinSink.getAndClear().trim().split(whitespace);
-    expect(codePoints, containsAllInOrder(const <String>['59470', 'optional:32']));
+    final List<String> codePoints =
+        stdinSink.getAndClear().trim().split(whitespace);
+    expect(
+        codePoints, containsAllInOrder(const <String>['59470', 'optional:32']));
 
     expect(processManager, hasNoRemainingExpectations);
   });

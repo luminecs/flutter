@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'message.dart';
@@ -13,7 +12,8 @@ class WaitForCondition extends Command {
   final SerializableWaitCondition condition;
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(condition.serialize());
+  Map<String, String> serialize() =>
+      super.serialize()..addAll(condition.serialize());
 
   @override
   String get kind => 'waitForCondition';
@@ -50,7 +50,8 @@ class NoTransientCallbacks extends SerializableWaitCondition {
 
   factory NoTransientCallbacks.deserialize(Map<String, String> json) {
     if (json['conditionName'] != 'NoTransientCallbacksCondition') {
-      throw SerializationException('Error occurred during deserializing the NoTransientCallbacksCondition JSON string: $json');
+      throw SerializationException(
+          'Error occurred during deserializing the NoTransientCallbacksCondition JSON string: $json');
     }
     return const NoTransientCallbacks();
   }
@@ -64,7 +65,8 @@ class NoPendingFrame extends SerializableWaitCondition {
 
   factory NoPendingFrame.deserialize(Map<String, String> json) {
     if (json['conditionName'] != 'NoPendingFrameCondition') {
-      throw SerializationException('Error occurred during deserializing the NoPendingFrameCondition JSON string: $json');
+      throw SerializationException(
+          'Error occurred during deserializing the NoPendingFrameCondition JSON string: $json');
     }
     return const NoPendingFrame();
   }
@@ -78,7 +80,8 @@ class FirstFrameRasterized extends SerializableWaitCondition {
 
   factory FirstFrameRasterized.deserialize(Map<String, String> json) {
     if (json['conditionName'] != 'FirstFrameRasterizedCondition') {
-      throw SerializationException('Error occurred during deserializing the FirstFrameRasterizedCondition JSON string: $json');
+      throw SerializationException(
+          'Error occurred during deserializing the FirstFrameRasterizedCondition JSON string: $json');
     }
     return const FirstFrameRasterized();
   }
@@ -95,7 +98,8 @@ class NoPendingPlatformMessages extends SerializableWaitCondition {
 
   factory NoPendingPlatformMessages.deserialize(Map<String, String> json) {
     if (json['conditionName'] != 'NoPendingPlatformMessagesCondition') {
-      throw SerializationException('Error occurred during deserializing the NoPendingPlatformMessagesCondition JSON string: $json');
+      throw SerializationException(
+          'Error occurred during deserializing the NoPendingPlatformMessagesCondition JSON string: $json');
     }
     return const NoPendingPlatformMessages();
   }
@@ -109,14 +113,18 @@ class CombinedCondition extends SerializableWaitCondition {
 
   factory CombinedCondition.deserialize(Map<String, String> jsonMap) {
     if (jsonMap['conditionName'] != 'CombinedCondition') {
-      throw SerializationException('Error occurred during deserializing the CombinedCondition JSON string: $jsonMap');
+      throw SerializationException(
+          'Error occurred during deserializing the CombinedCondition JSON string: $jsonMap');
     }
     if (jsonMap['conditions'] == null) {
       return const CombinedCondition(<SerializableWaitCondition>[]);
     }
 
-    final List<SerializableWaitCondition> conditions = <SerializableWaitCondition>[];
-    for (final Map<String, dynamic> condition in (json.decode(jsonMap['conditions']!) as List<dynamic>).cast<Map<String, dynamic>>()) {
+    final List<SerializableWaitCondition> conditions =
+        <SerializableWaitCondition>[];
+    for (final Map<String, dynamic> condition
+        in (json.decode(jsonMap['conditions']!) as List<dynamic>)
+            .cast<Map<String, dynamic>>()) {
       conditions.add(_deserialize(condition.cast<String, String>()));
     }
     return CombinedCondition(conditions);
@@ -130,10 +138,10 @@ class CombinedCondition extends SerializableWaitCondition {
   @override
   Map<String, String> serialize() {
     final Map<String, String> jsonMap = super.serialize();
-    final List<Map<String, String>> jsonConditions = conditions.map(
-      (SerializableWaitCondition condition) {
-        return condition.serialize();
-      }).toList();
+    final List<Map<String, String>> jsonConditions =
+        conditions.map((SerializableWaitCondition condition) {
+      return condition.serialize();
+    }).toList();
     jsonMap['conditions'] = json.encode(jsonConditions);
     return jsonMap;
   }

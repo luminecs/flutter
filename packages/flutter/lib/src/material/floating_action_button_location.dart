@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -19,41 +18,55 @@ abstract class FloatingActionButtonLocation {
 
   static const FloatingActionButtonLocation startTop = _StartTopFabLocation();
 
-  static const FloatingActionButtonLocation miniStartTop = _MiniStartTopFabLocation();
+  static const FloatingActionButtonLocation miniStartTop =
+      _MiniStartTopFabLocation();
 
   static const FloatingActionButtonLocation centerTop = _CenterTopFabLocation();
 
-  static const FloatingActionButtonLocation miniCenterTop = _MiniCenterTopFabLocation();
+  static const FloatingActionButtonLocation miniCenterTop =
+      _MiniCenterTopFabLocation();
 
   static const FloatingActionButtonLocation endTop = _EndTopFabLocation();
 
-  static const FloatingActionButtonLocation miniEndTop = _MiniEndTopFabLocation();
+  static const FloatingActionButtonLocation miniEndTop =
+      _MiniEndTopFabLocation();
 
-  static const FloatingActionButtonLocation startFloat = _StartFloatFabLocation();
+  static const FloatingActionButtonLocation startFloat =
+      _StartFloatFabLocation();
 
-  static const FloatingActionButtonLocation miniStartFloat = _MiniStartFloatFabLocation();
+  static const FloatingActionButtonLocation miniStartFloat =
+      _MiniStartFloatFabLocation();
 
-  static const FloatingActionButtonLocation centerFloat = _CenterFloatFabLocation();
+  static const FloatingActionButtonLocation centerFloat =
+      _CenterFloatFabLocation();
 
-  static const FloatingActionButtonLocation miniCenterFloat = _MiniCenterFloatFabLocation();
+  static const FloatingActionButtonLocation miniCenterFloat =
+      _MiniCenterFloatFabLocation();
 
   static const FloatingActionButtonLocation endFloat = _EndFloatFabLocation();
 
-  static const FloatingActionButtonLocation miniEndFloat = _MiniEndFloatFabLocation();
+  static const FloatingActionButtonLocation miniEndFloat =
+      _MiniEndFloatFabLocation();
 
-  static const FloatingActionButtonLocation startDocked = _StartDockedFabLocation();
+  static const FloatingActionButtonLocation startDocked =
+      _StartDockedFabLocation();
 
-  static const FloatingActionButtonLocation miniStartDocked = _MiniStartDockedFabLocation();
+  static const FloatingActionButtonLocation miniStartDocked =
+      _MiniStartDockedFabLocation();
 
-  static const FloatingActionButtonLocation centerDocked = _CenterDockedFabLocation();
+  static const FloatingActionButtonLocation centerDocked =
+      _CenterDockedFabLocation();
 
-  static const FloatingActionButtonLocation miniCenterDocked = _MiniCenterDockedFabLocation();
+  static const FloatingActionButtonLocation miniCenterDocked =
+      _MiniCenterDockedFabLocation();
 
   static const FloatingActionButtonLocation endDocked = _EndDockedFabLocation();
 
-  static const FloatingActionButtonLocation miniEndDocked = _MiniEndDockedFabLocation();
+  static const FloatingActionButtonLocation miniEndDocked =
+      _MiniEndDockedFabLocation();
 
-  static const FloatingActionButtonLocation endContained = _EndContainedFabLocation();
+  static const FloatingActionButtonLocation endContained =
+      _EndContainedFabLocation();
 
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry);
 
@@ -64,11 +77,13 @@ abstract class FloatingActionButtonLocation {
 abstract class StandardFabLocation extends FloatingActionButtonLocation {
   const StandardFabLocation();
 
-  double getOffsetX(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment);
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment);
 
-  double getOffsetY(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment);
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment);
 
-  bool isMini () => false;
+  bool isMini() => false;
 
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
@@ -79,28 +94,30 @@ abstract class StandardFabLocation extends FloatingActionButtonLocation {
     );
   }
 
-  static double _leftOffsetX(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
-    return kFloatingActionButtonMargin
-        + scaffoldGeometry.minInsets.left
-        - adjustment;
+  static double _leftOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    return kFloatingActionButtonMargin +
+        scaffoldGeometry.minInsets.left -
+        adjustment;
   }
 
-  static double _rightOffsetX(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
-    return scaffoldGeometry.scaffoldSize.width
-        - kFloatingActionButtonMargin
-        - scaffoldGeometry.minInsets.right
-        - scaffoldGeometry.floatingActionButtonSize.width
-        + adjustment;
+  static double _rightOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    return scaffoldGeometry.scaffoldSize.width -
+        kFloatingActionButtonMargin -
+        scaffoldGeometry.minInsets.right -
+        scaffoldGeometry.floatingActionButtonSize.width +
+        adjustment;
   }
-
-
 }
 
 mixin FabTopOffsetY on StandardFabLocation {
   @override
-  double getOffsetY(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
     if (scaffoldGeometry.contentTop > scaffoldGeometry.minViewPadding.top) {
-      final double fabHalfHeight = scaffoldGeometry.floatingActionButtonSize.height / 2.0;
+      final double fabHalfHeight =
+          scaffoldGeometry.floatingActionButtonSize.height / 2.0;
       return scaffoldGeometry.contentTop - fabHalfHeight;
     }
     // Otherwise, ensure we are placed within the bounds of a safe area.
@@ -110,23 +127,33 @@ mixin FabTopOffsetY on StandardFabLocation {
 
 mixin FabFloatOffsetY on StandardFabLocation {
   @override
-  double getOffsetY(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
     final double contentBottom = scaffoldGeometry.contentBottom;
-    final double bottomContentHeight = scaffoldGeometry.scaffoldSize.height - contentBottom;
+    final double bottomContentHeight =
+        scaffoldGeometry.scaffoldSize.height - contentBottom;
     final double bottomSheetHeight = scaffoldGeometry.bottomSheetSize.height;
     final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
     final double snackBarHeight = scaffoldGeometry.snackBarSize.height;
     final double safeMargin = math.max(
       kFloatingActionButtonMargin,
-      scaffoldGeometry.minViewPadding.bottom - bottomContentHeight + kFloatingActionButtonMargin,
+      scaffoldGeometry.minViewPadding.bottom -
+          bottomContentHeight +
+          kFloatingActionButtonMargin,
     );
 
     double fabY = contentBottom - fabHeight - safeMargin;
     if (snackBarHeight > 0.0) {
-      fabY = math.min(fabY, contentBottom - snackBarHeight - fabHeight - kFloatingActionButtonMargin);
+      fabY = math.min(
+          fabY,
+          contentBottom -
+              snackBarHeight -
+              fabHeight -
+              kFloatingActionButtonMargin);
     }
     if (bottomSheetHeight > 0.0) {
-      fabY = math.min(fabY, contentBottom - bottomSheetHeight - fabHeight / 2.0);
+      fabY =
+          math.min(fabY, contentBottom - bottomSheetHeight - fabHeight / 2.0);
     }
     return fabY + adjustment;
   }
@@ -134,9 +161,11 @@ mixin FabFloatOffsetY on StandardFabLocation {
 
 mixin FabDockedOffsetY on StandardFabLocation {
   @override
-  double getOffsetY(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
     final double contentBottom = scaffoldGeometry.contentBottom;
-    final double contentMargin = scaffoldGeometry.scaffoldSize.height - contentBottom;
+    final double contentMargin =
+        scaffoldGeometry.scaffoldSize.height - contentBottom;
     final double bottomViewPadding = scaffoldGeometry.minViewPadding.bottom;
     final double bottomSheetHeight = scaffoldGeometry.bottomSheetSize.height;
     final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
@@ -162,22 +191,31 @@ mixin FabDockedOffsetY on StandardFabLocation {
     double fabY = contentBottom - fabHeight / 2.0 - safeMargin;
     // The FAB should sit with a margin between it and the snack bar.
     if (snackBarHeight > 0.0) {
-      fabY = math.min(fabY, contentBottom - snackBarHeight - fabHeight - kFloatingActionButtonMargin);
+      fabY = math.min(
+          fabY,
+          contentBottom -
+              snackBarHeight -
+              fabHeight -
+              kFloatingActionButtonMargin);
     }
     // The FAB should sit with its center in front of the top of the bottom sheet.
     if (bottomSheetHeight > 0.0) {
-      fabY = math.min(fabY, contentBottom - bottomSheetHeight - fabHeight / 2.0);
+      fabY =
+          math.min(fabY, contentBottom - bottomSheetHeight - fabHeight / 2.0);
     }
-    final double maxFabY = scaffoldGeometry.scaffoldSize.height - fabHeight - safeMargin;
+    final double maxFabY =
+        scaffoldGeometry.scaffoldSize.height - fabHeight - safeMargin;
     return math.min(maxFabY, fabY);
   }
 }
 
 mixin FabContainedOffsetY on StandardFabLocation {
   @override
-  double getOffsetY(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
     final double contentBottom = scaffoldGeometry.contentBottom;
-    final double contentMargin = scaffoldGeometry.scaffoldSize.height - contentBottom;
+    final double contentMargin =
+        scaffoldGeometry.scaffoldSize.height - contentBottom;
     final double bottomViewPadding = scaffoldGeometry.minViewPadding.bottom;
     final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height;
 
@@ -193,9 +231,11 @@ mixin FabContainedOffsetY on StandardFabLocation {
     // This is to compute the distance between the content bottom to the top edge
     // of the floating action button. This can be negative if content margin is
     // too small.
-    final double contentBottomToFabTop = (contentMargin - bottomViewPadding - fabHeight) / 2.0;
+    final double contentBottomToFabTop =
+        (contentMargin - bottomViewPadding - fabHeight) / 2.0;
     final double fabY = contentBottom + contentBottomToFabTop;
-    final double maxFabY = scaffoldGeometry.scaffoldSize.height - fabHeight - safeMargin;
+    final double maxFabY =
+        scaffoldGeometry.scaffoldSize.height - fabHeight - safeMargin;
 
     return math.min(maxFabY, fabY);
   }
@@ -203,7 +243,8 @@ mixin FabContainedOffsetY on StandardFabLocation {
 
 mixin FabStartOffsetX on StandardFabLocation {
   @override
-  double getOffsetX(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
     switch (scaffoldGeometry.textDirection) {
       case TextDirection.rtl:
         return StandardFabLocation._rightOffsetX(scaffoldGeometry, adjustment);
@@ -215,14 +256,18 @@ mixin FabStartOffsetX on StandardFabLocation {
 
 mixin FabCenterOffsetX on StandardFabLocation {
   @override
-  double getOffsetX(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
-    return (scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width) / 2.0;
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    return (scaffoldGeometry.scaffoldSize.width -
+            scaffoldGeometry.floatingActionButtonSize.width) /
+        2.0;
   }
 }
 
 mixin FabEndOffsetX on StandardFabLocation {
   @override
-  double getOffsetX(ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
     switch (scaffoldGeometry.textDirection) {
       case TextDirection.rtl:
         return StandardFabLocation._leftOffsetX(scaffoldGeometry, adjustment);
@@ -234,7 +279,7 @@ mixin FabEndOffsetX on StandardFabLocation {
 
 mixin FabMiniOffsetAdjustment on StandardFabLocation {
   @override
-  bool isMini () => true;
+  bool isMini() => true;
 }
 
 class _StartTopFabLocation extends StandardFabLocation
@@ -392,13 +437,15 @@ class _EndContainedFabLocation extends StandardFabLocation
 abstract class FloatingActionButtonAnimator {
   const FloatingActionButtonAnimator();
 
-  static const FloatingActionButtonAnimator scaling = _ScalingFabMotionAnimator();
+  static const FloatingActionButtonAnimator scaling =
+      _ScalingFabMotionAnimator();
 
-  Offset getOffset({ required Offset begin, required Offset end, required double progress });
+  Offset getOffset(
+      {required Offset begin, required Offset end, required double progress});
 
-  Animation<double> getScaleAnimation({ required Animation<double> parent });
+  Animation<double> getScaleAnimation({required Animation<double> parent});
 
-  Animation<double> getRotationAnimation({ required Animation<double> parent });
+  Animation<double> getRotationAnimation({required Animation<double> parent});
 
   double getAnimationRestart(double previousValue) => 0.0;
 
@@ -410,7 +457,8 @@ class _ScalingFabMotionAnimator extends FloatingActionButtonAnimator {
   const _ScalingFabMotionAnimator();
 
   @override
-  Offset getOffset({ required Offset begin, required Offset end, required double progress }) {
+  Offset getOffset(
+      {required Offset begin, required Offset end, required double progress}) {
     if (progress < 0.5) {
       return begin;
     } else {
@@ -419,7 +467,7 @@ class _ScalingFabMotionAnimator extends FloatingActionButtonAnimator {
   }
 
   @override
-  Animation<double> getScaleAnimation({ required Animation<double> parent }) {
+  Animation<double> getScaleAnimation({required Animation<double> parent}) {
     // Animate the scale down from 1 to 0 in the first half of the animation
     // then from 0 back to 1 in the second half.
     const Curve curve = Interval(0.5, 1.0, curve: Curves.ease);
@@ -438,10 +486,11 @@ class _ScalingFabMotionAnimator extends FloatingActionButtonAnimator {
     end: 1.0,
   );
 
-  static final Animatable<double> _thresholdCenterTween = CurveTween(curve: const Threshold(0.5));
+  static final Animatable<double> _thresholdCenterTween =
+      CurveTween(curve: const Threshold(0.5));
 
   @override
-  Animation<double> getRotationAnimation({ required Animation<double> parent }) {
+  Animation<double> getRotationAnimation({required Animation<double> parent}) {
     // This rotation will turn on the way in, but not on the way out.
     return _AnimationSwap<double>(
       parent.drive(_rotationTween),
@@ -455,11 +504,14 @@ class _ScalingFabMotionAnimator extends FloatingActionButtonAnimator {
   // If the animation was finishing, we'll treat it as if we were starting at that point in reverse.
   // This avoids a size jump during the animation.
   @override
-  double getAnimationRestart(double previousValue) => math.min(1.0 - previousValue, previousValue);
+  double getAnimationRestart(double previousValue) =>
+      math.min(1.0 - previousValue, previousValue);
 }
 
 class _AnimationSwap<T> extends CompoundAnimation<T> {
-  _AnimationSwap(Animation<T> first, Animation<T> next, this.parent, this.swapThreshold) : super(first: first, next: next);
+  _AnimationSwap(
+      Animation<T> first, Animation<T> next, this.parent, this.swapThreshold)
+      : super(first: first, next: next);
 
   final Animation<double> parent;
   final double swapThreshold;

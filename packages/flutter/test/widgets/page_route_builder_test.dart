@@ -1,4 +1,3 @@
-
 // This file is run as part of a reduced test set in CI on Mac and Windows
 // machines.
 @Tags(<String>['reduced-test-set'])
@@ -9,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 class TestPage extends StatelessWidget {
-  const TestPage({ super.key, this.useMaterial3 });
+  const TestPage({super.key, this.useMaterial3});
 
   final bool? useMaterial3;
 
@@ -91,7 +90,9 @@ class ModalPage extends StatelessWidget {
 }
 
 void main() {
-  testWidgetsWithLeakTracking('Material2 - Barriers show when using PageRouteBuilder', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material2 - Barriers show when using PageRouteBuilder',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const TestPage(useMaterial3: false));
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
@@ -101,7 +102,9 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Material3 - Barriers show when using PageRouteBuilder', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material3 - Barriers show when using PageRouteBuilder',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const TestPage(useMaterial3: true));
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();

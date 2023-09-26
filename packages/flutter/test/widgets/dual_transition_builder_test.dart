@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
@@ -138,7 +137,8 @@ void main() {
     expect(state, same(tester.state(find.byType(_StatefulTestWidget))));
   });
 
-  testWidgetsWithLeakTracking('does not jump when interrupted - forward', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('does not jump when interrupted - forward',
+      (WidgetTester tester) async {
     final AnimationController controller = AnimationController(
       vsync: const TestVSync(),
       duration: const Duration(milliseconds: 300),
@@ -204,7 +204,8 @@ void main() {
     expect(_getOpacity(tester), 1.0);
   });
 
-  testWidgetsWithLeakTracking('does not jump when interrupted - reverse', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('does not jump when interrupted - reverse',
+      (WidgetTester tester) async {
     final AnimationController controller = AnimationController(
       value: 1.0,
       vsync: const TestVSync(),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/app_bar/sliver_app_bar.4.dart'
     as example;

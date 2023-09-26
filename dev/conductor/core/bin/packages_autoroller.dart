@@ -1,4 +1,3 @@
-
 import 'dart:io' as io;
 
 import 'package:args/args.dart';
@@ -39,7 +38,8 @@ Future<void> run(
   // TODO(fujino): delete after recipe has been migrated to stop passing this
   parser.addOption(
     'mirror-remote',
-    help: '(Deprecated) this is now a no-op. To change the account, edit this tool.',
+    help:
+        '(Deprecated) this is now a no-op. To change the account, edit this tool.',
   );
   parser.addOption(
     kUpstreamRemote,
@@ -60,7 +60,8 @@ ${parser.usage}
     rethrow;
   }
 
-  const String mirrorUrl = 'https://github.com/flutter-pub-roller-bot/flutter.git';
+  const String mirrorUrl =
+      'https://github.com/flutter-pub-roller-bot/flutter.git';
   final String upstreamUrl = results[kUpstreamRemote]! as String;
   final String tokenPath = results[kTokenOption]! as String;
   final File tokenFile = fs.file(tokenPath);
@@ -141,6 +142,5 @@ Directory get _localFlutterRoot {
 }
 
 @visibleForTesting
-void validateTokenFile(String filePath, [FileSystem fs = const LocalFileSystem()]) {
-
-}
+void validateTokenFile(String filePath,
+    [FileSystem fs = const LocalFileSystem()]) {}

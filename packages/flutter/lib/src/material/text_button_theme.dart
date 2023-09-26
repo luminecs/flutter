@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,11 +9,12 @@ import 'theme.dart';
 
 @immutable
 class TextButtonThemeData with Diagnosticable {
-  const TextButtonThemeData({ this.style });
+  const TextButtonThemeData({this.style});
 
   final ButtonStyle? style;
 
-  static TextButtonThemeData? lerp(TextButtonThemeData? a, TextButtonThemeData? b, double t) {
+  static TextButtonThemeData? lerp(
+      TextButtonThemeData? a, TextButtonThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
     }
@@ -40,7 +40,8 @@ class TextButtonThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
   }
 }
 
@@ -54,7 +55,8 @@ class TextButtonTheme extends InheritedTheme {
   final TextButtonThemeData data;
 
   static TextButtonThemeData of(BuildContext context) {
-    final TextButtonTheme? buttonTheme = context.dependOnInheritedWidgetOfExactType<TextButtonTheme>();
+    final TextButtonTheme? buttonTheme =
+        context.dependOnInheritedWidgetOfExactType<TextButtonTheme>();
     return buttonTheme?.data ?? Theme.of(context).textButtonTheme;
   }
 

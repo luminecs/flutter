@@ -1,4 +1,3 @@
-
 import '../test_utils.dart';
 import 'project.dart';
 
@@ -82,7 +81,8 @@ class HotReloadProject extends Project {
   ''';
 
   Uri get scheduledBreakpointUri => mainDart;
-  int get scheduledBreakpointLine => lineContaining(main, '// SCHEDULED BREAKPOINT');
+  int get scheduledBreakpointLine =>
+      lineContaining(main, '// SCHEDULED BREAKPOINT');
 
   Uri get buildBreakpointUri => mainDart;
   int get buildBreakpointLine => lineContaining(main, '// BUILD BREAKPOINT');

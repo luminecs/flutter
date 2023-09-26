@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +10,7 @@ void main() {
       debugInstrumentationEnabled = true;
       printBuffer = StringBuffer();
       originalDebugPrintCallback = debugPrint;
-      debugPrint = (String? message, { int? wrapWidth }) {
+      debugPrint = (String? message, {int? wrapWidth}) {
         printBuffer.writeln(message);
       };
     });
@@ -29,7 +28,8 @@ void main() {
       expect(result, 1);
       expect(
         printBuffer.toString(),
-        matches(RegExp('^action\\(\\)\nAction "no-op" took .+\$', multiLine: true)),
+        matches(
+            RegExp('^action\\(\\)\nAction "no-op" took .+\$', multiLine: true)),
       );
     });
 

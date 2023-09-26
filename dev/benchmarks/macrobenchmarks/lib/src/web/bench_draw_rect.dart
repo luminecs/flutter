@@ -1,12 +1,15 @@
-
 import 'dart:ui';
 
 import 'recorder.dart';
 
 class BenchDrawRect extends SceneBuilderRecorder {
-  BenchDrawRect.staticPaint() : benchmarkPaint = false, super(name: benchmarkName);
+  BenchDrawRect.staticPaint()
+      : benchmarkPaint = false,
+        super(name: benchmarkName);
 
-  BenchDrawRect.variablePaint() : benchmarkPaint = true, super(name: variablePaintBenchmarkName);
+  BenchDrawRect.variablePaint()
+      : benchmarkPaint = true,
+        super(name: variablePaintBenchmarkName);
 
   static const String benchmarkName = 'draw_rect';
   static const String variablePaintBenchmarkName = 'draw_rect_variable_paint';
@@ -19,18 +22,25 @@ class BenchDrawRect extends SceneBuilderRecorder {
 
   double wobbleCounter = 0;
 
-  static final Paint _staticPaint = Paint()..color = const Color.fromARGB(255, 255, 0, 0);
+  static final Paint _staticPaint = Paint()
+    ..color = const Color.fromARGB(255, 255, 0, 0);
 
   Paint makePaint(int row, int col) {
     if (benchmarkPaint) {
       final Paint paint = Paint();
       final double rowRatio = row / kRows;
-      paint.color = Color.fromARGB(255, (255 * rowRatio).floor(), (255 * col / kColumns).floor(), 255);
-      paint.filterQuality = FilterQuality.values[(FilterQuality.values.length * rowRatio).floor()];
-      paint.strokeCap = StrokeCap.values[(StrokeCap.values.length * rowRatio).floor()];
-      paint.strokeJoin = StrokeJoin.values[(StrokeJoin.values.length * rowRatio).floor()];
-      paint.blendMode = BlendMode.values[(BlendMode.values.length * rowRatio).floor()];
-      paint.style = PaintingStyle.values[(PaintingStyle.values.length * rowRatio).floor()];
+      paint.color = Color.fromARGB(
+          255, (255 * rowRatio).floor(), (255 * col / kColumns).floor(), 255);
+      paint.filterQuality = FilterQuality
+          .values[(FilterQuality.values.length * rowRatio).floor()];
+      paint.strokeCap =
+          StrokeCap.values[(StrokeCap.values.length * rowRatio).floor()];
+      paint.strokeJoin =
+          StrokeJoin.values[(StrokeJoin.values.length * rowRatio).floor()];
+      paint.blendMode =
+          BlendMode.values[(BlendMode.values.length * rowRatio).floor()];
+      paint.style = PaintingStyle
+          .values[(PaintingStyle.values.length * rowRatio).floor()];
       paint.strokeWidth = 1.0 + rowRatio;
       paint.strokeMiterLimit = rowRatio;
       return paint;

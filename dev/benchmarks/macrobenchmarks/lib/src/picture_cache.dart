@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class PictureCachePage extends StatelessWidget {
@@ -29,7 +28,8 @@ class PictureCachePage extends StatelessWidget {
               child: Builder(
                 builder: (BuildContext context) {
                   return ListView.builder(
-                    itemBuilder: (BuildContext context, int index) => ListItem(index: index),
+                    itemBuilder: (BuildContext context, int index) =>
+                        ListItem(index: index),
                   );
                 },
               ),
@@ -129,7 +129,9 @@ class ListItem extends StatelessWidget {
           ),
         ),
         Image.asset(
-          index.isEven ? 'food/butternut_squash_soup.png' : 'food/cherry_pie.png',
+          index.isEven
+              ? 'food/butternut_squash_soup.png'
+              : 'food/cherry_pie.png',
           package: 'flutter_gallery_assets',
           fit: BoxFit.cover,
           width: 110,

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -61,7 +60,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
   double? _maxScrollExtent;
 
   @override
-  bool get hasContentDimensions => _minScrollExtent != null && _maxScrollExtent != null;
+  bool get hasContentDimensions =>
+      _minScrollExtent != null && _maxScrollExtent != null;
 
   double _impliedVelocity = 0;
 
@@ -114,7 +114,10 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
 
   double setPixels(double newPixels) {
     assert(hasPixels);
-    assert(SchedulerBinding.instance.schedulerPhase != SchedulerPhase.persistentCallbacks, "A scrollable's position should not change during the build, layout, and paint phases, otherwise the rendering will be confused.");
+    assert(
+        SchedulerBinding.instance.schedulerPhase !=
+            SchedulerPhase.persistentCallbacks,
+        "A scrollable's position should not change during the build, layout, and paint phases, otherwise the rendering will be confused.");
     if (newPixels != pixels) {
       final double overscroll = applyBoundaryConditions(newPixels);
       assert(() {
@@ -172,14 +175,16 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
   // TODO(goderbauer): Deprecate this when state restoration supports all features of PageStorage.
   @protected
   void saveScrollOffset() {
-    PageStorage.maybeOf(context.storageContext)?.writeState(context.storageContext, pixels);
+    PageStorage.maybeOf(context.storageContext)
+        ?.writeState(context.storageContext, pixels);
   }
 
   // TODO(goderbauer): Deprecate this when state restoration supports all features of PageStorage.
   @protected
   void restoreScrollOffset() {
     if (!hasPixels) {
-      final double? value = PageStorage.maybeOf(context.storageContext)?.readState(context.storageContext) as double?;
+      final double? value = PageStorage.maybeOf(context.storageContext)
+          ?.readState(context.storageContext) as double?;
       if (value != null) {
         correctPixels(value);
       }
@@ -247,17 +252,19 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
     final ScrollMetrics currentMetrics = copyWith();
 
     return _lastMetrics == null ||
-           !(currentMetrics.extentBefore == _lastMetrics!.extentBefore &&
-             currentMetrics.extentInside == _lastMetrics!.extentInside &&
-             currentMetrics.extentAfter == _lastMetrics!.extentAfter &&
-             currentMetrics.axisDirection == _lastMetrics!.axisDirection);
+        !(currentMetrics.extentBefore == _lastMetrics!.extentBefore &&
+            currentMetrics.extentInside == _lastMetrics!.extentInside &&
+            currentMetrics.extentAfter == _lastMetrics!.extentAfter &&
+            currentMetrics.axisDirection == _lastMetrics!.axisDirection);
   }
 
   @override
   bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
     assert(haveDimensions == (_lastMetrics != null));
-    if (!nearEqual(_minScrollExtent, minScrollExtent, Tolerance.defaultTolerance.distance) ||
-        !nearEqual(_maxScrollExtent, maxScrollExtent, Tolerance.defaultTolerance.distance) ||
+    if (!nearEqual(_minScrollExtent, minScrollExtent,
+            Tolerance.defaultTolerance.distance) ||
+        !nearEqual(_maxScrollExtent, maxScrollExtent,
+            Tolerance.defaultTolerance.distance) ||
         _didChangeViewportDimensionOrReceiveCorrection ||
         _lastAxis != axis) {
       assert(minScrollExtent <= maxScrollExtent);
@@ -267,7 +274,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
       final ScrollMetrics? currentMetrics = haveDimensions ? copyWith() : null;
       _didChangeViewportDimensionOrReceiveCorrection = false;
       _pendingDimensions = true;
-      if (haveDimensions && !correctForNewDimensions(_lastMetrics!, currentMetrics!)) {
+      if (haveDimensions &&
+          !correctForNewDimensions(_lastMetrics!, currentMetrics!)) {
         return false;
       }
       _haveDimensions = true;
@@ -277,7 +285,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
       applyNewDimensions();
       _pendingDimensions = false;
     }
-    assert(!_didChangeViewportDimensionOrReceiveCorrection, 'Use correctForNewDimensions() (and return true) to change the scroll offset during applyContentDimensions().');
+    assert(!_didChangeViewportDimensionOrReceiveCorrection,
+        'Use correctForNewDimensions() (and return true) to change the scroll offset during applyContentDimensions().');
 
     if (_isMetricsChanged()) {
       // It is too late to send useful notifications, because the potential
@@ -294,7 +303,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
   }
 
   @protected
-  bool correctForNewDimensions(ScrollMetrics oldPosition, ScrollMetrics newPosition) {
+  bool correctForNewDimensions(
+      ScrollMetrics oldPosition, ScrollMetrics newPosition) {
     final double newPixels = physics.adjustPositionForNewDimensions(
       oldPosition: oldPosition,
       newPosition: newPosition,
@@ -353,22 +363,28 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
     context.setSemanticsActions(_semanticActions!);
   }
 
-  ScrollPositionAlignmentPolicy _maybeFlipAlignment(ScrollPositionAlignmentPolicy alignmentPolicy) {
+  ScrollPositionAlignmentPolicy _maybeFlipAlignment(
+      ScrollPositionAlignmentPolicy alignmentPolicy) {
     return switch (alignmentPolicy) {
       // Don't flip when explicit.
       ScrollPositionAlignmentPolicy.explicit => alignmentPolicy,
-      ScrollPositionAlignmentPolicy.keepVisibleAtEnd => ScrollPositionAlignmentPolicy.keepVisibleAtStart,
-      ScrollPositionAlignmentPolicy.keepVisibleAtStart => ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      ScrollPositionAlignmentPolicy.keepVisibleAtEnd =>
+        ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      ScrollPositionAlignmentPolicy.keepVisibleAtStart =>
+        ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
     };
   }
 
-  ScrollPositionAlignmentPolicy _applyAxisDirectionToAlignmentPolicy(ScrollPositionAlignmentPolicy alignmentPolicy) {
+  ScrollPositionAlignmentPolicy _applyAxisDirectionToAlignmentPolicy(
+      ScrollPositionAlignmentPolicy alignmentPolicy) {
     return switch (axisDirection) {
       // Start and end alignments must account for axis direction.
       // When focus is requested for example, it knows the directionality of the
       // keyboard keys initiating traversal, but not the direction of the
       // Scrollable.
-      AxisDirection.up || AxisDirection.left => _maybeFlipAlignment(alignmentPolicy),
+      AxisDirection.up ||
+      AxisDirection.left =>
+        _maybeFlipAlignment(alignmentPolicy),
       AxisDirection.down || AxisDirection.right => alignmentPolicy,
     };
   }
@@ -378,7 +394,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
     double alignment = 0.0,
     Duration duration = Duration.zero,
     Curve curve = Curves.ease,
-    ScrollPositionAlignmentPolicy alignmentPolicy = ScrollPositionAlignmentPolicy.explicit,
+    ScrollPositionAlignmentPolicy alignmentPolicy =
+        ScrollPositionAlignmentPolicy.explicit,
     RenderObject? targetRenderObject,
   }) {
     assert(object.attached);
@@ -395,14 +412,25 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
     double target;
     switch (_applyAxisDirectionToAlignmentPolicy(alignmentPolicy)) {
       case ScrollPositionAlignmentPolicy.explicit:
-        target = clampDouble(viewport.getOffsetToReveal(object, alignment, rect: targetRect).offset, minScrollExtent, maxScrollExtent);
+        target = clampDouble(
+            viewport
+                .getOffsetToReveal(object, alignment, rect: targetRect)
+                .offset,
+            minScrollExtent,
+            maxScrollExtent);
       case ScrollPositionAlignmentPolicy.keepVisibleAtEnd:
-        target = clampDouble(viewport.getOffsetToReveal(object, 1.0, rect: targetRect).offset, minScrollExtent, maxScrollExtent);
+        target = clampDouble(
+            viewport.getOffsetToReveal(object, 1.0, rect: targetRect).offset,
+            minScrollExtent,
+            maxScrollExtent);
         if (target < pixels) {
           target = pixels;
         }
       case ScrollPositionAlignmentPolicy.keepVisibleAtStart:
-        target = clampDouble(viewport.getOffsetToReveal(object, 0.0, rect: targetRect).offset, minScrollExtent, maxScrollExtent);
+        target = clampDouble(
+            viewport.getOffsetToReveal(object, 0.0, rect: targetRect).offset,
+            minScrollExtent,
+            maxScrollExtent);
         if (target > pixels) {
           target = pixels;
         }
@@ -453,7 +481,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
   @override
   bool get allowImplicitScrolling => physics.allowImplicitScrolling;
 
-  @Deprecated('This will lead to bugs.') // flutter_ignore: deprecation_syntax, https://github.com/flutter/flutter/issues/44609
+  @Deprecated(
+      'This will lead to bugs.') // flutter_ignore: deprecation_syntax, https://github.com/flutter/flutter/issues/44609
   void jumpToWithoutSettling(double value);
 
   ScrollHoldController hold(VoidCallback holdCancelCallback);
@@ -492,19 +521,21 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
     }
   }
 
-
   // NOTIFICATION DISPATCH
 
   void didStartScroll() {
-    activity!.dispatchScrollStartNotification(copyWith(), context.notificationContext);
+    activity!.dispatchScrollStartNotification(
+        copyWith(), context.notificationContext);
   }
 
   void didUpdateScrollPositionBy(double delta) {
-    activity!.dispatchScrollUpdateNotification(copyWith(), context.notificationContext!, delta);
+    activity!.dispatchScrollUpdateNotification(
+        copyWith(), context.notificationContext!, delta);
   }
 
   void didEndScroll() {
-    activity!.dispatchScrollEndNotification(copyWith(), context.notificationContext!);
+    activity!.dispatchScrollEndNotification(
+        copyWith(), context.notificationContext!);
     saveOffset();
     if (keepScrollOffset) {
       saveScrollOffset();
@@ -513,19 +544,27 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
 
   void didOverscrollBy(double value) {
     assert(activity!.isScrolling);
-    activity!.dispatchOverscrollNotification(copyWith(), context.notificationContext!, value);
+    activity!.dispatchOverscrollNotification(
+        copyWith(), context.notificationContext!, value);
   }
 
   void didUpdateScrollDirection(ScrollDirection direction) {
-    UserScrollNotification(metrics: copyWith(), context: context.notificationContext!, direction: direction).dispatch(context.notificationContext);
+    UserScrollNotification(
+            metrics: copyWith(),
+            context: context.notificationContext!,
+            direction: direction)
+        .dispatch(context.notificationContext);
   }
 
   void didUpdateScrollMetrics() {
-    assert(SchedulerBinding.instance.schedulerPhase != SchedulerPhase.persistentCallbacks);
+    assert(SchedulerBinding.instance.schedulerPhase !=
+        SchedulerPhase.persistentCallbacks);
     assert(_haveScheduledUpdateNotification);
     _haveScheduledUpdateNotification = false;
     if (context.notificationContext != null) {
-      ScrollMetricsNotification(metrics: copyWith(), context: context.notificationContext!).dispatch(context.notificationContext);
+      ScrollMetricsNotification(
+              metrics: copyWith(), context: context.notificationContext!)
+          .dispatch(context.notificationContext);
     }
   }
 
@@ -540,7 +579,8 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
 
   @override
   void dispose() {
-    activity?.dispose(); // it will be null if it got absorbed by another ScrollPosition
+    activity
+        ?.dispose(); // it will be null if it got absorbed by another ScrollPosition
     _activity = null;
     isScrollingNotifier.dispose();
     super.dispose();
@@ -558,12 +598,14 @@ abstract class ScrollPosition extends ViewportOffset with ScrollMetrics {
       description.add(debugLabel!);
     }
     super.debugFillDescription(description);
-    description.add('range: ${_minScrollExtent?.toStringAsFixed(1)}..${_maxScrollExtent?.toStringAsFixed(1)}');
+    description.add(
+        'range: ${_minScrollExtent?.toStringAsFixed(1)}..${_maxScrollExtent?.toStringAsFixed(1)}');
     description.add('viewport: ${_viewportDimension?.toStringAsFixed(1)}');
   }
 }
 
-class ScrollMetricsNotification extends Notification with ViewportNotificationMixin {
+class ScrollMetricsNotification extends Notification
+    with ViewportNotificationMixin {
   ScrollMetricsNotification({
     required this.metrics,
     required this.context,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
@@ -55,11 +54,11 @@ class SwitchListTile extends StatelessWidget {
     this.visualDensity,
     this.enableFeedback,
     this.hoverColor,
-  }) : _switchListTileType = _SwitchListTileType.material,
-       applyCupertinoTheme = false,
-       assert(activeThumbImage != null || onActiveThumbImageError == null),
-       assert(inactiveThumbImage != null || onInactiveThumbImageError == null),
-       assert(!isThreeLine || subtitle != null);
+  })  : _switchListTileType = _SwitchListTileType.material,
+        applyCupertinoTheme = false,
+        assert(activeThumbImage != null || onActiveThumbImageError == null),
+        assert(inactiveThumbImage != null || onInactiveThumbImageError == null),
+        assert(!isThreeLine || subtitle != null);
 
   const SwitchListTile.adaptive({
     super.key,
@@ -100,10 +99,10 @@ class SwitchListTile extends StatelessWidget {
     this.visualDensity,
     this.enableFeedback,
     this.hoverColor,
-  }) : _switchListTileType = _SwitchListTileType.adaptive,
-       assert(!isThreeLine || subtitle != null),
-       assert(activeThumbImage != null || onActiveThumbImageError == null),
-       assert(inactiveThumbImage != null || onInactiveThumbImageError == null);
+  })  : _switchListTileType = _SwitchListTileType.adaptive,
+        assert(!isThreeLine || subtitle != null),
+        assert(activeThumbImage != null || onActiveThumbImageError == null),
+        assert(inactiveThumbImage != null || onInactiveThumbImageError == null);
 
   final bool value;
 
@@ -192,7 +191,8 @@ class SwitchListTile extends StatelessWidget {
           activeColor: activeColor,
           activeThumbImage: activeThumbImage,
           inactiveThumbImage: inactiveThumbImage,
-          materialTapTargetSize: materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
+          materialTapTargetSize:
+              materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
           activeTrackColor: activeTrackColor,
           inactiveTrackColor: inactiveTrackColor,
           inactiveThumbColor: inactiveThumbColor,
@@ -218,7 +218,8 @@ class SwitchListTile extends StatelessWidget {
           activeColor: activeColor,
           activeThumbImage: activeThumbImage,
           inactiveThumbImage: inactiveThumbImage,
-          materialTapTargetSize: materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
+          materialTapTargetSize:
+              materialTapTargetSize ?? MaterialTapTargetSize.shrinkWrap,
           activeTrackColor: activeTrackColor,
           inactiveTrackColor: inactiveTrackColor,
           inactiveThumbColor: inactiveThumbColor,
@@ -253,9 +254,9 @@ class SwitchListTile extends StatelessWidget {
     final Set<MaterialState> states = <MaterialState>{
       if (selected) MaterialState.selected,
     };
-    final Color effectiveActiveColor = activeColor
-      ?? switchTheme.thumbColor?.resolve(states)
-      ?? theme.colorScheme.secondary;
+    final Color effectiveActiveColor = activeColor ??
+        switchTheme.thumbColor?.resolve(states) ??
+        theme.colorScheme.secondary;
     return MergeSemantics(
       child: ListTile(
         selectedColor: effectiveActiveColor,
@@ -267,7 +268,11 @@ class SwitchListTile extends StatelessWidget {
         dense: dense,
         contentPadding: contentPadding,
         enabled: onChanged != null,
-        onTap: onChanged != null ? () { onChanged!(!value); } : null,
+        onTap: onChanged != null
+            ? () {
+                onChanged!(!value);
+              }
+            : null,
         selected: selected,
         selectedTileColor: selectedTileColor,
         autofocus: autofocus,

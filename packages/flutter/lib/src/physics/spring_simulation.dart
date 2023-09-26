@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -28,7 +27,8 @@ class SpringDescription {
   final double damping;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'SpringDescription')}(mass: ${mass.toStringAsFixed(1)}, stiffness: ${stiffness.toStringAsFixed(1)}, damping: ${damping.toStringAsFixed(1)})';
+  String toString() =>
+      '${objectRuntimeType(this, 'SpringDescription')}(mass: ${mass.toStringAsFixed(1)}, stiffness: ${stiffness.toStringAsFixed(1)}, damping: ${damping.toStringAsFixed(1)})';
 }
 
 enum SpringType {
@@ -46,8 +46,8 @@ class SpringSimulation extends Simulation {
     double end,
     double velocity, {
     super.tolerance,
-  }) : _endPosition = end,
-       _solution = _SpringSolution(spring, start - end, velocity);
+  })  : _endPosition = end,
+        _solution = _SpringSolution(spring, start - end, velocity);
 
   final double _endPosition;
   final _SpringSolution _solution;
@@ -63,11 +63,12 @@ class SpringSimulation extends Simulation {
   @override
   bool isDone(double time) {
     return nearZero(_solution.x(time), tolerance.distance) &&
-           nearZero(_solution.dx(time), tolerance.velocity);
+        nearZero(_solution.dx(time), tolerance.velocity);
   }
 
   @override
-  String toString() => '${objectRuntimeType(this, 'SpringSimulation')}(end: ${_endPosition.toStringAsFixed(1)}, $type)';
+  String toString() =>
+      '${objectRuntimeType(this, 'SpringSimulation')}(end: ${_endPosition.toStringAsFixed(1)}, $type)';
 }
 
 class ScrollSpringSimulation extends SpringSimulation {
@@ -83,7 +84,6 @@ class ScrollSpringSimulation extends SpringSimulation {
   double x(double time) => isDone(time) ? _endPosition : super.x(time);
 }
 
-
 // SPRING IMPLEMENTATIONS
 
 abstract class _SpringSolution {
@@ -92,7 +92,8 @@ abstract class _SpringSolution {
     double initialPosition,
     double initialVelocity,
   ) {
-    final double cmk = spring.damping * spring.damping - 4 * spring.mass * spring.stiffness;
+    final double cmk =
+        spring.damping * spring.damping - 4 * spring.mass * spring.stiffness;
     if (cmk == 0.0) {
       return _CriticalSolution(spring, initialPosition, initialVelocity);
     }
@@ -120,9 +121,9 @@ class _CriticalSolution implements _SpringSolution {
   }
 
   _CriticalSolution.withArgs(double r, double c1, double c2)
-    : _r = r,
-      _c1 = c1,
-      _c2 = c2;
+      : _r = r,
+        _c1 = c1,
+        _c2 = c2;
 
   final double _r, _c1, _c2;
 
@@ -147,7 +148,8 @@ class _OverdampedSolution implements _SpringSolution {
     double distance,
     double velocity,
   ) {
-    final double cmk = spring.damping * spring.damping - 4 * spring.mass * spring.stiffness;
+    final double cmk =
+        spring.damping * spring.damping - 4 * spring.mass * spring.stiffness;
     final double r1 = (-spring.damping - math.sqrt(cmk)) / (2.0 * spring.mass);
     final double r2 = (-spring.damping + math.sqrt(cmk)) / (2.0 * spring.mass);
     final double c2 = (velocity - r1 * distance) / (r2 - r1);
@@ -156,23 +158,23 @@ class _OverdampedSolution implements _SpringSolution {
   }
 
   _OverdampedSolution.withArgs(double r1, double r2, double c1, double c2)
-    : _r1 = r1,
-      _r2 = r2,
-      _c1 = c1,
-      _c2 = c2;
+      : _r1 = r1,
+        _r2 = r2,
+        _c1 = c1,
+        _c2 = c2;
 
   final double _r1, _r2, _c1, _c2;
 
   @override
   double x(double time) {
     return _c1 * math.pow(math.e, _r1 * time) +
-           _c2 * math.pow(math.e, _r2 * time);
+        _c2 * math.pow(math.e, _r2 * time);
   }
 
   @override
   double dx(double time) {
     return _c1 * _r1 * math.pow(math.e, _r1 * time) +
-           _c2 * _r2 * math.pow(math.e, _r2 * time);
+        _c2 * _r2 * math.pow(math.e, _r2 * time);
   }
 
   @override
@@ -185,7 +187,8 @@ class _UnderdampedSolution implements _SpringSolution {
     double distance,
     double velocity,
   ) {
-    final double w = math.sqrt(4.0 * spring.mass * spring.stiffness - spring.damping * spring.damping) /
+    final double w = math.sqrt(4.0 * spring.mass * spring.stiffness -
+            spring.damping * spring.damping) /
         (2.0 * spring.mass);
     final double r = -(spring.damping / 2.0 * spring.mass);
     final double c1 = distance;
@@ -194,17 +197,17 @@ class _UnderdampedSolution implements _SpringSolution {
   }
 
   _UnderdampedSolution.withArgs(double w, double r, double c1, double c2)
-    : _w = w,
-      _r = r,
-      _c1 = c1,
-      _c2 = c2;
+      : _w = w,
+        _r = r,
+        _c1 = c1,
+        _c2 = c2;
 
   final double _w, _r, _c1, _c2;
 
   @override
   double x(double time) {
     return (math.pow(math.e, _r * time) as double) *
-           (_c1 * math.cos(_w * time) + _c2 * math.sin(_w * time));
+        (_c1 * math.cos(_w * time) + _c2 * math.sin(_w * time));
   }
 
   @override
@@ -213,7 +216,7 @@ class _UnderdampedSolution implements _SpringSolution {
     final double cosine = math.cos(_w * time);
     final double sine = math.sin(_w * time);
     return power * (_c2 * _w * cosine - _c1 * _w * sine) +
-           _r * power * (_c2 *      sine   + _c1 *      cosine);
+        _r * power * (_c2 * sine + _c1 * cosine);
   }
 
   @override

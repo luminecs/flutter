@@ -1,4 +1,3 @@
-
 import 'dart:js' as js;
 
 import 'package:flutter_driver/src/extension/_extension_web.dart';
@@ -15,8 +14,7 @@ void main() {
     });
 
     test('web_extension should register a function', () {
-      expect(() => registerWebServiceExtension(call),
-          returnsNormally);
+      expect(() => registerWebServiceExtension(call), returnsNormally);
 
       expect(js.context.hasProperty(r'$flutterDriver'), true);
       expect(js.context[r'$flutterDriver'], isNotNull);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,16 +7,26 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testGesture('Should recognize pan', (GestureTester tester) {
-    final MultiTapGestureRecognizer tap = MultiTapGestureRecognizer(longTapDelay: kLongPressTimeout);
+    final MultiTapGestureRecognizer tap =
+        MultiTapGestureRecognizer(longTapDelay: kLongPressTimeout);
 
     final List<String> log = <String>[];
 
-    tap.onTapDown = (int pointer, TapDownDetails details) { log.add('tap-down $pointer'); };
-    tap.onTapUp = (int pointer, TapUpDetails details) { log.add('tap-up $pointer'); };
-    tap.onTap = (int pointer) { log.add('tap $pointer'); };
-    tap.onLongTapDown = (int pointer, TapDownDetails details) { log.add('long-tap-down $pointer'); };
-    tap.onTapCancel = (int pointer) { log.add('tap-cancel $pointer'); };
-
+    tap.onTapDown = (int pointer, TapDownDetails details) {
+      log.add('tap-down $pointer');
+    };
+    tap.onTapUp = (int pointer, TapUpDetails details) {
+      log.add('tap-up $pointer');
+    };
+    tap.onTap = (int pointer) {
+      log.add('tap $pointer');
+    };
+    tap.onLongTapDown = (int pointer, TapDownDetails details) {
+      log.add('long-tap-down $pointer');
+    };
+    tap.onTapCancel = (int pointer) {
+      log.add('tap-cancel $pointer');
+    };
 
     final TestPointer pointer5 = TestPointer(5);
     final PointerDownEvent down5 = pointer5.down(const Offset(10.0, 10.0));
@@ -54,7 +63,8 @@ void main() {
     expect(log, <String>['long-tap-down 6']);
     log.clear();
 
-    tester.route(pointer6.move(const Offset(40.0, 30.0))); // move more than kTouchSlop from 15.0,15.0
+    tester.route(pointer6.move(
+        const Offset(40.0, 30.0))); // move more than kTouchSlop from 15.0,15.0
     expect(log, <String>['tap-cancel 6']);
     log.clear();
 
@@ -67,17 +77,26 @@ void main() {
   testGesture('Can filter based on device kind', (GestureTester tester) {
     final MultiTapGestureRecognizer tap = MultiTapGestureRecognizer(
       longTapDelay: kLongPressTimeout,
-      supportedDevices: <PointerDeviceKind>{ PointerDeviceKind.touch },
+      supportedDevices: <PointerDeviceKind>{PointerDeviceKind.touch},
     );
 
     final List<String> log = <String>[];
 
-    tap.onTapDown = (int pointer, TapDownDetails details) { log.add('tap-down $pointer'); };
-    tap.onTapUp = (int pointer, TapUpDetails details) { log.add('tap-up $pointer'); };
-    tap.onTap = (int pointer) { log.add('tap $pointer'); };
-    tap.onLongTapDown = (int pointer, TapDownDetails details) { log.add('long-tap-down $pointer'); };
-    tap.onTapCancel = (int pointer) { log.add('tap-cancel $pointer'); };
-
+    tap.onTapDown = (int pointer, TapDownDetails details) {
+      log.add('tap-down $pointer');
+    };
+    tap.onTapUp = (int pointer, TapUpDetails details) {
+      log.add('tap-up $pointer');
+    };
+    tap.onTap = (int pointer) {
+      log.add('tap $pointer');
+    };
+    tap.onLongTapDown = (int pointer, TapDownDetails details) {
+      log.add('long-tap-down $pointer');
+    };
+    tap.onTapCancel = (int pointer) {
+      log.add('tap-cancel $pointer');
+    };
 
     final TestPointer touchPointer5 = TestPointer(5);
     final PointerDownEvent down5 = touchPointer5.down(const Offset(10.0, 10.0));
@@ -133,7 +152,8 @@ void main() {
     expect(log, <String>['long-tap-down 7']);
     log.clear();
 
-    tester.route(touchPointer7.move(const Offset(40.0, 30.0))); // move more than kTouchSlop from 15.0,15.0
+    tester.route(touchPointer7.move(
+        const Offset(40.0, 30.0))); // move more than kTouchSlop from 15.0,15.0
     expect(log, <String>['tap-cancel 7']);
     log.clear();
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter_devicelab/framework/devices.dart';
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/ios.dart';
@@ -10,10 +9,12 @@ Future<void> main() async {
     deviceOperatingSystem = DeviceOperatingSystem.ios;
     String? simulatorDeviceId;
     try {
-      await testWithNewIOSSimulator('TestHotReloadSim', (String deviceId) async {
+      await testWithNewIOSSimulator('TestHotReloadSim',
+          (String deviceId) async {
         simulatorDeviceId = deviceId;
         // This isn't actually a benchmark test, so do not use the returned `benchmarkScoreKeys` result.
-        await createHotModeTest(deviceIdOverride: deviceId, checkAppRunningOnLocalDevice: true)();
+        await createHotModeTest(
+            deviceIdOverride: deviceId, checkAppRunningOnLocalDevice: true)();
       });
     } finally {
       await removeIOSimulator(simulatorDeviceId);

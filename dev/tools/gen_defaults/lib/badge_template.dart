@@ -1,8 +1,10 @@
-
 import 'template.dart';
 
 class BadgeTemplate extends TokenTemplate {
-  const BadgeTemplate(super.blockName, super.fileName, super.tokens, {
+  const BadgeTemplate(
+    super.blockName,
+    super.fileName,
+    super.tokens, {
     super.colorSchemePrefix = '_colors.',
   });
 

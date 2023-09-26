@@ -1,4 +1,3 @@
-
 import '../web_constants.dart';
 
 String generateWasmBootstrapFile(bool isSkwasm) {

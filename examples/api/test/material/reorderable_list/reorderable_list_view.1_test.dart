@@ -1,7 +1,7 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/reorderable_list/reorderable_list_view.1.dart' as example;
+import 'package:flutter_api_samples/material/reorderable_list/reorderable_list_view.1.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -13,7 +13,8 @@ void main() {
     final ThemeData theme = Theme.of(tester.element(find.byType(MaterialApp)));
 
     // Dragged item is wrapped in a Material widget with correct color.
-    final TestGesture drag = await tester.startGesture(tester.getCenter(find.text('Item 1')));
+    final TestGesture drag =
+        await tester.startGesture(tester.getCenter(find.text('Item 1')));
     await tester.pump(kLongPressTimeout + kPressTimeout);
     await tester.pumpAndSettle();
     final Material material = tester.widget<Material>(find.ancestor(

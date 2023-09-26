@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -35,7 +34,8 @@ class TestStepResult {
   final TestStatus status;
 
   static const TextStyle normal = TextStyle(height: 1.0);
-  static const TextStyle bold = TextStyle(fontWeight: FontWeight.bold, height: 1.0);
+  static const TextStyle bold =
+      TextStyle(fontWeight: FontWeight.bold, height: 1.0);
   static const TestStepResult complete = TestStepResult(
     'Test complete',
     nothing,

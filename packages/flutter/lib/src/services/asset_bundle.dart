@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -19,7 +18,7 @@ abstract class AssetBundle {
     return ui.ImmutableBuffer.fromUint8List(Uint8List.sublistView(data));
   }
 
-  Future<String> loadString(String key, { bool cache = true }) async {
+  Future<String> loadString(String key, {bool cache = true}) async {
     final ByteData data = await load(key);
     // 50 KB of data should take 2-3 ms to parse on a Moto G4, and about 400 μs
     // on a Pixel 4. On the web we can't bail to isolates, though...
@@ -35,17 +34,19 @@ abstract class AssetBundle {
     return utf8.decode(Uint8List.sublistView(data));
   }
 
-  Future<T> loadStructuredData<T>(String key, Future<T> Function(String value) parser) async {
+  Future<T> loadStructuredData<T>(
+      String key, Future<T> Function(String value) parser) async {
     return parser(await loadString(key));
   }
 
-  Future<T> loadStructuredBinaryData<T>(String key, FutureOr<T> Function(ByteData data) parser) async {
+  Future<T> loadStructuredBinaryData<T>(
+      String key, FutureOr<T> Function(ByteData data) parser) async {
     return parser(await load(key));
   }
 
-  void evict(String key) { }
+  void evict(String key) {}
 
-  void clear() { }
+  void clear() {}
 
   @override
   String toString() => '${describeIdentity(this)}()';
@@ -53,8 +54,8 @@ abstract class AssetBundle {
 
 class NetworkAssetBundle extends AssetBundle {
   NetworkAssetBundle(Uri baseUrl)
-    : _baseUrl = baseUrl,
-      _httpClient = HttpClient();
+      : _baseUrl = baseUrl,
+        _httpClient = HttpClient();
 
   final Uri _baseUrl;
   final HttpClient _httpClient;
@@ -63,7 +64,8 @@ class NetworkAssetBundle extends AssetBundle {
 
   @override
   Future<ByteData> load(String key) async {
-    final HttpClientRequest request = await _httpClient.getUrl(_urlFromKey(key));
+    final HttpClientRequest request =
+        await _httpClient.getUrl(_urlFromKey(key));
     final HttpClientResponse response = await request.close();
     if (response.statusCode != HttpStatus.ok) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
@@ -85,11 +87,13 @@ class NetworkAssetBundle extends AssetBundle {
 abstract class CachingAssetBundle extends AssetBundle {
   // TODO(ianh): Replace this with an intelligent cache, see https://github.com/flutter/flutter/issues/3568
   final Map<String, Future<String>> _stringCache = <String, Future<String>>{};
-  final Map<String, Future<dynamic>> _structuredDataCache = <String, Future<dynamic>>{};
-  final Map<String, Future<dynamic>> _structuredBinaryDataCache = <String, Future<dynamic>>{};
+  final Map<String, Future<dynamic>> _structuredDataCache =
+      <String, Future<dynamic>>{};
+  final Map<String, Future<dynamic>> _structuredBinaryDataCache =
+      <String, Future<dynamic>>{};
 
   @override
-  Future<String> loadString(String key, { bool cache = true }) {
+  Future<String> loadString(String key, {bool cache = true}) {
     if (cache) {
       return _stringCache.putIfAbsent(key, () => super.loadString(key));
     }
@@ -97,7 +101,8 @@ abstract class CachingAssetBundle extends AssetBundle {
   }
 
   @override
-  Future<T> loadStructuredData<T>(String key, Future<T> Function(String value) parser) {
+  Future<T> loadStructuredData<T>(
+      String key, Future<T> Function(String value) parser) {
     if (_structuredDataCache.containsKey(key)) {
       return _structuredDataCache[key]! as Future<T>;
     }
@@ -134,7 +139,8 @@ abstract class CachingAssetBundle extends AssetBundle {
   }
 
   @override
-  Future<T> loadStructuredBinaryData<T>(String key, FutureOr<T> Function(ByteData data) parser) {
+  Future<T> loadStructuredBinaryData<T>(
+      String key, FutureOr<T> Function(ByteData data) parser) {
     if (_structuredBinaryDataCache.containsKey(key)) {
       return _structuredBinaryDataCache[key]! as Future<T>;
     }
@@ -196,10 +202,13 @@ class PlatformAssetBundle extends CachingAssetBundle {
   @override
   Future<ByteData> load(String key) {
     final Uint8List encoded = utf8.encode(Uri(path: Uri.encodeFull(key)).path);
-    final Future<ByteData>? future = ServicesBinding.instance.defaultBinaryMessenger.send(
+    final Future<ByteData>? future =
+        ServicesBinding.instance.defaultBinaryMessenger
+            .send(
       'flutter/assets',
       ByteData.sublistView(encoded),
-    )?.then((ByteData? asset) {
+    )
+            ?.then((ByteData? asset) {
       if (asset == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           _errorSummaryWithKey(key),

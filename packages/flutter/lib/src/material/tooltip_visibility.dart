@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 
 class _TooltipVisibilityScope extends InheritedWidget {
@@ -27,7 +26,8 @@ class TooltipVisibility extends StatelessWidget {
   final bool visible;
 
   static bool of(BuildContext context) {
-    final _TooltipVisibilityScope? visibility = context.dependOnInheritedWidgetOfExactType<_TooltipVisibilityScope>();
+    final _TooltipVisibilityScope? visibility =
+        context.dependOnInheritedWidgetOfExactType<_TooltipVisibilityScope>();
     return visibility?.visible ?? true;
   }
 

@@ -1,5 +1,10 @@
-
-import 'dart:ui' as ui show Paragraph, ParagraphBuilder, ParagraphConstraints, ParagraphStyle, TextStyle;
+import 'dart:ui' as ui
+    show
+        Paragraph,
+        ParagraphBuilder,
+        ParagraphConstraints,
+        ParagraphStyle,
+        TextStyle;
 
 import 'box.dart';
 import 'object.dart';
@@ -8,7 +13,7 @@ const double _kMaxWidth = 100000.0;
 const double _kMaxHeight = 100000.0;
 
 class RenderErrorBox extends RenderBox {
-  RenderErrorBox([ this.message = '' ]) {
+  RenderErrorBox([this.message = '']) {
     try {
       if (message != '') {
         // This class is intentionally doing things using the low-level
@@ -101,7 +106,7 @@ class RenderErrorBox extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     try {
-      context.canvas.drawRect(offset & size, Paint() .. color = backgroundColor);
+      context.canvas.drawRect(offset & size, Paint()..color = backgroundColor);
       if (_paragraph != null) {
         double width = size.width;
         double left = 0.0;

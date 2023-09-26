@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io' show HttpClient, SocketException, WebSocket;
@@ -11,7 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vm_service/vm_service.dart' as vm;
 
-import '_callback_io.dart' if (dart.library.html) '_callback_web.dart' as driver_actions;
+import '_callback_io.dart' if (dart.library.html) '_callback_web.dart'
+    as driver_actions;
 import '_extension_io.dart' if (dart.library.html) '_extension_web.dart';
 import 'common.dart';
 import 'src/channel.dart';
@@ -23,7 +23,8 @@ const bool _shouldReportResultsToNative = bool.fromEnvironment(
   defaultValue: true,
 );
 
-class IntegrationTestWidgetsFlutterBinding extends LiveTestWidgetsFlutterBinding implements IntegrationTestResults {
+class IntegrationTestWidgetsFlutterBinding extends LiveTestWidgetsFlutterBinding
+    implements IntegrationTestResults {
   IntegrationTestWidgetsFlutterBinding() {
     tearDownAll(() async {
       if (!_allTestsPassed.isCompleted) {
@@ -41,7 +42,8 @@ class IntegrationTestWidgetsFlutterBinding extends LiveTestWidgetsFlutterBinding
         await integrationTestChannel.invokeMethod<void>(
           'allTestsFinished',
           <String, dynamic>{
-            'results': results.map<String, dynamic>((String name, Object result) {
+            'results':
+                results.map<String, dynamic>((String name, Object result) {
               if (result is Failure) {
                 return MapEntry<String, dynamic>(name, result.details);
               }
@@ -101,7 +103,8 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
   @override
   ViewConfiguration createViewConfigurationFor(RenderView renderView) {
     final FlutterView view = renderView.flutterView;
-    final Size? surfaceSize = view == platformDispatcher.implicitView ? _surfaceSize : null;
+    final Size? surfaceSize =
+        view == platformDispatcher.implicitView ? _surfaceSize : null;
     return TestViewConfiguration.fromView(
       size: surfaceSize ?? view.physicalSize / view.devicePixelRatio,
       view: view,
@@ -113,7 +116,8 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
   final Completer<bool> _allTestsPassed = Completer<bool>();
 
   @override
-  List<Failure> get failureMethodsDetails => results.values.whereType<Failure>().toList();
+  List<Failure> get failureMethodsDetails =>
+      results.values.whereType<Failure>().toList();
 
   @override
   void initInstances() {
@@ -121,7 +125,8 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     _instance = this;
   }
 
-  static IntegrationTestWidgetsFlutterBinding get instance => BindingBase.checkInstance(_instance);
+  static IntegrationTestWidgetsFlutterBinding get instance =>
+      BindingBase.checkInstance(_instance);
   static IntegrationTestWidgetsFlutterBinding? _instance;
 
   static IntegrationTestWidgetsFlutterBinding ensureInitialized() {
@@ -139,10 +144,12 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
 
   final CallbackManager callbackManager = driver_actions.callbackManager;
 
-  Future<List<int>> takeScreenshot(String screenshotName, [Map<String, Object?>? args]) async {
+  Future<List<int>> takeScreenshot(String screenshotName,
+      [Map<String, Object?>? args]) async {
     reportData ??= <String, dynamic>{};
     reportData!['screenshots'] ??= <dynamic>[];
-    final Map<String, dynamic> data = await callbackManager.takeScreenshot(screenshotName, args);
+    final Map<String, dynamic> data =
+        await callbackManager.takeScreenshot(screenshotName, args);
     assert(data.containsKey('bytes'));
 
     (reportData!['screenshots']! as List<dynamic>).add(data);
@@ -177,9 +184,8 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     VoidCallback invariantTester, {
     String description = '',
     @Deprecated(
-      'This parameter has no effect. Use the `timeout` parameter on `testWidgets` instead. '
-      'This feature was deprecated after v2.6.0-1.0.pre.'
-    )
+        'This parameter has no effect. Use the `timeout` parameter on `testWidgets` instead. '
+        'This feature was deprecated after v2.6.0-1.0.pre.')
     Duration? timeout,
   }) async {
     await super.runTest(
@@ -203,11 +209,14 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
       _vmService = vmService;
     }
     if (_vmService == null) {
-      final developer.ServiceProtocolInfo info = await developer.Service.getInfo();
+      final developer.ServiceProtocolInfo info =
+          await developer.Service.getInfo();
       assert(info.serverUri != null);
-      final String address = 'ws://localhost:${info.serverUri!.port}${info.serverUri!.path}ws';
+      final String address =
+          'ws://localhost:${info.serverUri!.port}${info.serverUri!.path}ws';
       try {
-        _vmService = await _vmServiceConnectUri(address, httpClient: httpClient);
+        _vmService =
+            await _vmServiceConnectUri(address, httpClient: httpClient);
       } on SocketException catch (e, s) {
         throw StateError(
           'Failed to connect to VM Service at $address.\n'
@@ -257,7 +266,8 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
     reportData![reportKey] = timeline.toJson();
   }
 
-  Future<_GarbageCollectionInfo> _runAndGetGCInfo(Future<void> Function() action) async {
+  Future<_GarbageCollectionInfo> _runAndGetGCInfo(
+      Future<void> Function() action) async {
     if (kIsWeb) {
       await action();
       return const _GarbageCollectionInfo();
@@ -268,11 +278,15 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
       streams: <String>['GC'],
     );
 
-    final int oldGenGCCount = timeline.traceEvents!.where((vm.TimelineEvent event) {
-      return event.json!['cat'] == 'GC' && event.json!['name'] == 'CollectOldGeneration';
+    final int oldGenGCCount =
+        timeline.traceEvents!.where((vm.TimelineEvent event) {
+      return event.json!['cat'] == 'GC' &&
+          event.json!['name'] == 'CollectOldGeneration';
     }).length;
-    final int newGenGCCount = timeline.traceEvents!.where((vm.TimelineEvent event) {
-      return event.json!['cat'] == 'GC' && event.json!['name'] == 'CollectNewGeneration';
+    final int newGenGCCount =
+        timeline.traceEvents!.where((vm.TimelineEvent event) {
+      return event.json!['cat'] == 'GC' &&
+          event.json!['name'] == 'CollectNewGeneration';
     }).length;
     return _GarbageCollectionInfo(
       oldCount: oldGenGCCount,
@@ -310,7 +324,8 @@ https://flutter.dev/docs/testing/integration-tests#testing-on-firebase-test-lab
       }
     }
 
-    await Future<void>.delayed(const Duration(seconds: 2)); // flush old FrameTimings
+    await Future<void>.delayed(
+        const Duration(seconds: 2)); // flush old FrameTimings
     final TimingsCallback watcher = frameTimings.addAll;
     addTimingsCallback(watcher);
     final _GarbageCollectionInfo gcInfo = await _runAndGetGCInfo(action);
@@ -371,7 +386,8 @@ Future<vm.VmService> _vmServiceConnectUri(
   String wsUri, {
   HttpClient? httpClient,
 }) async {
-  final WebSocket socket = await WebSocket.connect(wsUri, customClient: httpClient);
+  final WebSocket socket =
+      await WebSocket.connect(wsUri, customClient: httpClient);
   final StreamController<dynamic> controller = StreamController<dynamic>();
   final Completer<void> streamClosedCompleter = Completer<void>();
 

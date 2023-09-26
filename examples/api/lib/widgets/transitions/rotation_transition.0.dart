@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const RotationTransitionExampleApp());
 
@@ -19,10 +17,12 @@ class RotationTransitionExample extends StatefulWidget {
   const RotationTransitionExample({super.key});
 
   @override
-  State<RotationTransitionExample> createState() => _RotationTransitionExampleState();
+  State<RotationTransitionExample> createState() =>
+      _RotationTransitionExampleState();
 }
 
-class _RotationTransitionExampleState extends State<RotationTransitionExample> with TickerProviderStateMixin {
+class _RotationTransitionExampleState extends State<RotationTransitionExample>
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,

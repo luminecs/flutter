@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +27,9 @@ void main() {
     Future<void> sendUndo(WidgetTester tester) => sendUndoRedo(tester);
     Future<void> sendRedo(WidgetTester tester) => sendUndoRedo(tester, true);
 
-    testWidgetsWithLeakTracking('allows undo and redo to be called programmatically from the UndoHistoryController', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'allows undo and redo to be called programmatically from the UndoHistoryController',
+        (WidgetTester tester) async {
       final ValueNotifier<int> value = ValueNotifier<int>(0);
       addTearDown(value.dispose);
       final UndoHistoryController controller = UndoHistoryController();
@@ -120,7 +121,9 @@ void main() {
       expect(controller.value.canRedo, false);
     }, variant: TargetPlatformVariant.all());
 
-    testWidgetsWithLeakTracking('allows undo and redo to be called using the keyboard', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'allows undo and redo to be called using the keyboard',
+        (WidgetTester tester) async {
       final ValueNotifier<int> value = ValueNotifier<int>(0);
       addTearDown(value.dispose);
       final UndoHistoryController controller = UndoHistoryController();
@@ -215,7 +218,9 @@ void main() {
       expect(controller.value.canRedo, false);
     }, variant: TargetPlatformVariant.all(), skip: kIsWeb); // [intended]
 
-    testWidgetsWithLeakTracking('duplicate changes do not affect the undo history', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'duplicate changes do not affect the undo history',
+        (WidgetTester tester) async {
       final ValueNotifier<int> value = ValueNotifier<int>(0);
       addTearDown(value.dispose);
       final UndoHistoryController controller = UndoHistoryController();
@@ -268,13 +273,16 @@ void main() {
       expect(controller.value.canRedo, true);
     }, variant: TargetPlatformVariant.all());
 
-    testWidgetsWithLeakTracking('ignores value changes pushed during onTriggered', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'ignores value changes pushed during onTriggered',
+        (WidgetTester tester) async {
       final ValueNotifier<int> value = ValueNotifier<int>(0);
       addTearDown(value.dispose);
       final UndoHistoryController controller = UndoHistoryController();
       addTearDown(controller.dispose);
       int Function(int newValue) valueToUse = (int value) => value;
-      final GlobalKey<UndoHistoryState<int>> key = GlobalKey<UndoHistoryState<int>>();
+      final GlobalKey<UndoHistoryState<int>> key =
+          GlobalKey<UndoHistoryState<int>>();
 
       await tester.pumpWidget(
         MaterialApp(
@@ -319,9 +327,12 @@ void main() {
       expect(() => key.currentState!.undo(), throwsAssertionError);
     }, variant: TargetPlatformVariant.all());
 
-    testWidgetsWithLeakTracking('changes should send setUndoState to the UndoManagerConnection on iOS', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'changes should send setUndoState to the UndoManagerConnection on iOS',
+        (WidgetTester tester) async {
       final List<MethodCall> log = <MethodCall>[];
-      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.undoManager, (MethodCall methodCall) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.undoManager, (MethodCall methodCall) async {
         log.add(methodCall);
         return null;
       });
@@ -359,40 +370,55 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
 
       // Undo and redo should both be disabled.
-      MethodCall methodCall = log.lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
+      MethodCall methodCall = log
+          .lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
       expect(methodCall.method, 'UndoManager.setUndoState');
-      expect(methodCall.arguments as Map<String, dynamic>, <String, bool>{'canUndo': false, 'canRedo': false});
+      expect(methodCall.arguments as Map<String, dynamic>,
+          <String, bool>{'canUndo': false, 'canRedo': false});
 
       // Making a change should enable undo.
       value.value = 1;
       await tester.pump(const Duration(milliseconds: 500));
 
-      methodCall = log.lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
+      methodCall = log
+          .lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
       expect(methodCall.method, 'UndoManager.setUndoState');
-      expect(methodCall.arguments as Map<String, dynamic>, <String, bool>{'canUndo': true, 'canRedo': false});
+      expect(methodCall.arguments as Map<String, dynamic>,
+          <String, bool>{'canUndo': true, 'canRedo': false});
 
       // Undo should remain enabled after another change.
       value.value = 2;
       await tester.pump(const Duration(milliseconds: 500));
 
-      methodCall = log.lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
+      methodCall = log
+          .lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
       expect(methodCall.method, 'UndoManager.setUndoState');
-      expect(methodCall.arguments as Map<String, dynamic>, <String, bool>{'canUndo': true, 'canRedo': false});
+      expect(methodCall.arguments as Map<String, dynamic>,
+          <String, bool>{'canUndo': true, 'canRedo': false});
 
       // Undo and redo should be enabled after one undo.
       controller.undo();
-      methodCall = log.lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
+      methodCall = log
+          .lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
       expect(methodCall.method, 'UndoManager.setUndoState');
-      expect(methodCall.arguments as Map<String, dynamic>, <String, bool>{'canUndo': true, 'canRedo': true});
+      expect(methodCall.arguments as Map<String, dynamic>,
+          <String, bool>{'canUndo': true, 'canRedo': true});
 
       // Only redo should be enabled after a second undo.
       controller.undo();
-      methodCall = log.lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
+      methodCall = log
+          .lastWhere((MethodCall m) => m.method == 'UndoManager.setUndoState');
       expect(methodCall.method, 'UndoManager.setUndoState');
-      expect(methodCall.arguments as Map<String, dynamic>, <String, bool>{'canUndo': false, 'canRedo': true});
-    }, variant: const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}), skip: kIsWeb); // [intended]
+      expect(methodCall.arguments as Map<String, dynamic>,
+          <String, bool>{'canUndo': false, 'canRedo': true});
+    },
+        variant:
+            const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}),
+        skip: kIsWeb); // [intended]
 
-    testWidgetsWithLeakTracking('handlePlatformUndo should undo or redo appropriately on iOS', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'handlePlatformUndo should undo or redo appropriately on iOS',
+        (WidgetTester tester) async {
       final ValueNotifier<int> value = ValueNotifier<int>(0);
       addTearDown(value.dispose);
       final UndoHistoryController controller = UndoHistoryController();
@@ -478,11 +504,16 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
       expect(controller.value.canUndo, true);
       expect(controller.value.canRedo, false);
-    }, variant: const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}), skip: kIsWeb); // [intended]
+    },
+        variant:
+            const TargetPlatformVariant(<TargetPlatform>{TargetPlatform.iOS}),
+        skip: kIsWeb); // [intended]
   });
 
   group('UndoHistoryController', () {
-    testWidgetsWithLeakTracking('UndoHistoryController notifies onUndo listeners onUndo', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'UndoHistoryController notifies onUndo listeners onUndo',
+        (WidgetTester tester) async {
       int calls = 0;
       final UndoHistoryController controller = UndoHistoryController();
       addTearDown(controller.dispose);
@@ -500,7 +531,9 @@ void main() {
       expect(calls, 1);
     });
 
-    testWidgetsWithLeakTracking('UndoHistoryController notifies onRedo listeners onRedo', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'UndoHistoryController notifies onRedo listeners onRedo',
+        (WidgetTester tester) async {
       int calls = 0;
       final UndoHistoryController controller = UndoHistoryController();
       addTearDown(controller.dispose);
@@ -518,9 +551,12 @@ void main() {
       expect(calls, 1);
     });
 
-    testWidgetsWithLeakTracking('UndoHistoryController notifies listeners on value change', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking(
+        'UndoHistoryController notifies listeners on value change',
+        (WidgetTester tester) async {
       int calls = 0;
-      final UndoHistoryController controller = UndoHistoryController(value: const UndoHistoryValue(canUndo: true));
+      final UndoHistoryController controller =
+          UndoHistoryController(value: const UndoHistoryValue(canUndo: true));
       addTearDown(controller.dispose);
       controller.addListener(() {
         calls++;

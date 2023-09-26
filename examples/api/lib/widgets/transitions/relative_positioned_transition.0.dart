@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const RelativePositionedTransitionExampleApp());
 
@@ -19,10 +17,12 @@ class RelativePositionedTransitionExample extends StatefulWidget {
   const RelativePositionedTransitionExample({super.key});
 
   @override
-  State<RelativePositionedTransitionExample> createState() => _RelativePositionedTransitionExampleState();
+  State<RelativePositionedTransitionExample> createState() =>
+      _RelativePositionedTransitionExampleState();
 }
 
-class _RelativePositionedTransitionExampleState extends State<RelativePositionedTransitionExample>
+class _RelativePositionedTransitionExampleState
+    extends State<RelativePositionedTransitionExample>
     with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),

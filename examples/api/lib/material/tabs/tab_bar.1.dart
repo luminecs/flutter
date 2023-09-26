@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const TabBarApp());
 
@@ -23,7 +21,8 @@ class TabBarExample extends StatefulWidget {
   State<TabBarExample> createState() => _TabBarExampleState();
 }
 
-class _TabBarExampleState extends State<TabBarExample> with TickerProviderStateMixin {
+class _TabBarExampleState extends State<TabBarExample>
+    with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override

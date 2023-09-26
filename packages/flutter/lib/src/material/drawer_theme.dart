@@ -1,4 +1,3 @@
-
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/foundation.dart';
@@ -61,7 +60,8 @@ class DrawerThemeData with Diagnosticable {
     );
   }
 
-  static DrawerThemeData? lerp(DrawerThemeData? a, DrawerThemeData? b, double t) {
+  static DrawerThemeData? lerp(
+      DrawerThemeData? a, DrawerThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
     }
@@ -79,15 +79,15 @@ class DrawerThemeData with Diagnosticable {
 
   @override
   int get hashCode => Object.hash(
-    backgroundColor,
-    scrimColor,
-    elevation,
-    shadowColor,
-    surfaceTintColor,
-    shape,
-    endShape,
-    width,
-  );
+        backgroundColor,
+        scrimColor,
+        elevation,
+        shadowColor,
+        surfaceTintColor,
+        shape,
+        endShape,
+        width,
+      );
 
   @override
   bool operator ==(Object other) {
@@ -97,27 +97,32 @@ class DrawerThemeData with Diagnosticable {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is DrawerThemeData
-        && other.backgroundColor == backgroundColor
-        && other.scrimColor == scrimColor
-        && other.elevation == elevation
-        && other.shadowColor == shadowColor
-        && other.surfaceTintColor == surfaceTintColor
-        && other.shape == shape
-        && other.endShape == endShape
-        && other.width == width;
+    return other is DrawerThemeData &&
+        other.backgroundColor == backgroundColor &&
+        other.scrimColor == scrimColor &&
+        other.elevation == elevation &&
+        other.shadowColor == shadowColor &&
+        other.surfaceTintColor == surfaceTintColor &&
+        other.shape == shape &&
+        other.endShape == endShape &&
+        other.width == width;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(ColorProperty('backgroundColor', backgroundColor, defaultValue: null));
+    properties.add(
+        ColorProperty('backgroundColor', backgroundColor, defaultValue: null));
     properties.add(ColorProperty('scrimColor', scrimColor, defaultValue: null));
     properties.add(DoubleProperty('elevation', elevation, defaultValue: null));
-    properties.add(ColorProperty('shadowColor', shadowColor, defaultValue: null));
-    properties.add(ColorProperty('surfaceTintColor', surfaceTintColor, defaultValue: null));
-    properties.add(DiagnosticsProperty<ShapeBorder>('shape', shape, defaultValue: null));
-    properties.add(DiagnosticsProperty<ShapeBorder>('endShape', endShape, defaultValue: null));
+    properties
+        .add(ColorProperty('shadowColor', shadowColor, defaultValue: null));
+    properties.add(ColorProperty('surfaceTintColor', surfaceTintColor,
+        defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<ShapeBorder>('shape', shape, defaultValue: null));
+    properties.add(DiagnosticsProperty<ShapeBorder>('endShape', endShape,
+        defaultValue: null));
     properties.add(DoubleProperty('width', width, defaultValue: null));
   }
 }
@@ -132,7 +137,8 @@ class DrawerTheme extends InheritedTheme {
   final DrawerThemeData data;
 
   static DrawerThemeData of(BuildContext context) {
-    final DrawerTheme? drawerTheme = context.dependOnInheritedWidgetOfExactType<DrawerTheme>();
+    final DrawerTheme? drawerTheme =
+        context.dependOnInheritedWidgetOfExactType<DrawerTheme>();
     return drawerTheme?.data ?? Theme.of(context).drawerTheme;
   }
 

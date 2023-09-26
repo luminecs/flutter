@@ -1,4 +1,3 @@
-
 // This is a Flutter widget test can take a screenshot.
 //
 // For Web, this needs to be executed with the `test_driver/integration_test_extended_driver.dart`.
@@ -10,7 +9,8 @@
 
 import 'package:integration_test/integration_test.dart';
 
-import '_extended_test_io.dart' if (dart.library.html) '_extended_test_web.dart' as tests;
+import '_extended_test_io.dart' if (dart.library.html) '_extended_test_web.dart'
+    as tests;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

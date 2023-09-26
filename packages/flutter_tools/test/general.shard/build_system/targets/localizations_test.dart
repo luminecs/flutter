@@ -1,4 +1,3 @@
-
 import 'package:file/memory.dart';
 import 'package:flutter_tools/src/artifacts.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
@@ -11,7 +10,9 @@ import '../../../src/common.dart';
 import '../../../src/fake_process_manager.dart';
 
 void main() {
-  testWithoutContext('generateLocalizations is skipped if l10n.yaml does not exist.', () async {
+  testWithoutContext(
+      'generateLocalizations is skipped if l10n.yaml does not exist.',
+      () async {
     final FileSystem fileSystem = MemoryFileSystem.test();
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
@@ -28,10 +29,10 @@ void main() {
     expect(const GenerateLocalizationsTarget().canSkip(environment), false);
   });
 
-  testWithoutContext('parseLocalizationsOptions handles valid yaml configuration', () async {
+  testWithoutContext(
+      'parseLocalizationsOptions handles valid yaml configuration', () async {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    final File configFile = fileSystem.file('l10n.yaml')
-      ..writeAsStringSync('''
+    final File configFile = fileSystem.file('l10n.yaml')..writeAsStringSync('''
 arb-dir: arb
 template-arb-file: example.arb
 output-localization-file: bar
@@ -66,7 +67,9 @@ nullable-getter: false
     expect(options.nullableGetter, false);
   });
 
-  testWithoutContext('parseLocalizationsOptions handles preferredSupportedLocales as list', () async {
+  testWithoutContext(
+      'parseLocalizationsOptions handles preferredSupportedLocales as list',
+      () async {
     final FileSystem fileSystem = MemoryFileSystem.test();
     final File configFile = fileSystem.file('l10n.yaml')..writeAsStringSync('''
 preferred-supported-locales: ['en_US', 'de']
@@ -99,7 +102,8 @@ use-deferred-loading: string
     );
   });
 
-  testWithoutContext('parseLocalizationsOptions tool exits on malformed Yaml', () async {
+  testWithoutContext('parseLocalizationsOptions tool exits on malformed Yaml',
+      () async {
     final FileSystem fileSystem = MemoryFileSystem.test();
     final File configFile = fileSystem.file('l10n.yaml')..writeAsStringSync('''
 template-arb-file: {name}_en.arb

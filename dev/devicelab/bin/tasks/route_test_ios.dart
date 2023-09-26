@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter_devicelab/framework/devices.dart';
@@ -12,7 +11,8 @@ void main() {
     deviceOperatingSystem = DeviceOperatingSystem.ios;
     final Device device = await devices.workingDevice;
     await device.unlock();
-    final Directory appDir = dir(path.join(flutterDirectory.path, 'dev/integration_tests/ui'));
+    final Directory appDir =
+        dir(path.join(flutterDirectory.path, 'dev/integration_tests/ui'));
     section('TEST WHETHER `flutter drive --route` WORKS on IOS');
     await inDirectory(appDir, () async {
       return flutter(

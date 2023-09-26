@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 import 'dart:io';
 
@@ -7,10 +6,9 @@ final TokenLogger tokenLogger = TokenLogger();
 class TokenLogger {
   TokenLogger();
 
-  void init({
-    required Map<String, dynamic> allTokens,
-    required Map<String, List<String>> versionMap
-  }){
+  void init(
+      {required Map<String, dynamic> allTokens,
+      required Map<String, List<String>> versionMap}) {
     _allTokens = allTokens;
     _versionMap = versionMap;
   }
@@ -38,7 +36,8 @@ class TokenLogger {
   }
 
   void printVersionUsage({required bool verbose}) {
-    final String versionsString = 'Versions used: ${_versionMap.keys.join(', ')}';
+    final String versionsString =
+        'Versions used: ${_versionMap.keys.join(', ')}';
     print(versionsString);
     if (verbose) {
       for (final String version in _versionMap.keys) {
@@ -57,7 +56,8 @@ class TokenLogger {
     final Set<String> allTokensSet = _allTokens.keys.toSet();
 
     if (verbose) {
-      for (final String token in SplayTreeSet<String>.from(allTokensSet).toList()) {
+      for (final String token
+          in SplayTreeSet<String>.from(allTokensSet).toList()) {
         if (_usedTokens.contains(token)) {
           print('✅ $token');
         } else {
@@ -73,7 +73,8 @@ class TokenLogger {
   void dumpToFile(String path) {
     final File file = File(path);
     file.createSync(recursive: true);
-    final String versionsString = 'Versions used, ${_versionMap.keys.join(', ')}';
+    final String versionsString =
+        'Versions used, ${_versionMap.keys.join(', ')}';
     file.writeAsStringSync('$versionsString\n${_usedTokens.join(',\n')}\n');
   }
 }

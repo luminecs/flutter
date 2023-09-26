@@ -1,4 +1,3 @@
-
 import 'package:conductor_core/src/proto/conductor_state.pb.dart' as pb;
 import 'package:conductor_core/src/state.dart';
 import 'package:file/file.dart';

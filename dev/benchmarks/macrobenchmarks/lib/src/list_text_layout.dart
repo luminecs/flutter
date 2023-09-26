@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ColumnOfText extends StatefulWidget {
@@ -8,7 +7,8 @@ class ColumnOfText extends StatefulWidget {
   State<ColumnOfText> createState() => ColumnOfTextState();
 }
 
-class ColumnOfTextState extends State<ColumnOfText> with SingleTickerProviderStateMixin {
+class ColumnOfTextState extends State<ColumnOfText>
+    with SingleTickerProviderStateMixin {
   bool _showText = false;
   late AnimationController _controller;
 

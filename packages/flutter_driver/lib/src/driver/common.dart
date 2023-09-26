@@ -1,4 +1,3 @@
-
 import 'dart:io' show Platform;
 
 import 'package:file/file.dart';
@@ -15,4 +14,5 @@ void restoreFileSystem() {
   fs = const LocalFileSystem();
 }
 
-String get testOutputsDirectory => Platform.environment['FLUTTER_TEST_OUTPUTS_DIR'] ?? 'build';
+String get testOutputsDirectory =>
+    Platform.environment['FLUTTER_TEST_OUTPUTS_DIR'] ?? 'build';

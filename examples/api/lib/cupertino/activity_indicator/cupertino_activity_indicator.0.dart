@@ -1,6 +1,4 @@
-
 import 'package:flutter/cupertino.dart';
-
 
 void main() => runApp(const CupertinoIndicatorApp());
 
@@ -42,7 +40,8 @@ class CupertinoIndicatorExample extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // Cupertino activity indicator with custom radius and color.
-                CupertinoActivityIndicator(radius: 20.0, color: CupertinoColors.activeBlue),
+                CupertinoActivityIndicator(
+                    radius: 20.0, color: CupertinoColors.activeBlue),
                 SizedBox(height: 10),
                 Text(
                   'radius: 20.0\ncolor: CupertinoColors.activeBlue',

@@ -1,10 +1,10 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('AnimatedSwitcher fades in a new child.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('AnimatedSwitcher fades in a new child.',
+      (WidgetTester tester) async {
     final UniqueKey containerOne = UniqueKey();
     final UniqueKey containerTwo = UniqueKey();
     final UniqueKey containerThree = UniqueKey();
@@ -48,7 +48,9 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher can handle back-to-back changes.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'AnimatedSwitcher can handle back-to-back changes.',
+      (WidgetTester tester) async {
     final UniqueKey container1 = UniqueKey();
     final UniqueKey container2 = UniqueKey();
     final UniqueKey container3 = UniqueKey();
@@ -83,7 +85,9 @@ void main() {
     expect(find.byKey(container3), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking("AnimatedSwitcher doesn't transition in a new child of the same type.", (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      "AnimatedSwitcher doesn't transition in a new child of the same type.",
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       AnimatedSwitcher(
         duration: const Duration(milliseconds: 100),
@@ -109,7 +113,8 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher handles null children.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('AnimatedSwitcher handles null children.',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const AnimatedSwitcher(
         duration: Duration(milliseconds: 100),
@@ -164,7 +169,9 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgetsWithLeakTracking("AnimatedSwitcher doesn't start any animations after dispose.", (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      "AnimatedSwitcher doesn't start any animations after dispose.",
+      (WidgetTester tester) async {
     await tester.pumpWidget(AnimatedSwitcher(
       duration: const Duration(milliseconds: 100),
       child: Container(color: const Color(0xff000000)),
@@ -176,8 +183,10 @@ void main() {
     expect(await tester.pumpAndSettle(), equals(1));
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher uses custom layout.', (WidgetTester tester) async {
-    Widget newLayoutBuilder(Widget? currentChild, List<Widget> previousChildren) {
+  testWidgetsWithLeakTracking('AnimatedSwitcher uses custom layout.',
+      (WidgetTester tester) async {
+    Widget newLayoutBuilder(
+        Widget? currentChild, List<Widget> previousChildren) {
       return Column(
         children: <Widget>[
           ...previousChildren,
@@ -197,9 +206,11 @@ void main() {
     expect(find.byType(Column), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher uses custom transitions.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('AnimatedSwitcher uses custom transitions.',
+      (WidgetTester tester) async {
     late List<Widget> foundChildren;
-    Widget newLayoutBuilder(Widget? currentChild, List<Widget> previousChildren) {
+    Widget newLayoutBuilder(
+        Widget? currentChild, List<Widget> previousChildren) {
       foundChildren = <Widget>[
         if (currentChild != null) currentChild,
         ...previousChildren,
@@ -246,13 +257,16 @@ void main() {
     for (final Widget child in foundChildren) {
       expect(child, isA<KeyedSubtree>());
       expect(
-        find.descendant(of: find.byWidget(child), matching: find.byType(SizeTransition)),
+        find.descendant(
+            of: find.byWidget(child), matching: find.byType(SizeTransition)),
         findsOneWidget,
       );
     }
   });
 
-  testWidgetsWithLeakTracking("AnimatedSwitcher doesn't reset state of the children in transitions.", (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      "AnimatedSwitcher doesn't reset state of the children in transitions.",
+      (WidgetTester tester) async {
     final UniqueKey statefulOne = UniqueKey();
     final UniqueKey statefulTwo = UniqueKey();
     final UniqueKey statefulThree = UniqueKey();
@@ -303,7 +317,9 @@ void main() {
     expect(StatefulTestState.generation, equals(3));
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher updates widgets without animating if they are isomorphic.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'AnimatedSwitcher updates widgets without animating if they are isomorphic.',
+      (WidgetTester tester) async {
     Future<void> pumpChild(Widget child) async {
       return tester.pumpWidget(
         Directionality(
@@ -318,7 +334,8 @@ void main() {
 
     await pumpChild(const Text('1'));
     await tester.pump(const Duration(milliseconds: 10));
-    FadeTransition transition = tester.widget(find.byType(FadeTransition).first);
+    FadeTransition transition =
+        tester.widget(find.byType(FadeTransition).first);
     expect(transition.opacity.value, equals(1.0));
     expect(find.text('1'), findsOneWidget);
     expect(find.text('2'), findsNothing);
@@ -330,13 +347,16 @@ void main() {
     expect(find.text('2'), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher updates previous child transitions if the transitionBuilder changes.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'AnimatedSwitcher updates previous child transitions if the transitionBuilder changes.',
+      (WidgetTester tester) async {
     final UniqueKey containerOne = UniqueKey();
     final UniqueKey containerTwo = UniqueKey();
     final UniqueKey containerThree = UniqueKey();
 
     late List<Widget> foundChildren;
-    Widget newLayoutBuilder(Widget? currentChild, List<Widget> previousChildren) {
+    Widget newLayoutBuilder(
+        Widget? currentChild, List<Widget> previousChildren) {
       foundChildren = <Widget>[
         if (currentChild != null) currentChild,
         ...previousChildren,
@@ -379,7 +399,8 @@ void main() {
     for (final Widget child in foundChildren) {
       expect(child, isA<KeyedSubtree>());
       expect(
-        find.descendant(of: find.byWidget(child), matching: find.byType(FadeTransition)),
+        find.descendant(
+            of: find.byWidget(child), matching: find.byType(FadeTransition)),
         findsOneWidget,
       );
     }
@@ -408,13 +429,16 @@ void main() {
     for (final Widget child in foundChildren) {
       expect(child, isA<KeyedSubtree>());
       expect(
-        find.descendant(of: find.byWidget(child), matching: find.byType(ScaleTransition)),
+        find.descendant(
+            of: find.byWidget(child), matching: find.byType(ScaleTransition)),
         findsOneWidget,
       );
     }
   });
 
-  testWidgetsWithLeakTracking('AnimatedSwitcher does not duplicate animations if the same child is entered twice.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'AnimatedSwitcher does not duplicate animations if the same child is entered twice.',
+      (WidgetTester tester) async {
     Future<void> pumpChild(Widget child) async {
       return tester.pumpWidget(
         Directionality(
@@ -426,6 +450,7 @@ void main() {
         ),
       );
     }
+
     await pumpChild(const Text('1', key: Key('1')));
     await pumpChild(const Text('2', key: Key('2')));
     await pumpChild(const Text('1', key: Key('1')));

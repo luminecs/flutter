@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const GestureDetectorExampleApp());
 
@@ -34,7 +32,9 @@ class _GestureDetectorExampleState extends State<GestureDetectorExample> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _color == Colors.yellow ? _color = Colors.white : _color = Colors.yellow;
+            _color == Colors.yellow
+                ? _color = Colors.white
+                : _color = Colors.yellow;
           });
         },
       ),

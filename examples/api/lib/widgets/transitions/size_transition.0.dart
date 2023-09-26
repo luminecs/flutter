@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const SizeTransitionExampleApp());
 
@@ -22,7 +20,8 @@ class SizeTransitionExample extends StatefulWidget {
   State<SizeTransitionExample> createState() => _SizeTransitionExampleState();
 }
 
-class _SizeTransitionExampleState extends State<SizeTransitionExample> with TickerProviderStateMixin {
+class _SizeTransitionExampleState extends State<SizeTransitionExample>
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 3),
     vsync: this,

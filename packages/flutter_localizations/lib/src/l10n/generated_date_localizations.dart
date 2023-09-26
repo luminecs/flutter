@@ -1,4 +1,3 @@
-
 // This file has been automatically generated. Please do not edit it manually.
 // To regenerate run (omit --overwrite to print to console instead of the file):
 // dart --enable-asserts dev/tools/localization/bin/gen_date_localizations.dart --overwrite

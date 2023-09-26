@@ -1,11 +1,9 @@
-
 // Builds an adaptive navigation widget layout. When the screen width is less than
 // 450, A [NavigationBar] will be displayed. Otherwise, a [NavigationRail] will be
 // displayed on the left side, and also a button to open the [NavigationDrawer].
 // All of these navigation widgets are built from an identical list of data.
 
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const NavigationDrawerApp());
 
@@ -18,9 +16,12 @@ class ExampleDestination {
 }
 
 const List<ExampleDestination> destinations = <ExampleDestination>[
-  ExampleDestination('Messages', Icon(Icons.widgets_outlined), Icon(Icons.widgets)),
-  ExampleDestination('Profile', Icon(Icons.format_paint_outlined), Icon(Icons.format_paint)),
-  ExampleDestination('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings)),
+  ExampleDestination(
+      'Messages', Icon(Icons.widgets_outlined), Icon(Icons.widgets)),
+  ExampleDestination(
+      'Profile', Icon(Icons.format_paint_outlined), Icon(Icons.format_paint)),
+  ExampleDestination(
+      'Settings', Icon(Icons.settings_outlined), Icon(Icons.settings)),
 ];
 
 class NavigationDrawerApp extends StatelessWidget {
@@ -40,7 +41,8 @@ class NavigationDrawerExample extends StatefulWidget {
   const NavigationDrawerExample({super.key});
 
   @override
-  State<NavigationDrawerExample> createState() => _NavigationDrawerExampleState();
+  State<NavigationDrawerExample> createState() =>
+      _NavigationDrawerExampleState();
 }
 
 class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
@@ -173,6 +175,8 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
 
   @override
   Widget build(BuildContext context) {
-    return showNavigationDrawer ? buildDrawerScaffold(context) : buildBottomBarScaffold();
+    return showNavigationDrawer
+        ? buildDrawerScaffold(context)
+        : buildBottomBarScaffold();
   }
 }

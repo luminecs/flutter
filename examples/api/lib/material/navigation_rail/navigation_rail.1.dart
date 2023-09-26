@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const NavigationRailExampleApp());
 
@@ -167,7 +165,8 @@ class _NavRailExampleState extends State<NavRailExample> {
                             showLeading = !showLeading;
                           });
                         },
-                        child: Text(showLeading ? 'Hide Leading' : 'Show Leading'),
+                        child:
+                            Text(showLeading ? 'Hide Leading' : 'Show Leading'),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -175,7 +174,8 @@ class _NavRailExampleState extends State<NavRailExample> {
                             showTrailing = !showTrailing;
                           });
                         },
-                        child: Text(showTrailing ? 'Hide Trailing' : 'Show Trailing'),
+                        child: Text(
+                            showTrailing ? 'Hide Trailing' : 'Show Trailing'),
                       ),
                     ],
                   ),

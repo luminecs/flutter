@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const RefreshIndicatorExampleApp());
 
@@ -19,11 +17,13 @@ class RefreshIndicatorExample extends StatefulWidget {
   const RefreshIndicatorExample({super.key});
 
   @override
-  State<RefreshIndicatorExample> createState() => _RefreshIndicatorExampleState();
+  State<RefreshIndicatorExample> createState() =>
+      _RefreshIndicatorExampleState();
 }
 
 class _RefreshIndicatorExampleState extends State<RefreshIndicatorExample> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {

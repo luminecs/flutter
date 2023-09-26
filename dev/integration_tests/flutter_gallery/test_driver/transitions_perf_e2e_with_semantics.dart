@@ -1,4 +1,3 @@
-
 import 'transitions_perf_e2e.dart' as transitions_perf;
 
 void main() {

@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 
 import 'package:process/process.dart';
@@ -195,24 +194,27 @@ class VariableDumpMachineProjectValidator extends MachineProjectValidator {
   String get title => 'Machine JSON variable dump';
 }
 
-class GeneralInfoProjectValidator extends ProjectValidator{
+class GeneralInfoProjectValidator extends ProjectValidator {
   @override
   Future<List<ProjectValidatorResult>> start(FlutterProject project) async {
     final FlutterManifest flutterManifest = project.manifest;
     final List<ProjectValidatorResult> result = <ProjectValidatorResult>[];
-    final ProjectValidatorResult appNameValidatorResult = _getAppNameResult(flutterManifest);
+    final ProjectValidatorResult appNameValidatorResult =
+        _getAppNameResult(flutterManifest);
     result.add(appNameValidatorResult);
     final String supportedPlatforms = _getSupportedPlatforms(project);
     if (supportedPlatforms.isEmpty) {
       return result;
     }
-    final ProjectValidatorResult supportedPlatformsResult = ProjectValidatorResult(
-        name: 'Supported Platforms',
-        value: supportedPlatforms,
-        status: StatusProjectValidator.success
-    );
-    final ProjectValidatorResult isFlutterPackage = _isFlutterPackageValidatorResult(flutterManifest);
-    result.addAll(<ProjectValidatorResult>[supportedPlatformsResult, isFlutterPackage]);
+    final ProjectValidatorResult supportedPlatformsResult =
+        ProjectValidatorResult(
+            name: 'Supported Platforms',
+            value: supportedPlatforms,
+            status: StatusProjectValidator.success);
+    final ProjectValidatorResult isFlutterPackage =
+        _isFlutterPackageValidatorResult(flutterManifest);
+    result.addAll(
+        <ProjectValidatorResult>[supportedPlatformsResult, isFlutterPackage]);
     if (flutterManifest.flutterDescriptor.isNotEmpty) {
       result.add(_materialDesignResult(flutterManifest));
       result.add(_pluginValidatorResult(flutterManifest));
@@ -228,17 +230,14 @@ class GeneralInfoProjectValidator extends ProjectValidator{
       return const ProjectValidatorResult(
           name: name,
           value: 'name not found',
-          status: StatusProjectValidator.error
-      );
+          status: StatusProjectValidator.error);
     }
     return ProjectValidatorResult(
-        name: name,
-        value: appName,
-        status: StatusProjectValidator.success
-    );
+        name: name, value: appName, status: StatusProjectValidator.success);
   }
 
-  ProjectValidatorResult _isFlutterPackageValidatorResult(FlutterManifest flutterManifest) {
+  ProjectValidatorResult _isFlutterPackageValidatorResult(
+      FlutterManifest flutterManifest) {
     final String value;
     final StatusProjectValidator status;
     if (flutterManifest.flutterDescriptor.isNotEmpty) {
@@ -250,30 +249,30 @@ class GeneralInfoProjectValidator extends ProjectValidator{
     }
 
     return ProjectValidatorResult(
-        name: 'Is Flutter Package',
-        value: value,
-        status: status
-    );
+        name: 'Is Flutter Package', value: value, status: status);
   }
 
-  ProjectValidatorResult _materialDesignResult(FlutterManifest flutterManifest) {
+  ProjectValidatorResult _materialDesignResult(
+      FlutterManifest flutterManifest) {
     return ProjectValidatorResult(
-      name: 'Uses Material Design',
-      value: flutterManifest.usesMaterialDesign? 'yes' : 'no',
-      status: StatusProjectValidator.success
-    );
+        name: 'Uses Material Design',
+        value: flutterManifest.usesMaterialDesign ? 'yes' : 'no',
+        status: StatusProjectValidator.success);
   }
 
   String _getSupportedPlatforms(FlutterProject project) {
-    return project.getSupportedPlatforms().map((SupportedPlatform platform) => platform.name).join(', ');
+    return project
+        .getSupportedPlatforms()
+        .map((SupportedPlatform platform) => platform.name)
+        .join(', ');
   }
 
-  ProjectValidatorResult _pluginValidatorResult(FlutterManifest flutterManifest) {
+  ProjectValidatorResult _pluginValidatorResult(
+      FlutterManifest flutterManifest) {
     return ProjectValidatorResult(
-      name: 'Is Plugin',
-      value: flutterManifest.isPlugin? 'yes' : 'no',
-      status: StatusProjectValidator.success
-    );
+        name: 'Is Plugin',
+        value: flutterManifest.isPlugin ? 'yes' : 'no',
+        status: StatusProjectValidator.success);
   }
 
   @override
@@ -293,26 +292,28 @@ class PubDependenciesProjectValidator extends ProjectValidator {
   @override
   Future<List<ProjectValidatorResult>> start(FlutterProject project) async {
     const String name = 'Dart dependencies';
-    final ProcessResult processResult = await _processManager.run(<String>['dart', 'pub', 'deps', '--json']);
+    final ProcessResult processResult =
+        await _processManager.run(<String>['dart', 'pub', 'deps', '--json']);
     if (processResult.stdout is! String) {
       return <ProjectValidatorResult>[
-        _createProjectValidatorError(name, 'Command dart pub deps --json failed')
+        _createProjectValidatorError(
+            name, 'Command dart pub deps --json failed')
       ];
     }
 
     final LinkedHashMap<String, dynamic> jsonResult;
     final List<ProjectValidatorResult> result = <ProjectValidatorResult>[];
     try {
-      jsonResult = json.decode(
-        processResult.stdout.toString()
-      ) as LinkedHashMap<String, dynamic>;
-    } on FormatException{
-      result.add(_createProjectValidatorError(name, processResult.stderr.toString()));
+      jsonResult = json.decode(processResult.stdout.toString())
+          as LinkedHashMap<String, dynamic>;
+    } on FormatException {
+      result.add(
+          _createProjectValidatorError(name, processResult.stderr.toString()));
       return result;
     }
 
     final DartPubJson dartPubJson = DartPubJson(jsonResult);
-    final List <String> dependencies = <String>[];
+    final List<String> dependencies = <String>[];
 
     // Information retrieved from the pubspec.lock file if a dependency comes from
     // the hosted url https://pub.dartlang.org we ignore it or if the package
@@ -333,13 +334,11 @@ class PubDependenciesProjectValidator extends ProjectValidator {
       value = 'All pub dependencies are hosted on https://pub.dartlang.org';
     }
 
-    result.add(
-       ProjectValidatorResult(
-        name: name,
-        value: value,
-        status: StatusProjectValidator.info,
-      )
-    );
+    result.add(ProjectValidatorResult(
+      name: name,
+      value: value,
+      status: StatusProjectValidator.info,
+    ));
 
     return result;
   }
@@ -352,7 +351,9 @@ class PubDependenciesProjectValidator extends ProjectValidator {
   @override
   String get title => 'Pub dependencies';
 
-  ProjectValidatorResult _createProjectValidatorError(String name, String value) {
-    return ProjectValidatorResult(name: name, value: value, status: StatusProjectValidator.error);
+  ProjectValidatorResult _createProjectValidatorError(
+      String name, String value) {
+    return ProjectValidatorResult(
+        name: name, value: value, status: StatusProjectValidator.error);
   }
 }

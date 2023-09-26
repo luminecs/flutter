@@ -1,4 +1,3 @@
-
 const String headingsRoute = 'headings';
 
 const String appBarTitleKeyValue = 'Headings#AppBarTitle';

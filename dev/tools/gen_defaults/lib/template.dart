@@ -1,13 +1,11 @@
-
 import 'dart:io';
 
 import 'token_logger.dart';
 
 abstract class TokenTemplate {
-  const TokenTemplate(this.blockName, this.fileName, this._tokens, {
-    this.colorSchemePrefix = 'Theme.of(context).colorScheme.',
-    this.textThemePrefix = 'Theme.of(context).textTheme.'
-  });
+  const TokenTemplate(this.blockName, this.fileName, this._tokens,
+      {this.colorSchemePrefix = 'Theme.of(context).colorScheme.',
+      this.textThemePrefix = 'Theme.of(context).textTheme.'});
 
   final String blockName;
 
@@ -53,12 +51,14 @@ abstract class TokenTemplate {
     late String contentAfterBlock;
     if (beginPreviousBlock != -1) {
       if (endPreviousBlock < beginPreviousBlock) {
-        print('Unable to find block named $blockName in $fileName, skipping code generation.');
+        print(
+            'Unable to find block named $blockName in $fileName, skipping code generation.');
         return;
       }
       // Found a valid block matching the name, so record the content before and after.
       contentBeforeBlock = contents.substring(0, beginPreviousBlock);
-      contentAfterBlock = contents.substring(endPreviousBlock + endComment.length);
+      contentAfterBlock =
+          contents.substring(endPreviousBlock + endComment.length);
     } else {
       // Just append to the bottom.
       contentBeforeBlock = contents;
@@ -78,11 +78,12 @@ abstract class TokenTemplate {
 
   String color(String colorToken, [String defaultValue = 'null']) {
     return tokenAvailable(colorToken)
-      ? '$colorSchemePrefix${getToken(colorToken)}'
-      : defaultValue;
+        ? '$colorSchemePrefix${getToken(colorToken)}'
+        : defaultValue;
   }
 
-  String? colorOrTransparent(String token) => color(token, 'Colors.transparent');
+  String? colorOrTransparent(String token) =>
+      color(token, 'Colors.transparent');
 
   String componentColor(String componentToken) {
     final String colorToken = '$componentToken.color';
@@ -116,7 +117,8 @@ abstract class TokenTemplate {
   }
 
   String elevation(String componentToken) {
-    return getToken(getToken('$componentToken.elevation')! as String)!.toString();
+    return getToken(getToken('$componentToken.elevation')! as String)!
+        .toString();
   }
 
   String size(String componentToken) {
@@ -125,25 +127,37 @@ abstract class TokenTemplate {
       final String widthToken = '$componentToken.width';
       final String heightToken = '$componentToken.height';
       if (!tokenAvailable(widthToken) && !tokenAvailable(heightToken)) {
-        throw Exception('Unable to find width, height, or size tokens for $componentToken');
+        throw Exception(
+            'Unable to find width, height, or size tokens for $componentToken');
       }
-      final String? width = _numToString(tokenAvailable(widthToken) ? getToken(widthToken)! as num : double.infinity, 0);
-      final String? height = _numToString(tokenAvailable(heightToken) ? getToken(heightToken)! as num : double.infinity, 0);
+      final String? width = _numToString(
+          tokenAvailable(widthToken)
+              ? getToken(widthToken)! as num
+              : double.infinity,
+          0);
+      final String? height = _numToString(
+          tokenAvailable(heightToken)
+              ? getToken(heightToken)! as num
+              : double.infinity,
+          0);
       return 'const Size($width, $height)';
     }
     return 'const Size.square(${_numToString(getToken(sizeToken))})';
   }
 
   String shape(String componentToken, [String prefix = 'const ']) {
-
-    final Map<String, dynamic> shape = getToken(getToken('$componentToken.shape') as String) as Map<String, dynamic>;
+    final Map<String, dynamic> shape =
+        getToken(getToken('$componentToken.shape') as String)
+            as Map<String, dynamic>;
     switch (shape['family']) {
       case 'SHAPE_FAMILY_ROUNDED_CORNERS':
         final double topLeft = shape['topLeft'] as double;
         final double topRight = shape['topRight'] as double;
         final double bottomLeft = shape['bottomLeft'] as double;
         final double bottomRight = shape['bottomRight'] as double;
-        if (topLeft == topRight && topLeft == bottomLeft && topLeft == bottomRight) {
+        if (topLeft == topRight &&
+            topLeft == bottomLeft &&
+            topLeft == bottomRight) {
           if (topLeft == 0) {
             return '${prefix}RoundedRectangleBorder()';
           }
@@ -151,41 +165,41 @@ abstract class TokenTemplate {
         }
         if (topLeft == topRight && bottomLeft == bottomRight) {
           return '${prefix}RoundedRectangleBorder(borderRadius: BorderRadius.vertical('
-            '${topLeft > 0 ? 'top: Radius.circular($topLeft)':''}'
-            '${topLeft > 0 && bottomLeft > 0 ? ',':''}'
-            '${bottomLeft > 0 ? 'bottom: Radius.circular($bottomLeft)':''}'
-            '))';
+              '${topLeft > 0 ? 'top: Radius.circular($topLeft)' : ''}'
+              '${topLeft > 0 && bottomLeft > 0 ? ',' : ''}'
+              '${bottomLeft > 0 ? 'bottom: Radius.circular($bottomLeft)' : ''}'
+              '))';
         }
         return '${prefix}RoundedRectangleBorder(borderRadius: '
-          'BorderRadius.only('
-          'topLeft: Radius.circular(${shape['topLeft']}), '
-          'topRight: Radius.circular(${shape['topRight']}), '
-          'bottomLeft: Radius.circular(${shape['bottomLeft']}), '
-          'bottomRight: Radius.circular(${shape['bottomRight']})))';
-    case 'SHAPE_FAMILY_CIRCULAR':
+            'BorderRadius.only('
+            'topLeft: Radius.circular(${shape['topLeft']}), '
+            'topRight: Radius.circular(${shape['topRight']}), '
+            'bottomLeft: Radius.circular(${shape['bottomLeft']}), '
+            'bottomRight: Radius.circular(${shape['bottomRight']})))';
+      case 'SHAPE_FAMILY_CIRCULAR':
         return '${prefix}StadiumBorder()';
     }
-    print('Unsupported shape family type: ${shape['family']} for $componentToken');
+    print(
+        'Unsupported shape family type: ${shape['family']} for $componentToken');
     return '';
   }
 
   String border(String componentToken) {
-
     if (!tokenAvailable('$componentToken.color')) {
       return 'null';
     }
     final String borderColor = componentColor(componentToken);
-    final double width = (getToken('$componentToken.width') ?? getToken('$componentToken.height') ?? 1.0) as double;
+    final double width = (getToken('$componentToken.width') ??
+        getToken('$componentToken.height') ??
+        1.0) as double;
     return 'BorderSide(color: $borderColor${width != 1.0 ? ", width: $width" : ""})';
   }
 
   String textStyle(String componentToken) {
-
     return '$textThemePrefix${getToken("$componentToken.text-style")}';
   }
 
   String textStyleWithColor(String componentToken) {
-
     if (!tokenAvailable('$componentToken.text-style')) {
       return 'null';
     }

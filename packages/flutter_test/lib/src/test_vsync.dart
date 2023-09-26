@@ -1,4 +1,3 @@
-
 import 'package:flutter/scheduler.dart';
 
 class TestVSync implements TickerProvider {

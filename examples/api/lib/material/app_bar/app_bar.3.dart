@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 List<String> titles = <String>[
   'Cloud',
@@ -16,7 +14,8 @@ class AppBarApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
+      theme: ThemeData(
+          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
       home: const AppBarExample(),
     );
   }

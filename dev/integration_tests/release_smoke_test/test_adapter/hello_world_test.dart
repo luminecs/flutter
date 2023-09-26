@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:release_smoke_test/main.dart' as smoke;
@@ -7,7 +6,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('Hello world smoke test', (WidgetTester tester) async {
-    smoke.main(); // builds the app and schedules a frame but doesn't trigger one
+    smoke
+        .main(); // builds the app and schedules a frame but doesn't trigger one
 
     await tester.pump(); // triggers a frame
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 
 import 'basic.dart';
@@ -27,7 +26,8 @@ class DecoratedSliver extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderDecoratedSliver renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderDecoratedSliver renderObject) {
     renderObject
       ..decoration = decoration
       ..position = position
@@ -44,7 +44,8 @@ class DecoratedSliver extends SingleChildRenderObjectWidget {
       case DecorationPosition.foreground:
         label = 'fg';
     }
-    properties.add(EnumProperty<DecorationPosition>('position', position, level: DiagnosticLevel.hidden));
+    properties.add(EnumProperty<DecorationPosition>('position', position,
+        level: DiagnosticLevel.hidden));
     properties.add(DiagnosticsProperty<Decoration>(label, decoration));
   }
 }

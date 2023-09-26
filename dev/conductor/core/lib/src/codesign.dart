@@ -1,4 +1,3 @@
-
 import 'dart:io' as io;
 
 import 'package:args/command_runner.dart';
@@ -25,7 +24,6 @@ const String kSignatures = 'signatures';
 const String kRevision = 'revision';
 const String kUpstream = 'upstream';
 
-
 class CodesignCommand extends Command<void> {
   CodesignCommand({
     required this.checkouts,
@@ -40,13 +38,15 @@ class CodesignCommand extends Command<void> {
     }
     argParser.addFlag(
       kVerify,
-      help: 'Only verify expected binaries exist and are codesigned with entitlements.',
+      help:
+          'Only verify expected binaries exist and are codesigned with entitlements.',
     );
     argParser.addFlag(
       kSignatures,
       defaultsTo: true,
-      help: 'When off, this command will only verify the existence of binaries, and not their\n'
-            'signatures or entitlements. Must be used with --verify flag.',
+      help:
+          'When off, this command will only verify the existence of binaries, and not their\n'
+          'signatures or entitlements. Must be used with --verify flag.',
     );
     argParser.addOption(
       kUpstream,
@@ -113,7 +113,9 @@ class CodesignCommand extends Command<void> {
       revision = ((await processManager.run(
         <String>['git', 'rev-parse', 'HEAD'],
         workingDirectory: flutterRoot.path,
-      )).stdout as String).trim();
+      ))
+              .stdout as String)
+          .trim();
       assert(revision.isNotEmpty);
     }
 
@@ -293,18 +295,21 @@ class CodesignCommand extends Command<void> {
     }
 
     if (wrongEntitlementBinaries.isNotEmpty) {
-      stdio.printError('Found ${wrongEntitlementBinaries.length} binaries with unexpected entitlements:');
+      stdio.printError(
+          'Found ${wrongEntitlementBinaries.length} binaries with unexpected entitlements:');
       wrongEntitlementBinaries.forEach(stdio.printError);
     }
 
     if (unexpectedBinaries.isNotEmpty) {
-      stdio.printError('Found ${unexpectedBinaries.length} unexpected binaries in the cache:');
+      stdio.printError(
+          'Found ${unexpectedBinaries.length} unexpected binaries in the cache:');
       unexpectedBinaries.forEach(print);
     }
 
     // Finally, exit on any invalid state
     if (unsignedBinaries.isNotEmpty) {
-      throw ConductorException('Test failed because unsigned binaries detected.');
+      throw ConductorException(
+          'Test failed because unsigned binaries detected.');
     }
 
     if (wrongEntitlementBinaries.isNotEmpty) {
@@ -315,12 +320,14 @@ class CodesignCommand extends Command<void> {
     }
 
     if (unexpectedBinaries.isNotEmpty) {
-      throw ConductorException('Test failed because unexpected binaries found in the cache.');
+      throw ConductorException(
+          'Test failed because unexpected binaries found in the cache.');
     }
 
     final String? desiredRevision = argResults![kRevision] as String?;
     if (desiredRevision == null) {
-      stdio.printStatus('Verified that binaries are codesigned and have expected entitlements.');
+      stdio.printStatus(
+          'Verified that binaries are codesigned and have expected entitlements.');
     } else {
       stdio.printStatus(
         'Verified that binaries for commit $desiredRevision are codesigned and have '

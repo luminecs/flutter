@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 
 import 'check_box_list_tile.dart';

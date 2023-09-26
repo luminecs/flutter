@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,7 +6,8 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import 'semantics_tester.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Implicit Semantics merge behavior', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Implicit Semantics merge behavior',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(
@@ -120,7 +120,8 @@ void main() {
               children: <TestSemantics>[
                 TestSemantics(
                   id: 4,
-                  label: 'Signed in as\nMichael Goderbauer\ngoderbauer@google.com',
+                  label:
+                      'Signed in as\nMichael Goderbauer\ngoderbauer@google.com',
                 ),
               ],
             ),
@@ -170,7 +171,8 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgetsWithLeakTracking('Do not merge with conflicts', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Do not merge with conflicts',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(

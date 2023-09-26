@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 import '../../gallery/demo.dart';
@@ -21,7 +20,9 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
       builder: (BuildContext context) => child!,
     ).then((String? value) {
       if (value != null) {
-        setState(() { lastSelectedValue = value; });
+        setState(() {
+          lastSelectedValue = value;
+        });
       }
     });
   }
@@ -32,7 +33,9 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
       builder: (BuildContext context) => child!,
     ).then((String? value) {
       if (value != null) {
-        setState(() { lastSelectedValue = value; });
+        setState(() {
+          lastSelectedValue = value;
+        });
       }
     });
   }
@@ -46,7 +49,8 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
         // Material page. CupertinoPageRoutes could auto-populate these back
         // labels.
         previousPageTitle: 'Cupertino',
-        trailing: CupertinoDemoDocumentationButton(CupertinoAlertDemo.routeName),
+        trailing:
+            CupertinoDemoDocumentationButton(CupertinoAlertDemo.routeName),
       ),
       child: DefaultTextStyle(
         style: CupertinoTheme.of(context).textTheme.textStyle,
@@ -59,8 +63,9 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
                   child: ListView(
                     primary: true,
                     // Add more padding to the normal safe area.
-                    padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 72.0)
-                        + MediaQuery.of(context).padding,
+                    padding: const EdgeInsets.symmetric(
+                            vertical: 24.0, horizontal: 72.0) +
+                        MediaQuery.of(context).padding,
                     children: <Widget>[
                       CupertinoButton.filled(
                         child: const Text('Alert'),
@@ -68,19 +73,22 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
                       ),
                       const Padding(padding: EdgeInsets.all(8.0)),
                       CupertinoButton.filled(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 36.0),
                         child: const Text('Alert with Title'),
                         onPressed: () => _onAlertWithTitlePress(context),
                       ),
                       const Padding(padding: EdgeInsets.all(8.0)),
                       CupertinoButton.filled(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 36.0),
                         child: const Text('Alert with Buttons'),
                         onPressed: () => _onAlertWithButtonsPress(context),
                       ),
                       const Padding(padding: EdgeInsets.all(8.0)),
                       CupertinoButton.filled(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 36.0),
                         child: const Text('Alert Buttons Only'),
                         onPressed: () {
                           showDemoDialog(
@@ -91,7 +99,8 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
                       ),
                       const Padding(padding: EdgeInsets.all(8.0)),
                       CupertinoButton.filled(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 36.0),
                         child: const Text('Action Sheet'),
                         onPressed: () => _onActionSheetPress(context),
                       ),
@@ -136,9 +145,11 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
     showDemoDialog(
       context: context,
       child: CupertinoAlertDialog(
-        title: const Text('Allow "Maps" to access your location while you are using the app?'),
-        content: const Text('Your current location will be displayed on the map and used '
-          'for directions, nearby search results, and estimated travel times.'),
+        title: const Text(
+            'Allow "Maps" to access your location while you are using the app?'),
+        content: const Text(
+            'Your current location will be displayed on the map and used '
+            'for directions, nearby search results, and estimated travel times.'),
         actions: <Widget>[
           CupertinoDialogAction(
             child: const Text("Don't Allow"),
@@ -159,18 +170,19 @@ class _CupertinoAlertDemoState extends State<CupertinoAlertDemo> {
       child: const CupertinoDessertDialog(
         title: Text('Select Favorite Dessert'),
         content: Text('Please select your favorite type of dessert from the '
-          'list below. Your selection will be used to customize the suggested '
-          'list of eateries in your area.'),
+            'list below. Your selection will be used to customize the suggested '
+            'list of eateries in your area.'),
       ),
     );
   }
 
-  void _onActionSheetPress(BuildContext context)  {
+  void _onActionSheetPress(BuildContext context) {
     showDemoActionSheet(
       context: context,
       child: CupertinoActionSheet(
         title: const Text('Favorite Dessert'),
-        message: const Text('Please select the best dessert from the options below.'),
+        message: const Text(
+            'Please select the best dessert from the options below.'),
         actions: <Widget>[
           CupertinoActionSheetAction(
             child: const Text('Profiteroles'),

@@ -1,13 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('runApp uses deprecated pipelineOwner and renderView', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'runApp uses deprecated pipelineOwner and renderView',
+      (WidgetTester tester) async {
     runApp(const SizedBox());
-    final RenderObject renderObject = tester.renderObject(find.byType(SizedBox));
+    final RenderObject renderObject =
+        tester.renderObject(find.byType(SizedBox));
 
     RenderObject parent = renderObject;
     while (parent.parent != null) {
@@ -19,7 +21,8 @@ void main() {
     expect(renderObject.owner, equals(tester.binding.pipelineOwner));
   });
 
-  testWidgetsWithLeakTracking('can manually attach RootWidget to build owner', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('can manually attach RootWidget to build owner',
+      (WidgetTester tester) async {
     expect(find.byType(ColoredBox), findsNothing);
 
     final RootWidget rootWidget = RootWidget(
@@ -32,6 +35,7 @@ void main() {
     await tester.pump();
     expect(find.byType(ColoredBox), findsOneWidget);
     expect(tester.binding.rootElement!.widget, equals(rootWidget));
-    expect(tester.element(find.byType(ColoredBox)).owner, equals(tester.binding.buildOwner));
+    expect(tester.element(find.byType(ColoredBox)).owner,
+        equals(tester.binding.buildOwner));
   });
 }

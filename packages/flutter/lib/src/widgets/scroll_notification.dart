@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,11 +12,11 @@ mixin ViewportNotificationMixin on Notification {
   @override
   void debugFillDescription(List<String> description) {
     super.debugFillDescription(description);
-    description.add('depth: $depth (${ depth == 0 ? "local" : "remote"})');
+    description.add('depth: $depth (${depth == 0 ? "local" : "remote"})');
   }
 }
 
-mixin ViewportElementMixin  on NotifiableElementMixin {
+mixin ViewportElementMixin on NotifiableElementMixin {
   @override
   bool onNotification(Notification notification) {
     if (notification is ViewportNotificationMixin) {
@@ -27,7 +26,8 @@ mixin ViewportElementMixin  on NotifiableElementMixin {
   }
 }
 
-abstract class ScrollNotification extends LayoutChangedNotification with ViewportNotificationMixin {
+abstract class ScrollNotification extends LayoutChangedNotification
+    with ViewportNotificationMixin {
   ScrollNotification({
     required this.metrics,
     required this.context,
@@ -96,8 +96,8 @@ class OverscrollNotification extends ScrollNotification {
     this.dragDetails,
     required this.overscroll,
     this.velocity = 0.0,
-  }) : assert(overscroll.isFinite),
-       assert(overscroll != 0.0);
+  })  : assert(overscroll.isFinite),
+        assert(overscroll != 0.0);
 
   final DragUpdateDetails? dragDetails;
 
@@ -150,7 +150,8 @@ class UserScrollNotification extends ScrollNotification {
   }
 }
 
-typedef ScrollNotificationPredicate = bool Function(ScrollNotification notification);
+typedef ScrollNotificationPredicate = bool Function(
+    ScrollNotification notification);
 
 bool defaultScrollNotificationPredicate(ScrollNotification notification) {
   return notification.depth == 0;

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
@@ -16,7 +14,7 @@ abstract class SemanticsEvent {
 
   final String type;
 
-  Map<String, dynamic> toMap({ int? nodeId }) {
+  Map<String, dynamic> toMap({int? nodeId}) {
     final Map<String, dynamic> event = <String, dynamic>{
       'type': type,
       'data': getDataMap(),
@@ -43,9 +41,9 @@ abstract class SemanticsEvent {
 }
 
 class AnnounceSemanticsEvent extends SemanticsEvent {
-
-  const AnnounceSemanticsEvent(this.message, this.textDirection, {this.assertiveness = Assertiveness.polite})
-    : super('announce');
+  const AnnounceSemanticsEvent(this.message, this.textDirection,
+      {this.assertiveness = Assertiveness.polite})
+      : super('announce');
 
   final String message;
 
@@ -55,7 +53,7 @@ class AnnounceSemanticsEvent extends SemanticsEvent {
 
   @override
   Map<String, dynamic> getDataMap() {
-    return <String, dynamic> {
+    return <String, dynamic>{
       'message': message,
       'textDirection': textDirection.index,
       if (assertiveness != Assertiveness.polite)

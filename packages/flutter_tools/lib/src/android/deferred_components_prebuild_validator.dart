@@ -1,4 +1,3 @@
-
 import 'package:xml/xml.dart';
 
 import '../base/deferred_component.dart';
@@ -11,7 +10,10 @@ import '../template.dart';
 import 'deferred_components_validator.dart';
 
 class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
-  DeferredComponentsPrebuildValidator(super.projectDir, super.logger, super.platform, {
+  DeferredComponentsPrebuildValidator(
+    super.projectDir,
+    super.logger,
+    super.platform, {
     super.exitOnFail,
     super.title,
     Directory? templatesDir,
@@ -19,22 +21,24 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
 
   final Directory? _templatesDir;
 
-  Future<bool> checkAndroidDynamicFeature(List<DeferredComponent> components) async {
+  Future<bool> checkAndroidDynamicFeature(
+      List<DeferredComponent> components) async {
     inputs.add(projectDir.childFile('pubspec.yaml'));
     if (components.isEmpty) {
       return false;
     }
     bool changesMade = false;
     for (final DeferredComponent component in components) {
-      final _DeferredComponentAndroidFiles androidFiles = _DeferredComponentAndroidFiles(
-        name: component.name,
-        projectDir: projectDir,
-        logger: logger,
-        templatesDir: _templatesDir
-      );
+      final _DeferredComponentAndroidFiles androidFiles =
+          _DeferredComponentAndroidFiles(
+              name: component.name,
+              projectDir: projectDir,
+              logger: logger,
+              templatesDir: _templatesDir);
       if (!androidFiles.verifyFilesExist()) {
         // generate into temp directory
-        final Map<String, List<File>> results = await androidFiles.generateFiles(
+        final Map<String, List<File>> results =
+            await androidFiles.generateFiles(
           alternateAndroidDir: outputDir,
           clearAlternateOutputDir: true,
         );
@@ -59,25 +63,25 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
 
     // Add component name mapping to strings.xml
     final File stringRes = androidDir
-      .childDirectory('app')
-      .childDirectory('src')
-      .childDirectory('main')
-      .childDirectory('res')
-      .childDirectory('values')
-      .childFile('strings.xml');
+        .childDirectory('app')
+        .childDirectory('src')
+        .childDirectory('main')
+        .childDirectory('res')
+        .childDirectory('values')
+        .childFile('strings.xml');
     inputs.add(stringRes);
     final File stringResOutput = outputDir
-      .childDirectory('app')
-      .childDirectory('src')
-      .childDirectory('main')
-      .childDirectory('res')
-      .childDirectory('values')
-      .childFile('strings.xml');
+        .childDirectory('app')
+        .childDirectory('src')
+        .childDirectory('main')
+        .childDirectory('res')
+        .childDirectory('values')
+        .childFile('strings.xml');
     ErrorHandlingFileSystem.deleteIfExists(stringResOutput);
     if (components.isEmpty) {
       return true;
     }
-    final Map<String, String> requiredEntriesMap  = <String, String>{};
+    final Map<String, String> requiredEntriesMap = <String, String>{};
     for (final DeferredComponent component in components) {
       requiredEntriesMap['${component.name}Name'] = component.name;
     }
@@ -88,13 +92,14 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
         document = XmlDocument.parse(stringRes.readAsStringSync());
       } on XmlException {
         invalidFiles[stringRes.path] = 'Error parsing $stringRes '
-        'Please ensure that the strings.xml is a valid XML document and '
-        'try again.';
+            'Please ensure that the strings.xml is a valid XML document and '
+            'try again.';
         return false;
       }
       // Check if all required lines are present, and fix if name exists, but
       // wrong string stored.
-      for (final XmlElement resources in document.findAllElements('resources')) {
+      for (final XmlElement resources
+          in document.findAllElements('resources')) {
         for (final XmlElement element in resources.findElements('string')) {
           final String? name = element.getAttribute('name');
           if (requiredEntriesMap.containsKey(name)) {
@@ -136,20 +141,22 @@ class DeferredComponentsPrebuildValidator extends DeferredComponentsValidator {
 <resources>
 ''');
     for (final String key in requiredEntriesMap.keys) {
-      buffer.write('    <string name="$key">${requiredEntriesMap[key]}</string>\n');
+      buffer.write(
+          '    <string name="$key">${requiredEntriesMap[key]}</string>\n');
     }
-    buffer.write(
-'''
+    buffer.write('''
 </resources>
 
 ''');
-    stringResOutput.writeAsStringSync(buffer.toString(), flush: true, mode: FileMode.append);
+    stringResOutput.writeAsStringSync(buffer.toString(),
+        flush: true, mode: FileMode.append);
     generatedFiles.add(stringResOutput.path);
     return false;
   }
 
   void clearOutputDir() {
-    final Directory dir = projectDir.childDirectory('build').childDirectory(DeferredComponentsValidator.kDeferredComponentsTempDirectory);
+    final Directory dir = projectDir.childDirectory('build').childDirectory(
+        DeferredComponentsValidator.kDeferredComponentsTempDirectory);
     ErrorHandlingFileSystem.deleteIfExists(dir, recursive: true);
   }
 }
@@ -173,7 +180,10 @@ class _DeferredComponentAndroidFiles {
   Directory get androidDir => projectDir.childDirectory('android');
   Directory get componentDir => androidDir.childDirectory(name);
 
-  File get androidManifestFile => componentDir.childDirectory('src').childDirectory('main').childFile('AndroidManifest.xml');
+  File get androidManifestFile => componentDir
+      .childDirectory('src')
+      .childDirectory('main')
+      .childFile('AndroidManifest.xml');
   File get buildGradleFile => componentDir.childFile('build.gradle');
 
   // True when AndroidManifest.xml and build.gradle exist for the android dynamic feature.
@@ -182,15 +192,20 @@ class _DeferredComponentAndroidFiles {
   }
 
   // Generates any missing basic files for the dynamic feature into a temporary directory.
-  Future<Map<String, List<File>>> generateFiles({Directory? alternateAndroidDir, bool clearAlternateOutputDir = false}) async {
-    final Directory outputDir = alternateAndroidDir?.childDirectory(name) ?? componentDir;
+  Future<Map<String, List<File>>> generateFiles(
+      {Directory? alternateAndroidDir,
+      bool clearAlternateOutputDir = false}) async {
+    final Directory outputDir =
+        alternateAndroidDir?.childDirectory(name) ?? componentDir;
     if (clearAlternateOutputDir && alternateAndroidDir != null) {
       ErrorHandlingFileSystem.deleteIfExists(outputDir);
     }
     final List<File> inputs = <File>[];
     inputs.add(androidManifestFile);
     inputs.add(buildGradleFile);
-    final Map<String, List<File>> results = <String, List<File>>{'inputs': inputs};
+    final Map<String, List<File>> results = <String, List<File>>{
+      'inputs': inputs
+    };
     results['outputs'] = await _setupComponentFiles(outputDir);
     return results;
   }
@@ -200,14 +215,18 @@ class _DeferredComponentAndroidFiles {
     Template template;
     final Directory? templatesDir = _templatesDir;
     if (templatesDir != null) {
-      final Directory templateComponentDir = templatesDir.childDirectory('module${globals.fs.path.separator}android${globals.fs.path.separator}deferred_component');
-      template = Template(templateComponentDir, templateComponentDir,
+      final Directory templateComponentDir = templatesDir.childDirectory(
+          'module${globals.fs.path.separator}android${globals.fs.path.separator}deferred_component');
+      template = Template(
+        templateComponentDir,
+        templateComponentDir,
         fileSystem: globals.fs,
         logger: logger,
         templateRenderer: globals.templateRenderer,
       );
     } else {
-      template = await Template.fromName('module${globals.fs.path.separator}android${globals.fs.path.separator}deferred_component',
+      template = await Template.fromName(
+        'module${globals.fs.path.separator}android${globals.fs.path.separator}deferred_component',
         fileSystem: globals.fs,
         templateManifest: null,
         logger: logger,
@@ -215,7 +234,8 @@ class _DeferredComponentAndroidFiles {
       );
     }
     final Map<String, Object> context = <String, Object>{
-      'androidIdentifier': FlutterProject.current().manifest.androidPackage ?? 'com.example.${FlutterProject.current().manifest.appName}',
+      'androidIdentifier': FlutterProject.current().manifest.androidPackage ??
+          'com.example.${FlutterProject.current().manifest.appName}',
       'componentName': name,
     };
 
@@ -230,9 +250,9 @@ class _DeferredComponentAndroidFiles {
       ErrorHandlingFileSystem.deleteIfExists(tempBuildGradle);
     }
     final File tempAndroidManifest = outputDir
-      .childDirectory('src')
-      .childDirectory('main')
-      .childFile('AndroidManifest.xml');
+        .childDirectory('src')
+        .childDirectory('main')
+        .childFile('AndroidManifest.xml');
     if (!androidManifestFile.existsSync()) {
       generatedFiles.add(tempAndroidManifest);
     } else {

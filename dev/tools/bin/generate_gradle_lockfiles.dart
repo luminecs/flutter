@@ -1,4 +1,3 @@
-
 // This script generates `android/build.gradle` for each directory specify in the stdin.
 // Then it generate the lockfiles for each Gradle project.
 // To regenerate these files, run `find . -type d -name 'android' | dart dev/tools/bin/generate_gradle_lockfiles.dart`
@@ -10,16 +9,16 @@ import 'package:path/path.dart' as path;
 
 void main(List<String> arguments) {
   print(
-    "Usage: find . -type d -name 'android' | dart dev/tools/bin/generate_gradle_lockfiles.dart\n"
-    'If you would rather enter the files manually, just run `dart dev/tools/bin/generate_gradle_lockfiles.dart`,\n'
-    "enter the absolute paths to the app's android directory, then press CTRL-D.\n"
-  );
+      "Usage: find . -type d -name 'android' | dart dev/tools/bin/generate_gradle_lockfiles.dart\n"
+      'If you would rather enter the files manually, just run `dart dev/tools/bin/generate_gradle_lockfiles.dart`,\n'
+      "enter the absolute paths to the app's android directory, then press CTRL-D.\n");
 
   const FileSystem fileSystem = LocalFileSystem();
   final List<String> androidDirectories = getFilesFromStdin();
 
   for (final String androidDirectoryPath in androidDirectories) {
-    final Directory androidDirectory = fileSystem.directory(path.normalize(androidDirectoryPath));
+    final Directory androidDirectory =
+        fileSystem.directory(path.normalize(androidDirectoryPath));
 
     if (!androidDirectory.existsSync()) {
       throw '$androidDirectory does not exist';
@@ -48,11 +47,15 @@ void main(List<String> arguments) {
     }
 
     if (!androidDirectory.parent.childFile('pubspec.yaml').existsSync()) {
-      print('${rootBuildGradle.path} no pubspec.yaml in parent directory - skipping');
+      print(
+          '${rootBuildGradle.path} no pubspec.yaml in parent directory - skipping');
       continue;
     }
 
-    if (androidDirectory.parent.childFile('pubspec.yaml').readAsStringSync().contains('deferred-components')) {
+    if (androidDirectory.parent
+        .childFile('pubspec.yaml')
+        .readAsStringSync()
+        .contains('deferred-components')) {
       print('${rootBuildGradle.path} uses deferred components - skipping');
       continue;
     }
@@ -120,7 +123,8 @@ void exec(
   List<String> args, {
   String? workingDirectory,
 }) {
-  final ProcessResult result = Process.runSync(cmd, args, workingDirectory: workingDirectory);
+  final ProcessResult result =
+      Process.runSync(cmd, args, workingDirectory: workingDirectory);
   if (result.exitCode != 0) {
     throw ProcessException(
         cmd, args, '${result.stdout}${result.stderr}', result.exitCode);

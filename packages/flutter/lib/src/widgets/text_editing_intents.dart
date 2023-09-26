@@ -1,4 +1,3 @@
-
 import 'package:flutter/services.dart';
 
 import 'actions.dart';
@@ -16,26 +15,26 @@ abstract class DirectionalTextEditingIntent extends Intent {
 }
 
 class DeleteCharacterIntent extends DirectionalTextEditingIntent {
-  const DeleteCharacterIntent({ required bool forward }) : super(forward);
+  const DeleteCharacterIntent({required bool forward}) : super(forward);
 }
 
 class DeleteToNextWordBoundaryIntent extends DirectionalTextEditingIntent {
-  const DeleteToNextWordBoundaryIntent({ required bool forward }) : super(forward);
+  const DeleteToNextWordBoundaryIntent({required bool forward})
+      : super(forward);
 }
 
 class DeleteToLineBreakIntent extends DirectionalTextEditingIntent {
-  const DeleteToLineBreakIntent({ required bool forward }) : super(forward);
+  const DeleteToLineBreakIntent({required bool forward}) : super(forward);
 }
 
-abstract class DirectionalCaretMovementIntent extends DirectionalTextEditingIntent {
+abstract class DirectionalCaretMovementIntent
+    extends DirectionalTextEditingIntent {
   const DirectionalCaretMovementIntent(
     super.forward,
-    this.collapseSelection,
-    [
-      this.collapseAtReversal = false,
-      this.continuesAtWrap = false,
-    ]
-  ) : assert(!collapseSelection || !collapseAtReversal);
+    this.collapseSelection, [
+    this.collapseAtReversal = false,
+    this.continuesAtWrap = false,
+  ]) : assert(!collapseSelection || !collapseAtReversal);
 
   final bool collapseSelection;
 
@@ -51,20 +50,23 @@ class ExtendSelectionByCharacterIntent extends DirectionalCaretMovementIntent {
   }) : super(forward, collapseSelection);
 }
 
-class ExtendSelectionToNextWordBoundaryIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionToNextWordBoundaryIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionToNextWordBoundaryIntent({
     required bool forward,
     required bool collapseSelection,
   }) : super(forward, collapseSelection);
 }
 
-class ExtendSelectionToNextWordBoundaryOrCaretLocationIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionToNextWordBoundaryOrCaretLocationIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionToNextWordBoundaryOrCaretLocationIntent({
     required bool forward,
   }) : super(forward, false, true);
 }
 
-class ExpandSelectionToDocumentBoundaryIntent extends DirectionalCaretMovementIntent {
+class ExpandSelectionToDocumentBoundaryIntent
+    extends DirectionalCaretMovementIntent {
   const ExpandSelectionToDocumentBoundaryIntent({
     required bool forward,
   }) : super(forward, false);
@@ -82,38 +84,43 @@ class ExtendSelectionToLineBreakIntent extends DirectionalCaretMovementIntent {
     required bool collapseSelection,
     bool collapseAtReversal = false,
     bool continuesAtWrap = false,
-  }) : assert(!collapseSelection || !collapseAtReversal),
-       super(forward, collapseSelection, collapseAtReversal, continuesAtWrap);
+  })  : assert(!collapseSelection || !collapseAtReversal),
+        super(forward, collapseSelection, collapseAtReversal, continuesAtWrap);
 }
 
-class ExtendSelectionVerticallyToAdjacentLineIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionVerticallyToAdjacentLineIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionVerticallyToAdjacentLineIntent({
     required bool forward,
     required bool collapseSelection,
   }) : super(forward, collapseSelection);
 }
 
-class ExtendSelectionVerticallyToAdjacentPageIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionVerticallyToAdjacentPageIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionVerticallyToAdjacentPageIntent({
     required bool forward,
     required bool collapseSelection,
   }) : super(forward, collapseSelection);
 }
 
-class ExtendSelectionToNextParagraphBoundaryIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionToNextParagraphBoundaryIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionToNextParagraphBoundaryIntent({
     required bool forward,
     required bool collapseSelection,
   }) : super(forward, collapseSelection);
 }
 
-class ExtendSelectionToNextParagraphBoundaryOrCaretLocationIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionToNextParagraphBoundaryOrCaretLocationIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionToNextParagraphBoundaryOrCaretLocationIntent({
     required bool forward,
   }) : super(forward, false, true);
 }
 
-class ExtendSelectionToDocumentBoundaryIntent extends DirectionalCaretMovementIntent {
+class ExtendSelectionToDocumentBoundaryIntent
+    extends DirectionalCaretMovementIntent {
   const ExtendSelectionToDocumentBoundaryIntent({
     required bool forward,
     required bool collapseSelection,
@@ -141,9 +148,11 @@ class SelectAllTextIntent extends Intent {
 class CopySelectionTextIntent extends Intent {
   const CopySelectionTextIntent._(this.cause, this.collapseSelection);
 
-  const CopySelectionTextIntent.cut(SelectionChangedCause cause) : this._(cause, true);
+  const CopySelectionTextIntent.cut(SelectionChangedCause cause)
+      : this._(cause, true);
 
-  static const CopySelectionTextIntent copy = CopySelectionTextIntent._(SelectionChangedCause.keyboard, false);
+  static const CopySelectionTextIntent copy =
+      CopySelectionTextIntent._(SelectionChangedCause.keyboard, false);
 
   final SelectionChangedCause cause;
 
@@ -163,7 +172,8 @@ class RedoTextIntent extends Intent {
 }
 
 class ReplaceTextIntent extends Intent {
-  const ReplaceTextIntent(this.currentTextEditingValue, this.replacementText, this.replacementRange, this.cause);
+  const ReplaceTextIntent(this.currentTextEditingValue, this.replacementText,
+      this.replacementRange, this.cause);
 
   final TextEditingValue currentTextEditingValue;
 
@@ -181,7 +191,8 @@ class UndoTextIntent extends Intent {
 }
 
 class UpdateSelectionIntent extends Intent {
-  const UpdateSelectionIntent(this.currentTextEditingValue, this.newSelection, this.cause);
+  const UpdateSelectionIntent(
+      this.currentTextEditingValue, this.newSelection, this.cause);
 
   final TextEditingValue currentTextEditingValue;
 

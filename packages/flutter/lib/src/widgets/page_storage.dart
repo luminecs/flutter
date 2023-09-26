@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'framework.dart';
@@ -23,8 +22,8 @@ class _StorageEntryIdentifier {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is _StorageEntryIdentifier
-        && listEquals<PageStorageKey<dynamic>>(other.keys, keys);
+    return other is _StorageEntryIdentifier &&
+        listEquals<PageStorageKey<dynamic>>(other.keys, keys);
   }
 
   @override
@@ -37,7 +36,8 @@ class _StorageEntryIdentifier {
 }
 
 class PageStorageBucket {
-  static bool _maybeAddKey(BuildContext context, List<PageStorageKey<dynamic>> keys) {
+  static bool _maybeAddKey(
+      BuildContext context, List<PageStorageKey<dynamic>> keys) {
     final Widget widget = context.widget;
     final Key? key = widget.key;
     if (key is PageStorageKey) {
@@ -62,26 +62,28 @@ class PageStorageBucket {
 
   Map<Object, dynamic>? _storage;
 
-  void writeState(BuildContext context, dynamic data, { Object? identifier }) {
+  void writeState(BuildContext context, dynamic data, {Object? identifier}) {
     _storage ??= <Object, dynamic>{};
     if (identifier != null) {
       _storage![identifier] = data;
     } else {
-      final _StorageEntryIdentifier contextIdentifier = _computeIdentifier(context);
+      final _StorageEntryIdentifier contextIdentifier =
+          _computeIdentifier(context);
       if (contextIdentifier.isNotEmpty) {
         _storage![contextIdentifier] = data;
       }
     }
   }
 
-  dynamic readState(BuildContext context, { Object? identifier }) {
+  dynamic readState(BuildContext context, {Object? identifier}) {
     if (_storage == null) {
       return null;
     }
     if (identifier != null) {
       return _storage![identifier];
     }
-    final _StorageEntryIdentifier contextIdentifier = _computeIdentifier(context);
+    final _StorageEntryIdentifier contextIdentifier =
+        _computeIdentifier(context);
     return contextIdentifier.isNotEmpty ? _storage![contextIdentifier] : null;
   }
 }
@@ -98,7 +100,8 @@ class PageStorage extends StatelessWidget {
   final PageStorageBucket bucket;
 
   static PageStorageBucket? maybeOf(BuildContext context) {
-    final PageStorage? widget = context.findAncestorWidgetOfExactType<PageStorage>();
+    final PageStorage? widget =
+        context.findAncestorWidgetOfExactType<PageStorage>();
     return widget?.bucket;
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,7 +5,8 @@ void main() {
   testWidgets('Rendering Error', (WidgetTester tester) async {
     // Assets can load with its package name.
     await tester.pumpWidget(
-      Image.asset('icon/test.png',
+      Image.asset(
+        'icon/test.png',
         width: 54,
         height: 54,
         fit: BoxFit.none,

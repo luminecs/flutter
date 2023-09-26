@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/devfs.dart';
 import 'package:flutter_tools/src/reporting/reporting.dart';
 import 'package:flutter_tools/src/resident_runner.dart';
@@ -11,7 +10,8 @@ import 'package:vm_service/vm_service.dart' as vm_service;
 import '../src/common.dart';
 
 void main() {
-  testWithoutContext('defaultReloadSourcesHelper() handles empty DeviceReloadReports)', () {
+  testWithoutContext(
+      'defaultReloadSourcesHelper() handles empty DeviceReloadReports)', () {
     defaultReloadSourcesHelper(
       _FakeHotRunner(),
       <FlutterDevice?>[_FakeFlutterDevice()],

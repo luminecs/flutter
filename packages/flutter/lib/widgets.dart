@@ -1,4 +1,3 @@
-
 library widgets;
 
 export 'package:characters/characters.dart';

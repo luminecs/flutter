@@ -1,4 +1,3 @@
-
 import 'package:flutter_devicelab/framework/devices.dart';
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/task_result.dart';
@@ -28,15 +27,13 @@ Future<TaskResult> run() async {
   final String debugOutput = await _runWithMode('--debug', deviceId);
   if (!debugOutput.contains(warningPiece)) {
     return TaskResult.failure(
-        'Could not find the following warning message piece: $warningPiece'
-    );
+        'Could not find the following warning message piece: $warningPiece');
   }
 
   final String profileOutput = await _runWithMode('--profile', deviceId);
   if (profileOutput.contains(warningPiece)) {
     return TaskResult.failure(
-      'Unexpected warning message piece in profile mode: $warningPiece'
-    );
+        'Unexpected warning message piece in profile mode: $warningPiece');
   }
 
   return TaskResult.success(null);

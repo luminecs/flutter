@@ -1,4 +1,3 @@
-
 import 'dart:js_interop';
 
 // This value is set by the engine. It is used to determine if the application is

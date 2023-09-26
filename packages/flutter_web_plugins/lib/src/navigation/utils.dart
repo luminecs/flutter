@@ -1,4 +1,3 @@
-
 String extractPathname(String url) {
   return ensureLeadingSlash(Uri.parse(url).path);
 }

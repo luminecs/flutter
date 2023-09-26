@@ -1,4 +1,3 @@
-
 const String kDefaultTextField = 'default_textfield';
 const String kHeightText = 'height_text';
 const String kUnfocusButton = 'unfocus_button';

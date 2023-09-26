@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,7 +8,8 @@ import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:path/path.dart' as path;
 
 final String gradlew = Platform.isWindows ? 'gradlew.bat' : 'gradlew';
-final String gradlewExecutable = Platform.isWindows ? '.\\$gradlew' : './$gradlew';
+final String gradlewExecutable =
+    Platform.isWindows ? '.\\$gradlew' : './$gradlew';
 
 Future<void> main() async {
   await task(() async {
@@ -23,10 +23,14 @@ Future<void> main() async {
 
     section('Create project');
     await runProjectTest((FlutterProject flutterProject) async {
-      await inDirectory(path.join(flutterProject.rootPath, 'android'), () async {
+      await inDirectory(path.join(flutterProject.rootPath, 'android'),
+          () async {
         section('Insert gradle testing script');
         final File build = File(path.join(
-          flutterProject.rootPath, 'android', 'app', 'build.gradle',
+          flutterProject.rootPath,
+          'android',
+          'app',
+          'build.gradle',
         ));
         build.writeAsStringSync(
           '''
@@ -58,7 +62,8 @@ task printEngineMavenUrl() {
           realm = '$realm/';
         }
 
-        if (mavenUrl != 'https://storage.googleapis.com/${realm}download.flutter.io') {
+        if (mavenUrl !=
+            'https://storage.googleapis.com/${realm}download.flutter.io') {
           throw TaskResult.failure(
             'Expected Android engine maven dependency URL to '
             'resolve to https://storage.googleapis.com/${realm}download.flutter.io. Got '
@@ -69,7 +74,7 @@ task printEngineMavenUrl() {
         section('Checking overridden maven URL');
         gradleOutput = await eval(
           gradlewExecutable,
-          <String>['printEngineMavenUrl','-q'],
+          <String>['printEngineMavenUrl', '-q'],
           environment: <String, String>{
             'FLUTTER_STORAGE_BASE_URL': 'https://my.special.proxy',
           },
@@ -77,7 +82,8 @@ task printEngineMavenUrl() {
         outputLines = splitter.convert(gradleOutput);
         mavenUrl = outputLines.last;
 
-        if (mavenUrl != 'https://my.special.proxy/${realm}download.flutter.io') {
+        if (mavenUrl !=
+            'https://my.special.proxy/${realm}download.flutter.io') {
           throw TaskResult.failure(
             'Expected overridden Android engine maven '
             'dependency URL to resolve to proxy location '

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(const SliverDecorationExampleApp());
@@ -38,15 +37,14 @@ class SliverDecorationExample extends StatelessWidget {
           ),
           sliver: SliverList(
             delegate: SliverChildListDelegate(<Widget>[
-               const Text('Goodnight Moon'),
+              const Text('Goodnight Moon'),
             ]),
           ),
         ),
         const DecoratedSliver(
           decoration: BoxDecoration(
-            color: Colors.amber,
-            borderRadius: BorderRadius.all(Radius.circular(50))
-          ),
+              color: Colors.amber,
+              borderRadius: BorderRadius.all(Radius.circular(50))),
           sliver: SliverToBoxAdapter(child: SizedBox(height: 300)),
         ),
       ],

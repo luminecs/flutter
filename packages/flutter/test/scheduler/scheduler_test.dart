@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -8,8 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'scheduler_tester.dart';
 
-class TestSchedulerBinding extends BindingBase with SchedulerBinding, ServicesBinding {
-  final Map<String, List<Map<String, dynamic>>> eventsDispatched = <String, List<Map<String, dynamic>>>{};
+class TestSchedulerBinding extends BindingBase
+    with SchedulerBinding, ServicesBinding {
+  final Map<String, List<Map<String, dynamic>>> eventsDispatched =
+      <String, List<Map<String, dynamic>>>{};
 
   @override
   void postEvent(String eventKind, Map<String, dynamic> eventData) {
@@ -17,14 +18,16 @@ class TestSchedulerBinding extends BindingBase with SchedulerBinding, ServicesBi
   }
 
   List<Map<String, dynamic>> getEventsDispatched(String eventKind) {
-    return eventsDispatched.putIfAbsent(eventKind, () => <Map<String, dynamic>>[]);
+    return eventsDispatched.putIfAbsent(
+        eventKind, () => <Map<String, dynamic>>[]);
   }
 }
 
 class TestStrategy {
   int allowedPriority = 10000;
 
-  bool shouldRunTaskWithPriority({ required int priority, required SchedulerBinding scheduler }) {
+  bool shouldRunTaskWithPriority(
+      {required int priority, required SchedulerBinding scheduler}) {
     return priority >= allowedPriority;
   }
 }
@@ -43,7 +46,9 @@ void main() {
     final List<int> executedTasks = <int>[];
 
     void scheduleAddingTask(int x) {
-      scheduler.scheduleTask(() { executedTasks.add(x); }, Priority.idle + x);
+      scheduler.scheduleTask(() {
+        executedTasks.add(x);
+      }, Priority.idle + x);
     }
 
     input.forEach(scheduleAddingTask);
@@ -116,10 +121,13 @@ void main() {
         // Run it twice without processing the queued tasks.
         scheduler.scheduleWarmUpFrame();
         scheduler.scheduleWarmUpFrame();
-        scheduler.scheduleTask(() { taskExecuted = true; }, Priority.touch);
+        scheduler.scheduleTask(() {
+          taskExecuted = true;
+        }, Priority.touch);
       },
       zoneSpecification: ZoneSpecification(
-        createTimer: (Zone self, ZoneDelegate parent, Zone zone, Duration duration, void Function() f) {
+        createTimer: (Zone self, ZoneDelegate parent, Zone zone,
+            Duration duration, void Function() f) {
           // Don't actually run the tasks, just record that it was scheduled.
           timerQueueTasks.add(f);
           return DummyTimer();
@@ -155,7 +163,8 @@ void main() {
       ),
     ]);
 
-    final List<Map<String, dynamic>> events = scheduler.getEventsDispatched('Flutter.Frame');
+    final List<Map<String, dynamic>> events =
+        scheduler.getEventsDispatched('Flutter.Frame');
     expect(events, hasLength(1));
 
     final Map<String, dynamic> event = events.first;
@@ -175,7 +184,8 @@ void main() {
     SchedulerBinding.instance.addTimingsCallback((List<FrameTiming> timings) {
       throw Exception('Test');
     });
-    SchedulerBinding.instance.platformDispatcher.onReportTimings!(<FrameTiming>[]);
+    SchedulerBinding
+        .instance.platformDispatcher.onReportTimings!(<FrameTiming>[]);
     expect(errorCaught!.exceptionAsString(), equals('Exception: Test'));
   });
 
@@ -205,7 +215,10 @@ void main() {
     timeDilation = 2;
     scheduler.scheduleFrameCallback(frameCallback);
     tick(const Duration(seconds: 6));
-    expect(lastTimeStamp, const Duration(seconds: 2)); // timeDilation calls SchedulerBinding.resetEpoch
+    expect(
+        lastTimeStamp,
+        const Duration(
+            seconds: 2)); // timeDilation calls SchedulerBinding.resetEpoch
     expect(lastSystemTimeStamp, const Duration(seconds: 6));
 
     scheduler.scheduleFrameCallback(frameCallback);
@@ -220,7 +233,8 @@ void main() {
     expect(scheduler.schedulerPhase, SchedulerPhase.idle);
     final List<VoidCallback> timers = <VoidCallback>[];
     final ZoneSpecification timerInterceptor = ZoneSpecification(
-      createTimer: (Zone self, ZoneDelegate parent, Zone zone, Duration duration, void Function() callback) {
+      createTimer: (Zone self, ZoneDelegate parent, Zone zone,
+          Duration duration, void Function() callback) {
         timers.add(callback);
         return DummyTimer();
       },
@@ -228,7 +242,8 @@ void main() {
 
     // Schedule a warm-up frame.
     // Expect two timers, one for begin frame, and one for draw frame.
-    runZoned<void>(scheduler.scheduleWarmUpFrame, zoneSpecification: timerInterceptor);
+    runZoned<void>(scheduler.scheduleWarmUpFrame,
+        zoneSpecification: timerInterceptor);
     expect(timers.length, 2);
     final VoidCallback warmUpBeginFrame = timers.first;
     final VoidCallback warmUpDrawFrame = timers.last;

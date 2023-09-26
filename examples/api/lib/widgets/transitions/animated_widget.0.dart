@@ -1,8 +1,6 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const AnimatedWidgetExampleApp());
 
@@ -41,7 +39,8 @@ class AnimatedWidgetExample extends StatefulWidget {
   State<AnimatedWidgetExample> createState() => _AnimatedWidgetExampleState();
 }
 
-class _AnimatedWidgetExampleState extends State<AnimatedWidgetExample> with TickerProviderStateMixin {
+class _AnimatedWidgetExampleState extends State<AnimatedWidgetExample>
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 10),
     vsync: this,

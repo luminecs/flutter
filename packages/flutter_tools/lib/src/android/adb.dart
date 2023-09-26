@@ -1,4 +1,3 @@
-
 final RegExp _whitespace = RegExp(r'\s+');
 
 String cleanAdbDeviceName(String name) {

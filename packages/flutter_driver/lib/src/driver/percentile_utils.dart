@@ -1,4 +1,3 @@
-
 double findPercentile(List<double> doubles, double p) {
   assert(doubles.isNotEmpty);
   doubles.sort();

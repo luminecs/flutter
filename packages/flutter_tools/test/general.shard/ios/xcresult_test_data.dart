@@ -1,4 +1,3 @@
-
 const String kSampleResultJsonInvalidIssuesMap = r'''
 {
   "_type" : {
@@ -368,7 +367,6 @@ const String kSampleResultJsonWithProvisionIssue = r'''
   }
 }
 ''';
-
 
 const String kSampleResultJsonWithActionIssues = r'''
 {

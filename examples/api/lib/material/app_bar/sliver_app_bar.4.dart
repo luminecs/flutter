@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() {
   runApp(const StretchableSliverAppBar());
@@ -47,7 +45,8 @@ class _StretchableSliverAppBarState extends State<StretchableSliverAppBar> {
                   color: index.isOdd ? Colors.white : Colors.black12,
                   height: 100.0,
                   child: Center(
-                    child: Text('$index', textScaler: const TextScaler.linear(5.0)),
+                    child: Text('$index',
+                        textScaler: const TextScaler.linear(5.0)),
                   ),
                 );
               },

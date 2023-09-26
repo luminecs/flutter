@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/html_utils.dart';
 
 import '../src/common.dart';
@@ -120,7 +119,8 @@ void main() {
   test('throws on invalid baseHref', () {
     expect(() => IndexHtml('<base href>').getBaseHref(), throwsToolExit());
     expect(() => IndexHtml('<base href="">').getBaseHref(), throwsToolExit());
-    expect(() => IndexHtml('<base href="foo/111">').getBaseHref(), throwsToolExit());
+    expect(() => IndexHtml('<base href="foo/111">').getBaseHref(),
+        throwsToolExit());
     expect(
       () => IndexHtml('<base href="foo/111/">').getBaseHref(),
       throwsToolExit(),

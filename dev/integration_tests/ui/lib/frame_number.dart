@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:math';
 
@@ -48,9 +47,8 @@ class _FirstFrameTimingsState extends State<_FirstFrameTimings> {
   }
 
   void _setMinFrameNumber(List<FrameTiming> timings) {
-    final int minFrameNumber = timings
-      .map((FrameTiming timing) => timing.frameNumber)
-      .reduce(min);
+    final int minFrameNumber =
+        timings.map((FrameTiming timing) => timing.frameNumber).reduce(min);
     setState(() {
       _minFrameNumber = minFrameNumber;
     });

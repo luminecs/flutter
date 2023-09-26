@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 
 void main() {
   runApp(
@@ -24,11 +22,13 @@ class CopyableText extends StatelessWidget {
 
   final String text;
 
-  void _copy(CopyTextIntent intent) => Clipboard.setData(ClipboardData(text: text));
+  void _copy(CopyTextIntent intent) =>
+      Clipboard.setData(ClipboardData(text: text));
 
   @override
   Widget build(BuildContext context) {
-    final Action<CopyTextIntent> defaultCopyAction = CallbackAction<CopyTextIntent>(onInvoke: _copy);
+    final Action<CopyTextIntent> defaultCopyAction =
+        CallbackAction<CopyTextIntent>(onInvoke: _copy);
     return Shortcuts(
       shortcuts: const <ShortcutActivator, Intent>{
         SingleActivator(LogicalKeyboardKey.keyC, control: true): copyTextIntent
@@ -37,7 +37,8 @@ class CopyableText extends StatelessWidget {
         actions: <Type, Action<Intent>>{
           // The Action is made overridable so the VerificationCodeGenerator
           // widget can override how copying is handled.
-          CopyTextIntent: Action<CopyTextIntent>.overridable(defaultAction: defaultCopyAction, context: context),
+          CopyTextIntent: Action<CopyTextIntent>.overridable(
+              defaultAction: defaultCopyAction, context: context),
         },
         child: Focus(
           autofocus: true,
@@ -62,7 +63,9 @@ class VerificationCodeGenerator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Actions(
-      actions: <Type, Action<Intent>>{CopyTextIntent: CallbackAction<CopyTextIntent>(onInvoke: _copy)},
+      actions: <Type, Action<Intent>>{
+        CopyTextIntent: CallbackAction<CopyTextIntent>(onInvoke: _copy)
+      },
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

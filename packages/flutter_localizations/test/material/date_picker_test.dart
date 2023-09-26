@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +16,8 @@ void main() {
 
   group(CalendarDatePicker, () {
     final intl.NumberFormat arabicNumbers = intl.NumberFormat('0', 'ar');
-    final Map<Locale, Map<String, dynamic>> testLocales = <Locale, Map<String, dynamic>>{
+    final Map<Locale, Map<String, dynamic>> testLocales =
+        <Locale, Map<String, dynamic>>{
       // Tests the default.
       const Locale('en', 'US'): <String, dynamic>{
         'textDirection': TextDirection.ltr,
@@ -28,7 +28,15 @@ void main() {
       // Tests a different first day of week.
       const Locale('ru', 'RU'): <String, dynamic>{
         'textDirection': TextDirection.ltr,
-        'expectedDaysOfWeek': <String>['В', 'П', 'В', 'С', 'Ч', 'П', 'С',],
+        'expectedDaysOfWeek': <String>[
+          'В',
+          'П',
+          'В',
+          'С',
+          'Ч',
+          'П',
+          'С',
+        ],
         'expectedDaysOfMonth': List<String>.generate(30, (int i) => '${i + 1}'),
         'expectedMonthYearHeader': 'сентябрь 2017 г.',
       },
@@ -42,25 +50,34 @@ void main() {
       const Locale('ar', 'AR'): <String, dynamic>{
         'textDirection': TextDirection.rtl,
         'expectedDaysOfWeek': <String>['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'],
-        'expectedDaysOfMonth': List<String>.generate(30, (int i) => arabicNumbers.format(i + 1)),
+        'expectedDaysOfMonth':
+            List<String>.generate(30, (int i) => arabicNumbers.format(i + 1)),
         'expectedMonthYearHeader': 'سبتمبر ٢٠١٧',
       },
     };
 
     for (final Locale locale in testLocales.keys) {
       testWidgets('shows dates for $locale', (WidgetTester tester) async {
-        final List<String> expectedDaysOfWeek = testLocales[locale]!['expectedDaysOfWeek'] as List<String>;
-        final List<String> expectedDaysOfMonth = testLocales[locale]!['expectedDaysOfMonth'] as List<String>;
-        final String expectedMonthYearHeader = testLocales[locale]!['expectedMonthYearHeader'] as String;
-        final TextDirection textDirection = testLocales[locale]!['textDirection'] as TextDirection;
+        final List<String> expectedDaysOfWeek =
+            testLocales[locale]!['expectedDaysOfWeek'] as List<String>;
+        final List<String> expectedDaysOfMonth =
+            testLocales[locale]!['expectedDaysOfMonth'] as List<String>;
+        final String expectedMonthYearHeader =
+            testLocales[locale]!['expectedMonthYearHeader'] as String;
+        final TextDirection textDirection =
+            testLocales[locale]!['textDirection'] as TextDirection;
         final DateTime baseDate = DateTime(2017, 9, 27);
 
-        await _pumpBoilerplate(tester, CalendarDatePicker(
-          initialDate: baseDate,
-          firstDate: baseDate.subtract(const Duration(days: 90)),
-          lastDate: baseDate.add(const Duration(days: 90)),
-          onDateChanged: (DateTime newValue) {},
-        ), locale: locale, textDirection: textDirection);
+        await _pumpBoilerplate(
+            tester,
+            CalendarDatePicker(
+              initialDate: baseDate,
+              firstDate: baseDate.subtract(const Duration(days: 90)),
+              lastDate: baseDate.add(const Duration(days: 90)),
+              onDateChanged: (DateTime newValue) {},
+            ),
+            locale: locale,
+            textDirection: textDirection);
 
         expect(find.text(expectedMonthYearHeader), findsOneWidget);
 
@@ -70,7 +87,8 @@ void main() {
 
         Offset? previousCellOffset;
         for (final String dayOfMonth in expectedDaysOfMonth) {
-          final Finder dayCell = find.descendant(of: find.byType(GridView), matching: find.text(dayOfMonth));
+          final Finder dayCell = find.descendant(
+              of: find.byType(GridView), matching: find.text(dayOfMonth));
           expect(dayCell, findsOneWidget);
 
           // Check that cells are correctly positioned relative to each other,
@@ -78,9 +96,17 @@ void main() {
           final Offset offset = tester.getCenter(dayCell);
           if (previousCellOffset != null) {
             if (textDirection == TextDirection.ltr) {
-              expect(offset.dx > previousCellOffset.dx && offset.dy == previousCellOffset.dy || offset.dy > previousCellOffset.dy, true);
+              expect(
+                  offset.dx > previousCellOffset.dx &&
+                          offset.dy == previousCellOffset.dy ||
+                      offset.dy > previousCellOffset.dy,
+                  true);
             } else {
-              expect(offset.dx < previousCellOffset.dx && offset.dy == previousCellOffset.dy || offset.dy > previousCellOffset.dy, true);
+              expect(
+                  offset.dx < previousCellOffset.dx &&
+                          offset.dy == previousCellOffset.dy ||
+                      offset.dy > previousCellOffset.dy,
+                  true);
             }
           }
           previousCellOffset = offset;
@@ -89,7 +115,8 @@ void main() {
     }
   });
 
-  testWidgets('locale parameter overrides ambient locale', (WidgetTester tester) async {
+  testWidgets('locale parameter overrides ambient locale',
+      (WidgetTester tester) async {
     Widget buildFrame(bool useMaterial3) {
       return MaterialApp(
         theme: ThemeData(useMaterial3: useMaterial3),
@@ -155,10 +182,10 @@ void main() {
     );
 
     await tester.tap(find.text('ANNULER'));
-
   });
 
-  testWidgets('textDirection parameter overrides ambient textDirection', (WidgetTester tester) async {
+  testWidgets('textDirection parameter overrides ambient textDirection',
+      (WidgetTester tester) async {
     Widget buildFrame(bool useMaterial3) {
       return MaterialApp(
         theme: ThemeData(useMaterial3: useMaterial3),
@@ -213,7 +240,8 @@ void main() {
     await tester.tap(find.text('CANCEL'));
   });
 
-  testWidgets('textDirection parameter takes precedence over locale parameter', (WidgetTester tester) async {
+  testWidgets('textDirection parameter takes precedence over locale parameter',
+      (WidgetTester tester) async {
     Widget buildFrame(bool useMaterial3) {
       return MaterialApp(
         theme: ThemeData(useMaterial3: useMaterial3),
@@ -292,59 +320,65 @@ void main() {
     const Size kCommonScreenSizePortrait = Size(1070, 1770);
     const Size kCommonScreenSizeLandscape = Size(1770, 1070);
 
-    Future<void> showPicker(WidgetTester tester, Locale locale, Size size) async {
+    Future<void> showPicker(
+        WidgetTester tester, Locale locale, Size size) async {
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (BuildContext context) {
-              return Localizations(
-                locale: locale,
-                delegates: GlobalMaterialLocalizations.delegates,
-                child: TextButton(
-                  child: const Text('X'),
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: initialDate,
-                      firstDate: firstDate,
-                      lastDate: lastDate,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        )
-      );
+      await tester.pumpWidget(MaterialApp(
+        home: Builder(
+          builder: (BuildContext context) {
+            return Localizations(
+              locale: locale,
+              delegates: GlobalMaterialLocalizations.delegates,
+              child: TextButton(
+                child: const Text('X'),
+                onPressed: () {
+                  showDatePicker(
+                    context: context,
+                    initialDate: initialDate,
+                    firstDate: firstDate,
+                    lastDate: lastDate,
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ));
       await tester.tap(find.text('X'));
       await tester.pumpAndSettle();
     }
 
     // Regression test for https://github.com/flutter/flutter/issues/20171
-    testWidgets('common screen size - portrait - Chinese', (WidgetTester tester) async {
-      await showPicker(tester, const Locale('zh', 'CN'), kCommonScreenSizePortrait);
+    testWidgets('common screen size - portrait - Chinese',
+        (WidgetTester tester) async {
+      await showPicker(
+          tester, const Locale('zh', 'CN'), kCommonScreenSizePortrait);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('common screen size - landscape - Chinese', (WidgetTester tester) async {
-      await showPicker(tester, const Locale('zh', 'CN'), kCommonScreenSizeLandscape);
+    testWidgets('common screen size - landscape - Chinese',
+        (WidgetTester tester) async {
+      await showPicker(
+          tester, const Locale('zh', 'CN'), kCommonScreenSizeLandscape);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('common screen size - portrait - Japanese', (WidgetTester tester) async {
-      await showPicker(tester, const Locale('ja', 'JA'), kCommonScreenSizePortrait);
+    testWidgets('common screen size - portrait - Japanese',
+        (WidgetTester tester) async {
+      await showPicker(
+          tester, const Locale('ja', 'JA'), kCommonScreenSizePortrait);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('common screen size - landscape - Japanese', (WidgetTester tester) async {
-      await showPicker(tester, const Locale('ja', 'JA'), kCommonScreenSizeLandscape);
+    testWidgets('common screen size - landscape - Japanese',
+        (WidgetTester tester) async {
+      await showPicker(
+          tester, const Locale('ja', 'JA'), kCommonScreenSizeLandscape);
       expect(tester.takeException(), isNull);
     });
   });
-
 }
 
 Future<void> _pumpBoilerplate(

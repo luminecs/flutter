@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/floating_action_button/floating_action_button.0.dart'
     as example;
@@ -19,7 +18,8 @@ void main() {
 
     Color? getIconColor() {
       final RichText iconRichText = tester.widget<RichText>(
-        find.descendant(of: find.byIcon(Icons.navigation), matching: find.byType(RichText)),
+        find.descendant(
+            of: find.byIcon(Icons.navigation), matching: find.byType(RichText)),
       );
       return iconRichText.text.style?.color;
     }

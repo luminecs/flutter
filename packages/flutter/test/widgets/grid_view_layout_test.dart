@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
@@ -28,9 +27,11 @@ void main() {
       ),
     );
 
-    expect(tester.renderObjectList<RenderBox>(find.byType(DecoratedBox)), hasLength(4));
+    expect(tester.renderObjectList<RenderBox>(find.byType(DecoratedBox)),
+        hasLength(4));
 
-    for (final RenderBox box in tester.renderObjectList<RenderBox>(find.byType(DecoratedBox))) {
+    for (final RenderBox box
+        in tester.renderObjectList<RenderBox>(find.byType(DecoratedBox))) {
       expect(box.size.width, equals(100.0), reason: 'child width');
       expect(box.size.height, equals(100.0), reason: 'child height');
     }
@@ -57,7 +58,8 @@ void main() {
       ),
     );
 
-    for (final RenderBox box in tester.renderObjectList<RenderBox>(find.byType(DecoratedBox))) {
+    for (final RenderBox box
+        in tester.renderObjectList<RenderBox>(find.byType(DecoratedBox))) {
       expect(box.size.width, equals(50.0), reason: 'child width');
       expect(box.size.height, equals(50.0), reason: 'child height');
     }

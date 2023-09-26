@@ -1,4 +1,3 @@
-
 import 'package:flutter/animation.dart';
 
 // BEGIN GENERATED TOKEN PROPERTIES - Motion
@@ -41,7 +40,6 @@ abstract final class Durations {
 
   static const Duration extralong4 = Duration(milliseconds: 1000);
 }
-
 
 // TODO(guidezpl): Improve with description and assets, b/289870605
 

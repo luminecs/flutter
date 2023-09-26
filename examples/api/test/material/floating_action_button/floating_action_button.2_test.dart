@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/floating_action_button/floating_action_button.2.dart'
     as example;

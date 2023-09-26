@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
@@ -15,7 +14,7 @@ class ShowLicenses extends StatelessWidget {
     BuildContext context,
     AsyncSnapshot<List<LicenseEntry>> snapshot,
   ) {
-    final List<LicenseEntry> entries = snapshot.data  ?? <LicenseEntry>[];
+    final List<LicenseEntry> entries = snapshot.data ?? <LicenseEntry>[];
     String flutterPackage = '';
     final List<String> flutterParagraphs = <String>[];
     String enginePackage = '';
@@ -39,11 +38,15 @@ class ShowLicenses extends StatelessWidget {
     result.addAll(<Widget>[
       const Text('License Check Test', key: ValueKey<String>('Header')),
       Text(flutterPackage, key: const ValueKey<String>('FlutterPackage')),
-      Text(flutterParagraphs.join(' '), key: const ValueKey<String>('FlutterLicense')),
-      Text('${flutterParagraphs.length}', key: const ValueKey<String>('FlutterCount')),
+      Text(flutterParagraphs.join(' '),
+          key: const ValueKey<String>('FlutterLicense')),
+      Text('${flutterParagraphs.length}',
+          key: const ValueKey<String>('FlutterCount')),
       Text(enginePackage, key: const ValueKey<String>('EnginePackage')),
-      Text(engineParagraphs.join(' '), key: const ValueKey<String>('EngineLicense')),
-      Text('${engineParagraphs.length}', key: const ValueKey<String>('EngineCount')),
+      Text(engineParagraphs.join(' '),
+          key: const ValueKey<String>('EngineLicense')),
+      Text('${engineParagraphs.length}',
+          key: const ValueKey<String>('EngineCount')),
     ]);
 
     return ListView(

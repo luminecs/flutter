@@ -1,4 +1,3 @@
-
 import 'package:conductor_core/src/proto/conductor_state.pbenum.dart';
 import 'package:conductor_core/src/version.dart';
 

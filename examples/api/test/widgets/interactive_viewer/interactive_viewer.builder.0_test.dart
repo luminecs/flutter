@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_api_samples/widgets/interactive_viewer/interactive_viewer.builder.0.dart'
     as example;

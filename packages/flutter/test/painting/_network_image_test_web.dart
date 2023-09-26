@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/painting/_network_image_web.dart';
@@ -44,7 +43,6 @@ void runTests() {
     final TestHttpRequest testHttpRequest = TestHttpRequest()
       ..status = 404
       ..mockEvent = MockEvent('error', web.Event('test error'));
-
 
     httpRequestFactory = () {
       return testHttpRequest.getMock();

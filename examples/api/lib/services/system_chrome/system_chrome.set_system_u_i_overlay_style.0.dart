@@ -1,9 +1,7 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 
 void main() => runApp(const SystemOverlayStyleApp());
 
@@ -26,7 +24,8 @@ class SystemOverlayStyleExample extends StatefulWidget {
   const SystemOverlayStyleExample({super.key});
 
   @override
-  State<SystemOverlayStyleExample> createState() => _SystemOverlayStyleExampleState();
+  State<SystemOverlayStyleExample> createState() =>
+      _SystemOverlayStyleExampleState();
 }
 
 class _SystemOverlayStyleExampleState extends State<SystemOverlayStyleExample> {

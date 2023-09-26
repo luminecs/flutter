@@ -1,5 +1,5 @@
-
-import 'package:native_assets_builder/native_assets_builder.dart' show BuildResult;
+import 'package:native_assets_builder/native_assets_builder.dart'
+    show BuildResult;
 import 'package:native_assets_cli/native_assets_cli.dart' hide BuildMode;
 import 'package:native_assets_cli/native_assets_cli.dart' as native_assets_cli;
 
@@ -15,13 +15,17 @@ Future<Uri?> dryRunNativeAssetsMacOS({
   bool flutterTester = false,
   required FileSystem fileSystem,
 }) async {
-  if (await hasNoPackageConfig(buildRunner) || await isDisabledAndNoNativeAssets(buildRunner)) {
+  if (await hasNoPackageConfig(buildRunner) ||
+      await isDisabledAndNoNativeAssets(buildRunner)) {
     return null;
   }
 
   final Uri buildUri_ = nativeAssetsBuildUri(projectUri, OS.macOS);
-  final Iterable<Asset> nativeAssetPaths = await dryRunNativeAssetsMacOSInternal(fileSystem, projectUri, flutterTester, buildRunner);
-  final Uri nativeAssetsUri = await writeNativeAssetsYaml(nativeAssetPaths, buildUri_, fileSystem);
+  final Iterable<Asset> nativeAssetPaths =
+      await dryRunNativeAssetsMacOSInternal(
+          fileSystem, projectUri, flutterTester, buildRunner);
+  final Uri nativeAssetsUri =
+      await writeNativeAssetsYaml(nativeAssetPaths, buildUri_, fileSystem);
   return nativeAssetsUri;
 }
 
@@ -45,7 +49,8 @@ Future<Iterable<Asset>> dryRunNativeAssetsMacOSInternal(
   ensureNoLinkModeStatic(nativeAssets);
   globals.logger.printTrace('Dry running native assets for $targetOs done.');
   final Uri? absolutePath = flutterTester ? buildUri_ : null;
-  final Map<Asset, Asset> assetTargetLocations = _assetTargetLocations(nativeAssets, absolutePath);
+  final Map<Asset, Asset> assetTargetLocations =
+      _assetTargetLocations(nativeAssets, absolutePath);
   final Iterable<Asset> nativeAssetPaths = assetTargetLocations.values;
   return nativeAssetPaths;
 }
@@ -62,15 +67,21 @@ Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsMacOS({
 }) async {
   const OS targetOs = OS.macOS;
   final Uri buildUri_ = nativeAssetsBuildUri(projectUri, targetOs);
-  if (await hasNoPackageConfig(buildRunner) || await isDisabledAndNoNativeAssets(buildRunner)) {
-    final Uri nativeAssetsYaml = await writeNativeAssetsYaml(<Asset>[], yamlParentDirectory ?? buildUri_, fileSystem);
+  if (await hasNoPackageConfig(buildRunner) ||
+      await isDisabledAndNoNativeAssets(buildRunner)) {
+    final Uri nativeAssetsYaml = await writeNativeAssetsYaml(
+        <Asset>[], yamlParentDirectory ?? buildUri_, fileSystem);
     return (nativeAssetsYaml, <Uri>[]);
   }
 
-  final List<Target> targets = darwinArchs != null ? darwinArchs.map(_getNativeTarget).toList() : <Target>[Target.current];
-  final native_assets_cli.BuildMode buildModeCli = nativeAssetsBuildMode(buildMode);
+  final List<Target> targets = darwinArchs != null
+      ? darwinArchs.map(_getNativeTarget).toList()
+      : <Target>[Target.current];
+  final native_assets_cli.BuildMode buildModeCli =
+      nativeAssetsBuildMode(buildMode);
 
-  globals.logger.printTrace('Building native assets for $targets $buildModeCli.');
+  globals.logger
+      .printTrace('Building native assets for $targets $buildModeCli.');
   final List<Asset> nativeAssets = <Asset>[];
   final Set<Uri> dependencies = <Uri>{};
   for (final Target target in targets) {
@@ -88,10 +99,16 @@ Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsMacOS({
   ensureNoLinkModeStatic(nativeAssets);
   globals.logger.printTrace('Building native assets for $targets done.');
   final Uri? absolutePath = flutterTester ? buildUri_ : null;
-  final Map<Asset, Asset> assetTargetLocations = _assetTargetLocations(nativeAssets, absolutePath);
-  final Map<AssetPath, List<Asset>> fatAssetTargetLocations = _fatAssetTargetLocations(nativeAssets, absolutePath);
-  await copyNativeAssetsMacOSHost(buildUri_, fatAssetTargetLocations, codesignIdentity, buildMode, fileSystem);
-  final Uri nativeAssetsUri = await writeNativeAssetsYaml(assetTargetLocations.values, yamlParentDirectory ?? buildUri_, fileSystem);
+  final Map<Asset, Asset> assetTargetLocations =
+      _assetTargetLocations(nativeAssets, absolutePath);
+  final Map<AssetPath, List<Asset>> fatAssetTargetLocations =
+      _fatAssetTargetLocations(nativeAssets, absolutePath);
+  await copyNativeAssetsMacOSHost(buildUri_, fatAssetTargetLocations,
+      codesignIdentity, buildMode, fileSystem);
+  final Uri nativeAssetsUri = await writeNativeAssetsYaml(
+      assetTargetLocations.values,
+      yamlParentDirectory ?? buildUri_,
+      fileSystem);
   return (nativeAssetsUri, dependencies.toList());
 }
 
@@ -106,7 +123,8 @@ Target _getNativeTarget(DarwinArch darwinArch) {
   }
 }
 
-Map<AssetPath, List<Asset>> _fatAssetTargetLocations(List<Asset> nativeAssets, Uri? absolutePath) {
+Map<AssetPath, List<Asset>> _fatAssetTargetLocations(
+    List<Asset> nativeAssets, Uri? absolutePath) {
   final Map<AssetPath, List<Asset>> result = <AssetPath, List<Asset>>{};
   for (final Asset asset in nativeAssets) {
     final AssetPath path = _targetLocationMacOS(asset, absolutePath).path;
@@ -116,10 +134,12 @@ Map<AssetPath, List<Asset>> _fatAssetTargetLocations(List<Asset> nativeAssets, U
   return result;
 }
 
-Map<Asset, Asset> _assetTargetLocations(List<Asset> nativeAssets, Uri? absolutePath) => <Asset, Asset>{
-  for (final Asset asset in nativeAssets)
-    asset: _targetLocationMacOS(asset, absolutePath),
-};
+Map<Asset, Asset> _assetTargetLocations(
+        List<Asset> nativeAssets, Uri? absolutePath) =>
+    <Asset, Asset>{
+      for (final Asset asset in nativeAssets)
+        asset: _targetLocationMacOS(asset, absolutePath),
+    };
 
 Asset _targetLocationMacOS(Asset asset, Uri? absolutePath) {
   final AssetPath path = asset.path;
@@ -142,5 +162,6 @@ Asset _targetLocationMacOS(Asset asset, Uri? absolutePath) {
       }
       return asset.copyWith(path: AssetAbsolutePath(uri));
   }
-  throw Exception('Unsupported asset path type ${path.runtimeType} in asset $asset');
+  throw Exception(
+      'Unsupported asset path type ${path.runtimeType} in asset $asset');
 }

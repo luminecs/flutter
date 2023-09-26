@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:fuchsia_remote_debug_protocol/fuchsia_remote_debug_protocol.dart';
@@ -21,7 +20,7 @@ class _DummyPortForwarder implements PortForwarder {
   String get openPortAddress => InternetAddress.loopbackIPv4.address;
 
   @override
-  Future<void> stop() async { }
+  Future<void> stop() async {}
 }
 
 class _DummySshCommandRunner implements SshCommandRunner {

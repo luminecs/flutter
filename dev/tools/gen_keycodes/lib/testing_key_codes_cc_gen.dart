@@ -1,4 +1,3 @@
-
 import 'package:path/path.dart' as path;
 
 import 'base_code_gen.dart';
@@ -23,7 +22,8 @@ constexpr uint64_t kPhysical${_toUpperCamel(entry.constantName)} = ${toHex(entry
   }
 
   String get _logicalDefinitions {
-    final OutputLines<int> lines = OutputLines<int>('Logical Key list', behavior: DeduplicateBehavior.kSkip);
+    final OutputLines<int> lines = OutputLines<int>('Logical Key list',
+        behavior: DeduplicateBehavior.kSkip);
     for (final LogicalKeyEntry entry in logicalData.entries) {
       lines.add(entry.value, '''
 constexpr uint64_t kLogical${_toUpperCamel(entry.constantName)} = ${toHex(entry.value, digits: 11)};''');

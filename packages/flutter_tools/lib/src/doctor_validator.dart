@@ -1,4 +1,3 @@
-
 import 'package:meta/meta.dart';
 
 import 'base/async_guard.dart';
@@ -113,26 +112,28 @@ class GroupedValidator extends DoctorValidator {
       mergedMessages.addAll(result.messages);
     }
 
-    return ValidationResult(mergedType, mergedMessages,
-        statusInfo: statusInfo);
+    return ValidationResult(mergedType, mergedMessages, statusInfo: statusInfo);
   }
 }
 
 @immutable
 class ValidationResult {
-  const ValidationResult(this.type, this.messages, { this.statusInfo });
+  const ValidationResult(this.type, this.messages, {this.statusInfo});
 
   factory ValidationResult.crash(Object error, [StackTrace? stackTrace]) {
-    return ValidationResult(ValidationType.crash, <ValidationMessage>[
-      const ValidationMessage.error(
-          'Due to an error, the doctor check did not complete. '
-          'If the error message below is not helpful, '
-          'please let us know about this issue at https://github.com/flutter/flutter/issues.'),
-      ValidationMessage.error('$error'),
-      if (stackTrace != null)
-          // Stacktrace is informational. Printed in verbose mode only.
-          ValidationMessage('$stackTrace'),
-    ], statusInfo: 'the doctor check crashed');
+    return ValidationResult(
+        ValidationType.crash,
+        <ValidationMessage>[
+          const ValidationMessage.error(
+              'Due to an error, the doctor check did not complete. '
+              'If the error message below is not helpful, '
+              'please let us know about this issue at https://github.com/flutter/flutter/issues.'),
+          ValidationMessage.error('$error'),
+          if (stackTrace != null)
+            // Stacktrace is informational. Printed in verbose mode only.
+            ValidationMessage('$stackTrace'),
+        ],
+        statusInfo: 'the doctor check crashed');
   }
 
   final ValidationType type;
@@ -191,18 +192,20 @@ class ValidationResult {
 
 @immutable
 class ValidationMessage {
-  const ValidationMessage(this.message, { this.contextUrl, String? piiStrippedMessage })
-      : type = ValidationMessageType.information, piiStrippedMessage = piiStrippedMessage ?? message;
+  const ValidationMessage(this.message,
+      {this.contextUrl, String? piiStrippedMessage})
+      : type = ValidationMessageType.information,
+        piiStrippedMessage = piiStrippedMessage ?? message;
 
-  const ValidationMessage.error(this.message, { String? piiStrippedMessage })
-    : type = ValidationMessageType.error,
-      piiStrippedMessage = piiStrippedMessage ?? message,
-      contextUrl = null;
+  const ValidationMessage.error(this.message, {String? piiStrippedMessage})
+      : type = ValidationMessageType.error,
+        piiStrippedMessage = piiStrippedMessage ?? message,
+        contextUrl = null;
 
-  const ValidationMessage.hint(this.message, { String? piiStrippedMessage })
-    : type = ValidationMessageType.hint,
-      piiStrippedMessage = piiStrippedMessage ?? message,
-      contextUrl = null;
+  const ValidationMessage.hint(this.message, {String? piiStrippedMessage})
+      : type = ValidationMessageType.hint,
+        piiStrippedMessage = piiStrippedMessage ?? message,
+        contextUrl = null;
 
   final ValidationMessageType type;
   final String? contextUrl;
@@ -242,10 +245,10 @@ class ValidationMessage {
 
   @override
   bool operator ==(Object other) {
-    return other is ValidationMessage
-        && other.message == message
-        && other.type == type
-        && other.contextUrl == contextUrl;
+    return other is ValidationMessage &&
+        other.message == message &&
+        other.type == type &&
+        other.contextUrl == contextUrl;
   }
 
   @override
@@ -260,7 +263,9 @@ class NoIdeValidator extends DoctorValidator {
     return ValidationResult(
       // Info hint to user they do not have a supported IDE installed
       ValidationType.notAvailable,
-      globals.userMessages.noIdeInstallationInfo.map((String ideInfo) => ValidationMessage(ideInfo)).toList(),
+      globals.userMessages.noIdeInstallationInfo
+          .map((String ideInfo) => ValidationMessage(ideInfo))
+          .toList(),
       statusInfo: globals.userMessages.noIdeStatusInfo,
     );
   }

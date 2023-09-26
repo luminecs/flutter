@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 final ThemeData kLightGalleryTheme = _buildLightTheme();

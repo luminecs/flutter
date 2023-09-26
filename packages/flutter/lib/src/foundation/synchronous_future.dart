@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 class SynchronousFuture<T> implements Future<T> {
@@ -15,10 +14,12 @@ class SynchronousFuture<T> implements Future<T> {
   }
 
   @override
-  Future<T> catchError(Function onError, { bool Function(Object error)? test }) => Completer<T>().future;
+  Future<T> catchError(Function onError, {bool Function(Object error)? test}) =>
+      Completer<T>().future;
 
   @override
-  Future<R> then<R>(FutureOr<R> Function(T value) onValue, { Function? onError }) {
+  Future<R> then<R>(FutureOr<R> Function(T value) onValue,
+      {Function? onError}) {
     final FutureOr<R> result = onValue(_value);
     if (result is Future<R>) {
       return result;
@@ -27,7 +28,7 @@ class SynchronousFuture<T> implements Future<T> {
   }
 
   @override
-  Future<T> timeout(Duration timeLimit, { FutureOr<T> Function()? onTimeout }) {
+  Future<T> timeout(Duration timeLimit, {FutureOr<T> Function()? onTimeout}) {
     return Future<T>.value(_value).timeout(timeLimit, onTimeout: onTimeout);
   }
 

@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -11,12 +10,12 @@ abstract class BinaryMessenger {
   const BinaryMessenger();
 
   @Deprecated(
-    'Instead of calling this method, use ServicesBinding.instance.channelBuffers.push. '
-    'In tests, consider using tester.binding.defaultBinaryMessenger.handlePlatformMessage '
-    'or TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage. '
-    'This feature was deprecated after v3.9.0-19.0.pre.'
-  )
-  Future<void> handlePlatformMessage(String channel, ByteData? data, ui.PlatformMessageResponseCallback? callback);
+      'Instead of calling this method, use ServicesBinding.instance.channelBuffers.push. '
+      'In tests, consider using tester.binding.defaultBinaryMessenger.handlePlatformMessage '
+      'or TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage. '
+      'This feature was deprecated after v3.9.0-19.0.pre.')
+  Future<void> handlePlatformMessage(String channel, ByteData? data,
+      ui.PlatformMessageResponseCallback? callback);
 
   Future<ByteData?>? send(String channel, ByteData? message);
 

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:isolate';
 
@@ -13,8 +12,11 @@ typedef OnResultListener = void Function(String result);
 // The choice of JSON parsing here is meant as an example that might surface
 // in real-world applications.
 class Calculator {
-  Calculator({ required this.onProgressListener, required this.onResultListener, String? data })
-    : _data = _replicateJson(data, 10000);
+  Calculator(
+      {required this.onProgressListener,
+      required this.onResultListener,
+      String? data})
+      : _data = _replicateJson(data, 10000);
 
   final OnProgressListener onProgressListener;
   final OnResultListener onResultListener;
@@ -60,11 +62,7 @@ class Calculator {
 }
 
 // The current state of the calculation.
-enum CalculationState {
-  idle,
-  loading,
-  calculating
-}
+enum CalculationState { idle, loading, calculating }
 
 // Structured message to initialize the spawned isolate.
 class CalculationMessage {
@@ -79,8 +77,9 @@ class CalculationMessage {
 // This class manages these ports and maintains state related to the
 // progress of the background computation.
 class CalculationManager {
-  CalculationManager({ required this.onProgressListener, required this.onResultListener })
-    : _receivePort = ReceivePort() {
+  CalculationManager(
+      {required this.onProgressListener, required this.onResultListener})
+      : _receivePort = ReceivePort() {
     _receivePort.listen(_handleMessage);
   }
 
@@ -130,10 +129,12 @@ class CalculationManager {
     // loaded.
     rootBundle.loadString('services/data.json').then<void>((String data) {
       if (isRunning) {
-        final CalculationMessage message = CalculationMessage(data, _receivePort.sendPort);
+        final CalculationMessage message =
+            CalculationMessage(data, _receivePort.sendPort);
         // Spawn an isolate to JSON-parse the file contents. The JSON parsing
         // is synchronous, so if done in the main isolate, the UI would block.
-        Isolate.spawn<CalculationMessage>(_calculate, message).then<void>((Isolate isolate) {
+        Isolate.spawn<CalculationMessage>(_calculate, message)
+            .then<void>((Isolate isolate) {
           if (!isRunning) {
             isolate.kill(priority: Isolate.immediate);
           } else {
@@ -172,7 +173,7 @@ class CalculationManager {
     final SendPort sender = message.sendPort;
     final Calculator calculator = Calculator(
       onProgressListener: (double completed, double total) {
-        sender.send(<double>[ completed, total ]);
+        sender.send(<double>[completed, total]);
       },
       onResultListener: sender.send,
       data: message.data,
@@ -197,8 +198,8 @@ class IsolateExampleWidget extends StatefulWidget {
 }
 
 // Main application state.
-class IsolateExampleState extends State<StatefulWidget> with SingleTickerProviderStateMixin {
-
+class IsolateExampleState extends State<StatefulWidget>
+    with SingleTickerProviderStateMixin {
   String _status = 'Idle';
   String _label = 'Start';
   String _result = ' ';

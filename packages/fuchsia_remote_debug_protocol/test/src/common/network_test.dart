@@ -1,4 +1,3 @@
-
 import 'package:fuchsia_remote_debug_protocol/src/common/network.dart';
 
 import 'package:test/test.dart';

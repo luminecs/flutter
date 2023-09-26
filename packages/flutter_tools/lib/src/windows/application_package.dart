@@ -1,4 +1,3 @@
-
 import 'package:archive/archive.dart';
 
 import '../application_package.dart';
@@ -38,11 +37,13 @@ abstract class WindowsApp extends ApplicationPackage {
     }
 
     // Try to unpack as a zip.
-    final Directory tempDir = globals.fs.systemTempDirectory.createTempSync('flutter_app.');
+    final Directory tempDir =
+        globals.fs.systemTempDirectory.createTempSync('flutter_app.');
     try {
       globals.os.unzip(globals.fs.file(applicationBinary), tempDir);
     } on ArchiveException {
-      globals.printError('Invalid prebuilt Windows app. Unable to extract from archive.');
+      globals.printError(
+          'Invalid prebuilt Windows app. Unable to extract from archive.');
       return null;
     }
     final List<FileSystemEntity> exeFilesFound = <FileSystemEntity>[];
@@ -58,7 +59,8 @@ abstract class WindowsApp extends ApplicationPackage {
     }
 
     if (exeFilesFound.length > 1) {
-      globals.printError('Archive "${applicationBinary.path}" contains more than one .exe files.');
+      globals.printError(
+          'Archive "${applicationBinary.path}" contains more than one .exe files.');
       return null;
     }
 
@@ -74,12 +76,13 @@ abstract class WindowsApp extends ApplicationPackage {
   String executable(BuildMode buildMode);
 }
 
-class PrebuiltWindowsApp extends WindowsApp implements PrebuiltApplicationPackage {
+class PrebuiltWindowsApp extends WindowsApp
+    implements PrebuiltApplicationPackage {
   PrebuiltWindowsApp({
     required String executable,
     required this.applicationPackage,
-  }) : _executable = executable,
-       super(projectBundleId: executable);
+  })  : _executable = executable,
+        super(projectBundleId: executable);
 
   final String _executable;
 
@@ -104,10 +107,10 @@ class BuildableWindowsApp extends WindowsApp {
   String executable(BuildMode buildMode) {
     final String? binaryName = getCmakeExecutableName(project);
     return globals.fs.path.join(
-        getWindowsBuildDirectory(TargetPlatform.windows_x64),
-        'runner',
-        sentenceCase(buildMode.cliName),
-        '$binaryName.exe',
+      getWindowsBuildDirectory(TargetPlatform.windows_x64),
+      'runner',
+      sentenceCase(buildMode.cliName),
+      '$binaryName.exe',
     );
   }
 

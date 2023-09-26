@@ -1,4 +1,3 @@
-
 import 'product.dart';
 
 List<Product> loadProducts(Category category) {

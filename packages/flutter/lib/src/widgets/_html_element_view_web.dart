@@ -1,4 +1,3 @@
-
 import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/foundation.dart';
@@ -18,8 +17,11 @@ extension HtmlElementViewImpl on HtmlElementView {
   }) {
     return HtmlElementView(
       key: key,
-      viewType: isVisible ? ui_web.PlatformViewRegistry.defaultVisibleViewType : ui_web.PlatformViewRegistry.defaultInvisibleViewType,
-      onPlatformViewCreated: _createPlatformViewCallbackForElementCallback(onElementCreated),
+      viewType: isVisible
+          ? ui_web.PlatformViewRegistry.defaultVisibleViewType
+          : ui_web.PlatformViewRegistry.defaultInvisibleViewType,
+      onPlatformViewCreated:
+          _createPlatformViewCallbackForElementCallback(onElementCreated),
       creationParams: <dynamic, dynamic>{'tagName': tagName},
     );
   }
@@ -28,7 +30,8 @@ extension HtmlElementViewImpl on HtmlElementView {
     return PlatformViewLink(
       viewType: viewType,
       onCreatePlatformView: _createController,
-      surfaceFactory: (BuildContext context, PlatformViewController controller) {
+      surfaceFactory:
+          (BuildContext context, PlatformViewController controller) {
         return PlatformViewSurface(
           controller: controller,
           gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
@@ -113,4 +116,5 @@ class _HtmlElementViewController extends PlatformViewController {
 
 @visibleForTesting
 ui_web.PlatformViewRegistry? debugOverridePlatformViewRegistry;
-ui_web.PlatformViewRegistry get _platformViewsRegistry => debugOverridePlatformViewRegistry ?? ui_web.platformViewRegistry;
+ui_web.PlatformViewRegistry get _platformViewsRegistry =>
+    debugOverridePlatformViewRegistry ?? ui_web.platformViewRegistry;

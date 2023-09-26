@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 // This is the type used by the popup menu below.
 enum SampleItem { itemOne, itemTwo, itemThree }

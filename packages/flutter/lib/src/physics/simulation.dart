@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'tolerance.dart';
@@ -6,7 +5,7 @@ import 'tolerance.dart';
 export 'tolerance.dart' show Tolerance;
 
 abstract class Simulation {
-  Simulation({ this.tolerance = Tolerance.defaultTolerance });
+  Simulation({this.tolerance = Tolerance.defaultTolerance});
 
   double x(double time);
 

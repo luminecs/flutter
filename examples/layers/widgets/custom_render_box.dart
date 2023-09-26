@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
@@ -37,7 +36,7 @@ class RenderDots extends RenderConstrainedBox {
 }
 
 class Dots extends SingleChildRenderObjectWidget {
-  const Dots({ super.key, super.child });
+  const Dots({super.key, super.child});
 
   @override
   RenderDots createRenderObject(BuildContext context) => RenderDots();

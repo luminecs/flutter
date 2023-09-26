@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:ui' as ui;
 
@@ -20,18 +19,21 @@ class TestImageProvider extends ImageProvider<TestImageProvider> {
   }
 
   @override
-  void resolveStreamForKey(ImageConfiguration config, ImageStream stream, TestImageProvider key, ImageErrorListener handleError) {
+  void resolveStreamForKey(ImageConfiguration config, ImageStream stream,
+      TestImageProvider key, ImageErrorListener handleError) {
     configuration = config;
     super.resolveStreamForKey(config, stream, key, handleError);
   }
 
   @override
-  ImageStreamCompleter loadBuffer(TestImageProvider key, DecoderBufferCallback decode) {
+  ImageStreamCompleter loadBuffer(
+      TestImageProvider key, DecoderBufferCallback decode) {
     throw UnsupportedError('Use ImageProvider.loadImage instead.');
   }
 
   @override
-  ImageStreamCompleter loadImage(TestImageProvider key, ImageDecoderCallback decode) {
+  ImageStreamCompleter loadImage(
+      TestImageProvider key, ImageDecoderCallback decode) {
     loadCallCount += 1;
     return OneFrameImageStreamCompleter(_completer.future);
   }

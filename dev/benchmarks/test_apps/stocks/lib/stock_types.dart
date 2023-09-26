@@ -1,5 +1,5 @@
-
 enum StockMode { optimistic, pessimistic }
+
 enum BackupMode { enabled, disabled }
 
 class StockConfiguration {
@@ -48,8 +48,10 @@ class StockConfiguration {
       debugShowLayers: debugShowLayers ?? this.debugShowLayers,
       debugShowPointers: debugShowPointers ?? this.debugShowPointers,
       debugShowRainbow: debugShowRainbow ?? this.debugShowRainbow,
-      showPerformanceOverlay: showPerformanceOverlay ?? this.showPerformanceOverlay,
-      showSemanticsDebugger: showSemanticsDebugger ?? this.showSemanticsDebugger,
+      showPerformanceOverlay:
+          showPerformanceOverlay ?? this.showPerformanceOverlay,
+      showSemanticsDebugger:
+          showSemanticsDebugger ?? this.showSemanticsDebugger,
     );
   }
 }

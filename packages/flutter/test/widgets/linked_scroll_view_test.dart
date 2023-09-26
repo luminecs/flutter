@@ -1,4 +1,3 @@
-
 // This file contains a wacky demonstration of creating a custom ScrollPosition
 // setup. It's testing that we don't regress the factoring of the
 // ScrollPosition/ScrollActivity logic into a state where you can no longer
@@ -14,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 class LinkedScrollController extends ScrollController {
-  LinkedScrollController({ this.before, this.after });
+  LinkedScrollController({this.before, this.after});
 
   LinkedScrollController? before;
   LinkedScrollController? after;
@@ -33,9 +32,12 @@ class LinkedScrollController extends ScrollController {
 
   @override
   void attach(ScrollPosition position) {
-    assert(position is LinkedScrollPosition, 'A LinkedScrollController must only be used with LinkedScrollPositions.');
-    final LinkedScrollPosition linkedPosition = position as LinkedScrollPosition;
-    assert(linkedPosition.owner == this, 'A LinkedScrollPosition cannot change controllers once created.');
+    assert(position is LinkedScrollPosition,
+        'A LinkedScrollController must only be used with LinkedScrollPositions.');
+    final LinkedScrollPosition linkedPosition =
+        position as LinkedScrollPosition;
+    assert(linkedPosition.owner == this,
+        'A LinkedScrollPosition cannot change controllers once created.');
     super.attach(position);
     _parent?.attach(position);
   }
@@ -55,7 +57,8 @@ class LinkedScrollController extends ScrollController {
   }
 
   @override
-  LinkedScrollPosition createScrollPosition(ScrollPhysics physics, ScrollContext context, ScrollPosition? oldPosition) {
+  LinkedScrollPosition createScrollPosition(ScrollPhysics physics,
+      ScrollContext context, ScrollPosition? oldPosition) {
     return LinkedScrollPosition(
       this,
       physics: physics,
@@ -81,7 +84,8 @@ class LinkedScrollController extends ScrollController {
 
   Iterable<LinkedScrollActivity> link(LinkedScrollPosition driver) sync* {
     assert(hasClients);
-    for (final LinkedScrollPosition position in positions.cast<LinkedScrollPosition>()) {
+    for (final LinkedScrollPosition position
+        in positions.cast<LinkedScrollPosition>()) {
       yield position.link(driver);
     }
   }
@@ -99,7 +103,6 @@ class LinkedScrollController extends ScrollController {
       description.add('links: none');
     }
   }
-
 }
 
 class LinkedScrollPosition extends ScrollPositionWithSingleContext {
@@ -138,7 +141,8 @@ class LinkedScrollPosition extends ScrollPositionWithSingleContext {
 
   @override
   void applyUserOffset(double delta) {
-    updateUserScrollDirection(delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse);
+    updateUserScrollDirection(
+        delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse);
     final double value = pixels - physics.applyPhysicsToUserOffset(this, delta);
 
     if (value == pixels) {
@@ -174,7 +178,8 @@ class LinkedScrollPosition extends ScrollPositionWithSingleContext {
       owner.canLinkWithAfter ? maxScrollExtent : double.infinity,
     ));
 
-    assert(localOverscroll == 0.0 || (beforeOverscroll == 0.0 && afterOverscroll == 0.0));
+    assert(localOverscroll == 0.0 ||
+        (beforeOverscroll == 0.0 && afterOverscroll == 0.0));
   }
 
   void _userMoved(ScrollDirection direction) {
@@ -185,7 +190,8 @@ class LinkedScrollPosition extends ScrollPositionWithSingleContext {
     if (this.activity is! LinkedScrollActivity) {
       beginActivity(LinkedScrollActivity(this));
     }
-    final LinkedScrollActivity? activity = this.activity as LinkedScrollActivity?;
+    final LinkedScrollActivity? activity =
+        this.activity as LinkedScrollActivity?;
     activity!.link(driver);
     return activity;
   }
@@ -264,7 +270,7 @@ class LinkedScrollActivity extends ScrollActivity {
 }
 
 class Test extends StatefulWidget {
-  const Test({ super.key });
+  const Test({super.key});
   @override
   State<Test> createState() => _TestState();
 }
@@ -379,7 +385,8 @@ class _TestState extends State<Test> {
 }
 
 void main() {
-  testWidgetsWithLeakTracking('LinkedScrollController - 1', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('LinkedScrollController - 1',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const Test());
     expect(find.text('Hello A'), findsOneWidget);
     expect(find.text('Hello 1'), findsOneWidget);
@@ -457,7 +464,8 @@ void main() {
     expect(find.text('Hello D'), findsNothing);
     expect(find.text('Hello 4'), findsOneWidget);
   });
-  testWidgetsWithLeakTracking('LinkedScrollController - 2', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('LinkedScrollController - 2',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const Test());
     expect(find.text('Hello A'), findsOneWidget);
     expect(find.text('Hello B'), findsOneWidget);
@@ -467,8 +475,10 @@ void main() {
     expect(find.text('Hello 2'), findsOneWidget);
     expect(find.text('Hello 3'), findsNothing);
     expect(find.text('Hello 4'), findsNothing);
-    final TestGesture gestureTop = await tester.startGesture(const Offset(200.0, 150.0));
-    final TestGesture gestureBottom = await tester.startGesture(const Offset(600.0, 450.0));
+    final TestGesture gestureTop =
+        await tester.startGesture(const Offset(200.0, 150.0));
+    final TestGesture gestureBottom =
+        await tester.startGesture(const Offset(600.0, 450.0));
     await tester.pump(const Duration(seconds: 1));
     await gestureTop.moveBy(const Offset(0.0, -270.0));
     await tester.pump(const Duration(seconds: 1));

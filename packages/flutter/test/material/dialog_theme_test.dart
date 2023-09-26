@@ -1,4 +1,3 @@
-
 // This file is run as part of a reduced test set in CI on Mac and Windows
 // machines.
 @Tags(<String>['reduced-test-set'])
@@ -10,7 +9,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
-MaterialApp _appWithDialog(WidgetTester tester, Widget dialog, { ThemeData? theme }) {
+MaterialApp _appWithDialog(WidgetTester tester, Widget dialog,
+    {ThemeData? theme}) {
   return MaterialApp(
     theme: theme,
     home: Material(
@@ -38,11 +38,13 @@ MaterialApp _appWithDialog(WidgetTester tester, Widget dialog, { ThemeData? them
 final Key _painterKey = UniqueKey();
 
 Material _getMaterialFromDialog(WidgetTester tester) {
-  return tester.widget<Material>(find.descendant(of: find.byType(AlertDialog), matching: find.byType(Material)));
+  return tester.widget<Material>(find.descendant(
+      of: find.byType(AlertDialog), matching: find.byType(Material)));
 }
 
 RenderParagraph _getTextRenderObject(WidgetTester tester, String text) {
-  return tester.element<StatelessElement>(find.text(text)).renderObject! as RenderParagraph;
+  return tester.element<StatelessElement>(find.text(text)).renderObject!
+      as RenderParagraph;
 }
 
 void main() {
@@ -52,7 +54,8 @@ void main() {
     expect(identical(DialogTheme.lerp(theme, theme, 0.5), theme), true);
   });
 
-  testWidgetsWithLeakTracking('Dialog Theme implements debugFillProperties', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Dialog Theme implements debugFillProperties',
+      (WidgetTester tester) async {
     final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
     const DialogTheme(
       backgroundColor: Color(0xff123456),
@@ -67,7 +70,8 @@ void main() {
     ).debugFillProperties(builder);
     final List<String> description = builder.properties
         .where((DiagnosticsNode n) => !n.isFiltered(DiagnosticLevel.info))
-        .map((DiagnosticsNode n) => n.toString()).toList();
+        .map((DiagnosticsNode n) => n.toString())
+        .toList();
     expect(description, <String>[
       'backgroundColor: Color(0xff123456)',
       'elevation: 8.0',
@@ -81,13 +85,15 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Dialog background color', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Dialog background color',
+      (WidgetTester tester) async {
     const Color customColor = Colors.pink;
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
-    final ThemeData theme = ThemeData(dialogTheme: const DialogTheme(backgroundColor: customColor));
+    final ThemeData theme =
+        ThemeData(dialogTheme: const DialogTheme(backgroundColor: customColor));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -97,13 +103,14 @@ void main() {
     expect(materialWidget.color, customColor);
   });
 
-  testWidgetsWithLeakTracking('Custom dialog elevation', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Custom dialog elevation',
+      (WidgetTester tester) async {
     const double customElevation = 12.0;
     const Color shadowColor = Color(0xFF000001);
     const Color surfaceTintColor = Color(0xFF000002);
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
     final ThemeData theme = ThemeData(
       dialogTheme: const DialogTheme(
@@ -125,14 +132,16 @@ void main() {
     expect(materialWidget.surfaceTintColor, surfaceTintColor);
   });
 
-  testWidgetsWithLeakTracking('Custom dialog shape', (WidgetTester tester) async {
-    const RoundedRectangleBorder customBorder =
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0)));
+  testWidgetsWithLeakTracking('Custom dialog shape',
+      (WidgetTester tester) async {
+    const RoundedRectangleBorder customBorder = RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16.0)));
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
-    final ThemeData theme = ThemeData(dialogTheme: const DialogTheme(shape: customBorder));
+    final ThemeData theme =
+        ThemeData(dialogTheme: const DialogTheme(shape: customBorder));
 
     await tester.pumpWidget(
       _appWithDialog(tester, dialog, theme: theme),
@@ -144,12 +153,14 @@ void main() {
     expect(materialWidget.shape, customBorder);
   });
 
-  testWidgetsWithLeakTracking('Custom dialog alignment', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Custom dialog alignment',
+      (WidgetTester tester) async {
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
-    final ThemeData theme = ThemeData(dialogTheme: const DialogTheme(alignment: Alignment.bottomLeft));
+    final ThemeData theme = ThemeData(
+        dialogTheme: const DialogTheme(alignment: Alignment.bottomLeft));
 
     await tester.pumpWidget(
       _appWithDialog(tester, dialog, theme: theme),
@@ -164,10 +175,12 @@ void main() {
     expect(bottomLeft.dy, 576.0);
   });
 
-  testWidgetsWithLeakTracking('Material3 - Dialog alignment takes priority over theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material3 - Dialog alignment takes priority over theme',
+      (WidgetTester tester) async {
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
       alignment: Alignment.topRight,
     );
     final ThemeData theme = ThemeData(
@@ -185,18 +198,23 @@ void main() {
       find.descendant(of: find.byType(Dialog), matching: find.byType(Material)),
     );
     expect(bottomLeft.dx, 480.0);
-    if (!kIsWeb || isCanvasKit) { // https://github.com/flutter/flutter/issues/99933
+    if (!kIsWeb || isCanvasKit) {
+      // https://github.com/flutter/flutter/issues/99933
       expect(bottomLeft.dy, 124.0);
     }
   });
 
-  testWidgetsWithLeakTracking('Material2 - Dialog alignment takes priority over theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material2 - Dialog alignment takes priority over theme',
+      (WidgetTester tester) async {
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
       alignment: Alignment.topRight,
     );
-    final ThemeData theme = ThemeData(useMaterial3: false, dialogTheme: const DialogTheme(alignment: Alignment.bottomLeft));
+    final ThemeData theme = ThemeData(
+        useMaterial3: false,
+        dialogTheme: const DialogTheme(alignment: Alignment.bottomLeft));
 
     await tester.pumpWidget(
       _appWithDialog(tester, dialog, theme: theme),
@@ -211,12 +229,13 @@ void main() {
     expect(bottomLeft.dy, 104.0);
   });
 
-  testWidgetsWithLeakTracking('Material3 - Custom dialog shape matches golden', (WidgetTester tester) async {
-    const RoundedRectangleBorder customBorder =
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0)));
+  testWidgetsWithLeakTracking('Material3 - Custom dialog shape matches golden',
+      (WidgetTester tester) async {
+    const RoundedRectangleBorder customBorder = RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16.0)));
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
     final ThemeData theme = ThemeData(
       useMaterial3: true,
@@ -233,14 +252,17 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Material2 - Custom dialog shape matches golden', (WidgetTester tester) async {
-    const RoundedRectangleBorder customBorder =
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0)));
+  testWidgetsWithLeakTracking('Material2 - Custom dialog shape matches golden',
+      (WidgetTester tester) async {
+    const RoundedRectangleBorder customBorder = RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16.0)));
     const AlertDialog dialog = AlertDialog(
       title: Text('Title'),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
-    final ThemeData theme = ThemeData(useMaterial3: false, dialogTheme: const DialogTheme(shape: customBorder));
+    final ThemeData theme = ThemeData(
+        useMaterial3: false,
+        dialogTheme: const DialogTheme(shape: customBorder));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -252,8 +274,12 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Custom Icon Color - Constructor Param - highest preference', (WidgetTester tester) async {
-    const Color iconColor = Colors.pink, dialogThemeColor = Colors.green, iconThemeColor = Colors.yellow;
+  testWidgetsWithLeakTracking(
+      'Custom Icon Color - Constructor Param - highest preference',
+      (WidgetTester tester) async {
+    const Color iconColor = Colors.pink,
+        dialogThemeColor = Colors.green,
+        iconThemeColor = Colors.yellow;
     final ThemeData theme = ThemeData(
       iconTheme: const IconThemeData(color: iconThemeColor),
       dialogTheme: const DialogTheme(iconColor: dialogThemeColor),
@@ -261,7 +287,7 @@ void main() {
     const AlertDialog dialog = AlertDialog(
       icon: Icon(Icons.ac_unit),
       iconColor: iconColor,
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
@@ -273,7 +299,9 @@ void main() {
     expect(text.text.style!.color, iconColor);
   });
 
-  testWidgetsWithLeakTracking('Custom Icon Color - Dialog Theme - preference over Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Custom Icon Color - Dialog Theme - preference over Theme',
+      (WidgetTester tester) async {
     const Color dialogThemeColor = Colors.green, iconThemeColor = Colors.yellow;
     final ThemeData theme = ThemeData(
       iconTheme: const IconThemeData(color: iconThemeColor),
@@ -281,7 +309,7 @@ void main() {
     );
     const AlertDialog dialog = AlertDialog(
       icon: Icon(Icons.ac_unit),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
@@ -293,11 +321,13 @@ void main() {
     expect(text.text.style!.color, dialogThemeColor);
   });
 
-  testWidgetsWithLeakTracking('Material3 - Custom Icon Color - Theme - lowest preference', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material3 - Custom Icon Color - Theme - lowest preference',
+      (WidgetTester tester) async {
     final ThemeData theme = ThemeData(useMaterial3: true);
     const AlertDialog dialog = AlertDialog(
       icon: Icon(Icons.ac_unit),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
@@ -309,12 +339,16 @@ void main() {
     expect(text.text.style!.color, theme.colorScheme.secondary);
   });
 
-  testWidgetsWithLeakTracking('Material2 - Custom Icon Color - Theme - lowest preference', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material2 - Custom Icon Color - Theme - lowest preference',
+      (WidgetTester tester) async {
     const Color iconThemeColor = Colors.yellow;
-    final ThemeData theme = ThemeData(useMaterial3: false, iconTheme: const IconThemeData(color: iconThemeColor));
+    final ThemeData theme = ThemeData(
+        useMaterial3: false,
+        iconTheme: const IconThemeData(color: iconThemeColor));
     const AlertDialog dialog = AlertDialog(
       icon: Icon(Icons.ac_unit),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
@@ -326,13 +360,14 @@ void main() {
     expect(text.text.style!.color, iconThemeColor);
   });
 
-  testWidgetsWithLeakTracking('Custom Title Text Style - Constructor Param', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Custom Title Text Style - Constructor Param',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(
       title: Text(titleText),
       titleTextStyle: titleTextStyle,
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
 
     await tester.pumpWidget(_appWithDialog(tester, dialog));
@@ -343,14 +378,16 @@ void main() {
     expect(title.text.style, titleTextStyle);
   });
 
-  testWidgetsWithLeakTracking('Custom Title Text Style - Dialog Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Custom Title Text Style - Dialog Theme',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(
       title: Text(titleText),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
-    final ThemeData theme = ThemeData(dialogTheme: const DialogTheme(titleTextStyle: titleTextStyle));
+    final ThemeData theme = ThemeData(
+        dialogTheme: const DialogTheme(titleTextStyle: titleTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -360,11 +397,14 @@ void main() {
     expect(title.text.style, titleTextStyle);
   });
 
-  testWidgetsWithLeakTracking('Material3 - Custom Title Text Style - Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material3 - Custom Title Text Style - Theme',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(title: Text(titleText));
-    final ThemeData theme = ThemeData(useMaterial3: true, textTheme: const TextTheme(headlineSmall: titleTextStyle));
+    final ThemeData theme = ThemeData(
+        useMaterial3: true,
+        textTheme: const TextTheme(headlineSmall: titleTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -374,11 +414,14 @@ void main() {
     expect(title.text.style!.color, titleTextStyle.color);
   });
 
-  testWidgetsWithLeakTracking('Material2 - Custom Title Text Style - Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material2 - Custom Title Text Style - Theme',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(title: Text(titleText));
-    final ThemeData theme = ThemeData(useMaterial3: false, textTheme: const TextTheme(titleLarge: titleTextStyle));
+    final ThemeData theme = ThemeData(
+        useMaterial3: false,
+        textTheme: const TextTheme(titleLarge: titleTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -388,7 +431,9 @@ void main() {
     expect(title.text.style!.color, titleTextStyle.color);
   });
 
-  testWidgetsWithLeakTracking('Simple Dialog - Custom Title Text Style - Constructor Param', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Simple Dialog - Custom Title Text Style - Constructor Param',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const SimpleDialog dialog = SimpleDialog(
@@ -404,13 +449,16 @@ void main() {
     expect(title.text.style, titleTextStyle);
   });
 
-  testWidgetsWithLeakTracking('Simple Dialog - Custom Title Text Style - Dialog Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Simple Dialog - Custom Title Text Style - Dialog Theme',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const SimpleDialog dialog = SimpleDialog(
       title: Text(titleText),
     );
-    final ThemeData theme = ThemeData(dialogTheme: const DialogTheme(titleTextStyle: titleTextStyle));
+    final ThemeData theme = ThemeData(
+        dialogTheme: const DialogTheme(titleTextStyle: titleTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -420,13 +468,15 @@ void main() {
     expect(title.text.style, titleTextStyle);
   });
 
-  testWidgetsWithLeakTracking('Simple Dialog - Custom Title Text Style - Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Simple Dialog - Custom Title Text Style - Theme',
+      (WidgetTester tester) async {
     const String titleText = 'Title';
     const TextStyle titleTextStyle = TextStyle(color: Colors.pink);
     const SimpleDialog dialog = SimpleDialog(
       title: Text(titleText),
     );
-    final ThemeData theme = ThemeData(textTheme: const TextTheme(titleLarge: titleTextStyle));
+    final ThemeData theme =
+        ThemeData(textTheme: const TextTheme(titleLarge: titleTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -436,13 +486,14 @@ void main() {
     expect(title.text.style!.color, titleTextStyle.color);
   });
 
-  testWidgetsWithLeakTracking('Custom Content Text Style - Constructor Param', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Custom Content Text Style - Constructor Param',
+      (WidgetTester tester) async {
     const String contentText = 'Content';
     const TextStyle contentTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(
       content: Text(contentText),
       contentTextStyle: contentTextStyle,
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
 
     await tester.pumpWidget(_appWithDialog(tester, dialog));
@@ -453,14 +504,16 @@ void main() {
     expect(content.text.style, contentTextStyle);
   });
 
-  testWidgetsWithLeakTracking('Custom Content Text Style - Dialog Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Custom Content Text Style - Dialog Theme',
+      (WidgetTester tester) async {
     const String contentText = 'Content';
     const TextStyle contentTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(
       content: Text(contentText),
-      actions: <Widget>[ ],
+      actions: <Widget>[],
     );
-    final ThemeData theme = ThemeData(dialogTheme: const DialogTheme(contentTextStyle: contentTextStyle));
+    final ThemeData theme = ThemeData(
+        dialogTheme: const DialogTheme(contentTextStyle: contentTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -470,11 +523,16 @@ void main() {
     expect(content.text.style, contentTextStyle);
   });
 
-  testWidgetsWithLeakTracking('Material3 - Custom Content Text Style - Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material3 - Custom Content Text Style - Theme',
+      (WidgetTester tester) async {
     const String contentText = 'Content';
     const TextStyle contentTextStyle = TextStyle(color: Colors.pink);
-    const AlertDialog dialog = AlertDialog(content: Text(contentText),);
-    final ThemeData theme = ThemeData(useMaterial3: true, textTheme: const TextTheme(bodyMedium: contentTextStyle));
+    const AlertDialog dialog = AlertDialog(
+      content: Text(contentText),
+    );
+    final ThemeData theme = ThemeData(
+        useMaterial3: true,
+        textTheme: const TextTheme(bodyMedium: contentTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));
@@ -484,11 +542,14 @@ void main() {
     expect(content.text.style!.color, contentTextStyle.color);
   });
 
-  testWidgetsWithLeakTracking('Material2 - Custom Content Text Style - Theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material2 - Custom Content Text Style - Theme',
+      (WidgetTester tester) async {
     const String contentText = 'Content';
     const TextStyle contentTextStyle = TextStyle(color: Colors.pink);
     const AlertDialog dialog = AlertDialog(content: Text(contentText));
-    final ThemeData theme = ThemeData(useMaterial3: false, textTheme: const TextTheme(titleMedium: contentTextStyle));
+    final ThemeData theme = ThemeData(
+        useMaterial3: false,
+        textTheme: const TextTheme(titleMedium: contentTextStyle));
 
     await tester.pumpWidget(_appWithDialog(tester, dialog, theme: theme));
     await tester.tap(find.text('X'));

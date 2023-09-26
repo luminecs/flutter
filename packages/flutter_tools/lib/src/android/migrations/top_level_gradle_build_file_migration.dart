@@ -1,4 +1,3 @@
-
 import '../../base/file_system.dart';
 import '../../base/project_migrator.dart';
 import '../../project.dart';
@@ -19,14 +18,16 @@ class TopLevelGradleBuildFileMigration extends ProjectMigrator {
   TopLevelGradleBuildFileMigration(
     AndroidProject project,
     super.logger,
-  ) : _topLevelGradleBuildFile = project.hostAppGradleRoot.childFile('build.gradle');
+  ) : _topLevelGradleBuildFile =
+            project.hostAppGradleRoot.childFile('build.gradle');
 
   final File _topLevelGradleBuildFile;
 
   @override
   void migrate() {
     if (!_topLevelGradleBuildFile.existsSync()) {
-      logger.printTrace('Top-level Gradle build file not found, skipping migration of task "clean".');
+      logger.printTrace(
+          'Top-level Gradle build file not found, skipping migration of task "clean".');
       return;
     }
 
@@ -41,7 +42,8 @@ class TopLevelGradleBuildFileMigration extends ProjectMigrator {
     );
 
     if (newContents != fileContents) {
-      logger.printTrace('Migrating "clean" Gradle task to lazy declaration style.');
+      logger.printTrace(
+          'Migrating "clean" Gradle task to lazy declaration style.');
     }
 
     return newContents;

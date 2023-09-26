@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const UnfocusExampleApp());
 
@@ -49,7 +47,8 @@ class _UnfocusExampleState extends State<UnfocusExample> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                ...List<Widget>.generate(UnfocusDisposition.values.length, (int index) {
+                ...List<Widget>.generate(UnfocusDisposition.values.length,
+                    (int index) {
                   return Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[

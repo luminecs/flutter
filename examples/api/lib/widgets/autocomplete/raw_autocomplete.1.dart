@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const AutocompleteExampleApp());
 
@@ -68,7 +66,9 @@ class AutocompleteCustomTypeExample extends StatelessWidget {
         return _userOptions.where((User option) {
           // Search based on User.toString, which includes both name and
           // email, even though the display string is just the name.
-          return option.toString().contains(textEditingValue.text.toLowerCase());
+          return option
+              .toString()
+              .contains(textEditingValue.text.toLowerCase());
         });
       },
       displayStringForOption: _displayStringForOption,
@@ -86,7 +86,8 @@ class AutocompleteCustomTypeExample extends StatelessWidget {
           },
         );
       },
-      optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<User> onSelected, Iterable<User> options) {
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<User> onSelected, Iterable<User> options) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(

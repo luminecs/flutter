@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const TooltipExampleApp());
 
@@ -29,7 +27,8 @@ class TooltipSample extends StatelessWidget {
       message: 'I am a Tooltip',
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        gradient: const LinearGradient(colors: <Color>[Colors.amber, Colors.red]),
+        gradient:
+            const LinearGradient(colors: <Color>[Colors.amber, Colors.red]),
       ),
       height: 50,
       padding: const EdgeInsets.all(8.0),

@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -25,7 +24,8 @@ class SuggestionSpan {
   }
 
   @override
-  int get hashCode => Object.hash(range.start, range.end, Object.hashAll(suggestions));
+  int get hashCode =>
+      Object.hash(range.start, range.end, Object.hashAll(suggestions));
 }
 
 @immutable
@@ -39,7 +39,7 @@ class SpellCheckResults {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
-        return true;
+      return true;
     }
 
     return other is SpellCheckResults &&
@@ -48,13 +48,13 @@ class SpellCheckResults {
   }
 
   @override
-  int get hashCode => Object.hash(spellCheckedText, Object.hashAll(suggestionSpans));
+  int get hashCode =>
+      Object.hash(spellCheckedText, Object.hashAll(suggestionSpans));
 }
 
 abstract class SpellCheckService {
   Future<List<SuggestionSpan>?> fetchSpellCheckSuggestions(
-    Locale locale, String text
-  );
+      Locale locale, String text);
 }
 
 class DefaultSpellCheckService implements SpellCheckService {
@@ -104,7 +104,6 @@ class DefaultSpellCheckService implements SpellCheckService {
   @override
   Future<List<SuggestionSpan>?> fetchSpellCheckSuggestions(
       Locale locale, String text) async {
-
     final List<dynamic> rawResults;
     final String languageTag = locale.toLanguageTag();
 
@@ -122,15 +121,13 @@ class DefaultSpellCheckService implements SpellCheckService {
 
     for (final dynamic result in rawResults) {
       final Map<String, dynamic> resultMap =
-        Map<String,dynamic>.from(result as Map<dynamic, dynamic>);
-      suggestionSpans.add(
-        SuggestionSpan(
-          TextRange(
+          Map<String, dynamic>.from(result as Map<dynamic, dynamic>);
+      suggestionSpans.add(SuggestionSpan(
+        TextRange(
             start: resultMap['startIndex'] as int,
             end: resultMap['endIndex'] as int),
-          (resultMap['suggestions'] as List<dynamic>).cast<String>(),
-        )
-      );
+        (resultMap['suggestions'] as List<dynamic>).cast<String>(),
+      ));
     }
 
     if (lastSavedResults != null) {
@@ -141,7 +138,8 @@ class DefaultSpellCheckService implements SpellCheckService {
           listEquals(lastSavedResults!.suggestionSpans, suggestionSpans);
 
       if (textHasNotChanged && spansHaveChanged) {
-        suggestionSpans = mergeResults(lastSavedResults!.suggestionSpans, suggestionSpans);
+        suggestionSpans =
+            mergeResults(lastSavedResults!.suggestionSpans, suggestionSpans);
       }
     }
     lastSavedResults = SpellCheckResults(text, suggestionSpans);

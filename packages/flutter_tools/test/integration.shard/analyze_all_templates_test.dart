@@ -1,4 +1,3 @@
-
 import 'package:file/file.dart';
 import 'package:flutter_tools/src/base/io.dart';
 import 'package:flutter_tools/src/globals.dart' as globals;

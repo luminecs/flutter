@@ -1,4 +1,3 @@
-
 import 'package:flutter_gallery/demo/calculator/logic.dart';
 
 import 'package:test/test.dart' hide TypeMatcher, isInstanceOf;

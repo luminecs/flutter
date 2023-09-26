@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const StrokeAlignApp());
 
@@ -20,13 +18,15 @@ class StrokeAlignExample extends StatefulWidget {
   State<StrokeAlignExample> createState() => _StrokeAlignExampleState();
 }
 
-class _StrokeAlignExampleState extends State<StrokeAlignExample> with TickerProviderStateMixin {
+class _StrokeAlignExampleState extends State<StrokeAlignExample>
+    with TickerProviderStateMixin {
   late final AnimationController animation;
 
   @override
   void initState() {
     super.initState();
-    animation = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animation =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animation.repeat(reverse: true);
     animation.addListener(_markDirty);
   }

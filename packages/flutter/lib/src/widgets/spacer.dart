@@ -1,10 +1,8 @@
-
 import 'basic.dart';
 import 'framework.dart';
 
 class Spacer extends StatelessWidget {
-  const Spacer({super.key, this.flex = 1})
-    : assert(flex > 0);
+  const Spacer({super.key, this.flex = 1}) : assert(flex > 0);
 
   final int flex;
 

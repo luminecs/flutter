@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:args/args.dart';
@@ -15,7 +14,7 @@ import 'package:flutter_tools/src/runner/flutter_command_runner.dart';
 
 export 'package:test/test.dart' hide isInstanceOf, test;
 
-CommandRunner<void> createTestCommandRunner([ FlutterCommand? command ]) {
+CommandRunner<void> createTestCommandRunner([FlutterCommand? command]) {
   final FlutterCommandRunner runner = TestFlutterCommandRunner();
   if (command != null) {
     runner.addCommand(command);
@@ -23,7 +22,7 @@ CommandRunner<void> createTestCommandRunner([ FlutterCommand? command ]) {
   return runner;
 }
 
-Future<String> createProject(Directory temp, { List<String>? arguments }) async {
+Future<String> createProject(Directory temp, {List<String>? arguments}) async {
   arguments ??= <String>['--no-pub'];
   final String projectPath = globals.fs.path.join(temp.path, 'flutter_project');
   final CreateCommand command = CreateCommand();
@@ -42,20 +41,19 @@ class TestFlutterCommandRunner extends FlutterCommandRunner {
       if (topLevelResults['verbose'] as bool)
         Logger: VerboseLogger(topLevelLogger),
     };
-    return context.run<void>(
-      overrides: contextOverrides.map<Type, Generator>((Type type, dynamic value) {
-        return MapEntry<Type, Generator>(type, () => value);
-      }),
-      body: () {
-        Cache.flutterRoot ??= Cache.defaultFlutterRoot(
-          platform: globals.platform,
-          fileSystem: globals.fs,
-          userMessages: UserMessages(),
-        );
-        // For compatibility with tests that set this to a relative path.
-        Cache.flutterRoot = globals.fs.path.normalize(globals.fs.path.absolute(Cache.flutterRoot!));
-        return super.runCommand(topLevelResults);
-      }
-    );
+    return context.run<void>(overrides:
+        contextOverrides.map<Type, Generator>((Type type, dynamic value) {
+      return MapEntry<Type, Generator>(type, () => value);
+    }), body: () {
+      Cache.flutterRoot ??= Cache.defaultFlutterRoot(
+        platform: globals.platform,
+        fileSystem: globals.fs,
+        userMessages: UserMessages(),
+      );
+      // For compatibility with tests that set this to a relative path.
+      Cache.flutterRoot = globals.fs.path
+          .normalize(globals.fs.path.absolute(Cache.flutterRoot!));
+      return super.runCommand(topLevelResults);
+    });
   }
 }

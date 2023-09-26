@@ -1,8 +1,6 @@
-
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-
 
 void main() => runApp(const ExampleApp());
 
@@ -12,7 +10,8 @@ class ExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WidgetsApp(
-      builder: (BuildContext context, Widget? navigator) => const ExampleWidget(),
+      builder: (BuildContext context, Widget? navigator) =>
+          const ExampleWidget(),
       color: const Color(0xffffffff),
     );
   }

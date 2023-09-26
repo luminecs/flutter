@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 
 void main() => runApp(const ExampleApp());
 
@@ -25,8 +23,32 @@ class MyWidget extends StatefulWidget {
 
 class _MyWidgetState extends State<MyWidget> {
   final List<String> _alphabet = <String>[
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
   ];
   final Widget _spacer = const SizedBox.square(dimension: 10);
   final UniqueKey _center = UniqueKey();
@@ -208,7 +230,9 @@ class _MyWidgetState extends State<MyWidget> {
             key: _center,
             child: const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Center(child: Text('0', style: TextStyle(fontWeight: FontWeight.bold))),
+              child: Center(
+                  child:
+                      Text('0', style: TextStyle(fontWeight: FontWeight.bold))),
             ),
           ),
           _getList(isForward: true),

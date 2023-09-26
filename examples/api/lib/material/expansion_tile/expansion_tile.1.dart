@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() {
   runApp(const ExpansionTileControllerApp());
@@ -10,10 +8,12 @@ class ExpansionTileControllerApp extends StatefulWidget {
   const ExpansionTileControllerApp({super.key});
 
   @override
-  State<ExpansionTileControllerApp> createState() => _ExpansionTileControllerAppState();
+  State<ExpansionTileControllerApp> createState() =>
+      _ExpansionTileControllerAppState();
 }
 
-class _ExpansionTileControllerAppState extends State<ExpansionTileControllerApp> {
+class _ExpansionTileControllerAppState
+    extends State<ExpansionTileControllerApp> {
   final ExpansionTileController controller = ExpansionTileController();
 
   @override

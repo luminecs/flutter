@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/ui/text/font_feature.0.dart' as example;
@@ -13,8 +12,10 @@ void main() {
     );
 
     expect(find.byType(Text), findsNWidgets(9));
-    expect((tester.widget(find.byType(Text).at(0)) as Text).style!.fontSize, equals(18.0));
-    expect((tester.widget(find.byType(Text).at(1)) as Text).style!.fontFamily, equals('Cardo'));
+    expect((tester.widget(find.byType(Text).at(0)) as Text).style!.fontSize,
+        equals(18.0));
+    expect((tester.widget(find.byType(Text).at(1)) as Text).style!.fontFamily,
+        equals('Cardo'));
     expect((tester.widget(find.byType(Text).at(3)) as Text).style!.fontFeatures,
         equals(const <FontFeature>[FontFeature.oldstyleFigures()]));
     expect((tester.widget(find.byType(Text).at(5)) as Text).style!.fontFeatures,

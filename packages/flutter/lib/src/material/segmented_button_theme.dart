@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -29,7 +28,8 @@ class SegmentedButtonThemeData with Diagnosticable {
     );
   }
 
-  static SegmentedButtonThemeData lerp(SegmentedButtonThemeData? a, SegmentedButtonThemeData? b, double t) {
+  static SegmentedButtonThemeData lerp(
+      SegmentedButtonThemeData? a, SegmentedButtonThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
     }
@@ -41,9 +41,9 @@ class SegmentedButtonThemeData with Diagnosticable {
 
   @override
   int get hashCode => Object.hash(
-    style,
-    selectedIcon,
-  );
+        style,
+        selectedIcon,
+      );
 
   @override
   bool operator ==(Object other) {
@@ -53,16 +53,18 @@ class SegmentedButtonThemeData with Diagnosticable {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SegmentedButtonThemeData
-        && other.style == style
-        && other.selectedIcon == selectedIcon;
+    return other is SegmentedButtonThemeData &&
+        other.style == style &&
+        other.selectedIcon == selectedIcon;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
-    properties.add(DiagnosticsProperty<Widget>('selectedIcon', selectedIcon, defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
+    properties.add(DiagnosticsProperty<Widget>('selectedIcon', selectedIcon,
+        defaultValue: null));
   }
 }
 
@@ -80,7 +82,9 @@ class SegmentedButtonTheme extends InheritedTheme {
   }
 
   static SegmentedButtonThemeData? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<SegmentedButtonTheme>()?.data;
+    return context
+        .dependOnInheritedWidgetOfExactType<SegmentedButtonTheme>()
+        ?.data;
   }
 
   @override
@@ -89,5 +93,6 @@ class SegmentedButtonTheme extends InheritedTheme {
   }
 
   @override
-  bool updateShouldNotify(SegmentedButtonTheme oldWidget) => data != oldWidget.data;
+  bool updateShouldNotify(SegmentedButtonTheme oldWidget) =>
+      data != oldWidget.data;
 }

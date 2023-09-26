@@ -1,4 +1,3 @@
-
 // This file serves as the interface between the public and private APIs for
 // animated icons.
 // The AnimatedIcons class is public and is used to specify available icons,
@@ -44,7 +43,8 @@ abstract class AnimatedIconData {
 }
 
 class _AnimatedIconData extends AnimatedIconData {
-  const _AnimatedIconData(this.size, this.paths, {this.matchTextDirection = false});
+  const _AnimatedIconData(this.size, this.paths,
+      {this.matchTextDirection = false});
 
   final Size size;
   final List<_PathFrames> paths;

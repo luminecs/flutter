@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/widgets.dart';
@@ -7,14 +6,16 @@ Iterable<Element> collectAllElementsFrom(
   Element rootElement, {
   required bool skipOffstage,
 }) {
-  return CachingIterable<Element>(_DepthFirstElementTreeIterator(rootElement, !skipOffstage));
+  return CachingIterable<Element>(
+      _DepthFirstElementTreeIterator(rootElement, !skipOffstage));
 }
 
 Iterable<SemanticsNode> collectAllSemanticsNodesFrom(
   SemanticsNode root, {
-    DebugSemanticsDumpOrder order = DebugSemanticsDumpOrder.traversalOrder,
-  }) {
-    return CachingIterable<SemanticsNode>(_DepthFirstSemanticsTreeIterator(root, order));
+  DebugSemanticsDumpOrder order = DebugSemanticsDumpOrder.traversalOrder,
+}) {
+  return CachingIterable<SemanticsNode>(
+      _DepthFirstSemanticsTreeIterator(root, order));
 }
 
 abstract class _DepthFirstTreeIterator<ItemType> implements Iterator<ItemType> {
@@ -72,7 +73,8 @@ class _DepthFirstElementTreeIterator extends _DepthFirstTreeIterator<Element> {
   }
 }
 
-class _DepthFirstSemanticsTreeIterator extends _DepthFirstTreeIterator<SemanticsNode> {
+class _DepthFirstSemanticsTreeIterator
+    extends _DepthFirstTreeIterator<SemanticsNode> {
   _DepthFirstSemanticsTreeIterator(super.root, this.order);
 
   final DebugSemanticsDumpOrder order;

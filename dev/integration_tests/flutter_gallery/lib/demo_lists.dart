@@ -1,4 +1,3 @@
-
 // Demos for which timeline data will be collected using
 // FlutterDriver.traceAction().
 //

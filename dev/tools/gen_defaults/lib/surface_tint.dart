@@ -1,4 +1,3 @@
-
 import 'template.dart';
 
 class SurfaceTintTemplate extends TokenTemplate {

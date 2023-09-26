@@ -1,4 +1,3 @@
-
 import 'timeline.dart';
 
 const Set<String> kGCRootEvents = <String>{

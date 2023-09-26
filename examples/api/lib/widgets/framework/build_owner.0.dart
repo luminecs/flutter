@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +25,8 @@ Size measureWidget(Widget widget) {
   final PipelineOwner pipelineOwner = PipelineOwner();
   final MeasurementView rootView = pipelineOwner.rootNode = MeasurementView();
   final BuildOwner buildOwner = BuildOwner(focusManager: FocusManager());
-  final RenderObjectToWidgetElement<RenderBox> element = RenderObjectToWidgetAdapter<RenderBox>(
+  final RenderObjectToWidgetElement<RenderBox> element =
+      RenderObjectToWidgetAdapter<RenderBox>(
     container: rootView,
     debugShortDescription: '[root]',
     child: widget,
@@ -43,7 +42,8 @@ Size measureWidget(Widget widget) {
   }
 }
 
-class MeasurementView extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
+class MeasurementView extends RenderBox
+    with RenderObjectWithChildMixin<RenderBox> {
   @override
   void performLayout() {
     assert(child != null);

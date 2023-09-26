@@ -1,4 +1,3 @@
-
 import 'project.dart';
 
 class SteppingProject extends Project {

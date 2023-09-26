@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gallery/demo/material/chip_demo.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,23 +10,27 @@ void main() {
       home: const ChipDemo(),
     ));
 
-    expect(tester.getSemantics(find.byIcon(Icons.vignette)), matchesSemantics(
-      isButton: true,
-      hasEnabledState: true,
-      isEnabled: true,
-      isFocusable: true,
-      hasTapAction: true,
-      label: 'Update border shape',
-    ));
+    expect(
+        tester.getSemantics(find.byIcon(Icons.vignette)),
+        matchesSemantics(
+          isButton: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasTapAction: true,
+          label: 'Update border shape',
+        ));
 
-    expect(tester.getSemantics(find.byIcon(Icons.refresh)), matchesSemantics(
-      isButton: true,
-      hasEnabledState: true,
-      isEnabled: true,
-      isFocusable: true,
-      hasTapAction: true,
-      label: 'Reset chips',
-    ));
+    expect(
+        tester.getSemantics(find.byIcon(Icons.refresh)),
+        matchesSemantics(
+          isButton: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasTapAction: true,
+          label: 'Reset chips',
+        ));
 
     handle.dispose();
   });

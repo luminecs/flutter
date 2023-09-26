@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/build_info.dart';
 import 'package:flutter_tools/src/fuchsia/fuchsia_kernel_compiler.dart';
 
@@ -8,14 +7,14 @@ void main() {
   group('Fuchsia Kernel Compiler', () {
     test('provide correct flags for release mode', () {
       expect(
-        FuchsiaKernelCompiler.getBuildInfoFlags(
-          buildInfo: BuildInfo.release,
-          manifestPath: '',
-        ),
-        allOf(<Matcher>[
-          contains('-Ddart.vm.profile=false'),
-          contains('-Ddart.vm.product=true'),
-        ]));
+          FuchsiaKernelCompiler.getBuildInfoFlags(
+            buildInfo: BuildInfo.release,
+            manifestPath: '',
+          ),
+          allOf(<Matcher>[
+            contains('-Ddart.vm.profile=false'),
+            contains('-Ddart.vm.product=true'),
+          ]));
     });
 
     test('provide correct flags for profile mode', () {
@@ -33,14 +32,14 @@ void main() {
 
     test('provide correct flags for custom dart define', () {
       expect(
-        FuchsiaKernelCompiler.getBuildInfoFlags(
-          buildInfo: const BuildInfo(
-            BuildMode.debug,
-            null,
-            treeShakeIcons: true,
-            dartDefines: <String>['abc=efg'],
-          ),
-          manifestPath: ''),
+          FuchsiaKernelCompiler.getBuildInfoFlags(
+              buildInfo: const BuildInfo(
+                BuildMode.debug,
+                null,
+                treeShakeIcons: true,
+                dartDefines: <String>['abc=efg'],
+              ),
+              manifestPath: ''),
           allOf(<Matcher>[
             contains('-Dabc=efg'),
           ]));

@@ -1,12 +1,11 @@
-
 import 'message.dart';
 
 class RequestData extends Command {
-  const RequestData(this.message, { super.timeout });
+  const RequestData(this.message, {super.timeout});
 
   RequestData.deserialize(super.json)
-    : message = json['message'],
-      super.deserialize();
+      : message = json['message'],
+        super.deserialize();
 
   final String? message;
 
@@ -17,10 +16,10 @@ class RequestData extends Command {
   bool get requiresRootWidgetAttached => false;
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    if (message != null)
-      'message': message!,
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      if (message != null) 'message': message!,
+    });
 }
 
 class RequestDataResult extends Result {
@@ -34,6 +33,6 @@ class RequestDataResult extends Result {
 
   @override
   Map<String, dynamic> toJson() => <String, String>{
-    'message': message,
-  };
+        'message': message,
+      };
 }

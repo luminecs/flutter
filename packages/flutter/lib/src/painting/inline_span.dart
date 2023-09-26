@@ -1,4 +1,3 @@
-
 import 'dart:ui' as ui show ParagraphBuilder, StringAttribute;
 
 import 'package:flutter/foundation.dart';
@@ -24,6 +23,7 @@ class Accumulator {
     _value += addend;
   }
 }
+
 typedef InlineSpanVisitor = bool Function(InlineSpan span);
 
 @immutable
@@ -34,10 +34,12 @@ class InlineSpanSemanticsInformation {
     this.semanticsLabel,
     this.stringAttributes = const <ui.StringAttribute>[],
     this.recognizer,
-  }) : assert(!isPlaceholder || (text == '\uFFFC' && semanticsLabel == null && recognizer == null)),
-       requiresOwnNode = isPlaceholder || recognizer != null;
+  })  : assert(!isPlaceholder ||
+            (text == '\uFFFC' && semanticsLabel == null && recognizer == null)),
+        requiresOwnNode = isPlaceholder || recognizer != null;
 
-  static const InlineSpanSemanticsInformation placeholder = InlineSpanSemanticsInformation('\uFFFC', isPlaceholder: true);
+  static const InlineSpanSemanticsInformation placeholder =
+      InlineSpanSemanticsInformation('\uFFFC', isPlaceholder: true);
 
   final String text;
 
@@ -53,23 +55,28 @@ class InlineSpanSemanticsInformation {
 
   @override
   bool operator ==(Object other) {
-    return other is InlineSpanSemanticsInformation
-        && other.text == text
-        && other.semanticsLabel == semanticsLabel
-        && other.recognizer == recognizer
-        && other.isPlaceholder == isPlaceholder
-        && listEquals<ui.StringAttribute>(other.stringAttributes, stringAttributes);
+    return other is InlineSpanSemanticsInformation &&
+        other.text == text &&
+        other.semanticsLabel == semanticsLabel &&
+        other.recognizer == recognizer &&
+        other.isPlaceholder == isPlaceholder &&
+        listEquals<ui.StringAttribute>(
+            other.stringAttributes, stringAttributes);
   }
 
   @override
-  int get hashCode => Object.hash(text, semanticsLabel, recognizer, isPlaceholder);
+  int get hashCode =>
+      Object.hash(text, semanticsLabel, recognizer, isPlaceholder);
 
   @override
-  String toString() => '${objectRuntimeType(this, 'InlineSpanSemanticsInformation')}{text: $text, semanticsLabel: $semanticsLabel, recognizer: $recognizer}';
+  String toString() =>
+      '${objectRuntimeType(this, 'InlineSpanSemanticsInformation')}{text: $text, semanticsLabel: $semanticsLabel, recognizer: $recognizer}';
 }
 
-List<InlineSpanSemanticsInformation> combineSemanticsInfo(List<InlineSpanSemanticsInformation> infoList) {
-  final List<InlineSpanSemanticsInformation> combined = <InlineSpanSemanticsInformation>[];
+List<InlineSpanSemanticsInformation> combineSemanticsInfo(
+    List<InlineSpanSemanticsInformation> infoList) {
+  final List<InlineSpanSemanticsInformation> combined =
+      <InlineSpanSemanticsInformation>[];
   String workingText = '';
   String workingLabel = '';
   List<ui.StringAttribute> workingAttributes = <ui.StringAttribute>[];
@@ -98,7 +105,6 @@ List<InlineSpanSemanticsInformation> combineSemanticsInfo(List<InlineSpanSemanti
         );
       }
       workingLabel += effectiveLabel;
-
     }
   }
   combined.add(InlineSpanSemanticsInformation(
@@ -117,7 +123,8 @@ abstract class InlineSpan extends DiagnosticableTree {
 
   final TextStyle? style;
 
-  void build(ui.ParagraphBuilder builder, {
+  void build(
+    ui.ParagraphBuilder builder, {
     TextScaler textScaler = TextScaler.noScaling,
     List<PlaceholderDimensions>? dimensions,
   });
@@ -138,25 +145,32 @@ abstract class InlineSpan extends DiagnosticableTree {
   }
 
   @protected
-  InlineSpan? getSpanForPositionVisitor(TextPosition position, Accumulator offset);
+  InlineSpan? getSpanForPositionVisitor(
+      TextPosition position, Accumulator offset);
 
-  String toPlainText({bool includeSemanticsLabels = true, bool includePlaceholders = true}) {
+  String toPlainText(
+      {bool includeSemanticsLabels = true, bool includePlaceholders = true}) {
     final StringBuffer buffer = StringBuffer();
-    computeToPlainText(buffer, includeSemanticsLabels: includeSemanticsLabels, includePlaceholders: includePlaceholders);
+    computeToPlainText(buffer,
+        includeSemanticsLabels: includeSemanticsLabels,
+        includePlaceholders: includePlaceholders);
     return buffer.toString();
   }
 
   List<InlineSpanSemanticsInformation> getSemanticsInformation() {
-    final List<InlineSpanSemanticsInformation> collector = <InlineSpanSemanticsInformation>[];
+    final List<InlineSpanSemanticsInformation> collector =
+        <InlineSpanSemanticsInformation>[];
     computeSemanticsInformation(collector);
     return collector;
   }
 
   @protected
-  void computeSemanticsInformation(List<InlineSpanSemanticsInformation> collector);
+  void computeSemanticsInformation(
+      List<InlineSpanSemanticsInformation> collector);
 
   @protected
-  void computeToPlainText(StringBuffer buffer, {bool includeSemanticsLabels = true, bool includePlaceholders = true});
+  void computeToPlainText(StringBuffer buffer,
+      {bool includeSemanticsLabels = true, bool includePlaceholders = true});
 
   int? codeUnitAt(int index) {
     if (index < 0) {
@@ -186,8 +200,7 @@ abstract class InlineSpan extends DiagnosticableTree {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is InlineSpan
-        && other.style == style;
+    return other is InlineSpan && other.style == style;
   }
 
   @override

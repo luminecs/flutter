@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const RestorablePushAndRemoveUntilExampleApp());
 
@@ -19,14 +17,17 @@ class RestorablePushAndRemoveUntilExample extends StatefulWidget {
   const RestorablePushAndRemoveUntilExample({super.key});
 
   @override
-  State<RestorablePushAndRemoveUntilExample> createState() => _RestorablePushAndRemoveUntilExampleState();
+  State<RestorablePushAndRemoveUntilExample> createState() =>
+      _RestorablePushAndRemoveUntilExampleState();
 }
 
-class _RestorablePushAndRemoveUntilExampleState extends State<RestorablePushAndRemoveUntilExample> {
+class _RestorablePushAndRemoveUntilExampleState
+    extends State<RestorablePushAndRemoveUntilExample> {
   @pragma('vm:entry-point')
   static Route<void> _myRouteBuilder(BuildContext context, Object? arguments) {
     return MaterialPageRoute<void>(
-      builder: (BuildContext context) => const RestorablePushAndRemoveUntilExample(),
+      builder: (BuildContext context) =>
+          const RestorablePushAndRemoveUntilExample(),
     );
   }
 

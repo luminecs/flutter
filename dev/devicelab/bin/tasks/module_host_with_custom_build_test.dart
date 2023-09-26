@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter_devicelab/framework/apk_utils.dart';
@@ -8,11 +7,11 @@ import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:path/path.dart' as path;
 
 final String gradlew = Platform.isWindows ? 'gradlew.bat' : 'gradlew';
-final String gradlewExecutable = Platform.isWindows ? '.\\$gradlew' : './$gradlew';
+final String gradlewExecutable =
+    Platform.isWindows ? '.\\$gradlew' : './$gradlew';
 
 Future<void> main() async {
   await task(() async {
-
     section('Find Java');
 
     final String? javaHome = await findJavaHome();
@@ -29,13 +28,19 @@ Future<void> main() async {
       options: <String>['--android', '--no-ios'],
     );
 
-    final Directory tempDir = Directory.systemTemp.createTempSync('flutter_module_test.');
+    final Directory tempDir =
+        Directory.systemTemp.createTempSync('flutter_module_test.');
     final Directory projectDir = Directory(path.join(tempDir.path, 'hello'));
     try {
       await inDirectory(tempDir, () async {
         await flutter(
           'create',
-          options: <String>['--org', 'io.flutter.devicelab', '--template=module', 'hello'],
+          options: <String>[
+            '--org',
+            'io.flutter.devicelab',
+            '--template=module',
+            'hello'
+          ],
         );
       });
 
@@ -50,7 +55,8 @@ Future<void> main() async {
 
       section('Add to existing Android app');
 
-      final Directory hostAppDir = Directory(path.join(tempDir.path, 'hello_host_app_with_custom_build'));
+      final Directory hostAppDir = Directory(
+          path.join(tempDir.path, 'hello_host_app_with_custom_build'));
       mkdir(hostAppDir);
       recursiveCopy(
         Directory(
@@ -68,14 +74,16 @@ Future<void> main() async {
         hostAppDir,
       );
       copy(
-        File(path.join(projectDir.path, '.android', 'gradle', 'wrapper', 'gradle-wrapper.jar')),
+        File(path.join(projectDir.path, '.android', 'gradle', 'wrapper',
+            'gradle-wrapper.jar')),
         Directory(path.join(hostAppDir.path, 'gradle', 'wrapper')),
       );
 
       Future<void> clean() async {
         section('Clean');
         await inDirectory(hostAppDir, () async {
-          await exec(gradlewExecutable,
+          await exec(
+            gradlewExecutable,
             <String>['clean'],
             environment: <String, String>{
               'JAVA_HOME': javaHome,
@@ -96,7 +104,8 @@ Future<void> main() async {
       section('Run app:assembleDemoDebug');
 
       await inDirectory(hostAppDir, () async {
-        await exec(gradlewExecutable,
+        await exec(
+          gradlewExecutable,
           <String>['app:assembleDemoDebug'],
           environment: <String, String>{
             'JAVA_HOME': javaHome,
@@ -130,10 +139,12 @@ Future<void> main() async {
 
       // Change the order of the task and ensure that flutter_assets are in the APK.
       // https://github.com/flutter/flutter/pull/41333
-      section('Run app:assembleDemoDebug - Merge assets before processing manifest');
+      section(
+          'Run app:assembleDemoDebug - Merge assets before processing manifest');
 
       await inDirectory(hostAppDir, () async {
-        await exec(gradlewExecutable,
+        await exec(
+          gradlewExecutable,
           <String>[
             // Normally, `app:processDemoDebugManifest` runs before `app:mergeDemoDebugAssets`.
             // In this case, we run `app:mergeDemoDebugAssets` first.
@@ -174,7 +185,8 @@ Future<void> main() async {
       section('Run app:assembleDemoStaging');
 
       await inDirectory(hostAppDir, () async {
-        await exec(gradlewExecutable,
+        await exec(
+          gradlewExecutable,
           <String>['app:assembleDemoStaging'],
           environment: <String, String>{
             'JAVA_HOME': javaHome,
@@ -211,7 +223,8 @@ Future<void> main() async {
       section('Run app:assembleDemoRelease');
 
       await inDirectory(hostAppDir, () async {
-        await exec(gradlewExecutable,
+        await exec(
+          gradlewExecutable,
           <String>['app:assembleDemoRelease'],
           environment: <String, String>{
             'JAVA_HOME': javaHome,
@@ -231,7 +244,8 @@ Future<void> main() async {
       );
 
       if (!exists(File(demoReleaseApk))) {
-        return TaskResult.failure('Failed to build app-demo-release-unsigned.apk');
+        return TaskResult.failure(
+            'Failed to build app-demo-release-unsigned.apk');
       }
 
       section('Verify AOT ELF in app-demo-release-unsigned.apk');
@@ -248,8 +262,9 @@ Future<void> main() async {
 
       section('Run app:assembleDemoProd');
 
-       await inDirectory(hostAppDir, () async {
-        await exec(gradlewExecutable,
+      await inDirectory(hostAppDir, () async {
+        await exec(
+          gradlewExecutable,
           <String>['app:assembleDemoProd'],
           environment: <String, String>{
             'JAVA_HOME': javaHome,

@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 import 'use_cases.dart';
 
 class SliderUseCase extends UseCase {
-
   @override
   String get name => 'Slider';
 

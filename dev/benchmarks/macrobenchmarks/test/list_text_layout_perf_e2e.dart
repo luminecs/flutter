@@ -1,4 +1,3 @@
-
 import 'package:macrobenchmarks/common.dart';
 
 import 'util.dart';

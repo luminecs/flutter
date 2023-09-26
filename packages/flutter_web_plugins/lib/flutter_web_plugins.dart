@@ -1,4 +1,3 @@
-
 library flutter_web_plugins;
 
 export 'src/navigation/url_strategy.dart';

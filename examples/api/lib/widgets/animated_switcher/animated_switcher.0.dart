@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const AnimatedSwitcherExampleApp());
 
@@ -19,7 +17,8 @@ class AnimatedSwitcherExample extends StatefulWidget {
   const AnimatedSwitcherExample({super.key});
 
   @override
-  State<AnimatedSwitcherExample> createState() => _AnimatedSwitcherExampleState();
+  State<AnimatedSwitcherExample> createState() =>
+      _AnimatedSwitcherExampleState();
 }
 
 class _AnimatedSwitcherExampleState extends State<AnimatedSwitcherExample> {

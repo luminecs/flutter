@@ -1,4 +1,3 @@
-
 // This sample demonstrates showing a confirmation dialog before navigating
 // away from a page.
 
@@ -29,7 +28,6 @@ class _HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<_HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

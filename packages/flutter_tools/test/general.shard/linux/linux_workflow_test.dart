@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/base/platform.dart';
 import 'package:flutter_tools/src/features.dart';
 import 'package:flutter_tools/src/linux/linux_workflow.dart';
@@ -43,7 +42,8 @@ void main() {
     expect(linuxWorkflow.canListEmulators, false);
   });
 
-  testWithoutContext('Does not apply when the Linux desktop feature is disabled', () {
+  testWithoutContext(
+      'Does not apply when the Linux desktop feature is disabled', () {
     final LinuxWorkflow linuxWorkflow = LinuxWorkflow(
       platform: linux,
       featureFlags: disabledFlags,

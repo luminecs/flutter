@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 class Tolerance {
@@ -19,5 +18,6 @@ class Tolerance {
   final double velocity;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'Tolerance')}(distance: ±$distance, time: ±$time, velocity: ±$velocity)';
+  String toString() =>
+      '${objectRuntimeType(this, 'Tolerance')}(distance: ±$distance, time: ±$time, velocity: ±$velocity)';
 }

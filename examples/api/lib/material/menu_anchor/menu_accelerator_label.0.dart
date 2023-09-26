@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 
 void main() => runApp(const MenuAcceleratorApp());
 
@@ -102,7 +100,8 @@ class MenuAcceleratorApp extends StatelessWidget {
       theme: ThemeData(useMaterial3: true),
       home: Shortcuts(
         shortcuts: <ShortcutActivator, Intent>{
-          const SingleActivator(LogicalKeyboardKey.keyT, control: true): VoidCallbackIntent(() {
+          const SingleActivator(LogicalKeyboardKey.keyT, control: true):
+              VoidCallbackIntent(() {
             debugDumpApp();
           }),
         },

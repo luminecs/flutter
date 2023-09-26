@@ -1,14 +1,14 @@
-
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/utils.dart';
 import 'package:flutter_devicelab/tasks/perf_tests.dart';
 
 class HelloWorldMemoryTest extends MemoryTest {
-  HelloWorldMemoryTest() : super(
-    '${flutterDirectory.path}/examples/hello_world',
-    'lib/main.dart',
-    'io.flutter.examples.hello_world',
-  );
+  HelloWorldMemoryTest()
+      : super(
+          '${flutterDirectory.path}/examples/hello_world',
+          'lib/main.dart',
+          'io.flutter.examples.hello_world',
+        );
 
   @override
   Future<void> useMemory() async {
@@ -17,7 +17,8 @@ class HelloWorldMemoryTest extends MemoryTest {
       '--verbose',
       '--release',
       '--no-resident',
-      '-d', device!.deviceId,
+      '-d',
+      device!.deviceId,
       test,
     ]);
     await Future<void>.delayed(const Duration(milliseconds: 1500));

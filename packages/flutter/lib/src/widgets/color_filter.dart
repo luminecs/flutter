@@ -1,9 +1,7 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 import 'framework.dart';
-
 
 @immutable
 class ColorFiltered extends SingleChildRenderObjectWidget {
@@ -12,7 +10,8 @@ class ColorFiltered extends SingleChildRenderObjectWidget {
   final ColorFilter colorFilter;
 
   @override
-  RenderObject createRenderObject(BuildContext context) => _ColorFilterRenderObject(colorFilter);
+  RenderObject createRenderObject(BuildContext context) =>
+      _ColorFilterRenderObject(colorFilter);
 
   @override
   void updateRenderObject(BuildContext context, RenderObject renderObject) {
@@ -22,7 +21,8 @@ class ColorFiltered extends SingleChildRenderObjectWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ColorFilter>('colorFilter', colorFilter));
+    properties
+        .add(DiagnosticsProperty<ColorFilter>('colorFilter', colorFilter));
   }
 }
 
@@ -43,7 +43,8 @@ class _ColorFilterRenderObject extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    layer = context.pushColorFilter(offset, colorFilter, super.paint, oldLayer: layer as ColorFilterLayer?);
+    layer = context.pushColorFilter(offset, colorFilter, super.paint,
+        oldLayer: layer as ColorFilterLayer?);
     assert(() {
       layer!.debugCreator = debugCreator;
       return true;

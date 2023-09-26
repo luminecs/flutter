@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
@@ -40,17 +39,20 @@ class ExpandIcon extends StatefulWidget {
   State<ExpandIcon> createState() => _ExpandIconState();
 }
 
-class _ExpandIconState extends State<ExpandIcon> with SingleTickerProviderStateMixin {
+class _ExpandIconState extends State<ExpandIcon>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _iconTurns;
 
-  static final Animatable<double> _iconTurnTween = Tween<double>(begin: 0.0, end: 0.5)
-    .chain(CurveTween(curve: Curves.fastOutSlowIn));
+  static final Animatable<double> _iconTurnTween =
+      Tween<double>(begin: 0.0, end: 0.5)
+          .chain(CurveTween(curve: Curves.fastOutSlowIn));
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: kThemeAnimationDuration, vsync: this);
+    _controller =
+        AnimationController(duration: kThemeAnimationDuration, vsync: this);
     _iconTurns = _controller.drive(_iconTurnTween);
     // If the widget is initially expanded, rotate the icon without animating it.
     if (widget.isExpanded) {
@@ -101,8 +103,11 @@ class _ExpandIconState extends State<ExpandIcon> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     assert(debugCheckHasMaterialLocalizations(context));
-    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-    final String onTapHint = widget.isExpanded ? localizations.expandedIconTapHint : localizations.collapsedIconTapHint;
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
+    final String onTapHint = widget.isExpanded
+        ? localizations.expandedIconTapHint
+        : localizations.collapsedIconTapHint;
 
     return Semantics(
       onTapHint: widget.onPressed == null ? null : onTapHint,

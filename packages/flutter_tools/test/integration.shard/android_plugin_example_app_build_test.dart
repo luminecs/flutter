@@ -1,4 +1,3 @@
-
 import 'package:file_testing/file_testing.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
 import 'package:flutter_tools/src/base/io.dart';
@@ -11,7 +10,8 @@ void main() {
   late Directory tempDirPluginFfi;
 
   setUp(() async {
-    tempDirPluginMethodChannels = createResolvedTempDirectorySync('flutter_plugin_test.');
+    tempDirPluginMethodChannels =
+        createResolvedTempDirectorySync('flutter_plugin_test.');
     tempDirPluginFfi =
         createResolvedTempDirectorySync('flutter_ffi_plugin_test.');
   });
@@ -42,13 +42,15 @@ void main() {
       testName,
     ], workingDirectory: tempDir.path);
     if (result.exitCode != 0) {
-      throw Exception('flutter create failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
+      throw Exception(
+          'flutter create failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
     }
 
     final Directory exampleAppDir =
         tempDir.childDirectory(testName).childDirectory('example');
 
-    final File buildGradleFile = exampleAppDir.childDirectory('android').childFile('build.gradle');
+    final File buildGradleFile =
+        exampleAppDir.childDirectory('android').childFile('build.gradle');
     expect(buildGradleFile, exists);
 
     final String buildGradle = buildGradleFile.readAsStringSync();
@@ -69,7 +71,8 @@ void main() {
       '--target-platform=android-arm',
     ], workingDirectory: exampleAppDir.path);
     if (result.exitCode != 0) {
-      throw Exception('flutter build failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
+      throw Exception(
+          'flutter build failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
     }
 
     final File exampleApk = fileSystem.file(fileSystem.path.join(
@@ -94,7 +97,8 @@ void main() {
       'clean',
     ], workingDirectory: exampleAppDir.path);
     if (result.exitCode != 0) {
-      throw Exception('flutter clean failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
+      throw Exception(
+          'flutter clean failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
     }
 
     // Remove Gradle wrapper
@@ -123,7 +127,8 @@ android.enableR8=true''');
       '--target-platform=android-arm',
     ], workingDirectory: exampleAppDir.path);
     if (result.exitCode != 0) {
-      throw Exception('flutter build failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
+      throw Exception(
+          'flutter build failed: ${result.exitCode}\n${result.stderr}\n${result.stdout}');
     }
     expect(exampleApk, exists);
   }

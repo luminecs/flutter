@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'src/tests/controls_page.dart';
@@ -11,9 +10,10 @@ void main() {
 }
 
 Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  selectionControlsRoute : (BuildContext context) => const SelectionControlsPage(),
-  popupControlsRoute : (BuildContext context) => const PopupControlsPage(),
-  textFieldRoute : (BuildContext context) => const TextFieldPage(),
+  selectionControlsRoute: (BuildContext context) =>
+      const SelectionControlsPage(),
+  popupControlsRoute: (BuildContext context) => const PopupControlsPage(),
+  textFieldRoute: (BuildContext context) => const TextFieldPage(),
   headingsRoute: (BuildContext context) => const HeadingsPage(),
 };
 
@@ -24,22 +24,20 @@ class TestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: routes,
-      home: Builder(
-        builder: (BuildContext context) {
-          return Scaffold(
-            body: ListView(
-              children: routes.keys.map<Widget>((String value) {
-                return MaterialButton(
-                  child: Text(value),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(value);
-                  },
-                );
-              }).toList(),
-            ),
-          );
-        }
-      ),
+      home: Builder(builder: (BuildContext context) {
+        return Scaffold(
+          body: ListView(
+            children: routes.keys.map<Widget>((String value) {
+              return MaterialButton(
+                child: Text(value),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(value);
+                },
+              );
+            }).toList(),
+          ),
+        );
+      }),
     );
   }
 }

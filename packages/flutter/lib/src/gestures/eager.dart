@@ -1,4 +1,3 @@
-
 import 'recognizer.dart';
 
 export 'dart:ui' show PointerDeviceKind;
@@ -22,8 +21,8 @@ class EagerGestureRecognizer extends OneSequenceGestureRecognizer {
   String get debugDescription => 'eager';
 
   @override
-  void didStopTrackingLastPointer(int pointer) { }
+  void didStopTrackingLastPointer(int pointer) {}
 
   @override
-  void handleEvent(PointerEvent event) { }
+  void handleEvent(PointerEvent event) {}
 }

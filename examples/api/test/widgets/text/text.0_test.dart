@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/widgets/text/text.0.dart' as example;
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +16,8 @@ void main() {
 
     // Because this example uses Material 3 and a light brightness, the text color
     // should be the color scheme `onSurface` color.
-    final Color textColor = ColorScheme.fromSeed(seedColor: Colors.purple).onSurface;
+    final Color textColor =
+        ColorScheme.fromSeed(seedColor: Colors.purple).onSurface;
     expect(text.text.style!.color, textColor);
   });
 }

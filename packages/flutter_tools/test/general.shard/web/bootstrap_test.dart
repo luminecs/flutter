@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/web/bootstrap.dart';
 import 'package:package_config/package_config.dart';
 
@@ -17,7 +16,10 @@ void main() {
     expect(result, contains('"mapper": "mapper.js"'));
     expect(result, contains('mapperEl.src = getTTScriptUrl("mapper");'));
     // data-main is set to correct bootstrap module.
-    expect(result, contains('requireEl.setAttribute("data-main", "main_module.bootstrap");'));
+    expect(
+        result,
+        contains(
+            'requireEl.setAttribute("data-main", "main_module.bootstrap");'));
   });
 
   test('generateBootstrapScript includes loading indicator', () {
@@ -30,16 +32,19 @@ void main() {
   });
 
   // https://github.com/flutter/flutter/issues/107742
-  test('generateBootstrapScript loading indicator does not trigger scrollbars', () {
+  test('generateBootstrapScript loading indicator does not trigger scrollbars',
+      () {
     final String result = generateBootstrapScript(
       requireUrl: 'require.js',
       mapperUrl: 'mapper.js',
     );
 
     // See: https://regexr.com/6q0ft
-    final RegExp regex = RegExp(r'(?:\.flutter-loader\s*\{)[^}]+(?:overflow\:\s*hidden;)[^}]+}');
+    final RegExp regex =
+        RegExp(r'(?:\.flutter-loader\s*\{)[^}]+(?:overflow\:\s*hidden;)[^}]+}');
 
-    expect(result, matches(regex), reason: '.flutter-loader must have overflow: hidden');
+    expect(result, matches(regex),
+        reason: '.flutter-loader must have overflow: hidden');
   });
 
   // https://github.com/flutter/flutter/issues/82524
@@ -51,12 +56,12 @@ void main() {
     );
 
     // See: https://regexr.com/6q0kp
-    final RegExp regex = RegExp(
-      r'(?:require\.config\(\{)(?:.|\s(?!\}\);))*'
+    final RegExp regex = RegExp(r'(?:require\.config\(\{)(?:.|\s(?!\}\);))*'
         r'(?:waitSeconds\:\s*0[,]?)'
-      r'(?:(?!\}\);).|\s)*\}\);');
+        r'(?:(?!\}\);).|\s)*\}\);');
 
-    expect(result, matches(regex), reason: 'require.config must have a waitSeconds: 0 config entry');
+    expect(result, matches(regex),
+        reason: 'require.config must have a waitSeconds: 0 config entry');
   });
 
   test('generateMainModule hides requireJS injected by DDC', () {
@@ -66,9 +71,11 @@ void main() {
       nativeNullAssertions: false,
     );
     expect(result, contains('''define._amd = define.amd;'''),
-      reason: 'define.amd must be preserved as _amd so users may restore it if needed.');
+        reason:
+            'define.amd must be preserved as _amd so users may restore it if needed.');
     expect(result, contains('''delete define.amd;'''),
-      reason: "define.amd must be removed so packages don't attempt to use Dart's instance.");
+        reason:
+            "define.amd must be removed so packages don't attempt to use Dart's instance.");
   });
 
   test('generateMainModule embeds urls correctly', () {
@@ -78,8 +85,11 @@ void main() {
       nativeNullAssertions: false,
     );
     // bootstrap main module has correct defined module.
-    expect(result, contains('define("main_module.bootstrap", ["foo/bar/main.js", "dart_sdk"], '
-      'function(app, dart_sdk) {'));
+    expect(
+        result,
+        contains(
+            'define("main_module.bootstrap", ["foo/bar/main.js", "dart_sdk"], '
+            'function(app, dart_sdk) {'));
   });
 
   test('generateMainModule can set bootstrap name', () {
@@ -90,8 +100,11 @@ void main() {
       bootstrapModule: 'foo_module.bootstrap',
     );
     // bootstrap main module has correct defined module.
-    expect(result, contains('define("foo_module.bootstrap", ["foo/bar/main.js", "dart_sdk"], '
-      'function(app, dart_sdk) {'));
+    expect(
+        result,
+        contains(
+            'define("foo_module.bootstrap", ["foo/bar/main.js", "dart_sdk"], '
+            'function(app, dart_sdk) {'));
   });
 
   test('generateMainModule includes null safety switches', () {
@@ -117,12 +130,15 @@ void main() {
   });
 
   test('generateTestBootstrapFileContents embeds urls correctly', () {
-    final String result = generateTestBootstrapFileContents('foo.dart.js', 'require.js', 'mapper.js');
+    final String result = generateTestBootstrapFileContents(
+        'foo.dart.js', 'require.js', 'mapper.js');
 
     expect(result, contains('el.setAttribute("data-main", \'foo.dart.js\');'));
   });
 
-  test('generateTestEntrypoint does not generate test config wrappers when testConfigPath is not passed', () {
+  test(
+      'generateTestEntrypoint does not generate test config wrappers when testConfigPath is not passed',
+      () {
     final String result = generateTestEntrypoint(
       relativeTestPath: 'relative_path.dart',
       absolutePath: 'absolute_path.dart',
@@ -133,7 +149,9 @@ void main() {
     expect(result, isNot(contains('test_config.testExecutable')));
   });
 
-  test('generateTestEntrypoint generates test config wrappers when testConfigPath is passed', () {
+  test(
+      'generateTestEntrypoint generates test config wrappers when testConfigPath is passed',
+      () {
     final String result = generateTestEntrypoint(
       relativeTestPath: 'relative_path.dart',
       absolutePath: 'absolute_path.dart',

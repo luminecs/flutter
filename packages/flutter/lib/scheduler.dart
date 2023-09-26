@@ -1,4 +1,3 @@
-
 library scheduler;
 
 export 'src/scheduler/binding.dart';

@@ -1,4 +1,3 @@
-
 import 'dart:ui' show TextAffinity, TextPosition, TextRange;
 
 import 'package:flutter/foundation.dart';
@@ -13,24 +12,24 @@ class TextSelection extends TextRange {
     this.affinity = TextAffinity.downstream,
     this.isDirectional = false,
   }) : super(
-         start: baseOffset < extentOffset ? baseOffset : extentOffset,
-         end: baseOffset < extentOffset ? extentOffset : baseOffset,
-       );
+          start: baseOffset < extentOffset ? baseOffset : extentOffset,
+          end: baseOffset < extentOffset ? extentOffset : baseOffset,
+        );
 
   const TextSelection.collapsed({
     required int offset,
     this.affinity = TextAffinity.downstream,
-  }) : baseOffset = offset,
-       extentOffset = offset,
-       isDirectional = false,
-       super.collapsed(offset);
+  })  : baseOffset = offset,
+        extentOffset = offset,
+        isDirectional = false,
+        super.collapsed(offset);
 
   TextSelection.fromPosition(TextPosition position)
-    : baseOffset = position.offset,
-      extentOffset = position.offset,
-      affinity = position.affinity,
-      isDirectional = false,
-      super.collapsed(position.offset);
+      : baseOffset = position.offset,
+        extentOffset = position.offset,
+        affinity = position.affinity,
+        isDirectional = false,
+        super.collapsed(position.offset);
 
   final int baseOffset;
 
@@ -71,8 +70,8 @@ class TextSelection extends TextRange {
       return '$typeName.invalid';
     }
     return isCollapsed
-      ? '$typeName.collapsed(offset: $baseOffset, affinity: $affinity, isDirectional: $isDirectional)'
-      : '$typeName(baseOffset: $baseOffset, extentOffset: $extentOffset, isDirectional: $isDirectional)';
+        ? '$typeName.collapsed(offset: $baseOffset, affinity: $affinity, isDirectional: $isDirectional)'
+        : '$typeName(baseOffset: $baseOffset, extentOffset: $extentOffset, isDirectional: $isDirectional)';
   }
 
   @override
@@ -86,22 +85,24 @@ class TextSelection extends TextRange {
     if (!isValid) {
       return !other.isValid;
     }
-    return other.baseOffset == baseOffset
-        && other.extentOffset == extentOffset
-        && (!isCollapsed || other.affinity == affinity)
-        && other.isDirectional == isDirectional;
+    return other.baseOffset == baseOffset &&
+        other.extentOffset == extentOffset &&
+        (!isCollapsed || other.affinity == affinity) &&
+        other.isDirectional == isDirectional;
   }
 
   @override
   int get hashCode {
     if (!isValid) {
-      return Object.hash(-1.hashCode, -1.hashCode, TextAffinity.downstream.hashCode);
+      return Object.hash(
+          -1.hashCode, -1.hashCode, TextAffinity.downstream.hashCode);
     }
 
-    final int affinityHash = isCollapsed ? affinity.hashCode : TextAffinity.downstream.hashCode;
-    return Object.hash(baseOffset.hashCode, extentOffset.hashCode, affinityHash, isDirectional.hashCode);
+    final int affinityHash =
+        isCollapsed ? affinity.hashCode : TextAffinity.downstream.hashCode;
+    return Object.hash(baseOffset.hashCode, extentOffset.hashCode, affinityHash,
+        isDirectional.hashCode);
   }
-
 
   TextSelection copyWith({
     int? baseOffset,

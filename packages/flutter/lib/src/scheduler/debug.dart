@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 // Any changes to this file should be reflected in the debugAssertAllSchedulerVarsUnset()
@@ -12,8 +11,7 @@ bool debugPrintScheduleFrameStacks = false;
 
 bool debugAssertAllSchedulerVarsUnset(String reason) {
   assert(() {
-    if (debugPrintBeginFrameBanner ||
-        debugPrintEndFrameBanner) {
+    if (debugPrintBeginFrameBanner || debugPrintEndFrameBanner) {
       throw FlutterError(reason);
     }
     return true;

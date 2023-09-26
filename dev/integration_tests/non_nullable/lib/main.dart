@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 String? unused; // ignore: unreachable_from_main
@@ -13,11 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Center(child: Text('hello, world'))
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const Center(child: Text('hello, world')));
   }
 }

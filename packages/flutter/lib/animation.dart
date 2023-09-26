@@ -1,4 +1,3 @@
-
 library animation;
 
 // AnimationController can throw TickerCanceled

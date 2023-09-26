@@ -1,4 +1,3 @@
-
 import 'dart:ui_web' as ui_web;
 
 import 'utils.dart';
@@ -37,7 +36,8 @@ class PathUrlStrategy extends ui_web.HashUrlStrategy {
   @override
   String getPath() {
     final String? hash = includeHash ? _platformLocation.hash : null;
-    final String path = _platformLocation.pathname + _platformLocation.search + (hash ?? '');
+    final String path =
+        _platformLocation.pathname + _platformLocation.search + (hash ?? '');
     if (_basePath.isNotEmpty && path.startsWith(_basePath)) {
       return ensureLeadingSlash(path.substring(_basePath.length));
     }

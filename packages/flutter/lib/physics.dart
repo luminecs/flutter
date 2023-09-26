@@ -1,4 +1,3 @@
-
 library physics;
 
 export 'src/physics/clamped_simulation.dart';

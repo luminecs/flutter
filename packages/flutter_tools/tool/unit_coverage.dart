@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 void main(List<String> args) {
@@ -37,10 +36,12 @@ void main(List<String> args) {
   for (final Coverage coverage in coverages) {
     overallNumerator += coverage.testedLines;
     overallDenominator += coverage.totalLines;
-    final String coveragePercent = (coverage.testedLines / coverage.totalLines * 100).toStringAsFixed(2);
-    print('${coverage.library}: $coveragePercent% | ${coverage.testedLines} | ${coverage.totalLines}');
+    final String coveragePercent =
+        (coverage.testedLines / coverage.totalLines * 100).toStringAsFixed(2);
+    print(
+        '${coverage.library}: $coveragePercent% | ${coverage.testedLines} | ${coverage.totalLines}');
   }
-  print('OVERALL: ${overallNumerator/overallDenominator}');
+  print('OVERALL: ${overallNumerator / overallDenominator}');
 }
 
 class Coverage {

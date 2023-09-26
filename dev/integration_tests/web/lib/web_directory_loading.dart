@@ -1,4 +1,3 @@
-
 import 'dart:html' as html;
 
 // Attempt to load a file that is hosted in the applications's `web/` directory.

@@ -1,4 +1,3 @@
-
 import '../../base/file_system.dart';
 import '../../base/project_migrator.dart';
 import '../../cmake_project.dart';
@@ -57,7 +56,8 @@ const String _resourceFileAfter = '''
 
 class VersionMigration extends ProjectMigrator {
   VersionMigration(WindowsProject project, super.logger)
-    : _cmakeFile = project.runnerCmakeFile, _resourceFile = project.runnerResourceFile;
+      : _cmakeFile = project.runnerCmakeFile,
+        _resourceFile = project.runnerResourceFile;
 
   final File _cmakeFile;
   final File _resourceFile;
@@ -97,12 +97,14 @@ This indicates non-trivial changes have been made to the Windows runner in the
       _cmakeFileAfter,
     );
     if (originalCmakeContents != newCmakeContents) {
-      logger.printStatus('windows/runner/CMakeLists.txt does not define version information, updating.');
+      logger.printStatus(
+          'windows/runner/CMakeLists.txt does not define version information, updating.');
       _cmakeFile.writeAsStringSync(newCmakeContents);
     }
 
     // Migrate the windows/runner/Runner.rc file.
-    final String originalResourceFileContents = _resourceFile.readAsStringSync();
+    final String originalResourceFileContents =
+        _resourceFile.readAsStringSync();
     final String newResourceFileContents = replaceFirst(
       originalResourceFileContents,
       _resourceFileBefore,

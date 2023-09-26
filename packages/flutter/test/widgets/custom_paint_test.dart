@@ -1,11 +1,10 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 class TestCustomPainter extends CustomPainter {
-  TestCustomPainter({ required this.log, this.name });
+  TestCustomPainter({required this.log, this.name});
 
   final List<String?> log;
   final String? name;
@@ -29,7 +28,7 @@ class MockCanvas extends Fake implements Canvas {
   }
 
   @override
-  void save() { }
+  void save() {}
 }
 
 class MockPaintingContext extends Fake implements PaintingContext {
@@ -38,7 +37,8 @@ class MockPaintingContext extends Fake implements PaintingContext {
 }
 
 void main() {
-  testWidgetsWithLeakTracking('Control test for custom painting', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Control test for custom painting',
+      (WidgetTester tester) async {
     final List<String?> log = <String?>[];
     await tester.pumpWidget(CustomPaint(
       painter: TestCustomPainter(
@@ -60,7 +60,9 @@ void main() {
     expect(log, equals(<String>['background', 'child', 'foreground']));
   });
 
-  testWidgetsWithLeakTracking('Throws FlutterError on custom painter incorrect restore/save calls', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Throws FlutterError on custom painter incorrect restore/save calls',
+      (WidgetTester tester) async {
     final GlobalKey target = GlobalKey();
     final List<String?> log = <String?>[];
     await tester.pumpWidget(CustomPaint(
@@ -68,7 +70,8 @@ void main() {
       isComplex: true,
       painter: TestCustomPainter(log: log),
     ));
-    final RenderCustomPaint renderCustom = target.currentContext!.findRenderObject()! as RenderCustomPaint;
+    final RenderCustomPaint renderCustom =
+        target.currentContext!.findRenderObject()! as RenderCustomPaint;
     final MockPaintingContext paintingContext = MockPaintingContext();
     final MockCanvas canvas = paintingContext.canvas;
 
@@ -83,29 +86,33 @@ void main() {
     }
 
     FlutterError error = getError();
-    expect(error.toStringDeep(), equalsIgnoringHashCodes(
-      'FlutterError\n'
-      '   The TestCustomPainter#00000() custom painter called canvas.save()\n'
-      '   or canvas.saveLayer() at least 1 more time than it called\n'
-      '   canvas.restore().\n'
-      '   This leaves the canvas in an inconsistent state and will probably\n'
-      '   result in a broken display.\n'
-      '   You must pair each call to save()/saveLayer() with a later\n'
-      '   matching call to restore().\n',
-    ));
+    expect(
+        error.toStringDeep(),
+        equalsIgnoringHashCodes(
+          'FlutterError\n'
+          '   The TestCustomPainter#00000() custom painter called canvas.save()\n'
+          '   or canvas.saveLayer() at least 1 more time than it called\n'
+          '   canvas.restore().\n'
+          '   This leaves the canvas in an inconsistent state and will probably\n'
+          '   result in a broken display.\n'
+          '   You must pair each call to save()/saveLayer() with a later\n'
+          '   matching call to restore().\n',
+        ));
 
     canvas.saveCountDelta = -1;
     error = getError();
-    expect(error.toStringDeep(), equalsIgnoringHashCodes(
-      'FlutterError\n'
-      '   The TestCustomPainter#00000() custom painter called\n'
-      '   canvas.restore() 1 more time than it called canvas.save() or\n'
-      '   canvas.saveLayer().\n'
-      '   This leaves the canvas in an inconsistent state and will result\n'
-      '   in a broken display.\n'
-      '   You should only call restore() if you first called save() or\n'
-      '   saveLayer().\n',
-    ));
+    expect(
+        error.toStringDeep(),
+        equalsIgnoringHashCodes(
+          'FlutterError\n'
+          '   The TestCustomPainter#00000() custom painter called\n'
+          '   canvas.restore() 1 more time than it called canvas.save() or\n'
+          '   canvas.saveLayer().\n'
+          '   This leaves the canvas in an inconsistent state and will result\n'
+          '   in a broken display.\n'
+          '   You should only call restore() if you first called save() or\n'
+          '   saveLayer().\n',
+        ));
 
     canvas.saveCountDelta = 2;
     error = getError();
@@ -116,7 +123,8 @@ void main() {
     expect(error.toStringDeep(), contains('2 more times'));
   });
 
-  testWidgetsWithLeakTracking('CustomPaint sizing', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('CustomPaint sizing',
+      (WidgetTester tester) async {
     final GlobalKey target = GlobalKey();
 
     await tester.pumpWidget(Center(
@@ -148,10 +156,10 @@ void main() {
       child: CustomPaint(key: target, child: const SizedBox.shrink()),
     ));
     expect(target.currentContext!.size, Size.zero);
-
   });
 
-  testWidgetsWithLeakTracking('Raster cache hints', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Raster cache hints',
+      (WidgetTester tester) async {
     final GlobalKey target = GlobalKey();
 
     final List<String?> log = <String?>[];
@@ -160,7 +168,8 @@ void main() {
       isComplex: true,
       painter: TestCustomPainter(log: log),
     ));
-    RenderCustomPaint renderCustom = target.currentContext!.findRenderObject()! as RenderCustomPaint;
+    RenderCustomPaint renderCustom =
+        target.currentContext!.findRenderObject()! as RenderCustomPaint;
     expect(renderCustom.isComplex, true);
     expect(renderCustom.willChange, false);
 
@@ -169,7 +178,8 @@ void main() {
       willChange: true,
       foregroundPainter: TestCustomPainter(log: log),
     ));
-    renderCustom = target.currentContext!.findRenderObject()! as RenderCustomPaint;
+    renderCustom =
+        target.currentContext!.findRenderObject()! as RenderCustomPaint;
     expect(renderCustom.isComplex, false);
     expect(renderCustom.willChange, true);
   });
@@ -179,8 +189,11 @@ void main() {
     expect(() => CustomPaint(willChange: true), throwsAssertionError);
   });
 
-  test('RenderCustomPaint consults preferred size for intrinsics when it has no child', () {
-    final RenderCustomPaint inner = RenderCustomPaint(preferredSize: const Size(20, 30));
+  test(
+      'RenderCustomPaint consults preferred size for intrinsics when it has no child',
+      () {
+    final RenderCustomPaint inner =
+        RenderCustomPaint(preferredSize: const Size(20, 30));
     expect(inner.getMinIntrinsicWidth(double.infinity), 20);
     expect(inner.getMaxIntrinsicWidth(double.infinity), 20);
     expect(inner.getMinIntrinsicHeight(double.infinity), 30);
@@ -188,7 +201,8 @@ void main() {
   });
 
   test('RenderCustomPaint does not return infinity for its intrinsics', () {
-    final RenderCustomPaint inner = RenderCustomPaint(preferredSize: Size.infinite);
+    final RenderCustomPaint inner =
+        RenderCustomPaint(preferredSize: Size.infinite);
     expect(inner.getMinIntrinsicWidth(double.infinity), 0);
     expect(inner.getMaxIntrinsicWidth(double.infinity), 0);
     expect(inner.getMinIntrinsicHeight(double.infinity), 0);

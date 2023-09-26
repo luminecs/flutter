@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 

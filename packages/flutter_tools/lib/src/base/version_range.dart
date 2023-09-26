@@ -1,8 +1,7 @@
-
 import 'package:meta/meta.dart' show immutable;
 
 @immutable
-class VersionRange{
+class VersionRange {
   const VersionRange(
     this.versionMin,
     this.versionMax,

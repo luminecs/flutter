@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' hide Border;
 
@@ -20,8 +19,16 @@ class TableBorder {
     BorderStyle style = BorderStyle.solid,
     BorderRadius borderRadius = BorderRadius.zero,
   }) {
-    final BorderSide side = BorderSide(color: color, width: width, style: style);
-    return TableBorder(top: side, right: side, bottom: side, left: side, horizontalInside: side, verticalInside: side, borderRadius: borderRadius);
+    final BorderSide side =
+        BorderSide(color: color, width: width, style: style);
+    return TableBorder(
+        top: side,
+        right: side,
+        bottom: side,
+        left: side,
+        horizontalInside: side,
+        verticalInside: side,
+        borderRadius: borderRadius);
   }
 
   factory TableBorder.symmetric({
@@ -53,11 +60,11 @@ class TableBorder {
   final BorderRadius borderRadius;
 
   EdgeInsets get dimensions {
-    return EdgeInsets.fromLTRB(left.width, top.width, right.width, bottom.width);
+    return EdgeInsets.fromLTRB(
+        left.width, top.width, right.width, bottom.width);
   }
 
   bool get isUniform {
-
     final Color topColor = top.color;
     if (right.color != topColor ||
         bottom.color != topColor ||
@@ -114,7 +121,8 @@ class TableBorder {
       right: BorderSide.lerp(a.right, b.right, t),
       bottom: BorderSide.lerp(a.bottom, b.bottom, t),
       left: BorderSide.lerp(a.left, b.left, t),
-      horizontalInside: BorderSide.lerp(a.horizontalInside, b.horizontalInside, t),
+      horizontalInside:
+          BorderSide.lerp(a.horizontalInside, b.horizontalInside, t),
       verticalInside: BorderSide.lerp(a.verticalInside, b.verticalInside, t),
     );
   }
@@ -129,7 +137,8 @@ class TableBorder {
 
     // arguments can't be null
     assert(rows.isEmpty || (rows.first >= 0.0 && rows.last <= rect.height));
-    assert(columns.isEmpty || (columns.first >= 0.0 && columns.last <= rect.width));
+    assert(columns.isEmpty ||
+        (columns.first >= 0.0 && columns.last <= rect.width));
 
     if (columns.isNotEmpty || rows.isNotEmpty) {
       final Paint paint = Paint();
@@ -172,7 +181,8 @@ class TableBorder {
       }
     }
     if (!isUniform || borderRadius == BorderRadius.zero) {
-      paintBorder(canvas, rect, top: top, right: right, bottom: bottom, left: left);
+      paintBorder(canvas, rect,
+          top: top, right: right, bottom: bottom, left: left);
     } else {
       final RRect outer = borderRadius.toRRect(rect);
       final RRect inner = outer.deflate(top.width);
@@ -189,19 +199,21 @@ class TableBorder {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is TableBorder
-        && other.top == top
-        && other.right == right
-        && other.bottom == bottom
-        && other.left == left
-        && other.horizontalInside == horizontalInside
-        && other.verticalInside == verticalInside
-        && other.borderRadius == borderRadius;
+    return other is TableBorder &&
+        other.top == top &&
+        other.right == right &&
+        other.bottom == bottom &&
+        other.left == left &&
+        other.horizontalInside == horizontalInside &&
+        other.verticalInside == verticalInside &&
+        other.borderRadius == borderRadius;
   }
 
   @override
-  int get hashCode => Object.hash(top, right, bottom, left, horizontalInside, verticalInside, borderRadius);
+  int get hashCode => Object.hash(
+      top, right, bottom, left, horizontalInside, verticalInside, borderRadius);
 
   @override
-  String toString() => 'TableBorder($top, $right, $bottom, $left, $horizontalInside, $verticalInside, $borderRadius)';
+  String toString() =>
+      'TableBorder($top, $right, $bottom, $left, $horizontalInside, $verticalInside, $borderRadius)';
 }

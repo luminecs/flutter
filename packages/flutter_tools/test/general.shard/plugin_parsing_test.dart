@@ -1,4 +1,3 @@
-
 import 'package:file/memory.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
 import 'package:flutter_tools/src/platform_plugins.dart';
@@ -14,8 +13,8 @@ void main() {
   testWithoutContext('Plugin creation from the legacy format', () {
     final MemoryFileSystem fileSystem = MemoryFileSystem.test();
     const String pluginYamlRaw = 'androidPackage: com.flutter.dev\n'
-      'iosPrefix: FLT\n'
-      'pluginClass: SamplePlugin\n';
+        'iosPrefix: FLT\n'
+        'pluginClass: SamplePlugin\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -27,8 +26,10 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final AndroidPlugin androidPlugin = plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
-    final IOSPlugin iosPlugin = plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
+    final AndroidPlugin androidPlugin =
+        plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
+    final IOSPlugin iosPlugin =
+        plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
 
     expect(iosPlugin.pluginClass, 'SamplePlugin');
     expect(iosPlugin.classPrefix, 'FLT');
@@ -40,22 +41,22 @@ void main() {
   testWithoutContext('Plugin creation from the multi-platform format', () {
     final MemoryFileSystem fileSystem = MemoryFileSystem.test();
     const String pluginYamlRaw = 'platforms:\n'
-      ' android:\n'
-      '  package: com.flutter.dev\n'
-      '  pluginClass: ASamplePlugin\n'
-      ' ios:\n'
-      '  pluginClass: ISamplePlugin\n'
-      '  sharedDarwinSource: true\n'
-      ' linux:\n'
-      '  pluginClass: LSamplePlugin\n'
-      ' macos:\n'
-      '  pluginClass: MSamplePlugin\n'
-      '  sharedDarwinSource: true\n'
-      ' web:\n'
-      '  pluginClass: WebSamplePlugin\n'
-      '  fileName: web_plugin.dart\n'
-      ' windows:\n'
-      '  pluginClass: WinSamplePlugin\n';
+        ' android:\n'
+        '  package: com.flutter.dev\n'
+        '  pluginClass: ASamplePlugin\n'
+        ' ios:\n'
+        '  pluginClass: ISamplePlugin\n'
+        '  sharedDarwinSource: true\n'
+        ' linux:\n'
+        '  pluginClass: LSamplePlugin\n'
+        ' macos:\n'
+        '  pluginClass: MSamplePlugin\n'
+        '  sharedDarwinSource: true\n'
+        ' web:\n'
+        '  pluginClass: WebSamplePlugin\n'
+        '  fileName: web_plugin.dart\n'
+        ' windows:\n'
+        '  pluginClass: WinSamplePlugin\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -67,12 +68,18 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final AndroidPlugin androidPlugin = plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
-    final IOSPlugin iosPlugin = plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
-    final LinuxPlugin linuxPlugin = plugin.platforms[LinuxPlugin.kConfigKey]! as LinuxPlugin;
-    final MacOSPlugin macOSPlugin = plugin.platforms[MacOSPlugin.kConfigKey]! as MacOSPlugin;
-    final WebPlugin webPlugin = plugin.platforms[WebPlugin.kConfigKey]! as WebPlugin;
-    final WindowsPlugin windowsPlugin = plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
+    final AndroidPlugin androidPlugin =
+        plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
+    final IOSPlugin iosPlugin =
+        plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
+    final LinuxPlugin linuxPlugin =
+        plugin.platforms[LinuxPlugin.kConfigKey]! as LinuxPlugin;
+    final MacOSPlugin macOSPlugin =
+        plugin.platforms[MacOSPlugin.kConfigKey]! as MacOSPlugin;
+    final WebPlugin webPlugin =
+        plugin.platforms[WebPlugin.kConfigKey]! as WebPlugin;
+    final WindowsPlugin windowsPlugin =
+        plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
 
     expect(iosPlugin.pluginClass, 'ISamplePlugin');
     expect(iosPlugin.classPrefix, '');
@@ -87,24 +94,27 @@ void main() {
     expect(windowsPlugin.pluginClass, 'WinSamplePlugin');
   });
 
-  testWithoutContext('Plugin parsing of unknown fields are allowed (allows some future compatibility)', () {
+  testWithoutContext(
+      'Plugin parsing of unknown fields are allowed (allows some future compatibility)',
+      () {
     final MemoryFileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw = 'implements: same_plugin\n' // this should be ignored by the tool
-      'platforms:\n'
-      ' android:\n'
-      '  package: com.flutter.dev\n'
-      '  pluginClass: ASamplePlugin\n'
-      '  anUnknownField: ASamplePlugin\n' // this should be ignored by the tool
-      ' ios:\n'
-      '  pluginClass: ISamplePlugin\n'
-      ' linux:\n'
-      '  pluginClass: LSamplePlugin\n'
-      ' macos:\n'
-      '  pluginClass: MSamplePlugin\n'
-      ' web:\n'
-      '  pluginClass: WebSamplePlugin\n'
-      '  fileName: web_plugin.dart\n'
-      ' windows:\n'
+    const String pluginYamlRaw =
+        'implements: same_plugin\n' // this should be ignored by the tool
+        'platforms:\n'
+        ' android:\n'
+        '  package: com.flutter.dev\n'
+        '  pluginClass: ASamplePlugin\n'
+        '  anUnknownField: ASamplePlugin\n' // this should be ignored by the tool
+        ' ios:\n'
+        '  pluginClass: ISamplePlugin\n'
+        ' linux:\n'
+        '  pluginClass: LSamplePlugin\n'
+        ' macos:\n'
+        '  pluginClass: MSamplePlugin\n'
+        ' web:\n'
+        '  pluginClass: WebSamplePlugin\n'
+        '  fileName: web_plugin.dart\n'
+        ' windows:\n'
         '  pluginClass: WinSamplePlugin\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
@@ -117,12 +127,18 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final AndroidPlugin androidPlugin = plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
-    final IOSPlugin iosPlugin = plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
-    final LinuxPlugin linuxPlugin = plugin.platforms[LinuxPlugin.kConfigKey]! as LinuxPlugin;
-    final MacOSPlugin macOSPlugin = plugin.platforms[MacOSPlugin.kConfigKey]! as MacOSPlugin;
-    final WebPlugin webPlugin = plugin.platforms[WebPlugin.kConfigKey]! as WebPlugin;
-    final WindowsPlugin windowsPlugin = plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
+    final AndroidPlugin androidPlugin =
+        plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
+    final IOSPlugin iosPlugin =
+        plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
+    final LinuxPlugin linuxPlugin =
+        plugin.platforms[LinuxPlugin.kConfigKey]! as LinuxPlugin;
+    final MacOSPlugin macOSPlugin =
+        plugin.platforms[MacOSPlugin.kConfigKey]! as MacOSPlugin;
+    final WebPlugin webPlugin =
+        plugin.platforms[WebPlugin.kConfigKey]! as WebPlugin;
+    final WindowsPlugin windowsPlugin =
+        plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
 
     expect(iosPlugin.pluginClass, 'ISamplePlugin');
     expect(iosPlugin.classPrefix, '');
@@ -137,20 +153,22 @@ void main() {
     expect(windowsPlugin.pluginClass, 'WinSamplePlugin');
   });
 
-  testWithoutContext('Plugin parsing allows for Dart-only plugins without a pluginClass', () {
+  testWithoutContext(
+      'Plugin parsing allows for Dart-only plugins without a pluginClass', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw = 'implements: same_plugin\n' // this should be ignored by the tool
-      'platforms:\n'
-      ' android:\n'
-      '  dartPluginClass: ASamplePlugin\n'
-      ' ios:\n'
-      '  dartPluginClass: ISamplePlugin\n'
-      ' linux:\n'
-      '  dartPluginClass: LSamplePlugin\n'
-      ' macos:\n'
-      '  dartPluginClass: MSamplePlugin\n'
-      ' windows:\n'
-      '  dartPluginClass: WinSamplePlugin\n';
+    const String pluginYamlRaw =
+        'implements: same_plugin\n' // this should be ignored by the tool
+        'platforms:\n'
+        ' android:\n'
+        '  dartPluginClass: ASamplePlugin\n'
+        ' ios:\n'
+        '  dartPluginClass: ISamplePlugin\n'
+        ' linux:\n'
+        '  dartPluginClass: LSamplePlugin\n'
+        ' macos:\n'
+        '  dartPluginClass: MSamplePlugin\n'
+        ' windows:\n'
+        '  dartPluginClass: WinSamplePlugin\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -162,11 +180,16 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final AndroidPlugin androidPlugin = plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
-    final IOSPlugin iOSPlugin = plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
-    final LinuxPlugin linuxPlugin = plugin.platforms[LinuxPlugin.kConfigKey]! as LinuxPlugin;
-    final MacOSPlugin macOSPlugin = plugin.platforms[MacOSPlugin.kConfigKey]! as MacOSPlugin;
-    final WindowsPlugin windowsPlugin = plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
+    final AndroidPlugin androidPlugin =
+        plugin.platforms[AndroidPlugin.kConfigKey]! as AndroidPlugin;
+    final IOSPlugin iOSPlugin =
+        plugin.platforms[IOSPlugin.kConfigKey]! as IOSPlugin;
+    final LinuxPlugin linuxPlugin =
+        plugin.platforms[LinuxPlugin.kConfigKey]! as LinuxPlugin;
+    final MacOSPlugin macOSPlugin =
+        plugin.platforms[MacOSPlugin.kConfigKey]! as MacOSPlugin;
+    final WindowsPlugin windowsPlugin =
+        plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
 
     expect(androidPlugin.pluginClass, isNull);
     expect(iOSPlugin.pluginClass, isNull);
@@ -180,18 +203,19 @@ void main() {
     expect(windowsPlugin.dartPluginClass, 'WinSamplePlugin');
   });
 
-  testWithoutContext('Plugin parsing of legacy format and multi-platform format together is not allowed '
-    'and fatal error message contains plugin name', () {
+  testWithoutContext(
+      'Plugin parsing of legacy format and multi-platform format together is not allowed '
+      'and fatal error message contains plugin name', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
     const String pluginYamlRaw = 'androidPackage: com.flutter.dev\n'
-      'platforms:\n'
-      ' android:\n'
-      '  package: com.flutter.dev\n';
+        'platforms:\n'
+        ' android:\n'
+        '  package: com.flutter.dev\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
 
     expect(
-     () => Plugin.fromYaml(
+      () => Plugin.fromYaml(
         _kTestPluginName,
         _kTestPluginPath,
         pluginYaml,
@@ -205,20 +229,19 @@ void main() {
 
   testWithoutContext('Plugin parsing allows a default_package field', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' android:\n'
-      '  default_package: sample_package_android\n'
-      ' ios:\n'
-      '  default_package: sample_package_ios\n'
-      ' linux:\n'
-      '  default_package: sample_package_linux\n'
-      ' macos:\n'
-      '  default_package: sample_package_macos\n'
-      ' web:\n'
-      '  default_package: sample_package_web\n'
-      ' windows:\n'
-      '  default_package: sample_package_windows\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' android:\n'
+        '  default_package: sample_package_android\n'
+        ' ios:\n'
+        '  default_package: sample_package_ios\n'
+        ' linux:\n'
+        '  default_package: sample_package_linux\n'
+        ' macos:\n'
+        '  default_package: sample_package_macos\n'
+        ' web:\n'
+        '  default_package: sample_package_web\n'
+        ' windows:\n'
+        '  default_package: sample_package_windows\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -241,16 +264,16 @@ void main() {
     expect(plugin.pluginDartClassPlatforms, <String, String>{});
   });
 
-  testWithoutContext('Desktop plugin parsing allows a dartPluginClass field', () {
+  testWithoutContext('Desktop plugin parsing allows a dartPluginClass field',
+      () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' linux:\n'
-      '  dartPluginClass: LinuxClass\n'
-      ' macos:\n'
-      '  dartPluginClass: MacOSClass\n'
-      ' windows:\n'
-      '  dartPluginClass: WindowsClass\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' linux:\n'
+        '  dartPluginClass: LinuxClass\n'
+        ' macos:\n'
+        '  dartPluginClass: MacOSClass\n'
+        ' windows:\n'
+        '  dartPluginClass: WindowsClass\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -271,12 +294,11 @@ void main() {
 
   testWithoutContext('Windows allows supported mode lists', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' windows:\n'
-      '  pluginClass: WinSamplePlugin\n'
-      '  supportedVariants:\n'
-      '    - win32\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' windows:\n'
+        '  pluginClass: WinSamplePlugin\n'
+        '  supportedVariants:\n'
+        '    - win32\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -288,7 +310,8 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final WindowsPlugin windowsPlugin = plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
+    final WindowsPlugin windowsPlugin =
+        plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
     expect(windowsPlugin.supportedVariants, <PluginPlatformVariant>[
       PluginPlatformVariant.win32,
     ]);
@@ -296,10 +319,9 @@ void main() {
 
   testWithoutContext('Web plugin tool exits if fileName field missing', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' web:\n'
-      '  pluginClass: WebSamplePlugin\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' web:\n'
+        '  pluginClass: WebSamplePlugin\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     expect(
@@ -312,17 +334,17 @@ void main() {
         fileSystem: fileSystem,
       ),
       throwsToolExit(
-        message: 'The plugin `$_kTestPluginName` is missing the required field `fileName` in pubspec.yaml',
+        message:
+            'The plugin `$_kTestPluginName` is missing the required field `fileName` in pubspec.yaml',
       ),
     );
   });
 
   testWithoutContext('Windows assumes win32 when no variants are given', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' windows:\n'
-      '  pluginClass: WinSamplePlugin\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' windows:\n'
+        '  pluginClass: WinSamplePlugin\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -334,7 +356,8 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final WindowsPlugin windowsPlugin = plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
+    final WindowsPlugin windowsPlugin =
+        plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
     expect(windowsPlugin.supportedVariants, <PluginPlatformVariant>[
       PluginPlatformVariant.win32,
     ]);
@@ -342,12 +365,11 @@ void main() {
 
   testWithoutContext('Windows ignores unknown variants', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' windows:\n'
-      '  pluginClass: WinSamplePlugin\n'
-      '  supportedVariants:\n'
-      '    - not_yet_invented_variant\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' windows:\n'
+        '  pluginClass: WinSamplePlugin\n'
+        '  supportedVariants:\n'
+        '    - not_yet_invented_variant\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     final Plugin plugin = Plugin.fromYaml(
@@ -359,11 +381,13 @@ void main() {
       fileSystem: fileSystem,
     );
 
-    final WindowsPlugin windowsPlugin = plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
+    final WindowsPlugin windowsPlugin =
+        plugin.platforms[WindowsPlugin.kConfigKey]! as WindowsPlugin;
     expect(windowsPlugin.supportedVariants, <PluginPlatformVariant>{});
   });
 
-  testWithoutContext('Plugin parsing throws a fatal error on an empty plugin', () {
+  testWithoutContext('Plugin parsing throws a fatal error on an empty plugin',
+      () {
     final MemoryFileSystem fileSystem = MemoryFileSystem.test();
     final YamlMap? pluginYaml = loadYaml('') as YamlMap?;
 
@@ -380,7 +404,8 @@ void main() {
     );
   });
 
-  testWithoutContext('Plugin parsing throws a fatal error on empty platforms', () {
+  testWithoutContext('Plugin parsing throws a fatal error on empty platforms',
+      () {
     final MemoryFileSystem fileSystem = MemoryFileSystem.test();
     const String pluginYamlRaw = 'platforms:\n';
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
@@ -400,9 +425,8 @@ void main() {
 
   test('Plugin parsing throws a fatal error on an empty platform key', () {
     final MemoryFileSystem fileSystem = MemoryFileSystem.test();
-    const String pluginYamlRaw =
-      'platforms:\n'
-      ' android:\n';
+    const String pluginYamlRaw = 'platforms:\n'
+        ' android:\n';
 
     final YamlMap pluginYaml = loadYaml(pluginYamlRaw) as YamlMap;
     expect(

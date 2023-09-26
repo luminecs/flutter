@@ -1,4 +1,3 @@
-
 import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:flutter_tools/src/base/io.dart';
@@ -17,20 +16,22 @@ const ProcessManager processManager = LocalProcessManager();
 
 Directory createResolvedTempDirectorySync(String prefix) {
   assert(prefix.endsWith('.'));
-  final Directory tempDirectory = fileSystem.systemTempDirectory.createTempSync('flutter_$prefix');
+  final Directory tempDirectory =
+      fileSystem.systemTempDirectory.createTempSync('flutter_$prefix');
   return fileSystem.directory(tempDirectory.resolveSymbolicLinksSync());
 }
 
-void writeFile(String path, String content, {bool writeFutureModifiedDate = false}) {
+void writeFile(String path, String content,
+    {bool writeFutureModifiedDate = false}) {
   final File file = fileSystem.file(path)
     ..createSync(recursive: true)
     ..writeAsStringSync(content, flush: true);
-    // Some integration tests on Windows to not see this file as being modified
-    // recently enough for the hot reload to pick this change up unless the
-    // modified time is written in the future.
-    if (writeFutureModifiedDate) {
-      file.setLastModifiedSync(DateTime.now().add(const Duration(seconds: 5)));
-    }
+  // Some integration tests on Windows to not see this file as being modified
+  // recently enough for the hot reload to pick this change up unless the
+  // modified time is written in the future.
+  if (writeFutureModifiedDate) {
+    file.setLastModifiedSync(DateTime.now().add(const Duration(seconds: 5)));
+  }
 }
 
 void writeBytesFile(String path, List<int> content) {
@@ -51,9 +52,11 @@ Future<void> getPackages(String folder) async {
     'pub',
     'get',
   ];
-  final ProcessResult result = await processManager.run(command, workingDirectory: folder);
+  final ProcessResult result =
+      await processManager.run(command, workingDirectory: folder);
   if (result.exitCode != 0) {
-    throw Exception('flutter pub get failed: ${result.stderr}\n${result.stdout}');
+    throw Exception(
+        'flutter pub get failed: ${result.stderr}\n${result.stdout}');
   }
 }
 
@@ -106,7 +109,7 @@ abstract final class AppleTestUtils {
     final ProcessResult nm = processManager.runSync(
       <String>[
         'nm',
-        '--debug-syms',  // nm docs: 'Show all symbols, even debugger only'
+        '--debug-syms', // nm docs: 'Show all symbols, even debugger only'
         '--defined-only',
         '--just-symbol-name',
         dwarfPath,

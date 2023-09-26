@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 
 import 'framework.dart';
@@ -21,14 +20,15 @@ class SliverPrototypeExtentList extends SliverMultiBoxAdaptorWidget {
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
-  }) : super(delegate: SliverChildBuilderDelegate(
-         itemBuilder,
-         findChildIndexCallback: findChildIndexCallback,
-         childCount: itemCount,
-         addAutomaticKeepAlives: addAutomaticKeepAlives,
-         addRepaintBoundaries: addRepaintBoundaries,
-         addSemanticIndexes: addSemanticIndexes,
-       ));
+  }) : super(
+            delegate: SliverChildBuilderDelegate(
+          itemBuilder,
+          findChildIndexCallback: findChildIndexCallback,
+          childCount: itemCount,
+          addAutomaticKeepAlives: addAutomaticKeepAlives,
+          addRepaintBoundaries: addRepaintBoundaries,
+          addSemanticIndexes: addSemanticIndexes,
+        ));
 
   SliverPrototypeExtentList.list({
     super.key,
@@ -37,36 +37,41 @@ class SliverPrototypeExtentList extends SliverMultiBoxAdaptorWidget {
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
-  }) : super(delegate: SliverChildListDelegate(
-         children,
-         addAutomaticKeepAlives: addAutomaticKeepAlives,
-         addRepaintBoundaries: addRepaintBoundaries,
-         addSemanticIndexes: addSemanticIndexes,
-       ));
+  }) : super(
+            delegate: SliverChildListDelegate(
+          children,
+          addAutomaticKeepAlives: addAutomaticKeepAlives,
+          addRepaintBoundaries: addRepaintBoundaries,
+          addSemanticIndexes: addSemanticIndexes,
+        ));
 
   final Widget prototypeItem;
 
   @override
   RenderSliverMultiBoxAdaptor createRenderObject(BuildContext context) {
-    final _SliverPrototypeExtentListElement element = context as _SliverPrototypeExtentListElement;
+    final _SliverPrototypeExtentListElement element =
+        context as _SliverPrototypeExtentListElement;
     return _RenderSliverPrototypeExtentList(childManager: element);
   }
 
   @override
-  SliverMultiBoxAdaptorElement createElement() => _SliverPrototypeExtentListElement(this);
+  SliverMultiBoxAdaptorElement createElement() =>
+      _SliverPrototypeExtentListElement(this);
 }
 
 class _SliverPrototypeExtentListElement extends SliverMultiBoxAdaptorElement {
   _SliverPrototypeExtentListElement(SliverPrototypeExtentList super.widget);
 
   @override
-  _RenderSliverPrototypeExtentList get renderObject => super.renderObject as _RenderSliverPrototypeExtentList;
+  _RenderSliverPrototypeExtentList get renderObject =>
+      super.renderObject as _RenderSliverPrototypeExtentList;
 
   Element? _prototype;
   static final Object _prototypeSlot = Object();
 
   @override
-  void insertRenderObjectChild(covariant RenderObject child, covariant Object slot) {
+  void insertRenderObjectChild(
+      covariant RenderObject child, covariant Object slot) {
     if (slot == _prototypeSlot) {
       assert(child is RenderBox);
       renderObject.child = child as RenderBox;
@@ -112,18 +117,21 @@ class _SliverPrototypeExtentListElement extends SliverMultiBoxAdaptorElement {
   @override
   void mount(Element? parent, Object? newSlot) {
     super.mount(parent, newSlot);
-    _prototype = updateChild(_prototype, (widget as SliverPrototypeExtentList).prototypeItem, _prototypeSlot);
+    _prototype = updateChild(_prototype,
+        (widget as SliverPrototypeExtentList).prototypeItem, _prototypeSlot);
   }
 
   @override
   void update(SliverPrototypeExtentList newWidget) {
     super.update(newWidget);
     assert(widget == newWidget);
-    _prototype = updateChild(_prototype, (widget as SliverPrototypeExtentList).prototypeItem, _prototypeSlot);
+    _prototype = updateChild(_prototype,
+        (widget as SliverPrototypeExtentList).prototypeItem, _prototypeSlot);
   }
 }
 
-class _RenderSliverPrototypeExtentList extends RenderSliverFixedExtentBoxAdaptor {
+class _RenderSliverPrototypeExtentList
+    extends RenderSliverFixedExtentBoxAdaptor {
   _RenderSliverPrototypeExtentList({
     required _SliverPrototypeExtentListElement childManager,
   }) : super(childManager: childManager);
@@ -182,6 +190,8 @@ class _RenderSliverPrototypeExtentList extends RenderSliverFixedExtentBoxAdaptor
   @override
   double get itemExtent {
     assert(child != null && child!.hasSize);
-    return constraints.axis == Axis.vertical ? child!.size.height : child!.size.width;
+    return constraints.axis == Axis.vertical
+        ? child!.size.height
+        : child!.size.width;
   }
 }

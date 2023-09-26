@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const MethodChannel channel = MethodChannel('com.example.abstract_method_smoke_test');
+  const MethodChannel channel =
+      MethodChannel('com.example.abstract_method_smoke_test');
   await channel.invokeMethod<void>('show_keyboard');
   runApp(const MyApp());
   print('Test succeeded');
@@ -40,8 +40,8 @@ class _HomePage extends State<HomePage> {
     // Trigger the second route.
     // https://github.com/flutter/flutter/issues/40126
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const SecondPage()));
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => const SecondPage()));
     });
   }
 
@@ -59,9 +59,7 @@ class SecondPage extends StatelessWidget {
     return const Scaffold(
       body: Column(
         children: <Widget>[
-          Expanded(
-            child: AndroidView(viewType: 'simple')
-          ),
+          Expanded(child: AndroidView(viewType: 'simple')),
         ],
       ),
     );

@@ -1,4 +1,3 @@
-
 // This file is run as part of a reduced test set in CI on Mac and Windows
 // machines.
 @Tags(<String>['reduced-test-set'])
@@ -10,7 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Activity indicator animate property works', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Activity indicator animate property works',
+      (WidgetTester tester) async {
     await tester.pumpWidget(buildCupertinoActivityIndicator());
     expect(SchedulerBinding.instance.transientCallbackCount, equals(1));
 
@@ -26,7 +26,8 @@ void main() {
     expect(SchedulerBinding.instance.transientCallbackCount, equals(1));
   });
 
-  testWidgetsWithLeakTracking('Activity indicator dark mode', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Activity indicator dark mode',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
     await tester.pumpWidget(
       Center(
@@ -75,7 +76,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Activity indicator 0% in progress', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Activity indicator 0% in progress',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
     await tester.pumpWidget(
       Center(
@@ -97,7 +99,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Activity indicator 30% in progress', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Activity indicator 30% in progress',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
     await tester.pumpWidget(
       Center(
@@ -119,7 +122,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Activity indicator 100% in progress', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Activity indicator 100% in progress',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
     await tester.pumpWidget(
       Center(
@@ -140,7 +144,8 @@ void main() {
   });
 
   // Regression test for https://github.com/flutter/flutter/issues/41345.
-  testWidgetsWithLeakTracking('has the correct corner radius', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('has the correct corner radius',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoActivityIndicator(animating: false, radius: 100),
     );
@@ -177,8 +182,9 @@ void main() {
     expect(
       find.byType(CupertinoActivityIndicator),
       paints
-        ..rrect(rrect: const RRect.fromLTRBXY(-10, -100 / 3, 10, -100, 10, 10),
-                color: const Color(0x935d3fd3)),
+        ..rrect(
+            rrect: const RRect.fromLTRBXY(-10, -100 / 3, 10, -100, 10, 10),
+            color: const Color(0x935d3fd3)),
     );
   });
 }

@@ -1,4 +1,3 @@
-
 @Tags(<String>['reduced-test-set'])
 library;
 
@@ -135,7 +134,8 @@ void main() {
     expect(canvas.capturedPaint, hasColor(0x80666666));
   });
 
-  testWidgetsWithLeakTracking('color overrides IconTheme color', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('color overrides IconTheme color',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -181,7 +181,8 @@ void main() {
     expect(canvas.capturedSy, 0.25);
   });
 
-  testWidgetsWithLeakTracking('size overridesIconTheme size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('size overridesIconTheme size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -226,7 +227,8 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgetsWithLeakTracking('Inherited text direction rtl', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Inherited text direction rtl',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.rtl,
@@ -255,7 +257,8 @@ void main() {
         matchesGoldenFile('animated_icons_test.icon.rtl.png'));
   });
 
-  testWidgetsWithLeakTracking('Inherited text direction ltr', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Inherited text direction ltr',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -282,7 +285,8 @@ void main() {
         matchesGoldenFile('animated_icons_test.icon.ltr.png'));
   });
 
-  testWidgetsWithLeakTracking('Inherited text direction overridden', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Inherited text direction overridden',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -308,7 +312,8 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Direction has no effect on position of widget', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Direction has no effect on position of widget',
+      (WidgetTester tester) async {
     const AnimatedIcon icon = AnimatedIcon(
       progress: AlwaysStoppedAnimation<double>(0.0),
       icon: AnimatedIcons.arrow_menu,
@@ -336,7 +341,7 @@ class PaintColorMatcher extends Matcher {
 
   @override
   Description describe(Description description) =>
-    description.add('color was not $expectedColor');
+      description.add('color was not $expectedColor');
 
   @override
   bool matches(dynamic item, Map<dynamic, dynamic> matchState) {

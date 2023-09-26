@@ -1,4 +1,3 @@
-
 // The reduced test set tag is missing. This should fail analysis.
 @Tags(<String>['some-other-tag'])
 library;

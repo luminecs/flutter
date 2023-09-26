@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const AppBarApp());
 
@@ -63,7 +61,8 @@ class _SliverAppBarExampleState extends State<SliverAppBarExample> {
                   height: 100.0,
                   child: Center(
                     // todo-luminecs Text textScaler linear
-                    child: Text('$index', textScaler: const TextScaler.linear(5)),
+                    child:
+                        Text('$index', textScaler: const TextScaler.linear(5)),
                   ),
                 );
               },

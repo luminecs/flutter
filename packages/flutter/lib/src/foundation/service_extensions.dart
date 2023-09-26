@@ -1,4 +1,3 @@
-
 enum FoundationServiceExtensions {
   reassemble,
 
@@ -7,7 +6,6 @@ enum FoundationServiceExtensions {
   connectedVmServiceUri,
 
   activeDevToolsServerAddress,
-
 
   platformOverride,
 

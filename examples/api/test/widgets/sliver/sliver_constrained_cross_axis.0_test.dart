@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_api_samples/widgets/sliver/sliver_constrained_cross_axis.0.dart'
@@ -6,12 +5,14 @@ import 'package:flutter_api_samples/widgets/sliver/sliver_constrained_cross_axis
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('SliverConstrainedCrossAxis example', (WidgetTester tester) async {
+  testWidgets('SliverConstrainedCrossAxis example',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.SliverConstrainedCrossAxisExampleApp(),
     );
 
-    final RenderSliverList renderSliverList = tester.renderObject(find.byType(SliverList));
+    final RenderSliverList renderSliverList =
+        tester.renderObject(find.byType(SliverList));
     expect(renderSliverList.constraints.crossAxisExtent, equals(200));
   });
 }

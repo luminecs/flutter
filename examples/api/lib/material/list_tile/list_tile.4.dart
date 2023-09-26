@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const ListTileApp());
 
@@ -48,7 +46,8 @@ class _ListTileExampleState extends State<ListTileExample> {
                   titleAlignment = value;
                 });
               },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<ListTileTitleAlignment>>[
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<ListTileTitleAlignment>>[
                 const PopupMenuItem<ListTileTitleAlignment>(
                   value: ListTileTitleAlignment.threeLine,
                   child: Text('threeLine'),

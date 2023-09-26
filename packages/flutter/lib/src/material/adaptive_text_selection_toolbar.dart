@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
@@ -35,25 +34,24 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
     required VoidCallback? onShare,
     required VoidCallback? onLiveTextInput,
     required this.anchors,
-  }) : children = null,
-       buttonItems = EditableText.getEditableButtonItems(
-         clipboardStatus: clipboardStatus,
-         onCopy: onCopy,
-         onCut: onCut,
-         onPaste: onPaste,
-         onSelectAll: onSelectAll,
-         onLookUp: onLookUp,
-         onSearchWeb: onSearchWeb,
-         onShare: onShare,
-         onLiveTextInput: onLiveTextInput
-       );
+  })  : children = null,
+        buttonItems = EditableText.getEditableButtonItems(
+            clipboardStatus: clipboardStatus,
+            onCopy: onCopy,
+            onCut: onCut,
+            onPaste: onPaste,
+            onSelectAll: onSelectAll,
+            onLookUp: onLookUp,
+            onSearchWeb: onSearchWeb,
+            onShare: onShare,
+            onLiveTextInput: onLiveTextInput);
 
   AdaptiveTextSelectionToolbar.editableText({
     super.key,
     required EditableTextState editableTextState,
-  }) : children = null,
-       buttonItems = editableTextState.contextMenuButtonItems,
-       anchors = editableTextState.contextMenuAnchors;
+  })  : children = null,
+        buttonItems = editableTextState.contextMenuButtonItems,
+        anchors = editableTextState.contextMenuAnchors;
 
   AdaptiveTextSelectionToolbar.selectable({
     super.key,
@@ -61,19 +59,19 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
     required VoidCallback onSelectAll,
     required SelectionGeometry selectionGeometry,
     required this.anchors,
-  }) : children = null,
-       buttonItems = SelectableRegion.getSelectableButtonItems(
-         selectionGeometry: selectionGeometry,
-         onCopy: onCopy,
-         onSelectAll: onSelectAll,
-       );
+  })  : children = null,
+        buttonItems = SelectableRegion.getSelectableButtonItems(
+          selectionGeometry: selectionGeometry,
+          onCopy: onCopy,
+          onSelectAll: onSelectAll,
+        );
 
   AdaptiveTextSelectionToolbar.selectableRegion({
     super.key,
     required SelectableRegionState selectableRegionState,
-  }) : children = null,
-       buttonItems = selectableRegionState.contextMenuButtonItems,
-       anchors = selectableRegionState.contextMenuAnchors;
+  })  : children = null,
+        buttonItems = selectableRegionState.contextMenuButtonItems,
+        anchors = selectableRegionState.contextMenuAnchors;
 
   final List<ContextMenuButtonItem>? buttonItems;
 
@@ -81,7 +79,8 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
 
   final TextSelectionToolbarAnchors anchors;
 
-  static String getButtonLabel(BuildContext context, ContextMenuButtonItem buttonItem) {
+  static String getButtonLabel(
+      BuildContext context, ContextMenuButtonItem buttonItem) {
     if (buttonItem.label != null) {
       return buttonItem.label!;
     }
@@ -98,7 +97,8 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         assert(debugCheckHasMaterialLocalizations(context));
-        final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+        final MaterialLocalizations localizations =
+            MaterialLocalizations.of(context);
         switch (buttonItem.type) {
           case ContextMenuButtonType.cut:
             return localizations.cutButtonLabel;
@@ -124,21 +124,23 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
     }
   }
 
-  static Iterable<Widget> getAdaptiveButtons(BuildContext context, List<ContextMenuButtonItem> buttonItems) {
+  static Iterable<Widget> getAdaptiveButtons(
+      BuildContext context, List<ContextMenuButtonItem> buttonItems) {
     switch (Theme.of(context).platform) {
       case TargetPlatform.iOS:
         return buttonItems.map((ContextMenuButtonItem buttonItem) {
-            return CupertinoTextSelectionToolbarButton.buttonItem(
-              buttonItem: buttonItem,
-            );
-          });
+          return CupertinoTextSelectionToolbarButton.buttonItem(
+            buttonItem: buttonItem,
+          );
+        });
       case TargetPlatform.fuchsia:
       case TargetPlatform.android:
         final List<Widget> buttons = <Widget>[];
         for (int i = 0; i < buttonItems.length; i++) {
           final ContextMenuButtonItem buttonItem = buttonItems[i];
           buttons.add(TextSelectionToolbarTextButton(
-            padding: TextSelectionToolbarTextButton.getPadding(i, buttonItems.length),
+            padding: TextSelectionToolbarTextButton.getPadding(
+                i, buttonItems.length),
             onPressed: buttonItem.onPressed,
             child: Text(getButtonLabel(context, buttonItem)),
           ));
@@ -166,8 +168,8 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // If there aren't any buttons to build, build an empty toolbar.
-    if ((children != null && children!.isEmpty)
-      || (buttonItems != null && buttonItems!.isEmpty)) {
+    if ((children != null && children!.isEmpty) ||
+        (buttonItems != null && buttonItems!.isEmpty)) {
       return const SizedBox.shrink();
     }
 
@@ -179,13 +181,17 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
       case TargetPlatform.iOS:
         return CupertinoTextSelectionToolbar(
           anchorAbove: anchors.primaryAnchor,
-          anchorBelow: anchors.secondaryAnchor == null ? anchors.primaryAnchor : anchors.secondaryAnchor!,
+          anchorBelow: anchors.secondaryAnchor == null
+              ? anchors.primaryAnchor
+              : anchors.secondaryAnchor!,
           children: resultChildren,
         );
       case TargetPlatform.android:
         return TextSelectionToolbar(
           anchorAbove: anchors.primaryAnchor,
-          anchorBelow: anchors.secondaryAnchor == null ? anchors.primaryAnchor : anchors.secondaryAnchor!,
+          anchorBelow: anchors.secondaryAnchor == null
+              ? anchors.primaryAnchor
+              : anchors.secondaryAnchor!,
           children: resultChildren,
         );
       case TargetPlatform.fuchsia:

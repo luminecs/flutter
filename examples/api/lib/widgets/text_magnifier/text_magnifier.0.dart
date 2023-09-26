@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +26,9 @@ class TextMagnifierExampleApp extends StatelessWidget {
               // Create a custom magnifier configuration that
               // this `TextField` will use to build a magnifier with.
               magnifierConfiguration: TextMagnifierConfiguration(
-                magnifierBuilder: (_, __, ValueNotifier<MagnifierInfo> magnifierInfo) => CustomMagnifier(
+                magnifierBuilder:
+                    (_, __, ValueNotifier<MagnifierInfo> magnifierInfo) =>
+                        CustomMagnifier(
                   magnifierInfo: magnifierInfo,
                 ),
               ),

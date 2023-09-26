@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const GeneralDialogApp());
 
@@ -34,7 +32,8 @@ class GeneralDialogExample extends StatelessWidget {
   }
 
   @pragma('vm:entry-point')
-  static Route<Object?> _dialogBuilder(BuildContext context, Object? arguments) {
+  static Route<Object?> _dialogBuilder(
+      BuildContext context, Object? arguments) {
     return RawDialogRoute<void>(
       pageBuilder: (
         BuildContext context,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'transformations_demo_board.dart';
 import 'transformations_demo_color_picker.dart';
@@ -16,7 +15,7 @@ class EditBoardPoint extends StatelessWidget {
   final ValueChanged<Color>? onColorSelection;
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[

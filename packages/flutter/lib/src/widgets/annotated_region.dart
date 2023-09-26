@@ -1,4 +1,3 @@
-
 import 'package:flutter/rendering.dart';
 
 import 'framework.dart';
@@ -21,7 +20,8 @@ class AnnotatedRegion<T extends Object> extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderAnnotatedRegion<T> renderObject) {
+  void updateRenderObject(
+      BuildContext context, RenderAnnotatedRegion<T> renderObject) {
     renderObject
       ..value = value
       ..sized = sized;

@@ -1,8 +1,7 @@
-
 import 'message.dart';
 
 class GetRenderTree extends Command {
-  const GetRenderTree({ super.timeout });
+  const GetRenderTree({super.timeout});
 
   GetRenderTree.deserialize(super.json) : super.deserialize();
 
@@ -21,6 +20,6 @@ class RenderTree extends Result {
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'tree': tree,
-  };
+        'tree': tree,
+      };
 }

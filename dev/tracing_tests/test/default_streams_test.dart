@@ -1,4 +1,3 @@
-
 import 'dart:developer' as developer;
 
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +11,8 @@ void main() {
   late VmService vmService;
 
   setUpAll(() async {
-    final developer.ServiceProtocolInfo info = await developer.Service.getInfo();
+    final developer.ServiceProtocolInfo info =
+        await developer.Service.getInfo();
 
     if (info.serverUri == null) {
       fail('This test _must_ be run with --enable-vmservice.');
@@ -29,10 +29,12 @@ void main() {
 
   test('Image cache tracing', () async {
     final TimelineFlags flags = await vmService.getVMTimelineFlags();
-    expect(flags.recordedStreams, containsAll(<String>[
-      'Dart',
-      'Embedder',
-      'GC',
-    ]));
+    expect(
+        flags.recordedStreams,
+        containsAll(<String>[
+          'Dart',
+          'Embedder',
+          'GC',
+        ]));
   }, skip: isBrowser); // [intended] uses dart:isolate and io.
 }

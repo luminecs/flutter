@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/base/platform.dart';
 
 import '../../src/common.dart';

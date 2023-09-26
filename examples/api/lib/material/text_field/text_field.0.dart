@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 class ObscuredTextFieldSample extends StatelessWidget {
   const ObscuredTextFieldSample({super.key});

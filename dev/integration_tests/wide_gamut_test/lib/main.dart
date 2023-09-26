@@ -1,4 +1,3 @@
-
 import 'dart:async' show Completer;
 import 'dart:convert' show base64Decode;
 import 'dart:typed_data' show ByteData, Uint8List;
@@ -222,12 +221,10 @@ Future<ui.Image> _drawImage() async {
   final ByteData? byteData =
       await image.toByteData(format: ui.ImageByteFormat.rawExtendedRgba128);
   final Completer<ui.Image> completer = Completer<ui.Image>();
-  ui.decodeImageFromPixels(Uint8List.view(byteData!.buffer),
-      canvasSize.toInt(),
-      canvasSize.toInt(),
-      ui.PixelFormat.rgbaFloat32, (ui.Image image) {
-        completer.complete(image);
-      });
+  ui.decodeImageFromPixels(Uint8List.view(byteData!.buffer), canvasSize.toInt(),
+      canvasSize.toInt(), ui.PixelFormat.rgbaFloat32, (ui.Image image) {
+    completer.complete(image);
+  });
   return completer.future;
 }
 

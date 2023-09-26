@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 
 class DartDependencyPackage {
@@ -16,7 +15,8 @@ class DartDependencyPackage {
     List<dynamic> dependencies = <dynamic>[];
 
     if (packageInfo is LinkedHashMap) {
-      final LinkedHashMap<String, dynamic> info = packageInfo as LinkedHashMap<String, dynamic>;
+      final LinkedHashMap<String, dynamic> info =
+          packageInfo as LinkedHashMap<String, dynamic>;
       if (info.containsKey('name')) {
         name = info['name'] as String;
       }
@@ -42,7 +42,6 @@ class DartDependencyPackage {
   final String version;
   final String source;
   final List<String> dependencies;
-
 }
 
 class DartPubJson {

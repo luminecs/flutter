@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -11,7 +10,7 @@ import 'gesture_detector.dart';
 import 'navigator.dart';
 import 'transitions.dart';
 
-class _SemanticsClipper extends SingleChildRenderObjectWidget{
+class _SemanticsClipper extends SingleChildRenderObjectWidget {
   const _SemanticsClipper({
     super.child,
     required this.clipDetailsNotifier,
@@ -21,25 +20,29 @@ class _SemanticsClipper extends SingleChildRenderObjectWidget{
 
   @override
   _RenderSemanticsClipper createRenderObject(BuildContext context) {
-    return _RenderSemanticsClipper(clipDetailsNotifier: clipDetailsNotifier,);
+    return _RenderSemanticsClipper(
+      clipDetailsNotifier: clipDetailsNotifier,
+    );
   }
 
   @override
-  void updateRenderObject(BuildContext context, _RenderSemanticsClipper renderObject) {
+  void updateRenderObject(
+      BuildContext context, _RenderSemanticsClipper renderObject) {
     renderObject.clipDetailsNotifier = clipDetailsNotifier;
   }
 }
+
 class _RenderSemanticsClipper extends RenderProxyBox {
   _RenderSemanticsClipper({
     required ValueNotifier<EdgeInsets> clipDetailsNotifier,
     RenderBox? child,
-  }) : _clipDetailsNotifier = clipDetailsNotifier,
-      super(child);
+  })  : _clipDetailsNotifier = clipDetailsNotifier,
+        super(child);
 
   ValueNotifier<EdgeInsets> _clipDetailsNotifier;
 
   ValueNotifier<EdgeInsets> get clipDetailsNotifier => _clipDetailsNotifier;
-  set clipDetailsNotifier (ValueNotifier<EdgeInsets> newNotifier) {
+  set clipDetailsNotifier(ValueNotifier<EdgeInsets> newNotifier) {
     if (_clipDetailsNotifier == newNotifier) {
       return;
     }
@@ -111,7 +114,9 @@ class ModalBarrier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(!dismissible || semanticsLabel == null || debugCheckHasDirectionality(context));
+    assert(!dismissible ||
+        semanticsLabel == null ||
+        debugCheckHasDirectionality(context));
     final bool platformSupportsDismissingBarrier;
     switch (defaultTargetPlatform) {
       case TargetPlatform.fuchsia:
@@ -123,8 +128,10 @@ class ModalBarrier extends StatelessWidget {
       case TargetPlatform.macOS:
         platformSupportsDismissingBarrier = true;
     }
-    final bool semanticsDismissible = dismissible && platformSupportsDismissingBarrier;
-    final bool modalBarrierSemanticsDismissible = barrierSemanticsDismissible ?? semanticsDismissible;
+    final bool semanticsDismissible =
+        dismissible && platformSupportsDismissingBarrier;
+    final bool modalBarrierSemanticsDismissible =
+        barrierSemanticsDismissible ?? semanticsDismissible;
 
     void handleDismiss() {
       if (dismissible) {
@@ -140,17 +147,23 @@ class ModalBarrier extends StatelessWidget {
 
     Widget barrier = Semantics(
       onTapHint: semanticsOnTapHint,
-      onTap: semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
-      onDismiss: semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
+      onTap:
+          semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
+      onDismiss:
+          semanticsDismissible && semanticsLabel != null ? handleDismiss : null,
       label: semanticsDismissible ? semanticsLabel : null,
-      textDirection: semanticsDismissible && semanticsLabel != null ? Directionality.of(context) : null,
+      textDirection: semanticsDismissible && semanticsLabel != null
+          ? Directionality.of(context)
+          : null,
       child: MouseRegion(
         cursor: SystemMouseCursors.basic,
         child: ConstrainedBox(
-        constraints: const BoxConstraints.expand(),
-        child: color == null ? null : ColoredBox(
-          color: color!,
-          ),
+          constraints: const BoxConstraints.expand(),
+          child: color == null
+              ? null
+              : ColoredBox(
+                  color: color!,
+                ),
         ),
       ),
     );
@@ -159,7 +172,8 @@ class ModalBarrier extends StatelessWidget {
     // to allow assistive technology users to dismiss a modal BottomSheet by
     // tapping on the Scrim focus.
     // On iOS, some modal barriers are not dismissible in accessibility mode.
-    final bool excluding = !semanticsDismissible || !modalBarrierSemanticsDismissible;
+    final bool excluding =
+        !semanticsDismissible || !modalBarrierSemanticsDismissible;
 
     if (!excluding && clipDetailsNotifier != null) {
       barrier = _SemanticsClipper(
@@ -254,7 +268,8 @@ class _AnyTapGestureRecognizer extends BaseTapGestureRecognizer {
 
   @protected
   @override
-  void handleTapCancel({PointerDownEvent? down, PointerCancelEvent? cancel, String? reason}) {
+  void handleTapCancel(
+      {PointerDownEvent? down, PointerCancelEvent? cancel, String? reason}) {
     // Do nothing.
   }
 
@@ -262,7 +277,8 @@ class _AnyTapGestureRecognizer extends BaseTapGestureRecognizer {
   String get debugDescription => 'any tap';
 }
 
-class _AnyTapGestureRecognizerFactory extends GestureRecognizerFactory<_AnyTapGestureRecognizer> {
+class _AnyTapGestureRecognizerFactory
+    extends GestureRecognizerFactory<_AnyTapGestureRecognizer> {
   const _AnyTapGestureRecognizerFactory({this.onAnyTapUp});
 
   final VoidCallback? onAnyTapUp;
@@ -290,8 +306,10 @@ class _ModalBarrierGestureDetector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<Type, GestureRecognizerFactory> gestures = <Type, GestureRecognizerFactory>{
-      _AnyTapGestureRecognizer: _AnyTapGestureRecognizerFactory(onAnyTapUp: onDismiss),
+    final Map<Type, GestureRecognizerFactory> gestures =
+        <Type, GestureRecognizerFactory>{
+      _AnyTapGestureRecognizer:
+          _AnyTapGestureRecognizerFactory(onAnyTapUp: onDismiss),
     };
 
     return RawGestureDetector(

@@ -1,4 +1,3 @@
-
 import 'package:file/memory.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
 import 'package:flutter_tools/src/base/logger.dart';
@@ -54,14 +53,18 @@ void main() {
           fileSystem: memoryFileSystem,
           processManager: FakeProcessManager.any(),
         );
-        rootOverride.childDirectory('bin').childDirectory('internal').childFile('engine.version')
+        rootOverride
+            .childDirectory('bin')
+            .childDirectory('internal')
+            .childFile('engine.version')
           ..createSync(recursive: true)
           ..writeAsStringSync(engineRevision);
       });
 
       testUsingContext('version unknown', () async {
         const String frameworkVersion = '0.0.0-unknown';
-        final FakeFlutterVersion fakeFlutterVersion = FakeFlutterVersion(frameworkVersion: frameworkVersion);
+        final FakeFlutterVersion fakeFlutterVersion =
+            FakeFlutterVersion(frameworkVersion: frameworkVersion);
 
         final BuildIOSFrameworkCommand command = BuildIOSFrameworkCommand(
           logger: BufferLogger.test(),
@@ -72,8 +75,12 @@ void main() {
           verboseHelp: false,
         );
 
-        expect(() => command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
-            throwsToolExit(message: '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
+        expect(
+            () =>
+                command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
+            throwsToolExit(
+                message:
+                    '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
       }, overrides: <Type, Generator>{
         FileSystem: () => memoryFileSystem,
         ProcessManager: () => FakeProcessManager.any(),
@@ -102,8 +109,12 @@ void main() {
           verboseHelp: false,
         );
 
-        expect(() => command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
-            throwsToolExit(message: '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
+        expect(
+            () =>
+                command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
+            throwsToolExit(
+                message:
+                    '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
       }, overrides: <Type, Generator>{
         FileSystem: () => memoryFileSystem,
         ProcessManager: () => FakeProcessManager.any(),
@@ -129,7 +140,9 @@ void main() {
           verboseHelp: false,
         );
 
-        expect(() => command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
+        expect(
+            () =>
+                command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
             throwsToolExit(message: 'Could not find license'));
       }, overrides: <Type, Generator>{
         FileSystem: () => memoryFileSystem,
@@ -170,9 +183,11 @@ void main() {
               cache: cache,
               verboseHelp: false,
             );
-            command.produceFlutterPodspec(BuildMode.debug, outputDirectory, force: true);
+            command.produceFlutterPodspec(BuildMode.debug, outputDirectory,
+                force: true);
 
-            final File expectedPodspec = outputDirectory.childFile('Flutter.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('Flutter.podspec');
             expect(expectedPodspec.existsSync(), isTrue);
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
@@ -207,7 +222,8 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.debug, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('Flutter.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('Flutter.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
             expect(podspecContents, contains("'1.13.1113'"));
             expect(podspecContents, contains('# $frameworkVersion'));
@@ -228,9 +244,13 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.debug, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('Flutter.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('Flutter.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
-            expect(podspecContents, contains("'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/ios/artifacts.zip'"));
+            expect(
+                podspecContents,
+                contains(
+                    "'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/ios/artifacts.zip'"));
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
             ProcessManager: () => FakeProcessManager.any(),
@@ -247,9 +267,13 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.profile, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('Flutter.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('Flutter.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
-            expect(podspecContents, contains("'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/ios-profile/artifacts.zip'"));
+            expect(
+                podspecContents,
+                contains(
+                    "'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/ios-profile/artifacts.zip'"));
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
             ProcessManager: () => FakeProcessManager.any(),
@@ -266,9 +290,13 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.release, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('Flutter.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('Flutter.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
-            expect(podspecContents, contains("'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/ios-release/artifacts.zip'"));
+            expect(
+                podspecContents,
+                contains(
+                    "'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/ios-release/artifacts.zip'"));
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
             ProcessManager: () => FakeProcessManager.any(),
@@ -291,14 +319,18 @@ void main() {
           fileSystem: memoryFileSystem,
           processManager: FakeProcessManager.any(),
         );
-        rootOverride.childDirectory('bin').childDirectory('internal').childFile('engine.version')
+        rootOverride
+            .childDirectory('bin')
+            .childDirectory('internal')
+            .childFile('engine.version')
           ..createSync(recursive: true)
           ..writeAsStringSync(engineRevision);
       });
 
       testUsingContext('version unknown', () async {
         const String frameworkVersion = '0.0.0-unknown';
-        final FakeFlutterVersion fakeFlutterVersion = FakeFlutterVersion(frameworkVersion: frameworkVersion);
+        final FakeFlutterVersion fakeFlutterVersion =
+            FakeFlutterVersion(frameworkVersion: frameworkVersion);
 
         final BuildMacOSFrameworkCommand command = BuildMacOSFrameworkCommand(
           logger: BufferLogger.test(),
@@ -309,8 +341,12 @@ void main() {
           verboseHelp: false,
         );
 
-        expect(() => command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
-            throwsToolExit(message: '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
+        expect(
+            () =>
+                command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
+            throwsToolExit(
+                message:
+                    '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
       }, overrides: <Type, Generator>{
         FileSystem: () => memoryFileSystem,
         ProcessManager: () => FakeProcessManager.any(),
@@ -339,8 +375,12 @@ void main() {
           verboseHelp: false,
         );
 
-        expect(() => command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
-            throwsToolExit(message: '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
+        expect(
+            () =>
+                command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
+            throwsToolExit(
+                message:
+                    '--cocoapods is only supported on the beta or stable channel. Detected version is $frameworkVersion'));
       }, overrides: <Type, Generator>{
         FileSystem: () => memoryFileSystem,
         ProcessManager: () => FakeProcessManager.any(),
@@ -366,7 +406,9 @@ void main() {
           verboseHelp: false,
         );
 
-        expect(() => command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
+        expect(
+            () =>
+                command.produceFlutterPodspec(BuildMode.debug, outputDirectory),
             throwsToolExit(message: 'Could not find license'));
       }, overrides: <Type, Generator>{
         FileSystem: () => memoryFileSystem,
@@ -399,7 +441,8 @@ void main() {
               frameworkVersion: frameworkVersion,
             );
 
-            final BuildMacOSFrameworkCommand command = BuildMacOSFrameworkCommand(
+            final BuildMacOSFrameworkCommand command =
+                BuildMacOSFrameworkCommand(
               logger: BufferLogger.test(),
               buildSystem: TestBuildSystem.all(BuildResult(success: true)),
               platform: fakePlatform,
@@ -407,9 +450,11 @@ void main() {
               cache: cache,
               verboseHelp: false,
             );
-            command.produceFlutterPodspec(BuildMode.debug, outputDirectory, force: true);
+            command.produceFlutterPodspec(BuildMode.debug, outputDirectory,
+                force: true);
 
-            final File expectedPodspec = outputDirectory.childFile('FlutterMacOS.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('FlutterMacOS.podspec');
             expect(expectedPodspec.existsSync(), isTrue);
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
@@ -434,7 +479,8 @@ void main() {
           });
 
           testUsingContext('contains license and version', () async {
-            final BuildMacOSFrameworkCommand command = BuildMacOSFrameworkCommand(
+            final BuildMacOSFrameworkCommand command =
+                BuildMacOSFrameworkCommand(
               logger: BufferLogger.test(),
               buildSystem: TestBuildSystem.all(BuildResult(success: true)),
               platform: fakePlatform,
@@ -444,7 +490,8 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.debug, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('FlutterMacOS.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('FlutterMacOS.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
             expect(podspecContents, contains("'1.13.1113'"));
             expect(podspecContents, contains('# $frameworkVersion'));
@@ -455,7 +502,8 @@ void main() {
           });
 
           testUsingContext('debug URL', () async {
-            final BuildMacOSFrameworkCommand command = BuildMacOSFrameworkCommand(
+            final BuildMacOSFrameworkCommand command =
+                BuildMacOSFrameworkCommand(
               logger: BufferLogger.test(),
               buildSystem: TestBuildSystem.all(BuildResult(success: true)),
               platform: fakePlatform,
@@ -465,16 +513,21 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.debug, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('FlutterMacOS.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('FlutterMacOS.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
-            expect(podspecContents, contains("'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/darwin-x64/artifacts.zip'"));
+            expect(
+                podspecContents,
+                contains(
+                    "'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/darwin-x64/artifacts.zip'"));
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
             ProcessManager: () => FakeProcessManager.any(),
           });
 
           testUsingContext('profile URL', () async {
-            final BuildMacOSFrameworkCommand command = BuildMacOSFrameworkCommand(
+            final BuildMacOSFrameworkCommand command =
+                BuildMacOSFrameworkCommand(
               logger: BufferLogger.test(),
               buildSystem: TestBuildSystem.all(BuildResult(success: true)),
               platform: fakePlatform,
@@ -484,16 +537,21 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.profile, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('FlutterMacOS.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('FlutterMacOS.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
-            expect(podspecContents, contains("'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/darwin-x64-profile/artifacts.zip'"));
+            expect(
+                podspecContents,
+                contains(
+                    "'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/darwin-x64-profile/artifacts.zip'"));
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
             ProcessManager: () => FakeProcessManager.any(),
           });
 
           testUsingContext('release URL', () async {
-            final BuildMacOSFrameworkCommand command = BuildMacOSFrameworkCommand(
+            final BuildMacOSFrameworkCommand command =
+                BuildMacOSFrameworkCommand(
               logger: BufferLogger.test(),
               buildSystem: TestBuildSystem.all(BuildResult(success: true)),
               platform: fakePlatform,
@@ -503,9 +561,13 @@ void main() {
             );
             command.produceFlutterPodspec(BuildMode.release, outputDirectory);
 
-            final File expectedPodspec = outputDirectory.childFile('FlutterMacOS.podspec');
+            final File expectedPodspec =
+                outputDirectory.childFile('FlutterMacOS.podspec');
             final String podspecContents = expectedPodspec.readAsStringSync();
-            expect(podspecContents, contains("'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/darwin-x64-release/artifacts.zip'"));
+            expect(
+                podspecContents,
+                contains(
+                    "'$storageBaseUrl/flutter_infra_release/flutter/$engineRevision/darwin-x64-release/artifacts.zip'"));
           }, overrides: <Type, Generator>{
             FileSystem: () => memoryFileSystem,
             ProcessManager: () => FakeProcessManager.any(),
@@ -525,8 +587,10 @@ void main() {
     });
 
     testWithoutContext('created', () async {
-      final Directory frameworkA = fileSystem.directory('FrameworkA.framework')..createSync();
-      final Directory frameworkB = fileSystem.directory('FrameworkB.framework')..createSync();
+      final Directory frameworkA = fileSystem.directory('FrameworkA.framework')
+        ..createSync();
+      final Directory frameworkB = fileSystem.directory('FrameworkB.framework')
+        ..createSync();
       final Directory output = fileSystem.directory('output');
 
       fakeProcessManager.addCommand(FakeCommand(
@@ -552,13 +616,19 @@ void main() {
     });
 
     testWithoutContext('created with symbols', () async {
-      final Directory parentA = fileSystem.directory('FrameworkA')..createSync();
-      final File dSYMA = parentA.childFile('FrameworkA.framework.dSYM')..createSync();
-      final Directory frameworkA = parentA.childDirectory('FrameworkA.framework')..createSync();
+      final Directory parentA = fileSystem.directory('FrameworkA')
+        ..createSync();
+      final File dSYMA = parentA.childFile('FrameworkA.framework.dSYM')
+        ..createSync();
+      final Directory frameworkA =
+          parentA.childDirectory('FrameworkA.framework')..createSync();
 
-      final Directory parentB = fileSystem.directory('FrameworkB')..createSync();
-      final File dSYMB = parentB.childFile('FrameworkB.framework.dSYM')..createSync();
-      final Directory frameworkB = parentB.childDirectory('FrameworkB.framework')..createSync();
+      final Directory parentB = fileSystem.directory('FrameworkB')
+        ..createSync();
+      final File dSYMB = parentB.childFile('FrameworkB.framework.dSYM')
+        ..createSync();
+      final Directory frameworkB =
+          parentB.childDirectory('FrameworkB.framework')..createSync();
       final Directory output = fileSystem.directory('output');
 
       fakeProcessManager.addCommand(FakeCommand(

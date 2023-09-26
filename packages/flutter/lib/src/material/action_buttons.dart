@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -51,9 +50,11 @@ abstract class _ActionButton extends StatelessWidget {
   }
 }
 
-typedef _ActionIconBuilderCallback = WidgetBuilder? Function(ActionIconThemeData? actionIconTheme);
+typedef _ActionIconBuilderCallback = WidgetBuilder? Function(
+    ActionIconThemeData? actionIconTheme);
 typedef _ActionIconDataCallback = IconData Function(BuildContext context);
-typedef _AndroidSemanticsLabelCallback = String Function(MaterialLocalizations materialLocalization);
+typedef _AndroidSemanticsLabelCallback = String Function(
+    MaterialLocalizations materialLocalization);
 
 class _ActionIcon extends StatelessWidget {
   const _ActionIcon({
@@ -80,7 +81,8 @@ class _ActionIcon extends StatelessWidget {
     // expects the duplicated tooltip and label.
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        semanticsLabel = getAndroidSemanticsLabel(MaterialLocalizations.of(context));
+        semanticsLabel =
+            getAndroidSemanticsLabel(MaterialLocalizations.of(context));
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
@@ -94,7 +96,7 @@ class _ActionIcon extends StatelessWidget {
 }
 
 class BackButtonIcon extends StatelessWidget {
-  const BackButtonIcon({ super.key });
+  const BackButtonIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +145,7 @@ class BackButton extends _ActionButton {
 }
 
 class CloseButtonIcon extends StatelessWidget {
-  const CloseButtonIcon({ super.key });
+  const CloseButtonIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +162,7 @@ class CloseButtonIcon extends StatelessWidget {
 }
 
 class CloseButton extends _ActionButton {
-  const CloseButton({ super.key, super.color, super.onPressed, super.style })
+  const CloseButton({super.key, super.color, super.onPressed, super.style})
       : super(icon: const CloseButtonIcon());
 
   @override
@@ -173,7 +175,7 @@ class CloseButton extends _ActionButton {
 }
 
 class DrawerButtonIcon extends StatelessWidget {
-  const DrawerButtonIcon({ super.key });
+  const DrawerButtonIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +199,8 @@ class DrawerButton extends _ActionButton {
   }) : super(icon: const DrawerButtonIcon());
 
   @override
-  void _onPressedCallback(BuildContext context) => Scaffold.of(context).openDrawer();
+  void _onPressedCallback(BuildContext context) =>
+      Scaffold.of(context).openDrawer();
 
   @override
   String _getTooltip(BuildContext context) {
@@ -206,7 +209,7 @@ class DrawerButton extends _ActionButton {
 }
 
 class EndDrawerButtonIcon extends StatelessWidget {
-  const EndDrawerButtonIcon({ super.key });
+  const EndDrawerButtonIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +233,8 @@ class EndDrawerButton extends _ActionButton {
   }) : super(icon: const EndDrawerButtonIcon());
 
   @override
-  void _onPressedCallback(BuildContext context) => Scaffold.of(context).openEndDrawer();
+  void _onPressedCallback(BuildContext context) =>
+      Scaffold.of(context).openEndDrawer();
 
   @override
   String _getTooltip(BuildContext context) {

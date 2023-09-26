@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
@@ -13,7 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  static const ShapeDecoration _decoration =  ShapeDecoration(
+  static const ShapeDecoration _decoration = ShapeDecoration(
     shape: BeveledRectangleBorder(
       side: BorderSide(color: kShrineBrown900, width: 0.5),
       borderRadius: BorderRadius.all(Radius.circular(7.0)),
@@ -96,7 +95,8 @@ class _LoginPageState extends State<LoginPage> {
                     // of Shrine completely.
                     Navigator.of(context, rootNavigator: true).pop();
                   },
-                  child: Text('CANCEL', style: Theme.of(context).textTheme.bodySmall),
+                  child: Text('CANCEL',
+                      style: Theme.of(context).textTheme.bodySmall),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -108,7 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('NEXT', style: Theme.of(context).textTheme.bodySmall),
+                  child: Text('NEXT',
+                      style: Theme.of(context).textTheme.bodySmall),
                 ),
               ],
             ),

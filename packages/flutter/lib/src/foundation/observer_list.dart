@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 
 // TODO(ianh): Use DelegatingIterable, possibly moving it from the collection

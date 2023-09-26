@@ -1,4 +1,3 @@
-
 import 'percentile_utils.dart';
 import 'timeline.dart';
 
@@ -31,13 +30,17 @@ class RasterCacheSummarizer {
 
   double computeAveragePictureMemory() => _computeAverage(_pictureMemories);
 
-  double computePercentileLayerCount(double percentile) => _computePercentile(_layerCounts, percentile);
+  double computePercentileLayerCount(double percentile) =>
+      _computePercentile(_layerCounts, percentile);
 
-  double computePercentileLayerMemory(double percentile) => _computePercentile(_layerMemories, percentile);
+  double computePercentileLayerMemory(double percentile) =>
+      _computePercentile(_layerMemories, percentile);
 
-  double computePercentilePictureCount(double percentile) => _computePercentile(_pictureCounts, percentile);
+  double computePercentilePictureCount(double percentile) =>
+      _computePercentile(_pictureCounts, percentile);
 
-  double computePercentilePictureMemory(double percentile) => _computePercentile(_pictureMemories, percentile);
+  double computePercentilePictureMemory(double percentile) =>
+      _computePercentile(_pictureMemories, percentile);
 
   double computeWorstLayerCount() => _computeWorst(_layerCounts);
 

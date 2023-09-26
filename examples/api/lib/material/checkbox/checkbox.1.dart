@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const CheckboxExampleApp());
 
@@ -10,7 +8,8 @@ class CheckboxExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: const Color(0xff6750a4)),
+      theme: ThemeData(
+          useMaterial3: true, colorSchemeSeed: const Color(0xff6750a4)),
       title: 'Checkbox Sample',
       home: Scaffold(
         appBar: AppBar(title: const Text('Checkbox Sample')),

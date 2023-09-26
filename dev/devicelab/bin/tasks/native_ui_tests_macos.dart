@@ -1,4 +1,3 @@
-
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/ios.dart';
 import 'package:flutter_devicelab/framework/task_result.dart';
@@ -7,7 +6,8 @@ import 'package:path/path.dart' as path;
 
 Future<void> main() async {
   await task(() async {
-    final String projectDirectory = '${flutterDirectory.path}/dev/integration_tests/flutter_gallery';
+    final String projectDirectory =
+        '${flutterDirectory.path}/dev/integration_tests/flutter_gallery';
 
     await inDirectory(projectDirectory, () async {
       section('Build gallery app');

@@ -1,4 +1,3 @@
-
 // This example shows how to use process input events in the underlying render
 // tree.
 
@@ -18,7 +17,7 @@ List<Color> _kColors = <Color>[
 ];
 
 class Dot {
-  Dot({ required Color color }) : _paint = Paint()..color = color;
+  Dot({required Color color}) : _paint = Paint()..color = color;
 
   final Paint _paint;
   Offset position = Offset.zero;
@@ -114,7 +113,8 @@ void main() {
   //
   // We use the StackParentData of the paragraph to position the text in the top
   // left corner of the screen.
-  final StackParentData paragraphParentData = paragraph.parentData! as StackParentData;
+  final StackParentData paragraphParentData =
+      paragraph.parentData! as StackParentData;
   paragraphParentData
     ..top = 40.0
     ..left = 20.0;

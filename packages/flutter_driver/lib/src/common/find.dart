@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:meta/meta.dart';
@@ -10,15 +9,17 @@ import 'message.dart';
 const List<Type> _supportedKeyValueTypes = <Type>[String, int];
 
 DriverError _createInvalidKeyValueTypeError(String invalidType) {
-  return DriverError('Unsupported key value type $invalidType. Flutter Driver only supports ${_supportedKeyValueTypes.join(", ")}');
+  return DriverError(
+      'Unsupported key value type $invalidType. Flutter Driver only supports ${_supportedKeyValueTypes.join(", ")}');
 }
 
 abstract class CommandWithTarget extends Command {
   CommandWithTarget(this.finder, {super.timeout});
 
-  CommandWithTarget.deserialize(super.json, DeserializeFinderFactory finderFactory)
-    : finder = finderFactory.deserializeFinder(json),
-      super.deserialize();
+  CommandWithTarget.deserialize(
+      super.json, DeserializeFinderFactory finderFactory)
+      : finder = finderFactory.deserializeFinder(json),
+        super.deserialize();
 
   final SerializableFinder finder;
 
@@ -39,7 +40,8 @@ class WaitFor extends CommandWithTarget {
 class WaitForAbsent extends CommandWithTarget {
   WaitForAbsent(super.finder, {super.timeout});
 
-  WaitForAbsent.deserialize(super.json, super.finderFactory) : super.deserialize();
+  WaitForAbsent.deserialize(super.json, super.finderFactory)
+      : super.deserialize();
 
   @override
   String get kind => 'waitForAbsent';
@@ -48,8 +50,7 @@ class WaitForAbsent extends CommandWithTarget {
 class WaitForTappable extends CommandWithTarget {
   WaitForTappable(super.finder, {super.timeout});
 
-  WaitForTappable.deserialize(
-      super.json, super.finderFactory)
+  WaitForTappable.deserialize(super.json, super.finderFactory)
       : super.deserialize();
 
   @override
@@ -57,15 +58,14 @@ class WaitForTappable extends CommandWithTarget {
 }
 
 abstract class SerializableFinder {
-
   const SerializableFinder();
 
   String get finderType;
 
   @mustCallSuper
   Map<String, String> serialize() => <String, String>{
-    'finderType': finderType,
-  };
+        'finderType': finderType,
+      };
 }
 
 class ByTooltipMessage extends SerializableFinder {
@@ -77,9 +77,10 @@ class ByTooltipMessage extends SerializableFinder {
   String get finderType => 'ByTooltipMessage';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'text': text,
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'text': text,
+    });
 
   static ByTooltipMessage deserialize(Map<String, String> json) {
     return ByTooltipMessage(json['text']!);
@@ -98,14 +99,16 @@ class BySemanticsLabel extends SerializableFinder {
   Map<String, String> serialize() {
     if (label is RegExp) {
       final RegExp regExp = label as RegExp;
-      return super.serialize()..addAll(<String, String>{
-        'label': regExp.pattern,
-        'isRegExp': 'true',
-      });
+      return super.serialize()
+        ..addAll(<String, String>{
+          'label': regExp.pattern,
+          'isRegExp': 'true',
+        });
     } else {
-      return super.serialize()..addAll(<String, String>{
-        'label': label as String,
-      });
+      return super.serialize()
+        ..addAll(<String, String>{
+          'label': label as String,
+        });
     }
   }
 
@@ -124,9 +127,10 @@ class ByText extends SerializableFinder {
   String get finderType => 'ByText';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'text': text,
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'text': text,
+    });
 
   static ByText deserialize(Map<String, String> json) {
     return ByText(json['text']!);
@@ -152,10 +156,11 @@ class ByValueKey extends SerializableFinder {
   String get finderType => 'ByValueKey';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'keyValueString': keyValueString,
-    'keyValueType': keyValueType,
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'keyValueString': keyValueString,
+      'keyValueType': keyValueType,
+    });
 
   static ByValueKey deserialize(Map<String, String> json) {
     final String keyValueString = json['keyValueString']!;
@@ -180,9 +185,10 @@ class ByType extends SerializableFinder {
   String get finderType => 'ByType';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'type': type,
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'type': type,
+    });
 
   static ByType deserialize(Map<String, String> json) {
     return ByType(json['type']!);
@@ -218,19 +224,20 @@ class Descendant extends SerializableFinder {
   @override
   Map<String, String> serialize() {
     return super.serialize()
-        ..addAll(<String, String>{
-          'of': jsonEncode(of.serialize()),
-          'matching': jsonEncode(matching.serialize()),
-          'matchRoot': matchRoot ? 'true' : 'false',
-          'firstMatchOnly': firstMatchOnly ? 'true' : 'false',
-        });
+      ..addAll(<String, String>{
+        'of': jsonEncode(of.serialize()),
+        'matching': jsonEncode(matching.serialize()),
+        'matchRoot': matchRoot ? 'true' : 'false',
+        'firstMatchOnly': firstMatchOnly ? 'true' : 'false',
+      });
   }
 
-  static Descendant deserialize(Map<String, String> json, DeserializeFinderFactory finderFactory) {
-    final Map<String, String> jsonOfMatcher =
-        Map<String, String>.from(jsonDecode(json['of']!) as Map<String, dynamic>);
-    final Map<String, String> jsonMatchingMatcher =
-        Map<String, String>.from(jsonDecode(json['matching']!) as Map<String, dynamic>);
+  static Descendant deserialize(
+      Map<String, String> json, DeserializeFinderFactory finderFactory) {
+    final Map<String, String> jsonOfMatcher = Map<String, String>.from(
+        jsonDecode(json['of']!) as Map<String, dynamic>);
+    final Map<String, String> jsonMatchingMatcher = Map<String, String>.from(
+        jsonDecode(json['matching']!) as Map<String, dynamic>);
     return Descendant(
       of: finderFactory.deserializeFinder(jsonOfMatcher),
       matching: finderFactory.deserializeFinder(jsonMatchingMatcher),
@@ -270,11 +277,12 @@ class Ancestor extends SerializableFinder {
       });
   }
 
-  static Ancestor deserialize(Map<String, String> json, DeserializeFinderFactory finderFactory) {
-    final Map<String, String> jsonOfMatcher =
-        Map<String, String>.from(jsonDecode(json['of']!) as Map<String, dynamic>);
-    final Map<String, String> jsonMatchingMatcher =
-        Map<String, String>.from(jsonDecode(json['matching']!) as Map<String, dynamic>);
+  static Ancestor deserialize(
+      Map<String, String> json, DeserializeFinderFactory finderFactory) {
+    final Map<String, String> jsonOfMatcher = Map<String, String>.from(
+        jsonDecode(json['of']!) as Map<String, dynamic>);
+    final Map<String, String> jsonMatchingMatcher = Map<String, String>.from(
+        jsonDecode(json['matching']!) as Map<String, dynamic>);
     return Ancestor(
       of: finderFactory.deserializeFinder(jsonOfMatcher),
       matching: finderFactory.deserializeFinder(jsonMatchingMatcher),
@@ -285,18 +293,16 @@ class Ancestor extends SerializableFinder {
 }
 
 class GetSemanticsId extends CommandWithTarget {
-
   GetSemanticsId(super.finder, {super.timeout});
 
   GetSemanticsId.deserialize(super.json, super.finderFactory)
-    : super.deserialize();
+      : super.deserialize();
 
   @override
   String get kind => 'get_semantics_id';
 }
 
 class GetSemanticsIdResult extends Result {
-
   const GetSemanticsIdResult(this.id);
 
   final int id;

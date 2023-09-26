@@ -1,4 +1,3 @@
-
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -42,8 +41,10 @@ class ScrollController extends ChangeNotifier {
   bool get hasClients => _positions.isNotEmpty;
 
   ScrollPosition get position {
-    assert(_positions.isNotEmpty, 'ScrollController not attached to any scroll views.');
-    assert(_positions.length == 1, 'ScrollController attached to multiple scroll views.');
+    assert(_positions.isNotEmpty,
+        'ScrollController not attached to any scroll views.');
+    assert(_positions.length == 1,
+        'ScrollController attached to multiple scroll views.');
     return _positions.single;
   }
 
@@ -54,14 +55,17 @@ class ScrollController extends ChangeNotifier {
     required Duration duration,
     required Curve curve,
   }) async {
-    assert(_positions.isNotEmpty, 'ScrollController not attached to any scroll views.');
+    assert(_positions.isNotEmpty,
+        'ScrollController not attached to any scroll views.');
     await Future.wait<void>(<Future<void>>[
-      for (int i = 0; i < _positions.length; i += 1) _positions[i].animateTo(offset, duration: duration, curve: curve),
+      for (int i = 0; i < _positions.length; i += 1)
+        _positions[i].animateTo(offset, duration: duration, curve: curve),
     ]);
   }
 
   void jumpTo(double value) {
-    assert(_positions.isNotEmpty, 'ScrollController not attached to any scroll views.');
+    assert(_positions.isNotEmpty,
+        'ScrollController not attached to any scroll views.');
     for (final ScrollPosition position in List<ScrollPosition>.of(_positions)) {
       position.jumpTo(value);
     }
@@ -121,7 +125,8 @@ class ScrollController extends ChangeNotifier {
       description.add(debugLabel!);
     }
     if (initialScrollOffset != 0.0) {
-      description.add('initialScrollOffset: ${initialScrollOffset.toStringAsFixed(1)}, ');
+      description.add(
+          'initialScrollOffset: ${initialScrollOffset.toStringAsFixed(1)}, ');
     }
     if (_positions.isEmpty) {
       description.add('no clients');
@@ -144,14 +149,16 @@ class TrackingScrollController extends ScrollController {
     super.debugLabel,
   });
 
-  final Map<ScrollPosition, VoidCallback> _positionToListener = <ScrollPosition, VoidCallback>{};
+  final Map<ScrollPosition, VoidCallback> _positionToListener =
+      <ScrollPosition, VoidCallback>{};
   ScrollPosition? _lastUpdated;
   double? _lastUpdatedOffset;
 
   ScrollPosition? get mostRecentlyUpdatedPosition => _lastUpdated;
 
   @override
-  double get initialScrollOffset => _lastUpdatedOffset ?? super.initialScrollOffset;
+  double get initialScrollOffset =>
+      _lastUpdatedOffset ?? super.initialScrollOffset;
 
   @override
   void attach(ScrollPosition position) {

@@ -1,4 +1,3 @@
-
 import 'localizations_utils.dart';
 
 String generateMaterialHeader(String regenerateInstructions) {
@@ -61,4 +60,5 @@ const String materialFactoryArguments =
 
 const String materialSupportedLanguagesConstant = 'kMaterialSupportedLanguages';
 
-const String materialSupportedLanguagesDocMacro = 'flutter.localizations.material.languages';
+const String materialSupportedLanguagesDocMacro =
+    'flutter.localizations.material.languages';

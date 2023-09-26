@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -13,7 +12,8 @@ class LargeImagesPage extends StatelessWidget {
     imageCache.maximumSizeBytes = 50 << 20;
     return GridView.builder(
       itemCount: 1000,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       itemBuilder: (BuildContext context, int index) => DummyImage(index),
     ).build(context);
   }

@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/action_buttons/action_icon_theme.0.dart' as example;
+import 'package:flutter_api_samples/material/action_buttons/action_icon_theme.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -12,7 +12,6 @@ void main() {
         ),
       ),
     );
-
 
     expect(find.byType(DrawerButton), findsOneWidget);
     final Icon drawerButtonIcon = tester.widget(

@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -15,15 +14,15 @@ class TabController extends ChangeNotifier {
     Duration? animationDuration,
     required this.length,
     required TickerProvider vsync,
-  }) : assert(length >= 0),
-       assert(initialIndex >= 0 && (length == 0 || initialIndex < length)),
-       _index = initialIndex,
-       _previousIndex = initialIndex,
-       _animationDuration = animationDuration ?? kTabScrollDuration,
-       _animationController = AnimationController.unbounded(
-         value: initialIndex.toDouble(),
-         vsync: vsync,
-       ) {
+  })  : assert(length >= 0),
+        assert(initialIndex >= 0 && (length == 0 || initialIndex < length)),
+        _index = initialIndex,
+        _previousIndex = initialIndex,
+        _animationDuration = animationDuration ?? kTabScrollDuration,
+        _animationController = AnimationController.unbounded(
+          value: initialIndex.toDouble(),
+          vsync: vsync,
+        ) {
     if (kFlutterMemoryAllocationsEnabled) {
       ChangeNotifier.maybeDispatchObjectCreation(this);
     }
@@ -37,11 +36,10 @@ class TabController extends ChangeNotifier {
     required AnimationController? animationController,
     required Duration animationDuration,
     required this.length,
-  }) : _index = index,
-       _previousIndex = previousIndex,
-       _animationController = animationController,
-       _animationDuration = animationDuration;
-
+  })  : _index = index,
+        _previousIndex = previousIndex,
+        _animationController = animationController,
+        _animationDuration = animationDuration;
 
   TabController _copyWith({
     required int? index,
@@ -69,7 +67,7 @@ class TabController extends ChangeNotifier {
 
   final int length;
 
-  void _changeIndex(int value, { Duration? duration, Curve? curve }) {
+  void _changeIndex(int value, {Duration? duration, Curve? curve}) {
     assert(value >= 0 && (value < length || length == 0));
     assert(duration != null || curve == null);
     assert(_indexIsChangingCount >= 0);
@@ -82,13 +80,14 @@ class TabController extends ChangeNotifier {
       _indexIsChangingCount += 1;
       notifyListeners(); // Because the value of indexIsChanging may have changed.
       _animationController!
-        .animateTo(_index.toDouble(), duration: duration, curve: curve!)
-        .whenCompleteOrCancel(() {
-          if (_animationController != null) { // don't notify if we've been disposed
-            _indexIsChangingCount -= 1;
-            notifyListeners();
-          }
-        });
+          .animateTo(_index.toDouble(), duration: duration, curve: curve!)
+          .whenCompleteOrCancel(() {
+        if (_animationController != null) {
+          // don't notify if we've been disposed
+          _indexIsChangingCount -= 1;
+          notifyListeners();
+        }
+      });
     } else {
       _indexIsChangingCount += 1;
       _animationController!.value = _index.toDouble();
@@ -109,7 +108,7 @@ class TabController extends ChangeNotifier {
   bool get indexIsChanging => _indexIsChangingCount != 0;
   int _indexIsChangingCount = 0;
 
-  void animateTo(int value, { Duration? duration, Curve curve = Curves.ease }) {
+  void animateTo(int value, {Duration? duration, Curve curve = Curves.ease}) {
     _changeIndex(value, duration: duration ?? _animationDuration, curve: curve);
   }
 
@@ -154,8 +153,8 @@ class DefaultTabController extends StatefulWidget {
     this.initialIndex = 0,
     required this.child,
     this.animationDuration,
-  }) : assert(length >= 0),
-       assert(length == 0 || (initialIndex >= 0 && initialIndex < length));
+  })  : assert(length >= 0),
+        assert(length == 0 || (initialIndex >= 0 && initialIndex < length));
 
   final int length;
 
@@ -166,7 +165,9 @@ class DefaultTabController extends StatefulWidget {
   final Widget child;
 
   static TabController? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<_TabControllerScope>()?.controller;
+    return context
+        .dependOnInheritedWidgetOfExactType<_TabControllerScope>()
+        ?.controller;
   }
 
   static TabController of(BuildContext context) {
@@ -193,7 +194,8 @@ class DefaultTabController extends StatefulWidget {
   State<DefaultTabController> createState() => _DefaultTabControllerState();
 }
 
-class _DefaultTabControllerState extends State<DefaultTabController> with SingleTickerProviderStateMixin {
+class _DefaultTabControllerState extends State<DefaultTabController>
+    with SingleTickerProviderStateMixin {
   late TabController _controller;
 
   @override

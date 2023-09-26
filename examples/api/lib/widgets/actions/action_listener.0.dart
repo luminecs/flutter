@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const ActionListenerExampleApp());
 
@@ -68,7 +66,8 @@ class _ActionListenerExampleState extends State<ActionListenerExample> {
               },
               action: _myAction,
               child: ElevatedButton(
-                onPressed: () => const ActionDispatcher().invokeAction(_myAction, const MyIntent()),
+                onPressed: () => const ActionDispatcher()
+                    .invokeAction(_myAction, const MyIntent()),
                 child: const Text('Call Action Listener'),
               ),
             ),

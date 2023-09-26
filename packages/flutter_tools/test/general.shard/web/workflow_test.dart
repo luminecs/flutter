@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/base/platform.dart';
 import 'package:flutter_tools/src/web/workflow.dart';
 
@@ -51,7 +50,8 @@ void main() {
     expect(workflow.appliesToHostPlatform, false);
   });
 
-  testWithoutContext('WebWorkflow does not apply if feature flag is disabled', () {
+  testWithoutContext('WebWorkflow does not apply if feature flag is disabled',
+      () {
     final WebWorkflow workflow = WebWorkflow(
       platform: FakePlatform(),
       featureFlags: TestFeatureFlags(),

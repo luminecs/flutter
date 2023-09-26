@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:file/memory.dart';
@@ -11,7 +10,8 @@ import 'common.dart';
 void main() async {
   group('getBranch', () {
     const String branchName = 'stable';
-    test('getBranchName does not call git if env LUCI_BRANCH provided', () async {
+    test('getBranchName does not call git if env LUCI_BRANCH provided',
+        () async {
       final Platform platform = FakePlatform(
         environment: <String, String>{
           'LUCI_BRANCH': branchName,
@@ -39,7 +39,8 @@ void main() async {
         ],
       );
 
-      final String calculatedBranchName = await getBranchName(platform: platform, processManager: processManager);
+      final String calculatedBranchName = await getBranchName(
+          platform: platform, processManager: processManager);
       expect(
         calculatedBranchName,
         branchName,
@@ -99,7 +100,8 @@ void main() async {
           ),
         ],
       );
-      final String revision = await gitRevision(fullLength: true, processManager: processManager);
+      final String revision =
+          await gitRevision(fullLength: true, processManager: processManager);
       expect(processManager, hasNoRemainingExpectations);
       expect(revision, commitHash);
     });
@@ -115,7 +117,8 @@ void main() async {
           ),
         ],
       );
-      await runProcessWithValidations(command, '', processManager: processManager, verbose: false);
+      await runProcessWithValidations(command, '',
+          processManager: processManager, verbose: false);
       expect(processManager, hasNoRemainingExpectations);
     });
 
@@ -130,7 +133,8 @@ void main() async {
         ],
       );
       try {
-        await runProcessWithValidations(command, '', processManager: processManager, verbose: false);
+        await runProcessWithValidations(command, '',
+            processManager: processManager, verbose: false);
         throw Exception('Exception was not thrown');
       } on CommandException catch (e) {
         expect(e, isA<Exception>());
@@ -153,8 +157,12 @@ void main() async {
 })();
 ''';
       final MemoryFileSystem fs = MemoryFileSystem();
-      final File footerFile = fs.file('/a/b/c/footer.js')..createSync(recursive: true);
-      await createFooter(footerFile, '3.0.0', timestampParam: '2022-09-22 14:09', branchParam: 'stable', revisionParam: 'abcdef');
+      final File footerFile = fs.file('/a/b/c/footer.js')
+        ..createSync(recursive: true);
+      await createFooter(footerFile, '3.0.0',
+          timestampParam: '2022-09-22 14:09',
+          branchParam: 'stable',
+          revisionParam: 'abcdef');
       final String content = await footerFile.readAsString();
       expect(content, expectedContent);
     });

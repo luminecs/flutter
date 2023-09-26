@@ -1,4 +1,3 @@
-
 import 'package:file_testing/file_testing.dart';
 import 'package:flutter_tools/src/base/io.dart';
 
@@ -7,16 +6,20 @@ import 'test_utils.dart';
 
 // TODO(egarciad): Migrate existing files, https://github.com/flutter/flutter/issues/54566
 void main() {
-  test('android project using deprecated settings.gradle will still build', () async {
-    final String workingDirectory = fileSystem.path.join(getFlutterRoot(), 'dev', 'integration_tests', 'gradle_deprecated_settings');
-    final String flutterBin = fileSystem.path.join(getFlutterRoot(), 'bin', 'flutter');
+  test('android project using deprecated settings.gradle will still build',
+      () async {
+    final String workingDirectory = fileSystem.path.join(getFlutterRoot(),
+        'dev', 'integration_tests', 'gradle_deprecated_settings');
+    final String flutterBin =
+        fileSystem.path.join(getFlutterRoot(), 'bin', 'flutter');
 
     final ProcessResult result = await processManager.run(<String>[
       flutterBin,
       'build',
       'apk',
       '--debug',
-      '--target-platform', 'android-arm',
+      '--target-platform',
+      'android-arm',
       '--verbose',
     ], workingDirectory: workingDirectory);
 
@@ -26,8 +29,8 @@ void main() {
 
     expect(result.exitCode, 0);
 
-    final String apkPath = fileSystem.path.join(
-      workingDirectory, 'build', 'app', 'outputs', 'flutter-apk', 'app-debug.apk');
+    final String apkPath = fileSystem.path.join(workingDirectory, 'build',
+        'app', 'outputs', 'flutter-apk', 'app-debug.apk');
     expect(fileSystem.file(apkPath), exists);
   });
 }

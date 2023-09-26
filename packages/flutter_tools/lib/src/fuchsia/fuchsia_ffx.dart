@@ -1,4 +1,3 @@
-
 import 'package:file/file.dart';
 import 'package:process/process.dart';
 

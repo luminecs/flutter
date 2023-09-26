@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
@@ -12,7 +11,8 @@ void main() {
     const int itemCount = 10;
     const double itemHeight = 150.0;
 
-    testWidgetsWithLeakTracking('forward vertical', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('forward vertical',
+        (WidgetTester tester) async {
       final SemanticsTester semantics = SemanticsTester(tester);
       final ScrollController controller = ScrollController();
       addTearDown(controller.dispose);
@@ -33,17 +33,24 @@ void main() {
         ),
       );
 
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollUp]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollUp]));
 
       // Jump to the end.
       controller.jumpTo(itemCount * itemHeight);
       await tester.pumpAndSettle();
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollDown]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollDown]));
 
       semantics.dispose();
     });
 
-    testWidgetsWithLeakTracking('reverse vertical', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('reverse vertical',
+        (WidgetTester tester) async {
       final SemanticsTester semantics = SemanticsTester(tester);
       final ScrollController controller = ScrollController();
       addTearDown(controller.dispose);
@@ -65,17 +72,24 @@ void main() {
         ),
       );
 
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollDown]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollDown]));
 
       // Jump to the end.
       controller.jumpTo(itemCount * itemHeight);
       await tester.pumpAndSettle();
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollUp]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollUp]));
 
       semantics.dispose();
     });
 
-    testWidgetsWithLeakTracking('forward horizontal', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('forward horizontal',
+        (WidgetTester tester) async {
       final SemanticsTester semantics = SemanticsTester(tester);
       final ScrollController controller = ScrollController();
       addTearDown(controller.dispose);
@@ -97,17 +111,24 @@ void main() {
         ),
       );
 
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollLeft]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollLeft]));
 
       // Jump to the end.
       controller.jumpTo(itemCount * itemHeight);
       await tester.pumpAndSettle();
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollRight]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollRight]));
 
       semantics.dispose();
     });
 
-    testWidgetsWithLeakTracking('reverse horizontal', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('reverse horizontal',
+        (WidgetTester tester) async {
       final SemanticsTester semantics = SemanticsTester(tester);
       final ScrollController controller = ScrollController();
       addTearDown(controller.dispose);
@@ -130,12 +151,18 @@ void main() {
         ),
       );
 
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollRight]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollRight]));
 
       // Jump to the end.
       controller.jumpTo(itemCount * itemHeight);
       await tester.pumpAndSettle();
-      expect(semantics, includesNodeWith(actions: <SemanticsAction>[SemanticsAction.scrollLeft]));
+      expect(
+          semantics,
+          includesNodeWith(
+              actions: <SemanticsAction>[SemanticsAction.scrollLeft]));
 
       semantics.dispose();
     });

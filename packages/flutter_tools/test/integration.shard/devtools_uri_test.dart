@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter_tools/src/base/file_system.dart';
@@ -23,11 +22,13 @@ void main() {
   });
 
   // Regression test for https://github.com/flutter/flutter/issues/126691
-  testWithoutContext('flutter run --start-paused prints DevTools URI', () async {
+  testWithoutContext('flutter run --start-paused prints DevTools URI',
+      () async {
     final Completer<void> completer = Completer<void>();
     const String matcher = 'The Flutter DevTools debugger and profiler on';
 
-    final String flutterBin = fileSystem.path.join(getFlutterRoot(), 'bin', 'flutter');
+    final String flutterBin =
+        fileSystem.path.join(getFlutterRoot(), 'bin', 'flutter');
     final Process process = await processManager.start(<String>[
       flutterBin,
       'run',

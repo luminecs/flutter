@@ -1,4 +1,3 @@
-
 import '../../globals.dart' as globals;
 
 String generateFlutterJsFile(String fileGeneratorsPath) {

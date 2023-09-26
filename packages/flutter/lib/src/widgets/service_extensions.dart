@@ -1,4 +1,3 @@
-
 enum WidgetsServiceExtensions {
   debugDumpApp,
 

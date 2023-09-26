@@ -1,5 +1,3 @@
-
-
 import 'system_channels.dart';
 
 abstract final class HapticFeedback {

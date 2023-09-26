@@ -1,4 +1,3 @@
-
 const String selectionControlsRoute = 'controls';
 
 const String checkboxKeyValue = 'SelectionControls#Checkbox1';

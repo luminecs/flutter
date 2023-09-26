@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:fake_async/fake_async.dart';

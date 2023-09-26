@@ -1,4 +1,3 @@
-
 library gestures;
 
 export 'src/gestures/arena.dart';

@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const SnackBarExampleApp());
 
@@ -48,7 +46,8 @@ class _SnackBarExampleState extends State<SnackBarExample> {
       child: Column(
         children: <Widget>[
           _padRow(<Widget>[
-            Text('Snack Bar configuration', style: Theme.of(context).textTheme.bodyLarge),
+            Text('Snack Bar configuration',
+                style: Theme.of(context).textTheme.bodyLarge),
           ]),
           _padRow(
             <Widget>[
@@ -163,9 +162,13 @@ class _SnackBarExampleState extends State<SnackBarExample> {
             },
           )
         : null;
-    final double? width = _snackBarBehavior == SnackBarBehavior.floating && _multiLine ? 400.0 : null;
-    final String label =
-        _multiLine ? 'A Snack Bar with quite a lot of text which spans across multiple lines' : 'Single Line Snack Bar';
+    final double? width =
+        _snackBarBehavior == SnackBarBehavior.floating && _multiLine
+            ? 400.0
+            : null;
+    final String label = _multiLine
+        ? 'A Snack Bar with quite a lot of text which spans across multiple lines'
+        : 'Single Line Snack Bar';
     return SnackBar(
       content: Text(label),
       showCloseIcon: _withIcon,

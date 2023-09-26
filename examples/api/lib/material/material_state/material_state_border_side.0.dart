@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const MaterialStateBorderSideExampleApp());
 
@@ -24,10 +22,12 @@ class MaterialStateBorderSideExample extends StatefulWidget {
   const MaterialStateBorderSideExample({super.key});
 
   @override
-  State<MaterialStateBorderSideExample> createState() => _MaterialStateBorderSideExampleState();
+  State<MaterialStateBorderSideExample> createState() =>
+      _MaterialStateBorderSideExampleState();
 }
 
-class _MaterialStateBorderSideExampleState extends State<MaterialStateBorderSideExample> {
+class _MaterialStateBorderSideExampleState
+    extends State<MaterialStateBorderSideExample> {
   bool isSelected = true;
 
   @override

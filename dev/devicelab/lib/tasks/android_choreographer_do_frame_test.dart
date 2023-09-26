@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -73,7 +72,8 @@ Future<void> main() async {
 
       Future<TaskResult> runTestFor(String mode) async {
         int nextCompleterIdx = 0;
-        final Map<String, Completer<void>> sentinelCompleters = <String, Completer<void>>{};
+        final Map<String, Completer<void>> sentinelCompleters =
+            <String, Completer<void>>{};
         for (final String sentinel in kSentinelStr) {
           sentinelCompleters[sentinel] = Completer<void>();
         }
@@ -89,25 +89,26 @@ Future<void> main() async {
 
         int currSentinelIdx = 0;
         final StreamSubscription<void> stdout = run.stdout
-          .transform<String>(utf8.decoder)
-          .transform<String>(const LineSplitter())
-          .listen((String line) {
-            if (currSentinelIdx < sentinelCompleters.keys.length &&
-                line.contains(sentinelCompleters.keys.elementAt(currSentinelIdx))) {
-              sentinelCompleters.values.elementAt(currSentinelIdx).complete();
-              currSentinelIdx++;
-              print('stdout(MATCHED): $line');
-            } else {
-              print('stdout: $line');
-            }
-          });
+            .transform<String>(utf8.decoder)
+            .transform<String>(const LineSplitter())
+            .listen((String line) {
+          if (currSentinelIdx < sentinelCompleters.keys.length &&
+              line.contains(
+                  sentinelCompleters.keys.elementAt(currSentinelIdx))) {
+            sentinelCompleters.values.elementAt(currSentinelIdx).complete();
+            currSentinelIdx++;
+            print('stdout(MATCHED): $line');
+          } else {
+            print('stdout: $line');
+          }
+        });
 
         final StreamSubscription<void> stderr = run.stderr
-          .transform<String>(utf8.decoder)
-          .transform<String>(const LineSplitter())
-          .listen((String line) {
-            print('stderr: $line');
-          });
+            .transform<String>(utf8.decoder)
+            .transform<String>(const LineSplitter())
+            .listen((String line) {
+          print('stderr: $line');
+        });
 
         final Completer<void> exitCompleter = Completer<void>();
 
@@ -157,8 +158,10 @@ Future<void> main() async {
         if (nextCompleterIdx == sentinelCompleters.values.length) {
           return TaskResult.success(null);
         }
-        final String nextSentinel = sentinelCompleters.keys.elementAt(nextCompleterIdx);
-        return TaskResult.failure('Expected sentinel `$nextSentinel` in mode $mode');
+        final String nextSentinel =
+            sentinelCompleters.keys.elementAt(nextCompleterIdx);
+        return TaskResult.failure(
+            'Expected sentinel `$nextSentinel` in mode $mode');
       }
 
       final TaskResult debugResult = await runTestFor('debug');
@@ -172,7 +175,7 @@ Future<void> main() async {
       }
 
       final TaskResult releaseResult = await runTestFor('release');
-       if (releaseResult.failed) {
+      if (releaseResult.failed) {
         return releaseResult;
       }
 

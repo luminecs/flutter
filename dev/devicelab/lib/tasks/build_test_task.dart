@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -8,7 +7,11 @@ import '../framework/task_result.dart';
 import '../framework/utils.dart';
 
 abstract class BuildTestTask {
-  BuildTestTask(this.args, {this.workingDirectory, this.runFlutterClean = true,}) {
+  BuildTestTask(
+    this.args, {
+    this.workingDirectory,
+    this.runFlutterClean = true,
+  }) {
     final ArgResults argResults = argParser.parse(args);
     applicationBinaryPath = argResults[kApplicationBinaryPathOption] as String?;
     buildOnly = argResults[kBuildOnlyFlag] as bool;
@@ -46,7 +49,6 @@ abstract class BuildTestTask {
       await flutter('build', options: getBuildArgs(deviceOperatingSystem));
       copyArtifacts();
     });
-
   }
 
   Future<TaskResult> test() async {
@@ -54,25 +56,32 @@ abstract class BuildTestTask {
     await device.unlock();
     await inDirectory<void>(workingDirectory, () async {
       section('DRIVE START');
-      await flutter('drive', options: getTestArgs(deviceOperatingSystem, device.deviceId));
+      await flutter('drive',
+          options: getTestArgs(deviceOperatingSystem, device.deviceId));
     });
 
     return parseTaskResult();
   }
 
-  List<String> getBuildArgs(DeviceOperatingSystem deviceOperatingSystem) => throw UnimplementedError('getBuildArgs is not implemented');
+  List<String> getBuildArgs(DeviceOperatingSystem deviceOperatingSystem) =>
+      throw UnimplementedError('getBuildArgs is not implemented');
 
-  List<String> getTestArgs(DeviceOperatingSystem deviceOperatingSystem, String deviceId) => throw UnimplementedError('getTestArgs is not implemented');
+  List<String> getTestArgs(
+          DeviceOperatingSystem deviceOperatingSystem, String deviceId) =>
+      throw UnimplementedError('getTestArgs is not implemented');
 
-  void copyArtifacts() => throw UnimplementedError('copyArtifacts is not implemented');
+  void copyArtifacts() =>
+      throw UnimplementedError('copyArtifacts is not implemented');
 
-  Future<TaskResult> parseTaskResult() => throw UnimplementedError('parseTaskResult is not implemented');
+  Future<TaskResult> parseTaskResult() =>
+      throw UnimplementedError('parseTaskResult is not implemented');
 
   String? getApplicationBinaryPath() => applicationBinaryPath;
 
   Future<TaskResult> call() async {
     if (buildOnly && testOnly) {
-      throw Exception('Both build and test should not be passed. Pass only one.');
+      throw Exception(
+          'Both build and test should not be passed. Pass only one.');
     }
 
     if (!testOnly) {

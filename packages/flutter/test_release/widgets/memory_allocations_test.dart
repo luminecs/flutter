@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,7 +52,7 @@ class _TestRenderObject extends RenderObject {
 }
 
 class _TestElement extends RenderTreeRootElement with RootElementMixin {
-  _TestElement(): super(_TestLeafRenderObjectWidget());
+  _TestElement() : super(_TestLeafRenderObjectWidget());
 
   void makeInactive() {
     assignOwner(BuildOwner(focusManager: FocusManager()));
@@ -62,13 +61,16 @@ class _TestElement extends RenderTreeRootElement with RootElementMixin {
   }
 
   @override
-  void insertRenderObjectChild(covariant RenderObject child, covariant Object? slot) { }
+  void insertRenderObjectChild(
+      covariant RenderObject child, covariant Object? slot) {}
 
   @override
-  void moveRenderObjectChild(covariant RenderObject child, covariant Object? oldSlot, covariant Object? newSlot) { }
+  void moveRenderObjectChild(covariant RenderObject child,
+      covariant Object? oldSlot, covariant Object? newSlot) {}
 
   @override
-  void removeRenderObjectChild(covariant RenderObject child, covariant Object? slot) { }
+  void removeRenderObjectChild(
+      covariant RenderObject child, covariant Object? slot) {}
 }
 
 class _MyStatefulWidget extends StatefulWidget {
@@ -87,7 +89,8 @@ class _MyStatefulWidgetState extends State<_MyStatefulWidget> {
 
 Future<void> _activateFlutterObjects(WidgetTester tester) async {
   final _TestElement element = _TestElement();
-  element.makeInactive(); element.unmount();
+  element.makeInactive();
+  element.unmount();
 
   // Create and dispose State:
   await tester.pumpWidget(const _MyStatefulWidget());

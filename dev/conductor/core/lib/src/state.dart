@@ -1,4 +1,3 @@
-
 import 'dart:convert' show JsonEncoder, jsonDecode;
 
 import 'package:file/file.dart' show File;

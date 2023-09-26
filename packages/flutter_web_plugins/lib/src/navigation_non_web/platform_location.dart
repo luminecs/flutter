@@ -1,4 +1,3 @@
-
 import 'url_strategy.dart';
 
 typedef EventListener = dynamic Function(Object event);

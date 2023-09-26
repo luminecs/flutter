@@ -1,8 +1,6 @@
-
 import 'project.dart';
 
 class CompileErrorProject extends Project {
-
   @override
   final String pubspec = '''
   name: test

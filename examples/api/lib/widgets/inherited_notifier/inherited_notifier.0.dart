@@ -1,8 +1,6 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const InheritedNotifierExampleApp());
 
@@ -25,7 +23,10 @@ class SpinModel extends InheritedNotifier<AnimationController> {
   });
 
   static double of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<SpinModel>()!.notifier!.value;
+    return context
+        .dependOnInheritedWidgetOfExactType<SpinModel>()!
+        .notifier!
+        .value;
   }
 }
 
@@ -52,10 +53,12 @@ class InheritedNotifierExample extends StatefulWidget {
   const InheritedNotifierExample({super.key});
 
   @override
-  State<InheritedNotifierExample> createState() => _InheritedNotifierExampleState();
+  State<InheritedNotifierExample> createState() =>
+      _InheritedNotifierExampleState();
 }
 
-class _InheritedNotifierExampleState extends State<InheritedNotifierExample> with TickerProviderStateMixin {
+class _InheritedNotifierExampleState extends State<InheritedNotifierExample>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
 
   @override

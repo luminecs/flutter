@@ -1,4 +1,3 @@
-
 String objectRuntimeType(Object? object, String optimizedValue) {
   assert(() {
     optimizedValue = object.runtimeType.toString();

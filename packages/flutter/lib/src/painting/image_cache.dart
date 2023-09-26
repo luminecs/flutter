@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -23,10 +22,11 @@ class ImageCache {
     }
     TimelineTask? debugTimelineTask;
     if (!kReleaseMode) {
-      debugTimelineTask = TimelineTask()..start(
-        'ImageCache.setMaximumSize',
-        arguments: <String, dynamic>{'value': value},
-      );
+      debugTimelineTask = TimelineTask()
+        ..start(
+          'ImageCache.setMaximumSize',
+          arguments: <String, dynamic>{'value': value},
+        );
     }
     _maximumSize = value;
     if (maximumSize == 0) {
@@ -50,10 +50,11 @@ class ImageCache {
     }
     TimelineTask? debugTimelineTask;
     if (!kReleaseMode) {
-      debugTimelineTask = TimelineTask()..start(
-        'ImageCache.setMaximumSizeBytes',
-        arguments: <String, dynamic>{'value': value},
-      );
+      debugTimelineTask = TimelineTask()
+        ..start(
+          'ImageCache.setMaximumSizeBytes',
+          arguments: <String, dynamic>{'value': value},
+        );
     }
     _maximumSizeBytes = value;
     if (_maximumSizeBytes == 0) {
@@ -92,7 +93,7 @@ class ImageCache {
     _currentSizeBytes = 0;
   }
 
-  bool evict(Object key, { bool includeLive = true }) {
+  bool evict(Object key, {bool includeLive = true}) {
     if (includeLive) {
       // Remove from live images - the cache will not be able to mark
       // it as complete, and it might be getting evicted because it
@@ -133,7 +134,9 @@ class ImageCache {
   }
 
   void _touch(Object key, _CachedImage image, TimelineTask? timelineTask) {
-    if (image.sizeBytes != null && image.sizeBytes! <= maximumSizeBytes && maximumSize > 0) {
+    if (image.sizeBytes != null &&
+        image.sizeBytes! <= maximumSizeBytes &&
+        maximumSize > 0) {
       _currentSizeBytes += image.sizeBytes!;
       _cache[key] = image;
       _checkCacheSize(timelineTask);
@@ -142,7 +145,8 @@ class ImageCache {
     }
   }
 
-  void _trackLiveImage(Object key, ImageStreamCompleter completer, int? sizeBytes) {
+  void _trackLiveImage(
+      Object key, ImageStreamCompleter completer, int? sizeBytes) {
     // Avoid adding unnecessary callbacks to the completer.
     _liveImages.putIfAbsent(key, () {
       // Even if no callers to ImageProvider.resolve have listened to the stream,
@@ -159,21 +163,25 @@ class ImageCache {
     }).sizeBytes ??= sizeBytes;
   }
 
-  ImageStreamCompleter? putIfAbsent(Object key, ImageStreamCompleter Function() loader, { ImageErrorListener? onError }) {
+  ImageStreamCompleter? putIfAbsent(
+      Object key, ImageStreamCompleter Function() loader,
+      {ImageErrorListener? onError}) {
     TimelineTask? debugTimelineTask;
     if (!kReleaseMode) {
-      debugTimelineTask = TimelineTask()..start(
-        'ImageCache.putIfAbsent',
-        arguments: <String, dynamic>{
-          'key': key.toString(),
-        },
-      );
+      debugTimelineTask = TimelineTask()
+        ..start(
+          'ImageCache.putIfAbsent',
+          arguments: <String, dynamic>{
+            'key': key.toString(),
+          },
+        );
     }
     ImageStreamCompleter? result = _pendingImages[key]?.completer;
     // Nothing needs to be done because the image hasn't loaded yet.
     if (result != null) {
       if (!kReleaseMode) {
-        debugTimelineTask!.finish(arguments: <String, dynamic>{'result': 'pending'});
+        debugTimelineTask!
+            .finish(arguments: <String, dynamic>{'result': 'pending'});
       }
       return result;
     }
@@ -184,7 +192,8 @@ class ImageCache {
     final _CachedImage? image = _cache.remove(key);
     if (image != null) {
       if (!kReleaseMode) {
-        debugTimelineTask!.finish(arguments: <String, dynamic>{'result': 'keepAlive'});
+        debugTimelineTask!
+            .finish(arguments: <String, dynamic>{'result': 'keepAlive'});
       }
       // The image might have been keptAlive but had no listeners (so not live).
       // Make sure the cache starts tracking it as live again.
@@ -208,7 +217,8 @@ class ImageCache {
         debugTimelineTask,
       );
       if (!kReleaseMode) {
-        debugTimelineTask!.finish(arguments: <String, dynamic>{'result': 'keepAlive'});
+        debugTimelineTask!
+            .finish(arguments: <String, dynamic>{'result': 'keepAlive'});
       }
       return liveImage.completer;
     }
@@ -327,7 +337,8 @@ class ImageCache {
       finishArgs['currentSize'] = currentSize;
       finishArgs['currentSizeBytes'] = currentSizeBytes;
     }
-    while (_currentSizeBytes > _maximumSizeBytes || _cache.length > _maximumSize) {
+    while (
+        _currentSizeBytes > _maximumSizeBytes || _cache.length > _maximumSize) {
       final Object key = _cache.keys.first;
       final _CachedImage image = _cache[key]!;
       _currentSizeBytes -= image.sizeBytes!;
@@ -371,17 +382,18 @@ class ImageCacheStatus {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is ImageCacheStatus
-        && other.pending == pending
-        && other.keepAlive == keepAlive
-        && other.live == live;
+    return other is ImageCacheStatus &&
+        other.pending == pending &&
+        other.keepAlive == keepAlive &&
+        other.live == live;
   }
 
   @override
   int get hashCode => Object.hash(pending, keepAlive, live);
 
   @override
-  String toString() => '${objectRuntimeType(this, 'ImageCacheStatus')}(pending: $pending, live: $live, keepAlive: $keepAlive)';
+  String toString() =>
+      '${objectRuntimeType(this, 'ImageCacheStatus')}(pending: $pending, live: $live, keepAlive: $keepAlive)';
 }
 
 abstract class _CachedImageBase {
@@ -412,7 +424,8 @@ class _CachedImage extends _CachedImageBase {
 }
 
 class _LiveImage extends _CachedImageBase {
-  _LiveImage(ImageStreamCompleter completer, VoidCallback handleRemove, {int? sizeBytes})
+  _LiveImage(ImageStreamCompleter completer, VoidCallback handleRemove,
+      {int? sizeBytes})
       : super(completer, sizeBytes: sizeBytes) {
     _handleRemove = () {
       handleRemove();

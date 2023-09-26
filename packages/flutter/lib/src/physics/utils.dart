@@ -1,4 +1,3 @@
-
 bool nearEqual(double? a, double? b, double epsilon) {
   assert(epsilon >= 0.0);
   if (a == null || b == null) {

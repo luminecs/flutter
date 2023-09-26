@@ -1,10 +1,10 @@
-
 import 'package:flutter_tools/src/dart/pub.dart';
 import 'package:flutter_tools/src/project.dart';
 
 class ThrowingPub implements Pub {
   @override
-  Future<void> batch(List<String> arguments, {
+  Future<void> batch(
+    List<String> arguments, {
     PubContext? context,
     String? directory,
     MessageFilter? filter,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
@@ -17,7 +16,8 @@ class TestStatusTransitionWidget extends StatusTransitionWidget {
 }
 
 void main() {
-  testWidgetsWithLeakTracking('Status transition control test', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Status transition control test',
+      (WidgetTester tester) async {
     bool didBuild = false;
     final AnimationController controller = AnimationController(
       duration: const Duration(seconds: 1),

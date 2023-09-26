@@ -1,4 +1,3 @@
-
 import 'package:flutter_driver/src/common/error.dart';
 import 'package:flutter_driver/src/common/health.dart';
 import 'package:flutter_driver/src/driver/web_driver.dart';
@@ -26,7 +25,8 @@ void main() {
 }
 ''';
 
-      final Map<String, Object?> response = await driver.sendCommand(const GetHealth());
+      final Map<String, Object?> response =
+          await driver.sendCommand(const GetHealth());
       expect(response['test'], 'hello');
     });
 
@@ -35,9 +35,8 @@ void main() {
       expect(
         () => driver.sendCommand(const GetHealth()),
         _throwsDriverErrorWithMessage(
-          'FlutterDriver command GetHealth failed due to a remote error.\n'
-          'Command sent: {"command":"get_health"}'
-        ),
+            'FlutterDriver command GetHealth failed due to a remote error.\n'
+            'Command sent: {"command":"get_health"}'),
       );
     });
 
@@ -67,8 +66,7 @@ void main() {
       expect(
         () => driver.sendCommand(const GetHealth()),
         _throwsDriverErrorWithMessage(
-          'Error in Flutter application: test error message'
-        ),
+            'Error in Flutter application: test error message'),
       );
     });
 
@@ -102,10 +100,9 @@ Matcher _throwsDriverErrorWithMessage(String expectedMessage) {
 
 Matcher _throwsDriverErrorWithDataString(String dataType, String dataString) {
   return _throwsDriverErrorWithMessage(
-    'Received malformed response from the FlutterDriver extension.\n'
-    'Expected a JSON map containing a "response" field and, optionally, an '
-    '"isError" field, but got $dataType: $dataString'
-  );
+      'Received malformed response from the FlutterDriver extension.\n'
+      'Expected a JSON map containing a "response" field and, optionally, an '
+      '"isError" field, but got $dataType: $dataString');
 }
 
 class FakeFlutterWebConnection implements FlutterWebConnection {

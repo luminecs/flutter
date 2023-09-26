@@ -1,4 +1,3 @@
-
 import 'package:a11y_assessments/use_cases/dialog.dart';
 import 'package:flutter_test/flutter_test.dart';
 

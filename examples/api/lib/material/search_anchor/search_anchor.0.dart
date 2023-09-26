@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const SearchBarApp());
 
@@ -24,7 +22,8 @@ class _SearchBarAppState extends State<SearchBarApp> {
           icon: const Icon(Icons.call_missed),
           onPressed: () {
             controller.text = color.label;
-            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+            controller.selection =
+                TextSelection.collapsed(offset: controller.text.length);
           },
         ),
       ),
@@ -33,7 +32,9 @@ class _SearchBarAppState extends State<SearchBarApp> {
 
   Iterable<Widget> getSuggestions(SearchController controller) {
     final String input = controller.value.text;
-    return ColorLabel.values.where((ColorLabel color) => color.label.contains(input)).map(
+    return ColorLabel.values
+        .where((ColorLabel color) => color.label.contains(input))
+        .map(
           (ColorLabel filteredColor) => ListTile(
             leading: CircleAvatar(backgroundColor: filteredColor.color),
             title: Text(filteredColor.label),
@@ -41,7 +42,8 @@ class _SearchBarAppState extends State<SearchBarApp> {
               icon: const Icon(Icons.call_missed),
               onPressed: () {
                 controller.text = filteredColor.label;
-                controller.selection = TextSelection.collapsed(offset: controller.text.length);
+                controller.selection =
+                    TextSelection.collapsed(offset: controller.text.length);
               },
             ),
             onTap: () {
@@ -64,7 +66,8 @@ class _SearchBarAppState extends State<SearchBarApp> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = ThemeData(useMaterial3: true, colorSchemeSeed: selectedColorSeed);
+    final ThemeData themeData =
+        ThemeData(useMaterial3: true, colorSchemeSeed: selectedColorSeed);
     final ColorScheme colors = themeData.colorScheme;
 
     return MaterialApp(
@@ -77,12 +80,17 @@ class _SearchBarAppState extends State<SearchBarApp> {
             children: <Widget>[
               SearchAnchor.bar(
                 barHintText: 'Search colors',
-                suggestionsBuilder: (BuildContext context, SearchController controller) {
+                suggestionsBuilder:
+                    (BuildContext context, SearchController controller) {
                   if (controller.text.isEmpty) {
                     if (searchHistory.isNotEmpty) {
                       return getHistoryList(controller);
                     }
-                    return <Widget>[Center(child: Text('No search history.', style: TextStyle(color: colors.outline)))];
+                    return <Widget>[
+                      Center(
+                          child: Text('No search history.',
+                              style: TextStyle(color: colors.outline)))
+                    ];
                   }
                   return getSuggestions(controller);
                 },

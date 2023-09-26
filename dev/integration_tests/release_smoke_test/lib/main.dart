@@ -1,4 +1,3 @@
-
 import 'dart:convert' show utf8;
 
 import 'package:flutter/foundation.dart';
@@ -12,7 +11,8 @@ Future<void> main() async {
   print(text.toDiagnosticsNode());
   print(text.toStringDeep());
   // regression test for https://github.com/flutter/flutter/issues/49601
-  final List<int> computed = await compute(_utf8Encode, 'test', debugLabel: null);
+  final List<int> computed =
+      await compute(_utf8Encode, 'test', debugLabel: null);
   print(computed);
   runApp(
     const Center(

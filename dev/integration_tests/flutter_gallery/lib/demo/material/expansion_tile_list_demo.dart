@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../gallery/demo.dart';
@@ -22,7 +21,8 @@ class ExpansionTileListDemo extends StatelessWidget {
             const ListTile(title: Text('Top')),
             ExpansionTile(
               title: const Text('Sublist'),
-              backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.025),
+              backgroundColor:
+                  Theme.of(context).colorScheme.secondary.withOpacity(0.025),
               children: const <Widget>[
                 ListTile(title: Text('One')),
                 ListTile(title: Text('Two')),

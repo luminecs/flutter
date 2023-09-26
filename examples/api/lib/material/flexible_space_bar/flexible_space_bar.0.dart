@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const MaterialApp(home: FlexibleSpaceBarExampleApp()));
 
@@ -11,7 +9,8 @@ class FlexibleSpaceBarExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[
           SliverAppBar(
             stretch: true,

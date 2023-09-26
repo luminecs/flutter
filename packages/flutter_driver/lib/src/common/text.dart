@@ -1,9 +1,8 @@
-
 import 'find.dart';
 import 'message.dart';
 
 class GetText extends CommandWithTarget {
-  GetText(super.finder, { super.timeout });
+  GetText(super.finder, {super.timeout});
 
   GetText.deserialize(super.json, super.finderFactory) : super.deserialize();
 
@@ -22,16 +21,16 @@ class GetTextResult extends Result {
 
   @override
   Map<String, dynamic> toJson() => <String, String>{
-    'text': text,
-  };
+        'text': text,
+      };
 }
 
 class EnterText extends Command {
-  const EnterText(this.text, { super.timeout });
+  const EnterText(this.text, {super.timeout});
 
   EnterText.deserialize(super.json)
-    : text = json['text']!,
-      super.deserialize();
+      : text = json['text']!,
+        super.deserialize();
 
   final String text;
 
@@ -39,17 +38,18 @@ class EnterText extends Command {
   String get kind => 'enter_text';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'text': text,
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'text': text,
+    });
 }
 
 class SetTextEntryEmulation extends Command {
-  const SetTextEntryEmulation(this.enabled, { super.timeout });
+  const SetTextEntryEmulation(this.enabled, {super.timeout});
 
   SetTextEntryEmulation.deserialize(super.json)
-    : enabled = json['enabled'] == 'true',
-      super.deserialize();
+      : enabled = json['enabled'] == 'true',
+        super.deserialize();
 
   final bool enabled;
 
@@ -57,7 +57,8 @@ class SetTextEntryEmulation extends Command {
   String get kind => 'set_text_entry_emulation';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'enabled': '$enabled',
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'enabled': '$enabled',
+    });
 }

@@ -1,4 +1,3 @@
-
 import 'dart:ui' as ui show ParagraphBuilder, PlaceholderAlignment;
 
 import 'package:flutter/foundation.dart';
@@ -20,14 +19,14 @@ class WidgetSpan extends PlaceholderSpan {
     super.baseline,
     super.style,
   }) : assert(
-         baseline != null || !(
-          identical(alignment, ui.PlaceholderAlignment.aboveBaseline) ||
-          identical(alignment, ui.PlaceholderAlignment.belowBaseline) ||
-          identical(alignment, ui.PlaceholderAlignment.baseline)
-        ),
-      );
+          baseline != null ||
+              !(identical(alignment, ui.PlaceholderAlignment.aboveBaseline) ||
+                  identical(alignment, ui.PlaceholderAlignment.belowBaseline) ||
+                  identical(alignment, ui.PlaceholderAlignment.baseline)),
+        );
 
-  static List<Widget> extractFromInlineSpan(InlineSpan span, TextScaler textScaler) {
+  static List<Widget> extractFromInlineSpan(
+      InlineSpan span, TextScaler textScaler) {
     final List<Widget> widgets = <Widget>[];
     // _kEngineDefaultFontSize is the default font size to use when none of the
     // ancestor spans specifies one.
@@ -44,13 +43,17 @@ class WidgetSpan extends PlaceholderSpan {
       }
       if (span is WidgetSpan) {
         final double fontSize = fontSizeStack.last;
-        final double textScaleFactor = fontSize == 0 ? 0 : textScaler.scale(fontSize) / fontSize;
+        final double textScaleFactor =
+            fontSize == 0 ? 0 : textScaler.scale(fontSize) / fontSize;
         widgets.add(
           _WidgetSpanParentData(
             span: span,
             child: Semantics(
               tagForChildren: PlaceholderSpanIndexSemanticsTag(index++),
-              child: _AutoScaleInlineWidget(span: span, textScaleFactor: textScaleFactor, child: span.child),
+              child: _AutoScaleInlineWidget(
+                  span: span,
+                  textScaleFactor: textScaleFactor,
+                  child: span.child),
             ),
           ),
         );
@@ -67,6 +70,7 @@ class WidgetSpan extends PlaceholderSpan {
       }
       return true;
     }
+
     visitSubtree(span);
     return widgets;
   }
@@ -74,7 +78,8 @@ class WidgetSpan extends PlaceholderSpan {
   final Widget child;
 
   @override
-  void build(ui.ParagraphBuilder builder, {
+  void build(
+    ui.ParagraphBuilder builder, {
     TextScaler textScaler = TextScaler.noScaling,
     List<PlaceholderDimensions>? dimensions,
   }) {
@@ -85,7 +90,8 @@ class WidgetSpan extends PlaceholderSpan {
       builder.pushStyle(style!.getTextStyle(textScaler: textScaler));
     }
     assert(builder.placeholderCount < dimensions!.length);
-    final PlaceholderDimensions currentDimensions = dimensions![builder.placeholderCount];
+    final PlaceholderDimensions currentDimensions =
+        dimensions![builder.placeholderCount];
     builder.addPlaceholder(
       currentDimensions.size.width,
       currentDimensions.size.height,
@@ -105,7 +111,8 @@ class WidgetSpan extends PlaceholderSpan {
   bool visitDirectChildren(InlineSpanVisitor visitor) => true;
 
   @override
-  InlineSpan? getSpanForPositionVisitor(TextPosition position, Accumulator offset) {
+  InlineSpan? getSpanForPositionVisitor(
+      TextPosition position, Accumulator offset) {
     if (position.offset == offset.value) {
       return this;
     }
@@ -160,10 +167,10 @@ class WidgetSpan extends PlaceholderSpan {
     if (super != other) {
       return false;
     }
-    return other is WidgetSpan
-        && other.child == child
-        && other.alignment == alignment
-        && other.baseline == baseline;
+    return other is WidgetSpan &&
+        other.child == child &&
+        other.alignment == alignment &&
+        other.baseline == baseline;
   }
 
   @override
@@ -191,13 +198,14 @@ class WidgetSpan extends PlaceholderSpan {
 
 // A ParentDataWidget that sets TextParentData.span.
 class _WidgetSpanParentData extends ParentDataWidget<TextParentData> {
-  const _WidgetSpanParentData({ required this.span, required super.child });
+  const _WidgetSpanParentData({required this.span, required super.child});
 
   final WidgetSpan span;
 
   @override
   void applyParentData(RenderObject renderObject) {
-    final TextParentData parentData = renderObject.parentData! as TextParentData;
+    final TextParentData parentData =
+        renderObject.parentData! as TextParentData;
     parentData.span = span;
   }
 
@@ -211,18 +219,23 @@ class _WidgetSpanParentData extends ParentDataWidget<TextParentData> {
 // TODO(LongCatIsLooong): this shouldn't happen automatically, at least there
 // should be a way to opt out: https://github.com/flutter/flutter/issues/126962
 class _AutoScaleInlineWidget extends SingleChildRenderObjectWidget {
-  const _AutoScaleInlineWidget({ required this.span, required this.textScaleFactor, required super.child });
+  const _AutoScaleInlineWidget(
+      {required this.span,
+      required this.textScaleFactor,
+      required super.child});
 
   final WidgetSpan span;
   final double textScaleFactor;
 
   @override
   _RenderScaledInlineWidget createRenderObject(BuildContext context) {
-    return _RenderScaledInlineWidget(span.alignment, span.baseline, textScaleFactor);
+    return _RenderScaledInlineWidget(
+        span.alignment, span.baseline, textScaleFactor);
   }
 
   @override
-  void updateRenderObject(BuildContext context, _RenderScaledInlineWidget renderObject) {
+  void updateRenderObject(
+      BuildContext context, _RenderScaledInlineWidget renderObject) {
     renderObject
       ..alignment = span.alignment
       ..baseline = span.baseline
@@ -230,7 +243,8 @@ class _AutoScaleInlineWidget extends SingleChildRenderObjectWidget {
   }
 }
 
-class _RenderScaledInlineWidget extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
+class _RenderScaledInlineWidget extends RenderBox
+    with RenderObjectWithChildMixin<RenderBox> {
   _RenderScaledInlineWidget(this._alignment, this._baseline, this._scale);
 
   double get scale => _scale;
@@ -296,7 +310,9 @@ class _RenderScaledInlineWidget extends RenderBox with RenderObjectWithChildMixi
   @override
   Size computeDryLayout(BoxConstraints constraints) {
     assert(!constraints.hasBoundedHeight);
-    final Size unscaledSize = child?.computeDryLayout(BoxConstraints(maxWidth: constraints.maxWidth / scale)) ?? Size.zero;
+    final Size unscaledSize = child?.computeDryLayout(
+            BoxConstraints(maxWidth: constraints.maxWidth / scale)) ??
+        Size.zero;
     return constraints.constrain(unscaledSize * scale);
   }
 
@@ -309,7 +325,8 @@ class _RenderScaledInlineWidget extends RenderBox with RenderObjectWithChildMixi
     assert(!constraints.hasBoundedHeight);
     // Only constrain the width to the maximum width of the paragraph.
     // Leave height unconstrained, which will overflow if expanded past.
-    child.layout(BoxConstraints(maxWidth: constraints.maxWidth / scale), parentUsesSize: true);
+    child.layout(BoxConstraints(maxWidth: constraints.maxWidth / scale),
+        parentUsesSize: true);
     size = constraints.constrain(child.size * scale);
   }
 
@@ -331,12 +348,12 @@ class _RenderScaledInlineWidget extends RenderBox with RenderObjectWithChildMixi
       return;
     }
     layer = context.pushTransform(
-      needsCompositing,
-      offset,
-      Matrix4.diagonal3Values(scale, scale, 1.0),
-      (PaintingContext context, Offset offset) => context.paintChild(child, offset),
-      oldLayer: layer as TransformLayer?
-    );
+        needsCompositing,
+        offset,
+        Matrix4.diagonal3Values(scale, scale, 1.0),
+        (PaintingContext context, Offset offset) =>
+            context.paintChild(child, offset),
+        oldLayer: layer as TransformLayer?);
   }
 
   @override
@@ -348,7 +365,8 @@ class _RenderScaledInlineWidget extends RenderBox with RenderObjectWithChildMixi
     return result.addWithPaintTransform(
       transform: Matrix4.diagonal3Values(scale, scale, 1.0),
       position: position,
-      hitTest: (BoxHitTestResult result, Offset transformedOffset) => child.hitTest(result, position: transformedOffset),
+      hitTest: (BoxHitTestResult result, Offset transformedOffset) =>
+          child.hitTest(result, position: transformedOffset),
     );
   }
 }

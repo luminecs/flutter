@@ -1,4 +1,3 @@
-
 import 'package:file/file.dart';
 import 'package:file/memory.dart';
 import 'package:flutter_tools/src/base/file_system.dart';
@@ -103,19 +102,21 @@ void main() {
     testUsingContext('updates packages', () async {
       final UpdatePackagesCommand command = UpdatePackagesCommand();
       await createTestCommandRunner(command).run(<String>['update-packages']);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-        '/flutter/examples',
-        '/flutter/packages/flutter',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+            '/flutter/examples',
+            '/flutter/packages/flutter',
+          ]));
       expect(pub.pubBatchDirectories, isEmpty);
     }, overrides: <Type, Generator>{
       Pub: () => pub,
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
     });
 
     testUsingContext('force updates packages', () async {
@@ -124,21 +125,25 @@ void main() {
         'update-packages',
         '--force-upgrade',
       ]);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-        '/flutter/examples',
-        '/flutter/packages/flutter',
-      ]));
-      expect(pub.pubBatchDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+            '/flutter/examples',
+            '/flutter/packages/flutter',
+          ]));
+      expect(
+          pub.pubBatchDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+          ]));
     }, overrides: <Type, Generator>{
       Pub: () => pub,
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
     });
 
     testUsingContext('force updates packages --jobs=1', () async {
@@ -148,21 +153,25 @@ void main() {
         '--force-upgrade',
         '--jobs=1',
       ]);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-        '/flutter/examples',
-        '/flutter/packages/flutter',
-      ]));
-      expect(pub.pubBatchDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+            '/flutter/examples',
+            '/flutter/packages/flutter',
+          ]));
+      expect(
+          pub.pubBatchDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+          ]));
     }, overrides: <Type, Generator>{
       Pub: () => pub,
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
     });
 
     testUsingContext('--transitive-closure --consumer-only', () async {
@@ -172,12 +181,16 @@ void main() {
         '--transitive-closure',
         '--consumer-only',
       ]);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-      ]));
-      expect(pub.pubBatchDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+          ]));
+      expect(
+          pub.pubBatchDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+          ]));
       // Expecting a line like:
       //   'flutter -> {collection, meta, typed_data, vector_math}'
       expect(
@@ -189,8 +202,8 @@ void main() {
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
       Logger: () => logger,
     });
 
@@ -201,14 +214,18 @@ void main() {
         '--cherry-pick-package=vector_math',
         '--cherry-pick-version=2.0.9',
       ]);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-        '/flutter/examples',
-        '/flutter/packages/flutter',
-      ]));
-      expect(pub.pubBatchDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+            '/flutter/examples',
+            '/flutter/packages/flutter',
+          ]));
+      expect(
+          pub.pubBatchDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+          ]));
       expect(pub.pubspecYamls, hasLength(3));
       final String output = pub.pubspecYamls.first;
       expect(output, isNotNull);
@@ -224,8 +241,8 @@ void main() {
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
       Logger: () => logger,
     });
 
@@ -235,14 +252,18 @@ void main() {
         'update-packages',
         '--force-upgrade',
       ]);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-        '/flutter/examples',
-        '/flutter/packages/flutter',
-      ]));
-      expect(pub.pubBatchDirectories, equals(<String>[
-        '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+            '/flutter/examples',
+            '/flutter/packages/flutter',
+          ]));
+      expect(
+          pub.pubBatchDirectories,
+          equals(<String>[
+            '/.tmp_rand0/flutter_update_packages.rand0/synthetic_package',
+          ]));
       expect(pub.pubspecYamls, hasLength(3));
       final String output = pub.pubspecYamls.first;
       expect(output, isNotNull);
@@ -256,12 +277,13 @@ void main() {
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
       Logger: () => logger,
     });
 
-    testUsingContext('force updates packages --synthetic-package-path', () async {
+    testUsingContext('force updates packages --synthetic-package-path',
+        () async {
       final UpdatePackagesCommand command = UpdatePackagesCommand();
       const String dir = '/path/to/synthetic/package';
       await createTestCommandRunner(command).run(<String>[
@@ -269,27 +291,33 @@ void main() {
         '--force-upgrade',
         '--synthetic-package-path=$dir',
       ]);
-      expect(pub.pubGetDirectories, equals(<String>[
-        '$dir/synthetic_package',
-        '/flutter/examples',
-        '/flutter/packages/flutter',
-      ]));
-      expect(pub.pubBatchDirectories, equals(<String>[
-        '$dir/synthetic_package',
-      ]));
+      expect(
+          pub.pubGetDirectories,
+          equals(<String>[
+            '$dir/synthetic_package',
+            '/flutter/examples',
+            '/flutter/packages/flutter',
+          ]));
+      expect(
+          pub.pubBatchDirectories,
+          equals(<String>[
+            '$dir/synthetic_package',
+          ]));
     }, overrides: <Type, Generator>{
       Pub: () => pub,
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
       Cache: () => Cache.test(
-        processManager: processManager,
-      ),
+            processManager: processManager,
+          ),
     });
   });
 
   group('generateFakePubspec', () {
     const String prevVersion = '1.2.0';
-    testUsingContext('constrains package versions to >= previous version if doUpgrade: true', () {
+    testUsingContext(
+        'constrains package versions to >= previous version if doUpgrade: true',
+        () {
       final String pubspecSource = generateFakePubspec(
         <PubspecDependency>[
           PubspecDependency(
@@ -352,7 +380,8 @@ class FakePub extends Fake implements Pub {
     PubOutputMode outputMode = PubOutputMode.all,
   }) async {
     pubGetDirectories.add(project.directory.path);
-    pubspecYamls.add(project.directory.childFile('pubspec.yaml').readAsStringSync());
+    pubspecYamls
+        .add(project.directory.childFile('pubspec.yaml').readAsStringSync());
     project.directory.childFile('pubspec.lock')
       ..createSync(recursive: true)
       ..writeAsStringSync('''
@@ -378,17 +407,17 @@ sdks:
 
   @override
   Future<void> batch(
-      List<String> arguments, {
-        required PubContext context,
-        String? directory,
-        MessageFilter? filter,
-        String failureMessage = 'pub failed',
-      }) async {
+    List<String> arguments, {
+    required PubContext context,
+    String? directory,
+    MessageFilter? filter,
+    String failureMessage = 'pub failed',
+  }) async {
     if (directory != null) {
       pubBatchDirectories.add(directory);
     }
 
-'''
+    '''
 Dart SDK 2.16.0-144.0.dev
 Flutter SDK 2.9.0-1.0.pre.263
 flutter_api_samples 1.0.0
@@ -405,6 +434,8 @@ dev dependencies:
 transitive dependencies:
 - platform 3.1.0
 - process 4.2.4 [file path platform]
-'''.split('\n').forEach(filter!);
+'''
+        .split('\n')
+        .forEach(filter!);
   }
 }

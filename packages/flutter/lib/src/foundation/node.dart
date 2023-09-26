@@ -1,4 +1,3 @@
-
 import 'package:meta/meta.dart';
 
 // This file gets mutated by //dev/devicelab/bin/tasks/flutter_test_performance.dart
@@ -22,7 +21,7 @@ class AbstractNode {
     }
   }
 
-  void redepthChildren() { }
+  void redepthChildren() {}
 
   Object? get owner => _owner;
   Object? _owner;

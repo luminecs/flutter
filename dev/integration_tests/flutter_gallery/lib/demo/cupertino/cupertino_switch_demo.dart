@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 import '../../gallery/demo.dart';
@@ -13,7 +12,6 @@ class CupertinoSwitchDemo extends StatefulWidget {
 }
 
 class _CupertinoSwitchDemoState extends State<CupertinoSwitchDemo> {
-
   bool _switchValue = false;
 
   @override
@@ -25,7 +23,8 @@ class _CupertinoSwitchDemoState extends State<CupertinoSwitchDemo> {
         // Material page. CupertinoPageRoutes could auto-populate these back
         // labels.
         previousPageTitle: 'Cupertino',
-        trailing: CupertinoDemoDocumentationButton(CupertinoSwitchDemo.routeName),
+        trailing:
+            CupertinoDemoDocumentationButton(CupertinoSwitchDemo.routeName),
       ),
       child: DefaultTextStyle(
         style: CupertinoTheme.of(context).textTheme.textStyle,
@@ -46,9 +45,7 @@ class _CupertinoSwitchDemoState extends State<CupertinoSwitchDemo> {
                           });
                         },
                       ),
-                      Text(
-                        "Enabled - ${_switchValue ? "On" : "Off"}"
-                      ),
+                      Text("Enabled - ${_switchValue ? "On" : "Off"}"),
                     ],
                   ),
                 ),
@@ -60,9 +57,7 @@ class _CupertinoSwitchDemoState extends State<CupertinoSwitchDemo> {
                         value: true,
                         onChanged: null,
                       ),
-                      Text(
-                        'Disabled - On'
-                      ),
+                      Text('Disabled - On'),
                     ],
                   ),
                 ),
@@ -74,9 +69,7 @@ class _CupertinoSwitchDemoState extends State<CupertinoSwitchDemo> {
                         value: false,
                         onChanged: null,
                       ),
-                      Text(
-                        'Disabled - Off'
-                      ),
+                      Text('Disabled - Off'),
                     ],
                   ),
                 ),

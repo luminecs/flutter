@@ -1,4 +1,3 @@
-
 import 'dart:io' show Platform;
 import 'dart:ui' as ui show FlutterView, Scene, SceneBuilder, SemanticsUpdate;
 
@@ -31,9 +30,9 @@ class ViewConfiguration {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is ViewConfiguration
-        && other.size == size
-        && other.devicePixelRatio == devicePixelRatio;
+    return other is ViewConfiguration &&
+        other.size == size &&
+        other.devicePixelRatio == devicePixelRatio;
   }
 
   @override
@@ -43,13 +42,14 @@ class ViewConfiguration {
   String toString() => '$size at ${debugFormatDouble(devicePixelRatio)}x';
 }
 
-class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox> {
+class RenderView extends RenderObject
+    with RenderObjectWithChildMixin<RenderBox> {
   RenderView({
     RenderBox? child,
     ViewConfiguration? configuration,
     required ui.FlutterView view,
-  }) : _configuration = configuration,
-       _view = view {
+  })  : _configuration = configuration,
+        _view = view {
     this.child = child;
   }
 
@@ -103,7 +103,9 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   // We never call layout() on this class, so this should never get
   // checked. (This class is laid out using scheduleInitialLayout().)
   @override
-  void debugAssertDoesMeetConstraints() { assert(false); }
+  void debugAssertDoesMeetConstraints() {
+    assert(false);
+  }
 
   @override
   void performResize() {
@@ -121,7 +123,7 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     }
   }
 
-  bool hitTest(HitTestResult result, { required Offset position }) {
+  bool hitTest(HitTestResult result, {required Offset position}) {
     if (child != null) {
       child!.hitTest(BoxHitTestResult.wrap(result), position: position);
     }
@@ -138,7 +140,8 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
       context.paintChild(child!, offset);
     }
     assert(() {
-      final List<DebugPaintCallback> localCallbacks = _debugPaintCallbacks.toList();
+      final List<DebugPaintCallback> localCallbacks =
+          _debugPaintCallbacks.toList();
       for (final DebugPaintCallback paintCallback in localCallbacks) {
         if (_debugPaintCallbacks.contains(paintCallback)) {
           paintCallback(context, offset, this);
@@ -169,7 +172,8 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
       scene.dispose();
       assert(() {
         if (debugRepaintRainbowEnabled || debugRepaintTextRainbowEnabled) {
-          debugCurrentRepaintColor = debugCurrentRepaintColor.withHue((debugCurrentRepaintColor.hue + 2.0) % 360.0);
+          debugCurrentRepaintColor = debugCurrentRepaintColor
+              .withHue((debugCurrentRepaintColor.hue + 2.0) % 360.0);
         }
         return true;
       }());
@@ -226,7 +230,8 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
       // bottom drawn pixel is at 1919 position.
       bounds.bottom - 1.0 - _view.padding.bottom / 2.0,
     );
-    final SystemUiOverlayStyle? upperOverlayStyle = layer!.find<SystemUiOverlayStyle>(top);
+    final SystemUiOverlayStyle? upperOverlayStyle =
+        layer!.find<SystemUiOverlayStyle>(top);
     // Only android has a customizable system navigation bar.
     SystemUiOverlayStyle? lowerOverlayStyle;
     switch (defaultTargetPlatform) {
@@ -254,11 +259,15 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
         statusBarBrightness: upperOverlayStyle.statusBarBrightness,
         statusBarIconBrightness: upperOverlayStyle.statusBarIconBrightness,
         statusBarColor: upperOverlayStyle.statusBarColor,
-        systemStatusBarContrastEnforced: upperOverlayStyle.systemStatusBarContrastEnforced,
+        systemStatusBarContrastEnforced:
+            upperOverlayStyle.systemStatusBarContrastEnforced,
         systemNavigationBarColor: lowerOverlayStyle.systemNavigationBarColor,
-        systemNavigationBarDividerColor: lowerOverlayStyle.systemNavigationBarDividerColor,
-        systemNavigationBarIconBrightness: lowerOverlayStyle.systemNavigationBarIconBrightness,
-        systemNavigationBarContrastEnforced: lowerOverlayStyle.systemNavigationBarContrastEnforced,
+        systemNavigationBarDividerColor:
+            lowerOverlayStyle.systemNavigationBarDividerColor,
+        systemNavigationBarIconBrightness:
+            lowerOverlayStyle.systemNavigationBarIconBrightness,
+        systemNavigationBarContrastEnforced:
+            lowerOverlayStyle.systemNavigationBarContrastEnforced,
       );
       SystemChrome.setSystemUIOverlayStyle(overlayStyle);
       return;
@@ -268,16 +277,25 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     // navigation bar style using only one annotated region layer (for instance the one
     // automatically created by an [AppBar]).
     final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
-    final SystemUiOverlayStyle definedOverlayStyle = (upperOverlayStyle ?? lowerOverlayStyle)!;
+    final SystemUiOverlayStyle definedOverlayStyle =
+        (upperOverlayStyle ?? lowerOverlayStyle)!;
     final SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
       statusBarBrightness: definedOverlayStyle.statusBarBrightness,
       statusBarIconBrightness: definedOverlayStyle.statusBarIconBrightness,
       statusBarColor: definedOverlayStyle.statusBarColor,
-      systemStatusBarContrastEnforced: definedOverlayStyle.systemStatusBarContrastEnforced,
-      systemNavigationBarColor: isAndroid ? definedOverlayStyle.systemNavigationBarColor : null,
-      systemNavigationBarDividerColor: isAndroid ? definedOverlayStyle.systemNavigationBarDividerColor : null,
-      systemNavigationBarIconBrightness: isAndroid ? definedOverlayStyle.systemNavigationBarIconBrightness : null,
-      systemNavigationBarContrastEnforced: isAndroid ? definedOverlayStyle.systemNavigationBarContrastEnforced : null,
+      systemStatusBarContrastEnforced:
+          definedOverlayStyle.systemStatusBarContrastEnforced,
+      systemNavigationBarColor:
+          isAndroid ? definedOverlayStyle.systemNavigationBarColor : null,
+      systemNavigationBarDividerColor: isAndroid
+          ? definedOverlayStyle.systemNavigationBarDividerColor
+          : null,
+      systemNavigationBarIconBrightness: isAndroid
+          ? definedOverlayStyle.systemNavigationBarIconBrightness
+          : null,
+      systemNavigationBarContrastEnforced: isAndroid
+          ? definedOverlayStyle.systemNavigationBarContrastEnforced
+          : null,
     );
     SystemChrome.setSystemUIOverlayStyle(overlayStyle);
   }
@@ -297,18 +315,24 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     // root superclasses don't include any interesting information for this
     // class
     assert(() {
-      properties.add(DiagnosticsNode.message('debug mode enabled - ${kIsWeb ? 'Web' :  Platform.operatingSystem}'));
+      properties.add(DiagnosticsNode.message(
+          'debug mode enabled - ${kIsWeb ? 'Web' : Platform.operatingSystem}'));
       return true;
     }());
-    properties.add(DiagnosticsProperty<Size>('view size', _view.physicalSize, tooltip: 'in physical pixels'));
-    properties.add(DoubleProperty('device pixel ratio', _view.devicePixelRatio, tooltip: 'physical pixels per logical pixel'));
-    properties.add(DiagnosticsProperty<ViewConfiguration>('configuration', configuration, tooltip: 'in logical pixels'));
+    properties.add(DiagnosticsProperty<Size>('view size', _view.physicalSize,
+        tooltip: 'in physical pixels'));
+    properties.add(DoubleProperty('device pixel ratio', _view.devicePixelRatio,
+        tooltip: 'physical pixels per logical pixel'));
+    properties.add(DiagnosticsProperty<ViewConfiguration>(
+        'configuration', configuration,
+        tooltip: 'in logical pixels'));
     if (_view.platformDispatcher.semanticsEnabled) {
       properties.add(DiagnosticsNode.message('semantics enabled'));
     }
   }
 
-  static final List<DebugPaintCallback> _debugPaintCallbacks = <DebugPaintCallback>[];
+  static final List<DebugPaintCallback> _debugPaintCallbacks =
+      <DebugPaintCallback>[];
 
   static void debugAddPaintCallback(DebugPaintCallback callback) {
     assert(() {
@@ -325,4 +349,5 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
   }
 }
 
-typedef DebugPaintCallback = void Function(PaintingContext context, Offset offset, RenderView renderView);
+typedef DebugPaintCallback = void Function(
+    PaintingContext context, Offset offset, RenderView renderView);

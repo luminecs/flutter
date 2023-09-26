@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -34,22 +33,24 @@ void main() {
       ),
     );
 
-    expect(semantics, hasSemantics(
-      TestSemantics.root(
-        children: <TestSemantics>[
-          TestSemantics.rootChild(
-            id: 1,
-            label: 'test1',
+    expect(
+        semantics,
+        hasSemantics(
+          TestSemantics.root(
+            children: <TestSemantics>[
+              TestSemantics.rootChild(
+                id: 1,
+                label: 'test1',
+              ),
+              TestSemantics.rootChild(
+                id: 2,
+                label: 'test2',
+              ),
+            ],
           ),
-          TestSemantics.rootChild(
-            id: 2,
-            label: 'test2',
-          ),
-        ],
-      ),
-      ignoreRect: true,
-      ignoreTransform: true,
-    ));
+          ignoreRect: true,
+          ignoreTransform: true,
+        ));
 
     // merged
     await tester.pumpWidget(
@@ -72,18 +73,20 @@ void main() {
       ),
     );
 
-    expect(semantics, hasSemantics(
-      TestSemantics.root(
-        children: <TestSemantics>[
-          TestSemantics.rootChild(
-            id: 3,
-            label: 'test1\ntest2',
+    expect(
+        semantics,
+        hasSemantics(
+          TestSemantics.root(
+            children: <TestSemantics>[
+              TestSemantics.rootChild(
+                id: 3,
+                label: 'test1\ntest2',
+              ),
+            ],
           ),
-        ],
-      ),
-      ignoreRect: true,
-      ignoreTransform: true,
-    ));
+          ignoreRect: true,
+          ignoreTransform: true,
+        ));
 
     // not merged
     await tester.pumpWidget(
@@ -104,21 +107,25 @@ void main() {
       ),
     );
 
-    expect(semantics, hasSemantics(
-      TestSemantics.root(
-        children: <TestSemantics>[
-          TestSemantics.rootChild(id: 6, label: 'test1'),
-          TestSemantics.rootChild(id: 7, label: 'test2'),
-        ],
-      ),
-      ignoreRect: true,
-      ignoreTransform: true,
-    ));
+    expect(
+        semantics,
+        hasSemantics(
+          TestSemantics.root(
+            children: <TestSemantics>[
+              TestSemantics.rootChild(id: 6, label: 'test1'),
+              TestSemantics.rootChild(id: 7, label: 'test2'),
+            ],
+          ),
+          ignoreRect: true,
+          ignoreTransform: true,
+        ));
 
     semantics.dispose();
   });
 
-  testWidgetsWithLeakTracking('MergeSemantics works if other nodes are implicitly merged into its node', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'MergeSemantics works if other nodes are implicitly merged into its node',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(
@@ -126,7 +133,8 @@ void main() {
         textDirection: TextDirection.ltr,
         child: MergeSemantics(
           child: Semantics(
-            selected: true, // this is implicitly merged into the MergeSemantics node
+            selected:
+                true, // this is implicitly merged into the MergeSemantics node
             child: Row(
               children: <Widget>[
                 Semantics(
@@ -144,21 +152,23 @@ void main() {
       ),
     );
 
-    expect(semantics, hasSemantics(
-      TestSemantics.root(
-          children: <TestSemantics>[
-            TestSemantics.rootChild(
-              id: 1,
-              flags: <SemanticsFlag>[
-                SemanticsFlag.isSelected,
-              ],
-              label: 'test1\ntest2',
-            ),
-          ],
-      ),
-      ignoreRect: true,
-      ignoreTransform: true,
-    ));
+    expect(
+        semantics,
+        hasSemantics(
+          TestSemantics.root(
+            children: <TestSemantics>[
+              TestSemantics.rootChild(
+                id: 1,
+                flags: <SemanticsFlag>[
+                  SemanticsFlag.isSelected,
+                ],
+                label: 'test1\ntest2',
+              ),
+            ],
+          ),
+          ignoreRect: true,
+          ignoreTransform: true,
+        ));
 
     semantics.dispose();
   });

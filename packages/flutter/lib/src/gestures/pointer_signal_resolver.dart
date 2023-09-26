@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'events.dart';
@@ -16,7 +15,8 @@ class PointerSignalResolver {
 
   PointerSignalEvent? _currentEvent;
 
-  void register(PointerSignalEvent event, PointerSignalResolvedCallback callback) {
+  void register(
+      PointerSignalEvent event, PointerSignalResolvedCallback callback) {
     assert(_currentEvent == null || _isSameEvent(_currentEvent!, event));
     if (_firstRegisteredCallback != null) {
       return;
@@ -38,8 +38,9 @@ class PointerSignalResolver {
       InformationCollector? collector;
       assert(() {
         collector = () => <DiagnosticsNode>[
-          DiagnosticsProperty<PointerSignalEvent>('Event', event, style: DiagnosticsTreeStyle.errorProperty),
-        ];
+              DiagnosticsProperty<PointerSignalEvent>('Event', event,
+                  style: DiagnosticsTreeStyle.errorProperty),
+            ];
         return true;
       }());
       FlutterError.reportError(FlutterErrorDetails(

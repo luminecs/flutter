@@ -1,5 +1,5 @@
-
-import 'package:native_assets_builder/native_assets_builder.dart' show BuildResult;
+import 'package:native_assets_builder/native_assets_builder.dart'
+    show BuildResult;
 import 'package:native_assets_cli/native_assets_cli.dart' hide BuildMode;
 import 'package:native_assets_cli/native_assets_cli.dart' as native_assets_cli;
 
@@ -16,12 +16,14 @@ Future<Uri?> dryRunNativeAssetsLinux({
   bool flutterTester = false,
   required FileSystem fileSystem,
 }) async {
-  if (await hasNoPackageConfig(buildRunner) || await isDisabledAndNoNativeAssets(buildRunner)) {
+  if (await hasNoPackageConfig(buildRunner) ||
+      await isDisabledAndNoNativeAssets(buildRunner)) {
     return null;
   }
 
   final Uri buildUri_ = nativeAssetsBuildUri(projectUri, OS.linux);
-  final Iterable<Asset> nativeAssetPaths = await dryRunNativeAssetsLinuxInternal(
+  final Iterable<Asset> nativeAssetPaths =
+      await dryRunNativeAssetsLinuxInternal(
     fileSystem,
     projectUri,
     flutterTester,
@@ -55,7 +57,8 @@ Future<Iterable<Asset>> dryRunNativeAssetsLinuxInternal(
   ensureNoLinkModeStatic(nativeAssets);
   globals.logger.printTrace('Dry running native assets for $targetOs done.');
   final Uri? absolutePath = flutterTester ? buildUri_ : null;
-  final Map<Asset, Asset> assetTargetLocations = _assetTargetLocations(nativeAssets, absolutePath);
+  final Map<Asset, Asset> assetTargetLocations =
+      _assetTargetLocations(nativeAssets, absolutePath);
   final Iterable<Asset> nativeAssetPaths = assetTargetLocations.values;
   return nativeAssetPaths;
 }
@@ -76,15 +79,21 @@ Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsLinux({
     // CMake requires the folder to exist to do copying.
     await buildDir.create(recursive: true);
   }
-  if (await hasNoPackageConfig(buildRunner) || await isDisabledAndNoNativeAssets(buildRunner)) {
-    final Uri nativeAssetsYaml = await writeNativeAssetsYaml(<Asset>[], yamlParentDirectory ?? buildUri_, fileSystem);
+  if (await hasNoPackageConfig(buildRunner) ||
+      await isDisabledAndNoNativeAssets(buildRunner)) {
+    final Uri nativeAssetsYaml = await writeNativeAssetsYaml(
+        <Asset>[], yamlParentDirectory ?? buildUri_, fileSystem);
     return (nativeAssetsYaml, <Uri>[]);
   }
 
-  final Target target = targetPlatform != null ? _getNativeTarget(targetPlatform) : Target.current;
-  final native_assets_cli.BuildMode buildModeCli = nativeAssetsBuildMode(buildMode);
+  final Target target = targetPlatform != null
+      ? _getNativeTarget(targetPlatform)
+      : Target.current;
+  final native_assets_cli.BuildMode buildModeCli =
+      nativeAssetsBuildMode(buildMode);
 
-  globals.logger.printTrace('Building native assets for $target $buildModeCli.');
+  globals.logger
+      .printTrace('Building native assets for $target $buildModeCli.');
   final BuildResult result = await buildRunner.build(
     linkModePreference: LinkModePreference.dynamic,
     target: target,
@@ -98,7 +107,8 @@ Future<(Uri? nativeAssetsYaml, List<Uri> dependencies)> buildNativeAssetsLinux({
   ensureNoLinkModeStatic(nativeAssets);
   globals.logger.printTrace('Building native assets for $target done.');
   final Uri? absolutePath = flutterTester ? buildUri_ : null;
-  final Map<Asset, Asset> assetTargetLocations = _assetTargetLocations(nativeAssets, absolutePath);
+  final Map<Asset, Asset> assetTargetLocations =
+      _assetTargetLocations(nativeAssets, absolutePath);
   await _copyNativeAssetsLinux(
     buildUri_,
     assetTargetLocations,
@@ -118,7 +128,8 @@ Map<Asset, Asset> _assetTargetLocations(
   Uri? absolutePath,
 ) =>
     <Asset, Asset>{
-      for (final Asset asset in nativeAssets) asset: _targetLocationLinux(asset, absolutePath),
+      for (final Asset asset in nativeAssets)
+        asset: _targetLocationLinux(asset, absolutePath),
     };
 
 Asset _targetLocationLinux(Asset asset, Uri? absolutePath) {
@@ -142,7 +153,8 @@ Asset _targetLocationLinux(Asset asset, Uri? absolutePath) {
       }
       return asset.copyWith(path: AssetAbsolutePath(uri));
   }
-  throw Exception('Unsupported asset path type ${path.runtimeType} in asset $asset');
+  throw Exception(
+      'Unsupported asset path type ${path.runtimeType} in asset $asset');
 }
 
 Target _getNativeTarget(TargetPlatform targetPlatform) {
@@ -174,12 +186,14 @@ Future<void> _copyNativeAssetsLinux(
   FileSystem fileSystem,
 ) async {
   if (assetTargetLocations.isNotEmpty) {
-    globals.logger.printTrace('Copying native assets to ${buildUri.toFilePath()}.');
+    globals.logger
+        .printTrace('Copying native assets to ${buildUri.toFilePath()}.');
     final Directory buildDir = fileSystem.directory(buildUri.toFilePath());
     if (!buildDir.existsSync()) {
       buildDir.createSync(recursive: true);
     }
-    for (final MapEntry<Asset, Asset> assetMapping in assetTargetLocations.entries) {
+    for (final MapEntry<Asset, Asset> assetMapping
+        in assetTargetLocations.entries) {
       final Uri source = (assetMapping.key.path as AssetAbsolutePath).uri;
       final Uri target = (assetMapping.value.path as AssetAbsolutePath).uri;
       final Uri targetUri = buildUri.resolveUri(target);
@@ -196,7 +210,8 @@ Future<CCompilerConfig> cCompilerConfigLinux() async {
   const String kArBinary = 'llvm-ar';
   const String kLdBinary = 'ld.lld';
 
-  final ProcessResult whichResult = await globals.processManager.run(<String>['which', kClangPlusPlusBinary]);
+  final ProcessResult whichResult =
+      await globals.processManager.run(<String>['which', kClangPlusPlusBinary]);
   if (whichResult.exitCode != 0) {
     throwToolExit('Failed to find $kClangPlusPlusBinary on PATH.');
   }
@@ -208,7 +223,8 @@ Future<CCompilerConfig> cCompilerConfigLinux() async {
   for (final String binary in <String>[kClangBinary, kArBinary, kLdBinary]) {
     final File binaryFile = clangDir.childFile(binary);
     if (!await binaryFile.exists()) {
-      throwToolExit("Failed to find $binary relative to $clangPpFile: $binaryFile doesn't exist.");
+      throwToolExit(
+          "Failed to find $binary relative to $clangPpFile: $binaryFile doesn't exist.");
     }
     binaryPaths[binary] = binaryFile.uri;
   }

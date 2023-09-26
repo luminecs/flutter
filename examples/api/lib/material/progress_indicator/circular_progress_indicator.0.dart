@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const ProgressIndicatorApp());
 
@@ -19,10 +17,12 @@ class ProgressIndicatorExample extends StatefulWidget {
   const ProgressIndicatorExample({super.key});
 
   @override
-  State<ProgressIndicatorExample> createState() => _ProgressIndicatorExampleState();
+  State<ProgressIndicatorExample> createState() =>
+      _ProgressIndicatorExampleState();
 }
 
-class _ProgressIndicatorExampleState extends State<ProgressIndicatorExample> with TickerProviderStateMixin {
+class _ProgressIndicatorExampleState extends State<ProgressIndicatorExample>
+    with TickerProviderStateMixin {
   late AnimationController controller;
 
   @override

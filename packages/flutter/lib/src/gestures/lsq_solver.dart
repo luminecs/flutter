@@ -1,5 +1,3 @@
-
-
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -7,14 +5,14 @@ import 'package:flutter/foundation.dart';
 // TODO(abarth): Consider using vector_math.
 class _Vector {
   _Vector(int size)
-    : _offset = 0,
-      _length = size,
-      _elements = Float64List(size);
+      : _offset = 0,
+        _length = size,
+        _elements = Float64List(size);
 
   _Vector.fromVOL(List<double> values, int offset, int length)
-    : _offset = offset,
-      _length = length,
-      _elements = values;
+      : _offset = offset,
+        _length = length,
+        _elements = values;
 
   final int _offset;
 
@@ -41,8 +39,8 @@ class _Vector {
 // TODO(abarth): Consider using vector_math.
 class _Matrix {
   _Matrix(int rows, int cols)
-    : _columns = cols,
-      _elements = Float64List(rows * cols);
+      : _columns = cols,
+        _elements = Float64List(rows * cols);
 
   final int _columns;
   final List<double> _elements;
@@ -53,10 +51,10 @@ class _Matrix {
   }
 
   _Vector getRow(int row) => _Vector.fromVOL(
-    _elements,
-    row * _columns,
-    _columns,
-  );
+        _elements,
+        row * _columns,
+        _columns,
+      );
 }
 
 class PolynomialFit {
@@ -68,16 +66,18 @@ class PolynomialFit {
 
   @override
   String toString() {
-    final String coefficientString =
-        coefficients.map((double c) => c.toStringAsPrecision(3)).toList().toString();
+    final String coefficientString = coefficients
+        .map((double c) => c.toStringAsPrecision(3))
+        .toList()
+        .toString();
     return '${objectRuntimeType(this, 'PolynomialFit')}($coefficientString, confidence: ${confidence.toStringAsFixed(3)})';
   }
 }
 
 class LeastSquaresSolver {
   LeastSquaresSolver(this.x, this.y, this.w)
-    : assert(x.length == y.length),
-      assert(y.length == w.length);
+      : assert(x.length == y.length),
+        assert(y.length == w.length);
 
   final List<double> x;
 
@@ -177,10 +177,10 @@ class LeastSquaresSolver {
       sumSquaredTotal += w[h] * w[h] * v * v;
     }
 
-    result.confidence = sumSquaredTotal <= precisionErrorTolerance ? 1.0 :
-                          1.0 - (sumSquaredError / sumSquaredTotal);
+    result.confidence = sumSquaredTotal <= precisionErrorTolerance
+        ? 1.0
+        : 1.0 - (sumSquaredError / sumSquaredTotal);
 
     return result;
   }
-
 }

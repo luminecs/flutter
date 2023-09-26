@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter_devicelab/framework/framework.dart';
@@ -40,6 +39,7 @@ class NewGalleryWebCompileTest {
 
     rmTree(galleryParentDir);
 
-    return TaskResult.success(metrics, benchmarkScoreKeys: metrics.keys.toList());
+    return TaskResult.success(metrics,
+        benchmarkScoreKeys: metrics.keys.toList());
   }
 }

@@ -1,11 +1,9 @@
-
 import 'framework.dart';
 
 // Examples can assume:
 // TooltipThemeData data = const TooltipThemeData();
 
 abstract class InheritedTheme extends InheritedWidget {
-
   const InheritedTheme({
     super.key,
     required super.child,
@@ -13,13 +11,13 @@ abstract class InheritedTheme extends InheritedWidget {
 
   Widget wrap(BuildContext context, Widget child);
 
-  static Widget captureAll(BuildContext context, Widget child, {BuildContext? to}) {
-
+  static Widget captureAll(BuildContext context, Widget child,
+      {BuildContext? to}) {
     return capture(from: context, to: to).wrap(child);
   }
 
-  static CapturedThemes capture({ required BuildContext from, required BuildContext? to }) {
-
+  static CapturedThemes capture(
+      {required BuildContext from, required BuildContext? to}) {
     if (from == to) {
       // Nothing to capture.
       return CapturedThemes._(const <InheritedTheme>[]);
@@ -54,7 +52,8 @@ abstract class InheritedTheme extends InheritedWidget {
       return true;
     });
 
-    assert(debugDidFindAncestor, 'The provided `to` context must be an ancestor of the `from` context.');
+    assert(debugDidFindAncestor,
+        'The provided `to` context must be an ancestor of the `from` context.');
     return CapturedThemes._(themes);
   }
 }

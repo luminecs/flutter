@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,8 +39,10 @@ class MacOSTestTextInputKeyHandler extends TestTextInputKeyHandler {
           alt: true, shift: pressShift): <String>['deleteWordBackward:'],
       SingleActivator(LogicalKeyboardKey.backspace,
           meta: true, shift: pressShift): <String>['deleteToBeginningOfLine:'],
-      SingleActivator(LogicalKeyboardKey.backspace, control: true, shift: pressShift):
-          <String>['deleteBackwardByDecomposingPreviousCharacter:'],
+      SingleActivator(LogicalKeyboardKey.backspace,
+          control: true, shift: pressShift): <String>[
+        'deleteBackwardByDecomposingPreviousCharacter:'
+      ],
       SingleActivator(LogicalKeyboardKey.delete, shift: pressShift): <String>[
         'deleteForward:'
       ],

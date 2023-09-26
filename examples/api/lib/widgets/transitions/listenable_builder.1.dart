@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() {
   runApp(const ListenableBuilderExample());
@@ -10,7 +8,8 @@ class ListenableBuilderExample extends StatefulWidget {
   const ListenableBuilderExample({super.key});
 
   @override
-  State<ListenableBuilderExample> createState() => _ListenableBuilderExampleState();
+  State<ListenableBuilderExample> createState() =>
+      _ListenableBuilderExampleState();
 }
 
 class _ListenableBuilderExampleState extends State<ListenableBuilderExample> {

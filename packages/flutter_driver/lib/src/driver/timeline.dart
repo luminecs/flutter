@@ -1,4 +1,3 @@
-
 class Timeline {
   factory Timeline.fromJson(Map<String, dynamic> json) {
     return Timeline._(json, _parseEvents(json));

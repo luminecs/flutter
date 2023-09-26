@@ -1,4 +1,3 @@
-
 import 'package:flutter/services.dart';
 import 'framework.dart';
 
@@ -18,7 +17,8 @@ class AutofillGroup extends StatefulWidget {
   });
 
   static AutofillGroupState? maybeOf(BuildContext context) {
-    final _AutofillScope? scope = context.dependOnInheritedWidgetOfExactType<_AutofillScope>();
+    final _AutofillScope? scope =
+        context.dependOnInheritedWidgetOfExactType<_AutofillScope>();
     return scope?._scope;
   }
 
@@ -63,8 +63,8 @@ class AutofillGroupState extends State<AutofillGroup> with AutofillScopeMixin {
 
   @override
   Iterable<AutofillClient> get autofillClients {
-    return _clients.values
-      .where((AutofillClient client) => client.textInputConfiguration.autofillConfiguration.enabled);
+    return _clients.values.where((AutofillClient client) =>
+        client.textInputConfiguration.autofillConfiguration.enabled);
   }
 
   void register(AutofillClient client) {

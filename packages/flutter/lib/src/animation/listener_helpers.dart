@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/foundation.dart';
 
 import 'animation.dart';
@@ -40,13 +38,13 @@ mixin AnimationLazyListenerMixin {
 
 mixin AnimationEagerListenerMixin {
   @protected
-  void didRegisterListener() { }
+  void didRegisterListener() {}
 
   @protected
-  void didUnregisterListener() { }
+  void didUnregisterListener() {}
 
   @mustCallSuper
-  void dispose() { }
+  void dispose() {}
 }
 
 mixin AnimationLocalListenersMixin {
@@ -78,17 +76,18 @@ mixin AnimationLocalListenersMixin {
   @protected
   @pragma('vm:notify-debugger-on-exception')
   void notifyListeners() {
-    final List<VoidCallback> localListeners = _listeners.toList(growable: false);
+    final List<VoidCallback> localListeners =
+        _listeners.toList(growable: false);
     for (final VoidCallback listener in localListeners) {
       InformationCollector? collector;
       assert(() {
         collector = () => <DiagnosticsNode>[
-          DiagnosticsProperty<AnimationLocalListenersMixin>(
-            'The $runtimeType notifying listeners was',
-            this,
-            style: DiagnosticsTreeStyle.errorProperty,
-          ),
-        ];
+              DiagnosticsProperty<AnimationLocalListenersMixin>(
+                'The $runtimeType notifying listeners was',
+                this,
+                style: DiagnosticsTreeStyle.errorProperty,
+              ),
+            ];
         return true;
       }());
       try {
@@ -100,7 +99,8 @@ mixin AnimationLocalListenersMixin {
           exception: exception,
           stack: stack,
           library: 'animation library',
-          context: ErrorDescription('while notifying listeners for $runtimeType'),
+          context:
+              ErrorDescription('while notifying listeners for $runtimeType'),
           informationCollector: collector,
         ));
       }
@@ -109,7 +109,8 @@ mixin AnimationLocalListenersMixin {
 }
 
 mixin AnimationLocalStatusListenersMixin {
-  final ObserverList<AnimationStatusListener> _statusListeners = ObserverList<AnimationStatusListener>();
+  final ObserverList<AnimationStatusListener> _statusListeners =
+      ObserverList<AnimationStatusListener>();
 
   @protected
   void didRegisterListener();
@@ -137,7 +138,8 @@ mixin AnimationLocalStatusListenersMixin {
   @protected
   @pragma('vm:notify-debugger-on-exception')
   void notifyStatusListeners(AnimationStatus status) {
-    final List<AnimationStatusListener> localListeners = _statusListeners.toList(growable: false);
+    final List<AnimationStatusListener> localListeners =
+        _statusListeners.toList(growable: false);
     for (final AnimationStatusListener listener in localListeners) {
       try {
         if (_statusListeners.contains(listener)) {
@@ -147,19 +149,20 @@ mixin AnimationLocalStatusListenersMixin {
         InformationCollector? collector;
         assert(() {
           collector = () => <DiagnosticsNode>[
-            DiagnosticsProperty<AnimationLocalStatusListenersMixin>(
-              'The $runtimeType notifying status listeners was',
-              this,
-              style: DiagnosticsTreeStyle.errorProperty,
-            ),
-          ];
+                DiagnosticsProperty<AnimationLocalStatusListenersMixin>(
+                  'The $runtimeType notifying status listeners was',
+                  this,
+                  style: DiagnosticsTreeStyle.errorProperty,
+                ),
+              ];
           return true;
         }());
         FlutterError.reportError(FlutterErrorDetails(
           exception: exception,
           stack: stack,
           library: 'animation library',
-          context: ErrorDescription('while notifying status listeners for $runtimeType'),
+          context: ErrorDescription(
+              'while notifying status listeners for $runtimeType'),
           informationCollector: collector,
         ));
       }

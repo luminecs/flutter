@@ -1,6 +1,4 @@
-
 import 'package:flutter/cupertino.dart';
-
 
 void main() => runApp(const SliverNavBarApp());
 
@@ -76,7 +74,9 @@ class NextPage extends StatelessWidget {
             backgroundColor: CupertinoColors.systemYellow,
             border: Border(
               bottom: BorderSide(
-                color: brightness == Brightness.light ? CupertinoColors.black : CupertinoColors.white,
+                color: brightness == Brightness.light
+                    ? CupertinoColors.black
+                    : CupertinoColors.white,
               ),
             ),
             // The middle widget is visible in both collapsed and expanded states.
@@ -92,7 +92,8 @@ class NextPage extends StatelessWidget {
                 Text('Drag me up', textAlign: TextAlign.center),
                 // When the "leading" parameter is omitted on a route that has a previous page,
                 // the back button is automatically added to the leading position.
-                Text('Tap on the leading button to navigate back', textAlign: TextAlign.center),
+                Text('Tap on the leading button to navigate back',
+                    textAlign: TextAlign.center),
               ],
             ),
           ),

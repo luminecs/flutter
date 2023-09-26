@@ -1,4 +1,3 @@
-
 import 'package:flutter_devicelab/framework/devices.dart';
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/utils.dart';
@@ -10,7 +9,8 @@ class FastScrollHeavyGridViewMemoryTest extends MemoryTest {
   FastScrollHeavyGridViewMemoryTest()
       : super(
           '${flutterDirectory.path}/dev/benchmarks/macrobenchmarks',
-          'test_memory/heavy_gridview.dart', kPackageName,
+          'test_memory/heavy_gridview.dart',
+          kPackageName,
         );
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'colors.dart';
@@ -17,7 +16,8 @@ class CupertinoIconThemeData extends IconThemeData with Diagnosticable {
 
   @override
   IconThemeData resolve(BuildContext context) {
-    final Color? resolvedColor = CupertinoDynamicColor.maybeResolve(color, context);
+    final Color? resolvedColor =
+        CupertinoDynamicColor.maybeResolve(color, context);
     return resolvedColor == color ? this : copyWith(color: resolvedColor);
   }
 
@@ -47,6 +47,7 @@ class CupertinoIconThemeData extends IconThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(createCupertinoColorProperty('color', color, defaultValue: null));
+    properties
+        .add(createCupertinoColorProperty('color', color, defaultValue: null));
   }
 }

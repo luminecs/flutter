@@ -1,11 +1,11 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('provides a value to the layer tree', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('provides a value to the layer tree',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const AnnotatedRegion<int>(
         value: 1,
@@ -13,11 +13,14 @@ void main() {
       ),
     );
     final List<Layer> layers = tester.layers;
-    final AnnotatedRegionLayer<int> layer = layers.whereType<AnnotatedRegionLayer<int>>().first;
+    final AnnotatedRegionLayer<int> layer =
+        layers.whereType<AnnotatedRegionLayer<int>>().first;
     expect(layer.value, 1);
   });
 
-  testWidgetsWithLeakTracking('provides a value to the layer tree in a particular region', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'provides a value to the layer tree in a particular region',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Transform.translate(
         offset: const Offset(25.0, 25.0),
@@ -27,7 +30,8 @@ void main() {
         ),
       ),
     );
-    int? result = RendererBinding.instance.renderView.debugLayer!.find<int>(Offset(
+    int? result =
+        RendererBinding.instance.renderView.debugLayer!.find<int>(Offset(
       10.0 * tester.view.devicePixelRatio,
       10.0 * tester.view.devicePixelRatio,
     ));

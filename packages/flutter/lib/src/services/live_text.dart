@@ -1,4 +1,3 @@
-
 import 'system_channels.dart';
 
 class LiveText {
@@ -7,8 +6,9 @@ class LiveText {
   LiveText._();
 
   static Future<bool> isLiveTextInputAvailable() async {
-    final bool supportLiveTextInput =
-        await SystemChannels.platform.invokeMethod('LiveText.isLiveTextInputAvailable') ?? false;
+    final bool supportLiveTextInput = await SystemChannels.platform
+            .invokeMethod('LiveText.isLiveTextInputAvailable') ??
+        false;
     return supportLiveTextInput;
   }
 

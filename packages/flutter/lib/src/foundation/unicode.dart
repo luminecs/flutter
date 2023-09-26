@@ -1,4 +1,3 @@
-
 abstract final class Unicode {
   static const String LRE = '\u202A';
 

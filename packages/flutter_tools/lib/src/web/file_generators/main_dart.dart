@@ -1,7 +1,7 @@
-
 import 'package:package_config/package_config.dart';
 
-String generateMainDartFile(String appEntrypoint, {
+String generateMainDartFile(
+  String appEntrypoint, {
   required String pluginRegistrantEntrypoint,
   LanguageVersion? languageVersion,
 }) {

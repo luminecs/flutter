@@ -1,4 +1,3 @@
-
 import 'package:flutter_tools/src/base/os.dart';
 import 'package:flutter_tools/src/doctor_validator.dart';
 import 'package:flutter_tools/src/windows/windows_version_validator.dart';

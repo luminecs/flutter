@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Rotated box control test', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Rotated box control test',
+      (WidgetTester tester) async {
     final List<String> log = <String>[];
     final Key rotatedBoxKey = UniqueKey();
 
@@ -18,7 +18,9 @@ void main() {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               GestureDetector(
-                onTap: () { log.add('left'); },
+                onTap: () {
+                  log.add('left');
+                },
                 child: Container(
                   width: 100.0,
                   height: 40.0,
@@ -26,7 +28,9 @@ void main() {
                 ),
               ),
               GestureDetector(
-                onTap: () { log.add('right'); },
+                onTap: () {
+                  log.add('right');
+                },
                 child: Container(
                   width: 75.0,
                   height: 65.0,

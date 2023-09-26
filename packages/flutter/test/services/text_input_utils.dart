@@ -1,4 +1,3 @@
-
 import 'dart:convert' show utf8;
 
 import 'package:flutter/services.dart';
@@ -19,10 +18,12 @@ class FakeTextChannel implements MethodChannel {
   MethodCodec get codec => const JSONMethodCodec();
 
   @override
-  Future<List<T>> invokeListMethod<T>(String method, [dynamic arguments]) => throw UnimplementedError();
+  Future<List<T>> invokeListMethod<T>(String method, [dynamic arguments]) =>
+      throw UnimplementedError();
 
   @override
-  Future<Map<K, V>> invokeMapMethod<K, V>(String method, [dynamic arguments]) => throw UnimplementedError();
+  Future<Map<K, V>> invokeMapMethod<K, V>(String method, [dynamic arguments]) =>
+      throw UnimplementedError();
 
   @override
   Future<T> invokeMethod<T>(String method, [dynamic arguments]) async {
@@ -35,7 +36,8 @@ class FakeTextChannel implements MethodChannel {
   String get name => 'flutter/textinput';
 
   @override
-  void setMethodCallHandler(Future<void> Function(MethodCall call)? handler) => incoming = handler;
+  void setMethodCallHandler(Future<void> Function(MethodCall call)? handler) =>
+      incoming = handler;
 
   void validateOutgoingMethodCalls(List<MethodCall> calls) {
     expect(outgoingCalls.length, calls.length);
@@ -44,8 +46,10 @@ class FakeTextChannel implements MethodChannel {
     for (int i = 0; i < calls.length; i++) {
       final ByteData outgoingData = codec.encodeMethodCall(outgoingCalls[i]);
       final ByteData expectedData = codec.encodeMethodCall(calls[i]);
-      final String outgoingString = utf8.decode(outgoingData.buffer.asUint8List());
-      final String expectedString = utf8.decode(expectedData.buffer.asUint8List());
+      final String outgoingString =
+          utf8.decode(outgoingData.buffer.asUint8List());
+      final String expectedString =
+          utf8.decode(expectedData.buffer.asUint8List());
 
       if (outgoingString != expectedString) {
         output.writeln(
@@ -63,7 +67,8 @@ class FakeTextChannel implements MethodChannel {
 }
 
 class FakeScribbleElement implements ScribbleClient {
-  FakeScribbleElement({required String elementIdentifier, Rect bounds = Rect.zero})
+  FakeScribbleElement(
+      {required String elementIdentifier, Rect bounds = Rect.zero})
       : _elementIdentifier = elementIdentifier,
         _bounds = bounds;
 

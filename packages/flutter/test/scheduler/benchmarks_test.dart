@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,7 +13,9 @@ class TestBinding extends LiveTestWidgetsFlutterBinding {
   void handleBeginFrame(Duration? rawTimeStamp) {
     handleBeginFrameMicrotaskRun = false;
     framesBegun += 1;
-    Future<void>.microtask(() { handleBeginFrameMicrotaskRun = true; });
+    Future<void>.microtask(() {
+      handleBeginFrameMicrotaskRun = true;
+    });
     super.handleBeginFrame(rawTimeStamp);
   }
 
@@ -39,14 +40,16 @@ void main() {
     await benchmarkWidgets(
       (WidgetTester tester) async {
         const Key root = Key('root');
-        binding.attachRootWidget(binding.wrapWithDefaultView(Container(key: root)));
+        binding.attachRootWidget(
+            binding.wrapWithDefaultView(Container(key: root)));
         await tester.pump();
 
         expect(binding.framesBegun, greaterThan(0));
         expect(binding.framesDrawn, greaterThan(0));
 
         final Element appState = tester.element(find.byKey(root));
-        binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.benchmark;
+        binding.framePolicy =
+            LiveTestWidgetsFlutterBindingFramePolicy.benchmark;
 
         final int startFramesBegun = binding.framesBegun;
         final int startFramesDrawn = binding.framesDrawn;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/app_bar/app_bar.0.dart' as example;
 import 'package:flutter_test/flutter_test.dart';

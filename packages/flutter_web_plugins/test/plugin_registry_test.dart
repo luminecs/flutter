@@ -1,4 +1,3 @@
-
 @TestOn('chrome') // Uses web-only Flutter SDK
 library;
 
@@ -41,8 +40,7 @@ void main() {
     test('can register a plugin', () {
       TestPlugin.calledMethods.clear();
 
-      const MethodChannel frameworkChannel =
-          MethodChannel('test_plugin');
+      const MethodChannel frameworkChannel = MethodChannel('test_plugin');
       frameworkChannel.invokeMethod<void>('test1');
 
       expect(TestPlugin.calledMethods, equals(<String>['test1']));

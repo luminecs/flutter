@@ -1,4 +1,3 @@
-
 const List<String> kStates = <String>[
   'Alabama',
   'Alaska',

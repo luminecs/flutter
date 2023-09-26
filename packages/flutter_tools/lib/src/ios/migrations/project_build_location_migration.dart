@@ -1,4 +1,3 @@
-
 import '../../base/file_system.dart';
 import '../../base/project_migrator.dart';
 import '../../xcode_project.dart';
@@ -15,7 +14,8 @@ class ProjectBuildLocationMigration extends ProjectMigrator {
   @override
   void migrate() {
     if (!_xcodeProjectWorkspaceData.existsSync()) {
-      logger.printTrace('Xcode project workspace data not found, skipping build location migration.');
+      logger.printTrace(
+          'Xcode project workspace data not found, skipping build location migration.');
       return;
     }
 

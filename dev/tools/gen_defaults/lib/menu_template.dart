@@ -1,8 +1,10 @@
-
 import 'template.dart';
 
 class MenuTemplate extends TokenTemplate {
-  const MenuTemplate(super.blockName, super.fileName, super.tokens, {
+  const MenuTemplate(
+    super.blockName,
+    super.fileName,
+    super.tokens, {
     super.colorSchemePrefix = '_colors.',
   });
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart' show clampDouble;
 
 import 'events.dart';
@@ -45,15 +44,19 @@ class ForcePressDetails {
   final double pressure;
 }
 
-typedef GestureForcePressStartCallback = void Function(ForcePressDetails details);
+typedef GestureForcePressStartCallback = void Function(
+    ForcePressDetails details);
 
-typedef GestureForcePressPeakCallback = void Function(ForcePressDetails details);
+typedef GestureForcePressPeakCallback = void Function(
+    ForcePressDetails details);
 
-typedef GestureForcePressUpdateCallback = void Function(ForcePressDetails details);
+typedef GestureForcePressUpdateCallback = void Function(
+    ForcePressDetails details);
 
 typedef GestureForcePressEndCallback = void Function(ForcePressDetails details);
 
-typedef GestureForceInterpolation = double Function(double pressureMin, double pressureMax, double pressure);
+typedef GestureForceInterpolation = double Function(
+    double pressureMin, double pressureMax, double pressure);
 
 class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
   ForcePressGestureRecognizer({
@@ -104,10 +107,14 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
     assert(_state != _ForceState.ready);
     // A static pointer with changes in pressure creates PointerMoveEvent events.
     if (event is PointerMoveEvent || event is PointerDownEvent) {
-      final double pressure = interpolation(event.pressureMin, event.pressureMax, event.pressure);
+      final double pressure =
+          interpolation(event.pressureMin, event.pressureMax, event.pressure);
       assert(
-        (pressure >= 0.0 && pressure <= 1.0) || // Interpolated pressure must be between 1.0 and 0.0...
-        pressure.isNaN, // and interpolation may return NaN for values it doesn't want to support...
+        (pressure >= 0.0 &&
+                pressure <=
+                    1.0) || // Interpolated pressure must be between 1.0 and 0.0...
+            pressure
+                .isNaN, // and interpolation may return NaN for values it doesn't want to support...
       );
 
       _lastPosition = OffsetPair.fromEventPosition(event);
@@ -117,7 +124,8 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
         if (pressure > startPressure) {
           _state = _ForceState.started;
           resolve(GestureDisposition.accepted);
-        } else if (event.delta.distanceSquared > computeHitSlop(event.kind, gestureSettings)) {
+        } else if (event.delta.distanceSquared >
+            computeHitSlop(event.kind, gestureSettings)) {
           resolve(GestureDisposition.rejected);
         }
       }
@@ -126,32 +134,40 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
       if (pressure > startPressure && _state == _ForceState.accepted) {
         _state = _ForceState.started;
         if (onStart != null) {
-          invokeCallback<void>('onStart', () => onStart!(ForcePressDetails(
-            pressure: pressure,
-            globalPosition: _lastPosition.global,
-            localPosition: _lastPosition.local,
-          )));
+          invokeCallback<void>(
+              'onStart',
+              () => onStart!(ForcePressDetails(
+                    pressure: pressure,
+                    globalPosition: _lastPosition.global,
+                    localPosition: _lastPosition.local,
+                  )));
         }
       }
-      if (onPeak != null && pressure > peakPressure &&
-         (_state == _ForceState.started)) {
+      if (onPeak != null &&
+          pressure > peakPressure &&
+          (_state == _ForceState.started)) {
         _state = _ForceState.peaked;
         if (onPeak != null) {
-          invokeCallback<void>('onPeak', () => onPeak!(ForcePressDetails(
-            pressure: pressure,
-            globalPosition: event.position,
-            localPosition: event.localPosition,
-          )));
+          invokeCallback<void>(
+              'onPeak',
+              () => onPeak!(ForcePressDetails(
+                    pressure: pressure,
+                    globalPosition: event.position,
+                    localPosition: event.localPosition,
+                  )));
         }
       }
-      if (onUpdate != null &&  !pressure.isNaN &&
-         (_state == _ForceState.started || _state == _ForceState.peaked)) {
+      if (onUpdate != null &&
+          !pressure.isNaN &&
+          (_state == _ForceState.started || _state == _ForceState.peaked)) {
         if (onUpdate != null) {
-          invokeCallback<void>('onUpdate', () => onUpdate!(ForcePressDetails(
-            pressure: pressure,
-            globalPosition: event.position,
-            localPosition: event.localPosition,
-          )));
+          invokeCallback<void>(
+              'onUpdate',
+              () => onUpdate!(ForcePressDetails(
+                    pressure: pressure,
+                    globalPosition: event.position,
+                    localPosition: event.localPosition,
+                  )));
         }
       }
     }
@@ -165,28 +181,33 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
     }
 
     if (onStart != null && _state == _ForceState.started) {
-      invokeCallback<void>('onStart', () => onStart!(ForcePressDetails(
-        pressure: _lastPressure,
-        globalPosition: _lastPosition.global,
-        localPosition: _lastPosition.local,
-      )));
+      invokeCallback<void>(
+          'onStart',
+          () => onStart!(ForcePressDetails(
+                pressure: _lastPressure,
+                globalPosition: _lastPosition.global,
+                localPosition: _lastPosition.local,
+              )));
     }
   }
 
   @override
   void didStopTrackingLastPointer(int pointer) {
-    final bool wasAccepted = _state == _ForceState.started || _state == _ForceState.peaked;
+    final bool wasAccepted =
+        _state == _ForceState.started || _state == _ForceState.peaked;
     if (_state == _ForceState.possible) {
       resolve(GestureDisposition.rejected);
       return;
     }
     if (wasAccepted && onEnd != null) {
       if (onEnd != null) {
-        invokeCallback<void>('onEnd', () => onEnd!(ForcePressDetails(
-          pressure: 0.0,
-          globalPosition: _lastPosition.global,
-          localPosition: _lastPosition.local,
-        )));
+        invokeCallback<void>(
+            'onEnd',
+            () => onEnd!(ForcePressDetails(
+                  pressure: 0.0,
+                  globalPosition: _lastPosition.global,
+                  localPosition: _lastPosition.local,
+                )));
       }
     }
     _state = _ForceState.ready;

@@ -1,4 +1,3 @@
-
 library material_animated_icons;
 
 import 'dart:math' as math show pi;

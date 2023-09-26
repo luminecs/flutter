@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(const AppBarApp());
 
@@ -29,7 +27,8 @@ class AppBarExample extends StatelessWidget {
             tooltip: 'Show Snackbar',
             onPressed: () {
               // todo-luminecs ScaffoldMessenger showSnackBar SnackBar
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('This is a snackbar')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('This is a snackbar')));
             },
           ),
           IconButton(

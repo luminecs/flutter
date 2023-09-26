@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:ui';
 
@@ -16,7 +15,8 @@ export 'message_codec.dart' show MessageCodec;
 
 typedef PointTransformer = Offset Function(Offset position);
 
-final PlatformViewsRegistry platformViewsRegistry = PlatformViewsRegistry._instance();
+final PlatformViewsRegistry platformViewsRegistry =
+    PlatformViewsRegistry._instance();
 
 class PlatformViewsRegistry {
   PlatformViewsRegistry._instance();
@@ -54,7 +54,8 @@ class PlatformViewsService {
           _focusCallbacks[id]!();
         }
       default:
-        throw UnimplementedError("${call.method} was invoked but isn't implemented by PlatformViewsService");
+        throw UnimplementedError(
+            "${call.method} was invoked but isn't implemented by PlatformViewsService");
     }
     return Future<void>.value();
   }
@@ -71,7 +72,8 @@ class PlatformViewsService {
   }) {
     assert(creationParams == null || creationParamsCodec != null);
 
-    final TextureAndroidViewController controller = TextureAndroidViewController._(
+    final TextureAndroidViewController controller =
+        TextureAndroidViewController._(
       viewId: id,
       viewType: viewType,
       layoutDirection: layoutDirection,
@@ -93,7 +95,8 @@ class PlatformViewsService {
   }) {
     assert(creationParams == null || creationParamsCodec != null);
 
-    final SurfaceAndroidViewController controller = SurfaceAndroidViewController._(
+    final SurfaceAndroidViewController controller =
+        SurfaceAndroidViewController._(
       viewId: id,
       viewType: viewType,
       layoutDirection: layoutDirection,
@@ -112,7 +115,8 @@ class PlatformViewsService {
     MessageCodec<dynamic>? creationParamsCodec,
     VoidCallback? onFocus,
   }) {
-    final ExpensiveAndroidViewController controller = ExpensiveAndroidViewController._(
+    final ExpensiveAndroidViewController controller =
+        ExpensiveAndroidViewController._(
       viewId: id,
       viewType: viewType,
       layoutDirection: layoutDirection,
@@ -141,7 +145,8 @@ class PlatformViewsService {
       'viewType': viewType,
     };
     if (creationParams != null) {
-      final ByteData paramsByteData = creationParamsCodec!.encodeMessage(creationParams)!;
+      final ByteData paramsByteData =
+          creationParamsCodec!.encodeMessage(creationParams)!;
       args['params'] = Uint8List.view(
         paramsByteData.buffer,
         0,
@@ -174,7 +179,8 @@ class PlatformViewsService {
       'viewType': viewType,
     };
     if (creationParams != null) {
-      final ByteData paramsByteData = creationParamsCodec!.encodeMessage(creationParams)!;
+      final ByteData paramsByteData =
+          creationParamsCodec!.encodeMessage(creationParams)!;
       args['params'] = Uint8List.view(
         paramsByteData.buffer,
         0,
@@ -285,8 +291,8 @@ class AndroidMotionEvent {
     required this.source,
     required this.flags,
     required this.motionEventId,
-  }) : assert(pointerProperties.length == pointerCount),
-       assert(pointerCoords.length == pointerCount);
+  })  : assert(pointerProperties.length == pointerCount),
+        assert(pointerCoords.length == pointerCount);
 
   final int downTime;
 
@@ -325,8 +331,12 @@ class AndroidMotionEvent {
       eventTime,
       action,
       pointerCount,
-      pointerProperties.map<List<int>>((AndroidPointerProperties p) => p._asList()).toList(),
-      pointerCoords.map<List<double>>((AndroidPointerCoords p) => p._asList()).toList(),
+      pointerProperties
+          .map<List<int>>((AndroidPointerProperties p) => p._asList())
+          .toList(),
+      pointerCoords
+          .map<List<double>>((AndroidPointerCoords p) => p._asList())
+          .toList(),
       metaState,
       buttonState,
       xPrecision,
@@ -436,11 +446,13 @@ class _AndroidMotionEventConverter {
     if (event is PointerDownEvent) {
       action = numPointers == 1
           ? AndroidViewController.kActionDown
-          : AndroidViewController.pointerAction(pointerIdx, AndroidViewController.kActionPointerDown);
+          : AndroidViewController.pointerAction(
+              pointerIdx, AndroidViewController.kActionPointerDown);
     } else if (event is PointerUpEvent) {
       action = numPointers == 1
           ? AndroidViewController.kActionUp
-          : AndroidViewController.pointerAction(pointerIdx, AndroidViewController.kActionPointerUp);
+          : AndroidViewController.pointerAction(
+              pointerIdx, AndroidViewController.kActionPointerUp);
     } else if (event is PointerMoveEvent) {
       action = AndroidViewController.kActionMove;
     } else if (event is PointerCancelEvent) {
@@ -511,7 +523,9 @@ abstract class AndroidViewController extends PlatformViewController {
   })  : assert(creationParams == null || creationParamsCodec != null),
         _viewType = viewType,
         _layoutDirection = layoutDirection,
-        _creationParams = creationParams == null ? null : _CreationParams(creationParams, creationParamsCodec!);
+        _creationParams = creationParams == null
+            ? null
+            : _CreationParams(creationParams, creationParamsCodec!);
 
   static const int kActionDown = 0;
 
@@ -564,7 +578,8 @@ abstract class AndroidViewController extends PlatformViewController {
 
   bool get _createRequiresSize;
 
-  Future<void> _sendCreateMessage({required covariant Size? size, Offset? position});
+  Future<void> _sendCreateMessage(
+      {required covariant Size? size, Offset? position});
 
   Future<Size> _sendResizeMessage(Size size);
 
@@ -573,8 +588,10 @@ abstract class AndroidViewController extends PlatformViewController {
 
   @override
   Future<void> create({Size? size, Offset? position}) async {
-    assert(_state != _AndroidViewState.disposed, 'trying to create a disposed Android view');
-    assert(_state == _AndroidViewState.waitingForSize, 'Android view is already sized. View id: $viewId');
+    assert(_state != _AndroidViewState.disposed,
+        'trying to create a disposed Android view');
+    assert(_state == _AndroidViewState.waitingForSize,
+        'Android view is already sized. View id: $viewId');
 
     if (_createRequiresSize && size == null) {
       // Wait for a setSize call.
@@ -585,13 +602,15 @@ abstract class AndroidViewController extends PlatformViewController {
     await _sendCreateMessage(size: size, position: position);
     _state = _AndroidViewState.created;
 
-    for (final PlatformViewCreatedCallback callback in _platformViewCreatedCallbacks) {
+    for (final PlatformViewCreatedCallback callback
+        in _platformViewCreatedCallbacks) {
       callback(viewId);
     }
   }
 
   Future<Size> setSize(Size size) async {
-    assert(_state != _AndroidViewState.disposed, 'Android view is disposed. View id: $viewId');
+    assert(_state != _AndroidViewState.disposed,
+        'Android view is disposed. View id: $viewId');
     if (_state == _AndroidViewState.waitingForSize) {
       // Either `create` hasn't been called, or it couldn't run due to missing
       // size information, so create the view now.
@@ -615,7 +634,8 @@ abstract class AndroidViewController extends PlatformViewController {
     );
   }
 
-  PointTransformer get pointTransformer => _motionEventConverter.pointTransformer;
+  PointTransformer get pointTransformer =>
+      _motionEventConverter.pointTransformer;
   set pointTransformer(PointTransformer transformer) {
     _motionEventConverter.pointTransformer = transformer;
   }
@@ -627,13 +647,15 @@ abstract class AndroidViewController extends PlatformViewController {
     _platformViewCreatedCallbacks.add(listener);
   }
 
-  void removeOnPlatformViewCreatedListener(PlatformViewCreatedCallback listener) {
+  void removeOnPlatformViewCreatedListener(
+      PlatformViewCreatedCallback listener) {
     assert(_state != _AndroidViewState.disposed);
     _platformViewCreatedCallbacks.remove(listener);
   }
 
   @visibleForTesting
-  List<PlatformViewCreatedCallback> get createdCallbacks => _platformViewCreatedCallbacks;
+  List<PlatformViewCreatedCallback> get createdCallbacks =>
+      _platformViewCreatedCallbacks;
 
   Future<void> setLayoutDirection(TextDirection layoutDirection) async {
     assert(
@@ -691,7 +713,8 @@ abstract class AndroidViewController extends PlatformViewController {
     if (_state != _AndroidViewState.created) {
       return Future<void>.value();
     }
-    return SystemChannels.platform_views.invokeMethod<void>('clearFocus', viewId);
+    return SystemChannels.platform_views
+        .invokeMethod<void>('clearFocus', viewId);
   }
 
   @override
@@ -700,32 +723,37 @@ abstract class AndroidViewController extends PlatformViewController {
     _state = _AndroidViewState.disposed;
     _platformViewCreatedCallbacks.clear();
     PlatformViewsService._instance._focusCallbacks.remove(viewId);
-    if (state == _AndroidViewState.creating || state == _AndroidViewState.created) {
+    if (state == _AndroidViewState.creating ||
+        state == _AndroidViewState.created) {
       await _sendDisposeMessage();
     }
   }
 }
 
 class SurfaceAndroidViewController extends AndroidViewController {
-    SurfaceAndroidViewController._({
+  SurfaceAndroidViewController._({
     required super.viewId,
     required super.viewType,
     required super.layoutDirection,
     super.creationParams,
     super.creationParamsCodec,
-  })  : super._();
+  }) : super._();
 
   // By default, assume the implementation will be texture-based.
-  _AndroidViewControllerInternals _internals = _TextureAndroidViewControllerInternals();
+  _AndroidViewControllerInternals _internals =
+      _TextureAndroidViewControllerInternals();
 
   @override
   bool get _createRequiresSize => true;
 
   @override
-  Future<bool> _sendCreateMessage({required Size size, Offset? position}) async {
-    assert(!size.isEmpty, 'trying to create $TextureAndroidViewController without setting a valid size.');
+  Future<bool> _sendCreateMessage(
+      {required Size size, Offset? position}) async {
+    assert(!size.isEmpty,
+        'trying to create $TextureAndroidViewController without setting a valid size.');
 
-    final dynamic response = await _AndroidViewControllerInternals.sendCreateMessage(
+    final dynamic response =
+        await _AndroidViewControllerInternals.sendCreateMessage(
       viewId: viewId,
       viewType: _viewType,
       hybrid: false,
@@ -736,7 +764,8 @@ class SurfaceAndroidViewController extends AndroidViewController {
       position: position,
     );
     if (response is int) {
-      (_internals as _TextureAndroidViewControllerInternals).textureId = response;
+      (_internals as _TextureAndroidViewControllerInternals).textureId =
+          response;
     } else {
       // A null response indicates fallback to Hybrid Composition, so swap out
       // the implementation.
@@ -778,15 +807,17 @@ class ExpensiveAndroidViewController extends AndroidViewController {
     required super.layoutDirection,
     super.creationParams,
     super.creationParamsCodec,
-  })  : super._();
+  }) : super._();
 
-  final _AndroidViewControllerInternals _internals = _HybridAndroidViewControllerInternals();
+  final _AndroidViewControllerInternals _internals =
+      _HybridAndroidViewControllerInternals();
 
   @override
   bool get _createRequiresSize => false;
 
   @override
-  Future<void> _sendCreateMessage({required Size? size, Offset? position}) async {
+  Future<void> _sendCreateMessage(
+      {required Size? size, Offset? position}) async {
     await _AndroidViewControllerInternals.sendCreateMessage(
       viewId: viewId,
       viewType: _viewType,
@@ -832,16 +863,20 @@ class TextureAndroidViewController extends AndroidViewController {
     super.creationParamsCodec,
   }) : super._();
 
-  final _TextureAndroidViewControllerInternals _internals = _TextureAndroidViewControllerInternals();
+  final _TextureAndroidViewControllerInternals _internals =
+      _TextureAndroidViewControllerInternals();
 
   @override
   bool get _createRequiresSize => true;
 
   @override
-  Future<void> _sendCreateMessage({required Size size, Offset? position}) async {
-    assert(!size.isEmpty, 'trying to create $TextureAndroidViewController without setting a valid size.');
+  Future<void> _sendCreateMessage(
+      {required Size size, Offset? position}) async {
+    assert(!size.isEmpty,
+        'trying to create $TextureAndroidViewController without setting a valid size.');
 
-    _internals.textureId = await _AndroidViewControllerInternals.sendCreateMessage(
+    _internals.textureId =
+        await _AndroidViewControllerInternals.sendCreateMessage(
       viewId: viewId,
       viewType: _viewType,
       hybrid: false,
@@ -889,8 +924,8 @@ abstract class _AndroidViewControllerInternals {
   // This uses a dynamic return because depending on the mode that is selected
   // on the native side, the return type is different. Callers should cast
   // depending on the possible return types for their arguments.
-  static Future<dynamic> sendCreateMessage({
-      required int viewId,
+  static Future<dynamic> sendCreateMessage(
+      {required int viewId,
       required String viewType,
       required TextDirection layoutDirection,
       required bool hybrid,
@@ -910,7 +945,8 @@ abstract class _AndroidViewControllerInternals {
       if (position != null) 'top': position.dy,
     };
     if (creationParams != null) {
-      final ByteData paramsByteData = creationParams.codec.encodeMessage(creationParams.data)!;
+      final ByteData paramsByteData =
+          creationParams.codec.encodeMessage(creationParams.data)!;
       args['params'] = Uint8List.view(
         paramsByteData.buffer,
         0,
@@ -943,7 +979,8 @@ abstract class _AndroidViewControllerInternals {
 // displayed via a texture rather than directly in a native view.
 //
 // This is used for both Virtual Display and Texture Layer Hybrid Composition.
-class _TextureAndroidViewControllerInternals extends _AndroidViewControllerInternals {
+class _TextureAndroidViewControllerInternals
+    extends _AndroidViewControllerInternals {
   _TextureAndroidViewControllerInternals();
 
   Offset _offset = Offset.zero;
@@ -960,10 +997,12 @@ class _TextureAndroidViewControllerInternals extends _AndroidViewControllerInter
     required int viewId,
     required _AndroidViewState viewState,
   }) async {
-    assert(viewState != _AndroidViewState.waitingForSize, 'Android view must have an initial size. View id: $viewId');
+    assert(viewState != _AndroidViewState.waitingForSize,
+        'Android view must have an initial size. View id: $viewId');
     assert(!size.isEmpty);
 
-    final Map<Object?, Object?>? meta = await SystemChannels.platform_views.invokeMapMethod<Object?, Object?>(
+    final Map<Object?, Object?>? meta =
+        await SystemChannels.platform_views.invokeMapMethod<Object?, Object?>(
       'resize',
       <String, dynamic>{
         'id': viewId,
@@ -1008,8 +1047,8 @@ class _TextureAndroidViewControllerInternals extends _AndroidViewControllerInter
 
   @override
   Future<void> sendDisposeMessage({required int viewId}) {
-    return SystemChannels
-        .platform_views.invokeMethod<void>('dispose', <String, dynamic>{
+    return SystemChannels.platform_views
+        .invokeMethod<void>('dispose', <String, dynamic>{
       'id': viewId,
       'hybrid': false,
     });
@@ -1020,7 +1059,8 @@ class _TextureAndroidViewControllerInternals extends _AndroidViewControllerInter
 // displayed directly in a native view.
 //
 // This is used for Hybrid Composition.
-class _HybridAndroidViewControllerInternals extends _AndroidViewControllerInternals {
+class _HybridAndroidViewControllerInternals
+    extends _AndroidViewControllerInternals {
   @override
   int get textureId {
     throw UnimplementedError('Not supported for hybrid composition.');
@@ -1049,7 +1089,8 @@ class _HybridAndroidViewControllerInternals extends _AndroidViewControllerIntern
 
   @override
   Future<void> sendDisposeMessage({required int viewId}) {
-    return SystemChannels.platform_views.invokeMethod<void>('dispose', <String, dynamic>{
+    return SystemChannels.platform_views
+        .invokeMethod<void>('dispose', <String, dynamic>{
       'id': viewId,
       'hybrid': true,
     });
@@ -1069,7 +1110,8 @@ abstract class DarwinPlatformViewController {
   TextDirection _layoutDirection;
 
   Future<void> setLayoutDirection(TextDirection layoutDirection) async {
-    assert(!_debugDisposed, 'trying to set a layout direction for a disposed iOS UIView. View id: $id');
+    assert(!_debugDisposed,
+        'trying to set a layout direction for a disposed iOS UIView. View id: $id');
 
     if (layoutDirection == _layoutDirection) {
       return;

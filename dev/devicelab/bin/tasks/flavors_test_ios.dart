@@ -1,4 +1,3 @@
-
 import 'package:flutter_devicelab/framework/devices.dart';
 import 'package:flutter_devicelab/framework/framework.dart';
 import 'package:flutter_devicelab/framework/task_result.dart';
@@ -31,7 +30,8 @@ Future<void> main() async {
         );
 
         final String stderrString = stderr.toString();
-        if (!stderrString.contains('The Xcode project defines schemes: free, paid')) {
+        if (!stderrString
+            .contains('The Xcode project defines schemes: free, paid')) {
           print(stderrString);
           return TaskResult.failure('Should not succeed with bogus flavor');
         }

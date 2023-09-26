@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -71,11 +70,14 @@ Sat Mar  9 20:13:00 2019        49 /usr/sbin/syslogd
   });
 
   test('RunningProcessInfo.terminate', () {
-    final RunningProcessInfo process = RunningProcessInfo(123, 'test', DateTime(456));
+    final RunningProcessInfo process =
+        RunningProcessInfo(123, 'test', DateTime(456));
     final FakeProcessManager fakeProcessManager = FakeProcessManager();
     process.terminate(processManager: fakeProcessManager);
     if (Platform.isWindows) {
-      expect(fakeProcessManager.log, <String>['run([taskkill.exe, /pid, 123, /f], null, null, null, null, null, null)']);
+      expect(fakeProcessManager.log, <String>[
+        'run([taskkill.exe, /pid, 123, /f], null, null, null, null, null, null)'
+      ]);
     } else {
       expect(fakeProcessManager.log, <String>['killPid(123, SIGKILL)']);
     }
@@ -86,7 +88,7 @@ class FakeProcessManager implements ProcessManager {
   final List<String> log = <String>[];
 
   @override
-  bool canRun(Object? a, { String? workingDirectory }) {
+  bool canRun(Object? a, {String? workingDirectory}) {
     log.add('canRun($a, $workingDirectory)');
     return true;
   }
@@ -98,7 +100,8 @@ class FakeProcessManager implements ProcessManager {
   }
 
   @override
-  Future<ProcessResult> run(List<Object> a, {
+  Future<ProcessResult> run(
+    List<Object> a, {
     Map<String, String>? environment,
     bool? includeParentEnvironment,
     bool? runInShell,
@@ -106,12 +109,14 @@ class FakeProcessManager implements ProcessManager {
     Encoding? stdoutEncoding,
     String? workingDirectory,
   }) async {
-    log.add('run($a, $environment, $includeParentEnvironment, $runInShell, $stderrEncoding, $stdoutEncoding, $workingDirectory)');
+    log.add(
+        'run($a, $environment, $includeParentEnvironment, $runInShell, $stderrEncoding, $stdoutEncoding, $workingDirectory)');
     return ProcessResult(1, 0, 'stdout', 'stderr');
   }
 
   @override
-  ProcessResult runSync(List<Object> a, {
+  ProcessResult runSync(
+    List<Object> a, {
     Map<String, String>? environment,
     bool? includeParentEnvironment,
     bool? runInShell,
@@ -119,7 +124,8 @@ class FakeProcessManager implements ProcessManager {
     Encoding? stdoutEncoding,
     String? workingDirectory,
   }) {
-    log.add('runSync($a, $environment, $includeParentEnvironment, $runInShell, $stderrEncoding, $stdoutEncoding, $workingDirectory)');
+    log.add(
+        'runSync($a, $environment, $includeParentEnvironment, $runInShell, $stderrEncoding, $stdoutEncoding, $workingDirectory)');
     return ProcessResult(1, 0, 'stdout', 'stderr');
   }
 
@@ -132,7 +138,8 @@ class FakeProcessManager implements ProcessManager {
     bool? runInShell,
     String? workingDirectory,
   }) {
-    log.add('start($a, $environment, $includeParentEnvironment, $mode, $runInShell, $workingDirectory)');
+    log.add(
+        'start($a, $environment, $includeParentEnvironment, $mode, $runInShell, $workingDirectory)');
     return Completer<Process>().future;
   }
 }

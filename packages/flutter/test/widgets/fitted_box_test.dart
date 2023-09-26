@@ -1,11 +1,11 @@
-
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Can size according to aspect ratio', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Can size according to aspect ratio',
+      (WidgetTester tester) async {
     final Key outside = UniqueKey();
     final Key inside = UniqueKey();
 
@@ -33,8 +33,10 @@ void main() {
     expect(insideBox.size.width, 100.0);
     expect(insideBox.size.height, 50.0);
 
-    final Offset insidePoint = insideBox.localToGlobal(const Offset(100.0, 50.0));
-    final Offset outsidePoint = outsideBox.localToGlobal(const Offset(200.0, 100.0));
+    final Offset insidePoint =
+        insideBox.localToGlobal(const Offset(100.0, 50.0));
+    final Offset outsidePoint =
+        outsideBox.localToGlobal(const Offset(200.0, 100.0));
 
     expect(outsidePoint, equals(const Offset(500.0, 350.0)));
     expect(insidePoint, equals(outsidePoint));
@@ -69,8 +71,10 @@ void main() {
     expect(insideBox.size.width, 100.0);
     expect(insideBox.size.height, 50.0);
 
-    final Offset insidePoint = insideBox.localToGlobal(const Offset(100.0, 0.0));
-    final Offset outsidePoint = outsideBox.localToGlobal(const Offset(200.0, 50.0));
+    final Offset insidePoint =
+        insideBox.localToGlobal(const Offset(100.0, 0.0));
+    final Offset outsidePoint =
+        outsideBox.localToGlobal(const Offset(200.0, 50.0));
 
     expect(insidePoint, equals(outsidePoint));
   });
@@ -105,13 +109,16 @@ void main() {
     expect(insideBox.size.width, 100.0);
     expect(insideBox.size.height, 50.0);
 
-    final Offset insidePoint = insideBox.localToGlobal(const Offset(50.0, 25.0));
-    final Offset outsidePoint = outsideBox.localToGlobal(const Offset(100.0, 100.0));
+    final Offset insidePoint =
+        insideBox.localToGlobal(const Offset(50.0, 25.0));
+    final Offset outsidePoint =
+        outsideBox.localToGlobal(const Offset(100.0, 100.0));
 
     expect(insidePoint, equals(outsidePoint));
   });
 
-  testWidgetsWithLeakTracking('FittedBox with no child', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FittedBox with no child',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
     await tester.pumpWidget(
       Center(
@@ -127,11 +134,13 @@ void main() {
     expect(box.size.height, 0.0);
   });
 
-  testWidgetsWithLeakTracking('Child can be aligned multiple ways in a row', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Child can be aligned multiple ways in a row',
+      (WidgetTester tester) async {
     final Key outside = UniqueKey();
     final Key inside = UniqueKey();
 
-    { // align RTL
+    {
+      // align RTL
 
       await tester.pumpWidget(
         Directionality(
@@ -155,7 +164,8 @@ void main() {
         ),
       );
 
-      final RenderBox outsideBox = tester.firstRenderObject(find.byKey(outside));
+      final RenderBox outsideBox =
+          tester.firstRenderObject(find.byKey(outside));
       expect(outsideBox.size.width, 100.0);
       expect(outsideBox.size.height, 100.0);
 
@@ -164,15 +174,19 @@ void main() {
       expect(insideBox.size.height, 10.0);
 
       final Offset insideTopLeft = insideBox.localToGlobal(Offset.zero);
-      final Offset outsideTopLeft = outsideBox.localToGlobal(const Offset(0.0, 90.0));
-      final Offset insideBottomRight = insideBox.localToGlobal(const Offset(10.0, 10.0));
-      final Offset outsideBottomRight = outsideBox.localToGlobal(const Offset(10.0, 100.0));
+      final Offset outsideTopLeft =
+          outsideBox.localToGlobal(const Offset(0.0, 90.0));
+      final Offset insideBottomRight =
+          insideBox.localToGlobal(const Offset(10.0, 10.0));
+      final Offset outsideBottomRight =
+          outsideBox.localToGlobal(const Offset(10.0, 100.0));
 
       expect(insideTopLeft, equals(outsideTopLeft));
       expect(insideBottomRight, equals(outsideBottomRight));
     }
 
-    { // change direction
+    {
+      // change direction
 
       await tester.pumpWidget(
         Directionality(
@@ -196,7 +210,8 @@ void main() {
         ),
       );
 
-      final RenderBox outsideBox = tester.firstRenderObject(find.byKey(outside));
+      final RenderBox outsideBox =
+          tester.firstRenderObject(find.byKey(outside));
       expect(outsideBox.size.width, 100.0);
       expect(outsideBox.size.height, 100.0);
 
@@ -205,15 +220,19 @@ void main() {
       expect(insideBox.size.height, 10.0);
 
       final Offset insideTopLeft = insideBox.localToGlobal(Offset.zero);
-      final Offset outsideTopLeft = outsideBox.localToGlobal(const Offset(90.0, 90.0));
-      final Offset insideBottomRight = insideBox.localToGlobal(const Offset(10.0, 10.0));
-      final Offset outsideBottomRight = outsideBox.localToGlobal(const Offset(100.0, 100.0));
+      final Offset outsideTopLeft =
+          outsideBox.localToGlobal(const Offset(90.0, 90.0));
+      final Offset insideBottomRight =
+          insideBox.localToGlobal(const Offset(10.0, 10.0));
+      final Offset outsideBottomRight =
+          outsideBox.localToGlobal(const Offset(100.0, 100.0));
 
       expect(insideTopLeft, equals(outsideTopLeft));
       expect(insideBottomRight, equals(outsideBottomRight));
     }
 
-    { // change alignment
+    {
+      // change alignment
 
       await tester.pumpWidget(
         Directionality(
@@ -237,7 +256,8 @@ void main() {
         ),
       );
 
-      final RenderBox outsideBox = tester.firstRenderObject(find.byKey(outside));
+      final RenderBox outsideBox =
+          tester.firstRenderObject(find.byKey(outside));
       expect(outsideBox.size.width, 100.0);
       expect(outsideBox.size.height, 100.0);
 
@@ -246,15 +266,19 @@ void main() {
       expect(insideBox.size.height, 10.0);
 
       final Offset insideTopLeft = insideBox.localToGlobal(Offset.zero);
-      final Offset outsideTopLeft = outsideBox.localToGlobal(const Offset(45.0, 45.0));
-      final Offset insideBottomRight = insideBox.localToGlobal(const Offset(10.0, 10.0));
-      final Offset outsideBottomRight = outsideBox.localToGlobal(const Offset(55.0, 55.0));
+      final Offset outsideTopLeft =
+          outsideBox.localToGlobal(const Offset(45.0, 45.0));
+      final Offset insideBottomRight =
+          insideBox.localToGlobal(const Offset(10.0, 10.0));
+      final Offset outsideBottomRight =
+          outsideBox.localToGlobal(const Offset(55.0, 55.0));
 
       expect(insideTopLeft, equals(outsideTopLeft));
       expect(insideBottomRight, equals(outsideBottomRight));
     }
 
-    { // change size
+    {
+      // change size
 
       await tester.pumpWidget(
         Directionality(
@@ -278,7 +302,8 @@ void main() {
         ),
       );
 
-      final RenderBox outsideBox = tester.firstRenderObject(find.byKey(outside));
+      final RenderBox outsideBox =
+          tester.firstRenderObject(find.byKey(outside));
       expect(outsideBox.size.width, 100.0);
       expect(outsideBox.size.height, 100.0);
 
@@ -287,15 +312,19 @@ void main() {
       expect(insideBox.size.height, 10.0);
 
       final Offset insideTopLeft = insideBox.localToGlobal(Offset.zero);
-      final Offset outsideTopLeft = outsideBox.localToGlobal(const Offset(35.0, 45.0));
-      final Offset insideBottomRight = insideBox.localToGlobal(const Offset(30.0, 10.0));
-      final Offset outsideBottomRight = outsideBox.localToGlobal(const Offset(65.0, 55.0));
+      final Offset outsideTopLeft =
+          outsideBox.localToGlobal(const Offset(35.0, 45.0));
+      final Offset insideBottomRight =
+          insideBox.localToGlobal(const Offset(30.0, 10.0));
+      final Offset outsideBottomRight =
+          outsideBox.localToGlobal(const Offset(65.0, 55.0));
 
       expect(insideTopLeft, equals(outsideTopLeft));
       expect(insideBottomRight, equals(outsideBottomRight));
     }
 
-    { // change fit
+    {
+      // change fit
 
       await tester.pumpWidget(
         Directionality(
@@ -319,7 +348,8 @@ void main() {
         ),
       );
 
-      final RenderBox outsideBox = tester.firstRenderObject(find.byKey(outside));
+      final RenderBox outsideBox =
+          tester.firstRenderObject(find.byKey(outside));
       expect(outsideBox.size.width, 100.0);
       expect(outsideBox.size.height, 100.0);
 
@@ -329,15 +359,18 @@ void main() {
 
       final Offset insideTopLeft = insideBox.localToGlobal(Offset.zero);
       final Offset outsideTopLeft = outsideBox.localToGlobal(Offset.zero);
-      final Offset insideBottomRight = insideBox.localToGlobal(const Offset(30.0, 10.0));
-      final Offset outsideBottomRight = outsideBox.localToGlobal(const Offset(100.0, 100.0));
+      final Offset insideBottomRight =
+          insideBox.localToGlobal(const Offset(30.0, 10.0));
+      final Offset outsideBottomRight =
+          outsideBox.localToGlobal(const Offset(100.0, 100.0));
 
       expect(insideTopLeft, equals(outsideTopLeft));
       expect(insideBottomRight, equals(outsideBottomRight));
     }
   });
 
-  testWidgetsWithLeakTracking('FittedBox layers - contain', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FittedBox layers - contain',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: SizedBox(
@@ -358,7 +391,8 @@ void main() {
     expect(getLayers(), <Type>[TransformLayer, TransformLayer, OffsetLayer]);
   });
 
-  testWidgetsWithLeakTracking('FittedBox layers - cover - horizontal', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FittedBox layers - cover - horizontal',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: SizedBox(
@@ -378,10 +412,12 @@ void main() {
         ),
       ),
     );
-    expect(getLayers(), <Type>[TransformLayer, ClipRectLayer, TransformLayer, OffsetLayer]);
+    expect(getLayers(),
+        <Type>[TransformLayer, ClipRectLayer, TransformLayer, OffsetLayer]);
   });
 
-  testWidgetsWithLeakTracking('FittedBox layers - cover - vertical', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FittedBox layers - cover - vertical',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: SizedBox(
@@ -401,10 +437,12 @@ void main() {
         ),
       ),
     );
-    expect(getLayers(), <Type>[TransformLayer, ClipRectLayer, TransformLayer, OffsetLayer]);
+    expect(getLayers(),
+        <Type>[TransformLayer, ClipRectLayer, TransformLayer, OffsetLayer]);
   });
 
-  testWidgetsWithLeakTracking('FittedBox layers - none - clip', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FittedBox layers - none - clip',
+      (WidgetTester tester) async {
     final List<double> values = <double>[10.0, 50.0, 100.0];
     for (final double a in values) {
       for (final double b in values) {
@@ -430,7 +468,8 @@ void main() {
               ),
             );
             if (a < c || b < d) {
-              expect(getLayers(), <Type>[TransformLayer, ClipRectLayer, OffsetLayer]);
+              expect(getLayers(),
+                  <Type>[TransformLayer, ClipRectLayer, OffsetLayer]);
             } else {
               expect(getLayers(), <Type>[TransformLayer, OffsetLayer]);
             }
@@ -440,7 +479,8 @@ void main() {
     }
   });
 
-  testWidgetsWithLeakTracking('Big child into small fitted box - hit testing', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Big child into small fitted box - hit testing',
+      (WidgetTester tester) async {
     final GlobalKey key1 = GlobalKey();
     bool pointerDown = false;
     await tester.pumpWidget(
@@ -472,16 +512,20 @@ void main() {
     expect(pointerDown, isTrue);
   });
 
-  testWidgetsWithLeakTracking('Can set and update clipBehavior', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Can set and update clipBehavior',
+      (WidgetTester tester) async {
     await tester.pumpWidget(FittedBox(fit: BoxFit.none, child: Container()));
-    final RenderFittedBox renderObject = tester.allRenderObjects.whereType<RenderFittedBox>().first;
+    final RenderFittedBox renderObject =
+        tester.allRenderObjects.whereType<RenderFittedBox>().first;
     expect(renderObject.clipBehavior, equals(Clip.none));
 
-    await tester.pumpWidget(FittedBox(fit: BoxFit.none, clipBehavior: Clip.antiAlias, child: Container()));
+    await tester.pumpWidget(FittedBox(
+        fit: BoxFit.none, clipBehavior: Clip.antiAlias, child: Container()));
     expect(renderObject.clipBehavior, equals(Clip.antiAlias));
   });
 
-  testWidgetsWithLeakTracking('BoxFit.scaleDown matches size of child', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('BoxFit.scaleDown matches size of child',
+      (WidgetTester tester) async {
     final Key outside = UniqueKey();
     final Key inside = UniqueKey();
 
@@ -542,7 +586,9 @@ void main() {
     expect(insidePoint - outsidePoint, equals(Offset.zero));
   });
 
-  testWidgetsWithLeakTracking('Switching to and from BoxFit.scaleDown causes relayout', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Switching to and from BoxFit.scaleDown causes relayout',
+      (WidgetTester tester) async {
     final Key outside = UniqueKey();
 
     final Widget scaleDownWidget = Center(
@@ -586,7 +632,8 @@ void main() {
     expect(outsideBox.size.height, 50.0);
   });
 
-  testWidgetsWithLeakTracking('FittedBox without child does not throw', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FittedBox without child does not throw',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: SizedBox(

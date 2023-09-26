@@ -1,4 +1,3 @@
-
 import 'localizations_utils.dart';
 
 String generateCupertinoHeader(String regenerateInstructions) {
@@ -57,6 +56,8 @@ GlobalCupertinoLocalizations? getCupertinoTranslation(
 const String cupertinoFactoryArguments =
     'fullYearFormat: fullYearFormat, dayFormat: dayFormat, mediumDateFormat: mediumDateFormat, singleDigitHourFormat: singleDigitHourFormat, singleDigitMinuteFormat: singleDigitMinuteFormat, doubleDigitMinuteFormat: doubleDigitMinuteFormat, singleDigitSecondFormat: singleDigitSecondFormat, decimalFormat: decimalFormat';
 
-const String cupertinoSupportedLanguagesConstant = 'kCupertinoSupportedLanguages';
+const String cupertinoSupportedLanguagesConstant =
+    'kCupertinoSupportedLanguages';
 
-const String cupertinoSupportedLanguagesDocMacro = 'flutter.localizations.cupertino.languages';
+const String cupertinoSupportedLanguagesDocMacro =
+    'flutter.localizations.cupertino.languages';

@@ -1,4 +1,3 @@
-
 // This example shows how to show the text 'Hello, world.' using the underlying
 // render tree.
 

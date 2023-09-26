@@ -1,4 +1,3 @@
-
 // See: https://github.com/flutter/flutter/wiki/Release-process
 
 export 'src/candidates.dart';

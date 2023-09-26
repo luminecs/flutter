@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_api_samples/material/tooltip/tooltip.1.dart' as example;
@@ -12,7 +11,8 @@ void main() {
       const example.TooltipExampleApp(),
     );
 
-    TestGesture? gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    TestGesture? gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse);
     addTearDown(() async {
       if (gesture != null) {
         return gesture.removePointer();

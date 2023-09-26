@@ -1,4 +1,3 @@
-
 // The test should be run as:
 // flutter drive -t test/cull_opacity_perf_e2e.dart --driver test_driver/e2e_test.dart --trace-startup --profile
 

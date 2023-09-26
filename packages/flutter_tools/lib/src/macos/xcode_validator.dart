@@ -1,4 +1,3 @@
-
 import '../base/user_messages.dart';
 import '../base/version.dart';
 import '../build_info.dart';
@@ -39,13 +38,15 @@ class XcodeValidator extends DoctorValidator {
     if (_xcode.isInstalled) {
       xcodeStatus = ValidationType.success;
       if (xcodeSelectPath != null) {
-        messages.add(ValidationMessage(_userMessages.xcodeLocation(xcodeSelectPath)));
+        messages.add(
+            ValidationMessage(_userMessages.xcodeLocation(xcodeSelectPath)));
       }
       final String? versionText = _xcode.versionText;
       if (versionText != null) {
         xcodeVersionInfo = versionText;
         if (xcodeVersionInfo.contains(',')) {
-          xcodeVersionInfo = xcodeVersionInfo.substring(0, xcodeVersionInfo.indexOf(','));
+          xcodeVersionInfo =
+              xcodeVersionInfo.substring(0, xcodeVersionInfo.indexOf(','));
         }
       }
       if (_xcode.buildVersion != null) {
@@ -53,10 +54,12 @@ class XcodeValidator extends DoctorValidator {
       }
       if (!_xcode.isInstalledAndMeetsVersionCheck) {
         xcodeStatus = ValidationType.partial;
-        messages.add(ValidationMessage.error(_userMessages.xcodeOutdated(xcodeRequiredVersion.toString())));
+        messages.add(ValidationMessage.error(
+            _userMessages.xcodeOutdated(xcodeRequiredVersion.toString())));
       } else if (!_xcode.isRecommendedVersionSatisfactory) {
         xcodeStatus = ValidationType.partial;
-        messages.add(ValidationMessage.hint(_userMessages.xcodeRecommended(xcodeRecommendedVersion.toString())));
+        messages.add(ValidationMessage.hint(_userMessages
+            .xcodeRecommended(xcodeRecommendedVersion.toString())));
       }
 
       if (!_xcode.eulaSigned) {
@@ -68,7 +71,8 @@ class XcodeValidator extends DoctorValidator {
         messages.add(ValidationMessage.error(_userMessages.xcodeMissingSimct));
       }
 
-      final ValidationMessage? missingSimulatorMessage = await _validateSimulatorRuntimeInstalled();
+      final ValidationMessage? missingSimulatorMessage =
+          await _validateSimulatorRuntimeInstalled();
       if (missingSimulatorMessage != null) {
         xcodeStatus = ValidationType.partial;
         messages.add(missingSimulatorMessage);
@@ -82,7 +86,8 @@ class XcodeValidator extends DoctorValidator {
       }
     }
 
-    return ValidationResult(xcodeStatus, messages, statusInfo: xcodeVersionInfo);
+    return ValidationResult(xcodeStatus, messages,
+        statusInfo: xcodeVersionInfo);
   }
 
   Future<ValidationMessage?> _validateSimulatorRuntimeInstalled() async {
@@ -96,14 +101,18 @@ class XcodeValidator extends DoctorValidator {
       return null;
     }
 
-    final Version? platformSDKVersion = await _xcode.sdkPlatformVersion(EnvironmentType.simulator);
+    final Version? platformSDKVersion =
+        await _xcode.sdkPlatformVersion(EnvironmentType.simulator);
     if (platformSDKVersion == null) {
-      return const ValidationMessage.error('Unable to find the iPhone Simulator SDK.');
+      return const ValidationMessage.error(
+          'Unable to find the iPhone Simulator SDK.');
     }
 
-    final List<IOSSimulatorRuntime> runtimes = await _iosSimulatorUtils.getAvailableIOSRuntimes();
+    final List<IOSSimulatorRuntime> runtimes =
+        await _iosSimulatorUtils.getAvailableIOSRuntimes();
     if (runtimes.isEmpty) {
-      return const ValidationMessage.error('Unable to get list of installed Simulator runtimes.');
+      return const ValidationMessage.error(
+          'Unable to get list of installed Simulator runtimes.');
     }
 
     // Verify there is a simulator runtime installed matching the
@@ -114,7 +123,8 @@ class XcodeValidator extends DoctorValidator {
             runtime.version?.major == platformSDKVersion.major,
       );
     } on StateError {
-      return ValidationMessage.hint(_iOSSimulatorMissing(platformSDKVersion.toString()));
+      return ValidationMessage.hint(
+          _iOSSimulatorMissing(platformSDKVersion.toString()));
     }
 
     return null;
