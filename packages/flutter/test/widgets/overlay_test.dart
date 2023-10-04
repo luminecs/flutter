@@ -5,7 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'semantics_tester.dart';
 
 void main() {
-  testWidgets('OverflowEntries context contains Overlay', (WidgetTester tester) async {
+  testWidgets('OverflowEntries context contains Overlay',
+      (WidgetTester tester) async {
     final GlobalKey overlayKey = GlobalKey();
     bool didBuild = false;
     await tester.pumpWidget(
@@ -17,7 +18,8 @@ void main() {
             OverlayEntry(
               builder: (BuildContext context) {
                 didBuild = true;
-                final Overlay overlay = context.findAncestorWidgetOfExactType<Overlay>()!;
+                final Overlay overlay =
+                    context.findAncestorWidgetOfExactType<Overlay>()!;
                 expect(overlay.key, equals(overlayKey));
                 return Container();
               },
@@ -368,7 +370,7 @@ void main() {
     overlay.insertAll(entries, below: base);
     await tester.pump();
 
-    expect(buildOrder, <String>['New1', 'New2','Base']);
+    expect(buildOrder, <String>['New1', 'New2', 'Base']);
   });
 
   testWidgets('insertAll above', (WidgetTester tester) async {
@@ -654,12 +656,14 @@ void main() {
       expect(e.message, 'Only one of `above` and `below` may be specified.');
     }
 
-    expect(() => overlay.insert(
-      OverlayEntry(builder: (BuildContext context) {
-        return Container();
-      }),
-      above: base,
-    ), isNot(throwsAssertionError));
+    expect(
+        () => overlay.insert(
+              OverlayEntry(builder: (BuildContext context) {
+                return Container();
+              }),
+              above: base,
+            ),
+        isNot(throwsAssertionError));
 
     try {
       overlay.insert(
@@ -673,7 +677,8 @@ void main() {
         ),
       );
     } on AssertionError catch (e) {
-      expect(e.message, 'The provided entry used for `above` must be present in the Overlay.');
+      expect(e.message,
+          'The provided entry used for `above` must be present in the Overlay.');
     }
 
     try {
@@ -682,15 +687,17 @@ void main() {
           return Container();
         },
       ));
-
     } on AssertionError catch (e) {
-      expect(e.message, 'The provided entry used for `above` must be present in the Overlay and in the `newEntriesList`.');
+      expect(e.message,
+          'The provided entry used for `above` must be present in the Overlay and in the `newEntriesList`.');
     }
 
     await tester.pump();
   });
 
-  testWidgets('OverlayState.of() throws when called if an Overlay does not exist', (WidgetTester tester) async {
+  testWidgets(
+      'OverlayState.of() throws when called if an Overlay does not exist',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
@@ -706,28 +713,29 @@ void main() {
               expect(error, isNotNull);
               expect(error.diagnostics.length, 5);
               expect(error.diagnostics[2].level, DiagnosticLevel.hint);
-              expect(error.diagnostics[2].toStringDeep(), equalsIgnoringHashCodes(
-                'The most common way to add an Overlay to an application is to\n'
-                'include a MaterialApp, CupertinoApp or Navigator widget in the\n'
-                'runApp() call.\n'
-              ));
+              expect(
+                  error.diagnostics[2].toStringDeep(),
+                  equalsIgnoringHashCodes(
+                      'The most common way to add an Overlay to an application is to\n'
+                      'include a MaterialApp, CupertinoApp or Navigator widget in the\n'
+                      'runApp() call.\n'));
               expect(error.diagnostics[3], isA<DiagnosticsProperty<Widget>>());
               expect(error.diagnostics[3].value, debugRequiredFor);
               expect(error.diagnostics[4], isA<DiagnosticsProperty<Element>>());
-              expect(error.toStringDeep(), equalsIgnoringHashCodes(
-                'FlutterError\n'
-                '   No Overlay widget found.\n'
-                '   Container widgets require an Overlay widget ancestor for correct\n'
-                '   operation.\n'
-                '   The most common way to add an Overlay to an application is to\n'
-                '   include a MaterialApp, CupertinoApp or Navigator widget in the\n'
-                '   runApp() call.\n'
-                '   The specific widget that failed to find an overlay was:\n'
-                '     Container\n'
-                '   The context from which that widget was searching for an overlay\n'
-                '   was:\n'
-                '     Builder\n'
-              ));
+              expect(
+                  error.toStringDeep(),
+                  equalsIgnoringHashCodes('FlutterError\n'
+                      '   No Overlay widget found.\n'
+                      '   Container widgets require an Overlay widget ancestor for correct\n'
+                      '   operation.\n'
+                      '   The most common way to add an Overlay to an application is to\n'
+                      '   include a MaterialApp, CupertinoApp or Navigator widget in the\n'
+                      '   runApp() call.\n'
+                      '   The specific widget that failed to find an overlay was:\n'
+                      '     Container\n'
+                      '   The context from which that widget was searching for an overlay\n'
+                      '   was:\n'
+                      '     Builder\n'));
             }
             return Container();
           },
@@ -736,7 +744,9 @@ void main() {
     );
   });
 
-  testWidgets("OverlayState.maybeOf() works when an Overlay does and doesn't exist", (WidgetTester tester) async {
+  testWidgets(
+      "OverlayState.maybeOf() works when an Overlay does and doesn't exist",
+      (WidgetTester tester) async {
     final GlobalKey overlayKey = GlobalKey();
     OverlayState? foundState;
 
@@ -777,7 +787,9 @@ void main() {
     expect(foundState, isNull);
   });
 
-  testWidgets('OverlayEntry.opaque can be changed when OverlayEntry is not part of an Overlay (yet)', (WidgetTester tester) async {
+  testWidgets(
+      'OverlayEntry.opaque can be changed when OverlayEntry is not part of an Overlay (yet)',
+      (WidgetTester tester) async {
     final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
     final Key root = UniqueKey();
     final Key top = UniqueKey();
@@ -818,7 +830,8 @@ void main() {
     expect(find.byKey(top), findsOneWidget);
   });
 
-  testWidgets('OverlayEntries do not rebuild when opaqueness changes', (WidgetTester tester) async {
+  testWidgets('OverlayEntries do not rebuild when opaqueness changes',
+      (WidgetTester tester) async {
     // Regression test for https://github.com/flutter/flutter/issues/45797.
 
     final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
@@ -872,12 +885,17 @@ void main() {
 
     // Bottom widget is offstage and did not rebuild.
     expect(find.byKey(bottom), findsNothing);
-    expect(tester.state<StatefulTestState>(find.byKey(bottom, skipOffstage: false)).rebuildCount, 1);
+    expect(
+        tester
+            .state<StatefulTestState>(find.byKey(bottom, skipOffstage: false))
+            .rebuildCount,
+        1);
     expect(tester.state<StatefulTestState>(find.byKey(middle)).rebuildCount, 1);
     expect(tester.state<StatefulTestState>(find.byKey(top)).rebuildCount, 1);
   });
 
-  testWidgets('OverlayEntries do not rebuild when opaque entry is added', (WidgetTester tester) async {
+  testWidgets('OverlayEntries do not rebuild when opaque entry is added',
+      (WidgetTester tester) async {
     // Regression test for https://github.com/flutter/flutter/issues/45797.
 
     final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
@@ -926,18 +944,25 @@ void main() {
     expect(tester.state<StatefulTestState>(find.byKey(top)).rebuildCount, 1);
 
     overlayKey.currentState!.rearrange(<OverlayEntry>[
-      bottomEntry, middleEntry, topEntry,
+      bottomEntry,
+      middleEntry,
+      topEntry,
     ]);
     await tester.pump();
 
     // Bottom widget is offstage and did not rebuild.
     expect(find.byKey(bottom), findsNothing);
-    expect(tester.state<StatefulTestState>(find.byKey(bottom, skipOffstage: false)).rebuildCount, 1);
+    expect(
+        tester
+            .state<StatefulTestState>(find.byKey(bottom, skipOffstage: false))
+            .rebuildCount,
+        1);
     expect(tester.state<StatefulTestState>(find.byKey(middle)).rebuildCount, 1);
     expect(tester.state<StatefulTestState>(find.byKey(top)).rebuildCount, 1);
   });
 
-  testWidgets('entries below opaque entries are ignored for hit testing', (WidgetTester tester) async {
+  testWidgets('entries below opaque entries are ignored for hit testing',
+      (WidgetTester tester) async {
     final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
     int bottomTapCount = 0;
     await tester.pumpWidget(
@@ -962,7 +987,9 @@ void main() {
     );
 
     expect(bottomTapCount, 0);
-    await tester.tap(find.byKey(overlayKey), warnIfMissed: false); // gesture detector is translucent; no hit is registered between it and the render view
+    await tester.tap(find.byKey(overlayKey),
+        warnIfMissed:
+            false); // gesture detector is translucent; no hit is registered between it and the render view
     expect(bottomTapCount, 1);
 
     overlayKey.currentState!.insert(OverlayEntry(
@@ -977,7 +1004,9 @@ void main() {
     // Bottom is offstage and does not receive tap events.
     expect(find.byType(GestureDetector), findsNothing);
     expect(find.byType(GestureDetector, skipOffstage: false), findsOneWidget);
-    await tester.tap(find.byKey(overlayKey), warnIfMissed: false); // gesture detector is translucent; no hit is registered between it and the render view
+    await tester.tap(find.byKey(overlayKey),
+        warnIfMissed:
+            false); // gesture detector is translucent; no hit is registered between it and the render view
     expect(bottomTapCount, 1);
 
     int topTapCount = 0;
@@ -995,12 +1024,15 @@ void main() {
     await tester.pump();
 
     expect(topTapCount, 0);
-    await tester.tap(find.byKey(overlayKey), warnIfMissed: false); // gesture detector is translucent; no hit is registered between it and the render view
+    await tester.tap(find.byKey(overlayKey),
+        warnIfMissed:
+            false); // gesture detector is translucent; no hit is registered between it and the render view
     expect(topTapCount, 1);
     expect(bottomTapCount, 1);
   });
 
-  testWidgets('Semantics of entries below opaque entries are ignored', (WidgetTester tester) async {
+  testWidgets('Semantics of entries below opaque entries are ignored',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
     final GlobalKey<OverlayState> overlayKey = GlobalKey<OverlayState>();
     await tester.pumpWidget(
@@ -1035,7 +1067,8 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('Can use Positioned within OverlayEntry', (WidgetTester tester) async {
+  testWidgets('Can use Positioned within OverlayEntry',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
@@ -1055,17 +1088,20 @@ void main() {
       ),
     );
 
-    expect(tester.getTopLeft(find.text('positioned child')), const Offset(145, 123));
+    expect(tester.getTopLeft(find.text('positioned child')),
+        const Offset(145, 123));
   });
 
-  testWidgets('Overlay can set and update clipBehavior', (WidgetTester tester) async {
+  testWidgets('Overlay can set and update clipBehavior',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Directionality(
         textDirection: TextDirection.ltr,
         child: Overlay(
           initialEntries: <OverlayEntry>[
             OverlayEntry(
-              builder: (BuildContext context) => Positioned(left: 2000, right: 2500, child: Container()),
+              builder: (BuildContext context) =>
+                  Positioned(left: 2000, right: 2500, child: Container()),
             ),
           ],
         ),
@@ -1120,7 +1156,8 @@ void main() {
         child: Overlay(
           initialEntries: <OverlayEntry>[
             OverlayEntry(
-              builder: (BuildContext context) => Positioned(left: 10, right: 10, child: Container()),
+              builder: (BuildContext context) =>
+                  Positioned(left: 10, right: 10, child: Container()),
             ),
           ],
         ),
@@ -1128,14 +1165,17 @@ void main() {
     );
     final RenderObject renderObject = tester.renderObject(find.byType(Overlay));
     // ignore: avoid_dynamic_calls
-    expect((renderObject as dynamic).paint, paints
-      ..save()
-      ..clipRect(rect: const Rect.fromLTWH(0.0, 0.0, 800.0, 600.0))
-      ..restore(),
+    expect(
+      (renderObject as dynamic).paint,
+      paints
+        ..save()
+        ..clipRect(rect: const Rect.fromLTWH(0.0, 0.0, 800.0, 600.0))
+        ..restore(),
     );
   });
 
-  testWidgets('OverlayEntry throws if inserted to an invalid Overlay', (WidgetTester tester) async {
+  testWidgets('OverlayEntry throws if inserted to an invalid Overlay',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,
@@ -1143,7 +1183,8 @@ void main() {
       ),
     );
     final OverlayState overlay = tester.state(find.byType(Overlay));
-    final OverlayEntry entry = OverlayEntry(builder: (BuildContext context) => const SizedBox());
+    final OverlayEntry entry =
+        OverlayEntry(builder: (BuildContext context) => const SizedBox());
     expect(
       () => overlay.insert(entry),
       returnsNormally,
@@ -1156,7 +1197,8 @@ void main() {
         (FlutterError error) => error.toString(),
         'toString()',
         allOf(
-          contains('The specified entry is already present in the target Overlay.'),
+          contains(
+              'The specified entry is already present in the target Overlay.'),
           contains('The OverlayEntry was'),
           contains('The Overlay the OverlayEntry was trying to insert to was'),
         ),
@@ -1177,7 +1219,8 @@ void main() {
         (FlutterError error) => error.toString(),
         'toString()',
         allOf(
-          contains('Attempted to insert an OverlayEntry to an already disposed Overlay.'),
+          contains(
+              'Attempted to insert an OverlayEntry to an already disposed Overlay.'),
           contains('The OverlayEntry was'),
           contains('The Overlay the OverlayEntry was trying to insert to was'),
         ),
@@ -1192,7 +1235,8 @@ void main() {
         (FlutterError error) => error.toString(),
         'toString()',
         allOf(
-          contains('The specified entry is already present in a different Overlay.'),
+          contains(
+              'The specified entry is already present in a different Overlay.'),
           contains('The OverlayEntry was'),
           contains('The Overlay the OverlayEntry was trying to insert to was'),
           contains("The OverlayEntry's current Overlay was"),
@@ -1241,7 +1285,8 @@ void main() {
       expect(mountedLog, <bool>[true, false, true, false]);
     });
 
-    testWidgets('throw if disposed before removal', (WidgetTester tester) async {
+    testWidgets('throw if disposed before removal',
+        (WidgetTester tester) async {
       await tester.pumpWidget(emptyOverlay);
       final OverlayState overlay = overlayKey.currentState! as OverlayState;
       final OverlayEntry entry = OverlayEntry(
@@ -1268,7 +1313,7 @@ void main() {
 
       Object? error;
       try {
-        entry.addListener(() {  });
+        entry.addListener(() {});
       } catch (e) {
         error = e;
       }
@@ -1302,7 +1347,7 @@ void main() {
       // The entry is no longer usable.
       Object? error;
       try {
-        entry.addListener(() {  });
+        entry.addListener(() {});
       } catch (e) {
         error = e;
       }
@@ -1311,7 +1356,8 @@ void main() {
   });
 
   group('LookupBoundary', () {
-    testWidgets('hides Overlay from Overlay.maybeOf', (WidgetTester tester) async {
+    testWidgets('hides Overlay from Overlay.maybeOf',
+        (WidgetTester tester) async {
       OverlayState? overlay;
 
       await tester.pumpWidget(
@@ -1366,23 +1412,23 @@ void main() {
       final FlutterError error = exception! as FlutterError;
 
       expect(
-        error.toStringDeep(),
-        'FlutterError\n'
-        '   No Overlay widget found within the closest LookupBoundary.\n'
-        '   There is an ancestor Overlay widget, but it is hidden by a\n'
-        '   LookupBoundary.\n'
-        '   Some widgets require an Overlay widget ancestor for correct\n'
-        '   operation.\n'
-        '   The most common way to add an Overlay to an application is to\n'
-        '   include a MaterialApp, CupertinoApp or Navigator widget in the\n'
-        '   runApp() call.\n'
-        '   The context from which that widget was searching for an overlay\n'
-        '   was:\n'
-        '     Builder\n'
-      );
+          error.toStringDeep(),
+          'FlutterError\n'
+          '   No Overlay widget found within the closest LookupBoundary.\n'
+          '   There is an ancestor Overlay widget, but it is hidden by a\n'
+          '   LookupBoundary.\n'
+          '   Some widgets require an Overlay widget ancestor for correct\n'
+          '   operation.\n'
+          '   The most common way to add an Overlay to an application is to\n'
+          '   include a MaterialApp, CupertinoApp or Navigator widget in the\n'
+          '   runApp() call.\n'
+          '   The context from which that widget was searching for an overlay\n'
+          '   was:\n'
+          '     Builder\n');
     });
 
-    testWidgets('hides Overlay from debugCheckHasOverlay', (WidgetTester tester) async {
+    testWidgets('hides Overlay from debugCheckHasOverlay',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -1409,22 +1455,21 @@ void main() {
       final FlutterError error = exception! as FlutterError;
 
       expect(
-        error.toStringDeep(), startsWith(
-          'FlutterError\n'
-          '   No Overlay widget found within the closest LookupBoundary.\n'
-          '   There is an ancestor Overlay widget, but it is hidden by a\n'
-          '   LookupBoundary.\n'
-          '   Builder widgets require an Overlay widget ancestor within the\n'
-          '   closest LookupBoundary.\n'
-          '   An overlay lets widgets float on top of other widget children.\n'
-          '   To introduce an Overlay widget, you can either directly include\n'
-          '   one, or use a widget that contains an Overlay itself, such as a\n'
-          '   Navigator, WidgetApp, MaterialApp, or CupertinoApp.\n'
-          '   The specific widget that could not find a Overlay ancestor was:\n'
-          '     Builder\n'
-          '   The ancestors of this widget were:\n'
-          '     LookupBoundary\n'
-        ),
+        error.toStringDeep(),
+        startsWith('FlutterError\n'
+            '   No Overlay widget found within the closest LookupBoundary.\n'
+            '   There is an ancestor Overlay widget, but it is hidden by a\n'
+            '   LookupBoundary.\n'
+            '   Builder widgets require an Overlay widget ancestor within the\n'
+            '   closest LookupBoundary.\n'
+            '   An overlay lets widgets float on top of other widget children.\n'
+            '   To introduce an Overlay widget, you can either directly include\n'
+            '   one, or use a widget that contains an Overlay itself, such as a\n'
+            '   Navigator, WidgetApp, MaterialApp, or CupertinoApp.\n'
+            '   The specific widget that could not find a Overlay ancestor was:\n'
+            '     Builder\n'
+            '   The ancestors of this widget were:\n'
+            '     LookupBoundary\n'),
       );
     });
   });

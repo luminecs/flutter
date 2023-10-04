@@ -1,7 +1,7 @@
 import 'message.dart';
 
 class GetLayerTree extends Command {
-  const GetLayerTree({ super.timeout });
+  const GetLayerTree({super.timeout});
 
   GetLayerTree.deserialize(super.json) : super.deserialize();
 
@@ -20,6 +20,6 @@ class LayerTree extends Result {
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'tree': tree,
-  };
+        'tree': tree,
+      };
 }

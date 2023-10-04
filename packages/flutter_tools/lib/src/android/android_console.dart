@@ -3,9 +3,11 @@ import 'package:async/async.dart';
 import '../base/io.dart';
 import '../convert.dart';
 
-Future<Socket> kAndroidConsoleSocketFactory(String host, int port) => Socket.connect(host, port);
+Future<Socket> kAndroidConsoleSocketFactory(String host, int port) =>
+    Socket.connect(host, port);
 
-typedef AndroidConsoleSocketFactory = Future<Socket> Function(String host, int port);
+typedef AndroidConsoleSocketFactory = Future<Socket> Function(
+    String host, int port);
 
 class AndroidConsole {
   AndroidConsole(this._socket);

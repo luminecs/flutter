@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AbsorbPointerApp());
 
 class AbsorbPointerApp extends StatelessWidget {

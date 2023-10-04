@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const StepperExampleApp());
 
 class StepperExampleApp extends StatelessWidget {

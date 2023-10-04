@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const PageStorageExampleApp());
 
 class PageStorageExampleApp extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 void main() => runApp(const SingleActivatorExampleApp());
 
 class SingleActivatorExampleApp extends StatelessWidget {
@@ -38,7 +37,8 @@ class _SingleActivatorExampleState extends State<SingleActivatorExample> {
   Widget build(BuildContext context) {
     return Shortcuts(
       shortcuts: const <ShortcutActivator, Intent>{
-        SingleActivator(LogicalKeyboardKey.keyC, control: true): IncrementIntent(),
+        SingleActivator(LogicalKeyboardKey.keyC, control: true):
+            IncrementIntent(),
       },
       child: Actions(
         actions: <Type, Action<Intent>>{

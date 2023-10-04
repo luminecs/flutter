@@ -13,8 +13,8 @@ class SelectionContainer extends StatefulWidget {
   const SelectionContainer.disabled({
     super.key,
     required this.child,
-  }) : registrar = null,
-       delegate = null;
+  })  : registrar = null,
+        delegate = null;
 
   final SelectionRegistrar? registrar;
 
@@ -23,7 +23,8 @@ class SelectionContainer extends StatefulWidget {
   final SelectionContainerDelegate? delegate;
 
   static SelectionRegistrar? maybeOf(BuildContext context) {
-    final SelectionRegistrarScope? scope = context.dependOnInheritedWidgetOfExactType<SelectionRegistrarScope>();
+    final SelectionRegistrarScope? scope =
+        context.dependOnInheritedWidgetOfExactType<SelectionRegistrarScope>();
     return scope?.registrar;
   }
 
@@ -33,7 +34,8 @@ class SelectionContainer extends StatefulWidget {
   State<SelectionContainer> createState() => _SelectionContainerState();
 }
 
-class _SelectionContainerState extends State<SelectionContainer> with Selectable, SelectionRegistrant {
+class _SelectionContainerState extends State<SelectionContainer>
+    with Selectable, SelectionRegistrant {
   final Set<VoidCallback> _listeners = <VoidCallback>{};
 
   static const SelectionGeometry _disabledGeometry = SelectionGeometry(
@@ -66,7 +68,8 @@ class _SelectionContainerState extends State<SelectionContainer> with Selectable
       }
       if (oldWidget.delegate?.value != widget.delegate?.value) {
         // Avoid concurrent modification.
-        for (final VoidCallback listener in _listeners.toList(growable: false)) {
+        for (final VoidCallback listener
+            in _listeners.toList(growable: false)) {
           listener();
         }
       }
@@ -176,7 +179,8 @@ class SelectionRegistrarScope extends InheritedWidget {
   }
 }
 
-abstract class SelectionContainerDelegate implements SelectionHandler, SelectionRegistrar {
+abstract class SelectionContainerDelegate
+    implements SelectionHandler, SelectionRegistrar {
   BuildContext? _selectionContainerContext;
 
   Matrix4 getTransformFrom(Selectable child) {
@@ -184,7 +188,8 @@ abstract class SelectionContainerDelegate implements SelectionHandler, Selection
       _selectionContainerContext?.findRenderObject() != null,
       'getTransformFrom cannot be called before SelectionContainer is laid out.',
     );
-    return child.getTransformTo(_selectionContainerContext!.findRenderObject()! as RenderBox);
+    return child.getTransformTo(
+        _selectionContainerContext!.findRenderObject()! as RenderBox);
   }
 
   Matrix4 getTransformTo(RenderObject? ancestor) {
@@ -192,16 +197,18 @@ abstract class SelectionContainerDelegate implements SelectionHandler, Selection
       _selectionContainerContext?.findRenderObject() != null,
       'getTransformTo cannot be called before SelectionContainer is laid out.',
     );
-    final RenderBox box = _selectionContainerContext!.findRenderObject()! as RenderBox;
+    final RenderBox box =
+        _selectionContainerContext!.findRenderObject()! as RenderBox;
     return box.getTransformTo(ancestor);
   }
 
   bool get hasSize {
     assert(
-    _selectionContainerContext?.findRenderObject() != null,
-    'The _selectionContainerContext must have a renderObject, such as after the first build has completed.',
+      _selectionContainerContext?.findRenderObject() != null,
+      'The _selectionContainerContext must have a renderObject, such as after the first build has completed.',
     );
-    final RenderBox box = _selectionContainerContext!.findRenderObject()! as RenderBox;
+    final RenderBox box =
+        _selectionContainerContext!.findRenderObject()! as RenderBox;
     return box.hasSize;
   }
 
@@ -210,7 +217,8 @@ abstract class SelectionContainerDelegate implements SelectionHandler, Selection
       hasSize,
       'containerSize cannot be called before SelectionContainer is laid out.',
     );
-    final RenderBox box = _selectionContainerContext!.findRenderObject()! as RenderBox;
+    final RenderBox box =
+        _selectionContainerContext!.findRenderObject()! as RenderBox;
     return box.size;
   }
 }

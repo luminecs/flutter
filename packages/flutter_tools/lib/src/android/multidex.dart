@@ -6,15 +6,16 @@ import '../base/file_system.dart';
 // well as verifying the project is properly set up.
 
 File _getMultiDexApplicationFile(Directory projectDir) {
-  return projectDir.childDirectory('android')
-    .childDirectory('app')
-    .childDirectory('src')
-    .childDirectory('main')
-    .childDirectory('java')
-    .childDirectory('io')
-    .childDirectory('flutter')
-    .childDirectory('app')
-    .childFile('FlutterMultiDexApplication.java');
+  return projectDir
+      .childDirectory('android')
+      .childDirectory('app')
+      .childDirectory('src')
+      .childDirectory('main')
+      .childDirectory('java')
+      .childDirectory('io')
+      .childDirectory('flutter')
+      .childDirectory('app')
+      .childFile('FlutterMultiDexApplication.java');
 }
 
 void ensureMultiDexApplicationExists(final Directory projectDir) {
@@ -23,7 +24,9 @@ void ensureMultiDexApplicationExists(final Directory projectDir) {
     // This checks for instances of legacy versions of this file. Legacy versions maintained
     // compatibility with v1 embedding by extending FlutterApplication. If we detect this,
     // we replace the file with the modern v2 embedding version.
-    if (applicationFile.readAsStringSync().contains('android.app.Application;')) {
+    if (applicationFile
+        .readAsStringSync()
+        .contains('android.app.Application;')) {
       return;
     }
   }
@@ -68,11 +71,12 @@ bool multiDexApplicationExists(final Directory projectDir) {
 }
 
 File _getManifestFile(Directory projectDir) {
-  return projectDir.childDirectory('android')
-    .childDirectory('app')
-    .childDirectory('src')
-    .childDirectory('main')
-    .childFile('AndroidManifest.xml');
+  return projectDir
+      .childDirectory('android')
+      .childDirectory('app')
+      .childDirectory('src')
+      .childDirectory('main')
+      .childFile('AndroidManifest.xml');
 }
 
 bool androidManifestHasNameVariable(final Directory projectDir) {
@@ -89,7 +93,8 @@ bool androidManifestHasNameVariable(final Directory projectDir) {
     return false;
   }
   // Check for the ${androidName} application attribute.
-  for (final XmlElement application in document.findAllElements('application')) {
+  for (final XmlElement application
+      in document.findAllElements('application')) {
     final String? applicationName = application.getAttribute('android:name');
     if (applicationName == r'${applicationName}') {
       return true;

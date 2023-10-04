@@ -19,7 +19,8 @@ void main() {
       final FakeDevice device = FakeDevice();
 
       expect(() => eventPrinter.handleFinishedTest(device), returnsNormally);
-      expect(() => eventPrinter.handleStartedDevice(vmServiceUri), returnsNormally);
+      expect(() => eventPrinter.handleStartedDevice(vmServiceUri),
+          returnsNormally);
       expect(() => eventPrinter.handleTestCrashed(device), returnsNormally);
       expect(() => eventPrinter.handleTestTimedOut(device), returnsNormally);
     });
@@ -52,4 +53,4 @@ void main() {
   });
 }
 
-class FakeDevice extends Fake implements TestDevice { }
+class FakeDevice extends Fake implements TestDevice {}

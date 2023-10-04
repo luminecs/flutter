@@ -11,10 +11,12 @@ extension HtmlElementViewImpl on HtmlElementView {
     bool isVisible = true,
     ElementCreatedCallback? onElementCreated,
   }) {
-    throw UnimplementedError('HtmlElementView is only available on Flutter Web');
+    throw UnimplementedError(
+        'HtmlElementView is only available on Flutter Web');
   }
 
   Widget buildImpl(BuildContext context) {
-    throw UnimplementedError('HtmlElementView is only available on Flutter Web');
+    throw UnimplementedError(
+        'HtmlElementView is only available on Flutter Web');
   }
 }

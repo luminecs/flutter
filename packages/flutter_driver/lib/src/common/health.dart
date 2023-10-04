@@ -2,7 +2,7 @@ import 'enum_util.dart';
 import 'message.dart';
 
 class GetHealth extends Command {
-  const GetHealth({ super.timeout });
+  const GetHealth({super.timeout});
 
   GetHealth.deserialize(super.json) : super.deserialize();
 
@@ -28,11 +28,12 @@ class Health extends Result {
   final HealthStatus status;
 
   static Health fromJson(Map<String, dynamic> json) {
-    return Health(_healthStatusIndex.lookupBySimpleName(json['status'] as String));
+    return Health(
+        _healthStatusIndex.lookupBySimpleName(json['status'] as String));
   }
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'status': _healthStatusIndex.toSimpleName(status),
-  };
+        'status': _healthStatusIndex.toSimpleName(status),
+      };
 }

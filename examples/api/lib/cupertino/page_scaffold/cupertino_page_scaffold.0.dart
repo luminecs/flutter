@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const PageScaffoldApp());
 
 class PageScaffoldApp extends StatelessWidget {

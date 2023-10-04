@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/checkbox_list_tile/checkbox_list_tile.1.dart' as example;
+import 'package:flutter_api_samples/material/checkbox_list_tile/checkbox_list_tile.1.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

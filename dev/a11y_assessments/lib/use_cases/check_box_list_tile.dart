@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'use_cases.dart';
 
 class CheckBoxListTile extends UseCase {
-
   @override
   String get name => 'CheckBoxListTile';
 

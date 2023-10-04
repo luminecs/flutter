@@ -7,6 +7,7 @@ void main(List<String> args) {
     type = 'cupertino';
   }
   print('''
+
 void main(List<String> args) {
   print('Expected output $type');
 }

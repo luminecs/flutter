@@ -42,7 +42,9 @@ void main() {
     expect(boundary.debugLayer!.attached, isTrue); // this time it did again!
   });
 
-  test('updateSubtreeNeedsAddToScene propagates Layer.alwaysNeedsAddToScene up the tree', () {
+  test(
+      'updateSubtreeNeedsAddToScene propagates Layer.alwaysNeedsAddToScene up the tree',
+      () {
     final ContainerLayer a = ContainerLayer();
     final ContainerLayer b = ContainerLayer();
     final ContainerLayer c = ContainerLayer();
@@ -88,7 +90,9 @@ void main() {
     expect(f.debugSubtreeNeedsAddToScene, false);
   });
 
-  test('updateSubtreeNeedsAddToScene propagates Layer._needsAddToScene up the tree', () {
+  test(
+      'updateSubtreeNeedsAddToScene propagates Layer._needsAddToScene up the tree',
+      () {
     final ContainerLayer a = ContainerLayer();
     final ContainerLayer b = ContainerLayer();
     final ContainerLayer c = ContainerLayer();
@@ -96,7 +100,15 @@ void main() {
     final ContainerLayer e = ContainerLayer();
     final ContainerLayer f = ContainerLayer();
     final ContainerLayer g = ContainerLayer();
-    final List<ContainerLayer> allLayers = <ContainerLayer>[a, b, c, d, e, f, g];
+    final List<ContainerLayer> allLayers = <ContainerLayer>[
+      a,
+      b,
+      c,
+      d,
+      e,
+      f,
+      g
+    ];
 
     // The tree is like the following where b and j are dirty:
     //        a____
@@ -165,7 +177,9 @@ void main() {
   test('switching layer link of an attached leader layer should not crash', () {
     final LayerLink link = LayerLink();
     final LeaderLayer leaderLayer = LeaderLayer(link: link);
-    final RenderView view = RenderView(configuration: const ViewConfiguration(), view: RendererBinding.instance.platformDispatcher.views.single);
+    final RenderView view = RenderView(
+        configuration: const ViewConfiguration(),
+        view: RendererBinding.instance.platformDispatcher.views.single);
     leaderLayer.attach(view);
     final LayerLink link2 = LayerLink();
     leaderLayer.link = link2;
@@ -178,7 +192,9 @@ void main() {
     final LayerLink link = LayerLink();
     final LeaderLayer leaderLayer1 = LeaderLayer(link: link);
     final LeaderLayer leaderLayer2 = LeaderLayer(link: link);
-    final RenderView view = RenderView(configuration: const ViewConfiguration(), view: RendererBinding.instance.platformDispatcher.views.single);
+    final RenderView view = RenderView(
+        configuration: const ViewConfiguration(),
+        view: RendererBinding.instance.platformDispatcher.views.single);
     leaderLayer1.attach(view);
     leaderLayer2.attach(view);
     leaderLayer2.detach();
@@ -253,7 +269,7 @@ void main() {
     final LayerLink link = LayerLink();
     late RenderLeaderLayer leader;
     final RenderRepaintBoundary root = RenderRepaintBoundary(
-      child:RenderRepaintBoundary(
+      child: RenderRepaintBoundary(
         child: leader = RenderLeaderLayer(link: link),
       ),
     );
@@ -334,11 +350,13 @@ void main() {
     layer.debugFillProperties(builder);
     return builder.properties
         .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-        .map((DiagnosticsNode node) => node.toString()).toList();
+        .map((DiagnosticsNode node) => node.toString())
+        .toList();
   }
 
   test('ClipRectLayer prints clipBehavior in debug info', () {
-    expect(getDebugInfo(ClipRectLayer()), contains('clipBehavior: Clip.hardEdge'));
+    expect(
+        getDebugInfo(ClipRectLayer()), contains('clipBehavior: Clip.hardEdge'));
     expect(
       getDebugInfo(ClipRectLayer(clipBehavior: Clip.antiAliasWithSaveLayer)),
       contains('clipBehavior: Clip.antiAliasWithSaveLayer'),
@@ -346,7 +364,8 @@ void main() {
   });
 
   test('ClipRRectLayer prints clipBehavior in debug info', () {
-    expect(getDebugInfo(ClipRRectLayer()), contains('clipBehavior: Clip.antiAlias'));
+    expect(getDebugInfo(ClipRRectLayer()),
+        contains('clipBehavior: Clip.antiAlias'));
     expect(
       getDebugInfo(ClipRRectLayer(clipBehavior: Clip.antiAliasWithSaveLayer)),
       contains('clipBehavior: Clip.antiAliasWithSaveLayer'),
@@ -354,7 +373,8 @@ void main() {
   });
 
   test('ClipPathLayer prints clipBehavior in debug info', () {
-    expect(getDebugInfo(ClipPathLayer()), contains('clipBehavior: Clip.antiAlias'));
+    expect(getDebugInfo(ClipPathLayer()),
+        contains('clipBehavior: Clip.antiAlias'));
     expect(
       getDebugInfo(ClipPathLayer(clipBehavior: Clip.antiAliasWithSaveLayer)),
       contains('clipBehavior: Clip.antiAliasWithSaveLayer'),
@@ -362,10 +382,16 @@ void main() {
   });
 
   test('BackdropFilterLayer prints filter and blendMode in debug info', () {
-    final ImageFilter filter = ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0, tileMode: TileMode.repeated);
-    final BackdropFilterLayer layer = BackdropFilterLayer(filter: filter, blendMode: BlendMode.clear);
+    final ImageFilter filter =
+        ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0, tileMode: TileMode.repeated);
+    final BackdropFilterLayer layer =
+        BackdropFilterLayer(filter: filter, blendMode: BlendMode.clear);
     final List<String> info = getDebugInfo(layer);
-    expect(info, contains(isBrowser ? 'filter: ImageFilter.blur(1, 1, TileMode.repeated)' : 'filter: ImageFilter.blur(1.0, 1.0, repeated)'));
+    expect(
+        info,
+        contains(isBrowser
+            ? 'filter: ImageFilter.blur(1, 1, TileMode.repeated)'
+            : 'filter: ImageFilter.blur(1.0, 1.0, repeated)'));
     expect(info, contains('blendMode: clear'));
   });
 
@@ -381,7 +407,8 @@ void main() {
     final List<String> info = getDebugInfo(layer);
     expect(info, contains('picture: ${describeIdentity(picture)}'));
     expect(info, isNot(contains('engine layer: ${describeIdentity(null)}')));
-    expect(info, contains('raster cache hints: isComplex = true, willChange = false'));
+    expect(info,
+        contains('raster cache hints: isComplex = true, willChange = false'));
   });
 
   test('Layer prints engineLayer if it is not null in debug info', () {
@@ -391,7 +418,8 @@ void main() {
 
     layer.engineLayer = FakeEngineLayer();
     info = getDebugInfo(layer);
-    expect(info, contains('engine layer: ${describeIdentity(layer.engineLayer)}'));
+    expect(
+        info, contains('engine layer: ${describeIdentity(layer.engineLayer)}'));
   });
 
   test('mutating PictureLayer fields triggers needsAddToScene', () {
@@ -482,14 +510,17 @@ void main() {
       colorFilter: const ColorFilter.mode(Color(0xFFFF0000), BlendMode.color),
     );
     checkNeedsAddToScene(layer, () {
-      layer.colorFilter = const ColorFilter.mode(Color(0xFF00FF00), BlendMode.color);
+      layer.colorFilter =
+          const ColorFilter.mode(Color(0xFF00FF00), BlendMode.color);
     });
   });
 
   test('mutating ShaderMaskLayer fields triggers needsAddToScene', () {
-    const Gradient gradient = RadialGradient(colors: <Color>[Color(0x00000000), Color(0x00000001)]);
+    const Gradient gradient =
+        RadialGradient(colors: <Color>[Color(0x00000000), Color(0x00000001)]);
     final Shader shader = gradient.createShader(Rect.zero);
-    final ShaderMaskLayer layer = ShaderMaskLayer(shader: shader, maskRect: Rect.zero, blendMode: BlendMode.clear);
+    final ShaderMaskLayer layer = ShaderMaskLayer(
+        shader: shader, maskRect: Rect.zero, blendMode: BlendMode.clear);
     checkNeedsAddToScene(layer, () {
       layer.maskRect = unitRect;
     });
@@ -502,7 +533,8 @@ void main() {
   });
 
   test('mutating BackdropFilterLayer fields triggers needsAddToScene', () {
-    final BackdropFilterLayer layer = BackdropFilterLayer(filter: ImageFilter.blur());
+    final BackdropFilterLayer layer =
+        BackdropFilterLayer(filter: ImageFilter.blur());
     checkNeedsAddToScene(layer, () {
       layer.filter = ImageFilter.blur(sigmaX: 1.0);
     });
@@ -524,7 +556,9 @@ void main() {
     // Ensure we can render the same scene again after rendering an interior
     // layer.
     parent.buildScene(SceneBuilder());
-  }, skip: isBrowser); // TODO(yjbanov): `toImage` doesn't work on the Web: https://github.com/flutter/flutter/issues/49857
+  },
+      skip:
+          isBrowser); // TODO(yjbanov): `toImage` doesn't work on the Web: https://github.com/flutter/flutter/issues/49857
 
   test('ContainerLayer.toImageSync can render interior layer', () {
     final OffsetLayer parent = OffsetLayer();
@@ -542,7 +576,9 @@ void main() {
     // Ensure we can render the same scene again after rendering an interior
     // layer.
     parent.buildScene(SceneBuilder());
-  }, skip: isBrowser); // TODO(yjbanov): `toImage` doesn't work on the Web: https://github.com/flutter/flutter/issues/49857
+  },
+      skip:
+          isBrowser); // TODO(yjbanov): `toImage` doesn't work on the Web: https://github.com/flutter/flutter/issues/49857
 
   test('PictureLayer does not let you call dispose unless refcount is 0', () {
     PictureLayer layer = PictureLayer(Rect.zero);
@@ -646,7 +682,8 @@ void main() {
     expect(() => holder.layer = layer, throwsAssertionError);
   });
 
-  test('OpacityLayer does not push an OffsetLayer if there are no children', () {
+  test('OpacityLayer does not push an OffsetLayer if there are no children',
+      () {
     final OpacityLayer layer = OpacityLayer(alpha: 128);
     final FakeSceneBuilder builder = FakeSceneBuilder();
     layer.addToScene(builder);
@@ -782,7 +819,7 @@ void main() {
     expect(root.subtreeHasCompositionCallbacks, false);
     expect(a2.subtreeHasCompositionCallbacks, false);
 
-    b1.addCompositionCallback((_) { });
+    b1.addCompositionCallback((_) {});
 
     expect(b1.subtreeHasCompositionCallbacks, true);
     expect(a1.subtreeHasCompositionCallbacks, true);
@@ -896,7 +933,8 @@ void main() {
       expect(() => layer.debugMarkClean(), throwsAssertionError);
       expect(() => layer.updateSubtreeNeedsAddToScene(), throwsAssertionError);
       expect(() => layer.remove(), throwsAssertionError);
-      expect(() => (layer as ContainerLayer).append(ContainerLayer()), throwsAssertionError);
+      expect(() => (layer as ContainerLayer).append(ContainerLayer()),
+          throwsAssertionError);
       expect(() => layer.engineLayer = null, throwsAssertionError);
       compositedB1 = true;
     });
@@ -931,7 +969,8 @@ void main() {
     expect(compositedB1, true);
   });
 
-  test('Observe layer tree composition - observer count correctly maintained', () {
+  test('Observe layer tree composition - observer count correctly maintained',
+      () {
     final ContainerLayer root = ContainerLayer();
     final ContainerLayer a1 = ContainerLayer();
     root.append(a1);
@@ -939,8 +978,8 @@ void main() {
     expect(root.subtreeHasCompositionCallbacks, false);
     expect(a1.subtreeHasCompositionCallbacks, false);
 
-    final VoidCallback remover1 = a1.addCompositionCallback((_) { });
-    final VoidCallback remover2 = a1.addCompositionCallback((_) { });
+    final VoidCallback remover1 = a1.addCompositionCallback((_) {});
+    final VoidCallback remover2 = a1.addCompositionCallback((_) {});
 
     expect(root.subtreeHasCompositionCallbacks, true);
     expect(a1.subtreeHasCompositionCallbacks, true);
@@ -958,7 +997,7 @@ void main() {
 
   test('Double removing a observe callback throws', () {
     final ContainerLayer root = ContainerLayer();
-    final VoidCallback callback = root.addCompositionCallback((_) { });
+    final VoidCallback callback = root.addCompositionCallback((_) {});
     callback();
 
     expect(() => callback(), throwsAssertionError);
@@ -966,7 +1005,7 @@ void main() {
 
   test('Removing an observe callback on a disposed layer does not throw', () {
     final ContainerLayer root = ContainerLayer();
-    final VoidCallback callback = root.addCompositionCallback((_) { });
+    final VoidCallback callback = root.addCompositionCallback((_) {});
     root.dispose();
     expect(() => callback(), returnsNormally);
   });
@@ -981,7 +1020,8 @@ void main() {
     final BackdropFilterLayer backdropFilterLayer = BackdropFilterLayer();
     final ColorFilterLayer colorFilterLayer = ColorFilterLayer();
     final ShaderMaskLayer shaderMaskLayer = ShaderMaskLayer();
-    final TextureLayer textureLayer = TextureLayer(rect: Rect.zero, textureId: 1);
+    final TextureLayer textureLayer =
+        TextureLayer(rect: Rect.zero, textureId: 1);
     expect(offsetLayer.supportsRasterization(), true);
     expect(opacityLayer.supportsRasterization(), true);
     expect(clipRectLayer.supportsRasterization(), true);
@@ -993,7 +1033,8 @@ void main() {
     expect(textureLayer.supportsRasterization(), true);
 
     // Unsupported.
-    final PlatformViewLayer platformViewLayer = PlatformViewLayer(rect: Rect.zero, viewId: 1);
+    final PlatformViewLayer platformViewLayer =
+        PlatformViewLayer(rect: Rect.zero, viewId: 1);
 
     expect(platformViewLayer.supportsRasterization(), false);
   });
@@ -1061,6 +1102,8 @@ class FakeSceneBuilder extends Fake implements SceneBuilder {
   }
 }
 
-class FakeOpacityEngineLayer extends FakeEngineLayer implements OpacityEngineLayer {}
+class FakeOpacityEngineLayer extends FakeEngineLayer
+    implements OpacityEngineLayer {}
 
-class FakeOffsetEngineLayer extends FakeEngineLayer implements OffsetEngineLayer {}
+class FakeOffsetEngineLayer extends FakeEngineLayer
+    implements OffsetEngineLayer {}

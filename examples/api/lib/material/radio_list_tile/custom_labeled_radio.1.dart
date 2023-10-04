@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const LabeledRadioApp());
 
 class LabeledRadioApp extends StatelessWidget {

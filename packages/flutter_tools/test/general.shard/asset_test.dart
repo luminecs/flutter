@@ -80,7 +80,7 @@ void main() {
     });
   });
 
-const String packageConfig = '''
+  const String packageConfig = '''
 {
   "configVersion": 2,
   "packages":[
@@ -94,15 +94,20 @@ const String packageConfig = '''
 }
 ''';
 
-const String pubspecDotYaml = '''
+  const String pubspecDotYaml = '''
 name: my_package
 ''';
 
   testUsingContext('Bundles material shaders on non-web platforms', () async {
     final String shaderPath = globals.fs.path.join(
-      Cache.flutterRoot!,
-      'packages', 'flutter', 'lib', 'src', 'material', 'shaders', 'ink_sparkle.frag'
-    );
+        Cache.flutterRoot!,
+        'packages',
+        'flutter',
+        'lib',
+        'src',
+        'material',
+        'shaders',
+        'ink_sparkle.frag');
     globals.fs.file(shaderPath).createSync(recursive: true);
     globals.fs.file('.dart_tool/package_config.json')
       ..createSync(recursive: true)
@@ -110,7 +115,8 @@ name: my_package
     globals.fs.file('pubspec.yaml').writeAsStringSync(pubspecDotYaml);
     final AssetBundle asset = AssetBundleFactory.instance.createBundle();
 
-    await asset.build(packagesPath: '.packages', targetPlatform: TargetPlatform.android_arm);
+    await asset.build(
+        packagesPath: '.packages', targetPlatform: TargetPlatform.android_arm);
 
     expect(asset.entries.keys, contains('shaders/ink_sparkle.frag'));
   }, overrides: <Type, Generator>{
@@ -120,9 +126,14 @@ name: my_package
 
   testUsingContext('Does bundle material shaders on web platforms', () async {
     final String shaderPath = globals.fs.path.join(
-      Cache.flutterRoot!,
-      'packages', 'flutter', 'lib', 'src', 'material', 'shaders', 'ink_sparkle.frag'
-    );
+        Cache.flutterRoot!,
+        'packages',
+        'flutter',
+        'lib',
+        'src',
+        'material',
+        'shaders',
+        'ink_sparkle.frag');
     globals.fs.file(shaderPath).createSync(recursive: true);
     globals.fs.file('.dart_tool/package_config.json')
       ..createSync(recursive: true)
@@ -130,7 +141,9 @@ name: my_package
     globals.fs.file('pubspec.yaml').writeAsStringSync(pubspecDotYaml);
     final AssetBundle asset = AssetBundleFactory.instance.createBundle();
 
-    await asset.build(packagesPath: '.packages', targetPlatform: TargetPlatform.web_javascript);
+    await asset.build(
+        packagesPath: '.packages',
+        targetPlatform: TargetPlatform.web_javascript);
 
     expect(asset.entries.keys, contains('shaders/ink_sparkle.frag'));
   }, overrides: <Type, Generator>{

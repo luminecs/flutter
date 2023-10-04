@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const FormSectionApp());
 
 class FormSectionApp extends StatelessWidget {

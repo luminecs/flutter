@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const SliderApp());
 
 class SliderApp extends StatelessWidget {

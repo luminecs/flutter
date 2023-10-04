@@ -9,12 +9,12 @@ class TaskResult {
         benchmarkScoreKeys = null,
         message = 'No tests run';
 
-  TaskResult.success(this.data, {
+  TaskResult.success(
+    this.data, {
     this.benchmarkScoreKeys = const <String>[],
     this.detailFiles = const <String>[],
     this.message = 'success',
-  })
-      : succeeded = true {
+  }) : succeeded = true {
     const JsonEncoder prettyJson = JsonEncoder.withIndent('  ');
     if (benchmarkScoreKeys != null) {
       for (final String key in benchmarkScoreKeys!) {
@@ -29,7 +29,8 @@ class TaskResult {
     }
   }
 
-  factory TaskResult.successFromFile(File file, {
+  factory TaskResult.successFromFile(
+    File file, {
     List<String> benchmarkScoreKeys = const <String>[],
     List<String> detailFiles = const <String>[],
   }) {
@@ -43,9 +44,13 @@ class TaskResult {
   factory TaskResult.fromJson(Map<String, dynamic> json) {
     final bool success = json['success'] as bool;
     if (success) {
-      final List<String> benchmarkScoreKeys = (json['benchmarkScoreKeys'] as List<dynamic>? ?? <String>[]).cast<String>();
-      final List<String> detailFiles = (json['detailFiles'] as List<dynamic>? ?? <String>[]).cast<String>();
-      return TaskResult.success(json['data'] as Map<String, dynamic>?,
+      final List<String> benchmarkScoreKeys =
+          (json['benchmarkScoreKeys'] as List<dynamic>? ?? <String>[])
+              .cast<String>();
+      final List<String> detailFiles =
+          (json['detailFiles'] as List<dynamic>? ?? <String>[]).cast<String>();
+      return TaskResult.success(
+        json['data'] as Map<String, dynamic>?,
         benchmarkScoreKeys: benchmarkScoreKeys,
         detailFiles: detailFiles,
         message: json['reason'] as String?,

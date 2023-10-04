@@ -6,8 +6,7 @@ export 'tween.dart' show Animatable;
 // late AnimationController myAnimationController;
 
 class TweenSequence<T> extends Animatable<T> {
-  TweenSequence(List<TweenSequenceItem<T>> items)
-      : assert(items.isNotEmpty) {
+  TweenSequence(List<TweenSequenceItem<T>> items) : assert(items.isNotEmpty) {
     _items.addAll(items);
 
     double totalWeight = 0.0;
@@ -18,7 +17,8 @@ class TweenSequence<T> extends Animatable<T> {
 
     double start = 0.0;
     for (int i = 0; i < _items.length; i += 1) {
-      final double end = i == _items.length - 1 ? 1.0 : start + _items[i].weight / totalWeight;
+      final double end =
+          i == _items.length - 1 ? 1.0 : start + _items[i].weight / totalWeight;
       _intervals.add(_Interval(start, end));
       start = end;
     }
@@ -45,7 +45,8 @@ class TweenSequence<T> extends Animatable<T> {
       }
     }
     // Should be unreachable.
-    throw StateError('TweenSequence.evaluate() could not find an interval for $t');
+    throw StateError(
+        'TweenSequence.evaluate() could not find an interval for $t');
   }
 
   @override

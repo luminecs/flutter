@@ -83,8 +83,8 @@ class WebMemoryFS {
     }
 
     _mergedMetadata = metadataFiles.values
-      .map((Uint8List encoded) => utf8.decode(encoded))
-      .join('\n');
+        .map((Uint8List encoded) => utf8.decode(encoded))
+        .join('\n');
 
     return modules;
   }

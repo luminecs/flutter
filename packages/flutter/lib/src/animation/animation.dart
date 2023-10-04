@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'tween.dart';
@@ -28,7 +27,8 @@ typedef ValueListenableTransformer<T> = T Function(T);
 abstract class Animation<T> extends Listenable implements ValueListenable<T> {
   const Animation();
 
-  factory Animation.fromValueListenable(ValueListenable<T> listenable, {
+  factory Animation.fromValueListenable(
+    ValueListenable<T> listenable, {
     ValueListenableTransformer<T>? transformer,
   }) = _ValueListenableDelegateAnimation<T>;
 
@@ -80,7 +80,8 @@ abstract class Animation<T> extends Listenable implements ValueListenable<T> {
 
 // An implementation of an animation that delegates to a value listenable with a fixed direction.
 class _ValueListenableDelegateAnimation<T> extends Animation<T> {
-  _ValueListenableDelegateAnimation(this._listenable, {
+  _ValueListenableDelegateAnimation(
+    this._listenable, {
     ValueListenableTransformer<T>? transformer,
   }) : _transformer = transformer;
 

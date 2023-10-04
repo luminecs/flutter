@@ -47,8 +47,10 @@ void main() {
     frontendServerStdIn = MemoryIOSink();
 
     fakeProcessManager = FakeProcessManager.empty();
-    generatorStdoutHandler = StdoutHandler(logger: testLogger, fileSystem: MemoryFileSystem.test());
-    generatorWithSchemeStdoutHandler = StdoutHandler(logger: testLogger, fileSystem: MemoryFileSystem.test());
+    generatorStdoutHandler =
+        StdoutHandler(logger: testLogger, fileSystem: MemoryFileSystem.test());
+    generatorWithSchemeStdoutHandler =
+        StdoutHandler(logger: testLogger, fileSystem: MemoryFileSystem.test());
     generator = DefaultResidentCompiler(
       'sdkroot',
       buildMode: BuildMode.debug,
@@ -96,7 +98,7 @@ void main() {
 
     final CompilerOutput? output = await generator.recompile(
       Uri.parse('/path/to/main.dart'),
-        null /* invalidatedFiles */,
+      null /* invalidatedFiles */,
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       fs: MemoryFileSystem(),
@@ -108,7 +110,9 @@ void main() {
     expect(fakeProcessManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('incremental compile single dart compile with filesystem scheme', () async {
+  testWithoutContext(
+      'incremental compile single dart compile with filesystem scheme',
+      () async {
     fakeProcessManager.addCommand(FakeCommand(
       command: const <String>[
         ...frontendServerCommand,
@@ -124,7 +128,7 @@ void main() {
 
     final CompilerOutput? output = await generatorWithScheme.recompile(
       Uri.parse('file:///foo/bar/fizz/main.dart'),
-        null /* invalidatedFiles */,
+      null /* invalidatedFiles */,
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       fs: MemoryFileSystem(),
@@ -136,37 +140,47 @@ void main() {
     expect(fakeProcessManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('incremental compile single dart compile abnormally terminates', () async {
+  testWithoutContext(
+      'incremental compile single dart compile abnormally terminates',
+      () async {
     fakeProcessManager.addCommand(FakeCommand(
       command: const <String>[...frontendServerCommand, '--verbosity=error'],
       stdin: frontendServerStdIn,
     ));
 
-    expect(asyncGuard(() => generator.recompile(
-      Uri.parse('/path/to/main.dart'),
-      null, /* invalidatedFiles */
-      outputPath: '/build/',
-      packageConfig: PackageConfig.empty,
-      fs: MemoryFileSystem(),
-      projectRootPath: '',
-    )), throwsToolExit());
+    expect(
+        asyncGuard(() => generator.recompile(
+              Uri.parse('/path/to/main.dart'),
+              null,
+              /* invalidatedFiles */
+              outputPath: '/build/',
+              packageConfig: PackageConfig.empty,
+              fs: MemoryFileSystem(),
+              projectRootPath: '',
+            )),
+        throwsToolExit());
   });
 
-  testWithoutContext('incremental compile single dart compile abnormally terminates via exitCode', () async {
+  testWithoutContext(
+      'incremental compile single dart compile abnormally terminates via exitCode',
+      () async {
     fakeProcessManager.addCommand(FakeCommand(
       command: const <String>[...frontendServerCommand, '--verbosity=error'],
       stdin: frontendServerStdIn,
       exitCode: 1,
     ));
 
-    expect(asyncGuard(() => generator.recompile(
-      Uri.parse('/path/to/main.dart'),
-      null, /* invalidatedFiles */
-      outputPath: '/build/',
-      packageConfig: PackageConfig.empty,
-      fs: MemoryFileSystem(),
-      projectRootPath: '',
-    )), throwsToolExit(message: 'the Dart compiler exited unexpectedly.'));
+    expect(
+        asyncGuard(() => generator.recompile(
+              Uri.parse('/path/to/main.dart'),
+              null,
+              /* invalidatedFiles */
+              outputPath: '/build/',
+              packageConfig: PackageConfig.empty,
+              fs: MemoryFileSystem(),
+              projectRootPath: '',
+            )),
+        throwsToolExit(message: 'the Dart compiler exited unexpectedly.'));
   });
 
   testWithoutContext('incremental compile and recompile', () async {
@@ -180,7 +194,8 @@ void main() {
 
     await generator.recompile(
       Uri.parse('/path/to/main.dart'),
-      null, /* invalidatedFiles */
+      null,
+      /* invalidatedFiles */
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       projectRootPath: '',
@@ -191,28 +206,30 @@ void main() {
     // No accept or reject commands should be issued until we
     // send recompile request.
     await _accept(generator, frontendServerStdIn, '');
-    await _reject(generatorStdoutHandler, generator, frontendServerStdIn, '', '');
+    await _reject(
+        generatorStdoutHandler, generator, frontendServerStdIn, '', '');
 
     await _recompile(generatorStdoutHandler, generator, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
 
     await _accept(generator, frontendServerStdIn, r'^accept\n$');
 
     await _recompile(generatorStdoutHandler, generator, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
     // No sources returned from reject command.
-    await _reject(generatorStdoutHandler, generator, frontendServerStdIn, 'result abc\nabc\n',
-      r'^reject\n$');
+    await _reject(generatorStdoutHandler, generator, frontendServerStdIn,
+        'result abc\nabc\n', r'^reject\n$');
     completer.complete();
     expect(frontendServerStdIn.getAndClear(), isEmpty);
-    expect(testLogger.errorText, equals(
-      'line0\nline1\n'
-      'line1\nline2\n'
-      'line1\nline2\n'
-    ));
+    expect(
+        testLogger.errorText,
+        equals('line0\nline1\n'
+            'line1\nline2\n'
+            'line1\nline2\n'));
   });
 
-  testWithoutContext('incremental compile and recompile with filesystem scheme', () async {
+  testWithoutContext('incremental compile and recompile with filesystem scheme',
+      () async {
     final Completer<void> completer = Completer<void>();
     fakeProcessManager.addCommand(FakeCommand(
       command: const <String>[
@@ -229,7 +246,8 @@ void main() {
     ));
     await generatorWithScheme.recompile(
       Uri.parse('file:///foo/bar/fizz/main.dart'),
-      null, /* invalidatedFiles */
+      null,
+      /* invalidatedFiles */
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       fs: MemoryFileSystem(),
@@ -240,32 +258,41 @@ void main() {
     // No accept or reject commands should be issued until we
     // send recompile request.
     await _accept(generatorWithScheme, frontendServerStdIn, '');
-    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn, '', '');
+    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme,
+        frontendServerStdIn, '', '');
 
-    await _recompile(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
-      mainUri: Uri.parse('file:///foo/bar/fizz/main.dart'),
-      expectedMainUri: 'scheme:///main.dart');
+    await _recompile(
+        generatorWithSchemeStdoutHandler,
+        generatorWithScheme,
+        frontendServerStdIn,
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
+        mainUri: Uri.parse('file:///foo/bar/fizz/main.dart'),
+        expectedMainUri: 'scheme:///main.dart');
 
     await _accept(generatorWithScheme, frontendServerStdIn, r'^accept\n$');
 
-    await _recompile(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
-      mainUri: Uri.parse('file:///foo/bar/fizz/main.dart'),
-      expectedMainUri: 'scheme:///main.dart');
+    await _recompile(
+        generatorWithSchemeStdoutHandler,
+        generatorWithScheme,
+        frontendServerStdIn,
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
+        mainUri: Uri.parse('file:///foo/bar/fizz/main.dart'),
+        expectedMainUri: 'scheme:///main.dart');
     // No sources returned from reject command.
-    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn, 'result abc\nabc\n',
-      r'^reject\n$');
+    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme,
+        frontendServerStdIn, 'result abc\nabc\n', r'^reject\n$');
     completer.complete();
     expect(frontendServerStdIn.getAndClear(), isEmpty);
-    expect(testLogger.errorText, equals(
-      'line0\nline1\n'
-      'line1\nline2\n'
-      'line1\nline2\n'
-    ));
+    expect(
+        testLogger.errorText,
+        equals('line0\nline1\n'
+            'line1\nline2\n'
+            'line1\nline2\n'));
   });
 
-  testWithoutContext('incremental compile and recompile non-entrypoint file with filesystem scheme', () async {
+  testWithoutContext(
+      'incremental compile and recompile non-entrypoint file with filesystem scheme',
+      () async {
     final Uri mainUri = Uri.parse('file:///foo/bar/fizz/main.dart');
     const String expectedMainUri = 'scheme:///main.dart';
     final List<Uri> updatedUris = <Uri>[
@@ -293,7 +320,8 @@ void main() {
     ));
     await generatorWithScheme.recompile(
       Uri.parse('file:///foo/bar/fizz/main.dart'),
-      null, /* invalidatedFiles */
+      null,
+      /* invalidatedFiles */
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       fs: MemoryFileSystem(),
@@ -304,33 +332,40 @@ void main() {
     // No accept or reject commands should be issued until we
     // send recompile request.
     await _accept(generatorWithScheme, frontendServerStdIn, '');
-    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn, '', '');
+    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme,
+        frontendServerStdIn, '', '');
 
-    await _recompile(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
-      mainUri: mainUri,
-      expectedMainUri: expectedMainUri,
-      updatedUris: updatedUris,
-      expectedUpdatedUris: expectedUpdatedUris);
+    await _recompile(
+        generatorWithSchemeStdoutHandler,
+        generatorWithScheme,
+        frontendServerStdIn,
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
+        mainUri: mainUri,
+        expectedMainUri: expectedMainUri,
+        updatedUris: updatedUris,
+        expectedUpdatedUris: expectedUpdatedUris);
 
     await _accept(generatorWithScheme, frontendServerStdIn, r'^accept\n$');
 
-    await _recompile(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
-      mainUri: mainUri,
-      expectedMainUri: expectedMainUri,
-      updatedUris: updatedUris,
-      expectedUpdatedUris: expectedUpdatedUris);
+    await _recompile(
+        generatorWithSchemeStdoutHandler,
+        generatorWithScheme,
+        frontendServerStdIn,
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
+        mainUri: mainUri,
+        expectedMainUri: expectedMainUri,
+        updatedUris: updatedUris,
+        expectedUpdatedUris: expectedUpdatedUris);
     // No sources returned from reject command.
-    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme, frontendServerStdIn, 'result abc\nabc\n',
-      r'^reject\n$');
+    await _reject(generatorWithSchemeStdoutHandler, generatorWithScheme,
+        frontendServerStdIn, 'result abc\nabc\n', r'^reject\n$');
     completer.complete();
     expect(frontendServerStdIn.getAndClear(), isEmpty);
-    expect(testLogger.errorText, equals(
-      'line0\nline1\n'
-      'line1\nline2\n'
-      'line1\nline2\n'
-    ));
+    expect(
+        testLogger.errorText,
+        equals('line0\nline1\n'
+            'line1\nline2\n'
+            'line1\nline2\n'));
   });
 
   testWithoutContext('incremental compile can suppress errors', () async {
@@ -353,23 +388,20 @@ void main() {
     expect(frontendServerStdIn.getAndClear(), 'compile /path/to/main.dart\n');
 
     await _recompile(generatorStdoutHandler, generator, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
 
     await _accept(generator, frontendServerStdIn, r'^accept\n$');
 
     await _recompile(generatorStdoutHandler, generator, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n', suppressErrors: true);
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n',
+        suppressErrors: true);
 
     completer.complete();
     expect(frontendServerStdIn.getAndClear(), isEmpty);
 
     // Compiler message is not printed with suppressErrors: true above.
-    expect(testLogger.errorText, isNot(equals(
-      'line1\nline2\n'
-    )));
-    expect(testLogger.traceText, contains(
-      'line1\nline2\n'
-    ));
+    expect(testLogger.errorText, isNot(equals('line1\nline2\n')));
+    expect(testLogger.traceText, contains('line1\nline2\n'));
   });
 
   testWithoutContext('incremental compile and recompile twice', () async {
@@ -391,17 +423,17 @@ void main() {
     expect(frontendServerStdIn.getAndClear(), 'compile /path/to/main.dart\n');
 
     await _recompile(generatorStdoutHandler, generator, frontendServerStdIn,
-      'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
+        'result abc\nline1\nline2\nabc\nabc /path/to/main.dart.dill 0\n');
     await _recompile(generatorStdoutHandler, generator, frontendServerStdIn,
-      'result abc\nline2\nline3\nabc\nabc /path/to/main.dart.dill 0\n');
+        'result abc\nline2\nline3\nabc\nabc /path/to/main.dart.dill 0\n');
 
     completer.complete();
     expect(frontendServerStdIn.getAndClear(), isEmpty);
-    expect(testLogger.errorText, equals(
-      'line0\nline1\n'
-      'line1\nline2\n'
-      'line2\nline3\n'
-    ));
+    expect(
+        testLogger.errorText,
+        equals('line0\nline1\n'
+            'line1\nline2\n'
+            'line2\nline3\n'));
   });
 
   testWithoutContext('incremental compile with dartPluginRegistrant', () async {
@@ -424,10 +456,11 @@ void main() {
     ));
 
     final MemoryFileSystem fs = MemoryFileSystem();
-    final File dartPluginRegistrant = fs.file('some/dir/plugin_registrant.dart')..createSync(recursive: true);
+    final File dartPluginRegistrant = fs.file('some/dir/plugin_registrant.dart')
+      ..createSync(recursive: true);
     final CompilerOutput? output = await generatorWithScheme.recompile(
       Uri.parse('file:///foo/bar/fizz/main.dart'),
-        null /* invalidatedFiles */,
+      null /* invalidatedFiles */,
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       fs: fs,
@@ -441,7 +474,9 @@ void main() {
     expect(fakeProcessManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('compile does not pass libraries-spec when using a platform dill', () async {
+  testWithoutContext(
+      'compile does not pass libraries-spec when using a platform dill',
+      () async {
     fakeProcessManager.addCommand(FakeCommand(
       command: const <String>[
         ...frontendServerCommand,
@@ -453,9 +488,10 @@ void main() {
       stdin: frontendServerStdIn,
     ));
 
-    final CompilerOutput? output = await generatorWithPlatformDillAndLibrariesSpec.recompile(
+    final CompilerOutput? output =
+        await generatorWithPlatformDillAndLibrariesSpec.recompile(
       Uri.parse('/path/to/main.dart'),
-        null /* invalidatedFiles */,
+      null /* invalidatedFiles */,
       outputPath: '/build/',
       packageConfig: PackageConfig.empty,
       fs: MemoryFileSystem(),

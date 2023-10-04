@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const OverlayPortalExampleApp());
 
 class OverlayPortalExampleApp extends StatelessWidget {

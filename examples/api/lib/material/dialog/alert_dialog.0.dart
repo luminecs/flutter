@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AlertDialogExampleApp());
 
 class AlertDialogExampleApp extends StatelessWidget {

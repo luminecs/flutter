@@ -131,7 +131,8 @@ void main() {
   });
 
   // Because tap gesture will hold off on declaring victory.
-  testGesture('Wins over tap gesture below it in the tree', (GestureTester tester) {
+  testGesture('Wins over tap gesture below it in the tree',
+      (GestureTester tester) {
     bool recognizedSingleTap = false;
     bool canceledSingleTap = false;
     final TapGestureRecognizer singleTap = TapGestureRecognizer()
@@ -154,7 +155,8 @@ void main() {
     expect(canceledSingleTap, isTrue);
   });
 
-  testGesture('Wins over tap gesture above it in the tree', (GestureTester tester) {
+  testGesture('Wins over tap gesture above it in the tree',
+      (GestureTester tester) {
     bool recognizedSingleTap = false;
     bool canceledSingleTap = false;
     final TapGestureRecognizer singleTap = TapGestureRecognizer()
@@ -177,7 +179,8 @@ void main() {
     expect(canceledSingleTap, isTrue);
   });
 
-  testGesture('Loses to release gesture below it in the tree', (GestureTester tester) {
+  testGesture('Loses to release gesture below it in the tree',
+      (GestureTester tester) {
     bool recognizedRelease = false;
     final ReleaseGestureRecognizer release = ReleaseGestureRecognizer()
       ..onRelease = () {
@@ -194,7 +197,8 @@ void main() {
     expect(recognizedRelease, isTrue);
   });
 
-  testGesture('Wins over release gesture above it in the tree', (GestureTester tester) {
+  testGesture('Wins over release gesture above it in the tree',
+      (GestureTester tester) {
     bool recognizedRelease = false;
     final ReleaseGestureRecognizer release = ReleaseGestureRecognizer()
       ..onRelease = () {
@@ -211,7 +215,8 @@ void main() {
     expect(recognizedRelease, isFalse);
   });
 
-  testGesture('Fires cancel if competing recognizer declares victory', (GestureTester tester) {
+  testGesture('Fires cancel if competing recognizer declares victory',
+      (GestureTester tester) {
     final WinningGestureRecognizer winner = WinningGestureRecognizer();
     winner.addPointer(down1);
     serial.addPointer(down1);
@@ -222,7 +227,8 @@ void main() {
     expect(events, <String>['down#1', 'cancel#1']);
   });
 
-  testGesture('Wins over double-tap recognizer below it in the tree', (GestureTester tester) {
+  testGesture('Wins over double-tap recognizer below it in the tree',
+      (GestureTester tester) {
     bool recognizedDoubleTap = false;
     final DoubleTapGestureRecognizer doubleTap = DoubleTapGestureRecognizer()
       ..onDoubleTap = () {
@@ -259,7 +265,8 @@ void main() {
     expect(events, <String>['down#3', 'up#3']);
   });
 
-  testGesture('Wins over double-tap recognizer above it in the tree', (GestureTester tester) {
+  testGesture('Wins over double-tap recognizer above it in the tree',
+      (GestureTester tester) {
     bool recognizedDoubleTap = false;
     final DoubleTapGestureRecognizer doubleTap = DoubleTapGestureRecognizer()
       ..onDoubleTap = () {
@@ -297,7 +304,8 @@ void main() {
     expect(events, <String>['down#3', 'up#3']);
   });
 
-  testGesture('Fires cancel and resets for PointerCancelEvent', (GestureTester tester) {
+  testGesture('Fires cancel and resets for PointerCancelEvent',
+      (GestureTester tester) {
     serial.addPointer(down1);
     tester.closeArena(1);
     tester.route(down1);
@@ -315,7 +323,9 @@ void main() {
     expect(events, <String>['down#1', 'up#1']);
   });
 
-  testGesture('Fires cancel and resets when pointer dragged past slop tolerance', (GestureTester tester) {
+  testGesture(
+      'Fires cancel and resets when pointer dragged past slop tolerance',
+      (GestureTester tester) {
     serial.addPointer(down5);
     tester.closeArena(5);
     tester.route(down5);
@@ -370,7 +380,9 @@ void main() {
     expect(events, <String>['down#1', 'up#1']);
   });
 
-  testGesture('Serial taps with different buttons will start a new tap sequence', (GestureTester tester) {
+  testGesture(
+      'Serial taps with different buttons will start a new tap sequence',
+      (GestureTester tester) {
     serial.addPointer(down1);
     tester.closeArena(1);
     tester.route(down1);
@@ -388,7 +400,9 @@ void main() {
     expect(events, <String>['down#1', 'up#1']);
   });
 
-  testGesture('Interleaving taps cancel first sequence and start second sequence', (GestureTester tester) {
+  testGesture(
+      'Interleaving taps cancel first sequence and start second sequence',
+      (GestureTester tester) {
     serial.addPointer(down1);
     tester.closeArena(1);
     tester.route(down1);

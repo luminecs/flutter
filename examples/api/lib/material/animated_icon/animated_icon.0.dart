@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const AnimatedIconApp());
 }
@@ -30,7 +29,8 @@ class AnimatedIconExample extends StatefulWidget {
 }
 
 // todo-luminecs AnimationController Animation Tween AnimatedIcon SingleTickerProviderStateMixin
-class _AnimatedIconExampleState extends State<AnimatedIconExample> with SingleTickerProviderStateMixin {
+class _AnimatedIconExampleState extends State<AnimatedIconExample>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> animation;
 

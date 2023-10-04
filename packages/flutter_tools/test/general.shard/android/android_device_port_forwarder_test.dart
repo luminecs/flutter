@@ -6,8 +6,9 @@ import '../../src/common.dart';
 import '../../src/fake_process_manager.dart';
 
 void main() {
-  testWithoutContext('AndroidDevicePortForwarder returns the generated host '
-    'port from stdout', () async {
+  testWithoutContext(
+      'AndroidDevicePortForwarder returns the generated host '
+      'port from stdout', () async {
     final AndroidDevicePortForwarder forwarder = AndroidDevicePortForwarder(
       adbPath: 'adb',
       deviceId: '1',
@@ -23,8 +24,9 @@ void main() {
     expect(await forwarder.forward(123), 456);
   });
 
-  testWithoutContext('AndroidDevicePortForwarder returns the supplied host '
-    'port when stdout is empty', () async {
+  testWithoutContext(
+      'AndroidDevicePortForwarder returns the supplied host '
+      'port when stdout is empty', () async {
     final AndroidDevicePortForwarder forwarder = AndroidDevicePortForwarder(
       adbPath: 'adb',
       deviceId: '1',
@@ -39,8 +41,9 @@ void main() {
     expect(await forwarder.forward(123, hostPort: 456), 456);
   });
 
-  testWithoutContext('AndroidDevicePortForwarder returns the supplied host port '
-    'when stdout is the host port', () async {
+  testWithoutContext(
+      'AndroidDevicePortForwarder returns the supplied host port '
+      'when stdout is the host port', () async {
     final AndroidDevicePortForwarder forwarder = AndroidDevicePortForwarder(
       adbPath: 'adb',
       deviceId: '1',
@@ -56,8 +59,9 @@ void main() {
     expect(await forwarder.forward(123, hostPort: 456), 456);
   });
 
-  testWithoutContext('AndroidDevicePortForwarder throws an exception when stdout '
-    'is not blank nor the host port', () async {
+  testWithoutContext(
+      'AndroidDevicePortForwarder throws an exception when stdout '
+      'is not blank nor the host port', () async {
     final AndroidDevicePortForwarder forwarder = AndroidDevicePortForwarder(
       adbPath: 'adb',
       deviceId: '1',
@@ -73,8 +77,9 @@ void main() {
     expect(forwarder.forward(123, hostPort: 456), throwsProcessException());
   });
 
-  testWithoutContext('AndroidDevicePortForwarder forwardedPorts returns empty '
-    'list when forward failed', () {
+  testWithoutContext(
+      'AndroidDevicePortForwarder forwardedPorts returns empty '
+      'list when forward failed', () {
     final AndroidDevicePortForwarder forwarder = AndroidDevicePortForwarder(
       adbPath: 'adb',
       deviceId: '1',
@@ -91,7 +96,8 @@ void main() {
   });
 
   testWithoutContext('disposing device disposes the portForwarder', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>['adb', '-s', '1', 'forward', 'tcp:0', 'tcp:123'],
         stdout: '456',
@@ -118,8 +124,11 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('failures to unforward port do not throw if the forward is missing', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'failures to unforward port do not throw if the forward is missing',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>['adb', '-s', '1', 'forward', '--remove', 'tcp:456'],
         stderr: "error: listener 'tcp:456' not found",
@@ -136,8 +145,10 @@ void main() {
     await forwarder.unforward(ForwardedPort(456, 23));
   });
 
-  testWithoutContext('failures to unforward port print error but are non-fatal', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext('failures to unforward port print error but are non-fatal',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>['adb', '-s', '1', 'forward', '--remove', 'tcp:456'],
         stderr: 'error: everything is broken!',
@@ -154,6 +165,7 @@ void main() {
 
     await forwarder.unforward(ForwardedPort(456, 23));
 
-    expect(logger.errorText, contains('Failed to unforward port: error: everything is broken!'));
+    expect(logger.errorText,
+        contains('Failed to unforward port: error: everything is broken!'));
   });
 }

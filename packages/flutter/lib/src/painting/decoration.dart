@@ -44,18 +44,22 @@ abstract class Decoration with Diagnosticable {
     if (t == 1.0) {
       return b;
     }
-    return b.lerpFrom(a, t)
-        ?? a.lerpTo(b, t)
-        ?? (t < 0.5 ? (a.lerpTo(null, t * 2.0) ?? a) : (b.lerpFrom(null, (t - 0.5) * 2.0) ?? b));
+    return b.lerpFrom(a, t) ??
+        a.lerpTo(b, t) ??
+        (t < 0.5
+            ? (a.lerpTo(null, t * 2.0) ?? a)
+            : (b.lerpFrom(null, (t - 0.5) * 2.0) ?? b));
   }
 
-  bool hitTest(Size size, Offset position, { TextDirection? textDirection }) => true;
+  bool hitTest(Size size, Offset position, {TextDirection? textDirection}) =>
+      true;
 
   @factory
-  BoxPainter createBoxPainter([ VoidCallback onChanged ]);
+  BoxPainter createBoxPainter([VoidCallback onChanged]);
 
   Path getClipPath(Rect rect, TextDirection textDirection) {
-    throw UnsupportedError('${objectRuntimeType(this, 'This Decoration subclass')} does not expect to be used for clipping.');
+    throw UnsupportedError(
+        '${objectRuntimeType(this, 'This Decoration subclass')} does not expect to be used for clipping.');
   }
 }
 
@@ -67,5 +71,5 @@ abstract class BoxPainter {
   final VoidCallback? onChanged;
 
   @mustCallSuper
-  void dispose() { }
+  void dispose() {}
 }

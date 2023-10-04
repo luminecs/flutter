@@ -44,7 +44,6 @@ void runTests() {
       ..status = 404
       ..mockEvent = MockEvent('error', web.Event('test error'));
 
-
     httpRequestFactory = () {
       return testHttpRequest.getMock();
     };

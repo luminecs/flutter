@@ -108,7 +108,9 @@ void main() {
     },
   );
 
-  testWidgets('can change keyboard type', (WidgetTester tester) async {
+  testWidgets(
+    'can change keyboard type',
+    (WidgetTester tester) async {
       await tester.pumpWidget(
         const CupertinoApp(
           home: Center(
@@ -120,7 +122,10 @@ void main() {
       );
       await tester.tap(find.byType(CupertinoSearchTextField));
       await tester.showKeyboard(find.byType(CupertinoSearchTextField));
-      expect((tester.testTextInput.setClientArgs!['inputType'] as Map<String, dynamic>)['name'], equals('TextInputType.number'));
+      expect(
+          (tester.testTextInput.setClientArgs!['inputType']
+              as Map<String, dynamic>)['name'],
+          equals('TextInputType.number'));
     },
   );
 
@@ -162,7 +167,8 @@ void main() {
     );
 
     Text placeholder = tester.widget(find.text('Search'));
-    expect(placeholder.style!.color!.value, CupertinoColors.systemGrey.darkColor.value);
+    expect(placeholder.style!.color!.value,
+        CupertinoColors.systemGrey.darkColor.value);
 
     await tester.pumpAndSettle();
 
@@ -176,7 +182,8 @@ void main() {
     );
 
     placeholder = tester.widget(find.text('Search'));
-    expect(placeholder.style!.color!.value, CupertinoColors.systemGrey.color.value);
+    expect(placeholder.style!.color!.value,
+        CupertinoColors.systemGrey.color.value);
   });
 
   testWidgets(
@@ -270,32 +277,31 @@ void main() {
   );
 
   testWidgets('prefix widget visibility', (WidgetTester tester) async {
-      const Key prefixIcon = Key('prefix');
+    const Key prefixIcon = Key('prefix');
 
-      await tester.pumpWidget(
-        const CupertinoApp(
-          home: Center(
-            child: CupertinoSearchTextField(
-              prefixIcon: SizedBox(
-                key: prefixIcon,
-                width: 50,
-                height: 50,
-              ),
+    await tester.pumpWidget(
+      const CupertinoApp(
+        home: Center(
+          child: CupertinoSearchTextField(
+            prefixIcon: SizedBox(
+              key: prefixIcon,
+              width: 50,
+              height: 50,
             ),
           ),
         ),
-      );
+      ),
+    );
 
-      expect(find.byIcon(CupertinoIcons.search), findsNothing);
-      expect(find.byKey(prefixIcon), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.search), findsNothing);
+    expect(find.byKey(prefixIcon), findsOneWidget);
 
-      await tester.enterText(
-          find.byType(CupertinoSearchTextField), 'text input');
-      await tester.pump();
+    await tester.enterText(find.byType(CupertinoSearchTextField), 'text input');
+    await tester.pump();
 
-      expect(find.text('text input'), findsOneWidget);
-      expect(find.byIcon(CupertinoIcons.search), findsNothing);
-      expect(find.byKey(prefixIcon), findsOneWidget);
+    expect(find.text('text input'), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.search), findsNothing);
+    expect(find.byKey(prefixIcon), findsOneWidget);
   });
 
   testWidgets(
@@ -313,7 +319,8 @@ void main() {
 
       expect(find.byIcon(CupertinoIcons.xmark_circle_fill), findsOneWidget);
 
-      await tester.enterText(find.byType(CupertinoSearchTextField), 'text input');
+      await tester.enterText(
+          find.byType(CupertinoSearchTextField), 'text input');
       await tester.pump();
 
       expect(find.text('text input'), findsOneWidget);
@@ -338,7 +345,8 @@ void main() {
 
       expect(find.byIcon(CupertinoIcons.xmark_circle_fill), findsNothing);
 
-      await tester.enterText(find.byType(CupertinoSearchTextField), 'text input');
+      await tester.enterText(
+          find.byType(CupertinoSearchTextField), 'text input');
       await tester.pump();
 
       expect(find.byIcon(CupertinoIcons.xmark_circle_fill), findsOneWidget);
@@ -480,7 +488,8 @@ void main() {
   testWidgets(
     'custom suffix onTap overrides default clearing behavior',
     (WidgetTester tester) async {
-      final TextEditingController controller = TextEditingController(text: 'Text');
+      final TextEditingController controller =
+          TextEditingController(text: 'Text');
       await tester.pumpWidget(
         CupertinoApp(
           home: Center(
@@ -502,7 +511,8 @@ void main() {
     },
   );
 
-  testWidgets('onTap is properly forwarded to the inner text field', (WidgetTester tester) async {
+  testWidgets('onTap is properly forwarded to the inner text field',
+      (WidgetTester tester) async {
     int onTapCallCount = 0;
 
     // onTap can be null.
@@ -532,7 +542,8 @@ void main() {
     expect(onTapCallCount, 1);
   });
 
-  testWidgets('autocorrect is properly forwarded to the inner text field', (WidgetTester tester) async {
+  testWidgets('autocorrect is properly forwarded to the inner text field',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoApp(
         home: Center(
@@ -543,11 +554,13 @@ void main() {
       ),
     );
 
-    final CupertinoTextField textField = tester.widget(find.byType(CupertinoTextField));
+    final CupertinoTextField textField =
+        tester.widget(find.byType(CupertinoTextField));
     expect(textField.autocorrect, false);
   });
 
-  testWidgets('enabled is properly forwarded to the inner text field', (WidgetTester tester) async {
+  testWidgets('enabled is properly forwarded to the inner text field',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoApp(
         home: Center(
@@ -558,11 +571,13 @@ void main() {
       ),
     );
 
-    final CupertinoTextField textField = tester.widget(find.byType(CupertinoTextField));
+    final CupertinoTextField textField =
+        tester.widget(find.byType(CupertinoTextField));
     expect(textField.enabled, false);
   });
 
-  testWidgets('textInputAction is set to TextInputAction.search by default', (WidgetTester tester) async {
+  testWidgets('textInputAction is set to TextInputAction.search by default',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoApp(
         home: Center(
@@ -571,11 +586,13 @@ void main() {
       ),
     );
 
-    final CupertinoTextField textField = tester.widget(find.byType(CupertinoTextField));
+    final CupertinoTextField textField =
+        tester.widget(find.byType(CupertinoTextField));
     expect(textField.textInputAction, TextInputAction.search);
   });
 
-  testWidgets('autofocus:true gives focus to the widget', (WidgetTester tester) async {
+  testWidgets('autofocus:true gives focus to the widget',
+      (WidgetTester tester) async {
     final FocusNode focusNode = FocusNode();
     await tester.pumpWidget(
       CupertinoApp(
@@ -591,7 +608,8 @@ void main() {
     expect(focusNode.hasFocus, isTrue);
   });
 
-  testWidgets('smartQuotesType is properly forwarded to the inner text field', (WidgetTester tester) async {
+  testWidgets('smartQuotesType is properly forwarded to the inner text field',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoApp(
         home: Center(
@@ -602,11 +620,13 @@ void main() {
       ),
     );
 
-    final CupertinoTextField textField = tester.widget(find.byType(CupertinoTextField));
+    final CupertinoTextField textField =
+        tester.widget(find.byType(CupertinoTextField));
     expect(textField.smartQuotesType, SmartQuotesType.disabled);
   });
 
-  testWidgets('smartDashesType is properly forwarded to the inner text field', (WidgetTester tester) async {
+  testWidgets('smartDashesType is properly forwarded to the inner text field',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoApp(
         home: Center(
@@ -617,11 +637,14 @@ void main() {
       ),
     );
 
-    final CupertinoTextField textField = tester.widget(find.byType(CupertinoTextField));
+    final CupertinoTextField textField =
+        tester.widget(find.byType(CupertinoTextField));
     expect(textField.smartDashesType, SmartDashesType.disabled);
   });
 
-  testWidgets('enableIMEPersonalizedLearning is properly forwarded to the inner text field', (WidgetTester tester) async {
+  testWidgets(
+      'enableIMEPersonalizedLearning is properly forwarded to the inner text field',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const CupertinoApp(
         home: Center(
@@ -632,7 +655,8 @@ void main() {
       ),
     );
 
-    final CupertinoTextField textField = tester.widget(find.byType(CupertinoTextField));
+    final CupertinoTextField textField =
+        tester.widget(find.byType(CupertinoTextField));
     expect(textField.enableIMEPersonalizedLearning, false);
   });
 }

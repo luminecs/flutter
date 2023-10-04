@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-
   // Helpers
   final Widget sliverBox = SliverToBoxAdapter(
     child: Container(
@@ -16,11 +15,11 @@ void main() {
   );
   Widget boilerplate(
     List<Widget> slivers, {
-      ScrollController? controller,
-      Axis scrollDirection = Axis.vertical,
-    }) {
+    ScrollController? controller,
+    Axis scrollDirection = Axis.vertical,
+  }) {
     return MaterialApp(
-      theme:  ThemeData(
+      theme: ThemeData(
         useMaterial3: false,
         materialTapTargetSize: MaterialTapTargetSize.padded,
       ),
@@ -119,7 +118,8 @@ void main() {
         );
       });
 
-      testWidgetsWithLeakTracking('scrolls beyond viewportMainAxisExtent', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('scrolls beyond viewportMainAxisExtent',
+          (WidgetTester tester) async {
         final ScrollController controller = ScrollController();
         addTearDown(controller.dispose);
         final List<Widget> slivers = <Widget>[
@@ -139,7 +139,8 @@ void main() {
     });
 
     group('hasScrollBody: false', () {
-      testWidgetsWithLeakTracking('does not extend past viewportMainAxisExtent', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('does not extend past viewportMainAxisExtent',
+          (WidgetTester tester) async {
         final ScrollController controller = ScrollController();
         addTearDown(controller.dispose);
         final List<Widget> slivers = <Widget>[
@@ -159,7 +160,8 @@ void main() {
         expect(find.byType(Container), findsNWidgets(2));
       });
 
-      testWidgetsWithLeakTracking('child without size is sized by extent', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('child without size is sized by extent',
+          (WidgetTester tester) async {
         final List<Widget> slivers = <Widget>[
           sliverBox,
           SliverFillRemaining(
@@ -169,7 +171,8 @@ void main() {
         ];
 
         await tester.pumpWidget(boilerplate(slivers));
-        RenderBox box = tester.renderObject<RenderBox>(find.byType(Container).last);
+        RenderBox box =
+            tester.renderObject<RenderBox>(find.byType(Container).last);
         expect(box.size.height, equals(450));
 
         await tester.pumpWidget(boilerplate(
@@ -180,7 +183,8 @@ void main() {
         expect(box.size.width, equals(650));
       });
 
-      testWidgetsWithLeakTracking('child with smaller size is sized by extent', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('child with smaller size is sized by extent',
+          (WidgetTester tester) async {
         final GlobalKey key = GlobalKey();
         final List<Widget> slivers = <Widget>[
           sliverBox,
@@ -221,7 +225,9 @@ void main() {
         );
       });
 
-      testWidgetsWithLeakTracking('extent is overridden by child with larger size', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking(
+          'extent is overridden by child with larger size',
+          (WidgetTester tester) async {
         final List<Widget> slivers = <Widget>[
           sliverBox,
           SliverFillRemaining(
@@ -234,7 +240,8 @@ void main() {
           ),
         ];
         await tester.pumpWidget(boilerplate(slivers));
-        RenderBox box = tester.renderObject<RenderBox>(find.byType(Container).last);
+        RenderBox box =
+            tester.renderObject<RenderBox>(find.byType(Container).last);
         expect(box.size.height, equals(600));
 
         await tester.pumpWidget(boilerplate(
@@ -245,13 +252,16 @@ void main() {
         expect(box.size.width, equals(1000));
       });
 
-      testWidgetsWithLeakTracking('extent is overridden by child size if precedingScrollExtent > viewportMainAxisExtent', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking(
+          'extent is overridden by child size if precedingScrollExtent > viewportMainAxisExtent',
+          (WidgetTester tester) async {
         final GlobalKey key = GlobalKey();
         final List<Widget> slivers = <Widget>[
           SliverFixedExtentList(
             itemExtent: 150,
             delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) => Container(color: Colors.amber),
+              (BuildContext context, int index) =>
+                  Container(color: Colors.amber),
               childCount: 5,
             ),
           ),
@@ -286,7 +296,8 @@ void main() {
         expect(tester.getCenter(button).dx, equals(400.0));
       });
 
-      testWidgetsWithLeakTracking('alignment with a flexible works', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('alignment with a flexible works',
+          (WidgetTester tester) async {
         final GlobalKey key = GlobalKey();
         final List<Widget> slivers = <Widget>[
           sliverBox,
@@ -321,14 +332,16 @@ void main() {
           const Size(100.0, 100.0),
         );
         final VisualDensity density = VisualDensity.adaptivePlatformDensity;
-        expect(tester.getCenter(logo), Offset(400.0, 351.0 - density.vertical * 2.0));
+        expect(tester.getCenter(logo),
+            Offset(400.0, 351.0 - density.vertical * 2.0));
 
         // Also check that the button alignment is true to expectations
         // Buttons do not decrease their horizontal padding per the VisualDensity.
         final Finder button = find.byType(ElevatedButton);
         expect(
           tester.renderObject<RenderBox>(button).size,
-          Size(116.0 + math.max(0, density.horizontal) * 8.0, 48.0 + density.vertical * 4.0),
+          Size(116.0 + math.max(0, density.horizontal) * 8.0,
+              48.0 + density.vertical * 4.0),
         );
         expect(tester.getBottomLeft(button).dy, equals(600.0));
         expect(tester.getCenter(button).dx, equals(400.0));
@@ -348,14 +361,19 @@ void main() {
         expect(
           tester.renderObject<RenderBox>(button).size,
           // Buttons do not decrease their horizontal padding per the VisualDensity.
-          Size(116.0 + math.max(0, density.horizontal) * 8.0, 48.0 + density.vertical * 4.0),
+          Size(116.0 + math.max(0, density.horizontal) * 8.0,
+              48.0 + density.vertical * 4.0),
         );
         expect(tester.getBottomLeft(button).dy, lessThan(600.0));
         expect(tester.getCenter(button).dx, equals(400.0));
-      }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS, TargetPlatform.macOS }));
+      },
+          variant: const TargetPlatformVariant(
+              <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
 
       group('fillOverscroll: true, relevant platforms', () {
-        testWidgetsWithLeakTracking('child without size is sized by extent and overscroll', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'child without size is sized by extent and overscroll',
+            (WidgetTester tester) async {
           final List<Widget> slivers = <Widget>[
             sliverBox,
             SliverFillRemaining(
@@ -367,22 +385,29 @@ void main() {
 
           // Check size
           await tester.pumpWidget(boilerplate(slivers));
-          final RenderBox box1 = tester.renderObject<RenderBox>(find.byType(Container).last);
+          final RenderBox box1 =
+              tester.renderObject<RenderBox>(find.byType(Container).last);
           expect(box1.size.height, equals(450));
 
           // Overscroll and check size
           await tester.drag(find.byType(Scrollable), const Offset(0.0, -50.0));
           await tester.pump();
-          final RenderBox box2 = tester.renderObject<RenderBox>(find.byType(Container).last);
+          final RenderBox box2 =
+              tester.renderObject<RenderBox>(find.byType(Container).last);
           expect(box2.size.height, greaterThan(450));
 
           // Ensure overscroll retracts to original size after releasing gesture
           await tester.pumpAndSettle();
-          final RenderBox box3 = tester.renderObject<RenderBox>(find.byType(Container).last);
+          final RenderBox box3 =
+              tester.renderObject<RenderBox>(find.byType(Container).last);
           expect(box3.size.height, equals(450));
-    }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS,  TargetPlatform.macOS }));
+        },
+            variant: const TargetPlatformVariant(
+                <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
 
-        testWidgetsWithLeakTracking('child with smaller size is overridden and sized by extent and overscroll', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'child with smaller size is overridden and sized by extent and overscroll',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final List<Widget> slivers = <Widget>[
             sliverBox,
@@ -427,9 +452,13 @@ void main() {
             tester.renderObject<RenderBox>(find.byKey(key)).size.height,
             equals(450),
           );
-        }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS,  TargetPlatform.macOS }));
+        },
+            variant: const TargetPlatformVariant(
+                <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
 
-        testWidgetsWithLeakTracking('extent is overridden by child size and overscroll if precedingScrollExtent > viewportMainAxisExtent', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'extent is overridden by child size and overscroll if precedingScrollExtent > viewportMainAxisExtent',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final ScrollController controller = ScrollController();
           addTearDown(controller.dispose);
@@ -437,8 +466,8 @@ void main() {
             SliverFixedExtentList(
               itemExtent: 150,
               delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) =>
-                  Container(color: Colors.amber),
+                (BuildContext context, int index) =>
+                    Container(color: Colors.amber),
                 childCount: 5,
               ),
             ),
@@ -467,7 +496,8 @@ void main() {
           await tester.pump();
           expect(
             tester.renderObject<RenderBox>(find.byKey(key)).size.height,
-            equals(148.0 + VisualDensity.adaptivePlatformDensity.vertical * 4.0),
+            equals(
+                148.0 + VisualDensity.adaptivePlatformDensity.vertical * 4.0),
           );
           // Check that the button alignment is true to expectations
           final Finder button = find.byType(ElevatedButton);
@@ -490,11 +520,16 @@ void main() {
           await tester.pumpAndSettle();
           expect(
             tester.renderObject<RenderBox>(find.byKey(key)).size.height,
-            equals(148.0 + VisualDensity.adaptivePlatformDensity.vertical * 4.0),
+            equals(
+                148.0 + VisualDensity.adaptivePlatformDensity.vertical * 4.0),
           );
-        }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS,  TargetPlatform.macOS }));
+        },
+            variant: const TargetPlatformVariant(
+                <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
 
-        testWidgetsWithLeakTracking('fillOverscroll works when child has no size and precedingScrollExtent > viewportMainAxisExtent', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'fillOverscroll works when child has no size and precedingScrollExtent > viewportMainAxisExtent',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final ScrollController controller = ScrollController();
           addTearDown(controller.dispose);
@@ -503,7 +538,9 @@ void main() {
               itemExtent: 150,
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return Semantics(label: index.toString(), child: Container(color: Colors.amber));
+                  return Semantics(
+                      label: index.toString(),
+                      child: Container(color: Colors.amber));
                 },
                 childCount: 5,
               ),
@@ -555,9 +592,13 @@ void main() {
             find.bySemanticsLabel('4'),
             findsOneWidget,
           );
-        }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS,  TargetPlatform.macOS }));
+        },
+            variant: const TargetPlatformVariant(
+                <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
 
-        testWidgetsWithLeakTracking('alignment with a flexible works with fillOverscroll', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'alignment with a flexible works with fillOverscroll',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final List<Widget> slivers = <Widget>[
             sliverBox,
@@ -593,14 +634,16 @@ void main() {
             const Size(100.0, 100.0),
           );
           final VisualDensity density = VisualDensity.adaptivePlatformDensity;
-          expect(tester.getCenter(logo), Offset(400.0, 351.0 - density.vertical * 2.0));
+          expect(tester.getCenter(logo),
+              Offset(400.0, 351.0 - density.vertical * 2.0));
 
           // Also check that the button alignment is true to expectations.
           // Buttons do not decrease their horizontal padding per the VisualDensity.
           final Finder button = find.byType(ElevatedButton);
           expect(
             tester.renderObject<RenderBox>(button).size,
-            Size(116.0 + math.max(0, density.horizontal) * 8.0, 48.0 + density.vertical * 4.0),
+            Size(116.0 + math.max(0, density.horizontal) * 8.0,
+                48.0 + density.vertical * 4.0),
           );
           expect(tester.getBottomLeft(button).dy, equals(600.0));
           expect(tester.getCenter(button).dx, equals(400.0));
@@ -622,7 +665,8 @@ void main() {
           expect(
             tester.renderObject<RenderBox>(button).size,
             // Buttons do not decrease their horizontal padding per the VisualDensity.
-            Size(116.0 + math.max(0, density.horizontal) * 8.0, 48.0 + density.vertical * 4.0),
+            Size(116.0 + math.max(0, density.horizontal) * 8.0,
+                48.0 + density.vertical * 4.0),
           );
           expect(tester.getBottomLeft(button).dy, equals(600.0));
           expect(tester.getCenter(button).dx, equals(400.0));
@@ -638,20 +682,25 @@ void main() {
             tester.renderObject<RenderBox>(logo).size,
             const Size(100.0, 100.0),
           );
-          expect(tester.getCenter(logo), Offset(400.0, 351.0 - density.vertical * 2.0));
+          expect(tester.getCenter(logo),
+              Offset(400.0, 351.0 - density.vertical * 2.0));
           expect(
             tester.renderObject<RenderBox>(button).size,
             // Buttons do not decrease their horizontal padding per the VisualDensity.
-            Size(116.0 + math.max(0, density.horizontal) * 8.0, 48.0 + density.vertical * 4.0),
+            Size(116.0 + math.max(0, density.horizontal) * 8.0,
+                48.0 + density.vertical * 4.0),
           );
           expect(tester.getBottomLeft(button).dy, equals(600.0));
           expect(tester.getCenter(button).dx, equals(400.0));
-        }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.iOS,  TargetPlatform.macOS }));
+        },
+            variant: const TargetPlatformVariant(
+                <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.macOS}));
       });
 
       group('fillOverscroll: true, is ignored on irrelevant platforms', () {
         // Android/Other scroll physics when hasScrollBody: false, ignores fillOverscroll: true
-        testWidgetsWithLeakTracking('child without size is sized by extent', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking('child without size is sized by extent',
+            (WidgetTester tester) async {
           final List<Widget> slivers = <Widget>[
             sliverBox,
             SliverFillRemaining(
@@ -661,16 +710,20 @@ void main() {
             ),
           ];
           await tester.pumpWidget(boilerplate(slivers));
-          final RenderBox box1 = tester.renderObject<RenderBox>(find.byType(Container).last);
+          final RenderBox box1 =
+              tester.renderObject<RenderBox>(find.byType(Container).last);
           expect(box1.size.height, equals(450));
 
           await tester.drag(find.byType(Scrollable), const Offset(0.0, -50.0));
           await tester.pump();
-          final RenderBox box2 = tester.renderObject<RenderBox>(find.byType(Container).last);
+          final RenderBox box2 =
+              tester.renderObject<RenderBox>(find.byType(Container).last);
           expect(box2.size.height, equals(450));
         });
 
-        testWidgetsWithLeakTracking('child with size is overridden and sized by extent', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'child with size is overridden and sized by extent',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final List<Widget> slivers = <Widget>[
             sliverBox,
@@ -709,7 +762,9 @@ void main() {
           expect(tester.getCenter(button).dx, equals(400.0));
         });
 
-        testWidgetsWithLeakTracking('extent is overridden by child size if precedingScrollExtent > viewportMainAxisExtent', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'extent is overridden by child size if precedingScrollExtent > viewportMainAxisExtent',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final ScrollController controller = ScrollController();
           addTearDown(controller.dispose);
@@ -717,8 +772,8 @@ void main() {
             SliverFixedExtentList(
               itemExtent: 150,
               delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) =>
-                  Container(color: Colors.amber),
+                (BuildContext context, int index) =>
+                    Container(color: Colors.amber),
                 childCount: 5,
               ),
             ),
@@ -767,7 +822,9 @@ void main() {
           expect(tester.getCenter(button).dx, equals(400.0));
         });
 
-        testWidgetsWithLeakTracking('child has no size and precedingScrollExtent > viewportMainAxisExtent', (WidgetTester tester) async {
+        testWidgetsWithLeakTracking(
+            'child has no size and precedingScrollExtent > viewportMainAxisExtent',
+            (WidgetTester tester) async {
           final GlobalKey key = GlobalKey();
           final ScrollController controller = ScrollController();
           addTearDown(controller.dispose);
@@ -776,7 +833,9 @@ void main() {
               itemExtent: 150,
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return Semantics(label: index.toString(), child: Container(color: Colors.amber));
+                  return Semantics(
+                      label: index.toString(),
+                      child: Container(color: Colors.amber));
                 },
                 childCount: 5,
               ),

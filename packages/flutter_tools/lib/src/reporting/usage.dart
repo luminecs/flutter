@@ -22,9 +22,11 @@ abstract class Usage {
         firstRunMessenger: firstRunMessenger,
       );
 
-  static void command(String command, {
+  static void command(
+    String command, {
     CustomDimensions? parameters,
-  }) => globals.flutterUsage.sendCommand(command, parameters: parameters);
+  }) =>
+      globals.flutterUsage.sendCommand(command, parameters: parameters);
 
   bool get suppressAnalytics;
 
@@ -112,27 +114,31 @@ class _DefaultUsage implements Usage {
     required bool runningOnBot,
   }) {
     final FlutterVersion flutterVersion = globals.flutterVersion;
-    final String version = versionOverride ?? flutterVersion.getVersionString(redactUnknownBranches: true);
-    final bool suppressEnvFlag = globals.platform.environment['FLUTTER_SUPPRESS_ANALYTICS'] == 'true';
-    final String? logFilePath = logFile ?? globals.platform.environment['FLUTTER_ANALYTICS_LOG_FILE'];
+    final String version = versionOverride ??
+        flutterVersion.getVersionString(redactUnknownBranches: true);
+    final bool suppressEnvFlag =
+        globals.platform.environment['FLUTTER_SUPPRESS_ANALYTICS'] == 'true';
+    final String? logFilePath =
+        logFile ?? globals.platform.environment['FLUTTER_ANALYTICS_LOG_FILE'];
     final bool usingLogFile = logFilePath != null && logFilePath.isNotEmpty;
 
-    final AnalyticsFactory analyticsFactory = analyticsIOFactory ?? _defaultAnalyticsIOFactory;
+    final AnalyticsFactory analyticsFactory =
+        analyticsIOFactory ?? _defaultAnalyticsIOFactory;
     bool suppressAnalytics = false;
     bool skipAnalyticsSessionSetup = false;
     Analytics? setupAnalytics;
-    if (// To support testing, only allow other signals to suppress analytics
+    if ( // To support testing, only allow other signals to suppress analytics
         // when analytics are not being shunted to a file.
-        !usingLogFile && (
-        // Ignore local user branches.
-        version.startsWith('[user-branch]') ||
-        // Many CI systems don't do a full git checkout.
-        version.endsWith('/unknown') ||
-        // Ignore bots.
-        runningOnBot ||
-        // Ignore when suppressed by FLUTTER_SUPPRESS_ANALYTICS.
-        suppressEnvFlag
-    )) {
+        !usingLogFile &&
+            (
+                // Ignore local user branches.
+                version.startsWith('[user-branch]') ||
+                    // Many CI systems don't do a full git checkout.
+                    version.endsWith('/unknown') ||
+                    // Ignore bots.
+                    runningOnBot ||
+                    // Ignore when suppressed by FLUTTER_SUPPRESS_ANALYTICS.
+                    suppressEnvFlag)) {
       // If we think we're running on a CI system, suppress sending analytics.
       suppressAnalytics = true;
       setupAnalytics = AnalyticsMock();
@@ -176,9 +182,10 @@ class _DefaultUsage implements Usage {
       // separated list.
       final String enabledFeatures = allFeatures
           .where((Feature feature) {
-        final String? configSetting = feature.configSetting;
-        return configSetting != null && globals.config.getValue(configSetting) == true;
-      })
+            final String? configSetting = feature.configSetting;
+            return configSetting != null &&
+                globals.config.getValue(configSetting) == true;
+          })
           .map((Feature feature) => feature.configSetting)
           .join(',');
       analytics.setSessionValue(
@@ -188,7 +195,8 @@ class _DefaultUsage implements Usage {
 
       // Record the host as the application installer ID - the context that flutter_tools is running in.
       if (globals.platform.environment.containsKey('FLUTTER_HOST')) {
-        analytics.setSessionValue('aiid', globals.platform.environment['FLUTTER_HOST']);
+        analytics.setSessionValue(
+            'aiid', globals.platform.environment['FLUTTER_HOST']);
       }
       analytics.analyticsOpt = AnalyticsOpt.optOut;
     }
@@ -228,7 +236,7 @@ class _DefaultUsage implements Usage {
   String get clientId => _analytics.clientId;
 
   @override
-  void sendCommand(String command, { CustomDimensions? parameters }) {
+  void sendCommand(String command, {CustomDimensions? parameters}) {
     if (suppressAnalytics) {
       return;
     }
@@ -298,7 +306,8 @@ class _DefaultUsage implements Usage {
     // TODO(devoncarew): This may delay tool exit and could cause some analytics
     // events to not be reported. Perhaps we could send the analytics pings
     // out-of-process from flutter_tools?
-    await _analytics.waitForLastPing(timeout: const Duration(milliseconds: 250));
+    await _analytics.waitForLastPing(
+        timeout: const Duration(milliseconds: 250));
   }
 
   @override
@@ -323,21 +332,22 @@ class _DefaultUsage implements Usage {
 // But stdout can't be used for testing since wrapper scripts like
 // xcode_backend.sh etc manipulates them.
 class LogToFileAnalytics extends AnalyticsMock {
-  LogToFileAnalytics(String logFilePath) :
-    logFile = globals.fs.file(logFilePath)..createSync(recursive: true),
-    super(true);
+  LogToFileAnalytics(String logFilePath)
+      : logFile = globals.fs.file(logFilePath)..createSync(recursive: true),
+        super(true);
 
   final File logFile;
   final Map<String, String> _sessionValues = <String, String>{};
 
   final StreamController<Map<String, dynamic>> _sendController =
-        StreamController<Map<String, dynamic>>.broadcast(sync: true);
+      StreamController<Map<String, dynamic>>.broadcast(sync: true);
 
   @override
   Stream<Map<String, dynamic>> get onSend => _sendController.stream;
 
   @override
-  Future<void> sendScreenView(String viewName, {
+  Future<void> sendScreenView(
+    String viewName, {
     Map<String, String>? parameters,
   }) {
     if (!enabled) {
@@ -347,7 +357,8 @@ class LogToFileAnalytics extends AnalyticsMock {
     parameters['viewName'] = viewName;
     parameters.addAll(_sessionValues);
     _sendController.add(parameters);
-    logFile.writeAsStringSync('screenView $parameters\n', mode: FileMode.append);
+    logFile.writeAsStringSync('screenView $parameters\n',
+        mode: FileMode.append);
     return Future<void>.value();
   }
 
@@ -388,7 +399,6 @@ class LogToFileAnalytics extends AnalyticsMock {
   }
 }
 
-
 @visibleForTesting
 class TestUsage implements Usage {
   final List<TestUsageCommand> commands = <TestUsageCommand>[];
@@ -415,7 +425,7 @@ class TestUsage implements Usage {
   Stream<Map<String, dynamic>> get onSend => throw UnimplementedError();
 
   @override
-  void printWelcome() { }
+  void printWelcome() {}
 
   @override
   void sendCommand(String command, {CustomDimensions? parameters}) {
@@ -423,8 +433,10 @@ class TestUsage implements Usage {
   }
 
   @override
-  void sendEvent(String category, String parameter, {String? label, int? value, CustomDimensions? parameters}) {
-    events.add(TestUsageEvent(category, parameter, label: label, value: value, parameters: parameters));
+  void sendEvent(String category, String parameter,
+      {String? label, int? value, CustomDimensions? parameters}) {
+    events.add(TestUsageEvent(category, parameter,
+        label: label, value: value, parameters: parameters));
   }
 
   @override
@@ -433,8 +445,10 @@ class TestUsage implements Usage {
   }
 
   @override
-  void sendTiming(String category, String variableName, Duration duration, {String? label}) {
-    timings.add(TestTimingEvent(category, variableName, duration, label: label));
+  void sendTiming(String category, String variableName, Duration duration,
+      {String? label}) {
+    timings
+        .add(TestTimingEvent(category, variableName, duration, label: label));
   }
 }
 
@@ -449,8 +463,8 @@ class TestUsageCommand {
   @override
   bool operator ==(Object other) {
     return other is TestUsageCommand &&
-      other.command == command &&
-      other.parameters == parameters;
+        other.command == command &&
+        other.parameters == parameters;
   }
 
   @override
@@ -463,7 +477,8 @@ class TestUsageCommand {
 @visibleForTesting
 @immutable
 class TestUsageEvent {
-  const TestUsageEvent(this.category, this.parameter, {this.label, this.value, this.parameters});
+  const TestUsageEvent(this.category, this.parameter,
+      {this.label, this.value, this.parameters});
 
   final String category;
   final String parameter;
@@ -474,24 +489,27 @@ class TestUsageEvent {
   @override
   bool operator ==(Object other) {
     return other is TestUsageEvent &&
-      other.category == category &&
-      other.parameter == parameter &&
-      other.label == label &&
-      other.value == value &&
-      other.parameters == parameters;
+        other.category == category &&
+        other.parameter == parameter &&
+        other.label == label &&
+        other.value == value &&
+        other.parameters == parameters;
   }
 
   @override
-  int get hashCode => Object.hash(category, parameter, label, value, parameters);
+  int get hashCode =>
+      Object.hash(category, parameter, label, value, parameters);
 
   @override
-  String toString() => 'TestUsageEvent($category, $parameter, label:$label, value:$value, parameters:$parameters)';
+  String toString() =>
+      'TestUsageEvent($category, $parameter, label:$label, value:$value, parameters:$parameters)';
 }
 
 @visibleForTesting
 @immutable
 class TestTimingEvent {
-  const TestTimingEvent(this.category, this.variableName, this.duration, {this.label});
+  const TestTimingEvent(this.category, this.variableName, this.duration,
+      {this.label});
 
   final String category;
   final String variableName;
@@ -501,17 +519,18 @@ class TestTimingEvent {
   @override
   bool operator ==(Object other) {
     return other is TestTimingEvent &&
-      other.category == category &&
-      other.variableName == variableName &&
-      other.duration == duration &&
-      other.label == label;
+        other.category == category &&
+        other.variableName == variableName &&
+        other.duration == duration &&
+        other.label == label;
   }
 
   @override
   int get hashCode => Object.hash(category, variableName, duration, label);
 
   @override
-  String toString() => 'TestTimingEvent($category, $variableName, $duration, label:$label)';
+  String toString() =>
+      'TestTimingEvent($category, $variableName, $duration, label:$label)';
 }
 
 bool _mapsEqual(Map<dynamic, dynamic>? a, Map<dynamic, dynamic>? b) {

@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import 'framework.dart';
 
-typedef ValueWidgetBuilder<T> = Widget Function(BuildContext context, T value, Widget? child);
+typedef ValueWidgetBuilder<T> = Widget Function(
+    BuildContext context, T value, Widget? child);
 
 class ValueListenableBuilder<T> extends StatefulWidget {
   const ValueListenableBuilder({
@@ -49,7 +50,9 @@ class _ValueListenableBuilderState<T> extends State<ValueListenableBuilder<T>> {
   }
 
   void _valueChanged() {
-    setState(() { value = widget.valueListenable.value; });
+    setState(() {
+      value = widget.valueListenable.value;
+    });
   }
 
   @override

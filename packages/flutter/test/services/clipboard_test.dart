@@ -6,7 +6,9 @@ import '../widgets/clipboard_utils.dart';
 void main() {
   final MockClipboard mockClipboard = MockClipboard();
   TestWidgetsFlutterBinding.ensureInitialized()
-    .defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, mockClipboard.handleMethodCall);
+      .defaultBinaryMessenger
+      .setMockMethodCallHandler(
+          SystemChannels.platform, mockClipboard.handleMethodCall);
 
   test('Clipboard.getData returns text', () async {
     mockClipboard.clipboardData = <String, dynamic>{
@@ -30,7 +32,8 @@ void main() {
   test('Clipboard.getData throws if text is missing', () async {
     mockClipboard.clipboardData = <String, dynamic>{};
 
-    expect(() => Clipboard.getData(Clipboard.kTextPlain), throwsA(isA<TypeError>()));
+    expect(() => Clipboard.getData(Clipboard.kTextPlain),
+        throwsA(isA<TypeError>()));
   });
 
   test('Clipboard.getData throws if text is null', () async {
@@ -38,7 +41,8 @@ void main() {
       'text': null,
     };
 
-    expect(() => Clipboard.getData(Clipboard.kTextPlain), throwsA(isA<TypeError>()));
+    expect(() => Clipboard.getData(Clipboard.kTextPlain),
+        throwsA(isA<TypeError>()));
   });
 
   test('Clipboard.setData sets text', () async {

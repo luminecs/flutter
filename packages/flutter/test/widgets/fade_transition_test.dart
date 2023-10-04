@@ -7,7 +7,7 @@ void main() {
   testWidgetsWithLeakTracking('FadeTransition', (WidgetTester tester) async {
     final DebugPrintCallback oldPrint = debugPrint;
     final List<String> log = <String>[];
-    debugPrint = (String? message, { int? wrapWidth }) {
+    debugPrint = (String? message, {int? wrapWidth}) {
       log.add(message!);
     };
     debugPrintBuildScope = true;

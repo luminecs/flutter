@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const CustomScrollViewExampleApp());
 
 class CustomScrollViewExampleApp extends StatelessWidget {
@@ -18,7 +17,8 @@ class CustomScrollViewExample extends StatefulWidget {
   const CustomScrollViewExample({super.key});
 
   @override
-  State<CustomScrollViewExample> createState() => _CustomScrollViewExampleState();
+  State<CustomScrollViewExample> createState() =>
+      _CustomScrollViewExampleState();
 }
 
 class _CustomScrollViewExampleState extends State<CustomScrollViewExample> {

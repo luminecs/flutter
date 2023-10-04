@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const FadeTransitionExampleApp());
 
 class FadeTransitionExampleApp extends StatelessWidget {
@@ -21,7 +20,8 @@ class FadeTransitionExample extends StatefulWidget {
   State<FadeTransitionExample> createState() => _FadeTransitionExampleState();
 }
 
-class _FadeTransitionExampleState extends State<FadeTransitionExample> with TickerProviderStateMixin {
+class _FadeTransitionExampleState extends State<FadeTransitionExample>
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,

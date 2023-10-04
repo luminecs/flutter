@@ -52,10 +52,12 @@ class TwoColumnMaterial3Components extends StatefulWidget {
   const TwoColumnMaterial3Components({super.key});
 
   @override
-  State<TwoColumnMaterial3Components> createState() => _TwoColumnMaterial3ComponentsState();
+  State<TwoColumnMaterial3Components> createState() =>
+      _TwoColumnMaterial3ComponentsState();
 }
 
-class _TwoColumnMaterial3ComponentsState extends State<TwoColumnMaterial3Components> {
+class _TwoColumnMaterial3ComponentsState
+    extends State<TwoColumnMaterial3Components> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -165,15 +167,17 @@ class Communication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ComponentGroupDecoration(label: 'Communication', children: <Widget>[
-      NavigationBars(
-        selectedIndex: 1,
-        isExampleBar: true,
-        isBadgeExample: true,
-      ),
-      ProgressIndicators(),
-      SnackBarSection(),
-    ]);
+    return const ComponentGroupDecoration(
+        label: 'Communication',
+        children: <Widget>[
+          NavigationBars(
+            selectedIndex: 1,
+            isExampleBar: true,
+            isBadgeExample: true,
+          ),
+          ProgressIndicators(),
+          SnackBarSection(),
+        ]);
   }
 }
 
@@ -182,12 +186,14 @@ class Containment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ComponentGroupDecoration(label: 'Containment', children: <Widget>[
-      BottomSheetSection(),
-      Cards(),
-      Dialogs(),
-      Dividers(),
-    ]);
+    return const ComponentGroupDecoration(
+        label: 'Containment',
+        children: <Widget>[
+          BottomSheetSection(),
+          Cards(),
+          Dialogs(),
+          Dividers(),
+        ]);
   }
 }
 
@@ -217,14 +223,16 @@ class Selection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ComponentGroupDecoration(label: 'Selection', children: <Widget>[
-      Checkboxes(),
-      Chips(),
-      Menus(),
-      Radios(),
-      Sliders(),
-      Switches(),
-    ]);
+    return const ComponentGroupDecoration(
+        label: 'Selection',
+        children: <Widget>[
+          Checkboxes(),
+          Chips(),
+          Menus(),
+          Radios(),
+          Sliders(),
+          Switches(),
+        ]);
   }
 }
 
@@ -1336,7 +1344,8 @@ ButtonStyle enabledOutlinedButtonStyle(bool selected, ColorScheme colors) {
         : colors.onSurface.withOpacity(0.12),
     side: BorderSide(color: colors.outline),
   ).copyWith(
-    foregroundColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+    foregroundColor:
+        MaterialStateProperty.resolveWith((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
         return colors.onInverseSurface;
       }
@@ -1736,7 +1745,8 @@ class IconButtonAnchorExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      builder: (BuildContext context, MenuController controller, Widget? child) {
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
         return IconButton(
           onPressed: () {
             if (controller.isOpen) {
@@ -1785,7 +1795,8 @@ class ButtonAnchorExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      builder: (BuildContext context, MenuController controller, Widget? child) {
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
         return FilledButton.tonal(
           onPressed: () {
             if (controller.isOpen) {

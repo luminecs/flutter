@@ -4,7 +4,8 @@ import 'assertions.dart';
 import 'constants.dart';
 import 'diagnostics.dart';
 
-const bool _kMemoryAllocations = bool.fromEnvironment('flutter.memory_allocations');
+const bool _kMemoryAllocations =
+    bool.fromEnvironment('flutter.memory_allocations');
 
 const bool kFlutterMemoryAllocationsEnabled = _kMemoryAllocations || kDebugMode;
 
@@ -16,7 +17,7 @@ class _FieldNames {
   static const String className = 'className';
 }
 
-abstract class ObjectEvent{
+abstract class ObjectEvent {
   ObjectEvent({
     required this.object,
   });
@@ -41,11 +42,13 @@ class ObjectCreated extends ObjectEvent {
 
   @override
   Map<Object, Map<String, Object>> toMap() {
-    return <Object, Map<String, Object>>{object: <String, Object>{
-      _FieldNames.libraryName: library,
-      _FieldNames.className: className,
-      _FieldNames.eventType: 'created',
-    }};
+    return <Object, Map<String, Object>>{
+      object: <String, Object>{
+        _FieldNames.libraryName: library,
+        _FieldNames.className: className,
+        _FieldNames.eventType: 'created',
+      }
+    };
   }
 }
 
@@ -56,9 +59,11 @@ class ObjectDisposed extends ObjectEvent {
 
   @override
   Map<Object, Map<String, Object>> toMap() {
-    return <Object, Map<String, Object>>{object: <String, Object>{
-      _FieldNames.eventType: 'disposed',
-    }};
+    return <Object, Map<String, Object>>{
+      object: <String, Object>{
+        _FieldNames.eventType: 'disposed',
+      }
+    };
   }
 }
 
@@ -69,7 +74,7 @@ class MemoryAllocations {
 
   List<ObjectEventListener?>? _listeners;
 
-  void addListener(ObjectEventListener listener){
+  void addListener(ObjectEventListener listener) {
     if (!kFlutterMemoryAllocationsEnabled) {
       return;
     }
@@ -84,7 +89,7 @@ class MemoryAllocations {
 
   bool _listenersContainNulls = false;
 
-  void removeListener(ObjectEventListener listener){
+  void removeListener(ObjectEventListener listener) {
     if (!kFlutterMemoryAllocationsEnabled) {
       return;
     }
@@ -130,7 +135,8 @@ class MemoryAllocations {
       return false;
     }
     if (_listenersContainNulls) {
-      return _listeners?.firstWhere((ObjectEventListener? l) => l != null) != null;
+      return _listeners?.firstWhere((ObjectEventListener? l) => l != null) !=
+          null;
     }
     return _listeners?.isNotEmpty ?? false;
   }
@@ -156,7 +162,7 @@ class MemoryAllocations {
           stack: stack,
           library: 'foundation library',
           context: ErrorDescription('MemoryAllocations while '
-          'dispatching notifications for $type'),
+              'dispatching notifications for $type'),
           informationCollector: () => <DiagnosticsNode>[
             DiagnosticsProperty<Object>(
               'The $type sending notification was',

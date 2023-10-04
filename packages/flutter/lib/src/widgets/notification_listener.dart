@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 
 import 'framework.dart';
 
-typedef NotificationListenerCallback<T extends Notification> = bool Function(T notification);
+typedef NotificationListenerCallback<T extends Notification> = bool Function(
+    T notification);
 
 abstract class Notification {
   const Notification();
@@ -20,7 +21,7 @@ abstract class Notification {
 
   @protected
   @mustCallSuper
-  void debugFillDescription(List<String> description) { }
+  void debugFillDescription(List<String> description) {}
 }
 
 class NotificationListener<T extends Notification> extends ProxyWidget {
@@ -38,7 +39,8 @@ class NotificationListener<T extends Notification> extends ProxyWidget {
   }
 }
 
-class _NotificationElement<T extends Notification> extends ProxyElement with NotifiableElementMixin {
+class _NotificationElement<T extends Notification> extends ProxyElement
+    with NotifiableElementMixin {
   _NotificationElement(NotificationListener<T> super.widget);
 
   @override

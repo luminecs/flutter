@@ -2,7 +2,12 @@ import 'dart:async';
 import 'dart:convert' show json;
 import 'dart:developer' as developer;
 import 'dart:io' show exit;
-import 'dart:ui' as ui show Brightness, PlatformDispatcher, SingletonFlutterWindow, window; // ignore: deprecated_member_use
+import 'dart:ui' as ui
+    show
+        Brightness,
+        PlatformDispatcher,
+        SingletonFlutterWindow,
+        window; // ignore: deprecated_member_use
 
 // Before adding any more dart:ui imports, please read the README.
 
@@ -18,14 +23,20 @@ import 'print.dart';
 import 'service_extensions.dart';
 import 'timeline.dart';
 
-export 'dart:ui' show PlatformDispatcher, SingletonFlutterWindow, clampDouble; // ignore: deprecated_member_use
+export 'dart:ui'
+    show
+        PlatformDispatcher,
+        SingletonFlutterWindow,
+        clampDouble; // ignore: deprecated_member_use
 
-export 'basic_types.dart' show AsyncCallback, AsyncValueGetter, AsyncValueSetter;
+export 'basic_types.dart'
+    show AsyncCallback, AsyncValueGetter, AsyncValueSetter;
 
 // Examples can assume:
 // mixin BarBinding on BindingBase { }
 
-typedef ServiceExtensionCallback = Future<Map<String, dynamic>> Function(Map<String, String> parameters);
+typedef ServiceExtensionCallback = Future<Map<String, dynamic>> Function(
+    Map<String, String> parameters);
 
 abstract class BindingBase {
   BindingBase() {
@@ -37,7 +48,8 @@ abstract class BindingBase {
       return true;
     }());
 
-    assert(_debugInitializedType == null, 'Binding is already initialized to $_debugInitializedType');
+    assert(_debugInitializedType == null,
+        'Binding is already initialized to $_debugInitializedType');
     initInstances();
     assert(_debugInitializedType != null);
 
@@ -46,7 +58,8 @@ abstract class BindingBase {
     assert(_debugServiceExtensionsRegistered);
 
     if (!kReleaseMode) {
-      developer.postEvent('Flutter.FrameworkInitialization', <String, String>{});
+      developer
+          .postEvent('Flutter.FrameworkInitialization', <String, String>{});
       FlutterTimeline.finishSync();
     }
   }
@@ -56,13 +69,13 @@ abstract class BindingBase {
   static bool _debugServiceExtensionsRegistered = false;
 
   @Deprecated(
-    'Look up the current FlutterView from the context via View.of(context) or consult the PlatformDispatcher directly instead. '
-    'Deprecated to prepare for the upcoming multi-window support. '
-    'This feature was deprecated after v3.7.0-32.0.pre.'
-  )
+      'Look up the current FlutterView from the context via View.of(context) or consult the PlatformDispatcher directly instead. '
+      'Deprecated to prepare for the upcoming multi-window support. '
+      'This feature was deprecated after v3.7.0-32.0.pre.')
   ui.SingletonFlutterWindow get window => ui.window;
 
-  ui.PlatformDispatcher get platformDispatcher => ui.PlatformDispatcher.instance;
+  ui.PlatformDispatcher get platformDispatcher =>
+      ui.PlatformDispatcher.instance;
 
   @protected
   @mustCallSuper
@@ -81,7 +94,8 @@ abstract class BindingBase {
       if (_debugInitializedType == null && instance == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary('Binding has not yet been initialized.'),
-          ErrorDescription('The "instance" getter on the $T binding mixin is only available once that binding has been initialized.'),
+          ErrorDescription(
+              'The "instance" getter on the $T binding mixin is only available once that binding has been initialized.'),
           ErrorHint(
             'Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the '
             'latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method '
@@ -101,7 +115,8 @@ abstract class BindingBase {
       if (instance == null) {
         assert(_debugInitializedType == null);
         throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('Binding mixin instance is null but bindings are already initialized.'),
+          ErrorSummary(
+              'Binding mixin instance is null but bindings are already initialized.'),
           ErrorDescription(
             'The "instance" property of the $T binding mixin was accessed, but that binding was not initialized when '
             'the "initInstances()" method was called.',
@@ -117,15 +132,15 @@ abstract class BindingBase {
             'documentation of the BindingBase class for more details.',
           ),
           ErrorHint(
-            'The binding that was initialized was of the type "$_debugInitializedType". '
-          ),
+              'The binding that was initialized was of the type "$_debugInitializedType". '),
         ]);
       }
       try {
         if (instance._debugConstructed && _debugInitializedType == null) {
           throw FlutterError.fromParts(<DiagnosticsNode>[
             ErrorSummary('Binding initialized without calling initInstances.'),
-            ErrorDescription('An instance of $T is non-null, but BindingBase.initInstances() has not yet been called.'),
+            ErrorDescription(
+                'An instance of $T is non-null, but BindingBase.initInstances() has not yet been called.'),
             ErrorHint(
               'This could happen because a binding mixin was somehow used outside of the normal binding mechanisms, or because '
               'the binding\'s initInstances() method did not call "super.initInstances()".',
@@ -141,7 +156,8 @@ abstract class BindingBase {
           // The state of _debugInitializedType doesn't matter in this failure mode.
           throw FlutterError.fromParts(<DiagnosticsNode>[
             ErrorSummary('Binding did not complete initialization.'),
-            ErrorDescription('An instance of $T is non-null, but the BindingBase() constructor has not yet been called.'),
+            ErrorDescription(
+                'An instance of $T is non-null, but the BindingBase() constructor has not yet been called.'),
             ErrorHint(
               'This could also happen if some code was invoked that used the binding while the binding was initializing, '
               "for example if the binding's constructor itself invokes a callback. Bindings should not invoke callbacks "
@@ -152,7 +168,8 @@ abstract class BindingBase {
       } on NoSuchMethodError {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary('Binding does not extend BindingBase'),
-          ErrorDescription('An instance of $T was created but the BindingBase constructor was not called.'),
+          ErrorDescription(
+              'An instance of $T was created but the BindingBase constructor was not called.'),
           ErrorHint(
             'This could happen because the binding was implemented using "implements" rather than "extends" or "with". '
             'Concrete binding classes must extend or mix in BindingBase.',
@@ -174,7 +191,8 @@ abstract class BindingBase {
 
   bool debugCheckZone(String entryPoint) {
     assert(() {
-      assert(_debugBindingZone != null, 'debugCheckZone can only be used after the binding is fully initialized.');
+      assert(_debugBindingZone != null,
+          'debugCheckZone can only be used after the binding is fully initialized.');
       if (Zone.current != _debugBindingZone) {
         final Error message = FlutterError(
           'Zone mismatch.\n'
@@ -185,7 +203,7 @@ abstract class BindingBase {
           'a particular callback was set.\n'
           'It is important to use the same zone when calling `ensureInitialized` on the binding '
           'as when calling `$entryPoint` later.\n'
-          'To make this ${ debugZoneErrorsAreFatal ? 'error non-fatal' : 'warning fatal' }, '
+          'To make this ${debugZoneErrorsAreFatal ? 'error non-fatal' : 'warning fatal'}, '
           'set BindingBase.debugZoneErrorsAreFatal to ${!debugZoneErrorsAreFatal} before the '
           'bindings are initialized (i.e. as the first statement in `void main() { }`).',
         );
@@ -279,12 +297,15 @@ abstract class BindingBase {
             }
             _postExtensionStateChangedEvent(
               FoundationServiceExtensions.brightnessOverride.name,
-              (debugBrightnessOverride ?? platformDispatcher.platformBrightness).toString(),
+              (debugBrightnessOverride ?? platformDispatcher.platformBrightness)
+                  .toString(),
             );
             await reassembleApplication();
           }
           return <String, dynamic>{
-            'value': (debugBrightnessOverride ?? platformDispatcher.platformBrightness).toString(),
+            'value': (debugBrightnessOverride ??
+                    platformDispatcher.platformBrightness)
+                .toString(),
           };
         },
       );
@@ -372,7 +393,8 @@ abstract class BindingBase {
       callback: (Map<String, String> parameters) async {
         if (parameters.containsKey('enabled')) {
           await setter(parameters['enabled'] == 'true');
-          _postExtensionStateChangedEvent(name, await getter() ? 'true' : 'false');
+          _postExtensionStateChangedEvent(
+              name, await getter() ? 'true' : 'false');
         }
         return <String, dynamic>{'enabled': await getter() ? 'true' : 'false'};
       },
@@ -436,7 +458,8 @@ abstract class BindingBase {
     required ServiceExtensionCallback callback,
   }) {
     final String methodName = 'ext.flutter.$name';
-    developer.registerExtension(methodName, (String method, Map<String, String> parameters) async {
+    developer.registerExtension(methodName,
+        (String method, Map<String, String> parameters) async {
       assert(method == methodName);
       assert(() {
         if (debugInstrumentationEnabled) {
@@ -466,7 +489,8 @@ abstract class BindingBase {
         FlutterError.reportError(FlutterErrorDetails(
           exception: exception,
           stack: stack,
-          context: ErrorDescription('during a service extension callback for "$method"'),
+          context: ErrorDescription(
+              'during a service extension callback for "$method"'),
         ));
         return developer.ServiceExtensionResponse.error(
           developer.ServiceExtensionResponse.extensionError,

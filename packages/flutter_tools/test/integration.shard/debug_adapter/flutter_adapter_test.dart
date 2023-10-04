@@ -35,23 +35,25 @@ void main() {
   });
 
   group('launch', () {
-    testWithoutContext('can run and terminate a Flutter app in debug mode', () async {
+    testWithoutContext('can run and terminate a Flutter app in debug mode',
+        () async {
       final BasicProject project = BasicProject();
       await project.setUpIn(tempDir);
 
       // Once the "topLevelFunction" output arrives, we can terminate the app.
       unawaited(
         dap.client.output
-            .firstWhere((String output) => output.startsWith('topLevelFunction'))
+            .firstWhere(
+                (String output) => output.startsWith('topLevelFunction'))
             .whenComplete(() => dap.client.terminate()),
       );
 
-      final List<OutputEventBody> outputEvents = await dap.client.collectAllOutput(
-        launch: () => dap.client
-            .launch(
-              cwd: project.dir.path,
-              toolArgs: <String>['-d', 'flutter-tester'],
-            ),
+      final List<OutputEventBody> outputEvents =
+          await dap.client.collectAllOutput(
+        launch: () => dap.client.launch(
+          cwd: project.dir.path,
+          toolArgs: <String>['-d', 'flutter-tester'],
+        ),
       );
 
       final String output = _uniqueOutputLines(outputEvents);
@@ -59,7 +61,7 @@ void main() {
       expectLines(
         output,
         <Object>[
-        'Launching $relativeMainPath on Flutter test device in debug mode...',
+          'Launching $relativeMainPath on Flutter test device in debug mode...',
           startsWith('Connecting to VM Service at'),
           'topLevelFunction',
           'Application finished.',
@@ -76,7 +78,8 @@ void main() {
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.launch(
             cwd: project.dir.path,
@@ -88,12 +91,16 @@ void main() {
       ], eagerError: true);
 
       // Capture events while terminating.
-      final Future<List<Event>> logEventsFuture = dap.client.events('dart.log').toList();
+      final Future<List<Event>> logEventsFuture =
+          dap.client.events('dart.log').toList();
       await dap.client.terminate();
 
       // Ensure logs contain both the app.stop request and the result.
       final List<Event> logEvents = await logEventsFuture;
-      final List<String> logMessages = logEvents.map((Event l) => (l.body! as Map<String, Object?>)['message']! as String).toList();
+      final List<String> logMessages = logEvents
+          .map((Event l) =>
+              (l.body! as Map<String, Object?>)['message']! as String)
+          .toList();
       expect(
         logMessages,
         containsAll(<Matcher>[
@@ -103,24 +110,26 @@ void main() {
       );
     });
 
-    testWithoutContext('can run and terminate a Flutter app in noDebug mode', () async {
+    testWithoutContext('can run and terminate a Flutter app in noDebug mode',
+        () async {
       final BasicProject project = BasicProject();
       await project.setUpIn(tempDir);
 
       // Once the "topLevelFunction" output arrives, we can terminate the app.
       unawaited(
         dap.client.stdoutOutput
-            .firstWhere((String output) => output.startsWith('topLevelFunction'))
+            .firstWhere(
+                (String output) => output.startsWith('topLevelFunction'))
             .whenComplete(() => dap.client.terminate()),
       );
 
-      final List<OutputEventBody> outputEvents = await dap.client.collectAllOutput(
-        launch: () => dap.client
-            .launch(
-              cwd: project.dir.path,
-              noDebug: true,
-              toolArgs: <String>['-d', 'flutter-tester'],
-            ),
+      final List<OutputEventBody> outputEvents =
+          await dap.client.collectAllOutput(
+        launch: () => dap.client.launch(
+          cwd: project.dir.path,
+          noDebug: true,
+          toolArgs: <String>['-d', 'flutter-tester'],
+        ),
       );
 
       final String output = _uniqueOutputLines(outputEvents);
@@ -145,8 +154,10 @@ void main() {
       }
     });
 
-    testWithoutContext('outputs useful message on invalid DAP protocol messages', () async {
-      final OutOfProcessDapTestServer server = dap.server as OutOfProcessDapTestServer;
+    testWithoutContext(
+        'outputs useful message on invalid DAP protocol messages', () async {
+      final OutOfProcessDapTestServer server =
+          dap.server as OutOfProcessDapTestServer;
       final CompileErrorProject project = CompileErrorProject();
       await project.setUpIn(tempDir);
 
@@ -159,23 +170,30 @@ void main() {
 
       // Verify the user-friendly message was included in the output.
       final String error = stderrOutput.toString();
-      expect(error, contains('Input could not be parsed as a Debug Adapter Protocol message'));
-      expect(error, contains('The "flutter debug-adapter" command is intended for use by tooling'));
+      expect(
+          error,
+          contains(
+              'Input could not be parsed as a Debug Adapter Protocol message'));
+      expect(
+          error,
+          contains(
+              'The "flutter debug-adapter" command is intended for use by tooling'));
       // This test only runs with out-of-process DAP as it's testing _actual_
       // stderr output and that the debug-adapter process terminates, which is
       // not possible when running the DAP Server in-process.
     }, skip: useInProcessDap); // [intended] See above.
 
-    testWithoutContext('correctly outputs launch errors and terminates', () async {
+    testWithoutContext('correctly outputs launch errors and terminates',
+        () async {
       final CompileErrorProject project = CompileErrorProject();
       await project.setUpIn(tempDir);
 
-      final List<OutputEventBody> outputEvents = await dap.client.collectAllOutput(
-        launch: () => dap.client
-            .launch(
-              cwd: project.dir.path,
-              toolArgs: <String>['-d', 'flutter-tester'],
-            ),
+      final List<OutputEventBody> outputEvents =
+          await dap.client.collectAllOutput(
+        launch: () => dap.client.launch(
+          cwd: project.dir.path,
+          toolArgs: <String>['-d', 'flutter-tester'],
+        ),
       );
 
       final String output = _uniqueOutputLines(outputEvents);
@@ -192,11 +210,13 @@ void main() {
       }) async {
         await project.setUpIn(tempDir);
 
-        final List<OutputEventBody> outputEvents = await dap.client.collectAllOutput(launch: () {
+        final List<OutputEventBody> outputEvents =
+            await dap.client.collectAllOutput(launch: () {
           // Terminate the app after we see the exception because otherwise
           // it will keep running and `collectAllOutput` won't end.
           dap.client.output
-              .firstWhere((String output) => output.contains(endOfErrorOutputMarker))
+              .firstWhere(
+                  (String output) => output.contains(endOfErrorOutputMarker))
               .then((_) => dap.client.terminate());
           return dap.client.launch(
             noDebug: noDebug,
@@ -214,9 +234,11 @@ void main() {
         return output;
       }
 
-      testWithoutContext('correctly outputs exceptions in debug mode', () async {
+      testWithoutContext('correctly outputs exceptions in debug mode',
+          () async {
         final BasicProjectThatThrows project = BasicProjectThatThrows();
-        final String output = await getExceptionOutput(project, noDebug: false, ansiColors: false);
+        final String output = await getExceptionOutput(project,
+            noDebug: false, ansiColors: false);
 
         expect(
           output,
@@ -230,9 +252,11 @@ The relevant error-causing widget was:
         );
       });
 
-      testWithoutContext('correctly outputs colored exceptions when supported', () async {
+      testWithoutContext('correctly outputs colored exceptions when supported',
+          () async {
         final BasicProjectThatThrows project = BasicProjectThatThrows();
-        final String output = await getExceptionOutput(project, noDebug: false, ansiColors: true);
+        final String output =
+            await getExceptionOutput(project, noDebug: false, ansiColors: true);
 
         // Frames in the stack trace that are the users own code will be unformatted, but
         // frames from the framework are faint (starting with `\x1B[2m`).
@@ -259,9 +283,11 @@ When the exception was thrown, this was the stack:
         );
       });
 
-      testWithoutContext('correctly outputs exceptions in noDebug mode', () async {
+      testWithoutContext('correctly outputs exceptions in noDebug mode',
+          () async {
         final BasicProjectThatThrows project = BasicProjectThatThrows();
-        final String output = await getExceptionOutput(project, noDebug: true, ansiColors: false);
+        final String output =
+            await getExceptionOutput(project, noDebug: true, ansiColors: false);
 
         // When running in noDebug mode, we don't get the Flutter.Error event so
         // we get the basic Flutter-formatted version of the error.
@@ -288,7 +314,8 @@ The relevant error-causing widget was:
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.launch(
             cwd: project.dir.path,
@@ -309,16 +336,17 @@ The relevant error-causing widget was:
       await dap.client.hotReload();
 
       expectLines(
-          (await outputEventsFuture).join(),
-          <Object>[
-            startsWith('Reloaded'),
-            'topLevelFunction',
-          ],
-          allowExtras: true,
+        (await outputEventsFuture).join(),
+        <Object>[
+          startsWith('Reloaded'),
+          'topLevelFunction',
+        ],
+        allowExtras: true,
       );
 
       // Repeat the test for hot reload with custom syntax.
-      final Future<List<String>> customOutputEventsFuture = dap.client.stdoutOutput
+      final Future<List<String>> customOutputEventsFuture = dap
+          .client.stdoutOutput
           // But skip any topLevelFunctions that come before the reload.
           .skipWhile((String output) => output.startsWith('topLevelFunction'))
           .take(2)
@@ -327,34 +355,37 @@ The relevant error-causing widget was:
       await dap.client.customSyntaxHotReload();
 
       expectLines(
-          (await customOutputEventsFuture).join(),
-          <Object>[
-            startsWith('Reloaded'),
-            'topLevelFunction',
-          ],
-          allowExtras: true,
+        (await customOutputEventsFuture).join(),
+        <Object>[
+          startsWith('Reloaded'),
+          'topLevelFunction',
+        ],
+        allowExtras: true,
       );
 
       await dap.client.terminate();
     });
 
-    testWithoutContext('sends progress notifications during hot reload', () async {
+    testWithoutContext('sends progress notifications during hot reload',
+        () async {
       final BasicProject project = BasicProject();
       await project.setUpIn(tempDir);
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.initialize(supportsProgressReporting: true),
         dap.client.launch(
-              cwd: project.dir.path,
-              noDebug: true,
-              toolArgs: <String>['-d', 'flutter-tester'],
-            ),
+          cwd: project.dir.path,
+          noDebug: true,
+          toolArgs: <String>['-d', 'flutter-tester'],
+        ),
       ], eagerError: true);
 
       // Capture progress events during a reload.
-      final Future<List<Event>> progressEventsFuture = dap.client.progressEvents().toList();
+      final Future<List<Event>> progressEventsFuture =
+          dap.client.progressEvents().toList();
       await dap.client.hotReload();
       await dap.client.terminate();
 
@@ -362,12 +393,18 @@ The relevant error-causing widget was:
       final List<Event> progressEvents = await progressEventsFuture;
       expect(progressEvents, hasLength(2));
 
-      final List<String> eventKinds = progressEvents.map((Event event) => event.event).toList();
+      final List<String> eventKinds =
+          progressEvents.map((Event event) => event.event).toList();
       expect(eventKinds, <String>['progressStart', 'progressEnd']);
 
-      final List<Map<String, Object?>> eventBodies = progressEvents.map((Event event) => event.body).cast<Map<String, Object?>>().toList();
-      final ProgressStartEventBody start = ProgressStartEventBody.fromMap(eventBodies[0]);
-      final ProgressEndEventBody end = ProgressEndEventBody.fromMap(eventBodies[1]);
+      final List<Map<String, Object?>> eventBodies = progressEvents
+          .map((Event event) => event.body)
+          .cast<Map<String, Object?>>()
+          .toList();
+      final ProgressStartEventBody start =
+          ProgressStartEventBody.fromMap(eventBodies[0]);
+      final ProgressEndEventBody end =
+          ProgressEndEventBody.fromMap(eventBodies[1]);
       expect(start.progressId, isNotNull);
       expect(start.title, 'Flutter');
       expect(start.message, 'Hot reloading…');
@@ -381,7 +418,8 @@ The relevant error-causing widget was:
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.launch(
             cwd: project.dir.path,
@@ -402,34 +440,37 @@ The relevant error-causing widget was:
       await dap.client.hotRestart();
 
       expectLines(
-          (await outputEventsFuture).join(),
-          <Object>[
-            startsWith('Restarted application'),
-            'topLevelFunction',
-          ],
-          allowExtras: true,
+        (await outputEventsFuture).join(),
+        <Object>[
+          startsWith('Restarted application'),
+          'topLevelFunction',
+        ],
+        allowExtras: true,
       );
 
       await dap.client.terminate();
     });
 
-    testWithoutContext('sends progress notifications during hot restart', () async {
+    testWithoutContext('sends progress notifications during hot restart',
+        () async {
       final BasicProject project = BasicProject();
       await project.setUpIn(tempDir);
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.initialize(supportsProgressReporting: true),
         dap.client.launch(
-              cwd: project.dir.path,
-              noDebug: true,
-              toolArgs: <String>['-d', 'flutter-tester'],
-            ),
+          cwd: project.dir.path,
+          noDebug: true,
+          toolArgs: <String>['-d', 'flutter-tester'],
+        ),
       ], eagerError: true);
 
       // Capture progress events during a restart.
-      final Future<List<Event>> progressEventsFuture = dap.client.progressEvents().toList();
+      final Future<List<Event>> progressEventsFuture =
+          dap.client.progressEvents().toList();
       await dap.client.hotRestart();
       await dap.client.terminate();
 
@@ -437,12 +478,18 @@ The relevant error-causing widget was:
       final List<Event> progressEvents = await progressEventsFuture;
       expect(progressEvents, hasLength(2));
 
-      final List<String> eventKinds = progressEvents.map((Event event) => event.event).toList();
+      final List<String> eventKinds =
+          progressEvents.map((Event event) => event.event).toList();
       expect(eventKinds, <String>['progressStart', 'progressEnd']);
 
-      final List<Map<String, Object?>> eventBodies = progressEvents.map((Event event) => event.body).cast<Map<String, Object?>>().toList();
-      final ProgressStartEventBody start = ProgressStartEventBody.fromMap(eventBodies[0]);
-      final ProgressEndEventBody end = ProgressEndEventBody.fromMap(eventBodies[1]);
+      final List<Map<String, Object?>> eventBodies = progressEvents
+          .map((Event event) => event.body)
+          .cast<Map<String, Object?>>()
+          .toList();
+      final ProgressStartEventBody start =
+          ProgressStartEventBody.fromMap(eventBodies[0]);
+      final ProgressEndEventBody end =
+          ProgressEndEventBody.fromMap(eventBodies[1]);
       expect(start.progressId, isNotNull);
       expect(start.title, 'Flutter');
       expect(start.message, 'Hot restarting…');
@@ -450,7 +497,8 @@ The relevant error-causing widget was:
       expect(end.message, isNull);
     });
 
-    testWithoutContext('can hot restart when exceptions occur on outgoing isolates', () async {
+    testWithoutContext(
+        'can hot restart when exceptions occur on outgoing isolates', () async {
       final BasicProjectThatThrows project = BasicProjectThatThrows();
       await project.setUpIn(tempDir);
 
@@ -458,7 +506,8 @@ The relevant error-causing widget was:
       late int originalThreadId, newThreadId;
       await Future.wait(<Future<void>>[
         // Capture the thread ID of the stopped thread.
-        dap.client.stoppedEvents.first.then((StoppedEventBody event) => originalThreadId = event.threadId!),
+        dap.client.stoppedEvents.first.then(
+            (StoppedEventBody event) => originalThreadId = event.threadId!),
         dap.client.start(
           exceptionPauseMode: 'All', // Ensure we stop on all exceptions
           launch: () => dap.client.launch(
@@ -472,7 +521,8 @@ The relevant error-causing widget was:
       // to pause.
       await Future.wait(<Future<void>>[
         // Capture the thread ID of the newly stopped thread.
-        dap.client.stoppedEvents.first.then((StoppedEventBody event) => newThreadId = event.threadId!),
+        dap.client.stoppedEvents.first
+            .then((StoppedEventBody event) => newThreadId = event.threadId!),
         dap.client.hotRestart(),
       ], eagerError: true);
 
@@ -497,7 +547,8 @@ The relevant error-causing widget was:
       // Launch the app and wait for it to print "topLevelFunction" so we know
       // it's up and running.
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.launch(
             cwd: project.dir.path,
@@ -524,8 +575,10 @@ The relevant error-causing widget was:
       );
 
       // Ensure the event occurred, and its value was as expected.
-      final Map<String, Object?> stateChangeEvent = await stateChangeEventFuture;
-      expect(stateChangeEvent['value'], 'true'); // extension state change values are always strings
+      final Map<String, Object?> stateChangeEvent =
+          await stateChangeEventFuture;
+      expect(stateChangeEvent['value'],
+          'true'); // extension state change values are always strings
 
       await dap.client.terminate();
     });
@@ -549,7 +602,8 @@ The relevant error-causing widget was:
       await dap.client.terminate();
 
       final Event appStart = await appStartFuture;
-      final Map<String, Object?> params = appStart.body! as Map<String, Object?>;
+      final Map<String, Object?> params =
+          appStart.body! as Map<String, Object?>;
       expect(params['deviceId'], 'flutter-tester');
       expect(params['mode'], 'debug');
     });
@@ -583,7 +637,8 @@ The relevant error-causing widget was:
       await project.setUpIn(tempDir);
       testProcess = await SimpleFlutterRunner.start(tempDir);
 
-      breakpointFilePath = globals.fs.path.join(project.dir.path, 'lib', 'main.dart');
+      breakpointFilePath =
+          globals.fs.path.join(project.dir.path, 'lib', 'main.dart');
       breakpointLine = project.buildMethodBreakpointLine;
     });
 
@@ -592,12 +647,14 @@ The relevant error-causing widget was:
       await testProcess.process.exitCode;
     });
 
-    testWithoutContext('can attach to an already-running Flutter app and reload', () async {
+    testWithoutContext(
+        'can attach to an already-running Flutter app and reload', () async {
       final Uri vmServiceUri = await testProcess.vmServiceUri;
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.attach(
             cwd: project.dir.path,
@@ -617,23 +674,26 @@ The relevant error-causing widget was:
       // by printed output, to ensure the app is running again.
       await dap.client.hotReload();
       expectLines(
-          (await outputEventsFuture).join(),
-          <Object>[
-            startsWith('Reloaded'),
-            'topLevelFunction',
-          ],
-          allowExtras: true,
+        (await outputEventsFuture).join(),
+        <Object>[
+          startsWith('Reloaded'),
+          'topLevelFunction',
+        ],
+        allowExtras: true,
       );
 
       await dap.client.terminate();
     });
 
-    testWithoutContext('can attach to an already-running Flutter app and hit breakpoints', () async {
+    testWithoutContext(
+        'can attach to an already-running Flutter app and hit breakpoints',
+        () async {
       final Uri vmServiceUri = await testProcess.vmServiceUri;
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.attach(
             cwd: project.dir.path,
@@ -644,7 +704,8 @@ The relevant error-causing widget was:
       ], eagerError: true);
 
       // Set a breakpoint and expect to hit it.
-      final Future<StoppedEventBody> stoppedFuture = dap.client.stoppedEvents.firstWhere((StoppedEventBody e) => e.reason == 'breakpoint');
+      final Future<StoppedEventBody> stoppedFuture = dap.client.stoppedEvents
+          .firstWhere((StoppedEventBody e) => e.reason == 'breakpoint');
       await Future.wait(<Future<void>>[
         stoppedFuture,
         dap.client.setBreakpoint(breakpointFilePath, breakpointLine),
@@ -656,7 +717,8 @@ The relevant error-causing widget was:
 
       // Launch the app and wait for it to print "topLevelFunction".
       await Future.wait(<Future<void>>[
-        dap.client.stdoutOutput.firstWhere((String output) => output.startsWith('topLevelFunction')),
+        dap.client.stdoutOutput.firstWhere(
+            (String output) => output.startsWith('topLevelFunction')),
         dap.client.start(
           launch: () => dap.client.attach(
             cwd: project.dir.path,
@@ -667,7 +729,8 @@ The relevant error-causing widget was:
       ], eagerError: true);
 
       // Set a breakpoint and expect to hit it.
-      final Future<StoppedEventBody> stoppedFuture = dap.client.stoppedEvents.firstWhere((StoppedEventBody e) => e.reason == 'breakpoint');
+      final Future<StoppedEventBody> stoppedFuture = dap.client.stoppedEvents
+          .firstWhere((StoppedEventBody e) => e.reason == 'breakpoint');
       await Future.wait(<Future<void>>[
         stoppedFuture,
         dap.client.setBreakpoint(breakpointFilePath, breakpointLine),
@@ -676,34 +739,32 @@ The relevant error-causing widget was:
       // Detach and expected resume and correct output.
       await Future.wait(<Future<void>>[
         // We should print "Detached" instead of "Exited".
-        dap.client.outputEvents.firstWhere((OutputEventBody event) => event.output.contains('\nDetached')),
+        dap.client.outputEvents.firstWhere(
+            (OutputEventBody event) => event.output.contains('\nDetached')),
         // We should still get terminatedEvent (this signals the DAP server terminating).
         dap.client.event('terminated'),
         // We should get output showing the app resumed.
-        testProcess.output.firstWhere((String output) => output.contains('topLevelFunction')),
+        testProcess.output
+            .firstWhere((String output) => output.contains('topLevelFunction')),
         // Trigger the detach.
         dap.client.terminate(),
       ]);
-
     });
   });
 }
 
 String _uniqueOutputLines(List<OutputEventBody> outputEvents) {
   String? lastItem;
-  return outputEvents
-      .map((OutputEventBody e) {
-        final String output = e.output;
-        final Source? source = e.source;
-        return source != null
-            ? '$output          ^ source: ${source.name}\n'
-            : output;
-      })
-      .where((String output) {
-        // Skip the item if it's the same as the previous one.
-        final bool isDupe = output == lastItem;
-        lastItem = output;
-        return !isDupe;
-      })
-      .join();
+  return outputEvents.map((OutputEventBody e) {
+    final String output = e.output;
+    final Source? source = e.source;
+    return source != null
+        ? '$output          ^ source: ${source.name}\n'
+        : output;
+  }).where((String output) {
+    // Skip the item if it's the same as the previous one.
+    final bool isDupe = output == lastItem;
+    lastItem = output;
+    return !isDupe;
+  }).join();
 }

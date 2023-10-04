@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 enum Sky { midnight, viridian, cerulean }
 
 Map<Sky, Color> skyColors = <Sky, Color>{
@@ -27,7 +26,8 @@ class SegmentedControlExample extends StatefulWidget {
   const SegmentedControlExample({super.key});
 
   @override
-  State<SegmentedControlExample> createState() => _SegmentedControlExampleState();
+  State<SegmentedControlExample> createState() =>
+      _SegmentedControlExampleState();
 }
 
 class _SegmentedControlExampleState extends State<SegmentedControlExample> {

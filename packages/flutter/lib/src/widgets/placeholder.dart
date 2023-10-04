@@ -28,8 +28,7 @@ class _PlaceholderPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_PlaceholderPainter oldPainter) {
-    return oldPainter.color != color
-        || oldPainter.strokeWidth != strokeWidth;
+    return oldPainter.color != color || oldPainter.strokeWidth != strokeWidth;
   }
 
   @override
@@ -37,14 +36,13 @@ class _PlaceholderPainter extends CustomPainter {
 }
 
 class Placeholder extends StatelessWidget {
-  const Placeholder({
-    super.key,
-    this.color = const Color(0xFF455A64), // Blue Grey 700
-    this.strokeWidth = 2.0,
-    this.fallbackWidth = 400.0,
-    this.fallbackHeight = 400.0,
-    this.child
-  });
+  const Placeholder(
+      {super.key,
+      this.color = const Color(0xFF455A64), // Blue Grey 700
+      this.strokeWidth = 2.0,
+      this.fallbackWidth = 400.0,
+      this.fallbackHeight = 400.0,
+      this.child});
 
   final Color color;
 
@@ -74,10 +72,15 @@ class Placeholder extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(ColorProperty('color', color, defaultValue: const Color(0xFF455A64)));
-    properties.add(DoubleProperty('strokeWidth', strokeWidth, defaultValue: 2.0));
-    properties.add(DoubleProperty('fallbackWidth', fallbackWidth, defaultValue: 400.0));
-    properties.add(DoubleProperty('fallbackHeight', fallbackHeight, defaultValue: 400.0));
-    properties.add(DiagnosticsProperty<Widget>('child', child, defaultValue: null));
+    properties.add(
+        ColorProperty('color', color, defaultValue: const Color(0xFF455A64)));
+    properties
+        .add(DoubleProperty('strokeWidth', strokeWidth, defaultValue: 2.0));
+    properties.add(
+        DoubleProperty('fallbackWidth', fallbackWidth, defaultValue: 400.0));
+    properties.add(
+        DoubleProperty('fallbackHeight', fallbackHeight, defaultValue: 400.0));
+    properties
+        .add(DiagnosticsProperty<Widget>('child', child, defaultValue: null));
   }
 }

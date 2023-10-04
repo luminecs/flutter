@@ -14,11 +14,11 @@ class DefaultSelectionStyle extends InheritedTheme {
     required super.child,
   });
 
-  const DefaultSelectionStyle.fallback({ super.key })
-    : cursorColor = null,
-      selectionColor = null,
-      mouseCursor = null,
-      super(child: const _NullWidget());
+  const DefaultSelectionStyle.fallback({super.key})
+      : cursorColor = null,
+        selectionColor = null,
+        mouseCursor = null,
+        super(child: const _NullWidget());
 
   static Widget merge({
     Key? key,
@@ -50,24 +50,25 @@ class DefaultSelectionStyle extends InheritedTheme {
   final MouseCursor? mouseCursor;
 
   static DefaultSelectionStyle of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DefaultSelectionStyle>() ?? const DefaultSelectionStyle.fallback();
+    return context
+            .dependOnInheritedWidgetOfExactType<DefaultSelectionStyle>() ??
+        const DefaultSelectionStyle.fallback();
   }
 
   @override
   Widget wrap(BuildContext context, Widget child) {
     return DefaultSelectionStyle(
-      cursorColor: cursorColor,
-      selectionColor: selectionColor,
-      mouseCursor: mouseCursor,
-      child: child
-    );
+        cursorColor: cursorColor,
+        selectionColor: selectionColor,
+        mouseCursor: mouseCursor,
+        child: child);
   }
 
   @override
   bool updateShouldNotify(DefaultSelectionStyle oldWidget) {
     return cursorColor != oldWidget.cursorColor ||
-           selectionColor != oldWidget.selectionColor ||
-           mouseCursor != oldWidget.mouseCursor;
+        selectionColor != oldWidget.selectionColor ||
+        mouseCursor != oldWidget.mouseCursor;
   }
 }
 

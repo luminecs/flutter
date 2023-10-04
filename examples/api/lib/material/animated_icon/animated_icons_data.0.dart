@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 final Map<String, AnimatedIconData> iconsList = <String, AnimatedIconData>{
   'add_event': AnimatedIcons.add_event,
   'arrow_menu': AnimatedIcons.arrow_menu,
@@ -47,7 +46,8 @@ class AnimatedIconExample extends StatefulWidget {
 }
 
 // todo-luminecs AnimationController Animation Tween AnimatedIcon SingleTickerProviderStateMixin
-class _AnimatedIconExampleState extends State<AnimatedIconExample> with SingleTickerProviderStateMixin {
+class _AnimatedIconExampleState extends State<AnimatedIconExample>
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> animation;
 
@@ -78,7 +78,8 @@ class _AnimatedIconExampleState extends State<AnimatedIconExample> with SingleTi
           crossAxisCount: 4,
         ),
         // todo-luminecs map.entries.map()
-        children: iconsList.entries.map((MapEntry<String, AnimatedIconData> entry) {
+        children:
+            iconsList.entries.map((MapEntry<String, AnimatedIconData> entry) {
           return Card(
             child: Center(
               child: Column(

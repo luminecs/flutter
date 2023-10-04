@@ -52,7 +52,8 @@ class CalculatorState extends State<Calculator> {
   }
 
   void handlePlusTap() {
-    final CalcExpression? expression = _expression.appendOperation(Operation.Addition);
+    final CalcExpression? expression =
+        _expression.appendOperation(Operation.Addition);
     if (expression != null) {
       setState(() {
         pushExpression(expression);
@@ -70,7 +71,8 @@ class CalculatorState extends State<Calculator> {
   }
 
   void handleMultTap() {
-    final CalcExpression? expression = _expression.appendOperation(Operation.Multiplication);
+    final CalcExpression? expression =
+        _expression.appendOperation(Operation.Multiplication);
     if (expression != null) {
       setState(() {
         pushExpression(expression);
@@ -79,7 +81,8 @@ class CalculatorState extends State<Calculator> {
   }
 
   void handleDivTap() {
-    final CalcExpression? expression = _expression.appendOperation(Operation.Division);
+    final CalcExpression? expression =
+        _expression.appendOperation(Operation.Division);
     if (expression != null) {
       setState(() {
         pushExpression(expression);
@@ -129,7 +132,7 @@ class CalculatorState extends State<Calculator> {
 }
 
 class CalcDisplay extends StatelessWidget {
-  const CalcDisplay({ super.key, this.content});
+  const CalcDisplay({super.key, this.content});
 
   final String? content;
 
@@ -145,7 +148,7 @@ class CalcDisplay extends StatelessWidget {
 }
 
 class KeyPad extends StatelessWidget {
-  const KeyPad({ super.key, this.calcState });
+  const KeyPad({super.key, this.calcState});
 
   final CalculatorState? calcState;
 
@@ -244,10 +247,9 @@ class CalcKey extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              // This line is used as a sentinel in the hot reload tests: hot_mode_test.dart
-              // in the devicelab.
-              fontSize: (orientation == Orientation.portrait) ? 32.0 : 24.0
-            ),
+                // This line is used as a sentinel in the hot reload tests: hot_mode_test.dart
+                // in the devicelab.
+                fontSize: (orientation == Orientation.portrait) ? 32.0 : 24.0),
           ),
         ),
       ),
@@ -257,7 +259,7 @@ class CalcKey extends StatelessWidget {
 
 class NumberKey extends CalcKey {
   NumberKey(int value, CalculatorState? calcState, {Key? key})
-    : super('$value', () {
-        calcState!.handleNumberTap(value);
-      }, key: key);
+      : super('$value', () {
+          calcState!.handleNumberTap(value);
+        }, key: key);
 }

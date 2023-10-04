@@ -20,7 +20,8 @@ void main() {
     // rolls into Flutter.
     return path.replaceAll('/', globals.fs.path.separator);
   }
-  void writePubspecFile(String path, String name, { String? fontsSection }) {
+
+  void writePubspecFile(String path, String name, {String? fontsSection}) {
     if (fontsSection == null) {
       fontsSection = '';
     } else {
@@ -77,7 +78,8 @@ $fontsSection
     }
 
     expect(
-      json.decode(utf8.decode(await bundle.entries['FontManifest.json']!.contentsAsBytes())),
+      json.decode(utf8.decode(
+          await bundle.entries['FontManifest.json']!.contentsAsBytes())),
       json.decode(expectedAssetManifest),
     );
   }
@@ -94,21 +96,30 @@ $fontsSection
     setUp(() async {
       testFileSystem = MemoryFileSystem(
         style: globals.platform.isWindows
-          ? FileSystemStyle.windows
-          : FileSystemStyle.posix,
+            ? FileSystemStyle.windows
+            : FileSystemStyle.posix,
       );
-      testFileSystem!.currentDirectory = testFileSystem!.systemTempDirectory.createTempSync('flutter_asset_bundle_test.');
+      testFileSystem!.currentDirectory = testFileSystem!.systemTempDirectory
+          .createTempSync('flutter_asset_bundle_test.');
     });
 
-    testUsingContext('App includes neither font manifest nor fonts when no defines fonts', () async {
+    testUsingContext(
+        'App includes neither font manifest nor fonts when no defines fonts',
+        () async {
       writePubspecFile('pubspec.yaml', 'test');
       writePackagesFile('test_package:p/p/lib/');
       writePubspecFile('p/p/pubspec.yaml', 'test_package');
 
       final AssetBundle bundle = AssetBundleFactory.instance.createBundle();
       await bundle.build(packagesPath: '.packages');
-      expect(bundle.entries.keys, unorderedEquals(<String>['AssetManifest.bin',
-        'AssetManifest.json', 'FontManifest.json', 'NOTICES.Z']));
+      expect(
+          bundle.entries.keys,
+          unorderedEquals(<String>[
+            'AssetManifest.bin',
+            'AssetManifest.json',
+            'FontManifest.json',
+            'NOTICES.Z'
+          ]));
     }, overrides: <Type, Generator>{
       FileSystem: () => testFileSystem,
       ProcessManager: () => FakeProcessManager.any(),
@@ -140,7 +151,8 @@ $fontsSection
       ProcessManager: () => FakeProcessManager.any(),
     });
 
-    testUsingContext('App font uses local font file and package font file', () async {
+    testUsingContext('App font uses local font file and package font file',
+        () async {
       const String fontsSection = '''
        - family: foo
          fonts:
@@ -201,7 +213,8 @@ $fontsSection
       ProcessManager: () => FakeProcessManager.any(),
     });
 
-    testUsingContext('App uses package font with font file from another package', () async {
+    testUsingContext(
+        'App uses package font with font file from another package', () async {
       writePubspecFile('pubspec.yaml', 'test');
       writePackagesFile('test_package:p/p/lib/\ntest_package2:p2/p/lib/');
       const String fontsSection = '''
@@ -233,7 +246,8 @@ $fontsSection
       ProcessManager: () => FakeProcessManager.any(),
     });
 
-    testUsingContext('App uses package font with properties and own font file', () async {
+    testUsingContext('App uses package font with properties and own font file',
+        () async {
       writePubspecFile('pubspec.yaml', 'test');
       writePackagesFile('test_package:p/p/lib/');
 
@@ -266,7 +280,8 @@ $fontsSection
       ProcessManager: () => FakeProcessManager.any(),
     });
 
-    testUsingContext('App uses local font and package font with own font file.', () async {
+    testUsingContext('App uses local font and package font with own font file.',
+        () async {
       const String fontsSection = '''
        - family: foo
          fonts:

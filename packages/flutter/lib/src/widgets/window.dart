@@ -1,1 +1,1 @@
-abstract final class Window { }
+abstract final class Window {}

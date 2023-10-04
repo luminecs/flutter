@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const FittedBoxApp());
 
 class FittedBoxApp extends StatelessWidget {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const NavigatorExampleApp());
 
 class NavigatorExampleApp extends StatelessWidget {
@@ -46,7 +45,8 @@ class CollectPersonalInfoPage extends StatelessWidget {
         onTap: () {
           // This moves from the personal info page to the credentials page,
           // replacing this page with that one.
-          Navigator.of(context).pushReplacementNamed('signup/choose_credentials');
+          Navigator.of(context)
+              .pushReplacementNamed('signup/choose_credentials');
         },
         child: Container(
           color: Colors.lightBlue,

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const DatePickerApp());
 
 class DatePickerApp extends StatelessWidget {

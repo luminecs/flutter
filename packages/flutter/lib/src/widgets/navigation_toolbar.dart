@@ -5,7 +5,6 @@ import 'debug.dart';
 import 'framework.dart';
 
 class NavigationToolbar extends StatelessWidget {
-
   const NavigationToolbar({
     super.key,
     this.leading,
@@ -38,9 +37,11 @@ class NavigationToolbar extends StatelessWidget {
         textDirection: textDirection,
       ),
       children: <Widget>[
-        if (leading != null) LayoutId(id: _ToolbarSlot.leading, child: leading!),
+        if (leading != null)
+          LayoutId(id: _ToolbarSlot.leading, child: leading!),
         if (middle != null) LayoutId(id: _ToolbarSlot.middle, child: middle!),
-        if (trailing != null) LayoutId(id: _ToolbarSlot.trailing, child: trailing!),
+        if (trailing != null)
+          LayoutId(id: _ToolbarSlot.trailing, child: trailing!),
       ],
     );
   }
@@ -77,7 +78,8 @@ class _ToolbarLayout extends MultiChildLayoutDelegate {
     if (hasChild(_ToolbarSlot.leading)) {
       final BoxConstraints constraints = BoxConstraints(
         maxWidth: size.width,
-        minHeight: size.height, // The height should be exactly the height of the bar.
+        minHeight:
+            size.height, // The height should be exactly the height of the bar.
         maxHeight: size.height,
       );
       leadingWidth = layoutChild(_ToolbarSlot.leading, constraints).width;
@@ -107,8 +109,10 @@ class _ToolbarLayout extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_ToolbarSlot.middle)) {
-      final double maxWidth = math.max(size.width - leadingWidth - trailingWidth - middleSpacing * 2.0, 0.0);
-      final BoxConstraints constraints = BoxConstraints.loose(size).copyWith(maxWidth: maxWidth);
+      final double maxWidth = math.max(
+          size.width - leadingWidth - trailingWidth - middleSpacing * 2.0, 0.0);
+      final BoxConstraints constraints =
+          BoxConstraints.loose(size).copyWith(maxWidth: maxWidth);
       final Size middleSize = layoutChild(_ToolbarSlot.middle, constraints);
 
       final double middleStartMargin = leadingWidth + middleSpacing;
@@ -119,7 +123,8 @@ class _ToolbarLayout extends MultiChildLayoutDelegate {
       if (centerMiddle) {
         middleStart = (size.width - middleSize.width) / 2.0;
         if (middleStart + middleSize.width > size.width - trailingWidth) {
-          middleStart = size.width - trailingWidth - middleSize.width - middleSpacing;
+          middleStart =
+              size.width - trailingWidth - middleSize.width - middleSpacing;
         } else if (middleStart < middleStartMargin) {
           middleStart = middleStartMargin;
         }
@@ -139,8 +144,8 @@ class _ToolbarLayout extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(_ToolbarLayout oldDelegate) {
-    return oldDelegate.centerMiddle != centerMiddle
-        || oldDelegate.middleSpacing != middleSpacing
-        || oldDelegate.textDirection != textDirection;
+    return oldDelegate.centerMiddle != centerMiddle ||
+        oldDelegate.middleSpacing != middleSpacing ||
+        oldDelegate.textDirection != textDirection;
   }
 }

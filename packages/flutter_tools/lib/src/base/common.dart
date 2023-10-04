@@ -1,13 +1,14 @@
-Never throwToolExit(String? message, { int? exitCode }) {
+Never throwToolExit(String? message, {int? exitCode}) {
   throw ToolExit(message, exitCode: exitCode);
 }
 
 class ToolExit implements Exception {
-  ToolExit(this.message, { this.exitCode });
+  ToolExit(this.message, {this.exitCode});
 
   final String? message;
   final int? exitCode;
 
   @override
-  String toString() => 'Exception: $message'; // TODO(ianh): Really this should say "Error".
+  String toString() =>
+      'Exception: $message'; // TODO(ianh): Really this should say "Error".
 }

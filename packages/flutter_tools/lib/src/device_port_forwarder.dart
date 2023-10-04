@@ -23,7 +23,7 @@ class ForwardedPort {
 abstract class DevicePortForwarder {
   List<ForwardedPort> get forwardedPorts;
 
-  Future<int> forward(int devicePort, { int? hostPort });
+  Future<int> forward(int devicePort, {int? hostPort});
 
   Future<void> unforward(ForwardedPort forwardedPort);
 
@@ -35,14 +35,14 @@ class NoOpDevicePortForwarder implements DevicePortForwarder {
   const NoOpDevicePortForwarder();
 
   @override
-  Future<int> forward(int devicePort, { int? hostPort }) async => devicePort;
+  Future<int> forward(int devicePort, {int? hostPort}) async => devicePort;
 
   @override
   List<ForwardedPort> get forwardedPorts => <ForwardedPort>[];
 
   @override
-  Future<void> unforward(ForwardedPort forwardedPort) async { }
+  Future<void> unforward(ForwardedPort forwardedPort) async {}
 
   @override
-  Future<void> dispose() async { }
+  Future<void> dispose() async {}
 }

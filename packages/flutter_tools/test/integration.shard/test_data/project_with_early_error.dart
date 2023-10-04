@@ -1,7 +1,6 @@
 import 'project.dart';
 
 class ProjectWithEarlyError extends Project {
-
   @override
   final String pubspec = '''
   name: test
@@ -33,5 +32,4 @@ class ProjectWithEarlyError extends Project {
     }
   }
   ''';
-
 }

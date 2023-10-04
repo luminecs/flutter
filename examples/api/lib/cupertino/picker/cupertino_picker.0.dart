@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 const double _kItemExtent = 32.0;
 const List<String> _fruitNames = <String>[
   'Apple',
@@ -92,7 +91,8 @@ class _CupertinoPickerExampleState extends State<CupertinoPickerExample> {
                         _selectedFruit = selectedItem;
                       });
                     },
-                    children: List<Widget>.generate(_fruitNames.length, (int index) {
+                    children:
+                        List<Widget>.generate(_fruitNames.length, (int index) {
                       return Center(child: Text(_fruitNames[index]));
                     }),
                   ),

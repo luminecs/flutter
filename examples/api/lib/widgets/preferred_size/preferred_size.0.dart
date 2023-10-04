@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const PreferredSizeExampleApp());
 
 class PreferredSizeExampleApp extends StatelessWidget {

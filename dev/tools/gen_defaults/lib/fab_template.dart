@@ -1,7 +1,10 @@
 import 'template.dart';
 
 class FABTemplate extends TokenTemplate {
-  const FABTemplate(super.blockName, super.fileName, super.tokens, {
+  const FABTemplate(
+    super.blockName,
+    super.fileName,
+    super.tokens, {
     super.colorSchemePrefix = '_colors.',
     super.textThemePrefix = '_textTheme.',
   });

@@ -54,11 +54,12 @@ class UndoHistoryState<T> extends State<UndoHistory<T>> with UndoManagerClient {
 
   UndoHistoryController? _controller;
 
-  UndoHistoryController get _effectiveController => widget.controller ?? (_controller ??= UndoHistoryController());
+  UndoHistoryController get _effectiveController =>
+      widget.controller ?? (_controller ??= UndoHistoryController());
 
   @override
   void undo() {
-    if (_stack.currentValue == null)  {
+    if (_stack.currentValue == null) {
       // Returns early if there is not a first value registered in the history.
       // This is important because, if an undo is received while the initial
       // value is being pushed (a.k.a when the field gets the focus but the
@@ -87,7 +88,8 @@ class UndoHistoryState<T> extends State<UndoHistory<T>> with UndoManagerClient {
   bool get canRedo => _stack.canRedo;
 
   void _updateState() {
-    _effectiveController.value = UndoHistoryValue(canUndo: canUndo, canRedo: canRedo);
+    _effectiveController.value =
+        UndoHistoryValue(canUndo: canUndo, canRedo: canRedo);
 
     if (defaultTargetPlatform != TargetPlatform.iOS) {
       return;
@@ -132,7 +134,8 @@ class UndoHistoryState<T> extends State<UndoHistory<T>> with UndoManagerClient {
       return;
     }
 
-    if (!(widget.shouldChangeUndoStack?.call(_lastValue, widget.value.value) ?? true)) {
+    if (!(widget.shouldChangeUndoStack?.call(_lastValue, widget.value.value) ??
+        true)) {
       return;
     }
 
@@ -214,8 +217,14 @@ class UndoHistoryState<T> extends State<UndoHistory<T>> with UndoManagerClient {
   Widget build(BuildContext context) {
     return Actions(
       actions: <Type, Action<Intent>>{
-        UndoTextIntent: Action<UndoTextIntent>.overridable(context: context, defaultAction: CallbackAction<UndoTextIntent>(onInvoke: _undoFromIntent)),
-        RedoTextIntent: Action<RedoTextIntent>.overridable(context: context, defaultAction: CallbackAction<RedoTextIntent>(onInvoke: _redoFromIntent)),
+        UndoTextIntent: Action<UndoTextIntent>.overridable(
+            context: context,
+            defaultAction:
+                CallbackAction<UndoTextIntent>(onInvoke: _undoFromIntent)),
+        RedoTextIntent: Action<RedoTextIntent>.overridable(
+            context: context,
+            defaultAction:
+                CallbackAction<RedoTextIntent>(onInvoke: _redoFromIntent)),
       },
       child: widget.child,
     );
@@ -233,25 +242,29 @@ class UndoHistoryValue {
   final bool canRedo;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'UndoHistoryValue')}(canUndo: $canUndo, canRedo: $canRedo)';
+  String toString() =>
+      '${objectRuntimeType(this, 'UndoHistoryValue')}(canUndo: $canUndo, canRedo: $canRedo)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    return other is UndoHistoryValue && other.canUndo == canUndo && other.canRedo == canRedo;
+    return other is UndoHistoryValue &&
+        other.canUndo == canUndo &&
+        other.canRedo == canRedo;
   }
 
   @override
   int get hashCode => Object.hash(
-    canUndo.hashCode,
-    canRedo.hashCode,
-  );
+        canUndo.hashCode,
+        canRedo.hashCode,
+      );
 }
 
 class UndoHistoryController extends ValueNotifier<UndoHistoryValue> {
-  UndoHistoryController({UndoHistoryValue? value}) : super(value ?? UndoHistoryValue.empty);
+  UndoHistoryController({UndoHistoryValue? value})
+      : super(value ?? UndoHistoryValue.empty);
 
   final ChangeNotifier onUndo = ChangeNotifier();
 

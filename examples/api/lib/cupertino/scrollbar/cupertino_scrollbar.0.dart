@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const ScrollbarApp());
 
 class ScrollbarApp extends StatelessWidget {

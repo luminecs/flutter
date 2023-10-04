@@ -105,14 +105,16 @@ void mergeSort<T>(
   _mergeSort<T>(list, compare, middle, end, scratchSpace, 0);
   final int firstTarget = end - firstLength;
   _mergeSort<T>(list, compare, start, middle, list, firstTarget);
-  _merge<T>(compare, list, firstTarget, end, scratchSpace, 0, secondLength, list, start);
+  _merge<T>(compare, list, firstTarget, end, scratchSpace, 0, secondLength,
+      list, start);
 }
 
 Comparator<T> _defaultCompare<T>() {
   // If we specify Comparable<T> here, it fails if the type is an int, because
   // int isn't a subtype of comparable. Leaving out the type implicitly converts
   // it to a num, which is a comparable.
-  return (T value1, T value2) => (value1 as Comparable<dynamic>).compareTo(value2);
+  return (T value1, T value2) =>
+      (value1 as Comparable<dynamic>).compareTo(value2);
 }
 
 void _insertionSort<T>(
@@ -244,11 +246,13 @@ void _merge<T>(
       }
       // Second list empties first. Flushing first list here.
       target[targetOffset++] = firstElement;
-      target.setRange(targetOffset, targetOffset + (firstEnd - cursor1), firstList, cursor1);
+      target.setRange(targetOffset, targetOffset + (firstEnd - cursor1),
+          firstList, cursor1);
       return;
     }
   }
   // First list empties first. Reached by break above.
   target[targetOffset++] = secondElement;
-  target.setRange(targetOffset, targetOffset + (secondEnd - cursor2), secondList, cursor2);
+  target.setRange(
+      targetOffset, targetOffset + (secondEnd - cursor2), secondList, cursor2);
 }

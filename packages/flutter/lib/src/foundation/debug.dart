@@ -8,7 +8,8 @@ export 'dart:ui' show Brightness;
 
 export 'print.dart' show DebugPrintCallback;
 
-bool debugAssertAllFoundationVarsUnset(String reason, { DebugPrintCallback debugPrintOverride = debugPrintThrottled }) {
+bool debugAssertAllFoundationVarsUnset(String reason,
+    {DebugPrintCallback debugPrintOverride = debugPrintThrottled}) {
   assert(() {
     if (debugPrint != debugPrintOverride ||
         debugDefaultTargetPlatformOverride != null ||
@@ -23,7 +24,8 @@ bool debugAssertAllFoundationVarsUnset(String reason, { DebugPrintCallback debug
 
 bool debugInstrumentationEnabled = false;
 
-Future<T> debugInstrumentAction<T>(String description, Future<T> Function() action) async {
+Future<T> debugInstrumentAction<T>(
+    String description, Future<T> Function() action) async {
   bool instrument = false;
   assert(() {
     instrument = debugInstrumentationEnabled;

@@ -44,11 +44,12 @@ abstract class MaterialLocalizations {
 
   String licensesPackageDetailText(int licenseCount);
 
-  String pageRowsInfoTitle(int firstRow, int lastRow, int rowCount, bool rowCountIsApproximate);
+  String pageRowsInfoTitle(
+      int firstRow, int lastRow, int rowCount, bool rowCountIsApproximate);
 
   String get rowsPerPageTitle;
 
-  String tabLabel({ required int tabIndex, required int tabCount });
+  String tabLabel({required int tabIndex, required int tabCount});
 
   String selectedRowCountTitle(int selectedRowCount);
 
@@ -110,17 +111,18 @@ abstract class MaterialLocalizations {
 
   String scrimOnTapHint(String modalRouteContentName);
 
-  TimeOfDayFormat timeOfDayFormat({ bool alwaysUse24HourFormat = false });
+  TimeOfDayFormat timeOfDayFormat({bool alwaysUse24HourFormat = false});
 
   ScriptCategory get scriptCategory;
 
   String formatDecimal(int number);
 
-  String formatHour(TimeOfDay timeOfDay, { bool alwaysUse24HourFormat = false });
+  String formatHour(TimeOfDay timeOfDay, {bool alwaysUse24HourFormat = false});
 
   String formatMinute(TimeOfDay timeOfDay);
 
-  String formatTimeOfDay(TimeOfDay timeOfDay, { bool alwaysUse24HourFormat = false });
+  String formatTimeOfDay(TimeOfDay timeOfDay,
+      {bool alwaysUse24HourFormat = false});
 
   String formatYear(DateTime date);
 
@@ -198,40 +200,28 @@ abstract class MaterialLocalizations {
 
   String get showAccountsLabel;
 
-  @Deprecated(
-    'Use the reorderItemToStart from WidgetsLocalizations instead. '
-    'This feature was deprecated after v3.10.0-2.0.pre.'
-  )
+  @Deprecated('Use the reorderItemToStart from WidgetsLocalizations instead. '
+      'This feature was deprecated after v3.10.0-2.0.pre.')
   String get reorderItemToStart;
 
-  @Deprecated(
-    'Use the reorderItemToEnd from WidgetsLocalizations instead. '
-    'This feature was deprecated after v3.10.0-2.0.pre.'
-  )
+  @Deprecated('Use the reorderItemToEnd from WidgetsLocalizations instead. '
+      'This feature was deprecated after v3.10.0-2.0.pre.')
   String get reorderItemToEnd;
 
-  @Deprecated(
-    'Use the reorderItemUp from WidgetsLocalizations instead. '
-    'This feature was deprecated after v3.10.0-2.0.pre.'
-  )
+  @Deprecated('Use the reorderItemUp from WidgetsLocalizations instead. '
+      'This feature was deprecated after v3.10.0-2.0.pre.')
   String get reorderItemUp;
 
-  @Deprecated(
-    'Use the reorderItemDown from WidgetsLocalizations instead. '
-    'This feature was deprecated after v3.10.0-2.0.pre.'
-  )
+  @Deprecated('Use the reorderItemDown from WidgetsLocalizations instead. '
+      'This feature was deprecated after v3.10.0-2.0.pre.')
   String get reorderItemDown;
 
-  @Deprecated(
-    'Use the reorderItemLeft from WidgetsLocalizations instead. '
-    'This feature was deprecated after v3.10.0-2.0.pre.'
-  )
+  @Deprecated('Use the reorderItemLeft from WidgetsLocalizations instead. '
+      'This feature was deprecated after v3.10.0-2.0.pre.')
   String get reorderItemLeft;
 
-  @Deprecated(
-    'Use the reorderItemRight from WidgetsLocalizations instead. '
-    'This feature was deprecated after v3.10.0-2.0.pre.'
-  )
+  @Deprecated('Use the reorderItemRight from WidgetsLocalizations instead. '
+      'This feature was deprecated after v3.10.0-2.0.pre.')
   String get reorderItemRight;
 
   String get expandedIconTapHint => 'Collapse';
@@ -350,18 +340,21 @@ abstract class MaterialLocalizations {
 
   static MaterialLocalizations of(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
-    return Localizations.of<MaterialLocalizations>(context, MaterialLocalizations)!;
+    return Localizations.of<MaterialLocalizations>(
+        context, MaterialLocalizations)!;
   }
 }
 
-class _MaterialLocalizationsDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+class _MaterialLocalizationsDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
   const _MaterialLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) => locale.languageCode == 'en';
 
   @override
-  Future<MaterialLocalizations> load(Locale locale) => DefaultMaterialLocalizations.load(locale);
+  Future<MaterialLocalizations> load(Locale locale) =>
+      DefaultMaterialLocalizations.load(locale);
 
   @override
   bool shouldReload(_MaterialLocalizationsDelegate old) => false;
@@ -437,23 +430,38 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
 
   int _getDaysInMonth(int year, int month) {
     if (month == DateTime.february) {
-      final bool isLeapYear = (year % 4 == 0) && (year % 100 != 0) ||
-          (year % 400 == 0);
+      final bool isLeapYear =
+          (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
       if (isLeapYear) {
         return 29;
       }
       return 28;
     }
-    const List<int> daysInMonth = <int>[31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const List<int> daysInMonth = <int>[
+      31,
+      -1,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31
+    ];
     return daysInMonth[month - 1];
   }
 
   @override
-  String formatHour(TimeOfDay timeOfDay, { bool alwaysUse24HourFormat = false }) {
-    final TimeOfDayFormat format = timeOfDayFormat(alwaysUse24HourFormat: alwaysUse24HourFormat);
+  String formatHour(TimeOfDay timeOfDay, {bool alwaysUse24HourFormat = false}) {
+    final TimeOfDayFormat format =
+        timeOfDayFormat(alwaysUse24HourFormat: alwaysUse24HourFormat);
     switch (format) {
       case TimeOfDayFormat.h_colon_mm_space_a:
-        return formatDecimal(timeOfDay.hourOfPeriod == 0 ? 12 : timeOfDay.hourOfPeriod);
+        return formatDecimal(
+            timeOfDay.hourOfPeriod == 0 ? 12 : timeOfDay.hourOfPeriod);
       case TimeOfDayFormat.HH_colon_mm:
         return _formatTwoDigitZeroPad(timeOfDay.hour);
       case TimeOfDayFormat.a_space_h_colon_mm:
@@ -589,10 +597,12 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   String get dateRangeEndLabel => 'End Date';
 
   @override
-  String dateRangeStartDateSemanticLabel(String formattedDate) => 'Start date $formattedDate';
+  String dateRangeStartDateSemanticLabel(String formattedDate) =>
+      'Start date $formattedDate';
 
   @override
-  String dateRangeEndDateSemanticLabel(String formattedDate) => 'End date $formattedDate';
+  String dateRangeEndDateSemanticLabel(String formattedDate) =>
+      'End date $formattedDate';
 
   @override
   String get invalidDateFormatLabel => 'Invalid format.';
@@ -667,7 +677,8 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   }
 
   @override
-  String formatTimeOfDay(TimeOfDay timeOfDay, { bool alwaysUse24HourFormat = false }) {
+  String formatTimeOfDay(TimeOfDay timeOfDay,
+      {bool alwaysUse24HourFormat = false}) {
     // Not using intl.DateFormat for two reasons:
     //
     // - DateFormat supports more formats than our material time picker does,
@@ -680,7 +691,8 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
 
     // Add hour:minute.
     buffer
-      ..write(formatHour(timeOfDay, alwaysUse24HourFormat: alwaysUse24HourFormat))
+      ..write(
+          formatHour(timeOfDay, alwaysUse24HourFormat: alwaysUse24HourFormat))
       ..write(':')
       ..write(formatMinute(timeOfDay));
 
@@ -760,7 +772,8 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   String get bottomSheetLabel => 'Bottom Sheet';
 
   @override
-  String scrimOnTapHint(String modalRouteContentName) => 'Close $modalRouteContentName';
+  String scrimOnTapHint(String modalRouteContentName) =>
+      'Close $modalRouteContentName';
 
   @override
   String aboutListTileTitle(String applicationName) => 'About $applicationName';
@@ -782,17 +795,18 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   }
 
   @override
-  String pageRowsInfoTitle(int firstRow, int lastRow, int rowCount, bool rowCountIsApproximate) {
+  String pageRowsInfoTitle(
+      int firstRow, int lastRow, int rowCount, bool rowCountIsApproximate) {
     return rowCountIsApproximate
-      ? '$firstRow–$lastRow of about $rowCount'
-      : '$firstRow–$lastRow of $rowCount';
+        ? '$firstRow–$lastRow of about $rowCount'
+        : '$firstRow–$lastRow of $rowCount';
   }
 
   @override
   String get rowsPerPageTitle => 'Rows per page:';
 
   @override
-  String tabLabel({ required int tabIndex, required int tabCount }) {
+  String tabLabel({required int tabIndex, required int tabCount}) {
     assert(tabIndex >= 1);
     assert(tabCount >= 1);
     return 'Tab $tabIndex of $tabCount';
@@ -871,10 +885,10 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   ScriptCategory get scriptCategory => ScriptCategory.englishLike;
 
   @override
-  TimeOfDayFormat timeOfDayFormat({ bool alwaysUse24HourFormat = false }) {
+  TimeOfDayFormat timeOfDayFormat({bool alwaysUse24HourFormat = false}) {
     return alwaysUse24HourFormat
-      ? TimeOfDayFormat.HH_colon_mm
-      : TimeOfDayFormat.h_colon_mm_space_a;
+        ? TimeOfDayFormat.HH_colon_mm
+        : TimeOfDayFormat.h_colon_mm_space_a;
   }
 
   @override
@@ -932,10 +946,12 @@ class DefaultMaterialLocalizations implements MaterialLocalizations {
   String get refreshIndicatorSemanticLabel => 'Refresh';
 
   static Future<MaterialLocalizations> load(Locale locale) {
-    return SynchronousFuture<MaterialLocalizations>(const DefaultMaterialLocalizations());
+    return SynchronousFuture<MaterialLocalizations>(
+        const DefaultMaterialLocalizations());
   }
 
-  static const LocalizationsDelegate<MaterialLocalizations> delegate = _MaterialLocalizationsDelegate();
+  static const LocalizationsDelegate<MaterialLocalizations> delegate =
+      _MaterialLocalizationsDelegate();
 
   @override
   String remainingTextFieldCharacterCount(int remaining) {

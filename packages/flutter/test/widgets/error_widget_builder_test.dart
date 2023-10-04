@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('ErrorWidget.builder', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ErrorWidget.builder',
+      (WidgetTester tester) async {
     final ErrorWidgetBuilder oldBuilder = ErrorWidget.builder;
     ErrorWidget.builder = (FlutterErrorDetails details) {
       return const Text('oopsie!', textDirection: TextDirection.ltr);
@@ -22,7 +23,8 @@ void main() {
     ErrorWidget.builder = oldBuilder;
   });
 
-  testWidgetsWithLeakTracking('ErrorWidget.builder', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ErrorWidget.builder',
+      (WidgetTester tester) async {
     final ErrorWidgetBuilder oldBuilder = ErrorWidget.builder;
     ErrorWidget.builder = (FlutterErrorDetails details) {
       return ErrorWidget('');

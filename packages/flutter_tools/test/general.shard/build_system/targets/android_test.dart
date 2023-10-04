@@ -46,23 +46,40 @@ void main() {
     environment.buildDir.createSync(recursive: true);
 
     // create pre-requisites.
-    environment.buildDir.childFile('app.dill')
-      .writeAsStringSync('abcd');
+    environment.buildDir.childFile('app.dill').writeAsStringSync('abcd');
     fileSystem
-      .file(artifacts.getArtifactPath(Artifact.vmSnapshotData, mode: BuildMode.debug))
-      .createSync(recursive: true);
+        .file(artifacts.getArtifactPath(Artifact.vmSnapshotData,
+            mode: BuildMode.debug))
+        .createSync(recursive: true);
     fileSystem
-      .file(artifacts.getArtifactPath(Artifact.isolateSnapshotData, mode: BuildMode.debug))
-      .createSync(recursive: true);
+        .file(artifacts.getArtifactPath(Artifact.isolateSnapshotData,
+            mode: BuildMode.debug))
+        .createSync(recursive: true);
 
     await const DebugAndroidApplication().build(environment);
 
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'isolate_snapshot_data')).existsSync(), true);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'vm_snapshot_data')).existsSync(), true);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'kernel_blob.bin')).existsSync(), true);
+    expect(
+        fileSystem
+            .file(fileSystem.path
+                .join('out', 'flutter_assets', 'isolate_snapshot_data'))
+            .existsSync(),
+        true);
+    expect(
+        fileSystem
+            .file(fileSystem.path
+                .join('out', 'flutter_assets', 'vm_snapshot_data'))
+            .existsSync(),
+        true);
+    expect(
+        fileSystem
+            .file(fileSystem.path
+                .join('out', 'flutter_assets', 'kernel_blob.bin'))
+            .existsSync(),
+        true);
   });
 
-  testUsingContext('debug bundle contains expected resources with bundle SkSL', () async {
+  testUsingContext('debug bundle contains expected resources with bundle SkSL',
+      () async {
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
       outputDir: fileSystem.directory('out')..createSync(),
@@ -80,31 +97,44 @@ void main() {
     );
     environment.buildDir.createSync(recursive: true);
     fileSystem.file('bundle.sksl').writeAsStringSync(json.encode(
-      <String, Object>{
-        'engineRevision': '2',
-        'platform': 'android',
-        'data': <String, Object>{
-          'A': 'B',
-        },
-      },
-    ));
+          <String, Object>{
+            'engineRevision': '2',
+            'platform': 'android',
+            'data': <String, Object>{
+              'A': 'B',
+            },
+          },
+        ));
 
     // create pre-requisites.
-    environment.buildDir.childFile('app.dill')
-      .writeAsStringSync('abcd');
+    environment.buildDir.childFile('app.dill').writeAsStringSync('abcd');
     fileSystem
-      .file(artifacts.getArtifactPath(Artifact.vmSnapshotData, mode: BuildMode.debug))
-      .createSync(recursive: true);
+        .file(artifacts.getArtifactPath(Artifact.vmSnapshotData,
+            mode: BuildMode.debug))
+        .createSync(recursive: true);
     fileSystem
-      .file(artifacts.getArtifactPath(Artifact.isolateSnapshotData, mode: BuildMode.debug))
-      .createSync(recursive: true);
+        .file(artifacts.getArtifactPath(Artifact.isolateSnapshotData,
+            mode: BuildMode.debug))
+        .createSync(recursive: true);
 
     await const DebugAndroidApplication().build(environment);
 
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'isolate_snapshot_data')), exists);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'vm_snapshot_data')), exists);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'kernel_blob.bin')), exists);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'io.flutter.shaders.json')), exists);
+    expect(
+        fileSystem.file(fileSystem.path
+            .join('out', 'flutter_assets', 'isolate_snapshot_data')),
+        exists);
+    expect(
+        fileSystem.file(
+            fileSystem.path.join('out', 'flutter_assets', 'vm_snapshot_data')),
+        exists);
+    expect(
+        fileSystem.file(
+            fileSystem.path.join('out', 'flutter_assets', 'kernel_blob.bin')),
+        exists);
+    expect(
+        fileSystem.file(fileSystem.path
+            .join('out', 'flutter_assets', 'io.flutter.shaders.json')),
+        exists);
   });
 
   testWithoutContext('profile bundle contains expected resources', () async {
@@ -122,12 +152,12 @@ void main() {
     environment.buildDir.createSync(recursive: true);
 
     // create pre-requisites.
-    environment.buildDir.childFile('app.so')
-      .writeAsStringSync('abcd');
+    environment.buildDir.childFile('app.so').writeAsStringSync('abcd');
 
     await const ProfileAndroidApplication().build(environment);
 
-    expect(fileSystem.file(fileSystem.path.join('out', 'app.so')).existsSync(), true);
+    expect(fileSystem.file(fileSystem.path.join('out', 'app.so')).existsSync(),
+        true);
   });
 
   testWithoutContext('release bundle contains expected resources', () async {
@@ -145,12 +175,12 @@ void main() {
     environment.buildDir.createSync(recursive: true);
 
     // create pre-requisites.
-    environment.buildDir.childFile('app.so')
-      .writeAsStringSync('abcd');
+    environment.buildDir.childFile('app.so').writeAsStringSync('abcd');
 
     await const ReleaseAndroidApplication().build(environment);
 
-    expect(fileSystem.file(fileSystem.path.join('out', 'app.so')).existsSync(), true);
+    expect(fileSystem.file(fileSystem.path.join('out', 'app.so')).existsSync(),
+        true);
   });
 
   testUsingContext('AndroidAot can build provided target platform', () async {
@@ -166,23 +196,25 @@ void main() {
       fileSystem: fileSystem,
       logger: logger,
     );
-    processManager.addCommand(FakeCommand(command: <String>[
-      artifacts.getArtifactPath(
-        Artifact.genSnapshot,
-        platform: TargetPlatform.android_arm64,
-        mode: BuildMode.release,
-      ),
-      '--deterministic',
-      '--snapshot_kind=app-aot-elf',
-      '--elf=${environment.buildDir.childDirectory('arm64-v8a').childFile('app.so').path}',
-      '--strip',
-      environment.buildDir.childFile('app.dill').path,
+    processManager.addCommand(FakeCommand(
+      command: <String>[
+        artifacts.getArtifactPath(
+          Artifact.genSnapshot,
+          platform: TargetPlatform.android_arm64,
+          mode: BuildMode.release,
+        ),
+        '--deterministic',
+        '--snapshot_kind=app-aot-elf',
+        '--elf=${environment.buildDir.childDirectory('arm64-v8a').childFile('app.so').path}',
+        '--strip',
+        environment.buildDir.childFile('app.dill').path,
       ],
     ));
     environment.buildDir.createSync(recursive: true);
     environment.buildDir.childFile('app.dill').createSync();
     environment.projectDir.childFile('.packages').writeAsStringSync('\n');
-    const AndroidAot androidAot = AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
+    const AndroidAot androidAot =
+        AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
 
     await androidAot.build(environment);
 
@@ -203,32 +235,35 @@ void main() {
       fileSystem: fileSystem,
       logger: logger,
     );
-    processManager.addCommand(FakeCommand(command: <String>[
-      artifacts.getArtifactPath(
-        Artifact.genSnapshot,
-        platform: TargetPlatform.android_arm64,
-        mode: BuildMode.release,
-      ),
-      '--deterministic',
-      '--write-v8-snapshot-profile-to=code_size_1/snapshot.arm64-v8a.json',
-      '--trace-precompiler-to=code_size_1/trace.arm64-v8a.json',
-      '--snapshot_kind=app-aot-elf',
-      '--elf=${environment.buildDir.childDirectory('arm64-v8a').childFile('app.so').path}',
-      '--strip',
-      environment.buildDir.childFile('app.dill').path,
+    processManager.addCommand(FakeCommand(
+      command: <String>[
+        artifacts.getArtifactPath(
+          Artifact.genSnapshot,
+          platform: TargetPlatform.android_arm64,
+          mode: BuildMode.release,
+        ),
+        '--deterministic',
+        '--write-v8-snapshot-profile-to=code_size_1/snapshot.arm64-v8a.json',
+        '--trace-precompiler-to=code_size_1/trace.arm64-v8a.json',
+        '--snapshot_kind=app-aot-elf',
+        '--elf=${environment.buildDir.childDirectory('arm64-v8a').childFile('app.so').path}',
+        '--strip',
+        environment.buildDir.childFile('app.dill').path,
       ],
     ));
     environment.buildDir.createSync(recursive: true);
     environment.buildDir.childFile('app.dill').createSync();
     environment.projectDir.childFile('.packages').writeAsStringSync('\n');
-    const AndroidAot androidAot = AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
+    const AndroidAot androidAot =
+        AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
 
     await androidAot.build(environment);
 
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testUsingContext('kExtraGenSnapshotOptions passes values to gen_snapshot', () async {
+  testUsingContext('kExtraGenSnapshotOptions passes values to gen_snapshot',
+      () async {
     processManager = FakeProcessManager.empty();
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
@@ -243,8 +278,8 @@ void main() {
       fileSystem: fileSystem,
       logger: logger,
     );
-    processManager.addCommand(
-      FakeCommand(command: <String>[
+    processManager.addCommand(FakeCommand(
+      command: <String>[
         artifacts.getArtifactPath(
           Artifact.genSnapshot,
           platform: TargetPlatform.android_arm64,
@@ -265,10 +300,12 @@ void main() {
     environment.projectDir.childFile('.packages').writeAsStringSync('\n');
 
     await const AndroidAot(TargetPlatform.android_arm64, BuildMode.release)
-      .build(environment);
+        .build(environment);
   });
 
-  testUsingContext('--no-strip in kExtraGenSnapshotOptions suppresses --strip gen_snapshot flag', () async {
+  testUsingContext(
+      '--no-strip in kExtraGenSnapshotOptions suppresses --strip gen_snapshot flag',
+      () async {
     processManager = FakeProcessManager.empty();
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
@@ -283,8 +320,8 @@ void main() {
       fileSystem: fileSystem,
       logger: logger,
     );
-    processManager.addCommand(
-      FakeCommand(command: <String>[
+    processManager.addCommand(FakeCommand(
+      command: <String>[
         artifacts.getArtifactPath(
           Artifact.genSnapshot,
           platform: TargetPlatform.android_arm64,
@@ -303,10 +340,11 @@ void main() {
     environment.projectDir.childFile('.packages').writeAsStringSync('\n');
 
     await const AndroidAot(TargetPlatform.android_arm64, BuildMode.release)
-      .build(environment);
+        .build(environment);
   });
 
-  testWithoutContext('android aot bundle copies so from abi directory', () async {
+  testWithoutContext('android aot bundle copies so from abi directory',
+      () async {
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
       outputDir: fileSystem.directory('out')..createSync(),
@@ -319,22 +357,27 @@ void main() {
       logger: logger,
     );
     environment.buildDir.createSync(recursive: true);
-    const AndroidAot androidAot = AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
+    const AndroidAot androidAot =
+        AndroidAot(TargetPlatform.android_arm64, BuildMode.release);
     const AndroidAotBundle androidAotBundle = AndroidAotBundle(androidAot);
     // Create required files.
     environment.buildDir
-      .childDirectory('arm64-v8a')
-      .childFile('app.so')
-      .createSync(recursive: true);
+        .childDirectory('arm64-v8a')
+        .childFile('app.so')
+        .createSync(recursive: true);
 
     await androidAotBundle.build(environment);
 
-    expect(environment.outputDir
-      .childDirectory('arm64-v8a')
-      .childFile('app.so').existsSync(), true);
+    expect(
+        environment.outputDir
+            .childDirectory('arm64-v8a')
+            .childFile('app.so')
+            .existsSync(),
+        true);
   });
 
-  test('copyDeferredComponentSoFiles copies all files to correct locations', () {
+  test('copyDeferredComponentSoFiles copies all files to correct locations',
+      () {
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
       outputDir: fileSystem.directory('/out')..createSync(),
@@ -371,13 +414,18 @@ void main() {
       DeferredComponent(name: 'component3', libraries: <String>['lib2']),
     ];
     final List<LoadingUnit> loadingUnits = <LoadingUnit>[
-      LoadingUnit(id: 2, libraries: <String>['lib1'], path: '/unit2/abi1/part.so'),
-      LoadingUnit(id: 3, libraries: <String>['lib2'], path: '/unit3/abi1/part.so'),
-      LoadingUnit(id: 4, libraries: <String>['lib3'], path: '/unit4/abi1/part.so'),
-
-      LoadingUnit(id: 2, libraries: <String>['lib1'], path: '/unit2/abi2/part.so'),
-      LoadingUnit(id: 3, libraries: <String>['lib2'], path: '/unit3/abi2/part.so'),
-      LoadingUnit(id: 4, libraries: <String>['lib3'], path: '/unit4/abi2/part.so'),
+      LoadingUnit(
+          id: 2, libraries: <String>['lib1'], path: '/unit2/abi1/part.so'),
+      LoadingUnit(
+          id: 3, libraries: <String>['lib2'], path: '/unit3/abi1/part.so'),
+      LoadingUnit(
+          id: 4, libraries: <String>['lib3'], path: '/unit4/abi1/part.so'),
+      LoadingUnit(
+          id: 2, libraries: <String>['lib1'], path: '/unit2/abi2/part.so'),
+      LoadingUnit(
+          id: 3, libraries: <String>['lib2'], path: '/unit3/abi2/part.so'),
+      LoadingUnit(
+          id: 4, libraries: <String>['lib3'], path: '/unit4/abi2/part.so'),
     ];
     for (final DeferredComponent component in components) {
       component.assignLoadingUnits(loadingUnits);
@@ -387,13 +435,12 @@ void main() {
       buildDir.createSync(recursive: true);
     }
     final Depfile depfile = copyDeferredComponentSoFiles(
-      environment,
-      components,
-      loadingUnits,
-      buildDir,
-      <String>['abi1', 'abi2'],
-      BuildMode.release
-    );
+        environment,
+        components,
+        loadingUnits,
+        buildDir,
+        <String>['abi1', 'abi2'],
+        BuildMode.release);
     expect(depfile.inputs.length, 6);
     expect(depfile.outputs.length, 6);
 
@@ -411,11 +458,15 @@ void main() {
     expect(depfile.outputs[4].readAsStringSync(), so3.readAsStringSync());
     expect(depfile.outputs[5].readAsStringSync(), so6.readAsStringSync());
 
-    expect(depfile.outputs[0].path, '/build/component2/intermediates/flutter/release/deferred_libs/abi1/libapp.so-2.part.so');
-    expect(depfile.outputs[1].path, '/build/component3/intermediates/flutter/release/deferred_libs/abi1/libapp.so-3.part.so');
+    expect(depfile.outputs[0].path,
+        '/build/component2/intermediates/flutter/release/deferred_libs/abi1/libapp.so-2.part.so');
+    expect(depfile.outputs[1].path,
+        '/build/component3/intermediates/flutter/release/deferred_libs/abi1/libapp.so-3.part.so');
 
-    expect(depfile.outputs[2].path, '/build/component2/intermediates/flutter/release/deferred_libs/abi2/libapp.so-2.part.so');
-    expect(depfile.outputs[3].path, '/build/component3/intermediates/flutter/release/deferred_libs/abi2/libapp.so-3.part.so');
+    expect(depfile.outputs[2].path,
+        '/build/component2/intermediates/flutter/release/deferred_libs/abi2/libapp.so-2.part.so');
+    expect(depfile.outputs[3].path,
+        '/build/component3/intermediates/flutter/release/deferred_libs/abi2/libapp.so-3.part.so');
 
     expect(depfile.outputs[4].path, '/out/abi1/app.so-4.part.so');
     expect(depfile.outputs[5].path, '/out/abi2/app.so-4.part.so');
@@ -458,13 +509,18 @@ void main() {
       DeferredComponent(name: 'component3', libraries: <String>['lib2']),
     ];
     final List<LoadingUnit> loadingUnits = <LoadingUnit>[
-      LoadingUnit(id: 2, libraries: <String>['lib1'], path: '/unit2/abi1/part.so'),
-      LoadingUnit(id: 3, libraries: <String>['lib2'], path: '/unit3/abi1/part.so'),
-      LoadingUnit(id: 4, libraries: <String>['lib3'], path: '/unit4/abi1/part.so'),
-
-      LoadingUnit(id: 2, libraries: <String>['lib1'], path: '/unit2/abi2/part.so'),
-      LoadingUnit(id: 3, libraries: <String>['lib2'], path: '/unit3/abi2/part.so'),
-      LoadingUnit(id: 4, libraries: <String>['lib3'], path: '/unit4/abi2/part.so'),
+      LoadingUnit(
+          id: 2, libraries: <String>['lib1'], path: '/unit2/abi1/part.so'),
+      LoadingUnit(
+          id: 3, libraries: <String>['lib2'], path: '/unit3/abi1/part.so'),
+      LoadingUnit(
+          id: 4, libraries: <String>['lib3'], path: '/unit4/abi1/part.so'),
+      LoadingUnit(
+          id: 2, libraries: <String>['lib1'], path: '/unit2/abi2/part.so'),
+      LoadingUnit(
+          id: 3, libraries: <String>['lib2'], path: '/unit3/abi2/part.so'),
+      LoadingUnit(
+          id: 4, libraries: <String>['lib3'], path: '/unit4/abi2/part.so'),
     ];
     for (final DeferredComponent component in components) {
       component.assignLoadingUnits(loadingUnits);
@@ -474,13 +530,12 @@ void main() {
       buildDir.createSync(recursive: true);
     }
     final Depfile depfile = copyDeferredComponentSoFiles(
-      environment,
-      components,
-      loadingUnits,
-      buildDir,
-      <String>['abi1'],
-      BuildMode.release
-    );
+        environment,
+        components,
+        loadingUnits,
+        buildDir,
+        <String>['abi1'],
+        BuildMode.release);
     expect(depfile.inputs.length, 3);
     expect(depfile.outputs.length, 3);
 
@@ -492,15 +547,20 @@ void main() {
     expect(depfile.outputs[1].readAsStringSync(), so2.readAsStringSync());
     expect(depfile.outputs[2].readAsStringSync(), so3.readAsStringSync());
 
-    expect(depfile.outputs[0].path, '/build/component2/intermediates/flutter/release/deferred_libs/abi1/libapp.so-2.part.so');
-    expect(depfile.outputs[1].path, '/build/component3/intermediates/flutter/release/deferred_libs/abi1/libapp.so-3.part.so');
+    expect(depfile.outputs[0].path,
+        '/build/component2/intermediates/flutter/release/deferred_libs/abi1/libapp.so-2.part.so');
+    expect(depfile.outputs[1].path,
+        '/build/component3/intermediates/flutter/release/deferred_libs/abi1/libapp.so-3.part.so');
 
     expect(depfile.outputs[2].path, '/out/abi1/app.so-4.part.so');
   });
 
-  testUsingContext('DebugAndroidApplication with impeller and shader compilation', () async {
+  testUsingContext(
+      'DebugAndroidApplication with impeller and shader compilation', () async {
     // Create impellerc to work around fallback detection logic.
-    fileSystem.file(artifacts.getHostArtifact(HostArtifact.impellerc)).createSync(recursive: true);
+    fileSystem
+        .file(artifacts.getHostArtifact(HostArtifact.impellerc))
+        .createSync(recursive: true);
 
     final Environment environment = Environment.test(
       fileSystem.currentDirectory,
@@ -516,15 +576,17 @@ void main() {
     environment.buildDir.createSync(recursive: true);
 
     // create pre-requisites.
-    environment.buildDir.childFile('app.dill')
-      .writeAsStringSync('abcd');
+    environment.buildDir.childFile('app.dill').writeAsStringSync('abcd');
     fileSystem
-      .file(artifacts.getArtifactPath(Artifact.vmSnapshotData, mode: BuildMode.debug))
-      .createSync(recursive: true);
+        .file(artifacts.getArtifactPath(Artifact.vmSnapshotData,
+            mode: BuildMode.debug))
+        .createSync(recursive: true);
     fileSystem
-      .file(artifacts.getArtifactPath(Artifact.isolateSnapshotData, mode: BuildMode.debug))
-      .createSync(recursive: true);
-    fileSystem.file('pubspec.yaml').writeAsStringSync('name: hello\nflutter:\n  shaders:\n    - shader.glsl');
+        .file(artifacts.getArtifactPath(Artifact.isolateSnapshotData,
+            mode: BuildMode.debug))
+        .createSync(recursive: true);
+    fileSystem.file('pubspec.yaml').writeAsStringSync(
+        'name: hello\nflutter:\n  shaders:\n    - shader.glsl');
     fileSystem.file('.packages').writeAsStringSync('\n');
     fileSystem.file('shader.glsl').writeAsStringSync('test');
 
@@ -545,9 +607,24 @@ void main() {
     await const DebugAndroidApplication().build(environment);
     expect(processManager, hasNoRemainingExpectations);
 
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'isolate_snapshot_data')).existsSync(), true);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'vm_snapshot_data')).existsSync(), true);
-    expect(fileSystem.file(fileSystem.path.join('out', 'flutter_assets', 'kernel_blob.bin')).existsSync(), true);
+    expect(
+        fileSystem
+            .file(fileSystem.path
+                .join('out', 'flutter_assets', 'isolate_snapshot_data'))
+            .existsSync(),
+        true);
+    expect(
+        fileSystem
+            .file(fileSystem.path
+                .join('out', 'flutter_assets', 'vm_snapshot_data'))
+            .existsSync(),
+        true);
+    expect(
+        fileSystem
+            .file(fileSystem.path
+                .join('out', 'flutter_assets', 'kernel_blob.bin'))
+            .existsSync(),
+        true);
   }, overrides: <Type, Generator>{
     FileSystem: () => fileSystem,
     ProcessManager: () => processManager,

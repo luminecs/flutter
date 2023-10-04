@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 void main() => runApp(const ShortcutsExampleApp());
 
 class ShortcutsExampleApp extends StatelessWidget {
@@ -94,7 +93,8 @@ class _ShortcutsExampleState extends State<ShortcutsExample> {
           child: Column(
             children: <Widget>[
               const Text('Add to the counter by pressing the up arrow key'),
-              const Text('Subtract from the counter by pressing the down arrow key'),
+              const Text(
+                  'Subtract from the counter by pressing the down arrow key'),
               ListenableBuilder(
                 listenable: model,
                 builder: (BuildContext context, Widget? child) {

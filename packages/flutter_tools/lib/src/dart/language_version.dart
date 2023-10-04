@@ -14,18 +14,21 @@ final LanguageVersion nullSafeVersion = LanguageVersion(2, 12);
 
 LanguageVersion? _currentLanguageVersion;
 
-LanguageVersion currentLanguageVersion(FileSystem fileSystem, String flutterRoot) {
+LanguageVersion currentLanguageVersion(
+    FileSystem fileSystem, String flutterRoot) {
   if (_currentLanguageVersion != null) {
     return _currentLanguageVersion!;
   }
   // Either reading the file or parsing the version could fail on a corrupt Dart SDK.
   // let it crash so it shows up in crash logging.
-  final File versionFile = fileSystem.file(fileSystem.path.join(flutterRoot, 'bin', 'cache', 'dart-sdk', 'version'));
+  final File versionFile = fileSystem.file(
+      fileSystem.path.join(flutterRoot, 'bin', 'cache', 'dart-sdk', 'version'));
   if (!versionFile.existsSync() && _inUnitTest()) {
     return LanguageVersion(2, 12);
   }
   final Version version = Version.parse(versionFile.readAsStringSync())!;
-  return _currentLanguageVersion = LanguageVersion(version.major, version.minor);
+  return _currentLanguageVersion =
+      LanguageVersion(version.major, version.minor);
 }
 
 // Whether the tool is executing in a unit test.
@@ -33,7 +36,8 @@ bool _inUnitTest() {
   return Zone.current[#test.declarer] != null;
 }
 
-LanguageVersion determineLanguageVersion(File file, Package? package, String flutterRoot) {
+LanguageVersion determineLanguageVersion(
+    File file, Package? package, String flutterRoot) {
   int blockCommentDepth = 0;
   // If reading the file fails, default to a null-safe version. The
   // command will likely fail later in the process with a better error
@@ -95,7 +99,8 @@ LanguageVersion determineLanguageVersion(File file, Package? package, String flu
 
   // If the language version cannot be found, use the package version.
   if (package != null) {
-    return package.languageVersion ?? currentLanguageVersion(file.fileSystem, flutterRoot);
+    return package.languageVersion ??
+        currentLanguageVersion(file.fileSystem, flutterRoot);
   }
   // Default to current version.
   return currentLanguageVersion(file.fileSystem, flutterRoot);

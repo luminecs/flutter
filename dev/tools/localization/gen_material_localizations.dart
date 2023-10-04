@@ -2,6 +2,7 @@ import 'localizations_utils.dart';
 
 String generateMaterialHeader(String regenerateInstructions) {
   return '''
+
 // This file has been automatically generated. Please do not edit it manually.
 // To regenerate the file, use:
 // $regenerateInstructions
@@ -59,4 +60,5 @@ const String materialFactoryArguments =
 
 const String materialSupportedLanguagesConstant = 'kMaterialSupportedLanguages';
 
-const String materialSupportedLanguagesDocMacro = 'flutter.localizations.material.languages';
+const String materialSupportedLanguagesDocMacro =
+    'flutter.localizations.material.languages';

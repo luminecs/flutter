@@ -39,8 +39,10 @@ void main() {
     expect(find.byType(Placeholder), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('Widget builds with initial value', (WidgetTester tester) async {
-    final SpyStringValueNotifier valueListenable = SpyStringValueNotifier('Bachman');
+  testWidgetsWithLeakTracking('Widget builds with initial value',
+      (WidgetTester tester) async {
+    final SpyStringValueNotifier valueListenable =
+        SpyStringValueNotifier('Bachman');
     addTearDown(valueListenable.dispose);
 
     await tester.pumpWidget(builderForValueListenable(valueListenable));
@@ -48,7 +50,8 @@ void main() {
     expect(find.text('Bachman'), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('Widget updates when value changes', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Widget updates when value changes',
+      (WidgetTester tester) async {
     await tester.pumpWidget(textBuilderUnderTest);
 
     valueListenable.value = 'Gilfoyle';
@@ -61,14 +64,16 @@ void main() {
     expect(find.text('Dinesh'), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('Can change listenable', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Can change listenable',
+      (WidgetTester tester) async {
     await tester.pumpWidget(textBuilderUnderTest);
 
     valueListenable.value = 'Gilfoyle';
     await tester.pump();
     expect(find.text('Gilfoyle'), findsOneWidget);
 
-    final SpyStringValueNotifier differentListenable = SpyStringValueNotifier('Hendricks');
+    final SpyStringValueNotifier differentListenable =
+        SpyStringValueNotifier('Hendricks');
     addTearDown(differentListenable.dispose);
 
     await tester.pumpWidget(builderForValueListenable(differentListenable));
@@ -77,14 +82,17 @@ void main() {
     expect(find.text('Hendricks'), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('Stops listening to old listenable after changing listenable', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Stops listening to old listenable after changing listenable',
+      (WidgetTester tester) async {
     await tester.pumpWidget(textBuilderUnderTest);
 
     valueListenable.value = 'Gilfoyle';
     await tester.pump();
     expect(find.text('Gilfoyle'), findsOneWidget);
 
-    final SpyStringValueNotifier differentListenable = SpyStringValueNotifier('Hendricks');
+    final SpyStringValueNotifier differentListenable =
+        SpyStringValueNotifier('Hendricks');
     addTearDown(differentListenable.dispose);
 
     await tester.pumpWidget(builderForValueListenable(differentListenable));
@@ -100,7 +108,8 @@ void main() {
     expect(find.text('Hendricks'), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('Self-cleans when removed', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Self-cleans when removed',
+      (WidgetTester tester) async {
     await tester.pumpWidget(textBuilderUnderTest);
 
     valueListenable.value = 'Gilfoyle';

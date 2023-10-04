@@ -1,10 +1,9 @@
 import 'package:meta/meta.dart';
 
 abstract class Command {
-  const Command({ this.timeout });
+  const Command({this.timeout});
 
-  Command.deserialize(Map<String, String> json)
-    : timeout = _parseTimeout(json);
+  Command.deserialize(Map<String, String> json) : timeout = _parseTimeout(json);
 
   static Duration? _parseTimeout(Map<String, String> json) {
     final String? timeout = json['timeout'];

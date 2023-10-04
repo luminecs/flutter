@@ -32,7 +32,8 @@ abstract class AlignmentGeometry {
 
   AlignmentGeometry operator %(double other);
 
-  static AlignmentGeometry? lerp(AlignmentGeometry? a, AlignmentGeometry? b, double t) {
+  static AlignmentGeometry? lerp(
+      AlignmentGeometry? a, AlignmentGeometry? b, double t) {
     if (identical(a, b)) {
       return a;
     }
@@ -70,10 +71,10 @@ abstract class AlignmentGeometry {
 
   @override
   bool operator ==(Object other) {
-    return other is AlignmentGeometry
-        && other._x == _x
-        && other._start == _start
-        && other._y == _y;
+    return other is AlignmentGeometry &&
+        other._x == _x &&
+        other._start == _start &&
+        other._y == _y;
   }
 
   @override
@@ -192,10 +193,12 @@ class Alignment extends AlignmentGeometry {
       return a;
     }
     if (a == null) {
-      return Alignment(ui.lerpDouble(0.0, b!.x, t)!, ui.lerpDouble(0.0, b.y, t)!);
+      return Alignment(
+          ui.lerpDouble(0.0, b!.x, t)!, ui.lerpDouble(0.0, b.y, t)!);
     }
     if (b == null) {
-      return Alignment(ui.lerpDouble(a.x, 0.0, t)!, ui.lerpDouble(a.y, 0.0, t)!);
+      return Alignment(
+          ui.lerpDouble(a.x, 0.0, t)!, ui.lerpDouble(a.y, 0.0, t)!);
     }
     return Alignment(ui.lerpDouble(a.x, b.x, t)!, ui.lerpDouble(a.y, b.y, t)!);
   }
@@ -232,7 +235,7 @@ class Alignment extends AlignmentGeometry {
       return 'Alignment.bottomRight';
     }
     return 'Alignment(${x.toStringAsFixed(1)}, '
-                     '${y.toStringAsFixed(1)})';
+        '${y.toStringAsFixed(1)})';
   }
 
   @override
@@ -261,15 +264,18 @@ class AlignmentDirectional extends AlignmentGeometry {
 
   static const AlignmentDirectional topEnd = AlignmentDirectional(1.0, -1.0);
 
-  static const AlignmentDirectional centerStart = AlignmentDirectional(-1.0, 0.0);
+  static const AlignmentDirectional centerStart =
+      AlignmentDirectional(-1.0, 0.0);
 
   static const AlignmentDirectional center = AlignmentDirectional(0.0, 0.0);
 
   static const AlignmentDirectional centerEnd = AlignmentDirectional(1.0, 0.0);
 
-  static const AlignmentDirectional bottomStart = AlignmentDirectional(-1.0, 1.0);
+  static const AlignmentDirectional bottomStart =
+      AlignmentDirectional(-1.0, 1.0);
 
-  static const AlignmentDirectional bottomCenter = AlignmentDirectional(0.0, 1.0);
+  static const AlignmentDirectional bottomCenter =
+      AlignmentDirectional(0.0, 1.0);
 
   static const AlignmentDirectional bottomEnd = AlignmentDirectional(1.0, 1.0);
 
@@ -306,7 +312,8 @@ class AlignmentDirectional extends AlignmentGeometry {
 
   @override
   AlignmentDirectional operator ~/(double other) {
-    return AlignmentDirectional((start ~/ other).toDouble(), (y ~/ other).toDouble());
+    return AlignmentDirectional(
+        (start ~/ other).toDouble(), (y ~/ other).toDouble());
   }
 
   @override
@@ -314,22 +321,27 @@ class AlignmentDirectional extends AlignmentGeometry {
     return AlignmentDirectional(start % other, y % other);
   }
 
-  static AlignmentDirectional? lerp(AlignmentDirectional? a, AlignmentDirectional? b, double t) {
+  static AlignmentDirectional? lerp(
+      AlignmentDirectional? a, AlignmentDirectional? b, double t) {
     if (identical(a, b)) {
       return a;
     }
     if (a == null) {
-      return AlignmentDirectional(ui.lerpDouble(0.0, b!.start, t)!, ui.lerpDouble(0.0, b.y, t)!);
+      return AlignmentDirectional(
+          ui.lerpDouble(0.0, b!.start, t)!, ui.lerpDouble(0.0, b.y, t)!);
     }
     if (b == null) {
-      return AlignmentDirectional(ui.lerpDouble(a.start, 0.0, t)!, ui.lerpDouble(a.y, 0.0, t)!);
+      return AlignmentDirectional(
+          ui.lerpDouble(a.start, 0.0, t)!, ui.lerpDouble(a.y, 0.0, t)!);
     }
-    return AlignmentDirectional(ui.lerpDouble(a.start, b.start, t)!, ui.lerpDouble(a.y, b.y, t)!);
+    return AlignmentDirectional(
+        ui.lerpDouble(a.start, b.start, t)!, ui.lerpDouble(a.y, b.y, t)!);
   }
 
   @override
   Alignment resolve(TextDirection? direction) {
-    assert(direction != null, 'Cannot resolve $runtimeType without a TextDirection.');
+    assert(direction != null,
+        'Cannot resolve $runtimeType without a TextDirection.');
     switch (direction!) {
       case TextDirection.rtl:
         return Alignment(-start, y);
@@ -367,7 +379,7 @@ class AlignmentDirectional extends AlignmentGeometry {
       return 'AlignmentDirectional.bottomEnd';
     }
     return 'AlignmentDirectional(${start.toStringAsFixed(1)}, '
-                                '${y.toStringAsFixed(1)})';
+        '${y.toStringAsFixed(1)})';
   }
 
   @override
@@ -433,7 +445,8 @@ class _MixedAlignment extends AlignmentGeometry {
 
   @override
   Alignment resolve(TextDirection? direction) {
-    assert(direction != null, 'Cannot resolve $runtimeType without a TextDirection.');
+    assert(direction != null,
+        'Cannot resolve $runtimeType without a TextDirection.');
     switch (direction!) {
       case TextDirection.rtl:
         return Alignment(_x - _start, _y);

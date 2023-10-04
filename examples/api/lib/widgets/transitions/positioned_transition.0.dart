@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const PositionedTransitionExampleApp());
 
 class PositionedTransitionExampleApp extends StatelessWidget {
@@ -18,10 +17,12 @@ class PositionedTransitionExample extends StatefulWidget {
   const PositionedTransitionExample({super.key});
 
   @override
-  State<PositionedTransitionExample> createState() => _PositionedTransitionExampleState();
+  State<PositionedTransitionExample> createState() =>
+      _PositionedTransitionExampleState();
 }
 
-class _PositionedTransitionExampleState extends State<PositionedTransitionExample> with TickerProviderStateMixin {
+class _PositionedTransitionExampleState
+    extends State<PositionedTransitionExample> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -50,7 +51,8 @@ class _PositionedTransitionExampleState extends State<PositionedTransitionExampl
                   biggest,
                 ),
                 end: RelativeRect.fromSize(
-                  Rect.fromLTWH(biggest.width - bigLogo, biggest.height - bigLogo, bigLogo, bigLogo),
+                  Rect.fromLTWH(biggest.width - bigLogo,
+                      biggest.height - bigLogo, bigLogo, bigLogo),
                   biggest,
                 ),
               ).animate(CurvedAnimation(

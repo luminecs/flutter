@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const FocusScopeExampleApp());
 
 class FocusScopeExampleApp extends StatelessWidget {
@@ -134,7 +133,9 @@ class _FocusScopeExampleState extends State<FocusScopeExample> {
             // TRY THIS: Try changing this to Colors.green.withOpacity(0.8) to see for
             // yourself that the hidden components do/don't get focus.
             backgroundColor: Colors.green,
-            onPressed: backdropIsVisible ? null : () => setState(() => backdropIsVisible = true),
+            onPressed: backdropIsVisible
+                ? null
+                : () => setState(() => backdropIsVisible = true),
             child: DefaultTextStyle(
               style: Theme.of(context).textTheme.displayMedium!,
               child: const Text('FOREGROUND'),

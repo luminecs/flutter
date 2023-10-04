@@ -31,7 +31,8 @@ abstract class Context {
     );
   }
 
-  void updateState(pb.ConductorState state, [List<String> logs = const <String>[]]) {
+  void updateState(pb.ConductorState state,
+      [List<String> logs = const <String>[]]) {
     writeStateToFile(stateFile, state, logs);
   }
 }

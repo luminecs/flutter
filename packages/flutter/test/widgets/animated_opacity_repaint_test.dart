@@ -4,19 +4,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('RenderAnimatedOpacityMixin does not drop layer when animating to 1', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'RenderAnimatedOpacityMixin does not drop layer when animating to 1',
+      (WidgetTester tester) async {
     RenderTestObject.paintCount = 0;
-    final AnimationController controller = AnimationController(vsync: const TestVSync(), duration: const Duration(seconds: 1));
+    final AnimationController controller = AnimationController(
+        vsync: const TestVSync(), duration: const Duration(seconds: 1));
     final Tween<double> opacityTween = Tween<double>(begin: 0, end: 1);
-    await tester.pumpWidget(
-      ColoredBox(
-        color: Colors.red,
-        child: FadeTransition(
-          opacity: controller.drive(opacityTween),
-          child: const TestWidget(),
-        ),
-      )
-    );
+    await tester.pumpWidget(ColoredBox(
+      color: Colors.red,
+      child: FadeTransition(
+        opacity: controller.drive(opacityTween),
+        child: const TestWidget(),
+      ),
+    ));
 
     expect(RenderTestObject.paintCount, 0);
     controller.forward();
@@ -37,19 +38,21 @@ void main() {
     expect(RenderTestObject.paintCount, 1);
   });
 
-  testWidgetsWithLeakTracking('RenderAnimatedOpacityMixin avoids repainting child as it animates', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'RenderAnimatedOpacityMixin avoids repainting child as it animates',
+      (WidgetTester tester) async {
     RenderTestObject.paintCount = 0;
-    final AnimationController controller = AnimationController(vsync: const TestVSync(), duration: const Duration(seconds: 1));
-    final Tween<double> opacityTween = Tween<double>(begin: 0, end: 0.99); // Layer is dropped at 1
-    await tester.pumpWidget(
-      ColoredBox(
-        color: Colors.red,
-        child: FadeTransition(
-          opacity: controller.drive(opacityTween),
-          child: const TestWidget(),
-        ),
-      )
-    );
+    final AnimationController controller = AnimationController(
+        vsync: const TestVSync(), duration: const Duration(seconds: 1));
+    final Tween<double> opacityTween =
+        Tween<double>(begin: 0, end: 0.99); // Layer is dropped at 1
+    await tester.pumpWidget(ColoredBox(
+      color: Colors.red,
+      child: FadeTransition(
+        opacity: controller.drive(opacityTween),
+        child: const TestWidget(),
+      ),
+    ));
 
     expect(RenderTestObject.paintCount, 0);
     controller.forward();
@@ -70,22 +73,23 @@ void main() {
     expect(RenderTestObject.paintCount, 1);
   });
 
-  testWidgetsWithLeakTracking('RenderAnimatedOpacityMixin allows opacity layer to be disposed when animating to 0 opacity', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'RenderAnimatedOpacityMixin allows opacity layer to be disposed when animating to 0 opacity',
+      (WidgetTester tester) async {
     RenderTestObject.paintCount = 0;
-    final AnimationController controller = AnimationController(vsync: const TestVSync(), duration: const Duration(seconds: 1));
+    final AnimationController controller = AnimationController(
+        vsync: const TestVSync(), duration: const Duration(seconds: 1));
     final Tween<double> opacityTween = Tween<double>(begin: 0.99, end: 0);
 
     addTearDown(controller.dispose);
 
-    await tester.pumpWidget(
-      ColoredBox(
-        color: Colors.red,
-        child: FadeTransition(
-          opacity: controller.drive(opacityTween),
-          child: const TestWidget(),
-        ),
-      )
-    );
+    await tester.pumpWidget(ColoredBox(
+      color: Colors.red,
+      child: FadeTransition(
+        opacity: controller.drive(opacityTween),
+        child: const TestWidget(),
+      ),
+    ));
 
     expect(RenderTestObject.paintCount, 1);
     expect(tester.layers, contains(isA<OpacityLayer>()));

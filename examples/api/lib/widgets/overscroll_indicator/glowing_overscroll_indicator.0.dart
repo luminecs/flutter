@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const GlowingOverscrollIndicatorExampleApp());
 
 class GlowingOverscrollIndicatorExampleApp extends StatelessWidget {
@@ -22,7 +21,8 @@ class GlowingOverscrollIndicatorExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double leadingPaintOffset = MediaQuery.of(context).padding.top + AppBar().preferredSize.height;
+    final double leadingPaintOffset =
+        MediaQuery.of(context).padding.top + AppBar().preferredSize.height;
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification notification) {
         if (notification.leading) {

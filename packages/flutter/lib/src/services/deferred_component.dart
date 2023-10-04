@@ -12,17 +12,19 @@ abstract final class DeferredComponent {
   // so this is not possible. The API has been left flexible to allow adding
   // loadingUnitId as a parameter.
 
-  static Future<void> installDeferredComponent({required String componentName}) async {
+  static Future<void> installDeferredComponent(
+      {required String componentName}) async {
     await SystemChannels.deferredComponent.invokeMethod<void>(
       'installDeferredComponent',
-      <String, dynamic>{ 'loadingUnitId': -1, 'componentName': componentName },
+      <String, dynamic>{'loadingUnitId': -1, 'componentName': componentName},
     );
   }
 
-  static Future<void> uninstallDeferredComponent({required String componentName}) async {
+  static Future<void> uninstallDeferredComponent(
+      {required String componentName}) async {
     await SystemChannels.deferredComponent.invokeMethod<void>(
       'uninstallDeferredComponent',
-      <String, dynamic>{ 'loadingUnitId': -1, 'componentName': componentName },
+      <String, dynamic>{'loadingUnitId': -1, 'componentName': componentName},
     );
   }
 }

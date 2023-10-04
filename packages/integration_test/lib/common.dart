@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-typedef ScreenshotCallback = Future<bool> Function(String name, List<int> image, [Map<String, Object?>? args]);
-
+typedef ScreenshotCallback = Future<bool> Function(String name, List<int> image,
+    [Map<String, Object?>? args]);
 
 class Response {
   Response.allTestsPassed({this.data})
@@ -40,12 +40,15 @@ class Response {
       });
 
   static Response fromJson(String source) {
-    final Map<String, dynamic> responseJson = json.decode(source) as Map<String, dynamic>;
+    final Map<String, dynamic> responseJson =
+        json.decode(source) as Map<String, dynamic>;
     if ((responseJson['result'] as String?) == 'true') {
-      return Response.allTestsPassed(data: responseJson['data'] as Map<String, dynamic>?);
+      return Response.allTestsPassed(
+          data: responseJson['data'] as Map<String, dynamic>?);
     } else {
       return Response.someTestsFailed(
-        _failureDetailsFromJson(responseJson['failureDetails'] as List<dynamic>),
+        _failureDetailsFromJson(
+            responseJson['failureDetails'] as List<dynamic>),
         data: responseJson['data'] as Map<String, dynamic>?,
       );
     }
@@ -105,8 +108,10 @@ class Failure {
   String toString() => toJson();
 
   static Failure fromJsonString(String jsonString) {
-    final Map<String, dynamic> failure = json.decode(jsonString) as Map<String, dynamic>;
-    return Failure(failure['methodName'] as String, failure['details'] as String?);
+    final Map<String, dynamic> failure =
+        json.decode(jsonString) as Map<String, dynamic>;
+    return Failure(
+        failure['methodName'] as String, failure['details'] as String?);
   }
 }
 
@@ -174,7 +179,8 @@ class WebDriverCommand {
       : type = WebDriverCommandType.noop,
         values = <String, dynamic>{};
 
-  WebDriverCommand.screenshot(String screenshotName, [Map<String, Object?>? args])
+  WebDriverCommand.screenshot(String screenshotName,
+      [Map<String, Object?>? args])
       : type = WebDriverCommandType.screenshot,
         values = <String, dynamic>{
           'screenshot_name': screenshotName,
@@ -185,16 +191,18 @@ class WebDriverCommand {
 
   final Map<String, dynamic> values;
 
-  static Map<String, dynamic> typeToMap(WebDriverCommandType type) => <String, dynamic>{
-    'web_driver_command': '$type',
-  };
+  static Map<String, dynamic> typeToMap(WebDriverCommandType type) =>
+      <String, dynamic>{
+        'web_driver_command': '$type',
+      };
 }
 
 abstract class CallbackManager {
   Future<Map<String, dynamic>> callback(
       Map<String, String> params, IntegrationTestResults testRunner);
 
-   Future<Map<String, dynamic>> takeScreenshot(String screenshot, [Map<String, Object?>? args]);
+  Future<Map<String, dynamic>> takeScreenshot(String screenshot,
+      [Map<String, Object?>? args]);
 
   Future<void> convertFlutterSurfaceToImage();
 

@@ -5,7 +5,5 @@ import 'package:platform_views_layout/main.dart' as app;
 
 void main() {
   enableFlutterDriverExtension();
-  runApp(
-    const app.PlatformViewApp()
-  );
+  runApp(const app.PlatformViewApp());
 }

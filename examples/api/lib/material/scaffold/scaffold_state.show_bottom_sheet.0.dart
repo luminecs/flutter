@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ShowBottomSheetExampleApp());
 
 class ShowBottomSheetExampleApp extends StatelessWidget {

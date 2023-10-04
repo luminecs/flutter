@@ -27,8 +27,9 @@ void defaultLoggingFunction(LogMessage log) {
 
 class LogMessage {
   LogMessage(this.message, this.tag, this.level)
-    : levelName = level.toString().substring(level.toString().indexOf('.') + 1),
-      time = DateTime.now();
+      : levelName =
+            level.toString().substring(level.toString().indexOf('.') + 1),
+        time = DateTime.now();
 
   final String message;
 

@@ -51,6 +51,8 @@ const Duration kJumpTapTimeout = Duration(milliseconds: 500);
 
 const double kPrecisePointerHitSlop = 1.0; // Logical pixels;
 
-const double kPrecisePointerPanSlop = kPrecisePointerHitSlop * 2.0; // Logical pixels
+const double kPrecisePointerPanSlop =
+    kPrecisePointerHitSlop * 2.0; // Logical pixels
 
-const double kPrecisePointerScaleSlop = kPrecisePointerHitSlop; // Logical pixels
+const double kPrecisePointerScaleSlop =
+    kPrecisePointerHitSlop; // Logical pixels

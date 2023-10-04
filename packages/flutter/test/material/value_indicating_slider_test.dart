@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
-
 void main() {
-  testWidgetsWithLeakTracking('Slider value indicator', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Slider value indicator',
+      (WidgetTester tester) async {
     await _buildValueIndicatorStaticSlider(
       tester,
       value: 0,
@@ -50,7 +50,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Slider value indicator wide text', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Slider value indicator wide text',
+      (WidgetTester tester) async {
     await _buildValueIndicatorStaticSlider(
       tester,
       value: 0,
@@ -94,7 +95,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Slider value indicator large text scale', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Slider value indicator large text scale',
+      (WidgetTester tester) async {
     await _buildValueIndicatorStaticSlider(
       tester,
       value: 0,
@@ -138,7 +140,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Slider value indicator large text scale and wide text',
+  testWidgetsWithLeakTracking(
+      'Slider value indicator large text scale and wide text',
       (WidgetTester tester) async {
     await _buildValueIndicatorStaticSlider(
       tester,
@@ -191,7 +194,8 @@ void main() {
     // support is deprecated and the APIs are removed, these tests
     // can be deleted.
 
-    testWidgetsWithLeakTracking('Slider value indicator', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('Slider value indicator',
+        (WidgetTester tester) async {
       await _buildValueIndicatorStaticSlider(
         tester,
         value: 0,
@@ -229,7 +233,8 @@ void main() {
       );
     });
 
-    testWidgetsWithLeakTracking('Slider value indicator wide text', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('Slider value indicator wide text',
+        (WidgetTester tester) async {
       await _buildValueIndicatorStaticSlider(
         tester,
         value: 0,
@@ -270,7 +275,8 @@ void main() {
       );
     });
 
-    testWidgetsWithLeakTracking('Slider value indicator large text scale', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('Slider value indicator large text scale',
+        (WidgetTester tester) async {
       await _buildValueIndicatorStaticSlider(
         tester,
         value: 0,
@@ -311,7 +317,8 @@ void main() {
       );
     });
 
-    testWidgetsWithLeakTracking('Slider value indicator large text scale and wide text',
+    testWidgetsWithLeakTracking(
+        'Slider value indicator large text scale and wide text',
         (WidgetTester tester) async {
       await _buildValueIndicatorStaticSlider(
         tester,
@@ -399,8 +406,8 @@ Future<void> _buildValueIndicatorStaticSlider(
                 data: MediaQueryData(textScaleFactor: textScale),
                 child: SliderTheme(
                   data: Theme.of(context).sliderTheme.copyWith(
-                    showValueIndicator: ShowValueIndicator.always,
-                  ),
+                        showValueIndicator: ShowValueIndicator.always,
+                      ),
                   child: Slider(
                     value: value,
                     label: value.toStringAsFixed(decimalCount),

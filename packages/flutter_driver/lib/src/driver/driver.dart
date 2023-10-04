@@ -109,87 +109,99 @@ abstract class FlutterDriver {
 
   async_io.WebDriver get webDriver => throw UnimplementedError();
 
-  @Deprecated(
-    'Call setSemantics(true) instead. '
-    'This feature was deprecated after v2.3.0-12.1.pre.'
-  )
+  @Deprecated('Call setSemantics(true) instead. '
+      'This feature was deprecated after v2.3.0-12.1.pre.')
   Future<void> enableAccessibility() async {
     await setSemantics(true);
   }
 
-  Future<Map<String, dynamic>> sendCommand(Command command) async => throw UnimplementedError();
+  Future<Map<String, dynamic>> sendCommand(Command command) async =>
+      throw UnimplementedError();
 
-  Future<Health> checkHealth({ Duration? timeout }) async {
+  Future<Health> checkHealth({Duration? timeout}) async {
     return Health.fromJson(await sendCommand(GetHealth(timeout: timeout)));
   }
 
-  Future<RenderTree> getRenderTree({ Duration? timeout }) async {
-    return RenderTree.fromJson(await sendCommand(GetRenderTree(timeout: timeout)));
+  Future<RenderTree> getRenderTree({Duration? timeout}) async {
+    return RenderTree.fromJson(
+        await sendCommand(GetRenderTree(timeout: timeout)));
   }
 
-  Future<LayerTree> getLayerTree({ Duration? timeout }) async {
-    return LayerTree.fromJson(await sendCommand(GetLayerTree(timeout: timeout)));
+  Future<LayerTree> getLayerTree({Duration? timeout}) async {
+    return LayerTree.fromJson(
+        await sendCommand(GetLayerTree(timeout: timeout)));
   }
 
-  Future<void> tap(SerializableFinder finder, { Duration? timeout }) async {
+  Future<void> tap(SerializableFinder finder, {Duration? timeout}) async {
     await sendCommand(Tap(finder, timeout: timeout));
   }
 
-  Future<void> waitFor(SerializableFinder finder, { Duration? timeout }) async {
+  Future<void> waitFor(SerializableFinder finder, {Duration? timeout}) async {
     await sendCommand(WaitFor(finder, timeout: timeout));
   }
 
-  Future<void> waitForAbsent(SerializableFinder finder, { Duration? timeout }) async {
+  Future<void> waitForAbsent(SerializableFinder finder,
+      {Duration? timeout}) async {
     await sendCommand(WaitForAbsent(finder, timeout: timeout));
   }
 
-  Future<void> waitForTappable(SerializableFinder finder, { Duration? timeout }) async {
+  Future<void> waitForTappable(SerializableFinder finder,
+      {Duration? timeout}) async {
     await sendCommand(WaitForTappable(finder, timeout: timeout));
   }
 
-  Future<void> waitForCondition(SerializableWaitCondition waitCondition, {Duration? timeout}) async {
+  Future<void> waitForCondition(SerializableWaitCondition waitCondition,
+      {Duration? timeout}) async {
     await sendCommand(WaitForCondition(waitCondition, timeout: timeout));
   }
 
-  Future<void> waitUntilNoTransientCallbacks({ Duration? timeout }) async {
-    await sendCommand(WaitForCondition(const NoTransientCallbacks(), timeout: timeout));
+  Future<void> waitUntilNoTransientCallbacks({Duration? timeout}) async {
+    await sendCommand(
+        WaitForCondition(const NoTransientCallbacks(), timeout: timeout));
   }
 
   Future<void> waitUntilFirstFrameRasterized() async {
     await sendCommand(const WaitForCondition(FirstFrameRasterized()));
   }
 
-  Future<DriverOffset> _getOffset(SerializableFinder finder, OffsetType type, { Duration? timeout }) async {
+  Future<DriverOffset> _getOffset(SerializableFinder finder, OffsetType type,
+      {Duration? timeout}) async {
     final GetOffset command = GetOffset(finder, type, timeout: timeout);
-    final GetOffsetResult result = GetOffsetResult.fromJson(await sendCommand(command));
+    final GetOffsetResult result =
+        GetOffsetResult.fromJson(await sendCommand(command));
     return DriverOffset(result.dx, result.dy);
   }
 
-  Future<DriverOffset> getTopLeft(SerializableFinder finder, { Duration? timeout }) async {
+  Future<DriverOffset> getTopLeft(SerializableFinder finder,
+      {Duration? timeout}) async {
     return _getOffset(finder, OffsetType.topLeft, timeout: timeout);
   }
 
-  Future<DriverOffset> getTopRight(SerializableFinder finder, { Duration? timeout }) async {
+  Future<DriverOffset> getTopRight(SerializableFinder finder,
+      {Duration? timeout}) async {
     return _getOffset(finder, OffsetType.topRight, timeout: timeout);
   }
 
-  Future<DriverOffset> getBottomLeft(SerializableFinder finder, { Duration? timeout }) async {
+  Future<DriverOffset> getBottomLeft(SerializableFinder finder,
+      {Duration? timeout}) async {
     return _getOffset(finder, OffsetType.bottomLeft, timeout: timeout);
   }
 
-  Future<DriverOffset> getBottomRight(SerializableFinder finder, { Duration? timeout }) async {
+  Future<DriverOffset> getBottomRight(SerializableFinder finder,
+      {Duration? timeout}) async {
     return _getOffset(finder, OffsetType.bottomRight, timeout: timeout);
   }
 
-  Future<DriverOffset> getCenter(SerializableFinder finder, { Duration? timeout }) async {
+  Future<DriverOffset> getCenter(SerializableFinder finder,
+      {Duration? timeout}) async {
     return _getOffset(finder, OffsetType.center, timeout: timeout);
   }
 
   Future<Map<String, Object?>> getRenderObjectDiagnostics(
-      SerializableFinder finder, {
-      int subtreeDepth = 0,
-      bool includeProperties = true,
-      Duration? timeout,
+    SerializableFinder finder, {
+    int subtreeDepth = 0,
+    bool includeProperties = true,
+    Duration? timeout,
   }) async {
     return sendCommand(GetDiagnosticsTree(
       finder,
@@ -215,12 +227,17 @@ abstract class FlutterDriver {
     ));
   }
 
-  Future<void> scroll(SerializableFinder finder, double dx, double dy, Duration duration, { int frequency = 60, Duration? timeout }) async {
-    await sendCommand(Scroll(finder, dx, dy, duration, frequency, timeout: timeout));
+  Future<void> scroll(
+      SerializableFinder finder, double dx, double dy, Duration duration,
+      {int frequency = 60, Duration? timeout}) async {
+    await sendCommand(
+        Scroll(finder, dx, dy, duration, frequency, timeout: timeout));
   }
 
-  Future<void> scrollIntoView(SerializableFinder finder, { double alignment = 0.0, Duration? timeout }) async {
-    await sendCommand(ScrollIntoView(finder, alignment: alignment, timeout: timeout));
+  Future<void> scrollIntoView(SerializableFinder finder,
+      {double alignment = 0.0, Duration? timeout}) async {
+    await sendCommand(
+        ScrollIntoView(finder, alignment: alignment, timeout: timeout));
   }
 
   Future<void> scrollUntilVisible(
@@ -238,25 +255,31 @@ abstract class FlutterDriver {
     // the chance to complete if the item is already onscreen; if not, scroll
     // repeatedly until we either find the item or time out.
     bool isVisible = false;
-    waitFor(item, timeout: timeout).then<void>((_) { isVisible = true; });
+    waitFor(item, timeout: timeout).then<void>((_) {
+      isVisible = true;
+    });
     await Future<void>.delayed(const Duration(milliseconds: 500));
     while (!isVisible) {
-      await scroll(scrollable, dxScroll, dyScroll, const Duration(milliseconds: 100));
+      await scroll(
+          scrollable, dxScroll, dyScroll, const Duration(milliseconds: 100));
       await Future<void>.delayed(const Duration(milliseconds: 500));
     }
 
     return scrollIntoView(item, alignment: alignment);
   }
 
-  Future<String> getText(SerializableFinder finder, { Duration? timeout }) async {
-    return GetTextResult.fromJson(await sendCommand(GetText(finder, timeout: timeout))).text;
+  Future<String> getText(SerializableFinder finder, {Duration? timeout}) async {
+    return GetTextResult.fromJson(
+            await sendCommand(GetText(finder, timeout: timeout)))
+        .text;
   }
 
-  Future<void> enterText(String text, { Duration? timeout }) async {
+  Future<void> enterText(String text, {Duration? timeout}) async {
     await sendCommand(EnterText(text, timeout: timeout));
   }
 
-  Future<void> setTextEntryEmulation({ required bool enabled, Duration? timeout }) async {
+  Future<void> setTextEntryEmulation(
+      {required bool enabled, Duration? timeout}) async {
     await sendCommand(SetTextEntryEmulation(enabled, timeout: timeout));
   }
 
@@ -265,18 +288,24 @@ abstract class FlutterDriver {
     await sendCommand(SendTextInputAction(action, timeout: timeout));
   }
 
-  Future<String> requestData(String? message, { Duration? timeout }) async {
-    return RequestDataResult.fromJson(await sendCommand(RequestData(message, timeout: timeout))).message;
+  Future<String> requestData(String? message, {Duration? timeout}) async {
+    return RequestDataResult.fromJson(
+            await sendCommand(RequestData(message, timeout: timeout)))
+        .message;
   }
 
-  Future<bool> setSemantics(bool enabled, { Duration? timeout }) async {
-    final SetSemanticsResult result = SetSemanticsResult.fromJson(await sendCommand(SetSemantics(enabled, timeout: timeout)));
+  Future<bool> setSemantics(bool enabled, {Duration? timeout}) async {
+    final SetSemanticsResult result = SetSemanticsResult.fromJson(
+        await sendCommand(SetSemantics(enabled, timeout: timeout)));
     return result.changedState;
   }
 
-  Future<int> getSemanticsId(SerializableFinder finder, { Duration? timeout }) async {
-    final Map<String, dynamic> jsonResponse = await sendCommand(GetSemanticsId(finder, timeout: timeout));
-    final GetSemanticsIdResult result = GetSemanticsIdResult.fromJson(jsonResponse);
+  Future<int> getSemanticsId(SerializableFinder finder,
+      {Duration? timeout}) async {
+    final Map<String, dynamic> jsonResponse =
+        await sendCommand(GetSemanticsId(finder, timeout: timeout));
+    final GetSemanticsIdResult result =
+        GetSemanticsIdResult.fromJson(jsonResponse);
     return result.id;
   }
 
@@ -287,6 +316,7 @@ abstract class FlutterDriver {
   Future<List<Map<String, dynamic>>> getVmFlags() async {
     throw UnimplementedError();
   }
+
   Future<void> startTracing({
     List<TimelineStream> streams = const <TimelineStream>[TimelineStream.all],
     Duration timeout = kUnusuallyLongTimeout,
@@ -299,6 +329,7 @@ abstract class FlutterDriver {
   }) async {
     throw UnimplementedError();
   }
+
   Future<Timeline> traceAction(
     Future<dynamic> Function() action, {
     List<TimelineStream> streams = const <TimelineStream>[TimelineStream.all],
@@ -312,7 +343,9 @@ abstract class FlutterDriver {
   }) async {
     throw UnimplementedError();
   }
-  Future<T> runUnsynchronized<T>(Future<T> Function() action, { Duration? timeout }) async {
+
+  Future<T> runUnsynchronized<T>(Future<T> Function() action,
+      {Duration? timeout}) async {
     await sendCommand(SetFrameSync(false, timeout: timeout));
     T result;
     try {
@@ -352,14 +385,24 @@ class CommonFinders {
     required SerializableFinder matching,
     bool matchRoot = false,
     bool firstMatchOnly = false,
-  }) => Ancestor(of: of, matching: matching, matchRoot: matchRoot, firstMatchOnly: firstMatchOnly);
+  }) =>
+      Ancestor(
+          of: of,
+          matching: matching,
+          matchRoot: matchRoot,
+          firstMatchOnly: firstMatchOnly);
 
   SerializableFinder descendant({
     required SerializableFinder of,
     required SerializableFinder matching,
     bool matchRoot = false,
     bool firstMatchOnly = false,
-  }) => Descendant(of: of, matching: matching, matchRoot: matchRoot, firstMatchOnly: firstMatchOnly);
+  }) =>
+      Descendant(
+          of: of,
+          matching: matching,
+          matchRoot: matchRoot,
+          firstMatchOnly: firstMatchOnly);
 }
 
 @immutable
@@ -371,13 +414,12 @@ class DriverOffset {
   final double dy;
 
   @override
-  String toString() => '$runtimeType($dx, $dy)'; // ignore: no_runtimetype_tostring, can't access package:flutter here to use objectRuntimeType
+  String toString() =>
+      '$runtimeType($dx, $dy)'; // ignore: no_runtimetype_tostring, can't access package:flutter here to use objectRuntimeType
 
   @override
   bool operator ==(Object other) {
-    return other is DriverOffset
-        && other.dx == dx
-        && other.dy == dy;
+    return other is DriverOffset && other.dx == dx && other.dy == dy;
   }
 
   @override

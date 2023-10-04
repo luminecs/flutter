@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 // This is the type used by the menu below.
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -46,11 +45,13 @@ class _MenuAnchorExampleState extends State<MenuAnchorExample> {
               },
               icon: const Icon(Icons.more_horiz),
               tooltip: 'Show menu',
-            );},
+            );
+          },
           menuChildren: List<MenuItemButton>.generate(
             3,
             (int index) => MenuItemButton(
-              onPressed: () => setState(() => selectedMenu = SampleItem.values[index]),
+              onPressed: () =>
+                  setState(() => selectedMenu = SampleItem.values[index]),
               child: Text('Item ${index + 1}'),
             ),
           ),

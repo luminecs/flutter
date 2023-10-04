@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const AnimatedListSample());
 }
@@ -16,7 +15,8 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late ListModel<int> _list;
   int? _selectedItem;
-  late int _nextItem; // The next item inserted when the user presses the '+' button.
+  late int
+      _nextItem; // The next item inserted when the user presses the '+' button.
 
   @override
   void initState() {
@@ -30,7 +30,8 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
   }
 
   // Used to build list items that haven't been removed.
-  Widget _buildItem(BuildContext context, int index, Animation<double> animation) {
+  Widget _buildItem(
+      BuildContext context, int index, Animation<double> animation) {
     return CardItem(
       animation: animation,
       item: _list[index],
@@ -43,7 +44,8 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     );
   }
 
-  Widget _buildRemovedItem(int item, BuildContext context, Animation<double> animation) {
+  Widget _buildRemovedItem(
+      int item, BuildContext context, Animation<double> animation) {
     return CardItem(
       animation: animation,
       item: item,
@@ -53,7 +55,8 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
 
   // Insert the "next item" into the list model.
   void _insert() {
-    final int index = _selectedItem == null ? _list.length : _list.indexOf(_selectedItem!);
+    final int index =
+        _selectedItem == null ? _list.length : _list.indexOf(_selectedItem!);
     _list.insert(index, _nextItem++);
   }
 
@@ -99,7 +102,8 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
   }
 }
 
-typedef RemovedItemBuilder<T> = Widget Function(T item, BuildContext context, Animation<double> animation);
+typedef RemovedItemBuilder<T> = Widget Function(
+    T item, BuildContext context, Animation<double> animation);
 
 class ListModel<E> {
   ListModel({

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const OnChangedExampleApp());
 
 class OnChangedExampleApp extends StatelessWidget {

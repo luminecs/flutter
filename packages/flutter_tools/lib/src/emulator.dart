@@ -24,16 +24,16 @@ class EmulatorManager {
     required ProcessManager processManager,
     required AndroidWorkflow androidWorkflow,
     required FileSystem fileSystem,
-  }) : _java = java,
-       _androidSdk = androidSdk,
-       _processUtils = ProcessUtils(logger: logger, processManager: processManager),
-       _androidEmulators = AndroidEmulators(
-        androidSdk: androidSdk,
-        logger: logger,
-        processManager: processManager,
-        fileSystem: fileSystem,
-        androidWorkflow: androidWorkflow
-      ) {
+  })  : _java = java,
+        _androidSdk = androidSdk,
+        _processUtils =
+            ProcessUtils(logger: logger, processManager: processManager),
+        _androidEmulators = AndroidEmulators(
+            androidSdk: androidSdk,
+            logger: logger,
+            processManager: processManager,
+            fileSystem: fileSystem,
+            androidWorkflow: androidWorkflow) {
     _emulatorDiscoverers.add(_androidEmulators);
   }
 
@@ -74,18 +74,20 @@ class EmulatorManager {
   }
 
   Iterable<EmulatorDiscovery> get _platformDiscoverers {
-    return _emulatorDiscoverers.where((EmulatorDiscovery discoverer) => discoverer.supportsPlatform);
+    return _emulatorDiscoverers
+        .where((EmulatorDiscovery discoverer) => discoverer.supportsPlatform);
   }
 
   Future<List<Emulator>> getAllAvailableEmulators() async {
     final List<Emulator> emulators = <Emulator>[];
-    await Future.forEach<EmulatorDiscovery>(_platformDiscoverers, (EmulatorDiscovery discoverer) async {
+    await Future.forEach<EmulatorDiscovery>(_platformDiscoverers,
+        (EmulatorDiscovery discoverer) async {
       emulators.addAll(await discoverer.emulators);
     });
     return emulators;
   }
 
-  Future<CreateEmulatorResult> createEmulator({ String? name }) async {
+  Future<CreateEmulatorResult> createEmulator({String? name}) async {
     if (name == null || name.isEmpty) {
       const String autoName = 'flutter_emulator';
       // Don't use getEmulatorsMatching here, as it will only return one
@@ -106,8 +108,7 @@ class EmulatorManager {
     final String? avdManagerPath = _androidSdk?.avdManagerPath;
     if (avdManagerPath == null || !_androidEmulators.canLaunchAnything) {
       return CreateEmulatorResult(emulatorName,
-        success: false, error: 'avdmanager is missing from the Android SDK'
-      );
+          success: false, error: 'avdmanager is missing from the Android SDK');
     }
 
     final String? device = await _getPreferredAvailableDevice(avdManagerPath);
@@ -142,14 +143,20 @@ class EmulatorManager {
           .join('\n')
           .trim();
     }
-    final RunResult runResult = await _processUtils.run(<String>[
+
+    final RunResult runResult = await _processUtils.run(
+      <String>[
         avdManagerPath,
         'create',
         'avd',
-        '-n', emulatorName,
-        '-k', sdkId,
-        '-d', device,
-      ], environment: _java?.environment,
+        '-n',
+        emulatorName,
+        '-k',
+        sdkId,
+        '-d',
+        device,
+      ],
+      environment: _java?.environment,
     );
     return CreateEmulatorResult(
       emulatorName,
@@ -171,8 +178,8 @@ class EmulatorManager {
       'device',
       '-c',
     ];
-    final RunResult runResult = await _processUtils.run(args,
-        environment: _java?.environment);
+    final RunResult runResult =
+        await _processUtils.run(args, environment: _java?.environment);
     if (runResult.exitCode != 0) {
       return null;
     }
@@ -199,10 +206,11 @@ class EmulatorManager {
       avdManagerPath,
       'create',
       'avd',
-      '-n', 'temp',
+      '-n',
+      'temp',
     ];
-    final RunResult runResult = await _processUtils.run(args,
-        environment: _java?.environment);
+    final RunResult runResult =
+        await _processUtils.run(args, environment: _java?.environment);
 
     // Get the list of IDs that match our criteria
     final List<String> availableIDs = runResult.stderr
@@ -213,7 +221,8 @@ class EmulatorManager {
         .toList();
 
     final List<int> availableApiVersions = availableIDs
-        .map<String>((String id) => _androidApiVersion.firstMatch(id)!.group(1)!)
+        .map<String>(
+            (String id) => _androidApiVersion.firstMatch(id)!.group(1)!)
         .map<int>((String apiVersion) => int.parse(apiVersion))
         .toList();
 
@@ -233,7 +242,8 @@ class EmulatorManager {
   }
 
   bool get canListAnything {
-    return _platformDiscoverers.any((EmulatorDiscovery discoverer) => discoverer.canListAnything);
+    return _platformDiscoverers
+        .any((EmulatorDiscovery discoverer) => discoverer.canListAnything);
   }
 }
 
@@ -266,8 +276,7 @@ abstract class Emulator {
     if (identical(this, other)) {
       return true;
     }
-    return other is Emulator
-        && other.id == id;
+    return other is Emulator && other.id == id;
   }
 
   Future<void> launch({bool coldBoot});
@@ -292,10 +301,13 @@ abstract class Emulator {
     ];
 
     // Calculate column widths
-    final List<int> indices = List<int>.generate(table[0].length - 1, (int i) => i);
+    final List<int> indices =
+        List<int>.generate(table[0].length - 1, (int i) => i);
     List<int> widths = indices.map<int>((int i) => 0).toList();
     for (final List<String> row in table) {
-      widths = indices.map<int>((int i) => math.max(widths[i], row[i].length)).toList();
+      widths = indices
+          .map<int>((int i) => math.max(widths[i], row[i].length))
+          .toList();
     }
 
     // Join columns into lines of text
@@ -303,9 +315,8 @@ abstract class Emulator {
     return table
         .map<String>((List<String> row) {
           return indices
-            .map<String>((int i) => row[i].padRight(widths[i]))
-            .followedBy(<String>[row.last])
-            .join(' • ');
+              .map<String>((int i) => row[i].padRight(widths[i]))
+              .followedBy(<String>[row.last]).join(' • ');
         })
         .map<String>((String line) => line.replaceAll(whiteSpaceAndDots, ''))
         .toList();
@@ -317,7 +328,8 @@ abstract class Emulator {
 }
 
 class CreateEmulatorResult {
-  CreateEmulatorResult(this.emulatorName, {required this.success, this.output, this.error});
+  CreateEmulatorResult(this.emulatorName,
+      {required this.success, this.output, this.error});
 
   final bool success;
   final String emulatorName;

@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 
-class DesktopTextSelectionToolbarLayoutDelegate extends SingleChildLayoutDelegate {
+class DesktopTextSelectionToolbarLayoutDelegate
+    extends SingleChildLayoutDelegate {
   DesktopTextSelectionToolbarLayoutDelegate({
     required this.anchor,
   });

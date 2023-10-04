@@ -7,7 +7,8 @@ import '../widgets/editable_text_utils.dart' show textOffsetToPosition;
 const double _kToolbarContentDistance = 8.0;
 
 // A custom text selection menu that just displays a single custom button.
-class _CustomMaterialTextSelectionControls extends MaterialTextSelectionControls {
+class _CustomMaterialTextSelectionControls
+    extends MaterialTextSelectionControls {
   @override
   Widget buildToolbar(
     BuildContext context,
@@ -20,16 +21,20 @@ class _CustomMaterialTextSelectionControls extends MaterialTextSelectionControls
     Offset? lastSecondaryTapDownPosition,
   ) {
     final TextSelectionPoint startTextSelectionPoint = endpoints[0];
-    final TextSelectionPoint endTextSelectionPoint = endpoints.length > 1
-      ? endpoints[1]
-      : endpoints[0];
+    final TextSelectionPoint endTextSelectionPoint =
+        endpoints.length > 1 ? endpoints[1] : endpoints[0];
     final Offset anchorAbove = Offset(
       globalEditableRegion.left + selectionMidpoint.dx,
-      globalEditableRegion.top + startTextSelectionPoint.point.dy - textLineHeight - _kToolbarContentDistance,
+      globalEditableRegion.top +
+          startTextSelectionPoint.point.dy -
+          textLineHeight -
+          _kToolbarContentDistance,
     );
     final Offset anchorBelow = Offset(
       globalEditableRegion.left + selectionMidpoint.dx,
-      globalEditableRegion.top + endTextSelectionPoint.point.dy + TextSelectionToolbar.kToolbarContentDistanceBelow,
+      globalEditableRegion.top +
+          endTextSelectionPoint.point.dy +
+          TextSelectionToolbar.kToolbarContentDistanceBelow,
     );
 
     return TextSelectionToolbar(
@@ -60,7 +65,8 @@ void main() {
   Finder findPrivate(String type) {
     return find.descendant(
       of: find.byType(MaterialApp),
-      matching: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == type),
+      matching:
+          find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == type),
     );
   }
 
@@ -69,11 +75,15 @@ void main() {
   // visible part of the toolbar for use in measurements.
   Finder findToolbar() => findPrivate('_TextSelectionToolbarOverflowable');
 
-  Finder findOverflowButton() => findPrivate('_TextSelectionToolbarOverflowButton');
+  Finder findOverflowButton() =>
+      findPrivate('_TextSelectionToolbarOverflowButton');
 
-  testWidgetsWithLeakTracking('puts children in an overflow menu if they overflow', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'puts children in an overflow menu if they overflow',
+      (WidgetTester tester) async {
     late StateSetter setState;
-    final List<Widget> children = List<Widget>.generate(7, (int i) => const TestBox());
+    final List<Widget> children =
+        List<Widget>.generate(7, (int i) => const TestBox());
 
     await tester.pumpWidget(
       MaterialApp(
@@ -119,7 +129,8 @@ void main() {
     expect(findOverflowButton(), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('positions itself at anchorAbove if it fits', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('positions itself at anchorAbove if it fits',
+      (WidgetTester tester) async {
     late StateSetter setState;
     const double height = 44.0;
     const double anchorBelowY = 500.0;
@@ -149,7 +160,10 @@ void main() {
     // When the toolbar doesn't fit above aboveAnchor, it positions itself below
     // belowAnchor.
     double toolbarY = tester.getTopLeft(findToolbar()).dy;
-    expect(toolbarY, equals(anchorBelowY + TextSelectionToolbar.kToolbarContentDistanceBelow));
+    expect(
+        toolbarY,
+        equals(
+            anchorBelowY + TextSelectionToolbar.kToolbarContentDistanceBelow));
 
     // Even when it barely doesn't fit.
     setState(() {
@@ -157,7 +171,10 @@ void main() {
     });
     await tester.pump();
     toolbarY = tester.getTopLeft(findToolbar()).dy;
-    expect(toolbarY, equals(anchorBelowY + TextSelectionToolbar.kToolbarContentDistanceBelow));
+    expect(
+        toolbarY,
+        equals(
+            anchorBelowY + TextSelectionToolbar.kToolbarContentDistanceBelow));
 
     // When it does fit above aboveAnchor, it positions itself there.
     setState(() {
@@ -168,7 +185,8 @@ void main() {
     expect(toolbarY, equals(anchorAboveY - height - _kToolbarContentDistance));
   });
 
-  testWidgetsWithLeakTracking('can create and use a custom toolbar', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('can create and use a custom toolbar',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -187,7 +205,8 @@ void main() {
 
     // Long press on "custom" to select it.
     final Offset customPos = textOffsetToPosition(tester, 11);
-    final TestGesture gesture = await tester.startGesture(customPos, pointer: 7);
+    final TestGesture gesture =
+        await tester.startGesture(customPos, pointer: 7);
     await tester.pump(const Duration(seconds: 2));
     await gesture.up();
     await tester.pump();
@@ -200,8 +219,12 @@ void main() {
     expect(find.text('Select all'), findsNothing);
   }, skip: kIsWeb); // [intended] We don't show the toolbar on the web.
 
-  for (final ColorScheme colorScheme in <ColorScheme>[ThemeData.light().colorScheme, ThemeData.dark().colorScheme]) {
-    testWidgetsWithLeakTracking('default background color', (WidgetTester tester) async {
+  for (final ColorScheme colorScheme in <ColorScheme>[
+    ThemeData.light().colorScheme,
+    ThemeData.dark().colorScheme
+  ]) {
+    testWidgetsWithLeakTracking('default background color',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -227,13 +250,16 @@ void main() {
 
       Finder findToolbarContainer() {
         return find.descendant(
-          of: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_TextSelectionToolbarContainer'),
+          of: find.byWidgetPredicate((Widget w) =>
+              '${w.runtimeType}' == '_TextSelectionToolbarContainer'),
           matching: find.byType(Material),
         );
       }
+
       expect(findToolbarContainer(), findsAtLeastNWidgets(1));
 
-      final Material toolbarContainer = tester.widget(findToolbarContainer().first);
+      final Material toolbarContainer =
+          tester.widget(findToolbarContainer().first);
       expect(
         toolbarContainer.color,
         // The default colors are hardcoded and don't take the default value of
@@ -245,7 +271,8 @@ void main() {
       );
     });
 
-    testWidgetsWithLeakTracking('custom background color', (WidgetTester tester) async {
+    testWidgetsWithLeakTracking('custom background color',
+        (WidgetTester tester) async {
       const Color customBackgroundColor = Colors.red;
 
       await tester.pumpWidget(
@@ -275,13 +302,16 @@ void main() {
 
       Finder findToolbarContainer() {
         return find.descendant(
-          of: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_TextSelectionToolbarContainer'),
+          of: find.byWidgetPredicate((Widget w) =>
+              '${w.runtimeType}' == '_TextSelectionToolbarContainer'),
           matching: find.byType(Material),
         );
       }
+
       expect(findToolbarContainer(), findsAtLeastNWidgets(1));
 
-      final Material toolbarContainer = tester.widget(findToolbarContainer().first);
+      final Material toolbarContainer =
+          tester.widget(findToolbarContainer().first);
       expect(
         toolbarContainer.color,
         customBackgroundColor,

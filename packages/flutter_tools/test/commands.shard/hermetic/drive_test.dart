@@ -49,7 +49,8 @@ void main() {
     Cache.enableLocking();
   });
 
-  testUsingContext('warns if screenshot is not supported but continues test', () async {
+  testUsingContext('warns if screenshot is not supported but continues test',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -65,8 +66,8 @@ void main() {
       ..supportsScreenshot = false;
     fakeDeviceManager.attachedDevices = <Device>[screenshotDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(
-      <String>[
+    await expectLater(
+      () => createTestCommandRunner(command).run(<String>[
         'drive',
         '--no-pub',
         '-d',
@@ -77,7 +78,8 @@ void main() {
       throwsToolExit(message: 'cannot start app'),
     );
 
-    expect(logger.errorText, contains('Screenshot not supported for FakeDevice'));
+    expect(
+        logger.errorText, contains('Screenshot not supported for FakeDevice'));
     expect(logger.statusText, isEmpty);
   }, overrides: <Type, Generator>{
     FileSystem: () => fileSystem,
@@ -86,7 +88,9 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('does not register screenshot signal handler if --screenshot not provided', () async {
+  testUsingContext(
+      'does not register screenshot signal handler if --screenshot not provided',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -102,8 +106,8 @@ void main() {
     final Device screenshotDevice = ScreenshotDevice();
     fakeDeviceManager.attachedDevices = <Device>[screenshotDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(
-      <String>[
+    await expectLater(
+      () => createTestCommandRunner(command).run(<String>[
         'drive',
         '--no-pub',
         '-d',
@@ -123,7 +127,8 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('takes screenshot and rethrows on drive exception', () async {
+  testUsingContext('takes screenshot and rethrows on drive exception',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -138,8 +143,8 @@ void main() {
     final Device screenshotDevice = ThrowingScreenshotDevice();
     fakeDeviceManager.attachedDevices = <Device>[screenshotDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(
-      <String>[
+    await expectLater(
+      () => createTestCommandRunner(command).run(<String>[
         'drive',
         '--no-pub',
         '-d',
@@ -150,7 +155,8 @@ void main() {
       throwsToolExit(message: 'cannot start app'),
     );
 
-    expect(logger.statusText, contains('Screenshot written to drive_screenshots/drive_01.png'));
+    expect(logger.statusText,
+        contains('Screenshot written to drive_screenshots/drive_01.png'));
     expect(logger.statusText, isNot(contains('drive_02.png')));
   }, overrides: <Type, Generator>{
     FileSystem: () => fileSystem,
@@ -176,8 +182,8 @@ void main() {
     final Device screenshotDevice = ScreenshotDevice();
     fakeDeviceManager.attachedDevices = <Device>[screenshotDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(
-      <String>[
+    await expectLater(
+      () => createTestCommandRunner(command).run(<String>[
         'drive',
         '--no-pub',
         '-d',
@@ -192,8 +198,10 @@ void main() {
     );
 
     // Takes the screenshot before the application would be killed (if --keep-app-running not passed).
-    expect(logger.statusText, contains('Screenshot written to drive_screenshots/drive_01.png\n'
-        'Leaving the application running.'));
+    expect(
+        logger.statusText,
+        contains('Screenshot written to drive_screenshots/drive_01.png\n'
+            'Leaving the application running.'));
     expect(logger.statusText, isNot(contains('drive_02.png')));
   }, overrides: <Type, Generator>{
     FileSystem: () => fileSystem,
@@ -202,7 +210,9 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('drive --screenshot errors but does not fail if screenshot fails', () async {
+  testUsingContext(
+      'drive --screenshot errors but does not fail if screenshot fails',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -218,8 +228,8 @@ void main() {
     final Device screenshotDevice = ThrowingScreenshotDevice();
     fakeDeviceManager.attachedDevices = <Device>[screenshotDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(
-      <String>[
+    await expectLater(
+      () => createTestCommandRunner(command).run(<String>[
         'drive',
         '--no-pub',
         '-d',
@@ -231,7 +241,10 @@ void main() {
     );
 
     expect(logger.statusText, isEmpty);
-    expect(logger.errorText, contains('Error taking screenshot: FileSystemException: Not a directory'));
+    expect(
+        logger.errorText,
+        contains(
+            'Error taking screenshot: FileSystemException: Not a directory'));
   }, overrides: <Type, Generator>{
     FileSystem: () => fileSystem,
     ProcessManager: () => FakeProcessManager.any(),
@@ -239,7 +252,9 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('drive --timeout takes screenshot and tool exits after timeout', () async {
+  testUsingContext(
+      'drive --timeout takes screenshot and tool exits after timeout',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -262,29 +277,27 @@ void main() {
       // Because the tool exit will be thrown asynchronously by a [Timer],
       // use [asyncGuard] to catch it
       asyncGuard<void>(
-        () => createTestCommandRunner(command).run(
-          <String>[
-            'drive',
-            '--no-pub',
-            '-d',
-            screenshotDevice.id,
-            '--use-existing-app',
-            'http://localhost:8181',
-            '--screenshot',
-            'drive_screenshots',
-            '--timeout',
-            '300', // 5 minutes
-          ],
-        ),
-        onError: (Object error) {
-          expect(error, isA<ToolExit>());
-          expect(
-            (error as ToolExit).message,
-            contains('Timed out after 300 seconds'),
-          );
-          caughtToolExit = true;
-        }
-      );
+          () => createTestCommandRunner(command).run(
+                <String>[
+                  'drive',
+                  '--no-pub',
+                  '-d',
+                  screenshotDevice.id,
+                  '--use-existing-app',
+                  'http://localhost:8181',
+                  '--screenshot',
+                  'drive_screenshots',
+                  '--timeout',
+                  '300', // 5 minutes
+                ],
+              ), onError: (Object error) {
+        expect(error, isA<ToolExit>());
+        expect(
+          (error as ToolExit).message,
+          contains('Timed out after 300 seconds'),
+        );
+        caughtToolExit = true;
+      });
       time.elapse(const Duration(seconds: 299));
       expect(screenshotDevice.screenshots, isEmpty);
       time.elapse(const Duration(seconds: 2));
@@ -305,7 +318,9 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('drive --screenshot takes screenshot if sent a registered signal', () async {
+  testUsingContext(
+      'drive --screenshot takes screenshot if sent a registered signal',
+      () async {
     final FakeProcessSignal signal = FakeProcessSignal();
     final ProcessSignal signalUnderTest = ProcessSignal(signal);
     final DriveCommand command = DriveCommand(
@@ -362,7 +377,8 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('shouldRunPub is true unless user specifies --no-pub', () async {
+  testUsingContext('shouldRunPub is true unless user specifies --no-pub',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -375,7 +391,8 @@ void main() {
     fileSystem.file('pubspec.yaml').createSync();
 
     try {
-      await createTestCommandRunner(command).run(const <String>['drive', '--no-pub']);
+      await createTestCommandRunner(command)
+          .run(const <String>['drive', '--no-pub']);
     } on Exception {
       // Expected to throw
     }
@@ -407,24 +424,27 @@ void main() {
     fileSystem.file('test_driver/main_test.dart').createSync(recursive: true);
     fileSystem.file('pubspec.yaml').createSync();
 
-    await expectLater(() => createTestCommandRunner(command).run(<String>[
-      'drive',
-      '--start-paused',
-      '--disable-service-auth-codes',
-      '--trace-skia',
-      '--trace-systrace',
-      '--verbose-system-logs',
-      '--null-assertions',
-      '--native-null-assertions',
-      '--enable-impeller',
-      '--trace-systrace',
-      '--enable-software-rendering',
-      '--skia-deterministic-rendering',
-      '--enable-embedder-api',
-      '--ci',
-    ]), throwsToolExit());
+    await expectLater(
+        () => createTestCommandRunner(command).run(<String>[
+              'drive',
+              '--start-paused',
+              '--disable-service-auth-codes',
+              '--trace-skia',
+              '--trace-systrace',
+              '--verbose-system-logs',
+              '--null-assertions',
+              '--native-null-assertions',
+              '--enable-impeller',
+              '--trace-systrace',
+              '--enable-software-rendering',
+              '--skia-deterministic-rendering',
+              '--enable-embedder-api',
+              '--ci',
+            ]),
+        throwsToolExit());
 
-    final DebuggingOptions options = await command.createDebuggingOptions(false);
+    final DebuggingOptions options =
+        await command.createDebuggingOptions(false);
 
     expect(options.startPaused, true);
     expect(options.disableServiceAuthCodes, true);
@@ -444,7 +464,8 @@ void main() {
     ProcessManager: () => FakeProcessManager.any(),
   });
 
-  testUsingContext('Port publication not disabled for wireless device', () async {
+  testUsingContext('Port publication not disabled for wireless device',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -460,11 +481,14 @@ void main() {
       ..connectionInterface = DeviceConnectionInterface.wireless;
     fakeDeviceManager.wirelessDevices = <Device>[wirelessDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(<String>[
-      'drive',
-    ]), throwsToolExit());
+    await expectLater(
+        () => createTestCommandRunner(command).run(<String>[
+              'drive',
+            ]),
+        throwsToolExit());
 
-    final DebuggingOptions options = await command.createDebuggingOptions(false);
+    final DebuggingOptions options =
+        await command.createDebuggingOptions(false);
     expect(options.disablePortPublication, false);
   }, overrides: <Type, Generator>{
     Cache: () => Cache.test(processManager: FakeProcessManager.any()),
@@ -485,15 +509,18 @@ void main() {
     fileSystem.file('test_driver/main_test.dart').createSync(recursive: true);
     fileSystem.file('pubspec.yaml').createSync();
 
-    await expectLater(() => createTestCommandRunner(command).run(<String>[
-      'drive',
-    ]), throwsToolExit());
+    await expectLater(
+        () => createTestCommandRunner(command).run(<String>[
+              'drive',
+            ]),
+        throwsToolExit());
 
     final Device usbDevice = FakeIosDevice()
       ..connectionInterface = DeviceConnectionInterface.attached;
     fakeDeviceManager.attachedDevices = <Device>[usbDevice];
 
-    final DebuggingOptions options = await command.createDebuggingOptions(false);
+    final DebuggingOptions options =
+        await command.createDebuggingOptions(false);
     expect(options.disablePortPublication, true);
   }, overrides: <Type, Generator>{
     Cache: () => Cache.test(processManager: FakeProcessManager.any()),
@@ -502,7 +529,9 @@ void main() {
     DeviceManager: () => fakeDeviceManager,
   });
 
-  testUsingContext('Port publication does not default to enabled for wireless device if flag manually added', () async {
+  testUsingContext(
+      'Port publication does not default to enabled for wireless device if flag manually added',
+      () async {
     final DriveCommand command = DriveCommand(
       fileSystem: fileSystem,
       logger: logger,
@@ -518,12 +547,13 @@ void main() {
       ..connectionInterface = DeviceConnectionInterface.wireless;
     fakeDeviceManager.wirelessDevices = <Device>[wirelessDevice];
 
-    await expectLater(() => createTestCommandRunner(command).run(<String>[
-      'drive',
-      '--no-publish-port'
-    ]), throwsToolExit());
+    await expectLater(
+        () => createTestCommandRunner(command)
+            .run(<String>['drive', '--no-publish-port']),
+        throwsToolExit());
 
-    final DebuggingOptions options = await command.createDebuggingOptions(false);
+    final DebuggingOptions options =
+        await command.createDebuggingOptions(false);
     expect(options.disablePortPublication, true);
   }, overrides: <Type, Generator>{
     Cache: () => Cache.test(processManager: FakeProcessManager.any()),
@@ -539,15 +569,15 @@ class ThrowingScreenshotDevice extends ScreenshotDevice {
   @override
   Future<LaunchResult> startApp(
     ApplicationPackage? package, {
-      String? mainPath,
-      String? route,
-      DebuggingOptions? debuggingOptions,
-      Map<String, dynamic>? platformArgs,
-      bool prebuiltApplication = false,
-      bool usesTerminalUi = true,
-      bool ipv6 = false,
-      String? userIdentifier,
-    }) async {
+    String? mainPath,
+    String? route,
+    DebuggingOptions? debuggingOptions,
+    Map<String, dynamic>? platformArgs,
+    bool prebuiltApplication = false,
+    bool usesTerminalUi = true,
+    bool ipv6 = false,
+    String? userIdentifier,
+  }) async {
     throwToolExit('cannot start app');
   }
 }
@@ -583,15 +613,16 @@ class ScreenshotDevice extends Fake implements Device {
   @override
   Future<LaunchResult> startApp(
     ApplicationPackage? package, {
-      String? mainPath,
-      String? route,
-      DebuggingOptions? debuggingOptions,
-      Map<String, dynamic>? platformArgs,
-      bool prebuiltApplication = false,
-      bool usesTerminalUi = true,
-      bool ipv6 = false,
-      String? userIdentifier,
-    }) async => LaunchResult.succeeded();
+    String? mainPath,
+    String? route,
+    DebuggingOptions? debuggingOptions,
+    Map<String, dynamic>? platformArgs,
+    bool prebuiltApplication = false,
+    bool usesTerminalUi = true,
+    bool ipv6 = false,
+    String? userIdentifier,
+  }) async =>
+      LaunchResult.succeeded();
 
   @override
   Future<void> takeScreenshot(File outputFile) async {
@@ -614,16 +645,18 @@ class FakePub extends Fake implements Pub {
     bool checkUpToDate = false,
     bool shouldSkipThirdPartyGenerator = true,
     PubOutputMode outputMode = PubOutputMode.all,
-  }) async { }
+  }) async {}
 }
 
-class NeverEndingFlutterDriverFactory extends Fake implements FlutterDriverFactory {
+class NeverEndingFlutterDriverFactory extends Fake
+    implements FlutterDriverFactory {
   NeverEndingFlutterDriverFactory(this.callback);
 
   final void Function() callback;
 
   @override
-  DriverService createDriverService(bool web) => NeverEndingDriverService(callback);
+  DriverService createDriverService(bool web) =>
+      NeverEndingDriverService(callback);
 }
 
 class NeverEndingDriverService extends Fake implements DriverService {
@@ -631,7 +664,8 @@ class NeverEndingDriverService extends Fake implements DriverService {
 
   final void Function() callback;
   @override
-  Future<void> reuseApplication(Uri vmServiceUri, Device device, DebuggingOptions debuggingOptions, bool ipv6) async { }
+  Future<void> reuseApplication(Uri vmServiceUri, Device device,
+      DebuggingOptions debuggingOptions, bool ipv6) async {}
 
   @override
   Future<int> startTest(
@@ -639,29 +673,31 @@ class NeverEndingDriverService extends Fake implements DriverService {
     List<String> arguments,
     Map<String, String> environment,
     PackageConfig packageConfig, {
-      bool? headless,
-      String? chromeBinary,
-      String? browserName,
-      bool? androidEmulator,
-      int? driverPort,
-      List<String>? webBrowserFlags,
-      List<String>? browserDimension,
-      String? profileMemory,
-    }) async {
-      callback();
-      // return a Future that will never complete.
-      return Completer<int>().future;
+    bool? headless,
+    String? chromeBinary,
+    String? browserName,
+    bool? androidEmulator,
+    int? driverPort,
+    List<String>? webBrowserFlags,
+    List<String>? browserDimension,
+    String? profileMemory,
+  }) async {
+    callback();
+    // return a Future that will never complete.
+    return Completer<int>().future;
   }
 }
 
-class FailingFakeFlutterDriverFactory extends Fake implements FlutterDriverFactory {
+class FailingFakeFlutterDriverFactory extends Fake
+    implements FlutterDriverFactory {
   @override
   DriverService createDriverService(bool web) => FailingFakeDriverService();
 }
 
 class FailingFakeDriverService extends Fake implements DriverService {
   @override
-  Future<void> reuseApplication(Uri vmServiceUri, Device device, DebuggingOptions debuggingOptions, bool ipv6) async { }
+  Future<void> reuseApplication(Uri vmServiceUri, Device device,
+      DebuggingOptions debuggingOptions, bool ipv6) async {}
 
   @override
   Future<int> startTest(
@@ -669,19 +705,21 @@ class FailingFakeDriverService extends Fake implements DriverService {
     List<String> arguments,
     Map<String, String> environment,
     PackageConfig packageConfig, {
-      bool? headless,
-      String? chromeBinary,
-      String? browserName,
-      bool? androidEmulator,
-      int? driverPort,
-      List<String>? webBrowserFlags,
-      List<String>? browserDimension,
-      String? profileMemory,
-    }) async => 1;
+    bool? headless,
+    String? chromeBinary,
+    String? browserName,
+    bool? androidEmulator,
+    int? driverPort,
+    List<String>? webBrowserFlags,
+    List<String>? browserDimension,
+    String? profileMemory,
+  }) async =>
+      1;
 }
 
 class FakeProcessSignal extends Fake implements io.ProcessSignal {
-  final StreamController<io.ProcessSignal> controller = StreamController<io.ProcessSignal>();
+  final StreamController<io.ProcessSignal> controller =
+      StreamController<io.ProcessSignal>();
 
   @override
   Stream<io.ProcessSignal> watch() => controller.stream;
@@ -692,7 +730,8 @@ class FakeProcessSignal extends Fake implements io.ProcessSignal {
 // ignore: avoid_implementing_value_types
 class FakeIosDevice extends Fake implements IOSDevice {
   @override
-  DeviceConnectionInterface connectionInterface = DeviceConnectionInterface.attached;
+  DeviceConnectionInterface connectionInterface =
+      DeviceConnectionInterface.attached;
 
   @override
   bool get isWirelesslyConnected =>

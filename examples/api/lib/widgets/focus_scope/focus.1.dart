@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const FocusExampleApp());
 
 class FocusExampleApp extends StatelessWidget {

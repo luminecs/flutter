@@ -12,7 +12,8 @@ import 'scroll_notification.dart';
 import 'scroll_physics.dart';
 import 'scroll_position.dart';
 
-class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollActivityDelegate {
+class ScrollPositionWithSingleContext extends ScrollPosition
+    implements ScrollActivityDelegate {
   ScrollPositionWithSingleContext({
     required super.physics,
     required super.context,
@@ -83,7 +84,8 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
 
   @override
   void applyUserOffset(double delta) {
-    updateUserScrollDirection(delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse);
+    updateUserScrollDirection(
+        delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse);
     setPixels(pixels - physics.applyPhysicsToUserOffset(this, delta));
   }
 
@@ -95,7 +97,8 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
   @override
   void goBallistic(double velocity) {
     assert(hasPixels);
-    final Simulation? simulation = physics.createBallisticSimulation(this, velocity);
+    final Simulation? simulation =
+        physics.createBallisticSimulation(this, velocity);
     if (simulation != null) {
       beginActivity(BallisticScrollActivity(
         this,
@@ -174,7 +177,7 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
     if (targetPixels != pixels) {
       goIdle();
       updateUserScrollDirection(
-          -delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse,
+        -delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse,
       );
       final double oldPixels = pixels;
       // Set the notifier before calling force pixels.
@@ -188,8 +191,8 @@ class ScrollPositionWithSingleContext extends ScrollPosition implements ScrollAc
     }
   }
 
-
-  @Deprecated('This will lead to bugs.') // flutter_ignore: deprecation_syntax, https://github.com/flutter/flutter/issues/44609
+  @Deprecated(
+      'This will lead to bugs.') // flutter_ignore: deprecation_syntax, https://github.com/flutter/flutter/issues/44609
   @override
   void jumpToWithoutSettling(double value) {
     goIdle();

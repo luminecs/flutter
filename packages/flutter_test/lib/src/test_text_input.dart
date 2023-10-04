@@ -10,17 +10,24 @@ import 'test_text_input_key_handler.dart';
 export 'package:flutter/services.dart' show TextEditingValue, TextInputAction;
 
 class TestTextInput {
-  TestTextInput({ this.onCleared });
+  TestTextInput({this.onCleared});
 
   final VoidCallback? onCleared;
 
   final List<MethodCall> log = <MethodCall>[];
 
-  void register() => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.textInput, _handleTextInputCall);
+  void register() => TestDefaultBinaryMessengerBinding
+      .instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(SystemChannels.textInput, _handleTextInputCall);
 
-  void unregister() => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.textInput, null);
+  void unregister() =>
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.textInput, null);
 
-  bool get isRegistered => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.checkMockMessageHandler(SystemChannels.textInput.name, _handleTextInputCall);
+  bool get isRegistered =>
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .checkMockMessageHandler(
+              SystemChannels.textInput.name, _handleTextInputCall);
 
   int? _client;
 
@@ -37,6 +44,7 @@ class TestTextInput {
     assert(isRegistered);
     return _isVisible;
   }
+
   bool _isVisible = false;
 
   // Platform specific key handler that can process unhandled keyboard events.
@@ -90,7 +98,8 @@ class TestTextInput {
   }
 
   void updateEditingValue(TextEditingValue value) {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
         MethodCall(
@@ -98,14 +107,15 @@ class TestTextInput {
           <dynamic>[_client ?? -1, value.toJSON()],
         ),
       ),
-      (ByteData? data) { /* ignored */ },
+      (ByteData? data) {/* ignored */},
     );
   }
 
   Future<void> receiveAction(TextInputAction action) async {
     return TestAsyncUtils.guard(() {
       final Completer<void> completer = Completer<void>();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .handlePlatformMessage(
         SystemChannels.textInput.name,
         SystemChannels.textInput.codec.encodeMethodCall(
           MethodCall(
@@ -133,73 +143,76 @@ class TestTextInput {
   }
 
   void closeConnection() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
         MethodCall(
           'TextInputClient.onConnectionClosed',
-           <dynamic>[_client ?? -1],
+          <dynamic>[_client ?? -1],
         ),
       ),
-      (ByteData? data) { /* response from framework is discarded */ },
+      (ByteData? data) {/* response from framework is discarded */},
     );
   }
 
   Future<void> startScribbleInteraction() async {
     assert(isRegistered);
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
-        MethodCall(
-          'TextInputClient.scribbleInteractionBegan',
-           <dynamic>[_client ?? -1,]
-        ),
+        MethodCall('TextInputClient.scribbleInteractionBegan', <dynamic>[
+          _client ?? -1,
+        ]),
       ),
-      (ByteData? data) { /* response from framework is discarded */ },
+      (ByteData? data) {/* response from framework is discarded */},
     );
   }
 
   Future<void> finishScribbleInteraction() async {
     assert(isRegistered);
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
-        MethodCall(
-          'TextInputClient.scribbleInteractionFinished',
-           <dynamic>[_client ?? -1,]
-        ),
+        MethodCall('TextInputClient.scribbleInteractionFinished', <dynamic>[
+          _client ?? -1,
+        ]),
       ),
-      (ByteData? data) { /* response from framework is discarded */ },
+      (ByteData? data) {/* response from framework is discarded */},
     );
   }
 
-  Future<void> scribbleFocusElement(String elementIdentifier, Offset offset) async {
+  Future<void> scribbleFocusElement(
+      String elementIdentifier, Offset offset) async {
     assert(isRegistered);
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
-        MethodCall(
-          'TextInputClient.focusElement',
-           <dynamic>[elementIdentifier, offset.dx, offset.dy]
-        ),
+        MethodCall('TextInputClient.focusElement',
+            <dynamic>[elementIdentifier, offset.dx, offset.dy]),
       ),
-      (ByteData? data) { /* response from framework is discarded */ },
+      (ByteData? data) {/* response from framework is discarded */},
     );
   }
 
   Future<List<List<dynamic>>> scribbleRequestElementsInRect(Rect rect) async {
     assert(isRegistered);
     List<List<dynamic>> response = <List<dynamic>>[];
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
-        MethodCall(
-          'TextInputClient.requestElementsInRect',
-           <dynamic>[rect.left, rect.top, rect.width, rect.height]
-        ),
+        MethodCall('TextInputClient.requestElementsInRect',
+            <dynamic>[rect.left, rect.top, rect.width, rect.height]),
       ),
       (ByteData? data) {
-        response = (SystemChannels.textInput.codec.decodeEnvelope(data!) as List<dynamic>).map((dynamic element) => element as List<dynamic>).toList();
+        response = (SystemChannels.textInput.codec.decodeEnvelope(data!)
+                as List<dynamic>)
+            .map((dynamic element) => element as List<dynamic>)
+            .toList();
       },
     );
 
@@ -208,29 +221,27 @@ class TestTextInput {
 
   Future<void> scribbleInsertPlaceholder() async {
     assert(isRegistered);
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
-        MethodCall(
-          'TextInputClient.insertTextPlaceholder',
-           <dynamic>[_client ?? -1, 0.0, 0.0]
-        ),
+        MethodCall('TextInputClient.insertTextPlaceholder',
+            <dynamic>[_client ?? -1, 0.0, 0.0]),
       ),
-      (ByteData? data) { /* response from framework is discarded */ },
+      (ByteData? data) {/* response from framework is discarded */},
     );
   }
 
   Future<void> scribbleRemovePlaceholder() async {
     assert(isRegistered);
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
         MethodCall(
-          'TextInputClient.removeTextPlaceholder',
-           <dynamic>[_client ?? -1]
-        ),
+            'TextInputClient.removeTextPlaceholder', <dynamic>[_client ?? -1]),
       ),
-      (ByteData? data) { /* response from framework is discarded */ },
+      (ByteData? data) {/* response from framework is discarded */},
     );
   }
 
@@ -244,7 +255,8 @@ class TestTextInput {
 
   Future<void> handleKeyboardUndo(String direction) async {
     assert(isRegistered);
-    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    await TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .handlePlatformMessage(
       SystemChannels.textInput.name,
       SystemChannels.textInput.codec.encodeMethodCall(
         MethodCall('TextInputClient.handleUndo', <dynamic>[direction]),

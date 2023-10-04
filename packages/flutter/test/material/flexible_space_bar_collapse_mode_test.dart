@@ -8,7 +8,8 @@ const double expandedAppbarHeight = 250.0;
 final Key appbarContainerKey = UniqueKey();
 
 void main() {
-  testWidgetsWithLeakTracking('FlexibleSpaceBar collapse mode none', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FlexibleSpaceBar collapse mode none',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(platform: debugDefaultTargetPlatformOverride),
@@ -44,9 +45,12 @@ void main() {
 
     expect(topBeforeScroll.dy, equals(0.0));
     expect(topAfterScroll.dy, equals(0.0));
-  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.fuchsia }));
+  },
+      variant: TargetPlatformVariant.all(
+          excluding: <TargetPlatform>{TargetPlatform.fuchsia}));
 
-  testWidgetsWithLeakTracking('FlexibleSpaceBar collapse mode pin', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FlexibleSpaceBar collapse mode pin',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(platform: debugDefaultTargetPlatformOverride),
@@ -82,9 +86,12 @@ void main() {
 
     expect(topBeforeScroll.dy, equals(0.0));
     expect(topAfterScroll.dy, equals(-100.0));
-  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.fuchsia }));
+  },
+      variant: TargetPlatformVariant.all(
+          excluding: <TargetPlatform>{TargetPlatform.fuchsia}));
 
-  testWidgetsWithLeakTracking('FlexibleSpaceBar collapse mode parallax', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('FlexibleSpaceBar collapse mode parallax',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(platform: debugDefaultTargetPlatformOverride),
@@ -120,7 +127,9 @@ void main() {
     expect(topBeforeScroll.dy, equals(0.0));
     expect(topAfterScroll.dy, lessThan(10.0));
     expect(topAfterScroll.dy, greaterThan(-50.0));
-  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.fuchsia }));
+  },
+      variant: TargetPlatformVariant.all(
+          excluding: <TargetPlatform>{TargetPlatform.fuchsia}));
 }
 
 Future<void> slowDrag(WidgetTester tester, Key widget, Offset offset) async {

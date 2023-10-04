@@ -35,9 +35,8 @@ const String _kFlutterFirstRunMessage = '''
 ''';
 
 class FirstRunMessenger {
-  FirstRunMessenger({
-    required PersistentToolState persistentToolState
-  }) : _persistentToolState = persistentToolState;
+  FirstRunMessenger({required PersistentToolState persistentToolState})
+      : _persistentToolState = persistentToolState;
 
   final PersistentToolState _persistentToolState;
 
@@ -53,7 +52,8 @@ class FirstRunMessenger {
     _persistentToolState.setLastActiveLicenseTermsHash(_currentHash);
   }
 
-  String get _currentHash =>  hex.encode(md5.convert(utf8.encode(licenseTerms)).bytes);
+  String get _currentHash =>
+      hex.encode(md5.convert(utf8.encode(licenseTerms)).bytes);
 
   String get licenseTerms => _kFlutterFirstRunMessage;
 }

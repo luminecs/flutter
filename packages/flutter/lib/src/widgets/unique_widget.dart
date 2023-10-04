@@ -1,6 +1,7 @@
 import 'framework.dart';
 
-abstract class UniqueWidget<T extends State<StatefulWidget>> extends StatefulWidget {
+abstract class UniqueWidget<T extends State<StatefulWidget>>
+    extends StatefulWidget {
   const UniqueWidget({
     required GlobalKey<T> key,
   }) : super(key: key);

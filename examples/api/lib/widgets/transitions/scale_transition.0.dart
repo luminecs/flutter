@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ScaleTransitionExampleApp());
 
 class ScaleTransitionExampleApp extends StatelessWidget {
@@ -21,7 +20,8 @@ class ScaleTransitionExample extends StatefulWidget {
   State<ScaleTransitionExample> createState() => _ScaleTransitionExampleState();
 }
 
-class _ScaleTransitionExampleState extends State<ScaleTransitionExample> with TickerProviderStateMixin {
+class _ScaleTransitionExampleState extends State<ScaleTransitionExample>
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,

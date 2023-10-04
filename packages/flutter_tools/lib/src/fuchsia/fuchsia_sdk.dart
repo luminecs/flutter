@@ -12,13 +12,15 @@ import 'fuchsia_kernel_compiler.dart';
 import 'fuchsia_pm.dart';
 
 bool isFuchsiaSupportedPlatform(Platform platform) {
-  return featureFlags.isFuchsiaEnabled && (platform.isLinux || platform.isMacOS);
+  return featureFlags.isFuchsiaEnabled &&
+      (platform.isLinux || platform.isMacOS);
 }
 
 class FuchsiaSdk {
   late final FuchsiaPM fuchsiaPM = FuchsiaPM();
 
-  late final FuchsiaKernelCompiler fuchsiaKernelCompiler = FuchsiaKernelCompiler();
+  late final FuchsiaKernelCompiler fuchsiaKernelCompiler =
+      FuchsiaKernelCompiler();
 
   late final FuchsiaFfx fuchsiaFfx = FuchsiaFfx();
 
@@ -37,13 +39,15 @@ class FuchsiaSdk {
   Stream<String>? syslogs(String id) {
     Process? process;
     try {
-      final StreamController<String> controller = StreamController<String>(onCancel: () {
+      final StreamController<String> controller =
+          StreamController<String>(onCancel: () {
         process?.kill();
       });
       final File? sshConfig = globals.fuchsiaArtifacts?.sshConfig;
       if (sshConfig == null || !sshConfig.existsSync()) {
         globals.printError('Cannot read device logs: No ssh config.');
-        globals.printError('Have you set FUCHSIA_SSH_CONFIG or FUCHSIA_BUILD_DIR?');
+        globals.printError(
+            'Have you set FUCHSIA_SSH_CONFIG or FUCHSIA_BUILD_DIR?');
         return null;
       }
       const String remoteCommand = 'log_listener --clock Local';
@@ -90,9 +94,12 @@ class FuchsiaArtifacts {
     File? sshConfig;
     if (globals.platform.environment.containsKey(_kFuchsiaBuildDir)) {
       sshConfig = globals.fs.file(globals.fs.path.join(
-          globals.platform.environment[_kFuchsiaBuildDir]!, 'ssh-keys', 'ssh_config'));
+          globals.platform.environment[_kFuchsiaBuildDir]!,
+          'ssh-keys',
+          'ssh_config'));
     } else if (globals.platform.environment.containsKey(_kFuchsiaSshConfig)) {
-      sshConfig = globals.fs.file(globals.platform.environment[_kFuchsiaSshConfig]);
+      sshConfig =
+          globals.fs.file(globals.platform.environment[_kFuchsiaSshConfig]);
     }
 
     final String fuchsia = globals.cache.getArtifactDirectory('fuchsia').path;

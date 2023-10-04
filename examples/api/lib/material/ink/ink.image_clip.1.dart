@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(MaterialApp(
     home: Scaffold(
       appBar: AppBar(title: const Text('Image.frameBuilder Sample')),
       body: const Center(
         child: ImageClipExample(
-          image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg'),
+          image: NetworkImage(
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg'),
         ),
       ),
     ),

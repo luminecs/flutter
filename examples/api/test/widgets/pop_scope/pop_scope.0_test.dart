@@ -1,4 +1,5 @@
-import 'package:flutter_api_samples/widgets/pop_scope/pop_scope.0.dart' as example;
+import 'package:flutter_api_samples/widgets/pop_scope/pop_scope.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../navigator_utils.dart';

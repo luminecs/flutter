@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ReorderableApp());
 
 class ReorderableApp extends StatelessWidget {
@@ -49,7 +48,8 @@ class _ReorderableExampleState extends State<ReorderableExample> {
         ),
     ];
 
-    Widget proxyDecorator(Widget child, int index, Animation<double> animation) {
+    Widget proxyDecorator(
+        Widget child, int index, Animation<double> animation) {
       return AnimatedBuilder(
         animation: animation,
         builder: (BuildContext context, Widget? child) {

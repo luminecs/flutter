@@ -12,9 +12,9 @@ import 'navigator.dart';
 import 'overlay.dart';
 
 typedef MagnifierBuilder = Widget? Function(
-    BuildContext context,
-    MagnifierController controller,
-    ValueNotifier<MagnifierInfo> magnifierInfo,
+  BuildContext context,
+  MagnifierController controller,
+  ValueNotifier<MagnifierInfo> magnifierInfo,
 );
 
 @immutable
@@ -46,35 +46,37 @@ class MagnifierInfo {
     if (identical(this, other)) {
       return true;
     }
-    return other is MagnifierInfo
-        && other.globalGesturePosition == globalGesturePosition
-        && other.caretRect == caretRect
-        && other.currentLineBoundaries == currentLineBoundaries
-        && other.fieldBounds == fieldBounds;
+    return other is MagnifierInfo &&
+        other.globalGesturePosition == globalGesturePosition &&
+        other.caretRect == caretRect &&
+        other.currentLineBoundaries == currentLineBoundaries &&
+        other.fieldBounds == fieldBounds;
   }
 
   @override
   int get hashCode => Object.hash(
-    globalGesturePosition,
-    caretRect,
-    fieldBounds,
-    currentLineBoundaries,
-  );
+        globalGesturePosition,
+        caretRect,
+        fieldBounds,
+        currentLineBoundaries,
+      );
 }
 
 class TextMagnifierConfiguration {
-  const TextMagnifierConfiguration({
-    MagnifierBuilder? magnifierBuilder,
-    this.shouldDisplayHandlesInMagnifier = true
-  }) : _magnifierBuilder = magnifierBuilder;
+  const TextMagnifierConfiguration(
+      {MagnifierBuilder? magnifierBuilder,
+      this.shouldDisplayHandlesInMagnifier = true})
+      : _magnifierBuilder = magnifierBuilder;
 
   final MagnifierBuilder? _magnifierBuilder;
 
-  MagnifierBuilder get magnifierBuilder => _magnifierBuilder ?? (_, __, ___) => null;
+  MagnifierBuilder get magnifierBuilder =>
+      _magnifierBuilder ?? (_, __, ___) => null;
 
   final bool shouldDisplayHandlesInMagnifier;
 
-  static const TextMagnifierConfiguration disabled = TextMagnifierConfiguration();
+  static const TextMagnifierConfiguration disabled =
+      TextMagnifierConfiguration();
 }
 
 // TODO(antholeole): This whole paradigm can be removed once portals
@@ -195,7 +197,9 @@ class MagnifierDecoration extends ShapeDecoration {
       return true;
     }
 
-    return super == other && other is MagnifierDecoration && other.opacity == opacity;
+    return super == other &&
+        other is MagnifierDecoration &&
+        other.opacity == opacity;
   }
 
   @override
@@ -204,19 +208,18 @@ class MagnifierDecoration extends ShapeDecoration {
 
 class RawMagnifier extends StatelessWidget {
   const RawMagnifier({
-      super.key,
-      this.child,
-      this.decoration = const MagnifierDecoration(),
-      this.focalPointOffset = Offset.zero,
-      this.magnificationScale = 1,
-      required this.size,
-      }) : assert(magnificationScale != 0,
+    super.key,
+    this.child,
+    this.decoration = const MagnifierDecoration(),
+    this.focalPointOffset = Offset.zero,
+    this.magnificationScale = 1,
+    required this.size,
+  }) : assert(magnificationScale != 0,
             'Magnification scale of 0 results in undefined behavior.');
 
   final Widget? child;
 
   final MagnifierDecoration decoration;
-
 
   final Offset focalPointOffset;
 
@@ -398,10 +401,13 @@ class _RenderMagnification extends RenderProxyBox {
     final Offset thisCenter = Alignment.center.alongSize(size) + offset;
     final Matrix4 matrix = Matrix4.identity()
       ..translate(
-          magnificationScale * ((focalPointOffset.dx * -1) - thisCenter.dx) + thisCenter.dx,
-          magnificationScale * ((focalPointOffset.dy * -1) - thisCenter.dy) + thisCenter.dy)
+          magnificationScale * ((focalPointOffset.dx * -1) - thisCenter.dx) +
+              thisCenter.dx,
+          magnificationScale * ((focalPointOffset.dy * -1) - thisCenter.dy) +
+              thisCenter.dy)
       ..scale(magnificationScale);
-    final ImageFilter filter = ImageFilter.matrix(matrix.storage, filterQuality: FilterQuality.high);
+    final ImageFilter filter =
+        ImageFilter.matrix(matrix.storage, filterQuality: FilterQuality.high);
 
     if (layer == null) {
       layer = BackdropFilterLayer(

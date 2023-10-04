@@ -35,7 +35,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Align control test (LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Align control test (LTR)',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const Directionality(
       textDirection: TextDirection.ltr,
       child: Align(
@@ -59,7 +60,8 @@ void main() {
     expect(tester.getBottomRight(find.byType(SizedBox)).dx, 100.0);
   });
 
-  testWidgetsWithLeakTracking('Align control test (RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Align control test (RTL)',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const Directionality(
       textDirection: TextDirection.rtl,
       child: Align(
@@ -83,7 +85,8 @@ void main() {
     expect(tester.getBottomRight(find.byType(SizedBox)).dx, 100.0);
   });
 
-  testWidgetsWithLeakTracking('Shrink wraps in finite space', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Shrink wraps in finite space',
+      (WidgetTester tester) async {
     final GlobalKey alignKey = GlobalKey();
     await tester.pumpWidget(
       SingleChildScrollView(
@@ -125,7 +128,8 @@ void main() {
     expect(box.size.width, equals(50.0));
   });
 
-  testWidgetsWithLeakTracking('Align heightFactor', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Align heightFactor',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Directionality(
         textDirection: TextDirection.ltr,

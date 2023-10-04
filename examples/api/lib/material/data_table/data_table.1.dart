@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const DataTableExampleApp());
 
 class DataTableExampleApp extends StatelessWidget {
@@ -40,7 +39,8 @@ class _DataTableExampleState extends State<DataTableExample> {
         rows: List<DataRow>.generate(
           numItems,
           (int index) => DataRow(
-            color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+            color: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
               // All rows will have the same selected color.
               if (states.contains(MaterialState.selected)) {
                 return Theme.of(context).colorScheme.primary.withOpacity(0.08);

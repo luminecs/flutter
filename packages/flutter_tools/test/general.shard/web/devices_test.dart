@@ -19,10 +19,8 @@ void main() {
       featureFlags: TestFeatureFlags(),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
-      processManager:  FakeProcessManager.any(),
+      platform: FakePlatform(environment: <String, String>{}),
+      processManager: FakeProcessManager.any(),
     );
 
     expect(await webDevices.pollingGetDevices(), isEmpty);
@@ -106,7 +104,7 @@ void main() {
     expect(device.supportsRuntimeMode(BuildMode.profile), true);
     expect(device.supportsRuntimeMode(BuildMode.release), true);
     expect(device.supportsRuntimeMode(BuildMode.jitRelease), false);
-});
+  });
 
   testWithoutContext('ChromiumDevice accepts null package', () async {
     final MemoryFileSystem fs = MemoryFileSystem.test();
@@ -139,86 +137,85 @@ void main() {
     );
   });
 
-  testWithoutContext('Chrome device is listed when Chrome can be run', () async {
+  testWithoutContext('Chrome device is listed when Chrome can be run',
+      () async {
     final WebDevices webDevices = WebDevices(
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
-      processManager:  FakeProcessManager.any(),
+      platform: FakePlatform(environment: <String, String>{}),
+      processManager: FakeProcessManager.any(),
     );
 
     expect(await webDevices.pollingGetDevices(),
-      contains(isA<GoogleChromeDevice>()));
+        contains(isA<GoogleChromeDevice>()));
   });
 
-  testWithoutContext('Has well known device ids chrome, edge, and web-server', () async {
+  testWithoutContext('Has well known device ids chrome, edge, and web-server',
+      () async {
     final WebDevices webDevices = WebDevices(
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
-      processManager:  FakeProcessManager.any(),
+      platform: FakePlatform(environment: <String, String>{}),
+      processManager: FakeProcessManager.any(),
     );
 
     expect(webDevices.wellKnownIds, <String>['chrome', 'web-server', 'edge']);
   });
 
-  testWithoutContext('Chrome device is not listed when Chrome cannot be run', () async {
+  testWithoutContext('Chrome device is not listed when Chrome cannot be run',
+      () async {
     final FakeProcessManager processManager = FakeProcessManager.empty();
     processManager.excludedExecutables = <String>{kLinuxExecutable};
     final WebDevices webDevices = WebDevices(
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
+      platform: FakePlatform(environment: <String, String>{}),
       processManager: processManager,
     );
 
     expect(await webDevices.pollingGetDevices(),
-      isNot(contains(isA<GoogleChromeDevice>())));
+        isNot(contains(isA<GoogleChromeDevice>())));
   });
 
-  testWithoutContext('Web Server device is listed if enabled via showWebServerDevice', () async {
+  testWithoutContext(
+      'Web Server device is listed if enabled via showWebServerDevice',
+      () async {
     WebServerDevice.showWebServerDevice = true;
     final WebDevices webDevices = WebDevices(
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
+      platform: FakePlatform(environment: <String, String>{}),
       processManager: FakeProcessManager.any(),
     );
 
-    expect(await webDevices.pollingGetDevices(),
-      contains(isA<WebServerDevice>()));
+    expect(
+        await webDevices.pollingGetDevices(), contains(isA<WebServerDevice>()));
   });
 
-  testWithoutContext('Web Server device is not listed if disabled via showWebServerDevice', () async {
+  testWithoutContext(
+      'Web Server device is not listed if disabled via showWebServerDevice',
+      () async {
     WebServerDevice.showWebServerDevice = false;
     final WebDevices webDevices = WebDevices(
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
+      platform: FakePlatform(environment: <String, String>{}),
       processManager: FakeProcessManager.any(),
     );
 
     expect(await webDevices.pollingGetDevices(),
-      isNot(contains(isA<WebServerDevice>())));
+        isNot(contains(isA<WebServerDevice>())));
   });
 
-  testWithoutContext('Chrome invokes version command on non-Windows platforms', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext('Chrome invokes version command on non-Windows platforms',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           kLinuxExecutable,
@@ -231,15 +228,14 @@ void main() {
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
+      platform: FakePlatform(environment: <String, String>{}),
       processManager: processManager,
     );
 
-
-    final GoogleChromeDevice chromeDevice = (await webDevices.pollingGetDevices())
-      .whereType<GoogleChromeDevice>().first;
+    final GoogleChromeDevice chromeDevice =
+        (await webDevices.pollingGetDevices())
+            .whereType<GoogleChromeDevice>()
+            .first;
 
     expect(chromeDevice.isSupported(), true);
     expect(await chromeDevice.sdkNameAndVersion, 'ABC');
@@ -249,8 +245,11 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('Chrome and Edge version check invokes registry query on windows.', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext(
+      'Chrome and Edge version check invokes registry query on windows.',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           'reg',
@@ -259,7 +258,8 @@ void main() {
           '/v',
           'version',
         ],
-        stdout: r'HKEY_CURRENT_USER\Software\Microsoft\Edge\BLBeacon\ version REG_SZ 83.0.478.44 ',
+        stdout:
+            r'HKEY_CURRENT_USER\Software\Microsoft\Edge\BLBeacon\ version REG_SZ 83.0.478.44 ',
       ),
       const FakeCommand(
         command: <String>[
@@ -269,7 +269,8 @@ void main() {
           '/v',
           'version',
         ],
-        stdout: r'HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon\ version REG_SZ 74.0.0 A',
+        stdout:
+            r'HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon\ version REG_SZ 74.0.0 A',
       ),
     ]);
     final WebDevices webDevices = WebDevices(
@@ -277,15 +278,14 @@ void main() {
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
       platform: FakePlatform(
-        operatingSystem: 'windows',
-        environment: <String, String>{}
-      ),
+          operatingSystem: 'windows', environment: <String, String>{}),
       processManager: processManager,
     );
 
-
-    final GoogleChromeDevice chromeDevice = (await webDevices.pollingGetDevices())
-      .whereType<GoogleChromeDevice>().first;
+    final GoogleChromeDevice chromeDevice =
+        (await webDevices.pollingGetDevices())
+            .whereType<GoogleChromeDevice>()
+            .first;
 
     expect(chromeDevice.isSupported(), true);
     expect(await chromeDevice.sdkNameAndVersion, 'Google Chrome 74.0.0');
@@ -295,7 +295,9 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testWithoutContext('Chrome and Edge version check handles missing registry on Windows', () async {
+  testWithoutContext(
+      'Chrome and Edge version check handles missing registry on Windows',
+      () async {
     final FakeProcessManager processManager = FakeProcessManager.empty();
     processManager.excludedExecutables.add('reg');
 
@@ -331,8 +333,10 @@ void main() {
     expect(await chromeDevice.sdkNameAndVersion, 'unknown');
   });
 
-  testWithoutContext('Edge is not supported on versions less than 73', () async {
-    final FakeProcessManager processManager = FakeProcessManager.list(<FakeCommand>[
+  testWithoutContext('Edge is not supported on versions less than 73',
+      () async {
+    final FakeProcessManager processManager =
+        FakeProcessManager.list(<FakeCommand>[
       const FakeCommand(
         command: <String>[
           'reg',
@@ -341,7 +345,8 @@ void main() {
           '/v',
           'version',
         ],
-        stdout: r'HKEY_CURRENT_USER\Software\Microsoft\Edge\BLBeacon\ version REG_SZ 72.0.478.44 ',
+        stdout:
+            r'HKEY_CURRENT_USER\Software\Microsoft\Edge\BLBeacon\ version REG_SZ 72.0.478.44 ',
       ),
     ]);
     final WebDevices webDevices = WebDevices(
@@ -349,13 +354,13 @@ void main() {
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
       platform: FakePlatform(
-        operatingSystem: 'windows',
-        environment: <String, String>{}
-      ),
+          operatingSystem: 'windows', environment: <String, String>{}),
       processManager: processManager,
     );
 
-    expect((await webDevices.pollingGetDevices()).whereType<MicrosoftEdgeDevice>(), isEmpty);
+    expect(
+        (await webDevices.pollingGetDevices()).whereType<MicrosoftEdgeDevice>(),
+        isEmpty);
   });
 
   testWithoutContext('Edge is not support on non-windows platform', () async {
@@ -363,26 +368,27 @@ void main() {
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
-      platform: FakePlatform(
-        environment: <String, String>{}
-      ),
+      platform: FakePlatform(environment: <String, String>{}),
       processManager: FakeProcessManager.empty(),
     );
 
-    expect((await webDevices.pollingGetDevices()).whereType<MicrosoftEdgeDevice>(), isEmpty);
+    expect(
+        (await webDevices.pollingGetDevices()).whereType<MicrosoftEdgeDevice>(),
+        isEmpty);
 
     final WebDevices macosWebDevices = WebDevices(
       featureFlags: TestFeatureFlags(isWebEnabled: true),
       fileSystem: MemoryFileSystem.test(),
       logger: BufferLogger.test(),
       platform: FakePlatform(
-        operatingSystem: 'macos',
-        environment: <String, String>{}
-      ),
+          operatingSystem: 'macos', environment: <String, String>{}),
       processManager: FakeProcessManager.empty(),
     );
 
-    expect((await macosWebDevices.pollingGetDevices()).whereType<MicrosoftEdgeDevice>(), isEmpty);
+    expect(
+        (await macosWebDevices.pollingGetDevices())
+            .whereType<MicrosoftEdgeDevice>(),
+        isEmpty);
   });
 }
 

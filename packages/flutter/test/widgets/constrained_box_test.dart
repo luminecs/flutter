@@ -3,15 +3,33 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('Placeholder intrinsics', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Placeholder intrinsics',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const Placeholder());
-    expect(tester.renderObject<RenderBox>(find.byType(Placeholder)).getMinIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(Placeholder)).getMaxIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(Placeholder)).getMinIntrinsicHeight(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(Placeholder)).getMaxIntrinsicHeight(double.infinity), 0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(Placeholder))
+            .getMinIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(Placeholder))
+            .getMaxIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(Placeholder))
+            .getMinIntrinsicHeight(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(Placeholder))
+            .getMaxIntrinsicHeight(double.infinity),
+        0.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - minHeight', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - minHeight',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -20,13 +38,30 @@ void main() {
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 20.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        20.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - minWidth', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - minWidth',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -35,13 +70,30 @@ void main() {
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 20.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 20.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        0.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - maxHeight', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - maxHeight',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -50,13 +102,30 @@ void main() {
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        0.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - maxWidth', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - maxWidth',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -65,27 +134,61 @@ void main() {
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        0.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - tight', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - tight',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints.tightFor(width: 10.0, height: 30.0),
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 10.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 10.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 30.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 30.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        10.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        10.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        30.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        30.0);
   });
 
-
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - minHeight - with infinite width', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'ConstrainedBox intrinsics - minHeight - with infinite width',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -95,13 +198,31 @@ void main() {
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 20.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        20.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - minWidth - with infinite height', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'ConstrainedBox intrinsics - minWidth - with infinite height',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
         constraints: const BoxConstraints(
@@ -111,22 +232,56 @@ void main() {
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 20.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 20.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        20.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        0.0);
   });
 
-  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - infinite', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ConstrainedBox intrinsics - infinite',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       ConstrainedBox(
-        constraints: const BoxConstraints.tightFor(width: double.infinity, height: double.infinity),
+        constraints: const BoxConstraints.tightFor(
+            width: double.infinity, height: double.infinity),
         child: const Placeholder(),
       ),
     );
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicWidth(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMinIntrinsicHeight(double.infinity), 0.0);
-    expect(tester.renderObject<RenderBox>(find.byType(ConstrainedBox)).getMaxIntrinsicHeight(double.infinity), 0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicWidth(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMinIntrinsicHeight(double.infinity),
+        0.0);
+    expect(
+        tester
+            .renderObject<RenderBox>(find.byType(ConstrainedBox))
+            .getMaxIntrinsicHeight(double.infinity),
+        0.0);
   });
 }

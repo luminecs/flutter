@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 // A single lazily-constructed object that's shared with the entire application
 // via `SharedObject.of(context)`. The value of the object can be changed with
 // `SharedObject.reset(context)`. Resetting the value will cause all of the
@@ -16,13 +15,15 @@ class SharedObject {
 
   static void reset(BuildContext context) {
     // Calling SharedAppData.setValue() causes dependent widgets to be rebuilt.
-    SharedAppData.setValue<Object, SharedObject>(context, _sharedObjectKey, SharedObject._());
+    SharedAppData.setValue<Object, SharedObject>(
+        context, _sharedObjectKey, SharedObject._());
   }
 
   static SharedObject of(BuildContext context) {
     // If a value for _sharedObjectKey has never been set then the third
     // callback parameter is used to generate an initial value.
-    return SharedAppData.getValue<Object, SharedObject>(context, _sharedObjectKey, () => SharedObject._());
+    return SharedAppData.getValue<Object, SharedObject>(
+        context, _sharedObjectKey, () => SharedObject._());
   }
 }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const CupertinoListSectionInsetApp());
 
 class CupertinoListSectionInsetApp extends StatelessWidget {

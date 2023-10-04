@@ -14,7 +14,8 @@ import 'theme_data.dart';
 enum _ChipVariant { flat, elevated }
 
 //
-class ActionChip extends StatelessWidget implements ChipAttributes, TappableChipAttributes, DisabledChipAttributes {
+class ActionChip extends StatelessWidget
+    implements ChipAttributes, TappableChipAttributes, DisabledChipAttributes {
   const ActionChip({
     super.key,
     this.avatar,
@@ -39,9 +40,9 @@ class ActionChip extends StatelessWidget implements ChipAttributes, TappableChip
     this.shadowColor,
     this.surfaceTintColor,
     this.iconTheme,
-  }) : assert(pressElevation == null || pressElevation >= 0.0),
-       assert(elevation == null || elevation >= 0.0),
-       _chipVariant = _ChipVariant.flat;
+  })  : assert(pressElevation == null || pressElevation >= 0.0),
+        assert(elevation == null || elevation >= 0.0),
+        _chipVariant = _ChipVariant.flat;
 
   const ActionChip.elevated({
     super.key,
@@ -67,9 +68,9 @@ class ActionChip extends StatelessWidget implements ChipAttributes, TappableChip
     this.shadowColor,
     this.surfaceTintColor,
     this.iconTheme,
-  }) : assert(pressElevation == null || pressElevation >= 0.0),
-       assert(elevation == null || elevation >= 0.0),
-       _chipVariant = _ChipVariant.elevated;
+  })  : assert(pressElevation == null || pressElevation >= 0.0),
+        assert(elevation == null || elevation >= 0.0),
+        _chipVariant = _ChipVariant.elevated;
 
   @override
   final Widget? avatar;
@@ -125,8 +126,8 @@ class ActionChip extends StatelessWidget implements ChipAttributes, TappableChip
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     final ChipThemeData? defaults = Theme.of(context).useMaterial3
-      ? _ActionChipDefaultsM3(context, isEnabled, _chipVariant)
-      : null;
+        ? _ActionChipDefaultsM3(context, isEnabled, _chipVariant)
+        : null;
     return RawChip(
       defaultProperties: defaults,
       avatar: avatar,
@@ -164,10 +165,11 @@ class ActionChip extends StatelessWidget implements ChipAttributes, TappableChip
 
 class _ActionChipDefaultsM3 extends ChipThemeData {
   _ActionChipDefaultsM3(this.context, this.isEnabled, this._chipVariant)
-    : super(
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        showCheckmark: true,
-      );
+      : super(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          showCheckmark: true,
+        );
 
   final BuildContext context;
   final bool isEnabled;
@@ -177,8 +179,10 @@ class _ActionChipDefaultsM3 extends ChipThemeData {
 
   @override
   double? get elevation => _chipVariant == _ChipVariant.flat
-    ? 0.0
-    : isEnabled ? 1.0 : 0.0;
+      ? 0.0
+      : isEnabled
+          ? 1.0
+          : 0.0;
 
   @override
   double? get pressElevation => 1.0;
@@ -188,19 +192,18 @@ class _ActionChipDefaultsM3 extends ChipThemeData {
 
   @override
   MaterialStateProperty<Color?>? get color =>
-    MaterialStateProperty.resolveWith((Set<MaterialState> states) {
-      if (states.contains(MaterialState.disabled)) {
-        return _chipVariant == _ChipVariant.flat
-          ? null
-          : _colors.onSurface.withOpacity(0.12);
-      }
-      return null;
-    });
+      MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return _chipVariant == _ChipVariant.flat
+              ? null
+              : _colors.onSurface.withOpacity(0.12);
+        }
+        return null;
+      });
 
   @override
-  Color? get shadowColor => _chipVariant == _ChipVariant.flat
-    ? Colors.transparent
-    : _colors.shadow;
+  Color? get shadowColor =>
+      _chipVariant == _ChipVariant.flat ? Colors.transparent : _colors.shadow;
 
   @override
   Color? get surfaceTintColor => _colors.surfaceTint;
@@ -213,28 +216,27 @@ class _ActionChipDefaultsM3 extends ChipThemeData {
 
   @override
   BorderSide? get side => _chipVariant == _ChipVariant.flat
-    ? isEnabled
-        ? BorderSide(color: _colors.outline)
-        : BorderSide(color: _colors.onSurface.withOpacity(0.12))
-    : const BorderSide(color: Colors.transparent);
+      ? isEnabled
+          ? BorderSide(color: _colors.outline)
+          : BorderSide(color: _colors.onSurface.withOpacity(0.12))
+      : const BorderSide(color: Colors.transparent);
 
   @override
   IconThemeData? get iconTheme => IconThemeData(
-    color: isEnabled
-      ? _colors.primary
-      : _colors.onSurface,
-    size: 18.0,
-  );
+        color: isEnabled ? _colors.primary : _colors.onSurface,
+        size: 18.0,
+      );
 
   @override
   EdgeInsetsGeometry? get padding => const EdgeInsets.all(8.0);
 
   @override
   EdgeInsetsGeometry? get labelPadding => EdgeInsets.lerp(
-    const EdgeInsets.symmetric(horizontal: 8.0),
-    const EdgeInsets.symmetric(horizontal: 4.0),
-    clampDouble(MediaQuery.textScalerOf(context).textScaleFactor - 1.0, 0.0, 1.0),
-  )!;
+        const EdgeInsets.symmetric(horizontal: 8.0),
+        const EdgeInsets.symmetric(horizontal: 4.0),
+        clampDouble(
+            MediaQuery.textScalerOf(context).textScaleFactor - 1.0, 0.0, 1.0),
+      )!;
 }
 
 // END GENERATED TOKEN PROPERTIES - ActionChip

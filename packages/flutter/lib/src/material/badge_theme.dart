@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 
 import 'theme.dart';
 
-
 // Examples can assume:
 // late BuildContext context;
 
@@ -78,15 +77,15 @@ class BadgeThemeData with Diagnosticable {
 
   @override
   int get hashCode => Object.hash(
-    backgroundColor,
-    textColor,
-    smallSize,
-    largeSize,
-    textStyle,
-    padding,
-    alignment,
-    offset,
-  );
+        backgroundColor,
+        textColor,
+        smallSize,
+        largeSize,
+        textStyle,
+        padding,
+        alignment,
+        offset,
+      );
 
   @override
   bool operator ==(Object other) {
@@ -96,28 +95,34 @@ class BadgeThemeData with Diagnosticable {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is BadgeThemeData
-      && other.backgroundColor == backgroundColor
-      && other.textColor == textColor
-      && other.smallSize == smallSize
-      && other.largeSize == largeSize
-      && other.textStyle == textStyle
-      && other.padding == padding
-      && other.alignment == alignment
-      && other.offset == offset;
+    return other is BadgeThemeData &&
+        other.backgroundColor == backgroundColor &&
+        other.textColor == textColor &&
+        other.smallSize == smallSize &&
+        other.largeSize == largeSize &&
+        other.textStyle == textStyle &&
+        other.padding == padding &&
+        other.alignment == alignment &&
+        other.offset == offset;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(ColorProperty('backgroundColor', backgroundColor, defaultValue: null));
+    properties.add(
+        ColorProperty('backgroundColor', backgroundColor, defaultValue: null));
     properties.add(ColorProperty('textColor', textColor, defaultValue: null));
     properties.add(DoubleProperty('smallSize', smallSize, defaultValue: null));
     properties.add(DoubleProperty('largeSize', largeSize, defaultValue: null));
-    properties.add(DiagnosticsProperty<TextStyle>('textStyle', textStyle, defaultValue: null));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding, defaultValue: null));
-    properties.add(DiagnosticsProperty<AlignmentGeometry>('alignment', alignment, defaultValue: null));
-    properties.add(DiagnosticsProperty<Offset>('offset', offset, defaultValue: null));
+    properties.add(DiagnosticsProperty<TextStyle>('textStyle', textStyle,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<AlignmentGeometry>(
+        'alignment', alignment,
+        defaultValue: null));
+    properties
+        .add(DiagnosticsProperty<Offset>('offset', offset, defaultValue: null));
   }
 }
 
@@ -131,7 +136,8 @@ class BadgeTheme extends InheritedTheme {
   final BadgeThemeData data;
 
   static BadgeThemeData of(BuildContext context) {
-    final BadgeTheme? badgeTheme = context.dependOnInheritedWidgetOfExactType<BadgeTheme>();
+    final BadgeTheme? badgeTheme =
+        context.dependOnInheritedWidgetOfExactType<BadgeTheme>();
     return badgeTheme?.data ?? Theme.of(context).badgeTheme;
   }
 

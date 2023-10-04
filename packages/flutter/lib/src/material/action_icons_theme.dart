@@ -9,7 +9,11 @@ import 'theme.dart';
 
 @immutable
 class ActionIconThemeData with Diagnosticable {
-  const ActionIconThemeData({ this.backButtonIconBuilder, this.closeButtonIconBuilder, this.drawerButtonIconBuilder, this.endDrawerButtonIconBuilder });
+  const ActionIconThemeData(
+      {this.backButtonIconBuilder,
+      this.closeButtonIconBuilder,
+      this.drawerButtonIconBuilder,
+      this.endDrawerButtonIconBuilder});
 
   final WidgetBuilder? backButtonIconBuilder;
 
@@ -26,22 +30,32 @@ class ActionIconThemeData with Diagnosticable {
     WidgetBuilder? endDrawerButtonIconBuilder,
   }) {
     return ActionIconThemeData(
-      backButtonIconBuilder: backButtonIconBuilder ?? this.backButtonIconBuilder,
-      closeButtonIconBuilder: closeButtonIconBuilder ?? this.closeButtonIconBuilder,
-      drawerButtonIconBuilder: drawerButtonIconBuilder ?? this.drawerButtonIconBuilder,
-      endDrawerButtonIconBuilder: endDrawerButtonIconBuilder ?? this.endDrawerButtonIconBuilder,
+      backButtonIconBuilder:
+          backButtonIconBuilder ?? this.backButtonIconBuilder,
+      closeButtonIconBuilder:
+          closeButtonIconBuilder ?? this.closeButtonIconBuilder,
+      drawerButtonIconBuilder:
+          drawerButtonIconBuilder ?? this.drawerButtonIconBuilder,
+      endDrawerButtonIconBuilder:
+          endDrawerButtonIconBuilder ?? this.endDrawerButtonIconBuilder,
     );
   }
 
-  static ActionIconThemeData? lerp(ActionIconThemeData? a, ActionIconThemeData? b, double t) {
+  static ActionIconThemeData? lerp(
+      ActionIconThemeData? a, ActionIconThemeData? b, double t) {
     if (a == null && b == null) {
       return null;
     }
     return ActionIconThemeData(
-      backButtonIconBuilder: t < 0.5 ? a?.backButtonIconBuilder : b?.backButtonIconBuilder,
-      closeButtonIconBuilder: t < 0.5 ? a?.closeButtonIconBuilder : b?.closeButtonIconBuilder,
-      drawerButtonIconBuilder: t < 0.5 ? a?.drawerButtonIconBuilder : b?.drawerButtonIconBuilder,
-      endDrawerButtonIconBuilder: t < 0.5 ? a?.endDrawerButtonIconBuilder : b?.endDrawerButtonIconBuilder,
+      backButtonIconBuilder:
+          t < 0.5 ? a?.backButtonIconBuilder : b?.backButtonIconBuilder,
+      closeButtonIconBuilder:
+          t < 0.5 ? a?.closeButtonIconBuilder : b?.closeButtonIconBuilder,
+      drawerButtonIconBuilder:
+          t < 0.5 ? a?.drawerButtonIconBuilder : b?.drawerButtonIconBuilder,
+      endDrawerButtonIconBuilder: t < 0.5
+          ? a?.endDrawerButtonIconBuilder
+          : b?.endDrawerButtonIconBuilder,
     );
   }
 
@@ -64,20 +78,28 @@ class ActionIconThemeData with Diagnosticable {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is ActionIconThemeData
-        && other.backButtonIconBuilder == backButtonIconBuilder
-        && other.closeButtonIconBuilder == closeButtonIconBuilder
-        && other.drawerButtonIconBuilder == drawerButtonIconBuilder
-        && other.endDrawerButtonIconBuilder == endDrawerButtonIconBuilder;
+    return other is ActionIconThemeData &&
+        other.backButtonIconBuilder == backButtonIconBuilder &&
+        other.closeButtonIconBuilder == closeButtonIconBuilder &&
+        other.drawerButtonIconBuilder == drawerButtonIconBuilder &&
+        other.endDrawerButtonIconBuilder == endDrawerButtonIconBuilder;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<WidgetBuilder>('backButtonIconBuilder', backButtonIconBuilder, defaultValue: null));
-    properties.add(DiagnosticsProperty<WidgetBuilder>('closeButtonIconBuilder', closeButtonIconBuilder, defaultValue: null));
-    properties.add(DiagnosticsProperty<WidgetBuilder>('drawerButtonIconBuilder', drawerButtonIconBuilder, defaultValue: null));
-    properties.add(DiagnosticsProperty<WidgetBuilder>('endDrawerButtonIconBuilder', endDrawerButtonIconBuilder, defaultValue: null));
+    properties.add(DiagnosticsProperty<WidgetBuilder>(
+        'backButtonIconBuilder', backButtonIconBuilder,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<WidgetBuilder>(
+        'closeButtonIconBuilder', closeButtonIconBuilder,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<WidgetBuilder>(
+        'drawerButtonIconBuilder', drawerButtonIconBuilder,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<WidgetBuilder>(
+        'endDrawerButtonIconBuilder', endDrawerButtonIconBuilder,
+        defaultValue: null));
   }
 }
 
@@ -91,7 +113,8 @@ class ActionIconTheme extends InheritedTheme {
   final ActionIconThemeData data;
 
   static ActionIconThemeData? of(BuildContext context) {
-    final ActionIconTheme? actionIconTheme = context.dependOnInheritedWidgetOfExactType<ActionIconTheme>();
+    final ActionIconTheme? actionIconTheme =
+        context.dependOnInheritedWidgetOfExactType<ActionIconTheme>();
     return actionIconTheme?.data ?? Theme.of(context).actionIconTheme;
   }
 

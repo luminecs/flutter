@@ -33,28 +33,30 @@ class FakeAndroidBuilder implements AndroidBuilder {
   }) async {}
 
   @override
-  Future<List<String>> getBuildVariants({required FlutterProject project}) async => const <String>[];
+  Future<List<String>> getBuildVariants(
+          {required FlutterProject project}) async =>
+      const <String>[];
 
   @override
   Future<void> outputsAppLinkSettings(
     String buildVariant, {
     required FlutterProject project,
   }) async {}
-
 }
 
 class FakeFlutterProjectFactory extends FlutterProjectFactory {
-  FakeFlutterProjectFactory(this.directoryOverride) :
-    super(
-      fileSystem: globals.fs,
-      logger: globals.logger,
-    );
+  FakeFlutterProjectFactory(this.directoryOverride)
+      : super(
+          fileSystem: globals.fs,
+          logger: globals.logger,
+        );
 
   final Directory directoryOverride;
 
   @override
   FlutterProject fromDirectory(Directory _) {
     projects.clear();
-    return super.fromDirectory(directoryOverride.childDirectory('flutter_project'));
+    return super
+        .fromDirectory(directoryOverride.childDirectory('flutter_project'));
   }
 }

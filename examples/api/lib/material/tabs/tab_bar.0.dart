@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const TabBarApp());
 
 class TabBarApp extends StatelessWidget {

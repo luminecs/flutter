@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-
 const Duration fakeAPIDuration = Duration(seconds: 1);
 const Duration debounceDuration = Duration(milliseconds: 500);
 
@@ -22,7 +21,8 @@ class AutocompleteExampleApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Type below to autocomplete the following possible results: ${_FakeAPI._kOptions}.'),
+              Text(
+                  'Type below to autocomplete the following possible results: ${_FakeAPI._kOptions}.'),
               const _AsyncAutocomplete(),
             ],
           ),
@@ -36,10 +36,10 @@ class _AsyncAutocomplete extends StatefulWidget {
   const _AsyncAutocomplete();
 
   @override
-  State<_AsyncAutocomplete > createState() => _AsyncAutocompleteState();
+  State<_AsyncAutocomplete> createState() => _AsyncAutocompleteState();
 }
 
-class _AsyncAutocompleteState extends State<_AsyncAutocomplete > {
+class _AsyncAutocompleteState extends State<_AsyncAutocomplete> {
   // The query currently being searched for. If null, there is no pending
   // request.
   String? _currentQuery;
@@ -76,7 +76,8 @@ class _AsyncAutocompleteState extends State<_AsyncAutocomplete > {
   Widget build(BuildContext context) {
     return Autocomplete<String>(
       optionsBuilder: (TextEditingValue textEditingValue) async {
-        final Iterable<String>? options = await _debouncedSearch(textEditingValue.text);
+        final Iterable<String>? options =
+            await _debouncedSearch(textEditingValue.text);
         if (options == null) {
           return _lastOptions;
         }
@@ -134,8 +135,7 @@ _Debounceable<S, T> _debounce<S, T>(_Debounceable<S?, T> function) {
 
 // A wrapper around Timer used for debouncing.
 class _DebounceTimer {
-  _DebounceTimer(
-  ) {
+  _DebounceTimer() {
     _timer = Timer(debounceDuration, _onComplete);
   }
 

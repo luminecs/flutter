@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/widgets/basic/fractionally_sized_box.0.dart' as example;
+import 'package:flutter_api_samples/widgets/basic/fractionally_sized_box.0.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('FractionallySizedBox sizes DecoratedBox', (WidgetTester tester) async {
+  testWidgets('FractionallySizedBox sizes DecoratedBox',
+      (WidgetTester tester) async {
     const double appBarHeight = 56.0;
     const double widthFactor = 0.5;
     const double heightFactor = 0.5;
@@ -12,7 +14,8 @@ void main() {
       const example.FractionallySizedBoxApp(),
     );
 
-    final FractionallySizedBox fractionallySizedBox = tester.widget(find.byType(FractionallySizedBox));
+    final FractionallySizedBox fractionallySizedBox =
+        tester.widget(find.byType(FractionallySizedBox));
     expect(fractionallySizedBox.widthFactor, widthFactor);
     expect(fractionallySizedBox.heightFactor, heightFactor);
 

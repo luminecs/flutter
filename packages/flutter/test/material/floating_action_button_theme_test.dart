@@ -6,48 +6,62 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
   test('FloatingActionButtonThemeData copyWith, ==, hashCode basics', () {
-    expect(const FloatingActionButtonThemeData(), const FloatingActionButtonThemeData().copyWith());
-    expect(const FloatingActionButtonThemeData().hashCode, const FloatingActionButtonThemeData().copyWith().hashCode);
+    expect(const FloatingActionButtonThemeData(),
+        const FloatingActionButtonThemeData().copyWith());
+    expect(const FloatingActionButtonThemeData().hashCode,
+        const FloatingActionButtonThemeData().copyWith().hashCode);
   });
 
   test('FloatingActionButtonThemeData lerp special cases', () {
     expect(FloatingActionButtonThemeData.lerp(null, null, 0), null);
     const FloatingActionButtonThemeData data = FloatingActionButtonThemeData();
-    expect(identical(FloatingActionButtonThemeData.lerp(data, data, 0.5), data), true);
+    expect(identical(FloatingActionButtonThemeData.lerp(data, data, 0.5), data),
+        true);
   });
 
-  testWidgetsWithLeakTracking('Material3: Default values are used when no FloatingActionButton or FloatingActionButtonThemeData properties are specified', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material3: Default values are used when no FloatingActionButton or FloatingActionButtonThemeData properties are specified',
+      (WidgetTester tester) async {
     const ColorScheme colorScheme = ColorScheme.light();
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData.from(useMaterial3: true, colorScheme: colorScheme),
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () { },
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),
     ));
 
-    expect(_getRawMaterialButton(tester).fillColor, colorScheme.primaryContainer);
-    expect(_getRichText(tester).text.style!.color, colorScheme.onPrimaryContainer);
+    expect(
+        _getRawMaterialButton(tester).fillColor, colorScheme.primaryContainer);
+    expect(
+        _getRichText(tester).text.style!.color, colorScheme.onPrimaryContainer);
 
     // These defaults come directly from the [FloatingActionButton].
     expect(_getRawMaterialButton(tester).elevation, 6);
     expect(_getRawMaterialButton(tester).highlightElevation, 6);
-    expect(_getRawMaterialButton(tester).shape, const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))));
-    expect(_getRawMaterialButton(tester).splashColor, colorScheme.onPrimaryContainer.withOpacity(0.12));
-    expect(_getRawMaterialButton(tester).constraints, const BoxConstraints.tightFor(width: 56.0, height: 56.0));
+    expect(
+        _getRawMaterialButton(tester).shape,
+        const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))));
+    expect(_getRawMaterialButton(tester).splashColor,
+        colorScheme.onPrimaryContainer.withOpacity(0.12));
+    expect(_getRawMaterialButton(tester).constraints,
+        const BoxConstraints.tightFor(width: 56.0, height: 56.0));
     expect(_getIconSize(tester).width, 24.0);
     expect(_getIconSize(tester).height, 24.0);
   });
 
-  testWidgetsWithLeakTracking('Material2: Default values are used when no FloatingActionButton or FloatingActionButtonThemeData properties are specified', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material2: Default values are used when no FloatingActionButton or FloatingActionButtonThemeData properties are specified',
+      (WidgetTester tester) async {
     const ColorScheme colorScheme = ColorScheme.light();
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData.from(useMaterial3: false, colorScheme: colorScheme),
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () { },
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),
@@ -61,12 +75,15 @@ void main() {
     expect(_getRawMaterialButton(tester).highlightElevation, 12);
     expect(_getRawMaterialButton(tester).shape, const CircleBorder());
     expect(_getRawMaterialButton(tester).splashColor, ThemeData().splashColor);
-    expect(_getRawMaterialButton(tester).constraints, const BoxConstraints.tightFor(width: 56.0, height: 56.0));
+    expect(_getRawMaterialButton(tester).constraints,
+        const BoxConstraints.tightFor(width: 56.0, height: 56.0));
     expect(_getIconSize(tester).width, 24.0);
     expect(_getIconSize(tester).height, 24.0);
   });
 
-  testWidgetsWithLeakTracking('FloatingActionButtonThemeData values are used when no FloatingActionButton properties are specified', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'FloatingActionButtonThemeData values are used when no FloatingActionButton properties are specified',
+      (WidgetTester tester) async {
     const Color backgroundColor = Color(0xBEEFBEEF);
     const Color foregroundColor = Color(0xFACEFACE);
     const Color splashColor = Color(0xCAFEFEED);
@@ -74,7 +91,8 @@ void main() {
     const double disabledElevation = 1;
     const double highlightElevation = 13;
     const ShapeBorder shape = StadiumBorder();
-    const BoxConstraints constraints = BoxConstraints.tightFor(width: 100.0, height: 100.0);
+    const BoxConstraints constraints =
+        BoxConstraints.tightFor(width: 100.0, height: 100.0);
 
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData().copyWith(
@@ -91,7 +109,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () { },
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),
@@ -101,13 +119,16 @@ void main() {
     expect(_getRichText(tester).text.style!.color, foregroundColor);
     expect(_getRawMaterialButton(tester).elevation, elevation);
     expect(_getRawMaterialButton(tester).disabledElevation, disabledElevation);
-    expect(_getRawMaterialButton(tester).highlightElevation, highlightElevation);
+    expect(
+        _getRawMaterialButton(tester).highlightElevation, highlightElevation);
     expect(_getRawMaterialButton(tester).shape, shape);
     expect(_getRawMaterialButton(tester).splashColor, splashColor);
     expect(_getRawMaterialButton(tester).constraints, constraints);
   });
 
-  testWidgetsWithLeakTracking('FloatingActionButton values take priority over FloatingActionButtonThemeData values when both properties are specified', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'FloatingActionButton values take priority over FloatingActionButtonThemeData values when both properties are specified',
+      (WidgetTester tester) async {
     const Color backgroundColor = Color(0x00000001);
     const Color foregroundColor = Color(0x00000002);
     const Color splashColor = Color(0x00000003);
@@ -130,7 +151,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () { },
+          onPressed: () {},
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           splashColor: splashColor,
@@ -147,18 +168,21 @@ void main() {
     expect(_getRichText(tester).text.style!.color, foregroundColor);
     expect(_getRawMaterialButton(tester).elevation, elevation);
     expect(_getRawMaterialButton(tester).disabledElevation, disabledElevation);
-    expect(_getRawMaterialButton(tester).highlightElevation, highlightElevation);
+    expect(
+        _getRawMaterialButton(tester).highlightElevation, highlightElevation);
     expect(_getRawMaterialButton(tester).shape, shape);
     expect(_getRawMaterialButton(tester).splashColor, splashColor);
   });
 
-  testWidgetsWithLeakTracking('FloatingActionButton uses a custom shape when specified in the theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'FloatingActionButton uses a custom shape when specified in the theme',
+      (WidgetTester tester) async {
     const ShapeBorder customShape = BeveledRectangleBorder();
 
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () { },
+          onPressed: () {},
           shape: customShape,
         ),
       ),
@@ -167,8 +191,11 @@ void main() {
     expect(_getRawMaterialButton(tester).shape, customShape);
   });
 
-  testWidgetsWithLeakTracking('FloatingActionButton.small uses custom constraints when specified in the theme', (WidgetTester tester) async {
-    const BoxConstraints constraints = BoxConstraints.tightFor(width: 100.0, height: 100.0);
+  testWidgetsWithLeakTracking(
+      'FloatingActionButton.small uses custom constraints when specified in the theme',
+      (WidgetTester tester) async {
+    const BoxConstraints constraints =
+        BoxConstraints.tightFor(width: 100.0, height: 100.0);
     const double iconSize = 24.0;
 
     await tester.pumpWidget(MaterialApp(
@@ -179,7 +206,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton.small(
-          onPressed: () { },
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),
@@ -190,8 +217,11 @@ void main() {
     expect(_getIconSize(tester).height, iconSize);
   });
 
-  testWidgetsWithLeakTracking('FloatingActionButton.large uses custom constraints when specified in the theme', (WidgetTester tester) async {
-    const BoxConstraints constraints = BoxConstraints.tightFor(width: 100.0, height: 100.0);
+  testWidgetsWithLeakTracking(
+      'FloatingActionButton.large uses custom constraints when specified in the theme',
+      (WidgetTester tester) async {
+    const BoxConstraints constraints =
+        BoxConstraints.tightFor(width: 100.0, height: 100.0);
     const double iconSize = 36.0;
 
     await tester.pumpWidget(MaterialApp(
@@ -202,7 +232,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton.large(
-          onPressed: () { },
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),
@@ -213,13 +243,16 @@ void main() {
     expect(_getIconSize(tester).height, iconSize);
   });
 
-  testWidgetsWithLeakTracking('Material3: FloatingActionButton.extended uses custom properties when specified in the theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material3: FloatingActionButton.extended uses custom properties when specified in the theme',
+      (WidgetTester tester) async {
     const ColorScheme colorScheme = ColorScheme.light();
     const Key iconKey = Key('icon');
     const Key labelKey = Key('label');
     const BoxConstraints constraints = BoxConstraints.tightFor(height: 100.0);
     const double iconLabelSpacing = 33.0;
-    const EdgeInsetsDirectional padding = EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
+    const EdgeInsetsDirectional padding =
+        EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
     const TextStyle textStyle = TextStyle(letterSpacing: 2.0);
 
     await tester.pumpWidget(MaterialApp(
@@ -236,7 +269,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () { },
+          onPressed: () {},
           label: const Text('Extended', key: labelKey),
           icon: const Icon(Icons.add, key: iconKey),
         ),
@@ -244,18 +277,31 @@ void main() {
     ));
 
     expect(_getRawMaterialButton(tester).constraints, constraints);
-    expect(tester.getTopLeft(find.byKey(labelKey)).dx - tester.getTopRight(find.byKey(iconKey)).dx, iconLabelSpacing);
-    expect(tester.getTopLeft(find.byKey(iconKey)).dx - tester.getTopLeft(find.byType(FloatingActionButton)).dx, padding.start);
-    expect(tester.getTopRight(find.byType(FloatingActionButton)).dx - tester.getTopRight(find.byKey(labelKey)).dx, padding.end);
-    expect(_getRawMaterialButton(tester).textStyle, textStyle.copyWith(color: colorScheme.onPrimaryContainer));
+    expect(
+        tester.getTopLeft(find.byKey(labelKey)).dx -
+            tester.getTopRight(find.byKey(iconKey)).dx,
+        iconLabelSpacing);
+    expect(
+        tester.getTopLeft(find.byKey(iconKey)).dx -
+            tester.getTopLeft(find.byType(FloatingActionButton)).dx,
+        padding.start);
+    expect(
+        tester.getTopRight(find.byType(FloatingActionButton)).dx -
+            tester.getTopRight(find.byKey(labelKey)).dx,
+        padding.end);
+    expect(_getRawMaterialButton(tester).textStyle,
+        textStyle.copyWith(color: colorScheme.onPrimaryContainer));
   });
 
-  testWidgetsWithLeakTracking('Material2: FloatingActionButton.extended uses custom properties when specified in the theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material2: FloatingActionButton.extended uses custom properties when specified in the theme',
+      (WidgetTester tester) async {
     const Key iconKey = Key('icon');
     const Key labelKey = Key('label');
     const BoxConstraints constraints = BoxConstraints.tightFor(height: 100.0);
     const double iconLabelSpacing = 33.0;
-    const EdgeInsetsDirectional padding = EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
+    const EdgeInsetsDirectional padding =
+        EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
     const TextStyle textStyle = TextStyle(letterSpacing: 2.0);
 
     await tester.pumpWidget(MaterialApp(
@@ -269,7 +315,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () { },
+          onPressed: () {},
           label: const Text('Extended', key: labelKey),
           icon: const Icon(Icons.add, key: iconKey),
         ),
@@ -277,19 +323,32 @@ void main() {
     ));
 
     expect(_getRawMaterialButton(tester).constraints, constraints);
-    expect(tester.getTopLeft(find.byKey(labelKey)).dx - tester.getTopRight(find.byKey(iconKey)).dx, iconLabelSpacing);
-    expect(tester.getTopLeft(find.byKey(iconKey)).dx - tester.getTopLeft(find.byType(FloatingActionButton)).dx, padding.start);
-    expect(tester.getTopRight(find.byType(FloatingActionButton)).dx - tester.getTopRight(find.byKey(labelKey)).dx, padding.end);
+    expect(
+        tester.getTopLeft(find.byKey(labelKey)).dx -
+            tester.getTopRight(find.byKey(iconKey)).dx,
+        iconLabelSpacing);
+    expect(
+        tester.getTopLeft(find.byKey(iconKey)).dx -
+            tester.getTopLeft(find.byType(FloatingActionButton)).dx,
+        padding.start);
+    expect(
+        tester.getTopRight(find.byType(FloatingActionButton)).dx -
+            tester.getTopRight(find.byKey(labelKey)).dx,
+        padding.end);
     // The color comes from the default color scheme's onSecondary value.
-    expect(_getRawMaterialButton(tester).textStyle, textStyle.copyWith(color: const Color(0xffffffff)));
+    expect(_getRawMaterialButton(tester).textStyle,
+        textStyle.copyWith(color: const Color(0xffffffff)));
   });
 
-  testWidgetsWithLeakTracking('Material3: FloatingActionButton.extended custom properties takes priority over FloatingActionButtonThemeData spacing', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material3: FloatingActionButton.extended custom properties takes priority over FloatingActionButtonThemeData spacing',
+      (WidgetTester tester) async {
     const ColorScheme colorScheme = ColorScheme.light();
     const Key iconKey = Key('icon');
     const Key labelKey = Key('label');
     const double iconLabelSpacing = 33.0;
-    const EdgeInsetsDirectional padding = EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
+    const EdgeInsetsDirectional padding =
+        EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
     const TextStyle textStyle = TextStyle(letterSpacing: 2.0);
 
     await tester.pumpWidget(MaterialApp(
@@ -305,7 +364,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () { },
+          onPressed: () {},
           label: const Text('Extended', key: labelKey),
           icon: const Icon(Icons.add, key: iconKey),
           extendedIconLabelSpacing: iconLabelSpacing,
@@ -315,17 +374,30 @@ void main() {
       ),
     ));
 
-    expect(tester.getTopLeft(find.byKey(labelKey)).dx - tester.getTopRight(find.byKey(iconKey)).dx, iconLabelSpacing);
-    expect(tester.getTopLeft(find.byKey(iconKey)).dx - tester.getTopLeft(find.byType(FloatingActionButton)).dx, padding.start);
-    expect(tester.getTopRight(find.byType(FloatingActionButton)).dx - tester.getTopRight(find.byKey(labelKey)).dx, padding.end);
-    expect(_getRawMaterialButton(tester).textStyle, textStyle.copyWith(color: colorScheme.onPrimaryContainer));
+    expect(
+        tester.getTopLeft(find.byKey(labelKey)).dx -
+            tester.getTopRight(find.byKey(iconKey)).dx,
+        iconLabelSpacing);
+    expect(
+        tester.getTopLeft(find.byKey(iconKey)).dx -
+            tester.getTopLeft(find.byType(FloatingActionButton)).dx,
+        padding.start);
+    expect(
+        tester.getTopRight(find.byType(FloatingActionButton)).dx -
+            tester.getTopRight(find.byKey(labelKey)).dx,
+        padding.end);
+    expect(_getRawMaterialButton(tester).textStyle,
+        textStyle.copyWith(color: colorScheme.onPrimaryContainer));
   });
 
-  testWidgetsWithLeakTracking('Material2: FloatingActionButton.extended custom properties takes priority over FloatingActionButtonThemeData spacing', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Material2: FloatingActionButton.extended custom properties takes priority over FloatingActionButtonThemeData spacing',
+      (WidgetTester tester) async {
     const Key iconKey = Key('icon');
     const Key labelKey = Key('label');
     const double iconLabelSpacing = 33.0;
-    const EdgeInsetsDirectional padding = EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
+    const EdgeInsetsDirectional padding =
+        EdgeInsetsDirectional.only(start: 5.0, end: 6.0);
     const TextStyle textStyle = TextStyle(letterSpacing: 2.0);
 
     await tester.pumpWidget(MaterialApp(
@@ -338,7 +410,7 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () { },
+          onPressed: () {},
           label: const Text('Extended', key: labelKey),
           icon: const Icon(Icons.add, key: iconKey),
           extendedIconLabelSpacing: iconLabelSpacing,
@@ -348,26 +420,39 @@ void main() {
       ),
     ));
 
-    expect(tester.getTopLeft(find.byKey(labelKey)).dx - tester.getTopRight(find.byKey(iconKey)).dx, iconLabelSpacing);
-    expect(tester.getTopLeft(find.byKey(iconKey)).dx - tester.getTopLeft(find.byType(FloatingActionButton)).dx, padding.start);
-    expect(tester.getTopRight(find.byType(FloatingActionButton)).dx - tester.getTopRight(find.byKey(labelKey)).dx, padding.end);
+    expect(
+        tester.getTopLeft(find.byKey(labelKey)).dx -
+            tester.getTopRight(find.byKey(iconKey)).dx,
+        iconLabelSpacing);
+    expect(
+        tester.getTopLeft(find.byKey(iconKey)).dx -
+            tester.getTopLeft(find.byType(FloatingActionButton)).dx,
+        padding.start);
+    expect(
+        tester.getTopRight(find.byType(FloatingActionButton)).dx -
+            tester.getTopRight(find.byKey(labelKey)).dx,
+        padding.end);
     // The color comes from the default color scheme's onSecondary value.
-    expect(_getRawMaterialButton(tester).textStyle, textStyle.copyWith(color: const Color(0xffffffff)));
+    expect(_getRawMaterialButton(tester).textStyle,
+        textStyle.copyWith(color: const Color(0xffffffff)));
   });
 
-  testWidgetsWithLeakTracking('default FloatingActionButton debugFillProperties', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'default FloatingActionButton debugFillProperties',
+      (WidgetTester tester) async {
     final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
-    const FloatingActionButtonThemeData ().debugFillProperties(builder);
+    const FloatingActionButtonThemeData().debugFillProperties(builder);
 
     final List<String> description = builder.properties
-      .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-      .map((DiagnosticsNode node) => node.toString())
-      .toList();
+        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+        .map((DiagnosticsNode node) => node.toString())
+        .toList();
 
     expect(description, <String>[]);
   });
 
-  testWidgetsWithLeakTracking('Material implements debugFillProperties', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Material implements debugFillProperties',
+      (WidgetTester tester) async {
     final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
     const FloatingActionButtonThemeData(
       foregroundColor: Color(0xFEEDFEED),
@@ -384,9 +469,12 @@ void main() {
       enableFeedback: true,
       iconSize: 42,
       sizeConstraints: BoxConstraints.tightFor(width: 100.0, height: 100.0),
-      smallSizeConstraints: BoxConstraints.tightFor(width: 101.0, height: 101.0),
-      largeSizeConstraints: BoxConstraints.tightFor(width: 102.0, height: 102.0),
-      extendedSizeConstraints: BoxConstraints(minHeight: 103.0, maxHeight: 103.0),
+      smallSizeConstraints:
+          BoxConstraints.tightFor(width: 101.0, height: 101.0),
+      largeSizeConstraints:
+          BoxConstraints.tightFor(width: 102.0, height: 102.0),
+      extendedSizeConstraints:
+          BoxConstraints(minHeight: 103.0, maxHeight: 103.0),
       extendedIconLabelSpacing: 12,
       extendedPadding: EdgeInsetsDirectional.only(start: 7.0, end: 8.0),
       extendedTextStyle: TextStyle(letterSpacing: 2.0),
@@ -394,9 +482,9 @@ void main() {
     ).debugFillProperties(builder);
 
     final List<String> description = builder.properties
-      .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-      .map((DiagnosticsNode node) => node.toString())
-      .toList();
+        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+        .map((DiagnosticsNode node) => node.toString())
+        .toList();
 
     expect(description, <String>[
       'foregroundColor: Color(0xfeedfeed)',
@@ -423,7 +511,9 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('FloatingActionButton.mouseCursor uses FloatingActionButtonThemeData.mouseCursor when specified.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'FloatingActionButton.mouseCursor uses FloatingActionButtonThemeData.mouseCursor when specified.',
+      (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData().copyWith(
         floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -432,19 +522,21 @@ void main() {
       ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () { },
+          onPressed: () {},
           child: const Icon(Icons.add),
         ),
       ),
     ));
 
     await tester.pumpAndSettle();
-    final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    final TestGesture gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse);
     await gesture.addPointer();
     addTearDown(gesture.removePointer);
     await gesture.moveTo(tester.getCenter(find.byType(FloatingActionButton)));
     await tester.pumpAndSettle();
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), SystemMouseCursors.text);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        SystemMouseCursors.text);
   });
 }
 

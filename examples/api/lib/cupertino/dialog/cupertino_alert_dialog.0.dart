@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const AlertDialogApp());
 
 class AlertDialogApp extends StatelessWidget {

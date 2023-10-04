@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const LinearGradientExampleApp());
 
 class LinearGradientExampleApp extends StatelessWidget {

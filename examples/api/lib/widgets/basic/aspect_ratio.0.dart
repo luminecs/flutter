@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AspectRatioApp());
 
 class AspectRatioApp extends StatelessWidget {

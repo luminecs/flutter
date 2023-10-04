@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 
 import 'events.dart';
@@ -31,25 +30,29 @@ class Velocity {
     assert(maxValue >= 0.0 && maxValue >= minValue);
     final double valueSquared = pixelsPerSecond.distanceSquared;
     if (valueSquared > maxValue * maxValue) {
-      return Velocity(pixelsPerSecond: (pixelsPerSecond / pixelsPerSecond.distance) * maxValue);
+      return Velocity(
+          pixelsPerSecond:
+              (pixelsPerSecond / pixelsPerSecond.distance) * maxValue);
     }
     if (valueSquared < minValue * minValue) {
-      return Velocity(pixelsPerSecond: (pixelsPerSecond / pixelsPerSecond.distance) * minValue);
+      return Velocity(
+          pixelsPerSecond:
+              (pixelsPerSecond / pixelsPerSecond.distance) * minValue);
     }
     return this;
   }
 
   @override
   bool operator ==(Object other) {
-    return other is Velocity
-        && other.pixelsPerSecond == pixelsPerSecond;
+    return other is Velocity && other.pixelsPerSecond == pixelsPerSecond;
   }
 
   @override
   int get hashCode => pixelsPerSecond.hashCode;
 
   @override
-  String toString() => 'Velocity(${pixelsPerSecond.dx.toStringAsFixed(1)}, ${pixelsPerSecond.dy.toStringAsFixed(1)})';
+  String toString() =>
+      'Velocity(${pixelsPerSecond.dx.toStringAsFixed(1)}, ${pixelsPerSecond.dy.toStringAsFixed(1)})';
 }
 
 class VelocityEstimate {
@@ -69,7 +72,8 @@ class VelocityEstimate {
   final Offset offset;
 
   @override
-  String toString() => 'VelocityEstimate(${pixelsPerSecond.dx.toStringAsFixed(1)}, ${pixelsPerSecond.dy.toStringAsFixed(1)}; offset: $offset, duration: $duration, confidence: ${confidence.toStringAsFixed(1)})';
+  String toString() =>
+      'VelocityEstimate(${pixelsPerSecond.dx.toStringAsFixed(1)}, ${pixelsPerSecond.dy.toStringAsFixed(1)}; offset: $offset, duration: $duration, confidence: ${confidence.toStringAsFixed(1)})';
 }
 
 class _PointAtTime {
@@ -83,7 +87,6 @@ class _PointAtTime {
 }
 
 class VelocityTracker {
-
   VelocityTracker.withKind(this.kind);
 
   static const int _assumePointerMoveStoppedMilliseconds = 40;
@@ -94,7 +97,8 @@ class VelocityTracker {
   final PointerDeviceKind kind;
 
   // Circular buffer; current sample at _index.
-  final List<_PointAtTime?> _samples = List<_PointAtTime?>.filled(_historySize, null);
+  final List<_PointAtTime?> _samples =
+      List<_PointAtTime?>.filled(_historySize, null);
   int _index = 0;
 
   void addPosition(Duration time, Offset position) {
@@ -129,10 +133,14 @@ class VelocityTracker {
         break;
       }
 
-      final double age = (newestSample.time - sample.time).inMicroseconds.toDouble() / 1000;
-      final double delta = (sample.time - previousSample.time).inMicroseconds.abs().toDouble() / 1000;
+      final double age =
+          (newestSample.time - sample.time).inMicroseconds.toDouble() / 1000;
+      final double delta =
+          (sample.time - previousSample.time).inMicroseconds.abs().toDouble() /
+              1000;
       previousSample = sample;
-      if (age > _horizonMilliseconds || delta > _assumePointerMoveStoppedMilliseconds) {
+      if (age > _horizonMilliseconds ||
+          delta > _assumePointerMoveStoppedMilliseconds) {
         break;
       }
 
@@ -154,8 +162,10 @@ class VelocityTracker {
         final LeastSquaresSolver ySolver = LeastSquaresSolver(time, y, w);
         final PolynomialFit? yFit = ySolver.solve(2);
         if (yFit != null) {
-          return VelocityEstimate( // convert from pixels/ms to pixels/s
-            pixelsPerSecond: Offset(xFit.coefficients[1] * 1000, yFit.coefficients[1] * 1000),
+          return VelocityEstimate(
+            // convert from pixels/ms to pixels/s
+            pixelsPerSecond: Offset(
+                xFit.coefficients[1] * 1000, yFit.coefficients[1] * 1000),
             confidence: xFit.confidence * yFit.confidence,
             duration: newestSample.time - oldestSample.time,
             offset: newestSample.point - oldestSample.point,
@@ -188,7 +198,8 @@ class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
 
   static const int _sampleSize = 20;
 
-  final List<_PointAtTime?> _touchSamples = List<_PointAtTime?>.filled(_sampleSize, null);
+  final List<_PointAtTime?> _touchSamples =
+      List<_PointAtTime?>.filled(_sampleSize, null);
 
   @override
   void addPosition(Duration time, Offset position) {
@@ -223,9 +234,9 @@ class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
     assert(dt >= 0);
 
     return dt > 0
-      // Convert dt to milliseconds to preserve floating point precision.
-      ? (end.point - start.point) * 1000 / (dt.toDouble() / 1000)
-      : Offset.zero;
+        // Convert dt to milliseconds to preserve floating point precision.
+        ? (end.point - start.point) * 1000 / (dt.toDouble() / 1000)
+        : Offset.zero;
   }
 
   @override
@@ -236,9 +247,9 @@ class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
     // installed on the scroll view would report. Typically in an iOS scroll
     // view the velocity values are different between the two, because the
     // scroll view usually slows down when the touch is released.
-    final Offset estimatedVelocity = _previousVelocityAt(-2) * 0.6
-                                   + _previousVelocityAt(-1) * 0.35
-                                   + _previousVelocityAt(0) * 0.05;
+    final Offset estimatedVelocity = _previousVelocityAt(-2) * 0.6 +
+        _previousVelocityAt(-1) * 0.35 +
+        _previousVelocityAt(0) * 0.05;
 
     final _PointAtTime? newestSample = _touchSamples[_index];
     _PointAtTime? oldestNonNullSample;
@@ -251,7 +262,8 @@ class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
     }
 
     if (oldestNonNullSample == null || newestSample == null) {
-      assert(false, 'There must be at least 1 point in _touchSamples: $_touchSamples');
+      assert(false,
+          'There must be at least 1 point in _touchSamples: $_touchSamples');
       return const VelocityEstimate(
         pixelsPerSecond: Offset.zero,
         confidence: 0.0,
@@ -269,7 +281,8 @@ class IOSScrollViewFlingVelocityTracker extends VelocityTracker {
   }
 }
 
-class MacOSScrollViewFlingVelocityTracker extends IOSScrollViewFlingVelocityTracker {
+class MacOSScrollViewFlingVelocityTracker
+    extends IOSScrollViewFlingVelocityTracker {
   MacOSScrollViewFlingVelocityTracker(super.kind);
 
   @override
@@ -277,22 +290,26 @@ class MacOSScrollViewFlingVelocityTracker extends IOSScrollViewFlingVelocityTrac
     // The velocity estimated using this expression is an approximation of the
     // scroll velocity of a macOS scroll view at the moment the user touch was
     // released.
-    final Offset estimatedVelocity = _previousVelocityAt(-2) * 0.15
-                                   + _previousVelocityAt(-1) * 0.65
-                                   + _previousVelocityAt(0) * 0.2;
+    final Offset estimatedVelocity = _previousVelocityAt(-2) * 0.15 +
+        _previousVelocityAt(-1) * 0.65 +
+        _previousVelocityAt(0) * 0.2;
 
     final _PointAtTime? newestSample = _touchSamples[_index];
     _PointAtTime? oldestNonNullSample;
 
-    for (int i = 1; i <= IOSScrollViewFlingVelocityTracker._sampleSize; i += 1) {
-      oldestNonNullSample = _touchSamples[(_index + i) % IOSScrollViewFlingVelocityTracker._sampleSize];
+    for (int i = 1;
+        i <= IOSScrollViewFlingVelocityTracker._sampleSize;
+        i += 1) {
+      oldestNonNullSample = _touchSamples[
+          (_index + i) % IOSScrollViewFlingVelocityTracker._sampleSize];
       if (oldestNonNullSample != null) {
         break;
       }
     }
 
     if (oldestNonNullSample == null || newestSample == null) {
-      assert(false, 'There must be at least 1 point in _touchSamples: $_touchSamples');
+      assert(false,
+          'There must be at least 1 point in _touchSamples: $_touchSamples');
       return const VelocityEstimate(
         pixelsPerSecond: Offset.zero,
         confidence: 0.0,

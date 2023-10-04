@@ -25,7 +25,8 @@ typedef TaskFunction = Future<TaskResult> Function();
 
 bool _isTaskRegistered = false;
 
-Future<TaskResult> task(TaskFunction task, { ProcessManager? processManager }) async {
+Future<TaskResult> task(TaskFunction task,
+    {ProcessManager? processManager}) async {
   if (_isTaskRegistered) {
     throw StateError('A task is already registered');
   }
@@ -49,9 +50,10 @@ class _TaskRunner {
     registerExtension('ext.cocoonRunTask',
         (String method, Map<String, String> parameters) async {
       final Duration? taskTimeout = parameters.containsKey('timeoutInMinutes')
-        ? Duration(minutes: int.parse(parameters['timeoutInMinutes']!))
-        : null;
-      final bool runFlutterConfig = parameters['runFlutterConfig'] != 'false'; // used by tests to avoid changing the configuration
+          ? Duration(minutes: int.parse(parameters['timeoutInMinutes']!))
+          : null;
+      final bool runFlutterConfig = parameters['runFlutterConfig'] !=
+          'false'; // used by tests to avoid changing the configuration
       final bool runProcessCleanup = parameters['runProcessCleanup'] != 'false';
       final String? localEngine = parameters['localEngine'];
       final String? localEngineHost = parameters['localEngineHost'];
@@ -92,7 +94,8 @@ class _TaskRunner {
 
   Future<TaskResult> get whenDone => _completer.future;
 
-  Future<TaskResult> run(Duration? taskTimeout, {
+  Future<TaskResult> run(
+    Duration? taskTimeout, {
     bool runFlutterConfig = true,
     bool runProcessCleanup = true,
     required String? localEngine,
@@ -109,25 +112,36 @@ class _TaskRunner {
           processName: 'dart$exe',
           processManager: processManager,
         );
-        final Set<RunningProcessInfo> allProcesses = await getRunningProcesses(processManager: processManager);
+        final Set<RunningProcessInfo> allProcesses =
+            await getRunningProcesses(processManager: processManager);
         beforeRunningDartInstances.forEach(print);
         for (final RunningProcessInfo info in allProcesses) {
           if (info.commandLine.contains('iproxy')) {
-            print('[LEAK]: ${info.commandLine} ${info.creationDate} ${info.pid} ');
+            print(
+                '[LEAK]: ${info.commandLine} ${info.creationDate} ${info.pid} ');
           }
         }
       }
 
       if (runFlutterConfig) {
         print('Enabling configs for macOS and Linux...');
-        final int configResult = await exec(path.join(flutterDirectory.path, 'bin', 'flutter'), <String>[
-          'config',
-          '-v',
-          '--enable-macos-desktop',
-          '--enable-linux-desktop',
-          if (localEngine != null) ...<String>['--local-engine', localEngine],
-          if (localEngineHost != null) ...<String>['--local-engine-host', localEngineHost],
-        ], canFail: true);
+        final int configResult = await exec(
+            path.join(flutterDirectory.path, 'bin', 'flutter'),
+            <String>[
+              'config',
+              '-v',
+              '--enable-macos-desktop',
+              '--enable-linux-desktop',
+              if (localEngine != null) ...<String>[
+                '--local-engine',
+                localEngine
+              ],
+              if (localEngineHost != null) ...<String>[
+                '--local-engine-host',
+                localEngineHost
+              ],
+            ],
+            canFail: true);
         if (configResult != 0) {
           print('Failed to enable configuration, tasks may not run.');
         }
@@ -141,8 +155,12 @@ class _TaskRunner {
       late TaskResult result;
       IOSink? sink;
       try {
-        if (device != null && device.canStreamLogs && hostAgent.dumpDirectory != null) {
-          sink = File(path.join(hostAgent.dumpDirectory!.path, '${device.deviceId}.log')).openWrite();
+        if (device != null &&
+            device.canStreamLogs &&
+            hostAgent.dumpDirectory != null) {
+          sink = File(path.join(
+                  hostAgent.dumpDirectory!.path, '${device.deviceId}.log'))
+              .openWrite();
           await device.startLoggingToSink(sink);
         }
 
@@ -161,7 +179,8 @@ class _TaskRunner {
 
       if (runProcessCleanup) {
         section('Terminating lingering Dart$exe processes after task...');
-        final Set<RunningProcessInfo> afterRunningDartInstances = await getRunningProcesses(
+        final Set<RunningProcessInfo> afterRunningDartInstances =
+            await getRunningProcesses(
           processName: 'dart$exe',
           processManager: processManager,
         );

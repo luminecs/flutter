@@ -18,10 +18,10 @@ class PluginEventChannel<T> {
   final BinaryMessenger? binaryMessenger;
 
   @Deprecated(
-    'Replace calls to the "controller" setter with calls to the "setController" method. '
-    'This feature was deprecated after v1.23.0-7.0.pre.'
-  )
-  set controller(StreamController<T> controller) { // ignore: avoid_setters_without_getters
+      'Replace calls to the "controller" setter with calls to the "setController" method. '
+      'This feature was deprecated after v1.23.0-7.0.pre.')
+  set controller(StreamController<T> controller) {
+    // ignore: avoid_setters_without_getters
     setController(controller);
   }
 
@@ -82,7 +82,8 @@ class _EventChannelHandler<T> {
     subscription = controller.stream.listen((dynamic event) {
       messenger.send(name, codec.encodeSuccessEnvelope(event));
     }, onError: (dynamic error) {
-      messenger.send(name, codec.encodeErrorEnvelope(code: 'error', message: '$error'));
+      messenger.send(
+          name, codec.encodeErrorEnvelope(code: 'error', message: '$error'));
     });
     return codec.encodeSuccessEnvelope(null);
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const TooltipExampleApp());
 
 class TooltipExampleApp extends StatelessWidget {

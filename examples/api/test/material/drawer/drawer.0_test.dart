@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_samples/material/drawer/drawer.0.dart'
-    as example;
+import 'package:flutter_api_samples/material/drawer/drawer.0.dart' as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -19,15 +18,18 @@ void main() {
 
     expect(find.text('Page: '), findsOneWidget);
 
-    await tester.tap(find.ancestor(of: find.text('Messages'), matching: find.byType(InkWell)));
+    await tester.tap(find.ancestor(
+        of: find.text('Messages'), matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Page: Messages'), findsOneWidget);
 
-    await tester.tap(find.ancestor(of: find.text('Profile'), matching: find.byType(InkWell)));
+    await tester.tap(find.ancestor(
+        of: find.text('Profile'), matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Page: Profile'), findsOneWidget);
 
-    await tester.tap(find.ancestor(of: find.text('Settings'), matching: find.byType(InkWell)));
+    await tester.tap(find.ancestor(
+        of: find.text('Settings'), matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Page: Settings'), findsOneWidget);
   });

@@ -52,7 +52,10 @@ class XCResultGenerator {
 }
 
 class XCResult {
-  factory XCResult({required Map<String, Object?> resultJson, List<XCResultIssueDiscarder> issueDiscarders = const <XCResultIssueDiscarder>[]}) {
+  factory XCResult(
+      {required Map<String, Object?> resultJson,
+      List<XCResultIssueDiscarder> issueDiscarders =
+          const <XCResultIssueDiscarder>[]}) {
     final List<XCResultIssue> issues = <XCResultIssue>[];
 
     final Object? issuesMap = resultJson['issues'];
@@ -81,7 +84,8 @@ class XCResult {
 
     final Object? actionsMap = resultJson['actions'];
     if (actionsMap is Map<String, Object?>) {
-      final List<XCResultIssue> actionIssues = _parseActionIssues(actionsMap, issueDiscarders: issueDiscarders);
+      final List<XCResultIssue> actionIssues =
+          _parseActionIssues(actionsMap, issueDiscarders: issueDiscarders);
       issues.addAll(actionIssues);
     }
 
@@ -370,32 +374,33 @@ List<XCResultIssue> _parseActionIssues(
   //   }
   // }
   final List<XCResultIssue> issues = <XCResultIssue>[];
-    final Object? actionsValues = actionsMap['_values'];
-    if (actionsValues is! List<Object?>) {
-      return issues;
-    }
-
-    for (final Object? actionValue in actionsValues) {
-      if (actionValue is!Map<String, Object?>) {
-        continue;
-      }
-      final Object? actionResult = actionValue['actionResult'];
-      if (actionResult is! Map<String, Object?>) {
-        continue;
-      }
-      final Object? actionResultIssues = actionResult['issues'];
-      if (actionResultIssues is! Map<String, Object?>) {
-        continue;
-      }
-      final Object? testFailureSummaries = actionResultIssues['testFailureSummaries'];
-      if (testFailureSummaries is Map<String, Object?>) {
-        issues.addAll(_parseIssuesFromIssueSummariesJson(
-          type: XCResultIssueType.error,
-          issueSummariesJson: testFailureSummaries,
-          issueDiscarder: issueDiscarders,
-        ));
-      }
-    }
-
+  final Object? actionsValues = actionsMap['_values'];
+  if (actionsValues is! List<Object?>) {
     return issues;
   }
+
+  for (final Object? actionValue in actionsValues) {
+    if (actionValue is! Map<String, Object?>) {
+      continue;
+    }
+    final Object? actionResult = actionValue['actionResult'];
+    if (actionResult is! Map<String, Object?>) {
+      continue;
+    }
+    final Object? actionResultIssues = actionResult['issues'];
+    if (actionResultIssues is! Map<String, Object?>) {
+      continue;
+    }
+    final Object? testFailureSummaries =
+        actionResultIssues['testFailureSummaries'];
+    if (testFailureSummaries is Map<String, Object?>) {
+      issues.addAll(_parseIssuesFromIssueSummariesJson(
+        type: XCResultIssueType.error,
+        issueSummariesJson: testFailureSummaries,
+        issueDiscarder: issueDiscarders,
+      ));
+    }
+  }
+
+  return issues;
+}

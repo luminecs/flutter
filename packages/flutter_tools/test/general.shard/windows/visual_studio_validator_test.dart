@@ -47,7 +47,9 @@ void main() {
       fakeVisualStudio.windows10SDKVersion = null;
     }
 
-    testWithoutContext('Emits a message when Visual Studio is a pre-release version', () async {
+    testWithoutContext(
+        'Emits a message when Visual Studio is a pre-release version',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -64,7 +66,9 @@ void main() {
       expect(result.messages, contains(expectedMessage));
     });
 
-    testWithoutContext('Emits a partial status when Visual Studio installation is incomplete', () async {
+    testWithoutContext(
+        'Emits a partial status when Visual Studio installation is incomplete',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -82,7 +86,9 @@ void main() {
       expect(result.type, ValidationType.partial);
     });
 
-    testWithoutContext('Emits a partial status when Visual Studio installation needs rebooting', () async {
+    testWithoutContext(
+        'Emits a partial status when Visual Studio installation needs rebooting',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -99,7 +105,9 @@ void main() {
       expect(result.type, ValidationType.partial);
     });
 
-    testWithoutContext('Emits a partial status when Visual Studio installation is not launchable', () async {
+    testWithoutContext(
+        'Emits a partial status when Visual Studio installation is not launchable',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -116,7 +124,9 @@ void main() {
       expect(result.type, ValidationType.partial);
     });
 
-    testWithoutContext('Emits partial status when Visual Studio is installed but too old', () async {
+    testWithoutContext(
+        'Emits partial status when Visual Studio is installed but too old',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -134,7 +144,9 @@ void main() {
       expect(result.type, ValidationType.partial);
     });
 
-    testWithoutContext('Emits partial status when Visual Studio is installed without necessary components', () async {
+    testWithoutContext(
+        'Emits partial status when Visual Studio is installed without necessary components',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -146,7 +158,9 @@ void main() {
       expect(result.type, ValidationType.partial);
     });
 
-    testWithoutContext('Emits partial status when Visual Studio is installed but the SDK cannot be found', () async {
+    testWithoutContext(
+        'Emits partial status when Visual Studio is installed but the SDK cannot be found',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -158,7 +172,9 @@ void main() {
       expect(result.type, ValidationType.partial);
     });
 
-    testWithoutContext('Emits installed status when Visual Studio is installed with necessary components', () async {
+    testWithoutContext(
+        'Emits installed status when Visual Studio is installed with necessary components',
+        () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -174,7 +190,8 @@ void main() {
       expect(result.type, ValidationType.success);
     });
 
-    testWithoutContext('Emits missing status when Visual Studio is not installed', () async {
+    testWithoutContext(
+        'Emits missing status when Visual Studio is not installed', () async {
       final VisualStudioValidator validator = VisualStudioValidator(
         userMessages: userMessages,
         visualStudio: fakeVisualStudio,
@@ -183,10 +200,9 @@ void main() {
 
       final ValidationResult result = await validator.validate();
       const ValidationMessage expectedMessage = ValidationMessage.error(
-        'Visual Studio not installed; this is necessary to develop Windows apps.\n'
-        'Download at https://visualstudio.microsoft.com/downloads/.\n'
-        'Please install the "Desktop development" workload, including all of its default components'
-      );
+          'Visual Studio not installed; this is necessary to develop Windows apps.\n'
+          'Download at https://visualstudio.microsoft.com/downloads/.\n'
+          'Please install the "Desktop development" workload, including all of its default components');
 
       expect(result.messages, contains(expectedMessage));
       expect(result.type, ValidationType.missing);

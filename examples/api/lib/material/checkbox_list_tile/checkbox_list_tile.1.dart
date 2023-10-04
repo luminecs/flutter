@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const CheckboxListTileApp());
 
 class CheckboxListTileApp extends StatelessWidget {
@@ -19,7 +18,8 @@ class CheckboxListTileExample extends StatefulWidget {
   const CheckboxListTileExample({super.key});
 
   @override
-  State<CheckboxListTileExample> createState() => _CheckboxListTileExampleState();
+  State<CheckboxListTileExample> createState() =>
+      _CheckboxListTileExampleState();
 }
 
 class _CheckboxListTileExampleState extends State<CheckboxListTileExample> {

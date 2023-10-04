@@ -27,10 +27,13 @@ enum MaterialState {
 
 typedef MaterialPropertyResolver<T> = T Function(Set<MaterialState> states);
 
-abstract class MaterialStateColor extends Color implements MaterialStateProperty<Color> {
+abstract class MaterialStateColor extends Color
+    implements MaterialStateProperty<Color> {
   const MaterialStateColor(super.defaultValue);
 
-  static MaterialStateColor resolveWith(MaterialPropertyResolver<Color> callback) => _MaterialStateColor(callback);
+  static MaterialStateColor resolveWith(
+          MaterialPropertyResolver<Color> callback) =>
+      _MaterialStateColor(callback);
 
   @override
   Color resolve(Set<MaterialState> states);
@@ -47,7 +50,8 @@ class _MaterialStateColor extends MaterialStateColor {
   Color resolve(Set<MaterialState> states) => _resolve(states);
 }
 
-abstract class MaterialStateMouseCursor extends MouseCursor implements MaterialStateProperty<MouseCursor> {
+abstract class MaterialStateMouseCursor extends MouseCursor
+    implements MaterialStateProperty<MouseCursor> {
   const MaterialStateMouseCursor();
 
   @protected
@@ -59,13 +63,15 @@ abstract class MaterialStateMouseCursor extends MouseCursor implements MaterialS
   @override
   MouseCursor resolve(Set<MaterialState> states);
 
-  static const MaterialStateMouseCursor clickable = _EnabledAndDisabledMouseCursor(
+  static const MaterialStateMouseCursor clickable =
+      _EnabledAndDisabledMouseCursor(
     enabledCursor: SystemMouseCursors.click,
     disabledCursor: SystemMouseCursors.basic,
     name: 'clickable',
   );
 
-  static const MaterialStateMouseCursor textable = _EnabledAndDisabledMouseCursor(
+  static const MaterialStateMouseCursor textable =
+      _EnabledAndDisabledMouseCursor(
     enabledCursor: SystemMouseCursors.text,
     disabledCursor: SystemMouseCursors.basic,
     name: 'textable',
@@ -95,13 +101,15 @@ class _EnabledAndDisabledMouseCursor extends MaterialStateMouseCursor {
   String get debugDescription => 'MaterialStateMouseCursor($name)';
 }
 
-abstract class MaterialStateBorderSide extends BorderSide implements MaterialStateProperty<BorderSide?> {
+abstract class MaterialStateBorderSide extends BorderSide
+    implements MaterialStateProperty<BorderSide?> {
   const MaterialStateBorderSide();
 
   @override
   BorderSide? resolve(Set<MaterialState> states);
 
-  static MaterialStateBorderSide resolveWith(MaterialPropertyResolver<BorderSide?> callback) =>
+  static MaterialStateBorderSide resolveWith(
+          MaterialPropertyResolver<BorderSide?> callback) =>
       _MaterialStateBorderSide(callback);
 }
 
@@ -116,17 +124,20 @@ class _MaterialStateBorderSide extends MaterialStateBorderSide {
   }
 }
 
-abstract class MaterialStateOutlinedBorder extends OutlinedBorder implements MaterialStateProperty<OutlinedBorder?> {
+abstract class MaterialStateOutlinedBorder extends OutlinedBorder
+    implements MaterialStateProperty<OutlinedBorder?> {
   const MaterialStateOutlinedBorder();
 
   @override
   OutlinedBorder? resolve(Set<MaterialState> states);
 }
 
-abstract class MaterialStateTextStyle extends TextStyle implements MaterialStateProperty<TextStyle> {
+abstract class MaterialStateTextStyle extends TextStyle
+    implements MaterialStateProperty<TextStyle> {
   const MaterialStateTextStyle();
 
-  static MaterialStateTextStyle resolveWith(MaterialPropertyResolver<TextStyle> callback) =>
+  static MaterialStateTextStyle resolveWith(
+          MaterialPropertyResolver<TextStyle> callback) =>
       _MaterialStateTextStyle(callback);
 
   @override
@@ -142,10 +153,12 @@ class _MaterialStateTextStyle extends MaterialStateTextStyle {
   TextStyle resolve(Set<MaterialState> states) => _resolve(states);
 }
 
-abstract class MaterialStateOutlineInputBorder extends OutlineInputBorder implements MaterialStateProperty<InputBorder> {
+abstract class MaterialStateOutlineInputBorder extends OutlineInputBorder
+    implements MaterialStateProperty<InputBorder> {
   const MaterialStateOutlineInputBorder();
 
-  static MaterialStateOutlineInputBorder resolveWith(MaterialPropertyResolver<InputBorder> callback) =>
+  static MaterialStateOutlineInputBorder resolveWith(
+          MaterialPropertyResolver<InputBorder> callback) =>
       _MaterialStateOutlineInputBorder(callback);
 
   @override
@@ -161,17 +174,20 @@ class _MaterialStateOutlineInputBorder extends MaterialStateOutlineInputBorder {
   InputBorder resolve(Set<MaterialState> states) => _resolve(states);
 }
 
-abstract class MaterialStateUnderlineInputBorder extends UnderlineInputBorder implements MaterialStateProperty<InputBorder> {
+abstract class MaterialStateUnderlineInputBorder extends UnderlineInputBorder
+    implements MaterialStateProperty<InputBorder> {
   const MaterialStateUnderlineInputBorder();
 
-  static MaterialStateUnderlineInputBorder resolveWith(MaterialPropertyResolver<InputBorder> callback) =>
+  static MaterialStateUnderlineInputBorder resolveWith(
+          MaterialPropertyResolver<InputBorder> callback) =>
       _MaterialStateUnderlineInputBorder(callback);
 
   @override
   InputBorder resolve(Set<MaterialState> states);
 }
 
-class _MaterialStateUnderlineInputBorder extends MaterialStateUnderlineInputBorder {
+class _MaterialStateUnderlineInputBorder
+    extends MaterialStateUnderlineInputBorder {
   const _MaterialStateUnderlineInputBorder(this._resolve);
 
   final MaterialPropertyResolver<InputBorder> _resolve;
@@ -191,12 +207,15 @@ abstract class MaterialStateProperty<T> {
     return value;
   }
 
-  static MaterialStateProperty<T> resolveWith<T>(MaterialPropertyResolver<T> callback) => _MaterialStatePropertyWith<T>(callback);
+  static MaterialStateProperty<T> resolveWith<T>(
+          MaterialPropertyResolver<T> callback) =>
+      _MaterialStatePropertyWith<T>(callback);
 
   // TODO(darrenaustin): Deprecate this when we have the ability to create
   // a dart fix that will replace this with MaterialStatePropertyAll:
   // https://github.com/dart-lang/sdk/issues/49056.
-  static MaterialStateProperty<T> all<T>(T value) => MaterialStatePropertyAll<T>(value);
+  static MaterialStateProperty<T> all<T>(T value) =>
+      MaterialStatePropertyAll<T>(value);
 
   static MaterialStateProperty<T?>? lerp<T>(
     MaterialStateProperty<T>? a,
@@ -238,7 +257,6 @@ class _MaterialStatePropertyWith<T> implements MaterialStateProperty<T> {
 }
 
 class MaterialStatePropertyAll<T> implements MaterialStateProperty<T> {
-
   const MaterialStatePropertyAll(this.value);
 
   final T value;
@@ -257,7 +275,8 @@ class MaterialStatePropertyAll<T> implements MaterialStateProperty<T> {
 }
 
 class MaterialStatesController extends ValueNotifier<Set<MaterialState>> {
-  MaterialStatesController([Set<MaterialState>? value]) : super(<MaterialState>{...?value});
+  MaterialStatesController([Set<MaterialState>? value])
+      : super(<MaterialState>{...?value});
 
   void update(MaterialState state, bool add) {
     final bool valueChanged = add ? value.add(state) : value.remove(state);

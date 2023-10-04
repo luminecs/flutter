@@ -2,8 +2,10 @@ import '../../base/file_system.dart';
 import '../../base/project_migrator.dart';
 import '../../xcode_project.dart';
 
-const String _kDisableMinimumFrameDurationKey = 'CADisableMinimumFrameDurationOnPhone';
-const String _kIndirectInputEventsKey = 'UIApplicationSupportsIndirectInputEvents';
+const String _kDisableMinimumFrameDurationKey =
+    'CADisableMinimumFrameDurationOnPhone';
+const String _kIndirectInputEventsKey =
+    'UIApplicationSupportsIndirectInputEvents';
 
 class HostAppInfoPlistMigration extends ProjectMigrator {
   HostAppInfoPlistMigration(
@@ -16,7 +18,8 @@ class HostAppInfoPlistMigration extends ProjectMigrator {
   @override
   void migrate() {
     if (!_infoPlist.existsSync()) {
-      logger.printTrace('Info.plist not found, skipping host app Info.plist migration.');
+      logger.printTrace(
+          'Info.plist not found, skipping host app Info.plist migration.');
       return;
     }
 
@@ -27,7 +30,8 @@ class HostAppInfoPlistMigration extends ProjectMigrator {
   String migrateFileContents(String fileContents) {
     String newContents = fileContents;
     if (!newContents.contains(_kDisableMinimumFrameDurationKey)) {
-      logger.printTrace('Adding $_kDisableMinimumFrameDurationKey to Info.plist');
+      logger
+          .printTrace('Adding $_kDisableMinimumFrameDurationKey to Info.plist');
       const String plistEnd = '''
 </dict>
 </plist>

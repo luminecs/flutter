@@ -8,7 +8,8 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
   // Regression test for https://github.com/flutter/flutter/issues/105833
-  testWidgetsWithLeakTracking('Drag gesture uses provided gesture settings', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Drag gesture uses provided gesture settings',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.1, 0.5);
     bool dragStarted = false;
     final Key sliderKey = UniqueKey();
@@ -27,7 +28,9 @@ void main() {
                       dragStarted = true;
                     },
                     child: MediaQuery(
-                      data: MediaQuery.of(context).copyWith(gestureSettings: const DeviceGestureSettings(touchSlop: 20)),
+                      data: MediaQuery.of(context).copyWith(
+                          gestureSettings:
+                              const DeviceGestureSettings(touchSlop: 20)),
                       child: RangeSlider(
                         key: sliderKey,
                         values: values,
@@ -47,7 +50,8 @@ void main() {
       ),
     );
 
-    TestGesture drag = await tester.startGesture(tester.getCenter(find.byKey(sliderKey)));
+    TestGesture drag =
+        await tester.startGesture(tester.getCenter(find.byKey(sliderKey)));
     await tester.pump(kPressTimeout);
 
     // Less than configured touch slop, more than default touch slop
@@ -81,7 +85,9 @@ void main() {
                       dragStarted = true;
                     },
                     child: MediaQuery(
-                      data: MediaQuery.of(context).copyWith(gestureSettings: const DeviceGestureSettings(touchSlop: 10)),
+                      data: MediaQuery.of(context).copyWith(
+                          gestureSettings:
+                              const DeviceGestureSettings(touchSlop: 10)),
                       child: RangeSlider(
                         key: sliderKey,
                         values: values,
@@ -114,7 +120,9 @@ void main() {
     expect(dragStarted, false);
   });
 
-  testWidgetsWithLeakTracking('Range Slider can move when tapped (continuous LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider can move when tapped (continuous LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -151,8 +159,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // The start thumb is selected when tapping the left inactive track.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.1;
@@ -168,7 +178,9 @@ void main() {
     expect(values.end, moreOrLessEquals(0.9, epsilon: 0.01));
   });
 
-  testWidgetsWithLeakTracking('Range Slider can move when tapped (continuous RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider can move when tapped (continuous RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -205,8 +217,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // The end thumb is selected when tapping the left inactive track.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.1;
@@ -222,7 +236,9 @@ void main() {
     expect(values.end, moreOrLessEquals(0.9, epsilon: 0.01));
   });
 
-  testWidgetsWithLeakTracking('Range Slider can move when tapped (discrete LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider can move when tapped (discrete LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -261,8 +277,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // The start thumb is selected when tapping the left inactive track.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.1;
@@ -280,7 +298,9 @@ void main() {
     expect(values.end.round(), equals(90));
   });
 
-  testWidgetsWithLeakTracking('Range Slider can move when tapped (discrete RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider can move when tapped (discrete RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -319,8 +339,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // The start thumb is selected when tapping the left inactive track.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.1;
@@ -338,7 +360,9 @@ void main() {
     expect(values.end.round(), equals(90));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged to the min and max (continuous LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged to the min and max (continuous LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -367,8 +391,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // Drag the start thumb to the min.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.3;
@@ -382,7 +408,9 @@ void main() {
     expect(values.end, equals(1));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged to the min and max (continuous RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged to the min and max (continuous RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -411,8 +439,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // Drag the end thumb to the max.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.3;
@@ -426,7 +456,9 @@ void main() {
     expect(values.start, equals(0));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged to the min and max (discrete LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged to the min and max (discrete LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -457,8 +489,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // Drag the start thumb to the min.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.3;
@@ -472,7 +506,9 @@ void main() {
     expect(values.end, equals(100));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged to the min and max (discrete RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged to the min and max (discrete RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -503,8 +539,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // Drag the end thumb to the max.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.3;
@@ -518,7 +556,9 @@ void main() {
     expect(values.start, equals(0));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the start thumb can be dragged apart (continuous LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the start thumb can be dragged apart (continuous LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -547,8 +587,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the start thumb towards the center.
@@ -568,7 +610,9 @@ void main() {
     expect(values.start, moreOrLessEquals(0.2, epsilon: 0.05));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the start thumb can be dragged apart (continuous RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the start thumb can be dragged apart (continuous RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -597,8 +641,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the end thumb towards the center.
@@ -618,7 +664,9 @@ void main() {
     expect(values.start, moreOrLessEquals(0.2, epsilon: 0.05));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the start thumb can be dragged apart (discrete LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the start thumb can be dragged apart (discrete LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -649,8 +697,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the start thumb towards the center.
@@ -670,7 +720,9 @@ void main() {
     expect(values.start, moreOrLessEquals(20, epsilon: 0.01));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the start thumb can be dragged apart (discrete RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the start thumb can be dragged apart (discrete RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -701,8 +753,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the end thumb towards the center.
@@ -722,7 +776,9 @@ void main() {
     expect(values.start, moreOrLessEquals(20, epsilon: 0.01));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the end thumb can be dragged apart (continuous LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the end thumb can be dragged apart (continuous LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -751,8 +807,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the start thumb towards the center.
@@ -772,7 +830,9 @@ void main() {
     expect(values.end, moreOrLessEquals(0.8, epsilon: 0.05));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the end thumb can be dragged apart (continuous RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the end thumb can be dragged apart (continuous RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     await tester.pumpWidget(
@@ -801,8 +861,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the end thumb towards the center.
@@ -822,7 +884,9 @@ void main() {
     expect(values.end, moreOrLessEquals(0.8, epsilon: 0.05));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the end thumb can be dragged apart (discrete LTR)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the end thumb can be dragged apart (discrete LTR)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -853,8 +917,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the start thumb towards the center.
@@ -874,7 +940,9 @@ void main() {
     expect(values.end, moreOrLessEquals(80, epsilon: 0.01));
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumbs can be dragged together and the end thumb can be dragged apart (discrete RTL)', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumbs can be dragged together and the end thumb can be dragged apart (discrete RTL)',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
 
     await tester.pumpWidget(
@@ -905,8 +973,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the end thumb towards the center.
@@ -926,7 +996,9 @@ void main() {
     expect(values.end, moreOrLessEquals(80, epsilon: 0.01));
   });
 
-  testWidgetsWithLeakTracking('Range Slider onChangeEnd and onChangeStart are called on an interaction initiated by tap', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider onChangeEnd and onChangeStart are called on an interaction initiated by tap',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
     RangeValues? startValues;
     RangeValues? endValues;
@@ -964,8 +1036,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // Drag the start thumb towards the center.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.3;
@@ -980,7 +1054,9 @@ void main() {
     expect(endValues!.end, moreOrLessEquals(70, epsilon: 1));
   });
 
-  testWidgetsWithLeakTracking('Range Slider onChangeEnd and onChangeStart are called on an interaction initiated by drag', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider onChangeEnd and onChangeStart are called on an interaction initiated by drag',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(30, 70);
     late RangeValues startValues;
     late RangeValues endValues;
@@ -1018,8 +1094,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
 
     // Drag the thumbs together.
     final Offset leftTarget = topLeft + (bottomRight - topLeft) * 0.3;
@@ -1043,22 +1121,22 @@ void main() {
 
   ThemeData buildTheme() {
     return ThemeData(
-        platform: TargetPlatform.android,
-        primarySwatch: Colors.blue,
-        sliderTheme: const SliderThemeData(
-          disabledThumbColor: Color(0xff000001),
-          disabledActiveTickMarkColor: Color(0xff000002),
-          disabledActiveTrackColor: Color(0xff000003),
-          disabledInactiveTickMarkColor: Color(0xff000004),
-          disabledInactiveTrackColor: Color(0xff000005),
-          activeTrackColor: Color(0xff000006),
-          activeTickMarkColor: Color(0xff000007),
-          inactiveTrackColor: Color(0xff000008),
-          inactiveTickMarkColor: Color(0xff000009),
-          overlayColor: Color(0xff000010),
-          thumbColor: Color(0xff000011),
-          valueIndicatorColor: Color(0xff000012),
-        ),
+      platform: TargetPlatform.android,
+      primarySwatch: Colors.blue,
+      sliderTheme: const SliderThemeData(
+        disabledThumbColor: Color(0xff000001),
+        disabledActiveTickMarkColor: Color(0xff000002),
+        disabledActiveTrackColor: Color(0xff000003),
+        disabledInactiveTickMarkColor: Color(0xff000004),
+        disabledInactiveTrackColor: Color(0xff000005),
+        activeTrackColor: Color(0xff000006),
+        activeTickMarkColor: Color(0xff000007),
+        inactiveTrackColor: Color(0xff000008),
+        inactiveTickMarkColor: Color(0xff000009),
+        overlayColor: Color(0xff000010),
+        thumbColor: Color(0xff000011),
+        valueIndicatorColor: Color(0xff000012),
+      ),
     );
   }
 
@@ -1070,9 +1148,11 @@ void main() {
     bool enabled = true,
   }) {
     RangeValues values = const RangeValues(0.5, 0.75);
-    final ValueChanged<RangeValues>? onChanged = !enabled ? null : (RangeValues newValues) {
-      values = newValues;
-    };
+    final ValueChanged<RangeValues>? onChanged = !enabled
+        ? null
+        : (RangeValues newValues) {
+            values = newValues;
+          };
     return MaterialApp(
       home: Directionality(
         textDirection: TextDirection.ltr,
@@ -1082,7 +1162,8 @@ void main() {
               data: theme,
               child: RangeSlider(
                 values: values,
-                labels: RangeLabels(values.start.toStringAsFixed(2), values.end.toStringAsFixed(2)),
+                labels: RangeLabels(values.start.toStringAsFixed(2),
+                    values.end.toStringAsFixed(2)),
                 divisions: divisions,
                 activeColor: activeColor,
                 inactiveColor: inactiveColor,
@@ -1095,13 +1176,16 @@ void main() {
     );
   }
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes for a default enabled slider', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes for a default enabled slider',
+      (WidgetTester tester) async {
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
 
     await tester.pumpWidget(buildThemedApp(theme: theme));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     // Check default theme for enabled widget.
     expect(
@@ -1117,21 +1201,30 @@ void main() {
         ..circle(color: sliderTheme.thumbColor)
         ..circle(color: sliderTheme.thumbColor),
     );
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.activeTickMarkColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.inactiveTickMarkColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.activeTickMarkColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.inactiveTickMarkColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes when setting the active color', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes when setting the active color',
+      (WidgetTester tester) async {
     const Color activeColor = Color(0xcafefeed);
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
 
-    await tester.pumpWidget(buildThemedApp(theme: theme, activeColor: activeColor));
+    await tester
+        .pumpWidget(buildThemedApp(theme: theme, activeColor: activeColor));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1147,19 +1240,26 @@ void main() {
         ..circle(color: activeColor),
     );
     expect(sliderBox, isNot(paints..circle(color: sliderTheme.thumbColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes when setting the inactive color', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes when setting the inactive color',
+      (WidgetTester tester) async {
     const Color inactiveColor = Color(0xdeadbeef);
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
 
-    await tester.pumpWidget(buildThemedApp(theme: theme, inactiveColor: inactiveColor));
+    await tester
+        .pumpWidget(buildThemedApp(theme: theme, inactiveColor: inactiveColor));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1174,12 +1274,17 @@ void main() {
         ..circle(color: sliderTheme.thumbColor)
         ..circle(color: sliderTheme.thumbColor),
     );
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes with active and inactive colors', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes with active and inactive colors',
+      (WidgetTester tester) async {
     const Color activeColor = Color(0xcafefeed);
     const Color inactiveColor = Color(0xdeadbeef);
     final ThemeData theme = buildTheme();
@@ -1191,7 +1296,8 @@ void main() {
       inactiveColor: inactiveColor,
     ));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1207,18 +1313,24 @@ void main() {
         ..circle(color: activeColor),
     );
     expect(sliderBox, isNot(paints..circle(color: sliderTheme.thumbColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes for a discrete slider', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes for a discrete slider',
+      (WidgetTester tester) async {
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
 
     await tester.pumpWidget(buildThemedApp(theme: theme, divisions: 3));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1237,17 +1349,21 @@ void main() {
         ..circle(color: sliderTheme.thumbColor)
         ..circle(color: sliderTheme.thumbColor),
     );
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes for a discrete slider with active and inactive colors', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes for a discrete slider with active and inactive colors',
+      (WidgetTester tester) async {
     const Color activeColor = Color(0xcafefeed);
     const Color inactiveColor = Color(0xdeadbeef);
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
-
 
     await tester.pumpWidget(buildThemedApp(
       theme: theme,
@@ -1256,7 +1372,8 @@ void main() {
       divisions: 3,
     ));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1276,20 +1393,28 @@ void main() {
         ..circle(color: activeColor),
     );
     expect(sliderBox, isNot(paints..circle(color: sliderTheme.thumbColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.activeTickMarkColor)));
-    expect(sliderBox, isNot(paints..circle(color: sliderTheme.inactiveTickMarkColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.disabledThumbColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledActiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..rect(color: sliderTheme.disabledInactiveTrackColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.activeTickMarkColor)));
+    expect(sliderBox,
+        isNot(paints..circle(color: sliderTheme.inactiveTickMarkColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes for a default disabled slider', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes for a default disabled slider',
+      (WidgetTester tester) async {
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
 
     await tester.pumpWidget(buildThemedApp(theme: theme, enabled: false));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1300,10 +1425,13 @@ void main() {
     );
     expect(sliderBox, isNot(paints..circle(color: sliderTheme.thumbColor)));
     expect(sliderBox, isNot(paints..rect(color: sliderTheme.activeTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.inactiveTrackColor)));
+    expect(
+        sliderBox, isNot(paints..rect(color: sliderTheme.inactiveTrackColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes for a disabled slider with active and inactive colors', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes for a disabled slider with active and inactive colors',
+      (WidgetTester tester) async {
     const Color activeColor = Color(0xcafefeed);
     const Color inactiveColor = Color(0xdeadbeef);
     final ThemeData theme = buildTheme();
@@ -1316,7 +1444,8 @@ void main() {
       enabled: false,
     ));
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     expect(
       sliderBox,
@@ -1327,10 +1456,13 @@ void main() {
     );
     expect(sliderBox, isNot(paints..circle(color: sliderTheme.thumbColor)));
     expect(sliderBox, isNot(paints..rect(color: sliderTheme.activeTrackColor)));
-    expect(sliderBox, isNot(paints..rect(color: sliderTheme.inactiveTrackColor)));
+    expect(
+        sliderBox, isNot(paints..rect(color: sliderTheme.inactiveTrackColor)));
   });
 
-  testWidgetsWithLeakTracking('Range Slider uses the right theme colors for the right shapes when the value indicators are showing', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider uses the right theme colors for the right shapes when the value indicators are showing',
+      (WidgetTester tester) async {
     final ThemeData theme = buildTheme();
     final SliderThemeData sliderTheme = theme.sliderTheme;
     RangeValues values = const RangeValues(0.5, 0.75);
@@ -1341,9 +1473,11 @@ void main() {
       int? divisions,
       bool enabled = true,
     }) {
-      final ValueChanged<RangeValues>? onChanged = !enabled ? null : (RangeValues newValues) {
-        values = newValues;
-      };
+      final ValueChanged<RangeValues>? onChanged = !enabled
+          ? null
+          : (RangeValues newValues) {
+              values = newValues;
+            };
       return MaterialApp(
         home: Directionality(
           textDirection: TextDirection.ltr,
@@ -1353,7 +1487,8 @@ void main() {
                 data: theme,
                 child: RangeSlider(
                   values: values,
-                  labels: RangeLabels(values.start.toStringAsFixed(2), values.end.toStringAsFixed(2)),
+                  labels: RangeLabels(values.start.toStringAsFixed(2),
+                      values.end.toStringAsFixed(2)),
                   divisions: divisions,
                   activeColor: activeColor,
                   inactiveColor: inactiveColor,
@@ -1368,27 +1503,30 @@ void main() {
 
     await tester.pumpWidget(buildApp(divisions: 3));
 
-    final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
+    final RenderBox valueIndicatorBox =
+        tester.renderObject(find.byType(Overlay));
 
-    final Offset topRight = tester.getTopRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topRight =
+        tester.getTopRight(find.byType(RangeSlider)).translate(-24, 0);
     final TestGesture gesture = await tester.startGesture(topRight);
     // Wait for value indicator animation to finish.
     await tester.pumpAndSettle();
     expect(values.end, equals(1));
     expect(
-      valueIndicatorBox,
-      paints
-        ..path(color: Colors.black) // shadow
-        ..path(color: Colors.black) // shadow
-        ..path(color: sliderTheme.valueIndicatorColor)
-        ..paragraph()
-    );
+        valueIndicatorBox,
+        paints
+          ..path(color: Colors.black) // shadow
+          ..path(color: Colors.black) // shadow
+          ..path(color: sliderTheme.valueIndicatorColor)
+          ..paragraph());
     await gesture.up();
     // Wait for value indicator animation to finish.
     await tester.pumpAndSettle();
   });
 
-  testWidgetsWithLeakTracking('Range Slider removes value indicator from overlay if Slider gets disposed without value indicator animation completing.', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider removes value indicator from overlay if Slider gets disposed without value indicator animation completing.',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.5, 0.75);
     const Color fillColor = Color(0xf55f5f5f);
 
@@ -1401,6 +1539,7 @@ void main() {
       void onChanged(RangeValues newValues) {
         values = newValues;
       }
+
       return MaterialApp(
         theme: ThemeData(useMaterial3: false),
         home: Scaffold(
@@ -1428,7 +1567,9 @@ void main() {
                           builder: (BuildContext context) {
                             return ElevatedButton(
                               child: const Text('Inner page'),
-                              onPressed: () { Navigator.of(context).pop(); },
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
                             );
                           },
                         ),
@@ -1445,8 +1586,10 @@ void main() {
 
     await tester.pumpWidget(buildApp(divisions: 3));
 
-    final RenderObject valueIndicatorBox = tester.renderObject(find.byType(Overlay));
-    final Offset topRight = tester.getTopRight(find.byType(RangeSlider)).translate(-24, 0);
+    final RenderObject valueIndicatorBox =
+        tester.renderObject(find.byType(Overlay));
+    final Offset topRight =
+        tester.getTopRight(find.byType(RangeSlider)).translate(-24, 0);
     final TestGesture gesture = await tester.startGesture(topRight);
     // Wait for value indicator animation to finish.
     await tester.pumpAndSettle();
@@ -1454,14 +1597,14 @@ void main() {
     expect(
       valueIndicatorBox,
       paints
-      // Represents the raised button wth next text.
-      ..path(color: Colors.black)
-      ..paragraph()
-      // Represents the range slider.
-      ..path(color: fillColor)
-      ..paragraph()
-      ..path(color: fillColor)
-      ..paragraph(),
+        // Represents the raised button wth next text.
+        ..path(color: Colors.black)
+        ..paragraph()
+        // Represents the range slider.
+        ..path(color: fillColor)
+        ..paragraph()
+        ..path(color: fillColor)
+        ..paragraph(),
     );
 
     // Represents the Raised Button and Range Slider.
@@ -1475,11 +1618,11 @@ void main() {
     expect(
       valueIndicatorBox,
       isNot(
-      paints
-        ..path(color: fillColor)
-        ..paragraph()
-        ..path(color: fillColor)
-        ..paragraph(),
+        paints
+          ..path(color: fillColor)
+          ..paragraph()
+          ..path(color: fillColor)
+          ..paragraph(),
       ),
     );
 
@@ -1492,7 +1635,9 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgetsWithLeakTracking('Range Slider top thumb gets stroked when overlapping', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider top thumb gets stroked when overlapping',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     final ThemeData theme = ThemeData(
@@ -1532,12 +1677,15 @@ void main() {
       ),
     );
 
-    final RenderBox sliderBox = tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
+    final RenderBox sliderBox =
+        tester.firstRenderObject<RenderBox>(find.byType(RangeSlider));
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the thumbs towards the center.
@@ -1559,7 +1707,9 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Range Slider top value indicator gets stroked when overlapping', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider top value indicator gets stroked when overlapping',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     final ThemeData theme = ThemeData(
@@ -1585,7 +1735,8 @@ void main() {
                     data: theme,
                     child: RangeSlider(
                       values: values,
-                      labels: RangeLabels(values.start.toStringAsFixed(2), values.end.toStringAsFixed(2)),
+                      labels: RangeLabels(values.start.toStringAsFixed(2),
+                          values.end.toStringAsFixed(2)),
                       onChanged: (RangeValues newValues) {
                         setState(() {
                           values = newValues;
@@ -1601,12 +1752,15 @@ void main() {
       ),
     );
 
-    final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
+    final RenderBox valueIndicatorBox =
+        tester.renderObject(find.byType(Overlay));
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the thumbs towards the center.
@@ -1633,7 +1787,9 @@ void main() {
     await gesture.up();
   });
 
-  testWidgetsWithLeakTracking('Range Slider top value indicator gets stroked when overlapping with large text scale', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider top value indicator gets stroked when overlapping with large text scale',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     final ThemeData theme = ThemeData(
@@ -1661,7 +1817,8 @@ void main() {
                       data: theme,
                       child: RangeSlider(
                         values: values,
-                        labels: RangeLabels(values.start.toStringAsFixed(2), values.end.toStringAsFixed(2)),
+                        labels: RangeLabels(values.start.toStringAsFixed(2),
+                            values.end.toStringAsFixed(2)),
                         onChanged: (RangeValues newValues) {
                           setState(() {
                             values = newValues;
@@ -1678,12 +1835,15 @@ void main() {
       ),
     );
 
-    final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
+    final RenderBox valueIndicatorBox =
+        tester.renderObject(find.byType(Overlay));
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the thumbs towards the center.
@@ -1710,7 +1870,9 @@ void main() {
     await gesture.up();
   });
 
-  testWidgetsWithLeakTracking('Range Slider thumb gets stroked when overlapping', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider thumb gets stroked when overlapping',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(0.3, 0.7);
 
     final ThemeData theme = ThemeData(
@@ -1735,7 +1897,8 @@ void main() {
                     data: theme,
                     child: RangeSlider(
                       values: values,
-                      labels: RangeLabels(values.start.toStringAsFixed(2), values.end.toStringAsFixed(2)),
+                      labels: RangeLabels(values.start.toStringAsFixed(2),
+                          values.end.toStringAsFixed(2)),
                       onChanged: (RangeValues newValues) {
                         setState(() {
                           values = newValues;
@@ -1753,8 +1916,10 @@ void main() {
 
     // Get the bounds of the track by finding the slider edges and translating
     // inwards by the overlay radius.
-    final Offset topLeft = tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
-    final Offset bottomRight = tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
+    final Offset topLeft =
+        tester.getTopLeft(find.byType(RangeSlider)).translate(24, 0);
+    final Offset bottomRight =
+        tester.getBottomRight(find.byType(RangeSlider)).translate(-24, 0);
     final Offset middle = topLeft + bottomRight / 2;
 
     // Drag the thumbs towards the center.
@@ -1789,7 +1954,9 @@ void main() {
   });
 
   // Regression test for https://github.com/flutter/flutter/issues/101868
-  testWidgetsWithLeakTracking('RangeSlider.label info should not write to semantic node', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'RangeSlider.label info should not write to semantic node',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Theme(
@@ -1800,7 +1967,7 @@ void main() {
               child: RangeSlider(
                 values: const RangeValues(10.0, 12.0),
                 max: 100.0,
-                onChanged: (RangeValues v) { },
+                onChanged: (RangeValues v) {},
                 labels: const RangeLabels('Begin', 'End'),
               ),
             ),
@@ -1815,31 +1982,29 @@ void main() {
       tester.getSemantics(find.byType(RangeSlider)),
       matchesSemantics(
         scopesRoute: true,
-        children:<Matcher>[
+        children: <Matcher>[
           matchesSemantics(
-            children:  <Matcher>[
+            children: <Matcher>[
               matchesSemantics(
-                isEnabled: true,
-                isSlider: true,
-                hasEnabledState: true,
-                hasIncreaseAction: true,
-                hasDecreaseAction: true,
-                value: '10%',
-                increasedValue: '10%',
-                decreasedValue: '5%',
-                label: ''
-              ),
+                  isEnabled: true,
+                  isSlider: true,
+                  hasEnabledState: true,
+                  hasIncreaseAction: true,
+                  hasDecreaseAction: true,
+                  value: '10%',
+                  increasedValue: '10%',
+                  decreasedValue: '5%',
+                  label: ''),
               matchesSemantics(
-                isEnabled: true,
-                isSlider: true,
-                hasEnabledState: true,
-                hasIncreaseAction: true,
-                hasDecreaseAction: true,
-                value: '12%',
-                increasedValue: '17%',
-                decreasedValue: '12%',
-                label: ''
-              ),
+                  isEnabled: true,
+                  isSlider: true,
+                  hasEnabledState: true,
+                  hasIncreaseAction: true,
+                  hasDecreaseAction: true,
+                  value: '12%',
+                  increasedValue: '17%',
+                  decreasedValue: '12%',
+                  label: ''),
             ],
           ),
         ],
@@ -1847,7 +2012,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Range Slider Semantics - ltr', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Range Slider Semantics - ltr',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Theme(
@@ -1858,7 +2024,7 @@ void main() {
               child: RangeSlider(
                 values: const RangeValues(10.0, 30.0),
                 max: 100.0,
-                onChanged: (RangeValues v) { },
+                onChanged: (RangeValues v) {},
               ),
             ),
           ),
@@ -1868,14 +2034,15 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    final SemanticsNode semanticsNode = tester.getSemantics(find.byType(RangeSlider));
+    final SemanticsNode semanticsNode =
+        tester.getSemantics(find.byType(RangeSlider));
     expect(
       semanticsNode,
       matchesSemantics(
         scopesRoute: true,
-        children:<Matcher>[
+        children: <Matcher>[
           matchesSemantics(
-            children:  <Matcher>[
+            children: <Matcher>[
               matchesSemantics(
                 isEnabled: true,
                 isSlider: true,
@@ -1911,7 +2078,7 @@ void main() {
     final List<Rect> rects = <Rect>[];
     semanticsNode.visitChildren((SemanticsNode node) {
       node.visitChildren((SemanticsNode node) {
-       // Round rect values to avoid floating point errors.
+        // Round rect values to avoid floating point errors.
         rects.add(
           Rect.fromLTRB(
             node.rect.left.roundToDouble(),
@@ -1931,7 +2098,8 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Range Slider Semantics - rtl', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Range Slider Semantics - rtl',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Theme(
@@ -1942,7 +2110,7 @@ void main() {
               child: RangeSlider(
                 values: const RangeValues(10.0, 30.0),
                 max: 100.0,
-                onChanged: (RangeValues v) { },
+                onChanged: (RangeValues v) {},
               ),
             ),
           ),
@@ -1952,14 +2120,15 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    final SemanticsNode semanticsNode = tester.getSemantics(find.byType(RangeSlider));
+    final SemanticsNode semanticsNode =
+        tester.getSemantics(find.byType(RangeSlider));
     expect(
       semanticsNode,
       matchesSemantics(
         scopesRoute: true,
-        children:<Matcher>[
+        children: <Matcher>[
           matchesSemantics(
-            children:  <Matcher>[
+            children: <Matcher>[
               matchesSemantics(
                 isEnabled: true,
                 isSlider: true,
@@ -2013,7 +2182,8 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Range Slider implements debugFillProperties', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Range Slider implements debugFillProperties',
+      (WidgetTester tester) async {
     final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
 
     RangeSlider(
@@ -2027,8 +2197,9 @@ void main() {
     ).debugFillProperties(builder);
 
     final List<String> description = builder.properties
-      .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
-      .map((DiagnosticsNode node) => node.toString()).toList();
+        .where((DiagnosticsNode node) => !node.isFiltered(DiagnosticLevel.info))
+        .map((DiagnosticsNode node) => node.toString())
+        .toList();
 
     expect(description, <String>[
       'valueStart: 25.0',
@@ -2044,7 +2215,9 @@ void main() {
     ]);
   });
 
-  testWidgetsWithLeakTracking('Range Slider can be painted in a narrower constraint when track shape is RoundedRectRange', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider can be painted in a narrower constraint when track shape is RoundedRectRange',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Directionality(
@@ -2072,18 +2245,26 @@ void main() {
       renderObject,
       paints
         // left inactive track RRect
-        ..rrect(rrect: RRect.fromLTRBAndCorners(-24.0, 3.0, -12.0, 7.0, topLeft: const Radius.circular(2.0), bottomLeft: const Radius.circular(2.0)))
+        ..rrect(
+            rrect: RRect.fromLTRBAndCorners(-24.0, 3.0, -12.0, 7.0,
+                topLeft: const Radius.circular(2.0),
+                bottomLeft: const Radius.circular(2.0)))
         // active track RRect
         ..rect(rect: const Rect.fromLTRB(-12.0, 2.0, 0.0, 8.0))
         // right inactive track RRect
-        ..rrect(rrect: RRect.fromLTRBAndCorners(0.0, 3.0, 24.0, 7.0, topRight: const Radius.circular(2.0), bottomRight: const Radius.circular(2.0)))
+        ..rrect(
+            rrect: RRect.fromLTRBAndCorners(0.0, 3.0, 24.0, 7.0,
+                topRight: const Radius.circular(2.0),
+                bottomRight: const Radius.circular(2.0)))
         // thumbs
         ..circle(x: -12.0, y: 5.0, radius: 10.0)
         ..circle(x: 0.0, y: 5.0, radius: 10.0),
     );
   });
 
-  testWidgetsWithLeakTracking('Range Slider can be painted in a narrower constraint when track shape is Rectangular', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Range Slider can be painted in a narrower constraint when track shape is Rectangular',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
@@ -2128,7 +2309,9 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('Update the divisions and values at the same time for RangeSlider', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'Update the divisions and values at the same time for RangeSlider',
+      (WidgetTester tester) async {
     // Regress test for https://github.com/flutter/flutter/issues/65943
     Widget buildFrame(double maxValue) {
       return MaterialApp(
@@ -2155,24 +2338,34 @@ void main() {
     await tester.pumpAndSettle(); // Finish the animation.
 
     late Rect activeTrackRect;
-    expect(renderObject, paints..something((Symbol method, List<dynamic> arguments) {
-      if (method != #drawRect) {
-        return false;
-      }
-      activeTrackRect = arguments[0] as Rect;
-      return true;
-    }));
+    expect(
+        renderObject,
+        paints
+          ..something((Symbol method, List<dynamic> arguments) {
+            if (method != #drawRect) {
+              return false;
+            }
+            activeTrackRect = arguments[0] as Rect;
+            return true;
+          }));
 
     // The 1st thumb should at one-third(5 / 15) of the Slider.
     // The 2nd thumb should at (8 / 15) of the Slider.
     // The left of the active track shape is the position of the 1st thumb.
     // The right of the active track shape is the position of the 2nd thumb.
     // 24.0 is the default margin, (800.0 - 24.0 - 24.0) is the slider's width.
-    expect(nearEqual(activeTrackRect.left, (800.0 - 24.0 - 24.0) * (5 / 15) + 24.0, 0.01), true);
-    expect(nearEqual(activeTrackRect.right, (800.0 - 24.0 - 24.0) * (8 / 15) + 24.0, 0.01), true);
+    expect(
+        nearEqual(activeTrackRect.left, (800.0 - 24.0 - 24.0) * (5 / 15) + 24.0,
+            0.01),
+        true);
+    expect(
+        nearEqual(activeTrackRect.right,
+            (800.0 - 24.0 - 24.0) * (8 / 15) + 24.0, 0.01),
+        true);
   });
 
-  testWidgetsWithLeakTracking('RangeSlider changes mouse cursor when hovered', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('RangeSlider changes mouse cursor when hovered',
+      (WidgetTester tester) async {
     const RangeValues values = RangeValues(50, 70);
 
     // Test default cursor.
@@ -2196,10 +2389,13 @@ void main() {
       ),
     );
 
-    final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse, pointer: 1);
-    await gesture.addPointer(location: tester.getCenter(find.byType(RangeSlider)));
+    final TestGesture gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse, pointer: 1);
+    await gesture.addPointer(
+        location: tester.getCenter(find.byType(RangeSlider)));
 
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), SystemMouseCursors.click);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        SystemMouseCursors.click);
 
     // Test custom cursor.
     await tester.pumpWidget(
@@ -2213,7 +2409,8 @@ void main() {
                 child: RangeSlider(
                   values: values,
                   max: 100.0,
-                  mouseCursor: const MaterialStatePropertyAll<MouseCursor?>(SystemMouseCursors.text),
+                  mouseCursor: const MaterialStatePropertyAll<MouseCursor?>(
+                      SystemMouseCursors.text),
                   onChanged: (RangeValues values) {},
                 ),
               ),
@@ -2224,16 +2421,19 @@ void main() {
     );
 
     await tester.pump();
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), SystemMouseCursors.text);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        SystemMouseCursors.text);
   });
 
-  testWidgetsWithLeakTracking('RangeSlider MaterialStateMouseCursor resolves correctly', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'RangeSlider MaterialStateMouseCursor resolves correctly',
+      (WidgetTester tester) async {
     RangeValues values = const RangeValues(50, 70);
     const MouseCursor disabledCursor = SystemMouseCursors.basic;
     const MouseCursor hoveredCursor = SystemMouseCursors.grab;
     const MouseCursor draggedCursor = SystemMouseCursors.move;
 
-    Widget buildFrame({ required bool enabled }) {
+    Widget buildFrame({required bool enabled}) {
       return MaterialApp(
         home: Directionality(
           textDirection: TextDirection.ltr,
@@ -2242,10 +2442,11 @@ void main() {
               builder: (BuildContext context, StateSetter setState) {
                 return Center(
                   child: MouseRegion(
-                  cursor: SystemMouseCursors.forbidden,
-                  child: RangeSlider(
-                    mouseCursor: MaterialStateProperty.resolveWith<MouseCursor?>(
-                      (Set<MaterialState> states) {
+                    cursor: SystemMouseCursors.forbidden,
+                    child: RangeSlider(
+                      mouseCursor:
+                          MaterialStateProperty.resolveWith<MouseCursor?>(
+                        (Set<MaterialState> states) {
                           if (states.contains(MaterialState.disabled)) {
                             return disabledCursor;
                           }
@@ -2262,13 +2463,14 @@ void main() {
                       values: values,
                       max: 100.0,
                       onChanged: enabled
-                        ? (RangeValues newValues) {
-                            setState(() {
-                              values = newValues;
-                            });
-                          }
-                        : null,
-                      onChangeStart: enabled ? (RangeValues newValues) {} : null,
+                          ? (RangeValues newValues) {
+                              setState(() {
+                                values = newValues;
+                              });
+                            }
+                          : null,
+                      onChangeStart:
+                          enabled ? (RangeValues newValues) {} : null,
                       onChangeEnd: enabled ? (RangeValues newValues) {} : null,
                     ),
                   ),
@@ -2280,29 +2482,38 @@ void main() {
       );
     }
 
-    final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse, pointer: 1);
+    final TestGesture gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse, pointer: 1);
     await gesture.addPointer(location: Offset.zero);
 
     await tester.pumpWidget(buildFrame(enabled: false));
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), disabledCursor);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        disabledCursor);
 
     await tester.pumpWidget(buildFrame(enabled: true));
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), SystemMouseCursors.none);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        SystemMouseCursors.none);
 
-    await gesture.moveTo(tester.getCenter(find.byType(RangeSlider))); // start hover
+    await gesture
+        .moveTo(tester.getCenter(find.byType(RangeSlider))); // start hover
     await tester.pumpAndSettle();
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), hoveredCursor);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        hoveredCursor);
 
     await tester.timedDrag(
       find.byType(RangeSlider),
       const Offset(20.0, 0.0),
       const Duration(milliseconds: 100),
     );
-    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1), draggedCursor);
+    expect(RendererBinding.instance.mouseTracker.debugDeviceActiveCursor(1),
+        draggedCursor);
   });
 
-  testWidgetsWithLeakTracking('RangeSlider can be hovered and has correct hover color', (WidgetTester tester) async {
-    tester.binding.focusManager.highlightStrategy = FocusHighlightStrategy.alwaysTraditional;
+  testWidgetsWithLeakTracking(
+      'RangeSlider can be hovered and has correct hover color',
+      (WidgetTester tester) async {
+    tester.binding.focusManager.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
     RangeValues values = const RangeValues(50, 70);
     final ThemeData theme = ThemeData();
 
@@ -2318,12 +2529,12 @@ void main() {
                     values: values,
                     max: 100.0,
                     onChanged: enabled
-                      ? (RangeValues newValues) {
-                          setState(() {
-                            values = newValues;
-                          });
-                        }
-                      : null,
+                        ? (RangeValues newValues) {
+                            setState(() {
+                              values = newValues;
+                            });
+                          }
+                        : null,
                   ),
                 ),
               );
@@ -2343,7 +2554,8 @@ void main() {
     );
 
     // Start hovering.
-    final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    final TestGesture gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse);
     await gesture.addPointer();
     await gesture.moveTo(tester.getCenter(find.byType(RangeSlider)));
 
@@ -2364,8 +2576,11 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('RangeSlider is draggable and has correct dragged color', (WidgetTester tester) async {
-    tester.binding.focusManager.highlightStrategy = FocusHighlightStrategy.alwaysTraditional;
+  testWidgetsWithLeakTracking(
+      'RangeSlider is draggable and has correct dragged color',
+      (WidgetTester tester) async {
+    tester.binding.focusManager.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
     RangeValues values = const RangeValues(50, 70);
     final ThemeData theme = ThemeData();
 
@@ -2381,12 +2596,12 @@ void main() {
                     values: values,
                     max: 100.0,
                     onChanged: enabled
-                      ? (RangeValues newValues) {
-                          setState(() {
-                            values = newValues;
-                          });
-                        }
-                      : null,
+                        ? (RangeValues newValues) {
+                            setState(() {
+                              values = newValues;
+                            });
+                          }
+                        : null,
                   ),
                 ),
               );
@@ -2406,7 +2621,8 @@ void main() {
     );
 
     // Start dragging.
-    final TestGesture drag = await tester.startGesture(tester.getCenter(find.byType(RangeSlider)));
+    final TestGesture drag =
+        await tester.startGesture(tester.getCenter(find.byType(RangeSlider)));
     await tester.pump(kPressTimeout);
 
     // Less than configured touch slop, more than default touch slop
@@ -2420,8 +2636,11 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('RangeSlider overlayColor supports hovered and dragged states', (WidgetTester tester) async {
-    tester.binding.focusManager.highlightStrategy = FocusHighlightStrategy.alwaysTraditional;
+  testWidgetsWithLeakTracking(
+      'RangeSlider overlayColor supports hovered and dragged states',
+      (WidgetTester tester) async {
+    tester.binding.focusManager.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
     RangeValues values = const RangeValues(50, 70);
     const Color hoverColor = Color(0xffff0000);
     const Color draggedColor = Color(0xff0000ff);
@@ -2437,7 +2656,8 @@ void main() {
                   child: RangeSlider(
                     values: values,
                     max: 100.0,
-                    overlayColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
                       if (states.contains(MaterialState.hovered)) {
                         return hoverColor;
                       }
@@ -2448,12 +2668,12 @@ void main() {
                       return null;
                     }),
                     onChanged: enabled
-                      ? (RangeValues newValues) {
-                          setState(() {
-                            values = newValues;
-                          });
-                        }
-                      : null,
+                        ? (RangeValues newValues) {
+                            setState(() {
+                              values = newValues;
+                            });
+                          }
+                        : null,
                     onChangeStart: enabled ? (RangeValues newValues) {} : null,
                     onChangeEnd: enabled ? (RangeValues newValues) {} : null,
                   ),
@@ -2464,6 +2684,7 @@ void main() {
         ),
       );
     }
+
     await tester.pumpWidget(buildApp());
 
     // RangeSlider does not have overlay when enabled and not hovered.
@@ -2474,7 +2695,8 @@ void main() {
     );
 
     // Hover on the range slider but outside the thumb.
-    final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    final TestGesture gesture =
+        await tester.createGesture(kind: PointerDeviceKind.mouse);
     await gesture.addPointer();
     await gesture.moveTo(tester.getTopLeft(find.byType(RangeSlider)));
 
@@ -2513,7 +2735,8 @@ void main() {
     );
 
     // Start dragging.
-    final TestGesture drag = await tester.startGesture(tester.getCenter(find.byType(RangeSlider)));
+    final TestGesture drag =
+        await tester.startGesture(tester.getCenter(find.byType(RangeSlider)));
     await tester.pump(kPressTimeout);
 
     // Less than configured touch slop, more than default touch slop.
@@ -2535,7 +2758,9 @@ void main() {
     );
   });
 
-   testWidgetsWithLeakTracking('RangeSlider onChangeStart and onChangeEnd fire once', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'RangeSlider onChangeStart and onChangeEnd fire once',
+      (WidgetTester tester) async {
     // Regression test for https://github.com/flutter/flutter/issues/128433
 
     int startFired = 0;
@@ -2547,11 +2772,11 @@ void main() {
           child: Material(
             child: Center(
               child: GestureDetector(
-                onHorizontalDragUpdate: (_) { },
+                onHorizontalDragUpdate: (_) {},
                 child: RangeSlider(
                   values: const RangeValues(40, 80),
                   max: 100,
-                  onChanged: (RangeValues newValue) { },
+                  onChanged: (RangeValues newValue) {},
                   onChangeStart: (RangeValues value) {
                     startFired += 1;
                   },

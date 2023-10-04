@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const MaterialApp(home: Home()));
 }
@@ -29,7 +28,8 @@ class _SelectableButtonState extends State<SelectableButton> {
   @override
   void initState() {
     super.initState();
-    statesController = MaterialStatesController(<MaterialState>{if (widget.selected) MaterialState.selected});
+    statesController = MaterialStatesController(
+        <MaterialState>{if (widget.selected) MaterialState.selected});
   }
 
   @override

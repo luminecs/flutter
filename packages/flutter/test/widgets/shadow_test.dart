@@ -12,7 +12,8 @@ void main() {
     debugDisableShadows = true;
   });
 
-  testWidgetsWithLeakTracking('Shadows on BoxDecoration', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Shadows on BoxDecoration',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Center(
         child: RepaintBoundary(
@@ -48,7 +49,8 @@ void main() {
           child: Container(
             margin: const EdgeInsets.all(150.0),
             decoration: ShapeDecoration(
-              shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              shape: const BeveledRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
               shadows: kElevationToShadow[elevation],
             ),
             height: 100.0,
@@ -57,8 +59,10 @@ void main() {
         ),
       );
     }
+
     for (final int elevation in kElevationToShadow.keys) {
-      testWidgetsWithLeakTracking('elevation $elevation', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('elevation $elevation',
+          (WidgetTester tester) async {
         debugDisableShadows = false;
         await tester.pumpWidget(build(elevation));
         await expectLater(
@@ -70,7 +74,8 @@ void main() {
     }
   });
 
-  testWidgetsWithLeakTracking('Shadows with PhysicalLayer', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('Shadows with PhysicalLayer',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Center(
         child: RepaintBoundary(
@@ -129,7 +134,8 @@ void main() {
     }
 
     for (final int elevation in kElevationToShadow.keys) {
-      testWidgetsWithLeakTracking('elevation $elevation', (WidgetTester tester) async {
+      testWidgetsWithLeakTracking('elevation $elevation',
+          (WidgetTester tester) async {
         debugDisableShadows = false;
         await tester.pumpWidget(build(elevation.toDouble()));
         await expectLater(

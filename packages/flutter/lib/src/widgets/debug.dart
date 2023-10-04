@@ -1,5 +1,6 @@
 import 'dart:collection';
-import 'dart:developer' show Timeline; // to disambiguate reference in dartdocs below
+import 'dart:developer'
+    show Timeline; // to disambiguate reference in dartdocs below
 
 import 'package:flutter/foundation.dart';
 
@@ -52,13 +53,14 @@ Key? _firstNonUniqueKey(Iterable<Widget> widgets) {
   return null;
 }
 
-bool debugChildrenHaveDuplicateKeys(Widget parent, Iterable<Widget> children, { String? message }) {
+bool debugChildrenHaveDuplicateKeys(Widget parent, Iterable<Widget> children,
+    {String? message}) {
   assert(() {
     final Key? nonUniqueKey = _firstNonUniqueKey(children);
     if (nonUniqueKey != null) {
       throw FlutterError(
         "${message ?? 'Duplicate keys found.\n'
-                      'If multiple keyed widgets exist as children of another widget, they must have unique keys.'}"
+            'If multiple keyed widgets exist as children of another widget, they must have unique keys.'}"
         '\n$parent has multiple children with key $nonUniqueKey.',
       );
     }
@@ -80,12 +82,16 @@ bool debugItemsHaveDuplicateKeys(Iterable<Widget> items) {
 
 bool debugCheckHasTable(BuildContext context) {
   assert(() {
-    if (context.widget is! Table && context.findAncestorWidgetOfExactType<Table>() == null) {
+    if (context.widget is! Table &&
+        context.findAncestorWidgetOfExactType<Table>() == null) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('No Table widget found.'),
-        ErrorDescription('${context.widget.runtimeType} widgets require a Table widget ancestor.'),
-        context.describeWidget('The specific widget that could not find a Table ancestor was'),
-        context.describeOwnershipChain('The ownership chain for the affected widget is'),
+        ErrorDescription(
+            '${context.widget.runtimeType} widgets require a Table widget ancestor.'),
+        context.describeWidget(
+            'The specific widget that could not find a Table ancestor was'),
+        context.describeOwnershipChain(
+            'The ownership chain for the affected widget is'),
       ]);
     }
     return true;
@@ -95,18 +101,21 @@ bool debugCheckHasTable(BuildContext context) {
 
 bool debugCheckHasMediaQuery(BuildContext context) {
   assert(() {
-    if (context.widget is! MediaQuery && context.getElementForInheritedWidgetOfExactType<MediaQuery>() == null) {
+    if (context.widget is! MediaQuery &&
+        context.getElementForInheritedWidgetOfExactType<MediaQuery>() == null) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('No MediaQuery widget ancestor found.'),
-        ErrorDescription('${context.widget.runtimeType} widgets require a MediaQuery widget ancestor.'),
-        context.describeWidget('The specific widget that could not find a MediaQuery ancestor was'),
-        context.describeOwnershipChain('The ownership chain for the affected widget is'),
+        ErrorDescription(
+            '${context.widget.runtimeType} widgets require a MediaQuery widget ancestor.'),
+        context.describeWidget(
+            'The specific widget that could not find a MediaQuery ancestor was'),
+        context.describeOwnershipChain(
+            'The ownership chain for the affected widget is'),
         ErrorHint(
-          'No MediaQuery ancestor could be found starting from the context '
-          'that was passed to MediaQuery.of(). This can happen because the '
-          'context used is not a descendant of a View widget, which introduces '
-          'a MediaQuery.'
-        ),
+            'No MediaQuery ancestor could be found starting from the context '
+            'that was passed to MediaQuery.of(). This can happen because the '
+            'context used is not a descendant of a View widget, which introduces '
+            'a MediaQuery.'),
       ]);
     }
     return true;
@@ -114,17 +123,22 @@ bool debugCheckHasMediaQuery(BuildContext context) {
   return true;
 }
 
-bool debugCheckHasDirectionality(BuildContext context, { String? why, String? hint, String? alternative }) {
+bool debugCheckHasDirectionality(BuildContext context,
+    {String? why, String? hint, String? alternative}) {
   assert(() {
-    if (context.widget is! Directionality && context.getElementForInheritedWidgetOfExactType<Directionality>() == null) {
+    if (context.widget is! Directionality &&
+        context.getElementForInheritedWidgetOfExactType<Directionality>() ==
+            null) {
       why = why == null ? '' : ' $why';
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('No Directionality widget found.'),
-        ErrorDescription('${context.widget.runtimeType} widgets require a Directionality widget ancestor$why.\n'),
-        if (hint != null)
-          ErrorHint(hint),
-        context.describeWidget('The specific widget that could not find a Directionality ancestor was'),
-        context.describeOwnershipChain('The ownership chain for the affected widget is'),
+        ErrorDescription(
+            '${context.widget.runtimeType} widgets require a Directionality widget ancestor$why.\n'),
+        if (hint != null) ErrorHint(hint),
+        context.describeWidget(
+            'The specific widget that could not find a Directionality ancestor was'),
+        context.describeOwnershipChain(
+            'The ownership chain for the affected widget is'),
         ErrorHint(
           'Typically, the Directionality widget is introduced by the MaterialApp '
           'or WidgetsApp widget at the top of your application widget tree. It '
@@ -133,8 +147,7 @@ bool debugCheckHasDirectionality(BuildContext context, { String? why, String? hi
           'values, and to resolve EdgeInsetsDirectional, '
           'AlignmentDirectional, and other *Directional objects.',
         ),
-        if (alternative != null)
-          ErrorHint(alternative),
+        if (alternative != null) ErrorHint(alternative),
       ]);
     }
     return true;
@@ -147,7 +160,8 @@ void debugWidgetBuilderValue(Widget widget, Widget? built) {
     if (built == null) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('A build function returned null.'),
-        DiagnosticsProperty<Widget>('The offending widget is', widget, style: DiagnosticsTreeStyle.errorProperty),
+        DiagnosticsProperty<Widget>('The offending widget is', widget,
+            style: DiagnosticsTreeStyle.errorProperty),
         ErrorDescription('Build functions must never return null.'),
         ErrorHint(
           'To return an empty space that causes the building widget to fill available room, return "Container()". '
@@ -158,7 +172,8 @@ void debugWidgetBuilderValue(Widget widget, Widget? built) {
     if (widget == built) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('A build function returned context.widget.'),
-        DiagnosticsProperty<Widget>('The offending widget is', widget, style: DiagnosticsTreeStyle.errorProperty),
+        DiagnosticsProperty<Widget>('The offending widget is', widget,
+            style: DiagnosticsTreeStyle.errorProperty),
         ErrorDescription(
           'Build functions must never return their BuildContext parameter\'s widget or a child that contains "context.widget". '
           'Doing so introduces a loop in the widget tree that can cause the app to crash.',
@@ -171,7 +186,8 @@ void debugWidgetBuilderValue(Widget widget, Widget? built) {
 
 bool debugCheckHasWidgetsLocalizations(BuildContext context) {
   assert(() {
-    if (Localizations.of<WidgetsLocalizations>(context, WidgetsLocalizations) == null) {
+    if (Localizations.of<WidgetsLocalizations>(context, WidgetsLocalizations) ==
+        null) {
       throw FlutterError.fromParts(<DiagnosticsNode>[
         ErrorSummary('No WidgetsLocalizations found.'),
         ErrorDescription(
@@ -188,7 +204,8 @@ bool debugCheckHasWidgetsLocalizations(BuildContext context) {
           'automatically, or add a Localization widget with a '
           'WidgetsLocalizations delegate.',
         ),
-        ...context.describeMissingAncestor(expectedAncestorType: WidgetsLocalizations),
+        ...context.describeMissingAncestor(
+            expectedAncestorType: WidgetsLocalizations),
       ]);
     }
     return true;
@@ -198,14 +215,17 @@ bool debugCheckHasWidgetsLocalizations(BuildContext context) {
 
 bool debugCheckHasOverlay(BuildContext context) {
   assert(() {
-    if (LookupBoundary.findAncestorWidgetOfExactType<Overlay>(context) == null) {
-      final bool hiddenByBoundary = LookupBoundary.debugIsHidingAncestorWidgetOfExactType<Overlay>(context);
+    if (LookupBoundary.findAncestorWidgetOfExactType<Overlay>(context) ==
+        null) {
+      final bool hiddenByBoundary =
+          LookupBoundary.debugIsHidingAncestorWidgetOfExactType<Overlay>(
+              context);
       throw FlutterError.fromParts(<DiagnosticsNode>[
-        ErrorSummary('No Overlay widget found${hiddenByBoundary ? ' within the closest LookupBoundary' : ''}.'),
+        ErrorSummary(
+            'No Overlay widget found${hiddenByBoundary ? ' within the closest LookupBoundary' : ''}.'),
         if (hiddenByBoundary)
           ErrorDescription(
-              'There is an ancestor Overlay widget, but it is hidden by a LookupBoundary.'
-          ),
+              'There is an ancestor Overlay widget, but it is hidden by a LookupBoundary.'),
         ErrorDescription(
           '${context.widget.runtimeType} widgets require an Overlay '
           'widget ancestor within the closest LookupBoundary.\n'

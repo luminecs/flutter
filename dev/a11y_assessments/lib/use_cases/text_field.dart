@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'use_cases.dart';
 
 class TextFieldUseCase extends UseCase {
-
   @override
   String get name => 'TextField';
 

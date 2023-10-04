@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const SwitchApp());
 
 class SwitchApp extends StatelessWidget {
@@ -31,7 +30,8 @@ class _SwitchExampleState extends State<SwitchExample> {
   bool light0 = true;
   bool light1 = true;
 
-  final MaterialStateProperty<Icon?> thumbIcon = MaterialStateProperty.resolveWith<Icon?>(
+  final MaterialStateProperty<Icon?> thumbIcon =
+      MaterialStateProperty.resolveWith<Icon?>(
     (Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
         return const Icon(Icons.check);

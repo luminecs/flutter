@@ -116,8 +116,7 @@ class StartCommand extends Command<void> {
       argumentResults,
       platform.environment,
     )!;
-    final String frameworkMirror =
-        'git@github.com:$githubUsername/flutter.git';
+    final String frameworkMirror = 'git@github.com:$githubUsername/flutter.git';
     final String engineUpstream = getValueFromEnvOrArgs(
       kEngineUpstreamOption,
       argumentResults,

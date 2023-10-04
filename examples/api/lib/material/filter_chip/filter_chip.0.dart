@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 enum ExerciseFilter { walking, running, cycling, hiking }
 
 void main() => runApp(const ChipApp());

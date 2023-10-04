@@ -368,7 +368,6 @@ const String kSampleResultJsonWithProvisionIssue = r'''
 }
 ''';
 
-
 const String kSampleResultJsonWithActionIssues = r'''
 {
   "_type" : {

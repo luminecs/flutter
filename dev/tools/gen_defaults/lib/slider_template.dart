@@ -1,7 +1,11 @@
 import 'template.dart';
 
 class SliderTemplate extends TokenTemplate {
-  const SliderTemplate(this.tokenGroup, super.blockName, super.fileName, super.tokens, {
+  const SliderTemplate(
+    this.tokenGroup,
+    super.blockName,
+    super.fileName,
+    super.tokens, {
     super.colorSchemePrefix = '_colors.',
   });
 
@@ -76,5 +80,4 @@ class _${blockName}DefaultsM3 extends SliderThemeData {
   SliderComponentShape? get valueIndicatorShape => const DropSliderValueIndicatorShape();
 }
 ''';
-
 }

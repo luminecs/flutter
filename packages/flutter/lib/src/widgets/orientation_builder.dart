@@ -3,7 +3,8 @@ import 'framework.dart';
 import 'layout_builder.dart';
 import 'media_query.dart';
 
-typedef OrientationWidgetBuilder = Widget Function(BuildContext context, Orientation orientation);
+typedef OrientationWidgetBuilder = Widget Function(
+    BuildContext context, Orientation orientation);
 
 class OrientationBuilder extends StatelessWidget {
   const OrientationBuilder({
@@ -13,11 +14,14 @@ class OrientationBuilder extends StatelessWidget {
 
   final OrientationWidgetBuilder builder;
 
-  Widget _buildWithConstraints(BuildContext context, BoxConstraints constraints) {
+  Widget _buildWithConstraints(
+      BuildContext context, BoxConstraints constraints) {
     // If the constraints are fully unbounded (i.e., maxWidth and maxHeight are
     // both infinite), we prefer Orientation.portrait because its more common to
     // scroll vertically then horizontally.
-    final Orientation orientation = constraints.maxWidth > constraints.maxHeight ? Orientation.landscape : Orientation.portrait;
+    final Orientation orientation = constraints.maxWidth > constraints.maxHeight
+        ? Orientation.landscape
+        : Orientation.portrait;
     return builder(context, orientation);
   }
 

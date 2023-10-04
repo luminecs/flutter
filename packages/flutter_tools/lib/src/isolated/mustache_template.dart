@@ -6,7 +6,9 @@ class MustacheTemplateRenderer extends TemplateRenderer {
   const MustacheTemplateRenderer();
 
   @override
-  String renderString(String template, dynamic context, {bool htmlEscapeValues = false}) {
-    return Template(template, htmlEscapeValues: htmlEscapeValues).renderString(context);
+  String renderString(String template, dynamic context,
+      {bool htmlEscapeValues = false}) {
+    return Template(template, htmlEscapeValues: htmlEscapeValues)
+        .renderString(context);
   }
 }

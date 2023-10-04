@@ -13,7 +13,8 @@ typedef PaintImageCallback = void Function(ImageSizeInfo);
 
 @immutable
 class ImageSizeInfo {
-  const ImageSizeInfo({this.source, required this.displaySize, required this.imageSize});
+  const ImageSizeInfo(
+      {this.source, required this.displaySize, required this.imageSize});
 
   final String? source;
 
@@ -28,7 +29,7 @@ class ImageSizeInfo {
   int _sizeToBytes(Size size) {
     // Assume 4 bytes per pixel and that mipmapping will be used, which adds
     // 4/3.
-    return (size.width * size.height * 4 * (4/3)).toInt();
+    return (size.width * size.height * 4 * (4 / 3)).toInt();
   }
 
   Map<String, Object?> toJson() {
@@ -52,17 +53,18 @@ class ImageSizeInfo {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is ImageSizeInfo
-        && other.source == source
-        && other.imageSize == imageSize
-        && other.displaySize == displaySize;
+    return other is ImageSizeInfo &&
+        other.source == source &&
+        other.imageSize == imageSize &&
+        other.displaySize == displaySize;
   }
 
   @override
   int get hashCode => Object.hash(source, displaySize, imageSize);
 
   @override
-  String toString() => 'ImageSizeInfo($source, imageSize: $imageSize, displaySize: $displaySize)';
+  String toString() =>
+      'ImageSizeInfo($source, imageSize: $imageSize, displaySize: $displaySize)';
 }
 
 PaintImageCallback? debugOnPaintImage;
@@ -73,7 +75,8 @@ const int _imageOverheadAllowanceDefault = 128 * 1024;
 
 int debugImageOverheadAllowance = _imageOverheadAllowanceDefault;
 
-bool debugAssertAllPaintingVarsUnset(String reason, { bool debugDisableShadowsOverride = false }) {
+bool debugAssertAllPaintingVarsUnset(String reason,
+    {bool debugDisableShadowsOverride = false}) {
   assert(() {
     if (debugDisableShadows != debugDisableShadowsOverride ||
         debugNetworkImageHttpClientProvider != null ||
@@ -91,7 +94,8 @@ typedef ShaderWarmUpPictureCallback = bool Function(Picture);
 
 typedef ShaderWarmUpImageCallback = bool Function(Image);
 
-ShaderWarmUpPictureCallback debugCaptureShaderWarmUpPicture = _defaultPictureCapture;
+ShaderWarmUpPictureCallback debugCaptureShaderWarmUpPicture =
+    _defaultPictureCapture;
 bool _defaultPictureCapture(Picture picture) => true;
 
 ShaderWarmUpImageCallback debugCaptureShaderWarmUpImage = _defaultImageCapture;

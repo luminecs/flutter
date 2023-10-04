@@ -52,8 +52,7 @@ class LeadingNegToken extends ExpressionToken {
 enum Operation { Addition, Subtraction, Multiplication, Division }
 
 class OperationToken extends ExpressionToken {
-  OperationToken(this.operation)
-   : super(opString(operation));
+  OperationToken(this.operation) : super(opString(operation));
 
   Operation operation;
 
@@ -88,12 +87,11 @@ enum ExpressionState {
 class CalcExpression {
   CalcExpression(this._list, this.state);
 
-  CalcExpression.empty()
-    : this(<ExpressionToken>[], ExpressionState.Start);
+  CalcExpression.empty() : this(<ExpressionToken>[], ExpressionState.Start);
 
   CalcExpression.result(FloatToken result)
-    : _list = <ExpressionToken?>[],
-      state = ExpressionState.Result {
+      : _list = <ExpressionToken?>[],
+        state = ExpressionState.Result {
     _list.add(result);
   }
 

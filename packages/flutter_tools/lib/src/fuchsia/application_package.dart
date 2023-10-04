@@ -19,9 +19,11 @@ abstract class FuchsiaApp extends ApplicationPackage {
   }
 
   static FuchsiaApp? fromPrebuiltApp(FileSystemEntity applicationBinary) {
-    final FileSystemEntityType entityType = globals.fs.typeSync(applicationBinary.path);
+    final FileSystemEntityType entityType =
+        globals.fs.typeSync(applicationBinary.path);
     if (entityType != FileSystemEntityType.file) {
-      globals.printError('File "${applicationBinary.path}" does not exist or is not a .far file. Use far archive.');
+      globals.printError(
+          'File "${applicationBinary.path}" does not exist or is not a .far file. Use far archive.');
       return null;
     }
     return PrebuiltFuchsiaApp(
@@ -35,11 +37,12 @@ abstract class FuchsiaApp extends ApplicationPackage {
   File farArchive(BuildMode buildMode);
 }
 
-class PrebuiltFuchsiaApp extends FuchsiaApp implements PrebuiltApplicationPackage {
+class PrebuiltFuchsiaApp extends FuchsiaApp
+    implements PrebuiltApplicationPackage {
   PrebuiltFuchsiaApp({
     required this.applicationPackage,
   }) : // TODO(zanderso): Extract the archive and extract the id from meta/package.
-       super(projectBundleId: applicationPackage.path);
+        super(projectBundleId: applicationPackage.path);
 
   @override
   File farArchive(BuildMode buildMode) => globals.fs.file(applicationPackage);
@@ -52,8 +55,8 @@ class PrebuiltFuchsiaApp extends FuchsiaApp implements PrebuiltApplicationPackag
 }
 
 class BuildableFuchsiaApp extends FuchsiaApp {
-  BuildableFuchsiaApp({required this.project}) :
-      super(projectBundleId: project.project.manifest.appName);
+  BuildableFuchsiaApp({required this.project})
+      : super(projectBundleId: project.project.manifest.appName);
 
   final FuchsiaProject project;
 

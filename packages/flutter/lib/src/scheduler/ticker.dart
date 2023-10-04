@@ -20,7 +20,7 @@ abstract class TickerProvider {
 // TODO(jacobr): make Ticker use Diagnosticable to simplify reporting errors
 // related to a ticker.
 class Ticker {
-  Ticker(this._onTick, { this.debugLabel }) {
+  Ticker(this._onTick, {this.debugLabel}) {
     assert(() {
       _debugCreationStack = StackTrace.current;
       return true;
@@ -68,7 +68,8 @@ class Ticker {
       if (isActive) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary('A ticker was started twice.'),
-          ErrorDescription('A ticker that is already active cannot be started again without first stopping it.'),
+          ErrorDescription(
+              'A ticker that is already active cannot be started again without first stopping it.'),
           describeForError('The affected ticker was'),
         ]);
       }
@@ -79,8 +80,10 @@ class Ticker {
     if (shouldScheduleTick) {
       scheduleTick();
     }
-    if (SchedulerBinding.instance.schedulerPhase.index > SchedulerPhase.idle.index &&
-        SchedulerBinding.instance.schedulerPhase.index < SchedulerPhase.postFrameCallbacks.index) {
+    if (SchedulerBinding.instance.schedulerPhase.index >
+            SchedulerPhase.idle.index &&
+        SchedulerBinding.instance.schedulerPhase.index <
+            SchedulerPhase.postFrameCallbacks.index) {
       _startTime = SchedulerBinding.instance.currentFrameTimeStamp;
     }
     return _future!;
@@ -88,10 +91,11 @@ class Ticker {
 
   DiagnosticsNode describeForError(String name) {
     // TODO(jacobr): make this more structured.
-    return DiagnosticsProperty<Ticker>(name, this, description: toString(debugIncludeStack: true));
+    return DiagnosticsProperty<Ticker>(name, this,
+        description: toString(debugIncludeStack: true));
   }
 
-  void stop({ bool canceled = false }) {
+  void stop({bool canceled = false}) {
     if (!isActive) {
       return;
     }
@@ -111,7 +115,6 @@ class Ticker {
       localFuture._complete();
     }
   }
-
 
   final TickerCallback _onTick;
 
@@ -139,10 +142,11 @@ class Ticker {
   }
 
   @protected
-  void scheduleTick({ bool rescheduling = false }) {
+  void scheduleTick({bool rescheduling = false}) {
     assert(!scheduled);
     assert(shouldScheduleTick);
-    _animationId = SchedulerBinding.instance.scheduleFrameCallback(_tick, rescheduling: rescheduling);
+    _animationId = SchedulerBinding.instance
+        .scheduleFrameCallback(_tick, rescheduling: rescheduling);
   }
 
   @protected
@@ -159,14 +163,17 @@ class Ticker {
     assert(_future == null);
     assert(_startTime == null);
     assert(_animationId == null);
-    assert((originalTicker._future == null) == (originalTicker._startTime == null), 'Cannot absorb Ticker after it has been disposed.');
+    assert(
+        (originalTicker._future == null) == (originalTicker._startTime == null),
+        'Cannot absorb Ticker after it has been disposed.');
     if (originalTicker._future != null) {
       _future = originalTicker._future;
       _startTime = originalTicker._startTime;
       if (shouldScheduleTick) {
         scheduleTick();
       }
-      originalTicker._future = null; // so that it doesn't get disposed when we dispose of originalTicker
+      originalTicker._future =
+          null; // so that it doesn't get disposed when we dispose of originalTicker
       originalTicker.unscheduleTick();
     }
     originalTicker.dispose();
@@ -194,7 +201,7 @@ class Ticker {
   late StackTrace _debugCreationStack;
 
   @override
-  String toString({ bool debugIncludeStack = false }) {
+  String toString({bool debugIncludeStack = false}) {
     final StringBuffer buffer = StringBuffer();
     buffer.write('${objectRuntimeType(this, 'Ticker')}(');
     assert(() {
@@ -205,8 +212,11 @@ class Ticker {
     assert(() {
       if (debugIncludeStack) {
         buffer.writeln();
-        buffer.writeln('The stack trace when the $runtimeType was actually created was:');
-        FlutterError.defaultStackFilter(_debugCreationStack.toString().trimRight().split('\n')).forEach(buffer.writeln);
+        buffer.writeln(
+            'The stack trace when the $runtimeType was actually created was:');
+        FlutterError.defaultStackFilter(
+                _debugCreationStack.toString().trimRight().split('\n'))
+            .forEach(buffer.writeln);
       }
       return true;
     }());
@@ -223,7 +233,8 @@ class TickerFuture implements Future<void> {
 
   final Completer<void> _primaryCompleter = Completer<void>();
   Completer<void>? _secondaryCompleter;
-  bool? _completed; // null means unresolved, true means complete, false means canceled
+  bool?
+      _completed; // null means unresolved, true means complete, false means canceled
 
   void _complete() {
     assert(_completed == null);
@@ -242,6 +253,7 @@ class TickerFuture implements Future<void> {
     void thunk(dynamic value) {
       callback();
     }
+
     orCancel.then<void>(thunk, onError: thunk);
   }
 
@@ -265,17 +277,19 @@ class TickerFuture implements Future<void> {
   }
 
   @override
-  Future<void> catchError(Function onError, { bool Function(Object)? test }) {
+  Future<void> catchError(Function onError, {bool Function(Object)? test}) {
     return _primaryCompleter.future.catchError(onError, test: test);
   }
 
   @override
-  Future<R> then<R>(FutureOr<R> Function(void value) onValue, { Function? onError }) {
+  Future<R> then<R>(FutureOr<R> Function(void value) onValue,
+      {Function? onError}) {
     return _primaryCompleter.future.then<R>(onValue, onError: onError);
   }
 
   @override
-  Future<void> timeout(Duration timeLimit, { FutureOr<void> Function()? onTimeout }) {
+  Future<void> timeout(Duration timeLimit,
+      {FutureOr<void> Function()? onTimeout}) {
     return _primaryCompleter.future.timeout(timeLimit, onTimeout: onTimeout);
   }
 
@@ -285,7 +299,8 @@ class TickerFuture implements Future<void> {
   }
 
   @override
-  String toString() => '${describeIdentity(this)}(${ _completed == null ? "active" : _completed! ? "complete" : "canceled" })';
+  String toString() =>
+      '${describeIdentity(this)}(${_completed == null ? "active" : _completed! ? "complete" : "canceled"})';
 }
 
 class TickerCanceled implements Exception {

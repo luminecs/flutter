@@ -28,8 +28,10 @@ void main() {
     });
 
     test('updateDartRevision() updates the DEPS file', () async {
-      const String previousDartRevision = '171876a4e6cf56ee6da1f97d203926bd7afda7ef';
-      const String nextDartRevision = 'f6c91128be6b77aef8351e1e3a9d07c85bc2e46e';
+      const String previousDartRevision =
+          '171876a4e6cf56ee6da1f97d203926bd7afda7ef';
+      const String nextDartRevision =
+          'f6c91128be6b77aef8351e1e3a9d07c85bc2e46e';
 
       final Checkouts checkouts = Checkouts(
         fileSystem: fileSystem,
@@ -48,7 +50,8 @@ void main() {
     });
 
     test('updateDartRevision() throws exception on malformed DEPS file', () {
-      const String nextDartRevision = 'f6c91128be6b77aef8351e1e3a9d07c85bc2e46e';
+      const String nextDartRevision =
+          'f6c91128be6b77aef8351e1e3a9d07c85bc2e46e';
 
       final Checkouts checkouts = Checkouts(
         fileSystem: fileSystem,
@@ -64,7 +67,8 @@ void main() {
 vars = {
 }''');
       expect(
-        () async => repo.updateDartRevision(nextDartRevision, depsFile: depsFile),
+        () async =>
+            repo.updateDartRevision(nextDartRevision, depsFile: depsFile),
         throwsExceptionWith('Unexpected content in the DEPS file at'),
       );
     });
@@ -123,7 +127,8 @@ vars = {
       final EngineRepository repo = EngineRepository(checkouts);
       expect(
         () async => repo.commit(message),
-        throwsExceptionWith('Tried to commit with message $message but no changes were present'),
+        throwsExceptionWith(
+            'Tried to commit with message $message but no changes were present'),
       );
     });
 
@@ -182,9 +187,13 @@ vars = {
       expect(processManager.hasRemainingExpectations, false);
     });
 
-    test('updateCandidateBranchVersion() returns false if branch is the same as version file', () async {
+    test(
+        'updateCandidateBranchVersion() returns false if branch is the same as version file',
+        () async {
       const String branch = 'flutter-2.15-candidate.3';
-      final File versionFile = fileSystem.file('/release-candidate-branch.version')..writeAsStringSync(branch);
+      final File versionFile = fileSystem
+          .file('/release-candidate-branch.version')
+        ..writeAsStringSync(branch);
 
       final Checkouts checkouts = Checkouts(
         fileSystem: fileSystem,
@@ -195,14 +204,18 @@ vars = {
       );
 
       final FrameworkRepository repo = FrameworkRepository(checkouts);
-      final bool didUpdate = await repo.updateCandidateBranchVersion(branch, versionFile: versionFile);
+      final bool didUpdate = await repo.updateCandidateBranchVersion(branch,
+          versionFile: versionFile);
       expect(didUpdate, false);
     });
 
-    test('updateEngineRevision() returns false if newCommit is the same as version file', () async {
+    test(
+        'updateEngineRevision() returns false if newCommit is the same as version file',
+        () async {
       const String commit1 = 'abc123';
       const String commit2 = 'def456';
-      final File engineVersionFile = fileSystem.file('/engine.version')..writeAsStringSync(commit2);
+      final File engineVersionFile = fileSystem.file('/engine.version')
+        ..writeAsStringSync(commit2);
       processManager.addCommands(<FakeCommand>[
         FakeCommand(command: <String>[
           'git',
@@ -230,11 +243,14 @@ vars = {
       );
 
       final FrameworkRepository repo = FrameworkRepository(checkouts);
-      final bool didUpdate = await repo.updateEngineRevision(commit2, engineVersionFile: engineVersionFile);
+      final bool didUpdate = await repo.updateEngineRevision(commit2,
+          engineVersionFile: engineVersionFile);
       expect(didUpdate, false);
     });
 
-    test('framework repo set as localUpstream ensures requiredLocalBranches exist locally', () async {
+    test(
+        'framework repo set as localUpstream ensures requiredLocalBranches exist locally',
+        () async {
       const String commit = 'deadbeef';
       const String candidateBranch = 'flutter-1.2-candidate.3';
       bool createdCandidateBranch = false;
@@ -246,7 +262,8 @@ vars = {
           'upstream',
           '--',
           FrameworkRepository.defaultUpstream,
-          fileSystem.path.join(rootDir, 'flutter_conductor_checkouts', 'framework'),
+          fileSystem.path
+              .join(rootDir, 'flutter_conductor_checkouts', 'framework'),
         ]),
         FakeCommand(
           command: const <String>['git', 'checkout', candidateBranch, '--'],
@@ -259,10 +276,19 @@ vars = {
           command: <String>['git', 'checkout', 'beta', '--'],
         ),
         const FakeCommand(
-          command: <String>['git', 'checkout', FrameworkRepository.defaultBranch, '--'],
+          command: <String>[
+            'git',
+            'checkout',
+            FrameworkRepository.defaultBranch,
+            '--'
+          ],
         ),
         const FakeCommand(
-          command: <String>['git', 'checkout', FrameworkRepository.defaultBranch],
+          command: <String>[
+            'git',
+            'checkout',
+            FrameworkRepository.defaultBranch
+          ],
         ),
         const FakeCommand(
           command: <String>['git', 'rev-parse', 'HEAD'],
@@ -289,7 +315,9 @@ vars = {
       expect(createdCandidateBranch, true);
     });
 
-    test('engine repo set as localUpstream ensures requiredLocalBranches exist locally', () async {
+    test(
+        'engine repo set as localUpstream ensures requiredLocalBranches exist locally',
+        () async {
       const String commit = 'deadbeef';
       const String candidateBranch = 'flutter-1.2-candidate.3';
       bool createdCandidateBranch = false;
@@ -301,7 +329,8 @@ vars = {
           'upstream',
           '--',
           EngineRepository.defaultUpstream,
-          fileSystem.path.join(rootDir, 'flutter_conductor_checkouts', 'engine'),
+          fileSystem.path
+              .join(rootDir, 'flutter_conductor_checkouts', 'engine'),
         ]),
         FakeCommand(
           command: const <String>['git', 'checkout', candidateBranch, '--'],
@@ -385,14 +414,17 @@ Extraneous debug information that should be ignored.
         checkouts,
         localUpstream: true,
       );
-      final List<String> branchNames = await repo.listRemoteBranches(remoteName);
-      expect(branchNames, equals(<String>[
-        'experiment',
-        'feature-a',
-        'feature-b',
-        'fix_bug_1234',
-        'stable',
-      ]));
+      final List<String> branchNames =
+          await repo.listRemoteBranches(remoteName);
+      expect(
+          branchNames,
+          equals(<String>[
+            'experiment',
+            'feature-a',
+            'feature-b',
+            'fix_bug_1234',
+            'stable',
+          ]));
     });
   });
 }

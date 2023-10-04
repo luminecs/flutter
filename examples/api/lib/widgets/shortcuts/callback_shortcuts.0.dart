@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 void main() => runApp(const CallbackShortcutsApp());
 
 class CallbackShortcutsApp extends StatelessWidget {
@@ -24,7 +23,8 @@ class CallbackShortcutsExample extends StatefulWidget {
   const CallbackShortcutsExample({super.key});
 
   @override
-  State<CallbackShortcutsExample> createState() => _CallbackShortcutsExampleState();
+  State<CallbackShortcutsExample> createState() =>
+      _CallbackShortcutsExampleState();
 }
 
 class _CallbackShortcutsExampleState extends State<CallbackShortcutsExample> {

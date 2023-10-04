@@ -8,7 +8,6 @@ class ButtonMatrixApp extends StatefulWidget {
 }
 
 class ButtonMatrixAppState extends State<ButtonMatrixApp> {
-
   int count = 1;
   int increment = 1;
 
@@ -20,7 +19,9 @@ class ButtonMatrixAppState extends State<ButtonMatrixApp> {
           title: Text('Count: $count'),
           actions: <Widget>[
             TextButton(
-              onPressed: () => setState(() { count += increment; }),
+              onPressed: () => setState(() {
+                count += increment;
+              }),
               child: Text('Add $increment'),
             ),
           ],
@@ -34,7 +35,9 @@ class ButtonMatrixAppState extends State<ButtonMatrixApp> {
                 10,
                 TextButton(
                   child: const Text('Faster'),
-                  onPressed: () => setState(() { increment += 1; }),
+                  onPressed: () => setState(() {
+                    increment += 1;
+                  }),
                 ),
               ),
             ),

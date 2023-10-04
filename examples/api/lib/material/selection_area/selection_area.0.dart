@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const SelectionAreaExampleApp());
 
 class SelectionAreaExampleApp extends StatelessWidget {

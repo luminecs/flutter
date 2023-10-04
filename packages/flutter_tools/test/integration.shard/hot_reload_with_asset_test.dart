@@ -23,7 +23,8 @@ void main() {
     tryToDelete(tempDir);
   });
 
-  testWithoutContext('hot reload does not need to sync assets on the first reload', () async {
+  testWithoutContext(
+      'hot reload does not need to sync assets on the first reload', () async {
     final Completer<void> onFirstLoad = Completer<void>();
     final Completer<void> onSecondLoad = Completer<void>();
 
@@ -50,7 +51,8 @@ void main() {
     await onSecondLoad.future;
   });
 
-  testWithoutContext('hot restart does not need to sync assets on the first reload', () async {
+  testWithoutContext(
+      'hot restart does not need to sync assets on the first reload', () async {
     final Completer<void> onFirstLoad = Completer<void>();
     final Completer<void> onSecondLoad = Completer<void>();
 

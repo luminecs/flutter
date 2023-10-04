@@ -21,7 +21,11 @@ class _DrawerDemoState extends State<DrawerDemo> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static const List<String> _drawerContents = <String>[
-    'A', 'B', 'C', 'D', 'E',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
   ];
 
   static final Animatable<Offset> _drawerDetailsTween = Tween<Offset>(
@@ -91,7 +95,9 @@ class _DrawerDemoState extends State<DrawerDemo> with TickerProviderStateMixin {
           },
         ),
         title: const Text('Navigation drawer'),
-        actions: <Widget>[MaterialDemoDocumentationButton(DrawerDemo.routeName)],
+        actions: <Widget>[
+          MaterialDemoDocumentationButton(DrawerDemo.routeName)
+        ],
       ),
       drawer: Drawer(
         child: Column(
@@ -232,7 +238,8 @@ class _DrawerDemoState extends State<DrawerDemo> with TickerProviderStateMixin {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: Text('Tap here to open the drawer',
+                  child: Text(
+                    'Tap here to open the drawer',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),

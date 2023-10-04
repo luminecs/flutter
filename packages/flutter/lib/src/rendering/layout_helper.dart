@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'box.dart';
 
-typedef ChildLayouter = Size Function(RenderBox child, BoxConstraints constraints);
+typedef ChildLayouter = Size Function(
+    RenderBox child, BoxConstraints constraints);
 
 abstract final class ChildLayoutHelper {
   static Size dryLayoutChild(RenderBox child, BoxConstraints constraints) {

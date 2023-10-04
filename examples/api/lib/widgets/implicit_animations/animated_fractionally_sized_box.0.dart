@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AnimatedFractionallySizedBoxExampleApp());
 
 class AnimatedFractionallySizedBoxExampleApp extends StatelessWidget {
@@ -10,7 +9,8 @@ class AnimatedFractionallySizedBoxExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('AnimatedFractionallySizedBox Sample')),
+        appBar:
+            AppBar(title: const Text('AnimatedFractionallySizedBox Sample')),
         body: const AnimatedFractionallySizedBoxExample(),
       ),
     );
@@ -21,10 +21,12 @@ class AnimatedFractionallySizedBoxExample extends StatefulWidget {
   const AnimatedFractionallySizedBoxExample({super.key});
 
   @override
-  State<AnimatedFractionallySizedBoxExample> createState() => _AnimatedFractionallySizedBoxExampleState();
+  State<AnimatedFractionallySizedBoxExample> createState() =>
+      _AnimatedFractionallySizedBoxExampleState();
 }
 
-class _AnimatedFractionallySizedBoxExampleState extends State<AnimatedFractionallySizedBoxExample> {
+class _AnimatedFractionallySizedBoxExampleState
+    extends State<AnimatedFractionallySizedBoxExample> {
   bool selected = false;
 
   @override

@@ -21,15 +21,15 @@ abstract class GlobalCupertinoLocalizations implements CupertinoLocalizations {
     required intl.DateFormat doubleDigitMinuteFormat,
     required intl.DateFormat singleDigitSecondFormat,
     required intl.NumberFormat decimalFormat,
-  }) : _localeName = localeName,
-       _fullYearFormat = fullYearFormat,
-       _dayFormat = dayFormat,
-       _mediumDateFormat = mediumDateFormat,
-       _singleDigitHourFormat = singleDigitHourFormat,
-       _singleDigitMinuteFormat = singleDigitMinuteFormat,
-       _doubleDigitMinuteFormat = doubleDigitMinuteFormat,
-       _singleDigitSecondFormat = singleDigitSecondFormat,
-       _decimalFormat =decimalFormat;
+  })  : _localeName = localeName,
+        _fullYearFormat = fullYearFormat,
+        _dayFormat = dayFormat,
+        _mediumDateFormat = mediumDateFormat,
+        _singleDigitHourFormat = singleDigitHourFormat,
+        _singleDigitMinuteFormat = singleDigitMinuteFormat,
+        _doubleDigitMinuteFormat = doubleDigitMinuteFormat,
+        _singleDigitSecondFormat = singleDigitSecondFormat,
+        _decimalFormat = decimalFormat;
 
   final String _localeName;
   final intl.DateFormat _fullYearFormat;
@@ -62,13 +62,14 @@ abstract class GlobalCupertinoLocalizations implements CupertinoLocalizations {
     //
     // Because this will be used without specifying any day of month,
     // in most cases it should be capitalized (according to rules in specific language).
-    return intl.toBeginningOfSentenceCase(_fullYearFormat.dateSymbols.STANDALONEMONTHS[monthIndex - 1]) ??
+    return intl.toBeginningOfSentenceCase(
+            _fullYearFormat.dateSymbols.STANDALONEMONTHS[monthIndex - 1]) ??
         _fullYearFormat.dateSymbols.STANDALONEMONTHS[monthIndex - 1];
   }
 
   @override
   String datePickerDayOfMonth(int dayIndex, [int? weekDay]) {
-     if (weekDay != null) {
+    if (weekDay != null) {
       return ' ${DefaultCupertinoLocalizations.shortWeekdays[weekDay - DateTime.monday]} $dayIndex ';
     }
     // Year and month doesn't matter since we just want to day formatted.
@@ -198,13 +199,13 @@ abstract class GlobalCupertinoLocalizations implements CupertinoLocalizations {
   String get tabSemanticsLabelRaw;
 
   @override
-  String tabSemanticsLabel({ required int tabIndex, required int tabCount }) {
+  String tabSemanticsLabel({required int tabIndex, required int tabCount}) {
     assert(tabIndex >= 1);
     assert(tabCount >= 1);
     final String template = tabSemanticsLabelRaw;
     return template
-      .replaceFirst(r'$tabIndex', _decimalFormat.format(tabIndex))
-      .replaceFirst(r'$tabCount', _decimalFormat.format(tabCount));
+        .replaceFirst(r'$tabIndex', _decimalFormat.format(tabIndex))
+        .replaceFirst(r'$tabCount', _decimalFormat.format(tabCount));
   }
 
   @override
@@ -251,13 +252,13 @@ abstract class GlobalCupertinoLocalizations implements CupertinoLocalizations {
 
   @override
   List<String> get timerPickerHourLabels => <String>[
-    if (timerPickerHourLabelZero != null) timerPickerHourLabelZero!,
-    if (timerPickerHourLabelOne != null) timerPickerHourLabelOne!,
-    if (timerPickerHourLabelTwo != null) timerPickerHourLabelTwo!,
-    if (timerPickerHourLabelFew != null) timerPickerHourLabelFew!,
-    if (timerPickerHourLabelMany != null) timerPickerHourLabelMany!,
-    if (timerPickerHourLabelOther != null) timerPickerHourLabelOther!,
-  ];
+        if (timerPickerHourLabelZero != null) timerPickerHourLabelZero!,
+        if (timerPickerHourLabelOne != null) timerPickerHourLabelOne!,
+        if (timerPickerHourLabelTwo != null) timerPickerHourLabelTwo!,
+        if (timerPickerHourLabelFew != null) timerPickerHourLabelFew!,
+        if (timerPickerHourLabelMany != null) timerPickerHourLabelMany!,
+        if (timerPickerHourLabelOther != null) timerPickerHourLabelOther!,
+      ];
 
   @protected
   String? get timerPickerMinuteLabelZero => null;
@@ -288,13 +289,13 @@ abstract class GlobalCupertinoLocalizations implements CupertinoLocalizations {
 
   @override
   List<String> get timerPickerMinuteLabels => <String>[
-    if (timerPickerMinuteLabelZero != null) timerPickerMinuteLabelZero!,
-    if (timerPickerMinuteLabelOne != null) timerPickerMinuteLabelOne!,
-    if (timerPickerMinuteLabelTwo != null) timerPickerMinuteLabelTwo!,
-    if (timerPickerMinuteLabelFew != null) timerPickerMinuteLabelFew!,
-    if (timerPickerMinuteLabelMany != null) timerPickerMinuteLabelMany!,
-    if (timerPickerMinuteLabelOther != null) timerPickerMinuteLabelOther!,
-  ];
+        if (timerPickerMinuteLabelZero != null) timerPickerMinuteLabelZero!,
+        if (timerPickerMinuteLabelOne != null) timerPickerMinuteLabelOne!,
+        if (timerPickerMinuteLabelTwo != null) timerPickerMinuteLabelTwo!,
+        if (timerPickerMinuteLabelFew != null) timerPickerMinuteLabelFew!,
+        if (timerPickerMinuteLabelMany != null) timerPickerMinuteLabelMany!,
+        if (timerPickerMinuteLabelOther != null) timerPickerMinuteLabelOther!,
+      ];
 
   @protected
   String? get timerPickerSecondLabelZero => null;
@@ -325,29 +326,34 @@ abstract class GlobalCupertinoLocalizations implements CupertinoLocalizations {
 
   @override
   List<String> get timerPickerSecondLabels => <String>[
-    if (timerPickerSecondLabelZero != null) timerPickerSecondLabelZero!,
-    if (timerPickerSecondLabelOne != null) timerPickerSecondLabelOne!,
-    if (timerPickerSecondLabelTwo != null) timerPickerSecondLabelTwo!,
-    if (timerPickerSecondLabelFew != null) timerPickerSecondLabelFew!,
-    if (timerPickerSecondLabelMany != null) timerPickerSecondLabelMany!,
-    if (timerPickerSecondLabelOther != null) timerPickerSecondLabelOther!,
-  ];
+        if (timerPickerSecondLabelZero != null) timerPickerSecondLabelZero!,
+        if (timerPickerSecondLabelOne != null) timerPickerSecondLabelOne!,
+        if (timerPickerSecondLabelTwo != null) timerPickerSecondLabelTwo!,
+        if (timerPickerSecondLabelFew != null) timerPickerSecondLabelFew!,
+        if (timerPickerSecondLabelMany != null) timerPickerSecondLabelMany!,
+        if (timerPickerSecondLabelOther != null) timerPickerSecondLabelOther!,
+      ];
 
-  static const LocalizationsDelegate<CupertinoLocalizations> delegate = _GlobalCupertinoLocalizationsDelegate();
+  static const LocalizationsDelegate<CupertinoLocalizations> delegate =
+      _GlobalCupertinoLocalizationsDelegate();
 
-  static const List<LocalizationsDelegate<dynamic>> delegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> delegates =
+      <LocalizationsDelegate<dynamic>>[
     GlobalCupertinoLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
   ];
 }
 
-class _GlobalCupertinoLocalizationsDelegate extends LocalizationsDelegate<CupertinoLocalizations> {
+class _GlobalCupertinoLocalizationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
   const _GlobalCupertinoLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => kCupertinoSupportedLanguages.contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      kCupertinoSupportedLanguages.contains(locale.languageCode);
 
-  static final Map<Locale, Future<CupertinoLocalizations>> _loadedTranslations = <Locale, Future<CupertinoLocalizations>>{};
+  static final Map<Locale, Future<CupertinoLocalizations>> _loadedTranslations =
+      <Locale, Future<CupertinoLocalizations>>{};
 
   @override
   Future<CupertinoLocalizations> load(Locale locale) {
@@ -355,7 +361,8 @@ class _GlobalCupertinoLocalizationsDelegate extends LocalizationsDelegate<Cupert
     return _loadedTranslations.putIfAbsent(locale, () {
       util.loadDateIntlDataIfNotLoaded();
 
-      final String localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      final String localeName =
+          intl.Intl.canonicalizedLocale(locale.toString());
       assert(
         locale.toString() == localeName,
         'Flutter does not support the non-standard locale form $locale (which '
@@ -411,5 +418,6 @@ class _GlobalCupertinoLocalizationsDelegate extends LocalizationsDelegate<Cupert
   bool shouldReload(_GlobalCupertinoLocalizationsDelegate old) => false;
 
   @override
-  String toString() => 'GlobalCupertinoLocalizations.delegate(${kCupertinoSupportedLanguages.length} locales)';
+  String toString() =>
+      'GlobalCupertinoLocalizations.delegate(${kCupertinoSupportedLanguages.length} locales)';
 }

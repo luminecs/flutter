@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const CupertinoButtonApp());
 
 class CupertinoButtonApp extends StatelessWidget {

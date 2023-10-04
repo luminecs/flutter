@@ -17,7 +17,8 @@ class DragDownDetails {
   final Offset localPosition;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'DragDownDetails')}($globalPosition)';
+  String toString() =>
+      '${objectRuntimeType(this, 'DragDownDetails')}($globalPosition)';
 }
 
 typedef GestureDragDownCallback = void Function(DragDownDetails details);
@@ -43,7 +44,8 @@ class DragStartDetails {
   // instead).
 
   @override
-  String toString() => '${objectRuntimeType(this, 'DragStartDetails')}($globalPosition)';
+  String toString() =>
+      '${objectRuntimeType(this, 'DragStartDetails')}($globalPosition)';
 }
 
 typedef GestureDragStartCallback = void Function(DragStartDetails details);
@@ -55,12 +57,12 @@ class DragUpdateDetails {
     this.primaryDelta,
     required this.globalPosition,
     Offset? localPosition,
-  }) : assert(
-         primaryDelta == null
-           || (primaryDelta == delta.dx && delta.dy == 0.0)
-           || (primaryDelta == delta.dy && delta.dx == 0.0),
-       ),
-       localPosition = localPosition ?? globalPosition;
+  })  : assert(
+          primaryDelta == null ||
+              (primaryDelta == delta.dx && delta.dy == 0.0) ||
+              (primaryDelta == delta.dy && delta.dx == 0.0),
+        ),
+        localPosition = localPosition ?? globalPosition;
 
   final Duration? sourceTimeStamp;
 
@@ -73,7 +75,8 @@ class DragUpdateDetails {
   final Offset localPosition;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'DragUpdateDetails')}($delta)';
+  String toString() =>
+      '${objectRuntimeType(this, 'DragUpdateDetails')}($delta)';
 }
 
 typedef GestureDragUpdateCallback = void Function(DragUpdateDetails details);
@@ -83,15 +86,18 @@ class DragEndDetails {
     this.velocity = Velocity.zero,
     this.primaryVelocity,
   }) : assert(
-         primaryVelocity == null
-           || (primaryVelocity == velocity.pixelsPerSecond.dx && velocity.pixelsPerSecond.dy == 0)
-           || (primaryVelocity == velocity.pixelsPerSecond.dy && velocity.pixelsPerSecond.dx == 0),
-       );
+          primaryVelocity == null ||
+              (primaryVelocity == velocity.pixelsPerSecond.dx &&
+                  velocity.pixelsPerSecond.dy == 0) ||
+              (primaryVelocity == velocity.pixelsPerSecond.dy &&
+                  velocity.pixelsPerSecond.dx == 0),
+        );
 
   final Velocity velocity;
 
   final double? primaryVelocity;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'DragEndDetails')}($velocity)';
+  String toString() =>
+      '${objectRuntimeType(this, 'DragEndDetails')}($velocity)';
 }

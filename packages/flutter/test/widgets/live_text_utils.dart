@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 class LiveTextInputTester {
   LiveTextInputTester() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, _handler);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, _handler);
   }
 
   bool mockLiveTextInputEnabled = false;
@@ -23,12 +24,15 @@ class LiveTextInputTester {
   }
 
   void dispose() {
-    assert(TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.checkMockMessageHandler(SystemChannels.platform.name, _handler));
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null);
+    assert(TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .checkMockMessageHandler(SystemChannels.platform.name, _handler));
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null);
   }
 }
 
-Finder findLiveTextButton() => find.byWidgetPredicate((Widget widget) =>
-  widget is CustomPaint &&
-  '${widget.painter?.runtimeType}' == '_LiveTextIconPainter',
-);
+Finder findLiveTextButton() => find.byWidgetPredicate(
+      (Widget widget) =>
+          widget is CustomPaint &&
+          '${widget.painter?.runtimeType}' == '_LiveTextIconPainter',
+    );

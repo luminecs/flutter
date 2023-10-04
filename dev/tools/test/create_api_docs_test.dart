@@ -99,8 +99,10 @@ void main() {
           ),
         ],
       );
-      apidocs.FlutterInformation.instance =
-          apidocs.FlutterInformation(platform: platform, processManager: processManager, filesystem: memoryFileSystem);
+      apidocs.FlutterInformation.instance = apidocs.FlutterInformation(
+          platform: platform,
+          processManager: processManager,
+          filesystem: memoryFileSystem);
 
       apidocs.runPubProcess(
         arguments: <String>['--one', '--two'],
@@ -120,7 +122,8 @@ void main() {
         command: <Pattern>['git', 'status', '-b', '--porcelain'],
         stdout: '## $branchName',
       ));
-      final Map<String, dynamic> info = flutterInformation.getFlutterInformation();
+      final Map<String, dynamic> info =
+          flutterInformation.getFlutterInformation();
       expect(fakeProcessManager, hasNoRemainingExpectations);
       expect(info['frameworkVersion'], equals(Version.parse('2.5.0')));
     });
@@ -132,11 +135,13 @@ void main() {
         command: <Pattern>['git', 'status', '-b', '--porcelain'],
         stdout: '## $branchName',
       ));
-      final Map<String, dynamic> info = flutterInformation.getFlutterInformation();
+      final Map<String, dynamic> info =
+          flutterInformation.getFlutterInformation();
       expect(fakeProcessManager, hasNoRemainingExpectations);
       expect(info['frameworkVersion'], equals(Version.parse('2.5.0')));
     });
-    test('getFlutterRoot calls out to flutter if FLUTTER_ROOT is not set', () async {
+    test('getFlutterRoot calls out to flutter if FLUTTER_ROOT is not set',
+        () async {
       fakeProcessManager.addCommand(const FakeCommand(
         command: <Pattern>['flutter', '--version', '--machine'],
         stdout: testVersionInfo,
@@ -149,8 +154,10 @@ void main() {
       expect(fakeProcessManager, hasNoRemainingExpectations);
       expect(root.path, equals('/home/user/flutter'));
     });
-    test("getFlutterRoot doesn't call out to flutter if FLUTTER_ROOT is set", () async {
-      setUpWithEnvironment(<String, String>{'FLUTTER_ROOT': '/home/user/flutter'});
+    test("getFlutterRoot doesn't call out to flutter if FLUTTER_ROOT is set",
+        () async {
+      setUpWithEnvironment(
+          <String, String>{'FLUTTER_ROOT': '/home/user/flutter'});
       final Directory root = flutterInformation.getFlutterRoot();
       expect(fakeProcessManager, hasNoRemainingExpectations);
       expect(root.path, equals('/home/user/flutter'));
@@ -161,7 +168,8 @@ void main() {
         command: <Pattern>['git', 'status', '-b', '--porcelain'],
         stdout: '## $branchName',
       ));
-      final Map<String, dynamic> info = flutterInformation.getFlutterInformation();
+      final Map<String, dynamic> info =
+          flutterInformation.getFlutterInformation();
       expect(info['frameworkVersion'], isNotNull);
       expect(info['frameworkVersion'], equals(Version.parse('2.5.0')));
       expect(info['dartSdkVersion'], isNotNull);
@@ -177,16 +185,22 @@ void main() {
       flutterHome.childFile('engine.realm')
         ..createSync(recursive: true)
         ..writeAsStringSync('realm');
-      setUpWithEnvironment(<String, String>{'FLUTTER_ROOT': '/home/user/flutter'});
+      setUpWithEnvironment(
+          <String, String>{'FLUTTER_ROOT': '/home/user/flutter'});
       fakeProcessManager.addCommand(const FakeCommand(
-        command: <Pattern>['/home/user/flutter/bin/flutter', '--version', '--machine'],
+        command: <Pattern>[
+          '/home/user/flutter/bin/flutter',
+          '--version',
+          '--machine'
+        ],
         stdout: testVersionInfo,
       ));
       fakeProcessManager.addCommand(const FakeCommand(
         command: <Pattern>['git', 'status', '-b', '--porcelain'],
         stdout: '## $branchName',
       ));
-      final Map<String, dynamic> info = flutterInformation.getFlutterInformation();
+      final Map<String, dynamic> info =
+          flutterInformation.getFlutterInformation();
       expect(fakeProcessManager, hasNoRemainingExpectations);
       expect(info['engineRealm'], equals('realm'));
     });

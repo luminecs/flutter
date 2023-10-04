@@ -22,7 +22,7 @@ class BitField<T extends dynamic> implements bitfield.BitField<T> {
   }
 
   @override
-  void reset([ bool value = false ]) {
+  void reset([bool value = false]) {
     throw UnsupportedError('Not supported when compiling to JavaScript');
   }
 }

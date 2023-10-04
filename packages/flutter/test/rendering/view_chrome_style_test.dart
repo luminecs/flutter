@@ -223,18 +223,21 @@ void main() {
       );
     });
 
-    testWidgets('Top AnnotatedRegion provides status bar overlay style and bottom AnnotatedRegion provides navigation bar overlay style', (WidgetTester tester) async {
+    testWidgets(
+        'Top AnnotatedRegion provides status bar overlay style and bottom AnnotatedRegion provides navigation bar overlay style',
+        (WidgetTester tester) async {
       setupTestDevice(tester);
       await tester.pumpWidget(
         const Column(children: <Widget>[
-          Expanded(child: AnnotatedRegion<SystemUiOverlayStyle>(
+          Expanded(
+              child: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
-              systemNavigationBarColor: Colors.blue,
-              statusBarColor: Colors.blue
-            ),
+                systemNavigationBarColor: Colors.blue,
+                statusBarColor: Colors.blue),
             child: SizedBox.expand(),
           )),
-          Expanded(child: AnnotatedRegion<SystemUiOverlayStyle>(
+          Expanded(
+              child: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
               systemNavigationBarColor: Colors.green,
               statusBarColor: Colors.green,
@@ -249,15 +252,17 @@ void main() {
       expect(SystemChrome.latestStyle?.systemNavigationBarColor, Colors.green);
     }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-    testWidgets('Top only AnnotatedRegion provides status bar and navigation bar style properties', (WidgetTester tester) async {
+    testWidgets(
+        'Top only AnnotatedRegion provides status bar and navigation bar style properties',
+        (WidgetTester tester) async {
       setupTestDevice(tester);
       await tester.pumpWidget(
         const Column(children: <Widget>[
-          Expanded(child: AnnotatedRegion<SystemUiOverlayStyle>(
+          Expanded(
+              child: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
-              systemNavigationBarColor: Colors.blue,
-              statusBarColor: Colors.blue
-            ),
+                systemNavigationBarColor: Colors.blue,
+                statusBarColor: Colors.blue),
             child: SizedBox.expand(),
           )),
           Expanded(child: SizedBox.expand()),
@@ -269,16 +274,18 @@ void main() {
       expect(SystemChrome.latestStyle?.systemNavigationBarColor, Colors.blue);
     }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-    testWidgets('Bottom only AnnotatedRegion provides status bar and navigation bar style properties', (WidgetTester tester) async {
+    testWidgets(
+        'Bottom only AnnotatedRegion provides status bar and navigation bar style properties',
+        (WidgetTester tester) async {
       setupTestDevice(tester);
       await tester.pumpWidget(
         const Column(children: <Widget>[
           Expanded(child: SizedBox.expand()),
-          Expanded(child: AnnotatedRegion<SystemUiOverlayStyle>(
+          Expanded(
+              child: AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
-              systemNavigationBarColor: Colors.green,
-              statusBarColor: Colors.green
-            ),
+                systemNavigationBarColor: Colors.green,
+                statusBarColor: Colors.green),
             child: SizedBox.expand(),
           )),
         ]),

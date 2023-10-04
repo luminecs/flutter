@@ -60,7 +60,9 @@ void main() {
     );
 
     expect(renderSliverOpacity.debugLayer, null);
-    layout(root, phase: EnginePhase.paint, constraints: BoxConstraints.tight(const Size(10, 10)));
+    layout(root,
+        phase: EnginePhase.paint,
+        constraints: BoxConstraints.tight(const Size(10, 10)));
     final ContainerLayer layer = renderSliverOpacity.debugLayer!;
     expect(layer, isNotNull);
 
@@ -72,12 +74,14 @@ void main() {
     expect(renderSliverOpacity.debugLayer, same(layer));
   });
 
-  test('RenderSliverAnimatedOpacity does not composite if it is transparent', () async {
+  test('RenderSliverAnimatedOpacity does not composite if it is transparent',
+      () async {
     final Animation<double> opacityAnimation = AnimationController(
       vsync: FakeTickerProvider(),
     )..value = 0.0;
 
-    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity = RenderSliverAnimatedOpacity(
+    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity =
+        RenderSliverAnimatedOpacity(
       opacity: opacityAnimation,
       sliver: RenderSliverToBoxAdapter(
         child: RenderSizedBox(const Size(1.0, 1.0)), // size doesn't matter
@@ -95,12 +99,14 @@ void main() {
     expect(renderSliverAnimatedOpacity.needsCompositing, false);
   });
 
-  test('RenderSliverAnimatedOpacity does composite if it is partially opaque', () {
+  test('RenderSliverAnimatedOpacity does composite if it is partially opaque',
+      () {
     final Animation<double> opacityAnimation = AnimationController(
       vsync: FakeTickerProvider(),
     )..value = 0.5;
 
-    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity = RenderSliverAnimatedOpacity(
+    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity =
+        RenderSliverAnimatedOpacity(
       opacity: opacityAnimation,
       sliver: RenderSliverToBoxAdapter(
         child: RenderSizedBox(const Size(1.0, 1.0)), // size doesn't matter
@@ -123,7 +129,8 @@ void main() {
       vsync: FakeTickerProvider(),
     )..value = 1.0;
 
-    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity = RenderSliverAnimatedOpacity(
+    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity =
+        RenderSliverAnimatedOpacity(
       opacity: opacityAnimation,
       sliver: RenderSliverToBoxAdapter(
         child: RenderSizedBox(const Size(1.0, 1.0)), // size doesn't matter
@@ -144,9 +151,10 @@ void main() {
   test('RenderSliverAnimatedOpacity reuses its layer', () {
     final Animation<double> opacityAnimation = AnimationController(
       vsync: FakeTickerProvider(),
-    )..value = 0.5;  // must not be 0 or 1.0. Otherwise, it won't create a layer
+    )..value = 0.5; // must not be 0 or 1.0. Otherwise, it won't create a layer
 
-    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity = RenderSliverAnimatedOpacity(
+    final RenderSliverAnimatedOpacity renderSliverAnimatedOpacity =
+        RenderSliverAnimatedOpacity(
       opacity: opacityAnimation,
       sliver: RenderSliverToBoxAdapter(
         child: RenderSizedBox(const Size(1.0, 1.0)), // size doesn't matter
@@ -161,7 +169,9 @@ void main() {
     );
 
     expect(renderSliverAnimatedOpacity.debugLayer, null);
-    layout(root, phase: EnginePhase.paint, constraints: BoxConstraints.tight(const Size(10, 10)));
+    layout(root,
+        phase: EnginePhase.paint,
+        constraints: BoxConstraints.tight(const Size(10, 10)));
     final ContainerLayer layer = renderSliverAnimatedOpacity.debugLayer!;
     expect(layer, isNotNull);
 

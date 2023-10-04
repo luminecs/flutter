@@ -1,11 +1,11 @@
 import 'message.dart';
 
 class SetSemantics extends Command {
-  const SetSemantics(this.enabled, { super.timeout });
+  const SetSemantics(this.enabled, {super.timeout});
 
   SetSemantics.deserialize(super.json)
-    : enabled = json['enabled']!.toLowerCase() == 'true',
-      super.deserialize();
+      : enabled = json['enabled']!.toLowerCase() == 'true',
+        super.deserialize();
 
   final bool enabled;
 
@@ -13,9 +13,10 @@ class SetSemantics extends Command {
   String get kind => 'set_semantics';
 
   @override
-  Map<String, String> serialize() => super.serialize()..addAll(<String, String>{
-    'enabled': '$enabled',
-  });
+  Map<String, String> serialize() => super.serialize()
+    ..addAll(<String, String>{
+      'enabled': '$enabled',
+    });
 }
 
 class SetSemanticsResult extends Result {
@@ -29,6 +30,6 @@ class SetSemanticsResult extends Result {
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'changedState': changedState,
-  };
+        'changedState': changedState,
+      };
 }

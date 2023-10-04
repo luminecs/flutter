@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const CharacterActivatorExampleApp());
 
 class CharacterActivatorExampleApp extends StatelessWidget {
@@ -27,7 +26,8 @@ class CharacterActivatorExample extends StatefulWidget {
   const CharacterActivatorExample({super.key});
 
   @override
-  State<CharacterActivatorExample> createState() => _CharacterActivatorExampleState();
+  State<CharacterActivatorExample> createState() =>
+      _CharacterActivatorExampleState();
 }
 
 class _CharacterActivatorExampleState extends State<CharacterActivatorExample> {

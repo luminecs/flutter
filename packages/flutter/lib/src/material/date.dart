@@ -8,24 +8,24 @@ abstract final class DateUtils {
   }
 
   static DateTimeRange datesOnly(DateTimeRange range) {
-    return DateTimeRange(start: dateOnly(range.start), end: dateOnly(range.end));
+    return DateTimeRange(
+        start: dateOnly(range.start), end: dateOnly(range.end));
   }
 
   static bool isSameDay(DateTime? dateA, DateTime? dateB) {
-    return
-      dateA?.year == dateB?.year &&
-      dateA?.month == dateB?.month &&
-      dateA?.day == dateB?.day;
+    return dateA?.year == dateB?.year &&
+        dateA?.month == dateB?.month &&
+        dateA?.day == dateB?.day;
   }
 
   static bool isSameMonth(DateTime? dateA, DateTime? dateB) {
-    return
-      dateA?.year == dateB?.year &&
-      dateA?.month == dateB?.month;
+    return dateA?.year == dateB?.year && dateA?.month == dateB?.month;
   }
 
   static int monthDelta(DateTime startDate, DateTime endDate) {
-    return (endDate.year - startDate.year) * 12 + endDate.month - startDate.month;
+    return (endDate.year - startDate.year) * 12 +
+        endDate.month -
+        startDate.month;
   }
 
   static DateTime addMonthsToMonthDate(DateTime monthDate, int monthsToAdd) {
@@ -36,7 +36,8 @@ abstract final class DateUtils {
     return DateTime(date.year, date.month, date.day + days);
   }
 
-  static int firstDayOffset(int year, int month, MaterialLocalizations localizations) {
+  static int firstDayOffset(
+      int year, int month, MaterialLocalizations localizations) {
     // 0-based day of week for the month and year, with 0 representing Monday.
     final int weekdayFromMonday = DateTime(year, month).weekday - 1;
 
@@ -54,10 +55,24 @@ abstract final class DateUtils {
 
   static int getDaysInMonth(int year, int month) {
     if (month == DateTime.february) {
-      final bool isLeapYear = (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
+      final bool isLeapYear =
+          (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0);
       return isLeapYear ? 29 : 28;
     }
-    const List<int> daysInMonth = <int>[31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const List<int> daysInMonth = <int>[
+      31,
+      -1,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31
+    ];
     return daysInMonth[month - 1];
   }
 }
@@ -98,9 +113,7 @@ class DateTimeRange {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is DateTimeRange
-      && other.start == start
-      && other.end == end;
+    return other is DateTimeRange && other.start == start && other.end == end;
   }
 
   @override

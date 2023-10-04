@@ -4,7 +4,8 @@ import 'framework.dart';
 import 'implicit_animations.dart';
 import 'value_listenable_builder.dart';
 
-class TweenAnimationBuilder<T extends Object?> extends ImplicitlyAnimatedWidget {
+class TweenAnimationBuilder<T extends Object?>
+    extends ImplicitlyAnimatedWidget {
   const TweenAnimationBuilder({
     super.key,
     required this.tween,
@@ -27,7 +28,8 @@ class TweenAnimationBuilder<T extends Object?> extends ImplicitlyAnimatedWidget 
   }
 }
 
-class _TweenAnimationBuilderState<T extends Object?> extends AnimatedWidgetBaseState<TweenAnimationBuilder<T>> {
+class _TweenAnimationBuilderState<T extends Object?>
+    extends AnimatedWidgetBaseState<TweenAnimationBuilder<T>> {
   Tween<T>? _currentTween;
 
   @override
@@ -48,12 +50,14 @@ class _TweenAnimationBuilderState<T extends Object?> extends AnimatedWidgetBaseS
     );
     _currentTween = visitor(_currentTween, widget.tween.end, (dynamic value) {
       assert(false);
-      throw StateError('Constructor will never be called because null is never provided as current tween.');
+      throw StateError(
+          'Constructor will never be called because null is never provided as current tween.');
     }) as Tween<T>?;
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, _currentTween!.evaluate(animation), widget.child);
+    return widget.builder(
+        context, _currentTween!.evaluate(animation), widget.child);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const TextButtonExampleApp());
 
 class TextButtonExampleApp extends StatelessWidget {

@@ -31,13 +31,14 @@ class CupertinoPicker extends StatefulWidget {
     required List<Widget> children,
     this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
     bool looping = false,
-  }) : assert(diameterRatio > 0.0, RenderListWheelViewport.diameterRatioZeroMessage),
-       assert(magnification > 0),
-       assert(itemExtent > 0),
-       assert(squeeze > 0),
-       childDelegate = looping
-                       ? ListWheelChildLoopingListDelegate(children: children)
-                       : ListWheelChildListDelegate(children: children);
+  })  : assert(diameterRatio > 0.0,
+            RenderListWheelViewport.diameterRatioZeroMessage),
+        assert(magnification > 0),
+        assert(itemExtent > 0),
+        assert(squeeze > 0),
+        childDelegate = looping
+            ? ListWheelChildLoopingListDelegate(children: children)
+            : ListWheelChildListDelegate(children: children);
 
   CupertinoPicker.builder({
     super.key,
@@ -53,11 +54,13 @@ class CupertinoPicker extends StatefulWidget {
     required NullableIndexedWidgetBuilder itemBuilder,
     int? childCount,
     this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
-  }) : assert(diameterRatio > 0.0, RenderListWheelViewport.diameterRatioZeroMessage),
-       assert(magnification > 0),
-       assert(itemExtent > 0),
-       assert(squeeze > 0),
-       childDelegate = ListWheelChildBuilderDelegate(builder: itemBuilder, childCount: childCount);
+  })  : assert(diameterRatio > 0.0,
+            RenderListWheelViewport.diameterRatioZeroMessage),
+        assert(magnification > 0),
+        assert(itemExtent > 0),
+        assert(squeeze > 0),
+        childDelegate = ListWheelChildBuilderDelegate(
+            builder: itemBuilder, childCount: childCount);
 
   final double diameterRatio;
 
@@ -102,7 +105,8 @@ class _CupertinoPickerState extends State<CupertinoPicker> {
     super.didUpdateWidget(oldWidget);
     if (widget.scrollController != null && oldWidget.scrollController == null) {
       _controller = null;
-    } else if (widget.scrollController == null && oldWidget.scrollController != null) {
+    } else if (widget.scrollController == null &&
+        oldWidget.scrollController != null) {
       assert(_controller == null);
       _controller = FixedExtentScrollController();
     }
@@ -153,12 +157,15 @@ class _CupertinoPickerState extends State<CupertinoPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = CupertinoTheme.of(context).textTheme.pickerTextStyle;
-    final Color? resolvedBackgroundColor = CupertinoDynamicColor.maybeResolve(widget.backgroundColor, context);
+    final TextStyle textStyle =
+        CupertinoTheme.of(context).textTheme.pickerTextStyle;
+    final Color? resolvedBackgroundColor =
+        CupertinoDynamicColor.maybeResolve(widget.backgroundColor, context);
 
     assert(RenderListWheelViewport.defaultPerspective == _kDefaultPerspective);
     final Widget result = DefaultTextStyle(
-      style: textStyle.copyWith(color: CupertinoDynamicColor.maybeResolve(textStyle.color, context)),
+      style: textStyle.copyWith(
+          color: CupertinoDynamicColor.maybeResolve(textStyle.color, context)),
       child: Stack(
         children: <Widget>[
           Positioned.fill(
@@ -193,7 +200,6 @@ class _CupertinoPickerState extends State<CupertinoPicker> {
 }
 
 class CupertinoPickerDefaultSelectionOverlay extends StatelessWidget {
-
   const CupertinoPickerDefaultSelectionOverlay({
     super.key,
     this.background = CupertinoColors.tertiarySystemFill,
@@ -248,11 +254,13 @@ class _CupertinoPickerSemantics extends SingleChildRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
-    return _RenderCupertinoPickerSemantics(scrollController, Directionality.of(context));
+    return _RenderCupertinoPickerSemantics(
+        scrollController, Directionality.of(context));
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderCupertinoPickerSemantics renderObject) {
+  void updateRenderObject(BuildContext context,
+      covariant _RenderCupertinoPickerSemantics renderObject) {
     assert(debugCheckHasDirectionality(context));
     renderObject
       ..textDirection = Directionality.of(context)
@@ -261,16 +269,19 @@ class _CupertinoPickerSemantics extends SingleChildRenderObjectWidget {
 }
 
 class _RenderCupertinoPickerSemantics extends RenderProxyBox {
-  _RenderCupertinoPickerSemantics(FixedExtentScrollController controller, this._textDirection) {
+  _RenderCupertinoPickerSemantics(
+      FixedExtentScrollController controller, this._textDirection) {
     _updateController(null, controller);
   }
 
   FixedExtentScrollController get controller => _controller;
   late FixedExtentScrollController _controller;
-  set controller(FixedExtentScrollController value) => _updateController(_controller, value);
+  set controller(FixedExtentScrollController value) =>
+      _updateController(_controller, value);
 
   // This method exists to allow controller to be non-null. It is only called with a null oldValue from constructor.
-  void _updateController(FixedExtentScrollController? oldValue, FixedExtentScrollController value) {
+  void _updateController(FixedExtentScrollController? oldValue,
+      FixedExtentScrollController value) {
     if (value == oldValue) {
       return;
     }
@@ -310,6 +321,7 @@ class _RenderCupertinoPickerSemantics extends RenderProxyBox {
     _currentIndex = controller.selectedItem;
     markNeedsSemanticsUpdate();
   }
+
   @override
   void describeSemanticsConfiguration(SemanticsConfiguration config) {
     super.describeSemanticsConfiguration(config);
@@ -318,7 +330,8 @@ class _RenderCupertinoPickerSemantics extends RenderProxyBox {
   }
 
   @override
-  void assembleSemanticsNode(SemanticsNode node, SemanticsConfiguration config, Iterable<SemanticsNode> children) {
+  void assembleSemanticsNode(SemanticsNode node, SemanticsConfiguration config,
+      Iterable<SemanticsNode> children) {
     if (children.isEmpty) {
       return super.assembleSemanticsNode(node, config, children);
     }

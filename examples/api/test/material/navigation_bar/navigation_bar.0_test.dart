@@ -9,7 +9,8 @@ void main() {
     await tester.pumpWidget(
       const example.NavigationBarApp(),
     );
-    final NavigationBar navigationBarWidget = tester.firstWidget(find.byType(NavigationBar));
+    final NavigationBar navigationBarWidget =
+        tester.firstWidget(find.byType(NavigationBar));
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Notifications'), findsOneWidget);

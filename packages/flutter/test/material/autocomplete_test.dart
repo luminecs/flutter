@@ -42,7 +42,8 @@ void main() {
     User(name: 'Charlie', email: 'charlie123@gmail.com'),
   ];
 
-  testWidgetsWithLeakTracking('can filter and select a list of string options', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('can filter and select a list of string options',
+      (WidgetTester tester) async {
     late String lastSelection;
     await tester.pumpWidget(
       MaterialApp(
@@ -87,7 +88,8 @@ void main() {
     await tester.pump();
     expect(find.byType(TextFormField), findsOneWidget);
     expect(find.byType(ListView), findsNothing);
-    final TextFormField field = find.byType(TextFormField).evaluate().first.widget as TextFormField;
+    final TextFormField field =
+        find.byType(TextFormField).evaluate().first.widget as TextFormField;
     expect(field.controller!.text, 'chameleon');
     expect(lastSelection, 'chameleon');
 
@@ -102,14 +104,18 @@ void main() {
     expect(list.semanticChildCount, 6);
   });
 
-  testWidgetsWithLeakTracking('can filter and select a list of custom User options', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'can filter and select a list of custom User options',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: Autocomplete<User>(
             optionsBuilder: (TextEditingValue textEditingValue) {
               return kOptionsUsers.where((User option) {
-                return option.toString().contains(textEditingValue.text.toLowerCase());
+                return option
+                    .toString()
+                    .contains(textEditingValue.text.toLowerCase());
               });
             },
           ),
@@ -143,7 +149,8 @@ void main() {
     await tester.pump();
     expect(find.byType(TextFormField), findsOneWidget);
     expect(find.byType(ListView), findsNothing);
-    final TextFormField field = find.byType(TextFormField).evaluate().first.widget as TextFormField;
+    final TextFormField field =
+        find.byType(TextFormField).evaluate().first.widget as TextFormField;
     expect(field.controller!.text, 'Alice, alice@example.com');
 
     // Modify the field text. The options appear again and are filtered.
@@ -156,7 +163,9 @@ void main() {
     expect(list.semanticChildCount, 1);
   });
 
-  testWidgetsWithLeakTracking('displayStringForOption is displayed in the options', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'displayStringForOption is displayed in the options',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -166,7 +175,9 @@ void main() {
             },
             optionsBuilder: (TextEditingValue textEditingValue) {
               return kOptionsUsers.where((User option) {
-                return option.toString().contains(textEditingValue.text.toLowerCase());
+                return option
+                    .toString()
+                    .contains(textEditingValue.text.toLowerCase());
               });
             },
           ),
@@ -183,7 +194,8 @@ void main() {
     await tester.tap(find.byType(TextFormField));
     await tester.pump();
     expect(find.byType(ListView), findsOneWidget);
-    final ListView list = find.byType(ListView).evaluate().first.widget as ListView;
+    final ListView list =
+        find.byType(ListView).evaluate().first.widget as ListView;
     expect(list.semanticChildCount, kOptionsUsers.length);
     for (int i = 0; i < kOptionsUsers.length; i++) {
       expect(find.text(kOptionsUsers[i].name), findsOneWidget);
@@ -195,11 +207,13 @@ void main() {
     await tester.pump();
     expect(find.byType(TextFormField), findsOneWidget);
     expect(find.byType(ListView), findsNothing);
-    final TextFormField field = find.byType(TextFormField).evaluate().first.widget as TextFormField;
+    final TextFormField field =
+        find.byType(TextFormField).evaluate().first.widget as TextFormField;
     expect(field.controller!.text, kOptionsUsers.first.name);
   });
 
-  testWidgetsWithLeakTracking('can build a custom field', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('can build a custom field',
+      (WidgetTester tester) async {
     final GlobalKey fieldKey = GlobalKey();
     await tester.pumpWidget(
       MaterialApp(
@@ -210,7 +224,10 @@ void main() {
                 return option.contains(textEditingValue.text.toLowerCase());
               });
             },
-            fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+            fieldViewBuilder: (BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted) {
               return Container(key: fieldKey);
             },
           ),
@@ -223,7 +240,8 @@ void main() {
     expect(find.byType(TextFormField), findsNothing);
   });
 
-  testWidgetsWithLeakTracking('can build custom options', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('can build custom options',
+      (WidgetTester tester) async {
     final GlobalKey optionsKey = GlobalKey();
     await tester.pumpWidget(
       MaterialApp(
@@ -234,7 +252,9 @@ void main() {
                 return option.contains(textEditingValue.text.toLowerCase());
               });
             },
-            optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+            optionsViewBuilder: (BuildContext context,
+                AutocompleteOnSelected<String> onSelected,
+                Iterable<String> options) {
               return Container(key: optionsKey);
             },
           ),
@@ -252,7 +272,9 @@ void main() {
     expect(find.byKey(optionsKey), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('the default Autocomplete options widget has a maximum height of 200', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'the default Autocomplete options widget has a maximum height of 200',
+      (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(
       body: Autocomplete<String>(
         optionsBuilder: (TextEditingValue textEditingValue) {
@@ -273,10 +295,12 @@ void main() {
     expect(resultingHeight, equals(200));
   });
 
-  testWidgetsWithLeakTracking('the options height restricts to max desired height', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'the options height restricts to max desired height',
+      (WidgetTester tester) async {
     const double desiredHeight = 150.0;
     await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
+        home: Scaffold(
       body: Autocomplete<String>(
         optionsMaxHeight: desiredHeight,
         optionsBuilder: (TextEditingValue textEditingValue) {
@@ -298,14 +322,17 @@ void main() {
     expect(resultingHeight, equals(desiredHeight));
   });
 
-  testWidgetsWithLeakTracking('The height of options shrinks to height of resulting items, if less than maxHeight', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'The height of options shrinks to height of resulting items, if less than maxHeight',
+      (WidgetTester tester) async {
     // Returns a Future with the height of the default [Autocomplete] options widget
     // after the provided text had been entered into the [Autocomplete] field.
     Future<double> getDefaultOptionsHeight(
         WidgetTester tester, String enteredText) async {
       final Finder listFinder = find.byType(ListView);
       final Finder inputFinder = find.byType(TextFormField);
-      final TextFormField field = inputFinder.evaluate().first.widget as TextFormField;
+      final TextFormField field =
+          inputFinder.evaluate().first.widget as TextFormField;
       field.controller!.clear();
       await tester.tap(inputFinder);
       await tester.enterText(inputFinder, enteredText);
@@ -316,7 +343,7 @@ void main() {
 
     const double maxOptionsHeight = 250.0;
     await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
+        home: Scaffold(
       body: Autocomplete<String>(
         optionsMaxHeight: maxOptionsHeight,
         optionsBuilder: (TextEditingValue textEditingValue) {
@@ -346,7 +373,8 @@ void main() {
     expect(oneItemsHeight, lessThan(twoItemsHeight));
   });
 
-  testWidgetsWithLeakTracking('initialValue sets initial text field value', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('initialValue sets initial text field value',
+      (WidgetTester tester) async {
     late String lastSelection;
     await tester.pumpWidget(
       MaterialApp(
@@ -378,7 +406,8 @@ void main() {
     await tester.tap(find.byType(TextFormField));
     await tester.pump();
     expect(find.byType(ListView), findsOneWidget);
-    final ListView list = find.byType(ListView).evaluate().first.widget as ListView;
+    final ListView list =
+        find.byType(ListView).evaluate().first.widget as ListView;
     // Displays just one option ('lemur').
     expect(list.semanticChildCount, 1);
 
@@ -388,7 +417,8 @@ void main() {
     await tester.pump();
     expect(find.byType(TextFormField), findsOneWidget);
     expect(find.byType(ListView), findsNothing);
-    final TextFormField field = find.byType(TextFormField).evaluate().first.widget as TextFormField;
+    final TextFormField field =
+        find.byType(TextFormField).evaluate().first.widget as TextFormField;
     expect(field.controller!.text, 'lemur');
     expect(lastSelection, 'lemur');
   });
@@ -396,7 +426,8 @@ void main() {
   // Ensures that the option with the given label has a given background color
   // if given, or no background if color is null.
   void checkOptionHighlight(WidgetTester tester, String label, Color? color) {
-    final RenderBox renderBox = tester.renderObject<RenderBox>(find.ancestor(matching: find.byType(Container), of: find.text(label)));
+    final RenderBox renderBox = tester.renderObject<RenderBox>(
+        find.ancestor(matching: find.byType(Container), of: find.text(label)));
     if (color != null) {
       // Check to see that the container is painted with the highlighted background color.
       expect(renderBox, paints..rect(color: color));
@@ -407,7 +438,9 @@ void main() {
     }
   }
 
-  testWidgetsWithLeakTracking('keyboard navigation of the options properly highlights the option', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'keyboard navigation of the options properly highlights the option',
+      (WidgetTester tester) async {
     const Color highlightColor = Color(0xFF112233);
     await tester.pumpWidget(
       MaterialApp(
@@ -430,7 +463,8 @@ void main() {
     await tester.enterText(find.byType(TextFormField), 'el');
     await tester.pump();
     expect(find.byType(ListView), findsOneWidget);
-    final ListView list = find.byType(ListView).evaluate().first.widget as ListView;
+    final ListView list =
+        find.byType(ListView).evaluate().first.widget as ListView;
     expect(list.semanticChildCount, 2);
 
     // Initially the first option should be highlighted
@@ -446,7 +480,9 @@ void main() {
     checkOptionHighlight(tester, 'elephant', highlightColor);
   });
 
-  testWidgetsWithLeakTracking('keyboard navigation keeps the highlighted option scrolled into view', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking(
+      'keyboard navigation keeps the highlighted option scrolled into view',
+      (WidgetTester tester) async {
     const Color highlightColor = Color(0xFF112233);
     await tester.pumpWidget(
       MaterialApp(
@@ -467,7 +503,8 @@ void main() {
     await tester.enterText(find.byType(TextFormField), 'e');
     await tester.pump();
     expect(find.byType(ListView), findsOneWidget);
-    final ListView list = find.byType(ListView).evaluate().first.widget as ListView;
+    final ListView list =
+        find.byType(ListView).evaluate().first.widget as ListView;
     expect(list.semanticChildCount, 6);
 
     final Rect optionsGroupRect = tester.getRect(find.byType(ListView));
@@ -481,7 +518,8 @@ void main() {
     );
 
     // Move down the list of options.
-    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown); // Select 'elephant'.
+    await tester
+        .sendKeyEvent(LogicalKeyboardKey.arrowDown); // Select 'elephant'.
     await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown); // Select 'goose'.
     await tester.pumpAndSettle();
@@ -515,13 +553,15 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) => <String>['a'],
+              optionsBuilder: (TextEditingValue textEditingValue) =>
+                  <String>['a'],
             ),
           ),
         ),
       );
-      final OptionsViewOpenDirection actual = tester.widget<RawAutocomplete<String>>(find.byType(RawAutocomplete<String>))
-        .optionsViewOpenDirection;
+      final OptionsViewOpenDirection actual = tester
+          .widget<RawAutocomplete<String>>(find.byType(RawAutocomplete<String>))
+          .optionsViewOpenDirection;
       expect(actual, equals(OptionsViewOpenDirection.down));
     });
 
@@ -530,14 +570,17 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Autocomplete<String>(
-              optionsViewOpenDirection: OptionsViewOpenDirection.down, // ignore: avoid_redundant_argument_values
-              optionsBuilder: (TextEditingValue textEditingValue) => <String>['a'],
+              optionsViewOpenDirection: OptionsViewOpenDirection
+                  .down, // ignore: avoid_redundant_argument_values
+              optionsBuilder: (TextEditingValue textEditingValue) =>
+                  <String>['a'],
             ),
           ),
         ),
       );
-      final OptionsViewOpenDirection actual = tester.widget<RawAutocomplete<String>>(find.byType(RawAutocomplete<String>))
-        .optionsViewOpenDirection;
+      final OptionsViewOpenDirection actual = tester
+          .widget<RawAutocomplete<String>>(find.byType(RawAutocomplete<String>))
+          .optionsViewOpenDirection;
       expect(actual, equals(OptionsViewOpenDirection.down));
     });
 
@@ -547,13 +590,15 @@ void main() {
           home: Scaffold(
             body: Autocomplete<String>(
               optionsViewOpenDirection: OptionsViewOpenDirection.up,
-              optionsBuilder: (TextEditingValue textEditingValue) => <String>['a'],
+              optionsBuilder: (TextEditingValue textEditingValue) =>
+                  <String>['a'],
             ),
           ),
         ),
       );
-      final OptionsViewOpenDirection actual = tester.widget<RawAutocomplete<String>>(find.byType(RawAutocomplete<String>))
-        .optionsViewOpenDirection;
+      final OptionsViewOpenDirection actual = tester
+          .widget<RawAutocomplete<String>>(find.byType(RawAutocomplete<String>))
+          .optionsViewOpenDirection;
       expect(actual, equals(OptionsViewOpenDirection.up));
     });
   });

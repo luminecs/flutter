@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const CustomListItemApp());
 
 class CustomListItemApp extends StatelessWidget {

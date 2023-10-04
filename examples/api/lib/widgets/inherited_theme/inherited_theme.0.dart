@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const InheritedThemeExampleApp());
 }
@@ -18,7 +17,8 @@ class MyAppBody extends StatelessWidget {
     // the new route pushed onto said navigator.
     // Themes are captured outside of the route's builder because when the
     // builder executes, the context may not be valid anymore.
-    final CapturedThemes themes = InheritedTheme.capture(from: context, to: navigator.context);
+    final CapturedThemes themes =
+        InheritedTheme.capture(from: context, to: navigator.context);
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(

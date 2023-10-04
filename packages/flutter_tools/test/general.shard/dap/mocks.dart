@@ -16,10 +16,14 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
     bool supportsRestart = true,
     FutureOr<void> Function(MockFlutterDebugAdapter adapter)? preAppStart,
   }) {
-    final StreamController<List<int>> stdinController = StreamController<List<int>>();
-    final StreamController<List<int>> stdoutController = StreamController<List<int>>();
-    final ByteStreamServerChannel channel = ByteStreamServerChannel(stdinController.stream, stdoutController.sink, null);
-    final ByteStreamServerChannel clientChannel = ByteStreamServerChannel(stdoutController.stream, stdinController.sink, null);
+    final StreamController<List<int>> stdinController =
+        StreamController<List<int>>();
+    final StreamController<List<int>> stdoutController =
+        StreamController<List<int>>();
+    final ByteStreamServerChannel channel = ByteStreamServerChannel(
+        stdinController.stream, stdoutController.sink, null);
+    final ByteStreamServerChannel clientChannel = ByteStreamServerChannel(
+        stdoutController.stream, stdinController.sink, null);
 
     return MockFlutterDebugAdapter._(
       channel,
@@ -59,18 +63,25 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
   @override
   bool get sendLogsToClient => false;
 
-  final StreamController<Map<String, Object?>> _dapToClientMessagesController = StreamController<Map<String, Object?>>.broadcast();
+  final StreamController<Map<String, Object?>> _dapToClientMessagesController =
+      StreamController<Map<String, Object?>>.broadcast();
 
-  Stream<Map<String, Object?>> get dapToClientMessages => _dapToClientMessagesController.stream;
+  Stream<Map<String, Object?>> get dapToClientMessages =>
+      _dapToClientMessagesController.stream;
 
   Stream<Map<String, Object?>> get dapToClientProgressEvents {
-    const List<String> progressEventTypes = <String>['progressStart', 'progressUpdate', 'progressEnd'];
+    const List<String> progressEventTypes = <String>[
+      'progressStart',
+      'progressUpdate',
+      'progressEnd'
+    ];
 
-    return dapToClientMessages
-        .where((Map<String, Object?> message) => progressEventTypes.contains(message['event'] as String?));
+    return dapToClientMessages.where((Map<String, Object?> message) =>
+        progressEventTypes.contains(message['event'] as String?));
   }
 
-  final List<Map<String, Object?>> dapToFlutterMessages = <Map<String, Object?>>[];
+  final List<Map<String, Object?>> dapToFlutterMessages =
+      <Map<String, Object?>>[];
 
   List<String> get dapToFlutterRequests => dapToFlutterMessages
       .map((Map<String, Object?> message) => message['method'] as String?)
@@ -117,7 +128,8 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
     if (message is Event && message.event == 'flutter.forwardedRequest') {
       final Map<String, Object?> body = message.body! as Map<String, Object?>;
       final String method = body['method']! as String;
-      final Map<String, Object?>? params = body['params'] as Map<String, Object?>?;
+      final Map<String, Object?>? params =
+          body['params'] as Map<String, Object?>?;
 
       final Object? result = _handleReverseRequest(method, params);
 
@@ -165,7 +177,8 @@ class MockFlutterDebugAdapter extends FlutterDebugAdapter {
     // If we were mocking debug mode, then simulate the debugger initializing.
     return enableDebugger
         ? Future<void>.value()
-        : throw StateError('Invalid attempt to wait for debuggerInitialized when not debugging');
+        : throw StateError(
+            'Invalid attempt to wait for debuggerInitialized when not debugging');
   }
 }
 
@@ -174,9 +187,12 @@ class MockFlutterTestDebugAdapter extends FlutterTestDebugAdapter {
     required FileSystem fileSystem,
     required Platform platform,
   }) {
-    final StreamController<List<int>> stdinController = StreamController<List<int>>();
-    final StreamController<List<int>> stdoutController = StreamController<List<int>>();
-    final ByteStreamServerChannel channel = ByteStreamServerChannel(stdinController.stream, stdoutController.sink, null);
+    final StreamController<List<int>> stdinController =
+        StreamController<List<int>>();
+    final StreamController<List<int>> stdoutController =
+        StreamController<List<int>>();
+    final ByteStreamServerChannel channel = ByteStreamServerChannel(
+        stdinController.stream, stdoutController.sink, null);
 
     return MockFlutterTestDebugAdapter._(
       stdinController.sink,
@@ -218,7 +234,8 @@ class MockFlutterTestDebugAdapter extends FlutterTestDebugAdapter {
     // If we were mocking debug mode, then simulate the debugger initializing.
     return enableDebugger
         ? Future<void>.value()
-        : throw StateError('Invalid attempt to wait for debuggerInitialized when not debugging');
+        : throw StateError(
+            'Invalid attempt to wait for debuggerInitialized when not debugging');
   }
 }
 

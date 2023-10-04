@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const StreamBuilderExampleApp());
 
 class StreamBuilderExampleApp extends StatelessWidget {

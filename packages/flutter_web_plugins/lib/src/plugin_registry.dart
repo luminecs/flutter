@@ -13,10 +13,8 @@ import 'package:flutter/services.dart';
 
 class Registrar extends BinaryMessenger {
   Registrar([
-    @Deprecated(
-      'This argument is ignored. '
-      'This feature was deprecated after v1.24.0-7.0.pre.'
-    )
+    @Deprecated('This argument is ignored. '
+        'This feature was deprecated after v1.24.0-7.0.pre.')
     BinaryMessenger? binaryMessenger,
   ]);
 
@@ -24,16 +22,15 @@ class Registrar extends BinaryMessenger {
     ui_web.setPluginHandler(handleFrameworkMessage);
   }
 
-  @Deprecated(
-    'Use handleFrameworkMessage instead. '
-    'This feature was deprecated after v1.24.0-7.0.pre.'
-  )
+  @Deprecated('Use handleFrameworkMessage instead. '
+      'This feature was deprecated after v1.24.0-7.0.pre.')
   @override
   Future<void> handlePlatformMessage(
     String channel,
     ByteData? data,
     ui.PlatformMessageResponseCallback? callback,
-  ) => handleFrameworkMessage(channel, data, callback);
+  ) =>
+      handleFrameworkMessage(channel, data, callback);
 
   Future<void> handleFrameworkMessage(
     String channel,
@@ -61,9 +58,8 @@ class Registrar extends BinaryMessenger {
   }
 
   @Deprecated(
-    'This property is redundant. It returns the object on which it is called. '
-    'This feature was deprecated after v1.24.0-7.0.pre.'
-  )
+      'This property is redundant. It returns the object on which it is called. '
+      'This feature was deprecated after v1.24.0-7.0.pre.')
   BinaryMessenger get messenger => this;
 
   final Map<String, MessageHandler> _handlers = <String, MessageHandler>{};
@@ -96,40 +92,29 @@ class Registrar extends BinaryMessenger {
   }
 }
 
-@Deprecated(
-  'Use Registrar instead. '
-  'This feature was deprecated after v1.26.0-18.0.pre.'
-)
+@Deprecated('Use Registrar instead. '
+    'This feature was deprecated after v1.26.0-18.0.pre.')
 class PluginRegistry extends Registrar {
-  @Deprecated(
-    'Use Registrar instead. '
-    'This feature was deprecated after v1.26.0-18.0.pre.'
-  )
+  @Deprecated('Use Registrar instead. '
+      'This feature was deprecated after v1.26.0-18.0.pre.')
   PluginRegistry([
-    @Deprecated(
-      'This argument is ignored. '
-      'This feature was deprecated after v1.26.0-18.0.pre.'
-    )
+    @Deprecated('This argument is ignored. '
+        'This feature was deprecated after v1.26.0-18.0.pre.')
     BinaryMessenger? binaryMessenger,
   ]) : super();
 
   @Deprecated(
-    'This method is redundant. It returns the object on which it is called. '
-    'This feature was deprecated after v1.26.0-18.0.pre.'
-  )
+      'This method is redundant. It returns the object on which it is called. '
+      'This feature was deprecated after v1.26.0-18.0.pre.')
   Registrar registrarFor(Type key) => this;
 }
 
 final Registrar webPluginRegistrar = PluginRegistry();
 
-@Deprecated(
-  'Use webPluginRegistrar instead. '
-  'This feature was deprecated after v1.24.0-7.0.pre.'
-)
+@Deprecated('Use webPluginRegistrar instead. '
+    'This feature was deprecated after v1.24.0-7.0.pre.')
 PluginRegistry get webPluginRegistry => webPluginRegistrar as PluginRegistry;
 
-@Deprecated(
-  'Use webPluginRegistrar instead. '
-  'This feature was deprecated after v1.24.0-7.0.pre.'
-)
+@Deprecated('Use webPluginRegistrar instead. '
+    'This feature was deprecated after v1.24.0-7.0.pre.')
 BinaryMessenger get pluginBinaryMessenger => webPluginRegistrar;

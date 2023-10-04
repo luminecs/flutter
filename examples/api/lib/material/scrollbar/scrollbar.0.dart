@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ScrollbarExampleApp());
 
 class ScrollbarExampleApp extends StatelessWidget {
@@ -26,7 +25,8 @@ class ScrollbarExample extends StatelessWidget {
       child: GridView.builder(
         primary: true,
         itemCount: 120,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         itemBuilder: (BuildContext context, int index) {
           return Center(
             child: Text('item $index'),

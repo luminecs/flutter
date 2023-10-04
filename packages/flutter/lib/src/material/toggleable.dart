@@ -12,7 +12,8 @@ const Duration _kToggleDuration = Duration(milliseconds: 200);
 const Duration _kReactionFadeDuration = Duration(milliseconds: 50);
 
 @optionalTypeArgs
-mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin<S> {
+mixin ToggleableStateMixin<S extends StatefulWidget>
+    on TickerProviderStateMixin<S> {
   AnimationController get positionController => _positionController;
   late AnimationController _positionController;
 
@@ -143,7 +144,9 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
 
   void _handleTapEnd([TapUpDetails? _]) {
     if (_downPosition != null) {
-      setState(() { _downPosition = null; });
+      setState(() {
+        _downPosition = null;
+      });
     }
     _reactionController.reverse();
   }
@@ -151,7 +154,9 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
   bool _focused = false;
   void _handleFocusHighlightChanged(bool focused) {
     if (focused != _focused) {
-      setState(() { _focused = focused; });
+      setState(() {
+        _focused = focused;
+      });
       if (focused) {
         _reactionFocusFadeController.forward();
       } else {
@@ -163,7 +168,9 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
   bool _hovering = false;
   void _handleHoverChanged(bool hovering) {
     if (hovering != _hovering) {
-      setState(() { _hovering = hovering; });
+      setState(() {
+        _hovering = hovering;
+      });
       if (hovering) {
         _reactionHoverFadeController.forward();
       } else {
@@ -173,11 +180,11 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
   }
 
   Set<MaterialState> get states => <MaterialState>{
-    if (!isInteractive) MaterialState.disabled,
-    if (_hovering) MaterialState.hovered,
-    if (_focused) MaterialState.focused,
-    if (value ?? true) MaterialState.selected,
-  };
+        if (!isInteractive) MaterialState.disabled,
+        if (_hovering) MaterialState.hovered,
+        if (_focused) MaterialState.focused,
+        if (value ?? true) MaterialState.selected,
+      };
 
   Widget buildToggleable({
     FocusNode? focusNode,
@@ -214,7 +221,8 @@ mixin ToggleableStateMixin<S extends StatefulWidget> on TickerProviderStateMixin
   }
 }
 
-abstract class ToggleablePainter extends ChangeNotifier implements CustomPainter {
+abstract class ToggleablePainter extends ChangeNotifier
+    implements CustomPainter {
   Animation<double> get position => _position!;
   Animation<double>? _position;
   set position(Animation<double> value) {
@@ -368,7 +376,9 @@ abstract class ToggleablePainter extends ChangeNotifier implements CustomPainter
     Offset offset = Offset.zero,
     required Offset origin,
   }) {
-    if (!reaction.isDismissed || !reactionFocusFade.isDismissed || !reactionHoverFade.isDismissed) {
+    if (!reaction.isDismissed ||
+        !reactionFocusFade.isDismissed ||
+        !reactionHoverFade.isDismissed) {
       final Paint reactionPaint = Paint()
         ..color = Color.lerp(
           Color.lerp(
@@ -391,7 +401,6 @@ abstract class ToggleablePainter extends ChangeNotifier implements CustomPainter
       }
     }
   }
-
 
   @override
   void dispose() {

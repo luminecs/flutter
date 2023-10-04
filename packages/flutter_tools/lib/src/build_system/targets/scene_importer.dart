@@ -19,9 +19,9 @@ class DevelopmentSceneImporter {
     required SceneImporter sceneImporter,
     required FileSystem fileSystem,
     @visibleForTesting math.Random? random,
-  }) : _sceneImporter = sceneImporter,
-       _fileSystem = fileSystem,
-       _random = random ?? math.Random();
+  })  : _sceneImporter = sceneImporter,
+        _fileSystem = fileSystem,
+        _random = random ?? math.Random();
 
   final SceneImporter _sceneImporter;
   final FileSystem _fileSystem;
@@ -29,7 +29,8 @@ class DevelopmentSceneImporter {
   final math.Random _random;
 
   Future<DevFSContent?> reimportScene(DevFSContent inputScene) async {
-    final File output = _fileSystem.systemTempDirectory.childFile('${_random.nextDouble()}.temp');
+    final File output = _fileSystem.systemTempDirectory
+        .childFile('${_random.nextDouble()}.temp');
     late File inputFile;
     bool cleanupInput = false;
     Uint8List result;
@@ -39,7 +40,8 @@ class DevelopmentSceneImporter {
       if (inputScene is DevFSFileContent) {
         inputFile = inputScene.file as File;
       } else {
-        inputFile = _fileSystem.systemTempDirectory.childFile('${_random.nextDouble()}.temp');
+        inputFile = _fileSystem.systemTempDirectory
+            .childFile('${_random.nextDouble()}.temp');
         inputFile.writeAsBytesSync(await inputScene.contentsAsBytes());
         cleanupInput = true;
       }

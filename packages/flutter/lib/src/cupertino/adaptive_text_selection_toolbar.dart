@@ -32,25 +32,24 @@ class CupertinoAdaptiveTextSelectionToolbar extends StatelessWidget {
     required VoidCallback? onShare,
     required VoidCallback? onLiveTextInput,
     required this.anchors,
-  }) : children = null,
-       buttonItems = EditableText.getEditableButtonItems(
-         clipboardStatus: clipboardStatus,
-         onCopy: onCopy,
-         onCut: onCut,
-         onPaste: onPaste,
-         onSelectAll: onSelectAll,
-         onLookUp: onLookUp,
-         onSearchWeb: onSearchWeb,
-         onShare: onShare,
-         onLiveTextInput: onLiveTextInput
-       );
+  })  : children = null,
+        buttonItems = EditableText.getEditableButtonItems(
+            clipboardStatus: clipboardStatus,
+            onCopy: onCopy,
+            onCut: onCut,
+            onPaste: onPaste,
+            onSelectAll: onSelectAll,
+            onLookUp: onLookUp,
+            onSearchWeb: onSearchWeb,
+            onShare: onShare,
+            onLiveTextInput: onLiveTextInput);
 
   CupertinoAdaptiveTextSelectionToolbar.editableText({
     super.key,
     required EditableTextState editableTextState,
-  }) : children = null,
-       buttonItems = editableTextState.contextMenuButtonItems,
-       anchors = editableTextState.contextMenuAnchors;
+  })  : children = null,
+        buttonItems = editableTextState.contextMenuButtonItems,
+        anchors = editableTextState.contextMenuAnchors;
 
   CupertinoAdaptiveTextSelectionToolbar.selectable({
     super.key,
@@ -58,12 +57,12 @@ class CupertinoAdaptiveTextSelectionToolbar extends StatelessWidget {
     required VoidCallback onSelectAll,
     required SelectionGeometry selectionGeometry,
     required this.anchors,
-  }) : children = null,
-       buttonItems = SelectableRegion.getSelectableButtonItems(
-         selectionGeometry: selectionGeometry,
-         onCopy: onCopy,
-         onSelectAll: onSelectAll,
-       );
+  })  : children = null,
+        buttonItems = SelectableRegion.getSelectableButtonItems(
+          selectionGeometry: selectionGeometry,
+          onCopy: onCopy,
+          onSelectAll: onSelectAll,
+        );
 
   final TextSelectionToolbarAnchors anchors;
 
@@ -71,7 +70,8 @@ class CupertinoAdaptiveTextSelectionToolbar extends StatelessWidget {
 
   final List<ContextMenuButtonItem>? buttonItems;
 
-  static Iterable<Widget> getAdaptiveButtons(BuildContext context, List<ContextMenuButtonItem> buttonItems) {
+  static Iterable<Widget> getAdaptiveButtons(
+      BuildContext context, List<ContextMenuButtonItem> buttonItems) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -99,8 +99,8 @@ class CupertinoAdaptiveTextSelectionToolbar extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final List<Widget> resultChildren = children
-        ?? getAdaptiveButtons(context, buttonItems!).toList();
+    final List<Widget> resultChildren =
+        children ?? getAdaptiveButtons(context, buttonItems!).toList();
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:

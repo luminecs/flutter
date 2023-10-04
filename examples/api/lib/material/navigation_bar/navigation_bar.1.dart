@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const NavigationBarApp());
 
 class NavigationBarApp extends StatelessWidget {
@@ -21,7 +20,8 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
-  NavigationDestinationLabelBehavior labelBehavior = NavigationDestinationLabelBehavior.alwaysShow;
+  NavigationDestinationLabelBehavior labelBehavior =
+      NavigationDestinationLabelBehavior.alwaysShow;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,8 @@ class _NavigationExampleState extends State<NavigationExample> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      labelBehavior = NavigationDestinationLabelBehavior.alwaysShow;
+                      labelBehavior =
+                          NavigationDestinationLabelBehavior.alwaysShow;
                     });
                   },
                   child: const Text('alwaysShow'),
@@ -70,7 +71,8 @@ class _NavigationExampleState extends State<NavigationExample> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      labelBehavior = NavigationDestinationLabelBehavior.onlyShowSelected;
+                      labelBehavior =
+                          NavigationDestinationLabelBehavior.onlyShowSelected;
                     });
                   },
                   child: const Text('onlyShowSelected'),
@@ -78,7 +80,8 @@ class _NavigationExampleState extends State<NavigationExample> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      labelBehavior = NavigationDestinationLabelBehavior.alwaysHide;
+                      labelBehavior =
+                          NavigationDestinationLabelBehavior.alwaysHide;
                     });
                   },
                   child: const Text('alwaysHide'),

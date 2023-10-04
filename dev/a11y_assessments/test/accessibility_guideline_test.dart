@@ -5,7 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   for (final UseCase useCase in useCases) {
-    testWidgets('testing accessibility guideline for ${useCase.name}', (WidgetTester tester) async {
+    testWidgets('testing accessibility guideline for ${useCase.name}',
+        (WidgetTester tester) async {
       await tester.pumpWidget(const App());
       await tester.tap(find.byKey(Key(useCase.name)));
       await tester.pumpAndSettle();

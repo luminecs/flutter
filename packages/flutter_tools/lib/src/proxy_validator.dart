@@ -15,9 +15,9 @@ class ProxyValidator extends DoctorValidator {
   final String _noProxy;
 
   static String _getEnv(String key, Platform platform) =>
-    platform.environment[key.toLowerCase()]?.trim() ??
-    platform.environment[key.toUpperCase()]?.trim() ??
-    '';
+      platform.environment[key.toLowerCase()]?.trim() ??
+      platform.environment[key.toUpperCase()]?.trim() ??
+      '';
 
   @override
   Future<ValidationResult> validate() async {
@@ -30,19 +30,18 @@ class ProxyValidator extends DoctorValidator {
       const ValidationMessage('HTTP_PROXY is set'),
       if (_noProxy.isEmpty)
         const ValidationMessage.hint('NO_PROXY is not set')
-      else
-        ...<ValidationMessage>[
-          ValidationMessage('NO_PROXY is $_noProxy'),
-          for (final String host in await _getLoopbackAddresses())
-            if (_noProxy.contains(host))
-              ValidationMessage('NO_PROXY contains $host')
-            else
-              ValidationMessage.hint('NO_PROXY does not contain $host'),
-        ],
+      else ...<ValidationMessage>[
+        ValidationMessage('NO_PROXY is $_noProxy'),
+        for (final String host in await _getLoopbackAddresses())
+          if (_noProxy.contains(host))
+            ValidationMessage('NO_PROXY contains $host')
+          else
+            ValidationMessage.hint('NO_PROXY does not contain $host'),
+      ],
     ];
 
-    final bool hasIssues = messages.any(
-      (ValidationMessage msg) => msg.isHint || msg.isError);
+    final bool hasIssues =
+        messages.any((ValidationMessage msg) => msg.isHint || msg.isError);
 
     return ValidationResult(
       hasIssues ? ValidationType.partial : ValidationType.success,
@@ -54,10 +53,12 @@ class ProxyValidator extends DoctorValidator {
     final List<String> loopBackAddresses = <String>['localhost'];
 
     final List<NetworkInterface> networkInterfaces =
-      await listNetworkInterfaces(includeLinkLocal: true, includeLoopback: true);
+        await listNetworkInterfaces(
+            includeLinkLocal: true, includeLoopback: true);
 
     for (final NetworkInterface networkInterface in networkInterfaces) {
-      for (final InternetAddress internetAddress in networkInterface.addresses) {
+      for (final InternetAddress internetAddress
+          in networkInterface.addresses) {
         if (internetAddress.isLoopback) {
           loopBackAddresses.add(internetAddress.address);
         }

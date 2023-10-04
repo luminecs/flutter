@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const RadioListTileApp());
 
 class RadioListTileApp extends StatelessWidget {

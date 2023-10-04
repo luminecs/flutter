@@ -6,14 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const String kAnimatedGif = 'R0lGODlhAQABAKEDAAAA//8AAAD/AP///yH/C05FVFNDQVBFMi'
-                            '4wAwEAAAAh+QQACgD/ACwAAAAAAQABAAACAkwBACH5BAAKAP8A'
-                            'LAAAAAABAAEAAAICVAEAIfkEAAoA/wAsAAAAAAEAAQAAAgJEAQ'
-                            'A7';
+    '4wAwEAAAAh+QQACgD/ACwAAAAAAQABAAACAkwBACH5BAAKAP8A'
+    'LAAAAAABAAEAAAICVAEAIfkEAAoA/wAsAAAAAAEAAQAAAgJEAQ'
+    'A7';
 
 const String kBlueSquare = 'iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAASEl'
-                           'EQVR42u3PMQ0AMAgAsGFjL/4tYQU08JLWQSN/9TsgRERERERERE'
-                           'REREREREREREREREREREREREREREREREREREREREQ2BgNuaUcSj'
-                           'uqqAAAAAElFTkSuQmCC';
+    'EQVR42u3PMQ0AMAgAsGFjL/4tYQU08JLWQSN/9TsgRERERERERE'
+    'REREREREREREREREREREREREREREREREREREREREQ2BgNuaUcSj'
+    'uqqAAAAAElFTkSuQmCC';
 
 class AnimatedPlaceholderPage extends StatelessWidget {
   const AnimatedPlaceholderPage({super.key});
@@ -22,11 +22,13 @@ class AnimatedPlaceholderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       itemCount: 100,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 10),
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 10),
       itemBuilder: (BuildContext context, int index) {
         return FadeInImage(
           placeholder: const DelayedBase64Image(Duration.zero, kAnimatedGif),
-          image: DelayedBase64Image(Duration(milliseconds: 100 * index), kBlueSquare),
+          image: DelayedBase64Image(
+              Duration(milliseconds: 100 * index), kBlueSquare),
         );
       },
     );
@@ -34,6 +36,7 @@ class AnimatedPlaceholderPage extends StatelessWidget {
 }
 
 int _key = 0;
+
 class DelayedBase64Image extends ImageProvider<int> {
   const DelayedBase64Image(this.delay, this.data);
 
@@ -51,7 +54,8 @@ class DelayedBase64Image extends ImageProvider<int> {
     return MultiFrameImageStreamCompleter(
       codec: Future<ui.Codec>.delayed(
         delay,
-        () async => decode(await ImmutableBuffer.fromUint8List(base64.decode(data))),
+        () async =>
+            decode(await ImmutableBuffer.fromUint8List(base64.decode(data))),
       ),
       scale: 1.0,
     );

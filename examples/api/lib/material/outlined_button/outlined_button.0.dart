@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const OutlinedButtonExampleApp());
 
 class OutlinedButtonExampleApp extends StatelessWidget {

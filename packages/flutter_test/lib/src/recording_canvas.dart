@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 class RecordedInvocation {
-  const RecordedInvocation(this.invocation, { required this.stack });
+  const RecordedInvocation(this.invocation, {required this.stack});
 
   final Invocation invocation;
 
@@ -11,10 +11,11 @@ class RecordedInvocation {
   @override
   String toString() => _describeInvocation(invocation);
 
-  String stackToString({ String indent = '' }) {
-    return indent + FlutterError.defaultStackFilter(
-      stack.toString().trimRight().split('\n'),
-    ).join('\n$indent');
+  String stackToString({String indent = ''}) {
+    return indent +
+        FlutterError.defaultStackFilter(
+          stack.toString().trimRight().split('\n'),
+        ).join('\n$indent');
   }
 }
 
@@ -32,20 +33,24 @@ class TestRecordingCanvas implements Canvas {
   @override
   void save() {
     _saveCount += 1;
-    invocations.add(RecordedInvocation(_MethodCall(#save), stack: StackTrace.current));
+    invocations
+        .add(RecordedInvocation(_MethodCall(#save), stack: StackTrace.current));
   }
 
   @override
   void saveLayer(Rect? bounds, Paint paint) {
     _saveCount += 1;
-    invocations.add(RecordedInvocation(_MethodCall(#saveLayer, <dynamic>[bounds, paint]), stack: StackTrace.current));
+    invocations.add(RecordedInvocation(
+        _MethodCall(#saveLayer, <dynamic>[bounds, paint]),
+        stack: StackTrace.current));
   }
 
   @override
   void restore() {
     _saveCount -= 1;
     assert(_saveCount >= 0);
-    invocations.add(RecordedInvocation(_MethodCall(#restore), stack: StackTrace.current));
+    invocations.add(
+        RecordedInvocation(_MethodCall(#restore), stack: StackTrace.current));
   }
 
   @override
@@ -54,7 +59,8 @@ class TestRecordingCanvas implements Canvas {
   }
 }
 
-class TestRecordingPaintingContext extends ClipContext implements PaintingContext {
+class TestRecordingPaintingContext extends ClipContext
+    implements PaintingContext {
   TestRecordingPaintingContext(this.canvas);
 
   final List<OpacityLayer> _createdLayers = <OpacityLayer>[];
@@ -76,7 +82,8 @@ class TestRecordingPaintingContext extends ClipContext implements PaintingContex
     Clip clipBehavior = Clip.hardEdge,
     ClipRectLayer? oldLayer,
   }) {
-    clipRectAndPaint(clipRect.shift(offset), clipBehavior, clipRect.shift(offset), () => painter(this, offset));
+    clipRectAndPaint(clipRect.shift(offset), clipBehavior,
+        clipRect.shift(offset), () => painter(this, offset));
     return null;
   }
 
@@ -90,7 +97,8 @@ class TestRecordingPaintingContext extends ClipContext implements PaintingContex
     Clip clipBehavior = Clip.antiAlias,
     ClipRRectLayer? oldLayer,
   }) {
-    clipRRectAndPaint(clipRRect.shift(offset), clipBehavior, bounds.shift(offset), () => painter(this, offset));
+    clipRRectAndPaint(clipRRect.shift(offset), clipBehavior,
+        bounds.shift(offset), () => painter(this, offset));
     return null;
   }
 
@@ -104,7 +112,8 @@ class TestRecordingPaintingContext extends ClipContext implements PaintingContex
     Clip clipBehavior = Clip.antiAlias,
     ClipPathLayer? oldLayer,
   }) {
-    clipPathAndPaint(clipPath.shift(offset), clipBehavior, bounds.shift(offset), () => painter(this, offset));
+    clipPathAndPaint(clipPath.shift(offset), clipBehavior, bounds.shift(offset),
+        () => painter(this, offset));
     return null;
   }
 
@@ -160,11 +169,11 @@ class TestRecordingPaintingContext extends ClipContext implements PaintingContex
   VoidCallback addCompositionCallback(CompositionCallback callback) => () {};
 
   @override
-  void noSuchMethod(Invocation invocation) { }
+  void noSuchMethod(Invocation invocation) {}
 }
 
 class _MethodCall implements Invocation {
-  _MethodCall(this._name, [ this._arguments = const <dynamic>[]]);
+  _MethodCall(this._name, [this._arguments = const <dynamic>[]]);
   final Symbol _name;
   final List<dynamic> _arguments;
   @override
@@ -182,7 +191,7 @@ class _MethodCall implements Invocation {
   @override
   List<dynamic> get positionalArguments => _arguments;
   @override
-  List<Type> get typeArguments => const <Type> [];
+  List<Type> get typeArguments => const <Type>[];
 }
 
 String _valueName(Object? value) {

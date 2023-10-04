@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AnimatedPositionedExampleApp());
 
 class AnimatedPositionedExampleApp extends StatelessWidget {
@@ -23,7 +22,8 @@ class AnimatedPositionedExample extends StatefulWidget {
   const AnimatedPositionedExample({super.key});
 
   @override
-  State<AnimatedPositionedExample> createState() => _AnimatedPositionedExampleState();
+  State<AnimatedPositionedExample> createState() =>
+      _AnimatedPositionedExampleState();
 }
 
 class _AnimatedPositionedExampleState extends State<AnimatedPositionedExample> {

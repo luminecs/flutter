@@ -4,7 +4,7 @@ import 'colors.dart';
 
 const Color _kThumbBorderColor = Color(0x0A000000);
 
-const List<BoxShadow> _kSwitchBoxShadows = <BoxShadow> [
+const List<BoxShadow> _kSwitchBoxShadows = <BoxShadow>[
   BoxShadow(
     color: Color(0x26000000),
     offset: Offset(0, 3),
@@ -17,7 +17,7 @@ const List<BoxShadow> _kSwitchBoxShadows = <BoxShadow> [
   ),
 ];
 
-const List<BoxShadow> _kSliderBoxShadows = <BoxShadow> [
+const List<BoxShadow> _kSliderBoxShadows = <BoxShadow>[
   BoxShadow(
     color: Color(0x26000000),
     offset: Offset(0, 3),

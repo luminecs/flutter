@@ -1,4 +1,5 @@
-import 'package:flutter_api_samples/widgets/app_lifecycle_listener/app_lifecycle_listener.1.dart' as example;
+import 'package:flutter_api_samples/widgets/app_lifecycle_listener/app_lifecycle_listener.1.dart'
+    as example;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

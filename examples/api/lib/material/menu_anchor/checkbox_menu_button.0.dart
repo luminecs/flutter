@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 void main() => runApp(const MenuApp());
 
 class MyCheckboxMenu extends StatefulWidget {
@@ -15,7 +14,8 @@ class MyCheckboxMenu extends StatefulWidget {
 
 class _MyCheckboxMenuState extends State<MyCheckboxMenu> {
   final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
-  static const SingleActivator _showShortcut = SingleActivator(LogicalKeyboardKey.keyS, control: true);
+  static const SingleActivator _showShortcut =
+      SingleActivator(LogicalKeyboardKey.keyS, control: true);
   bool _showingMessage = false;
 
   @override
@@ -52,7 +52,8 @@ class _MyCheckboxMenuState extends State<MyCheckboxMenu> {
                 child: const Text('Show Message'),
               ),
             ],
-            builder: (BuildContext context, MenuController controller, Widget? child) {
+            builder: (BuildContext context, MenuController controller,
+                Widget? child) {
               return TextButton(
                 focusNode: _buttonFocusNode,
                 onPressed: () {
@@ -98,7 +99,8 @@ class MenuApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
-      home: const Scaffold(body: SafeArea(child: MyCheckboxMenu(message: kMessage))),
+      home: const Scaffold(
+          body: SafeArea(child: MyCheckboxMenu(message: kMessage))),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-
 void main() {
   // Slow down time to see Hero flight animation.
   timeDilation = 15.0;

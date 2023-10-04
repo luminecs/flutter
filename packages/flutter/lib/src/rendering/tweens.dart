@@ -2,14 +2,14 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 
 class FractionalOffsetTween extends Tween<FractionalOffset?> {
-  FractionalOffsetTween({ super.begin, super.end });
+  FractionalOffsetTween({super.begin, super.end});
 
   @override
   FractionalOffset? lerp(double t) => FractionalOffset.lerp(begin, end, t);
 }
 
 class AlignmentTween extends Tween<Alignment> {
-  AlignmentTween({ super.begin, super.end });
+  AlignmentTween({super.begin, super.end});
 
   @override
   Alignment lerp(double t) => Alignment.lerp(begin, end, t)!;

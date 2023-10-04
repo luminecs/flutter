@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const IndexedStackApp());
 
 class IndexedStackApp extends StatelessWidget {
@@ -71,7 +70,9 @@ class _IndexedStackExampleState extends State<IndexedStackExample> {
               children: <Widget>[
                 IndexedStack(
                   index: index,
-                  children: <Widget>[for (final String name in names) PersonTracker(name: name)],
+                  children: <Widget>[
+                    for (final String name in names) PersonTracker(name: name)
+                  ],
                 )
               ],
             ),

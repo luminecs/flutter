@@ -18,7 +18,8 @@ typedef AnimatableCallback<T> = T Function(double);
 abstract class Animatable<T> {
   const Animatable();
 
-  const factory Animatable.fromCallback(AnimatableCallback<T> callback) = _CallbackAnimatable<T>;
+  const factory Animatable.fromCallback(AnimatableCallback<T> callback) =
+      _CallbackAnimatable<T>;
 
   T transform(double t);
 
@@ -45,7 +46,8 @@ class _CallbackAnimatable<T> extends Animatable<T> {
   }
 }
 
-class _AnimatedEvaluation<T> extends Animation<T> with AnimationWithParentMixin<double> {
+class _AnimatedEvaluation<T> extends Animation<T>
+    with AnimationWithParentMixin<double> {
   _AnimatedEvaluation(this.parent, this._evaluatable);
 
   @override
@@ -104,7 +106,8 @@ class Tween<T extends Object?> extends Animatable<T> {
       dynamic result;
       try {
         // ignore: avoid_dynamic_calls
-        result = (begin as dynamic) + ((end as dynamic) - (begin as dynamic)) * t;
+        result =
+            (begin as dynamic) + ((end as dynamic) - (begin as dynamic)) * t;
         result as T;
         return true;
       } on NoSuchMethodError {
@@ -135,7 +138,8 @@ class Tween<T extends Object?> extends Animatable<T> {
             'for more information.',
           ),
           if (begin is int || end is int)
-            ErrorHint('To lerp int values, consider IntTween or StepTween instead.')
+            ErrorHint(
+                'To lerp int values, consider IntTween or StepTween instead.')
           else
             ErrorHint(
               'There may be a dedicated "${begin.runtimeType}Tween" for this type, '
@@ -145,7 +149,8 @@ class Tween<T extends Object?> extends Animatable<T> {
       }
     }());
     // ignore: avoid_dynamic_calls
-    return (begin as dynamic) + ((end as dynamic) - (begin as dynamic)) * t as T;
+    return (begin as dynamic) + ((end as dynamic) - (begin as dynamic)) * t
+        as T;
   }
 
   @override
@@ -160,12 +165,12 @@ class Tween<T extends Object?> extends Animatable<T> {
   }
 
   @override
-  String toString() => '${objectRuntimeType(this, 'Animatable')}($begin \u2192 $end)';
+  String toString() =>
+      '${objectRuntimeType(this, 'Animatable')}($begin \u2192 $end)';
 }
 
 class ReverseTween<T extends Object?> extends Tween<T> {
-  ReverseTween(this.parent)
-    : super(begin: parent.end, end: parent.begin);
+  ReverseTween(this.parent) : super(begin: parent.end, end: parent.begin);
 
   final Tween<T> parent;
 
@@ -174,28 +179,28 @@ class ReverseTween<T extends Object?> extends Tween<T> {
 }
 
 class ColorTween extends Tween<Color?> {
-  ColorTween({ super.begin, super.end });
+  ColorTween({super.begin, super.end});
 
   @override
   Color? lerp(double t) => Color.lerp(begin, end, t);
 }
 
 class SizeTween extends Tween<Size?> {
-  SizeTween({ super.begin, super.end });
+  SizeTween({super.begin, super.end});
 
   @override
   Size? lerp(double t) => Size.lerp(begin, end, t);
 }
 
 class RectTween extends Tween<Rect?> {
-  RectTween({ super.begin, super.end });
+  RectTween({super.begin, super.end});
 
   @override
   Rect? lerp(double t) => Rect.lerp(begin, end, t);
 }
 
 class IntTween extends Tween<int> {
-  IntTween({ super.begin, super.end });
+  IntTween({super.begin, super.end});
 
   // The inherited lerp() function doesn't work with ints because it multiplies
   // the begin and end types by a double, and int * double returns a double.
@@ -204,7 +209,7 @@ class IntTween extends Tween<int> {
 }
 
 class StepTween extends Tween<int> {
-  StepTween({ super.begin, super.end });
+  StepTween({super.begin, super.end});
 
   // The inherited lerp() function doesn't work with ints because it multiplies
   // the begin and end types by a double, and int * double returns a double.
@@ -219,11 +224,12 @@ class ConstantTween<T> extends Tween<T> {
   T lerp(double t) => begin as T;
 
   @override
-  String toString() => '${objectRuntimeType(this, 'ConstantTween')}(value: $begin)';
+  String toString() =>
+      '${objectRuntimeType(this, 'ConstantTween')}(value: $begin)';
 }
 
 class CurveTween extends Animatable<double> {
-  CurveTween({ required this.curve });
+  CurveTween({required this.curve});
 
   Curve curve;
 
@@ -237,5 +243,6 @@ class CurveTween extends Animatable<double> {
   }
 
   @override
-  String toString() => '${objectRuntimeType(this, 'CurveTween')}(curve: $curve)';
+  String toString() =>
+      '${objectRuntimeType(this, 'CurveTween')}(curve: $curve)';
 }

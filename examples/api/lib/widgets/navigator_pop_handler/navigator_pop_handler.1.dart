@@ -27,8 +27,7 @@ class NavigatorPopHandlerApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/home',
       routes: <String, WidgetBuilder>{
-        '/home': (BuildContext context) => const _BottomNavPage(
-        ),
+        '/home': (BuildContext context) => const _BottomNavPage(),
       },
     );
   }
@@ -188,7 +187,8 @@ class _BottomNavTabState extends State<_BottomNavTab> {
                           _TabPage.one,
                         ]);
                       },
-                      child: const Text('Go to another route in this nested Navigator'),
+                      child: const Text(
+                          'Go to another route in this nested Navigator'),
                     ),
                   ],
                 ),
@@ -218,7 +218,7 @@ class _BottomNavTabState extends State<_BottomNavTab> {
 }
 
 class _LinksPage extends StatelessWidget {
-  const _LinksPage ({
+  const _LinksPage({
     required this.backgroundColor,
     this.buttons = const <Widget>[],
     required this.title,

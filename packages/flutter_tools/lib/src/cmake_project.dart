@@ -19,7 +19,8 @@ abstract class CmakeBasedProject {
   Directory get pluginSymlinkDirectory;
 }
 
-class WindowsProject extends FlutterProjectPlatform implements CmakeBasedProject {
+class WindowsProject extends FlutterProjectPlatform
+    implements CmakeBasedProject {
   WindowsProject.fromFlutter(this.parent);
 
   @override
@@ -31,7 +32,8 @@ class WindowsProject extends FlutterProjectPlatform implements CmakeBasedProject
   String get _childDirectory => 'windows';
 
   @override
-  bool existsSync() => _editableDirectory.existsSync() && cmakeFile.existsSync();
+  bool existsSync() =>
+      _editableDirectory.existsSync() && cmakeFile.existsSync();
 
   @override
   File get cmakeFile => _editableDirectory.childFile('CMakeLists.txt');
@@ -40,25 +42,32 @@ class WindowsProject extends FlutterProjectPlatform implements CmakeBasedProject
   File get managedCmakeFile => managedDirectory.childFile('CMakeLists.txt');
 
   @override
-  File get generatedCmakeConfigFile => ephemeralDirectory.childFile('generated_config.cmake');
+  File get generatedCmakeConfigFile =>
+      ephemeralDirectory.childFile('generated_config.cmake');
 
   @override
-  File get generatedPluginCmakeFile => managedDirectory.childFile('generated_plugins.cmake');
+  File get generatedPluginCmakeFile =>
+      managedDirectory.childFile('generated_plugins.cmake');
 
   File get runnerCmakeFile => runnerDirectory.childFile('CMakeLists.txt');
 
-  File get runnerFlutterWindowFile => runnerDirectory.childFile('flutter_window.cpp');
+  File get runnerFlutterWindowFile =>
+      runnerDirectory.childFile('flutter_window.cpp');
 
   File get runnerResourceFile => runnerDirectory.childFile('Runner.rc');
 
   @override
-  Directory get pluginSymlinkDirectory => ephemeralDirectory.childDirectory('.plugin_symlinks');
+  Directory get pluginSymlinkDirectory =>
+      ephemeralDirectory.childDirectory('.plugin_symlinks');
 
-  Directory get _editableDirectory => parent.directory.childDirectory(_childDirectory);
+  Directory get _editableDirectory =>
+      parent.directory.childDirectory(_childDirectory);
 
-  Directory get managedDirectory => _editableDirectory.childDirectory('flutter');
+  Directory get managedDirectory =>
+      _editableDirectory.childDirectory('flutter');
 
-  Directory get ephemeralDirectory => managedDirectory.childDirectory('ephemeral');
+  Directory get ephemeralDirectory =>
+      managedDirectory.childDirectory('ephemeral');
 
   Directory get runnerDirectory => _editableDirectory.childDirectory('runner');
 
@@ -74,13 +83,16 @@ class LinuxProject extends FlutterProjectPlatform implements CmakeBasedProject {
   @override
   String get pluginConfigKey => LinuxPlugin.kConfigKey;
 
-  static final RegExp _applicationIdPattern = RegExp(r'''^\s*set\s*\(\s*APPLICATION_ID\s*"(.*)"\s*\)\s*$''');
+  static final RegExp _applicationIdPattern =
+      RegExp(r'''^\s*set\s*\(\s*APPLICATION_ID\s*"(.*)"\s*\)\s*$''');
 
   Directory get _editableDirectory => parent.directory.childDirectory('linux');
 
-  Directory get managedDirectory => _editableDirectory.childDirectory('flutter');
+  Directory get managedDirectory =>
+      _editableDirectory.childDirectory('flutter');
 
-  Directory get ephemeralDirectory => managedDirectory.childDirectory('ephemeral');
+  Directory get ephemeralDirectory =>
+      managedDirectory.childDirectory('ephemeral');
 
   @override
   bool existsSync() => _editableDirectory.existsSync();
@@ -92,13 +104,16 @@ class LinuxProject extends FlutterProjectPlatform implements CmakeBasedProject {
   File get managedCmakeFile => managedDirectory.childFile('CMakeLists.txt');
 
   @override
-  File get generatedCmakeConfigFile => ephemeralDirectory.childFile('generated_config.cmake');
+  File get generatedCmakeConfigFile =>
+      ephemeralDirectory.childFile('generated_config.cmake');
 
   @override
-  File get generatedPluginCmakeFile => managedDirectory.childFile('generated_plugins.cmake');
+  File get generatedPluginCmakeFile =>
+      managedDirectory.childFile('generated_plugins.cmake');
 
   @override
-  Directory get pluginSymlinkDirectory => ephemeralDirectory.childDirectory('.plugin_symlinks');
+  Directory get pluginSymlinkDirectory =>
+      ephemeralDirectory.childDirectory('.plugin_symlinks');
 
   Future<void> ensureReadyForPlatformSpecificTooling() async {}
 

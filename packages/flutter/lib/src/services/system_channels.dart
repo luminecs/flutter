@@ -7,22 +7,22 @@ export 'platform_channel.dart' show BasicMessageChannel, MethodChannel;
 
 abstract final class SystemChannels {
   static const MethodChannel navigation = OptionalMethodChannel(
-      'flutter/navigation',
-      JSONMethodCodec(),
+    'flutter/navigation',
+    JSONMethodCodec(),
   );
 
   static const MethodChannel platform = OptionalMethodChannel(
-      'flutter/platform',
-      JSONMethodCodec(),
+    'flutter/platform',
+    JSONMethodCodec(),
   );
 
   static const MethodChannel textInput = OptionalMethodChannel(
-      'flutter/textinput',
-      JSONMethodCodec(),
+    'flutter/textinput',
+    JSONMethodCodec(),
   );
 
   static const MethodChannel spellCheck = OptionalMethodChannel(
-      'flutter/spellcheck',
+    'flutter/spellcheck',
   );
 
   static const MethodChannel undoManager = OptionalMethodChannel(
@@ -30,22 +30,26 @@ abstract final class SystemChannels {
     JSONMethodCodec(),
   );
 
-  static const BasicMessageChannel<Object?> keyEvent = BasicMessageChannel<Object?>(
-      'flutter/keyevent',
-      JSONMessageCodec(),
+  static const BasicMessageChannel<Object?> keyEvent =
+      BasicMessageChannel<Object?>(
+    'flutter/keyevent',
+    JSONMessageCodec(),
   );
 
-  static const BasicMessageChannel<String?> lifecycle = BasicMessageChannel<String?>(
-      'flutter/lifecycle',
-      StringCodec(),
+  static const BasicMessageChannel<String?> lifecycle =
+      BasicMessageChannel<String?>(
+    'flutter/lifecycle',
+    StringCodec(),
   );
 
-  static const BasicMessageChannel<Object?> system = BasicMessageChannel<Object?>(
-      'flutter/system',
-      JSONMessageCodec(),
+  static const BasicMessageChannel<Object?> system =
+      BasicMessageChannel<Object?>(
+    'flutter/system',
+    JSONMessageCodec(),
   );
 
-  static const BasicMessageChannel<Object?> accessibility = BasicMessageChannel<Object?>(
+  static const BasicMessageChannel<Object?> accessibility =
+      BasicMessageChannel<Object?>(
     'flutter/accessibility',
     StandardMessageCodec(),
   );

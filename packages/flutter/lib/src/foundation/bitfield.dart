@@ -1,5 +1,5 @@
-import '_bitfield_io.dart'
-  if (dart.library.js_util) '_bitfield_web.dart' as bitfield;
+import '_bitfield_io.dart' if (dart.library.js_util) '_bitfield_web.dart'
+    as bitfield;
 
 const int kMaxUnsignedSMI = bitfield.kMaxUnsignedSMI;
 
@@ -12,5 +12,5 @@ abstract class BitField<T extends dynamic> {
 
   void operator []=(T index, bool value);
 
-  void reset([ bool value = false ]);
+  void reset([bool value = false]);
 }

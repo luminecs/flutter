@@ -4,7 +4,6 @@ import 'package:integration_test/integration_test.dart';
 
 import 'package:integration_test_example/main.dart' as app;
 
-
 // Tests the failure behavior of the IntegrationTestWidgetsFlutterBinding
 //
 // This test fails intentionally! It should be run using a test runner that

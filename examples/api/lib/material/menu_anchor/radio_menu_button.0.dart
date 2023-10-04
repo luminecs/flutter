@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 void main() => runApp(const MenuApp());
 
 class MyRadioMenu extends StatefulWidget {
@@ -16,16 +15,21 @@ class _MyRadioMenuState extends State<MyRadioMenu> {
   Color _backgroundColor = Colors.red;
   late ShortcutRegistryEntry _entry;
 
-  static const SingleActivator _redShortcut = SingleActivator(LogicalKeyboardKey.keyR, control: true);
-  static const SingleActivator _greenShortcut = SingleActivator(LogicalKeyboardKey.keyG, control: true);
-  static const SingleActivator _blueShortcut = SingleActivator(LogicalKeyboardKey.keyB, control: true);
+  static const SingleActivator _redShortcut =
+      SingleActivator(LogicalKeyboardKey.keyR, control: true);
+  static const SingleActivator _greenShortcut =
+      SingleActivator(LogicalKeyboardKey.keyG, control: true);
+  static const SingleActivator _blueShortcut =
+      SingleActivator(LogicalKeyboardKey.keyB, control: true);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _entry = ShortcutRegistry.of(context).addAll(<ShortcutActivator, VoidCallbackIntent>{
+    _entry = ShortcutRegistry.of(context)
+        .addAll(<ShortcutActivator, VoidCallbackIntent>{
       _redShortcut: VoidCallbackIntent(() => _setBackgroundColor(Colors.red)),
-      _greenShortcut: VoidCallbackIntent(() => _setBackgroundColor(Colors.green)),
+      _greenShortcut:
+          VoidCallbackIntent(() => _setBackgroundColor(Colors.green)),
       _blueShortcut: VoidCallbackIntent(() => _setBackgroundColor(Colors.blue)),
     });
   }
@@ -73,7 +77,8 @@ class _MyRadioMenuState extends State<MyRadioMenu> {
               child: const Text('Blue Background'),
             ),
           ],
-          builder: (BuildContext context, MenuController controller, Widget? child) {
+          builder:
+              (BuildContext context, MenuController controller, Widget? child) {
             return TextButton(
               focusNode: _buttonFocusNode,
               onPressed: () {

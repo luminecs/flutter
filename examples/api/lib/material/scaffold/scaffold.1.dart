@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ScaffoldExampleApp());
 
 class ScaffoldExampleApp extends StatelessWidget {

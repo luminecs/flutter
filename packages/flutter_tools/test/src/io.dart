@@ -3,8 +3,8 @@ import 'dart:io' as io show Directory, File, IOOverrides, Link;
 import 'package:flutter_tools/src/base/file_system.dart';
 
 class FlutterIOOverrides extends io.IOOverrides {
-  FlutterIOOverrides({ FileSystem? fileSystem })
-    : _fileSystemDelegate = fileSystem;
+  FlutterIOOverrides({FileSystem? fileSystem})
+      : _fileSystemDelegate = fileSystem;
 
   final FileSystem? _fileSystemDelegate;
 
@@ -37,7 +37,9 @@ class FlutterIOOverrides extends io.IOOverrides {
     if (_fileSystemDelegate == null) {
       return super.fsWatch(path, events, recursive);
     }
-    return _fileSystemDelegate.file(path).watch(events: events, recursive: recursive);
+    return _fileSystemDelegate
+        .file(path)
+        .watch(events: events, recursive: recursive);
   }
 
   @override

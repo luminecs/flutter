@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ActionsExampleApp());
 
 class ActionsExampleApp extends StatelessWidget {
@@ -146,7 +145,9 @@ class _ActionsExampleState extends State<ActionsExample> {
                       builder: (BuildContext context, Widget? child) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('${model.data.value}', style: Theme.of(context).textTheme.headlineMedium),
+                          child: Text('${model.data.value}',
+                              style:
+                                  Theme.of(context).textTheme.headlineMedium),
                         );
                       }),
                   IconButton(

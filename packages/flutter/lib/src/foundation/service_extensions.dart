@@ -7,7 +7,6 @@ enum FoundationServiceExtensions {
 
   activeDevToolsServerAddress,
 
-
   platformOverride,
 
   brightnessOverride,

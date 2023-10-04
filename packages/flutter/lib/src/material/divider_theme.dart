@@ -10,7 +10,6 @@ import 'theme.dart';
 
 @immutable
 class DividerThemeData with Diagnosticable {
-
   const DividerThemeData({
     this.color,
     this.space,
@@ -45,7 +44,8 @@ class DividerThemeData with Diagnosticable {
     );
   }
 
-  static DividerThemeData lerp(DividerThemeData? a, DividerThemeData? b, double t) {
+  static DividerThemeData lerp(
+      DividerThemeData? a, DividerThemeData? b, double t) {
     if (identical(a, b) && a != null) {
       return a;
     }
@@ -60,12 +60,12 @@ class DividerThemeData with Diagnosticable {
 
   @override
   int get hashCode => Object.hash(
-    color,
-    space,
-    thickness,
-    indent,
-    endIndent,
-  );
+        color,
+        space,
+        thickness,
+        indent,
+        endIndent,
+      );
 
   @override
   bool operator ==(Object other) {
@@ -75,12 +75,12 @@ class DividerThemeData with Diagnosticable {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is DividerThemeData
-        && other.color == color
-        && other.space == space
-        && other.thickness == thickness
-        && other.indent == indent
-        && other.endIndent == endIndent;
+    return other is DividerThemeData &&
+        other.color == color &&
+        other.space == space &&
+        other.thickness == thickness &&
+        other.indent == indent &&
+        other.endIndent == endIndent;
   }
 
   @override
@@ -104,7 +104,8 @@ class DividerTheme extends InheritedTheme {
   final DividerThemeData data;
 
   static DividerThemeData of(BuildContext context) {
-    final DividerTheme? dividerTheme = context.dependOnInheritedWidgetOfExactType<DividerTheme>();
+    final DividerTheme? dividerTheme =
+        context.dependOnInheritedWidgetOfExactType<DividerTheme>();
     return dividerTheme?.data ?? Theme.of(context).dividerTheme;
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AlignTransitionExampleApp());
 
 class AlignTransitionExampleApp extends StatelessWidget {
@@ -21,7 +20,8 @@ class AlignTransitionExample extends StatefulWidget {
   State<AlignTransitionExample> createState() => _AlignTransitionExampleState();
 }
 
-class _AlignTransitionExampleState extends State<AlignTransitionExample> with TickerProviderStateMixin {
+class _AlignTransitionExampleState extends State<AlignTransitionExample>
+    with TickerProviderStateMixin {
   // Using `late final` for lazy initialization. See
   // https://dart.dev/null-safety/understanding-null-safety#lazy-initialization.
   late final AnimationController _controller = AnimationController(

@@ -21,10 +21,11 @@ void main() {
   });
 
   testWithoutContext(
-      'gradle task exists named printBuildVariants that prints build variants', () async {
+      'gradle task exists named printBuildVariants that prints build variants',
+      () async {
     // Create a new flutter project.
     final String flutterBin =
-    fileSystem.path.join(getFlutterRoot(), 'bin', 'flutter');
+        fileSystem.path.join(getFlutterRoot(), 'bin', 'flutter');
     ProcessResult result = await processManager.run(<String>[
       flutterBin,
       'create',
@@ -56,7 +57,9 @@ void main() {
       'BuildVariant: release',
       'BuildVariant: profile',
     ];
-    final List<String> actualLines = LineSplitter.split(result.stdout.toString()).toList();
-    expect(const ListEquality<String>().equals(actualLines, expectedLines), isTrue);
+    final List<String> actualLines =
+        LineSplitter.split(result.stdout.toString()).toList();
+    expect(const ListEquality<String>().equals(actualLines, expectedLines),
+        isTrue);
   });
 }

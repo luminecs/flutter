@@ -49,5 +49,8 @@ class HashUrlStrategy extends UrlStrategy {
 }
 
 class PathUrlStrategy extends HashUrlStrategy {
-  const PathUrlStrategy([PlatformLocation? _, bool __ = false,]);
+  const PathUrlStrategy([
+    PlatformLocation? _,
+    bool __ = false,
+  ]);
 }

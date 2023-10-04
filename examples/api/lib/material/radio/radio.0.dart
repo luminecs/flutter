@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const RadioExampleApp());
 
 class RadioExampleApp extends StatelessWidget {

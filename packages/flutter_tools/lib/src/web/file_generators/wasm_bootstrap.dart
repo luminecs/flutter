@@ -2,6 +2,7 @@ import '../web_constants.dart';
 
 String generateWasmBootstrapFile(bool isSkwasm) {
   return '''
+
 (async function () {
   let dart2wasm_runtime;
   let moduleInstance;

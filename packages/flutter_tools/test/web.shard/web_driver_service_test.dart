@@ -8,7 +8,9 @@ import '../src/common.dart';
 import '../src/fake_process_manager.dart';
 
 void main() {
-  testWithoutContext('WebDriverService catches SocketExceptions cleanly and includes link to documentation', () async {
+  testWithoutContext(
+      'WebDriverService catches SocketExceptions cleanly and includes link to documentation',
+      () async {
     final BufferLogger logger = BufferLogger.test();
     final WebDriverService service = WebDriverService(
       logger: logger,
@@ -18,7 +20,8 @@ void main() {
       ),
       dartSdkPath: 'dart',
     );
-    const String link = 'https://flutter.dev/docs/testing/integration-tests#running-in-a-browser';
+    const String link =
+        'https://flutter.dev/docs/testing/integration-tests#running-in-a-browser';
     try {
       await service.startTest(
         'foo.test',

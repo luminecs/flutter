@@ -27,5 +27,5 @@ class MockSliverToBoxAdapter extends SingleChildRenderObjectWidget {
 
   @override
   RenderMockSliverToBoxAdapter createRenderObject(BuildContext context) =>
-    RenderMockSliverToBoxAdapter(incrementCounter: incrementCounter);
+      RenderMockSliverToBoxAdapter(incrementCounter: incrementCounter);
 }

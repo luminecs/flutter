@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const SearchTextFieldApp());
 
 class SearchTextFieldApp extends StatelessWidget {

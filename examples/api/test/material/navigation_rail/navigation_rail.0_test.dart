@@ -27,7 +27,8 @@ void main() {
     expect(find.text('selectedIndex: 2'), findsOneWidget);
   });
 
-  testWidgets('Navigation rail updates label type', (WidgetTester tester) async {
+  testWidgets('Navigation rail updates label type',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.NavigationRailExampleApp(),
     );
@@ -46,7 +47,8 @@ void main() {
     expect(find.text('Label type: none'), findsOneWidget);
   });
 
-  testWidgets('Navigation rail updates group alignment', (WidgetTester tester) async {
+  testWidgets('Navigation rail updates group alignment',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.NavigationRailExampleApp(),
     );
@@ -65,7 +67,8 @@ void main() {
     expect(find.text('Group alignment: 1.0'), findsOneWidget);
   });
 
-  testWidgets('Navigation rail shows leading/trailing widgets', (WidgetTester tester) async {
+  testWidgets('Navigation rail shows leading/trailing widgets',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const example.NavigationRailExampleApp(),
     );

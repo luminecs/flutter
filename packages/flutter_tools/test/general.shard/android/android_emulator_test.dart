@@ -12,7 +12,9 @@ import '../../src/fake_process_manager.dart';
 const String emulatorID = 'i1234';
 const String errorText = '[Android emulator test error]';
 const List<String> kEmulatorLaunchCommand = <String>[
-  'emulator', '-avd', emulatorID,
+  'emulator',
+  '-avd',
+  emulatorID,
 ];
 
 void main() {
@@ -127,7 +129,8 @@ void main() {
     });
 
     testWithoutContext('succeeds', () async {
-      final AndroidEmulator emulator = AndroidEmulator(emulatorID,
+      final AndroidEmulator emulator = AndroidEmulator(
+        emulatorID,
         processManager: FakeProcessManager.list(<FakeCommand>[
           const FakeCommand(command: kEmulatorLaunchCommand),
         ]),
@@ -143,7 +146,8 @@ void main() {
         ...kEmulatorLaunchCommand,
         '-no-snapshot-load',
       ];
-      final AndroidEmulator emulator = AndroidEmulator(emulatorID,
+      final AndroidEmulator emulator = AndroidEmulator(
+        emulatorID,
         processManager: FakeProcessManager.list(<FakeCommand>[
           FakeCommand(command: kEmulatorLaunchColdBootCommand),
         ]),
@@ -155,8 +159,9 @@ void main() {
     });
 
     testWithoutContext('prints error on failure', () async {
-      final BufferLogger logger =  BufferLogger.test();
-      final AndroidEmulator emulator = AndroidEmulator(emulatorID,
+      final BufferLogger logger = BufferLogger.test();
+      final AndroidEmulator emulator = AndroidEmulator(
+        emulatorID,
         processManager: FakeProcessManager.list(<FakeCommand>[
           const FakeCommand(
             command: kEmulatorLaunchCommand,
@@ -174,9 +179,11 @@ void main() {
       expect(logger.errorText, contains(errorText));
     });
 
-    testWithoutContext('prints nothing on late failure with empty stderr', () async {
-      final BufferLogger logger =  BufferLogger.test();
-      final AndroidEmulator emulator = AndroidEmulator(emulatorID,
+    testWithoutContext('prints nothing on late failure with empty stderr',
+        () async {
+      final BufferLogger logger = BufferLogger.test();
+      final AndroidEmulator emulator = AndroidEmulator(
+        emulatorID,
         processManager: FakeProcessManager.list(<FakeCommand>[
           FakeCommand(
             command: kEmulatorLaunchCommand,

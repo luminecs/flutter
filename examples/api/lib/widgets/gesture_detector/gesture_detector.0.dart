@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const GestureDetectorExampleApp());
 
 class GestureDetectorExampleApp extends StatelessWidget {

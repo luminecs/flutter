@@ -14,40 +14,43 @@ const TextStyle _kToolbarButtonFontStyle = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
-const CupertinoDynamicColor _kToolbarTextColor = CupertinoDynamicColor.withBrightness(
+const CupertinoDynamicColor _kToolbarTextColor =
+    CupertinoDynamicColor.withBrightness(
   color: CupertinoColors.black,
   darkColor: CupertinoColors.white,
 );
 
-const CupertinoDynamicColor _kToolbarPressedColor = CupertinoDynamicColor.withBrightness(
+const CupertinoDynamicColor _kToolbarPressedColor =
+    CupertinoDynamicColor.withBrightness(
   color: Color(0x10000000),
   darkColor: Color(0x10FFFFFF),
 );
 
 // Value measured from screenshot of iOS 16.0.2
-const EdgeInsets _kToolbarButtonPadding = EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0);
+const EdgeInsets _kToolbarButtonPadding =
+    EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0);
 
 class CupertinoTextSelectionToolbarButton extends StatefulWidget {
   const CupertinoTextSelectionToolbarButton({
     super.key,
     this.onPressed,
     required Widget this.child,
-  }) : text = null,
-       buttonItem = null;
+  })  : text = null,
+        buttonItem = null;
 
   const CupertinoTextSelectionToolbarButton.text({
     super.key,
     this.onPressed,
     required this.text,
-  }) : buttonItem = null,
-       child = null;
+  })  : buttonItem = null,
+        child = null;
 
   CupertinoTextSelectionToolbarButton.buttonItem({
     super.key,
     required ContextMenuButtonItem this.buttonItem,
-  }) : child = null,
-       text = null,
-       onPressed = buttonItem.onPressed;
+  })  : child = null,
+        text = null,
+        onPressed = buttonItem.onPressed;
 
   final Widget? child;
 
@@ -57,13 +60,15 @@ class CupertinoTextSelectionToolbarButton extends StatefulWidget {
 
   final String? text;
 
-  static String getButtonLabel(BuildContext context, ContextMenuButtonItem buttonItem) {
+  static String getButtonLabel(
+      BuildContext context, ContextMenuButtonItem buttonItem) {
     if (buttonItem.label != null) {
       return buttonItem.label!;
     }
 
     assert(debugCheckHasCupertinoLocalizations(context));
-    final CupertinoLocalizations localizations = CupertinoLocalizations.of(context);
+    final CupertinoLocalizations localizations =
+        CupertinoLocalizations.of(context);
     switch (buttonItem.type) {
       case ContextMenuButtonType.cut:
         return localizations.cutButtonLabel;
@@ -87,10 +92,12 @@ class CupertinoTextSelectionToolbarButton extends StatefulWidget {
   }
 
   @override
-  State<StatefulWidget> createState() => _CupertinoTextSelectionToolbarButtonState();
+  State<StatefulWidget> createState() =>
+      _CupertinoTextSelectionToolbarButtonState();
 }
 
-class _CupertinoTextSelectionToolbarButtonState extends State<CupertinoTextSelectionToolbarButton> {
+class _CupertinoTextSelectionToolbarButtonState
+    extends State<CupertinoTextSelectionToolbarButton> {
   bool isPressed = false;
 
   void _onTapDown(TapDownDetails details) {
@@ -111,8 +118,8 @@ class _CupertinoTextSelectionToolbarButtonState extends State<CupertinoTextSelec
     final Widget content = _getContentWidget(context);
     final Widget child = CupertinoButton(
       color: isPressed
-        ? _kToolbarPressedColor.resolveFrom(context)
-        : const Color(0x00000000),
+          ? _kToolbarPressedColor.resolveFrom(context)
+          : const Color(0x00000000),
       borderRadius: null,
       disabledColor: const Color(0x00000000),
       // This CupertinoButton does not actually handle the onPressed callback,
@@ -146,7 +153,9 @@ class _CupertinoTextSelectionToolbarButtonState extends State<CupertinoTextSelec
       return widget.child!;
     }
     final Widget textWidget = Text(
-      widget.text ?? CupertinoTextSelectionToolbarButton.getButtonLabel(context, widget.buttonItem!),
+      widget.text ??
+          CupertinoTextSelectionToolbarButton.getButtonLabel(
+              context, widget.buttonItem!),
       overflow: TextOverflow.ellipsis,
       style: _kToolbarButtonFontStyle.copyWith(
         color: widget.onPressed != null
@@ -173,7 +182,8 @@ class _CupertinoTextSelectionToolbarButtonState extends State<CupertinoTextSelec
           width: 13.0,
           height: 13.0,
           child: CustomPaint(
-            painter: _LiveTextIconPainter(color: _kToolbarTextColor.resolveFrom(context)),
+            painter: _LiveTextIconPainter(
+                color: _kToolbarTextColor.resolveFrom(context)),
           ),
         );
     }
@@ -202,7 +212,8 @@ class _LiveTextIconPainter extends CustomPainter {
     final Path path = Path()
       ..moveTo(origin.dx, origin.dy + 3.5)
       ..lineTo(origin.dx, origin.dy + 1.0)
-      ..arcToPoint(Offset(origin.dx + 1.0, origin.dy), radius: const Radius.circular(1))
+      ..arcToPoint(Offset(origin.dx + 1.0, origin.dy),
+          radius: const Radius.circular(1))
       ..lineTo(origin.dx + 3.5, origin.dy);
 
     // Rotate to draw corner four times.
@@ -213,7 +224,8 @@ class _LiveTextIconPainter extends CustomPainter {
     }
 
     // Draw three lines.
-    canvas.drawLine(const Offset(-3.0, -3.0), const Offset(3.0, -3.0), _painter);
+    canvas.drawLine(
+        const Offset(-3.0, -3.0), const Offset(3.0, -3.0), _painter);
     canvas.drawLine(const Offset(-3.0, 0.0), const Offset(3.0, 0.0), _painter);
     canvas.drawLine(const Offset(-3.0, 3.0), const Offset(1.0, 3.0), _painter);
 

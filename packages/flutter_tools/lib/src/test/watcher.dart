@@ -1,7 +1,7 @@
 import 'test_device.dart';
 
 abstract class TestWatcher {
-  void handleStartedDevice(Uri? vmServiceUri) { }
+  void handleStartedDevice(Uri? vmServiceUri) {}
 
   Future<void> handleFinishedTest(TestDevice testDevice);
 

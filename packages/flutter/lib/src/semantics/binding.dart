@@ -1,11 +1,13 @@
-import 'dart:ui' as ui show AccessibilityFeatures, SemanticsActionEvent, SemanticsUpdateBuilder;
+import 'dart:ui' as ui
+    show AccessibilityFeatures, SemanticsActionEvent, SemanticsUpdateBuilder;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'debug.dart';
 
-export 'dart:ui' show AccessibilityFeatures, SemanticsActionEvent, SemanticsUpdateBuilder;
+export 'dart:ui'
+    show AccessibilityFeatures, SemanticsActionEvent, SemanticsUpdateBuilder;
 
 mixin SemanticsBinding on BindingBase {
   @override
@@ -27,7 +29,9 @@ mixin SemanticsBinding on BindingBase {
     assert(_semanticsEnabled.value == (_outstandingHandles > 0));
     return _semanticsEnabled.value;
   }
-  late final ValueNotifier<bool> _semanticsEnabled = ValueNotifier<bool>(platformDispatcher.semanticsEnabled);
+
+  late final ValueNotifier<bool> _semanticsEnabled =
+      ValueNotifier<bool>(platformDispatcher.semanticsEnabled);
 
   void addSemanticsEnabledListener(VoidCallback listener) {
     _semanticsEnabled.addListener(listener);
@@ -70,8 +74,9 @@ mixin SemanticsBinding on BindingBase {
   void _handleSemanticsActionEvent(ui.SemanticsActionEvent action) {
     final Object? arguments = action.arguments;
     final ui.SemanticsActionEvent decodedAction = arguments is ByteData
-      ? action.copyWith(arguments: const StandardMessageCodec().decodeMessage(arguments))
-      : action;
+        ? action.copyWith(
+            arguments: const StandardMessageCodec().decodeMessage(arguments))
+        : action;
     performSemanticsAction(decodedAction);
   }
 

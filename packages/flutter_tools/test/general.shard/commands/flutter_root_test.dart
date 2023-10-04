@@ -7,7 +7,8 @@ import 'package:flutter_tools/src/cache.dart';
 import '../../src/common.dart';
 
 void main() {
-  testWithoutContext('Cache can initialize flutter root from environment variable', () {
+  testWithoutContext(
+      'Cache can initialize flutter root from environment variable', () {
     final String defaultFlutterRoot = Cache.defaultFlutterRoot(
       fileSystem: MemoryFileSystem.test(),
       userMessages: UserMessages(),
@@ -21,7 +22,8 @@ void main() {
     expect(defaultFlutterRoot, '/path/to/flutter');
   });
 
-  testWithoutContext('Cache can initialize flutter root data-scheme platform script', () {
+  testWithoutContext(
+      'Cache can initialize flutter root data-scheme platform script', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
     // For data-uri, the root is initialized to ../.. and then normalized. Change the
     // current directory to verify this.
@@ -35,13 +37,13 @@ void main() {
         platform: FakePlatform(
           environment: <String, String>{},
           script: Uri.parse('data:,Hello%2C%20World!'),
-        )
-    );
+        ));
 
     expect(defaultFlutterRoot, '/foo');
   });
 
-  testWithoutContext('Cache can initialize flutter root package-scheme platform script', () {
+  testWithoutContext(
+      'Cache can initialize flutter root package-scheme platform script', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
     final String defaultFlutterRoot = Cache.defaultFlutterRoot(
         fileSystem: fileSystem,
@@ -49,14 +51,13 @@ void main() {
         platform: FakePlatform(
             environment: <String, String>{},
             script: Uri.parse('package:flutter_tools/flutter_tools.dart'),
-            packageConfig: 'flutter/packages/flutter_tools/.packages'
-        )
-    );
+            packageConfig: 'flutter/packages/flutter_tools/.packages'));
 
     expect(defaultFlutterRoot, '/flutter');
   });
 
-  testWithoutContext('Cache can initialize flutter root from snapshot location', () {
+  testWithoutContext('Cache can initialize flutter root from snapshot location',
+      () {
     final FileSystem fileSystem = MemoryFileSystem.test();
     final String defaultFlutterRoot = Cache.defaultFlutterRoot(
         fileSystem: fileSystem,
@@ -64,8 +65,7 @@ void main() {
         platform: FakePlatform(
           environment: <String, String>{},
           script: Uri.parse('file:///flutter/bin/cache/flutter_tools.snapshot'),
-        )
-    );
+        ));
 
     expect(defaultFlutterRoot, '/flutter');
   });
@@ -77,14 +77,15 @@ void main() {
         userMessages: UserMessages(),
         platform: FakePlatform(
           environment: <String, String>{},
-          script: Uri.parse('file:///flutter/packages/flutter_tools/bin/flutter_tools.dart'),
-        )
-    );
+          script: Uri.parse(
+              'file:///flutter/packages/flutter_tools/bin/flutter_tools.dart'),
+        ));
 
     expect(defaultFlutterRoot, '/flutter');
   });
 
-  testWithoutContext('Cache will default to current directory if there are no matches', () {
+  testWithoutContext(
+      'Cache will default to current directory if there are no matches', () {
     final FileSystem fileSystem = MemoryFileSystem.test();
     final String defaultFlutterRoot = Cache.defaultFlutterRoot(
         fileSystem: fileSystem,
@@ -92,8 +93,7 @@ void main() {
         platform: FakePlatform(
           environment: <String, String>{},
           script: Uri.parse('http://foo.bar'), // does not match any heuristics.
-        )
-    );
+        ));
 
     expect(defaultFlutterRoot, '/');
   });

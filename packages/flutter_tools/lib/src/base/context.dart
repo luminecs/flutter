@@ -17,7 +17,8 @@ class ContextDependencyCycleException implements Exception {
 @visibleForTesting
 const Object contextKey = _Key.key;
 
-AppContext get context => Zone.current[contextKey] as AppContext? ?? AppContext._root;
+AppContext get context =>
+    Zone.current[contextKey] as AppContext? ?? AppContext._root;
 
 class AppContext {
   AppContext._(
@@ -39,7 +40,8 @@ class AppContext {
 
   dynamic _boxNull(dynamic value) => value ?? _BoxedNull.instance;
 
-  dynamic _unboxNull(dynamic value) => value == _BoxedNull.instance ? null : value;
+  dynamic _unboxNull(dynamic value) =>
+      value == _BoxedNull.instance ? null : value;
 
   dynamic _generateIfNecessary(Type type, Map<Type, Generator> generators) {
     if (!generators.containsKey(type)) {

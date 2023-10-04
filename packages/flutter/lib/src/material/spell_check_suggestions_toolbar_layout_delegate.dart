@@ -1,7 +1,8 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart' show TextSelectionToolbarLayoutDelegate;
 
-class SpellCheckSuggestionsToolbarLayoutDelegate extends SingleChildLayoutDelegate {
+class SpellCheckSuggestionsToolbarLayoutDelegate
+    extends SingleChildLayoutDelegate {
   SpellCheckSuggestionsToolbarLayoutDelegate({
     required this.anchor,
   });

@@ -69,44 +69,61 @@ class MediaQueryData {
     this.navigationMode = NavigationMode.traditional,
     this.gestureSettings = const DeviceGestureSettings(touchSlop: kTouchSlop),
     this.displayFeatures = const <ui.DisplayFeature>[],
-  }) : _textScaleFactor = textScaleFactor,
-       _textScaler = textScaler,
-       assert(
-         identical(textScaler, _kUnspecifiedTextScaler) || textScaleFactor == 1.0,
-         'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
-       );
+  })  : _textScaleFactor = textScaleFactor,
+        _textScaler = textScaler,
+        assert(
+          identical(textScaler, _kUnspecifiedTextScaler) ||
+              textScaleFactor == 1.0,
+          'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
+        );
 
-  @Deprecated(
-    'Use MediaQueryData.fromView instead. '
-    'This constructor was deprecated in preparation for the upcoming multi-window support. '
-    'This feature was deprecated after v3.7.0-32.0.pre.'
-  )
-  factory MediaQueryData.fromWindow(ui.FlutterView window) => MediaQueryData.fromView(window);
+  @Deprecated('Use MediaQueryData.fromView instead. '
+      'This constructor was deprecated in preparation for the upcoming multi-window support. '
+      'This feature was deprecated after v3.7.0-32.0.pre.')
+  factory MediaQueryData.fromWindow(ui.FlutterView window) =>
+      MediaQueryData.fromView(window);
 
   MediaQueryData.fromView(ui.FlutterView view, {MediaQueryData? platformData})
-    : size = view.physicalSize / view.devicePixelRatio,
-      devicePixelRatio = view.devicePixelRatio,
-      _textScaleFactor = 1.0, // _textScaler is the source of truth.
-      _textScaler = _textScalerFromView(view, platformData),
-      platformBrightness = platformData?.platformBrightness ?? view.platformDispatcher.platformBrightness,
-      padding = EdgeInsets.fromViewPadding(view.padding, view.devicePixelRatio),
-      viewPadding = EdgeInsets.fromViewPadding(view.viewPadding, view.devicePixelRatio),
-      viewInsets = EdgeInsets.fromViewPadding(view.viewInsets, view.devicePixelRatio),
-      systemGestureInsets = EdgeInsets.fromViewPadding(view.systemGestureInsets, view.devicePixelRatio),
-      accessibleNavigation = platformData?.accessibleNavigation ?? view.platformDispatcher.accessibilityFeatures.accessibleNavigation,
-      invertColors = platformData?.invertColors ?? view.platformDispatcher.accessibilityFeatures.invertColors,
-      disableAnimations = platformData?.disableAnimations ?? view.platformDispatcher.accessibilityFeatures.disableAnimations,
-      boldText = platformData?.boldText ?? view.platformDispatcher.accessibilityFeatures.boldText,
-      highContrast = platformData?.highContrast ?? view.platformDispatcher.accessibilityFeatures.highContrast,
-      onOffSwitchLabels = platformData?.onOffSwitchLabels ?? view.platformDispatcher.accessibilityFeatures.onOffSwitchLabels,
-      alwaysUse24HourFormat = platformData?.alwaysUse24HourFormat ?? view.platformDispatcher.alwaysUse24HourFormat,
-      navigationMode = platformData?.navigationMode ?? NavigationMode.traditional,
-      gestureSettings = DeviceGestureSettings.fromView(view),
-      displayFeatures = view.displayFeatures;
+      : size = view.physicalSize / view.devicePixelRatio,
+        devicePixelRatio = view.devicePixelRatio,
+        _textScaleFactor = 1.0, // _textScaler is the source of truth.
+        _textScaler = _textScalerFromView(view, platformData),
+        platformBrightness = platformData?.platformBrightness ??
+            view.platformDispatcher.platformBrightness,
+        padding =
+            EdgeInsets.fromViewPadding(view.padding, view.devicePixelRatio),
+        viewPadding =
+            EdgeInsets.fromViewPadding(view.viewPadding, view.devicePixelRatio),
+        viewInsets =
+            EdgeInsets.fromViewPadding(view.viewInsets, view.devicePixelRatio),
+        systemGestureInsets = EdgeInsets.fromViewPadding(
+            view.systemGestureInsets, view.devicePixelRatio),
+        accessibleNavigation = platformData?.accessibleNavigation ??
+            view.platformDispatcher.accessibilityFeatures.accessibleNavigation,
+        invertColors = platformData?.invertColors ??
+            view.platformDispatcher.accessibilityFeatures.invertColors,
+        disableAnimations = platformData?.disableAnimations ??
+            view.platformDispatcher.accessibilityFeatures.disableAnimations,
+        boldText = platformData?.boldText ??
+            view.platformDispatcher.accessibilityFeatures.boldText,
+        highContrast = platformData?.highContrast ??
+            view.platformDispatcher.accessibilityFeatures.highContrast,
+        onOffSwitchLabels = platformData?.onOffSwitchLabels ??
+            view.platformDispatcher.accessibilityFeatures.onOffSwitchLabels,
+        alwaysUse24HourFormat = platformData?.alwaysUse24HourFormat ??
+            view.platformDispatcher.alwaysUse24HourFormat,
+        navigationMode =
+            platformData?.navigationMode ?? NavigationMode.traditional,
+        gestureSettings = DeviceGestureSettings.fromView(view),
+        displayFeatures = view.displayFeatures;
 
-  static TextScaler _textScalerFromView(ui.FlutterView view, MediaQueryData? platformData) {
-    final double scaleFactor = platformData?.textScaleFactor ?? view.platformDispatcher.textScaleFactor;
-    return scaleFactor == 1.0 ? TextScaler.noScaling : TextScaler.linear(scaleFactor);
+  static TextScaler _textScalerFromView(
+      ui.FlutterView view, MediaQueryData? platformData) {
+    final double scaleFactor = platformData?.textScaleFactor ??
+        view.platformDispatcher.textScaleFactor;
+    return scaleFactor == 1.0
+        ? TextScaler.noScaling
+        : TextScaler.linear(scaleFactor);
   }
 
   final Size size;
@@ -132,12 +149,13 @@ class MediaQueryData {
       return _textScaler;
     }
     return _textScaleFactor == 1.0
-      // textScaleFactor and textScaler from the constructor are consistent.
-      ? TextScaler.noScaling
-      // The constructor was called with an explicitly specified textScaleFactor,
-      // we assume the caller is unmigrated and ignore _textScaler.
-      : TextScaler.linear(_textScaleFactor);
+        // textScaleFactor and textScaler from the constructor are consistent.
+        ? TextScaler.noScaling
+        // The constructor was called with an explicitly specified textScaleFactor,
+        // we assume the caller is unmigrated and ignore _textScaler.
+        : TextScaler.linear(_textScaleFactor);
   }
+
   final TextScaler _textScaler;
 
   final Brightness platformBrightness;
@@ -171,7 +189,9 @@ class MediaQueryData {
   final List<ui.DisplayFeature> displayFeatures;
 
   Orientation get orientation {
-    return size.width > size.height ? Orientation.landscape : Orientation.portrait;
+    return size.width > size.height
+        ? Orientation.landscape
+        : Orientation.portrait;
   }
 
   MediaQueryData copyWith({
@@ -213,7 +233,8 @@ class MediaQueryData {
       viewPadding: viewPadding ?? this.viewPadding,
       viewInsets: viewInsets ?? this.viewInsets,
       systemGestureInsets: systemGestureInsets ?? this.systemGestureInsets,
-      alwaysUse24HourFormat: alwaysUse24HourFormat ?? this.alwaysUse24HourFormat,
+      alwaysUse24HourFormat:
+          alwaysUse24HourFormat ?? this.alwaysUse24HourFormat,
       invertColors: invertColors ?? this.invertColors,
       highContrast: highContrast ?? this.highContrast,
       onOffSwitchLabels: onOffSwitchLabels ?? this.onOffSwitchLabels,
@@ -243,10 +264,15 @@ class MediaQueryData {
         bottom: removeBottom ? 0.0 : null,
       ),
       viewPadding: viewPadding.copyWith(
-        left: removeLeft ? math.max(0.0, viewPadding.left - padding.left) : null,
+        left:
+            removeLeft ? math.max(0.0, viewPadding.left - padding.left) : null,
         top: removeTop ? math.max(0.0, viewPadding.top - padding.top) : null,
-        right: removeRight ? math.max(0.0, viewPadding.right - padding.right) : null,
-        bottom: removeBottom ? math.max(0.0, viewPadding.bottom - padding.bottom) : null,
+        right: removeRight
+            ? math.max(0.0, viewPadding.right - padding.right)
+            : null,
+        bottom: removeBottom
+            ? math.max(0.0, viewPadding.bottom - padding.bottom)
+            : null,
       ),
     );
   }
@@ -262,10 +288,16 @@ class MediaQueryData {
     }
     return copyWith(
       viewPadding: viewPadding.copyWith(
-        left: removeLeft ? math.max(0.0, viewPadding.left - viewInsets.left) : null,
+        left: removeLeft
+            ? math.max(0.0, viewPadding.left - viewInsets.left)
+            : null,
         top: removeTop ? math.max(0.0, viewPadding.top - viewInsets.top) : null,
-        right: removeRight ? math.max(0.0, viewPadding.right - viewInsets.right) : null,
-        bottom: removeBottom ? math.max(0.0, viewPadding.bottom - viewInsets.bottom) : null,
+        right: removeRight
+            ? math.max(0.0, viewPadding.right - viewInsets.right)
+            : null,
+        bottom: removeBottom
+            ? math.max(0.0, viewPadding.bottom - viewInsets.bottom)
+            : null,
       ),
       viewInsets: viewInsets.copyWith(
         left: removeLeft ? 0.0 : null,
@@ -302,8 +334,11 @@ class MediaQueryData {
   }
 
   MediaQueryData removeDisplayFeatures(Rect subScreen) {
-    assert(subScreen.left >= 0.0 && subScreen.top >= 0.0 &&
-        subScreen.right <= size.width && subScreen.bottom <= size.height,
+    assert(
+        subScreen.left >= 0.0 &&
+            subScreen.top >= 0.0 &&
+            subScreen.right <= size.width &&
+            subScreen.bottom <= size.height,
         "'subScreen' argument cannot be outside the bounds of the screen");
     if (subScreen.size == size && subScreen.topLeft == Offset.zero) {
       return this;
@@ -329,9 +364,10 @@ class MediaQueryData {
         right: math.max(0.0, viewInsets.right - rightInset),
         bottom: math.max(0.0, viewInsets.bottom - bottomInset),
       ),
-      displayFeatures: displayFeatures.where(
-        (ui.DisplayFeature displayFeature) => subScreen.overlaps(displayFeature.bounds)
-      ).toList(),
+      displayFeatures: displayFeatures
+          .where((ui.DisplayFeature displayFeature) =>
+              subScreen.overlaps(displayFeature.bounds))
+          .toList(),
     );
   }
 
@@ -340,47 +376,47 @@ class MediaQueryData {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is MediaQueryData
-        && other.size == size
-        && other.devicePixelRatio == devicePixelRatio
-        && other.textScaleFactor == textScaleFactor
-        && other.platformBrightness == platformBrightness
-        && other.padding == padding
-        && other.viewPadding == viewPadding
-        && other.viewInsets == viewInsets
-        && other.systemGestureInsets == systemGestureInsets
-        && other.alwaysUse24HourFormat == alwaysUse24HourFormat
-        && other.highContrast == highContrast
-        && other.onOffSwitchLabels == onOffSwitchLabels
-        && other.disableAnimations == disableAnimations
-        && other.invertColors == invertColors
-        && other.accessibleNavigation == accessibleNavigation
-        && other.boldText == boldText
-        && other.navigationMode == navigationMode
-        && other.gestureSettings == gestureSettings
-        && listEquals(other.displayFeatures, displayFeatures);
+    return other is MediaQueryData &&
+        other.size == size &&
+        other.devicePixelRatio == devicePixelRatio &&
+        other.textScaleFactor == textScaleFactor &&
+        other.platformBrightness == platformBrightness &&
+        other.padding == padding &&
+        other.viewPadding == viewPadding &&
+        other.viewInsets == viewInsets &&
+        other.systemGestureInsets == systemGestureInsets &&
+        other.alwaysUse24HourFormat == alwaysUse24HourFormat &&
+        other.highContrast == highContrast &&
+        other.onOffSwitchLabels == onOffSwitchLabels &&
+        other.disableAnimations == disableAnimations &&
+        other.invertColors == invertColors &&
+        other.accessibleNavigation == accessibleNavigation &&
+        other.boldText == boldText &&
+        other.navigationMode == navigationMode &&
+        other.gestureSettings == gestureSettings &&
+        listEquals(other.displayFeatures, displayFeatures);
   }
 
   @override
   int get hashCode => Object.hash(
-    size,
-    devicePixelRatio,
-    textScaleFactor,
-    platformBrightness,
-    padding,
-    viewPadding,
-    viewInsets,
-    alwaysUse24HourFormat,
-    highContrast,
-    onOffSwitchLabels,
-    disableAnimations,
-    invertColors,
-    accessibleNavigation,
-    boldText,
-    navigationMode,
-    gestureSettings,
-    Object.hashAll(displayFeatures),
-  );
+        size,
+        devicePixelRatio,
+        textScaleFactor,
+        platformBrightness,
+        padding,
+        viewPadding,
+        viewInsets,
+        alwaysUse24HourFormat,
+        highContrast,
+        onOffSwitchLabels,
+        disableAnimations,
+        invertColors,
+        accessibleNavigation,
+        boldText,
+        navigationMode,
+        gestureSettings,
+        Object.hashAll(displayFeatures),
+      );
 
   @override
   String toString() {
@@ -478,11 +514,9 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
     );
   }
 
-  @Deprecated(
-    'Use MediaQuery.fromView instead. '
-    'This constructor was deprecated in preparation for the upcoming multi-window support. '
-    'This feature was deprecated after v3.7.0-32.0.pre.'
-  )
+  @Deprecated('Use MediaQuery.fromView instead. '
+      'This constructor was deprecated in preparation for the upcoming multi-window support. '
+      'This feature was deprecated after v3.7.0-32.0.pre.')
   static Widget fromWindow({
     Key? key,
     required Widget child,
@@ -516,7 +550,8 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
       builder: (BuildContext context) {
         assert(debugCheckHasMediaQuery(context));
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+          data:
+              MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
           child: child,
         );
       },
@@ -539,7 +574,8 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
       final MediaQueryData data = MediaQuery.of(context);
       return MediaQuery(
         data: data.copyWith(
-          textScaler: data.textScaler.clamp(minScaleFactor: minScaleFactor, maxScaleFactor: maxScaleFactor),
+          textScaler: data.textScaler.clamp(
+              minScaleFactor: minScaleFactor, maxScaleFactor: maxScaleFactor),
         ),
         child: child,
       );
@@ -554,113 +590,159 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
 
   static MediaQueryData _of(BuildContext context, [_MediaQueryAspect? aspect]) {
     assert(debugCheckHasMediaQuery(context));
-    return InheritedModel.inheritFrom<MediaQuery>(context, aspect: aspect)!.data;
+    return InheritedModel.inheritFrom<MediaQuery>(context, aspect: aspect)!
+        .data;
   }
 
   static MediaQueryData? maybeOf(BuildContext context) {
     return _maybeOf(context);
   }
 
-  static MediaQueryData? _maybeOf(BuildContext context, [_MediaQueryAspect? aspect]) {
-    return InheritedModel.inheritFrom<MediaQuery>(context, aspect: aspect)?.data;
+  static MediaQueryData? _maybeOf(BuildContext context,
+      [_MediaQueryAspect? aspect]) {
+    return InheritedModel.inheritFrom<MediaQuery>(context, aspect: aspect)
+        ?.data;
   }
 
-  static Size sizeOf(BuildContext context) => _of(context, _MediaQueryAspect.size).size;
+  static Size sizeOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.size).size;
 
-  static Size? maybeSizeOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.size)?.size;
+  static Size? maybeSizeOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.size)?.size;
 
-  static Orientation orientationOf(BuildContext context) => _of(context, _MediaQueryAspect.orientation).orientation;
+  static Orientation orientationOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.orientation).orientation;
 
-  static Orientation? maybeOrientationOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.orientation)?.orientation;
+  static Orientation? maybeOrientationOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.orientation)?.orientation;
 
-  static double devicePixelRatioOf(BuildContext context) => _of(context, _MediaQueryAspect.devicePixelRatio).devicePixelRatio;
+  static double devicePixelRatioOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.devicePixelRatio).devicePixelRatio;
 
-  static double? maybeDevicePixelRatioOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.devicePixelRatio)?.devicePixelRatio;
+  static double? maybeDevicePixelRatioOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.devicePixelRatio)?.devicePixelRatio;
 
   @Deprecated(
     'Use textScalerOf instead. '
     'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
     'This feature was deprecated after v3.12.0-2.0.pre.',
   )
-  static double textScaleFactorOf(BuildContext context) => maybeTextScaleFactorOf(context) ?? 1.0;
+  static double textScaleFactorOf(BuildContext context) =>
+      maybeTextScaleFactorOf(context) ?? 1.0;
 
   @Deprecated(
     'Use maybeTextScalerOf instead. '
     'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
     'This feature was deprecated after v3.12.0-2.0.pre.',
   )
-  static double? maybeTextScaleFactorOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.textScaleFactor)?.textScaleFactor;
+  static double? maybeTextScaleFactorOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.textScaleFactor)?.textScaleFactor;
 
-  static TextScaler textScalerOf(BuildContext context) => maybeTextScalerOf(context) ?? TextScaler.noScaling;
+  static TextScaler textScalerOf(BuildContext context) =>
+      maybeTextScalerOf(context) ?? TextScaler.noScaling;
 
-  static TextScaler? maybeTextScalerOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.textScaler)?.textScaler;
+  static TextScaler? maybeTextScalerOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.textScaler)?.textScaler;
 
-  static Brightness platformBrightnessOf(BuildContext context) => maybePlatformBrightnessOf(context) ?? Brightness.light;
+  static Brightness platformBrightnessOf(BuildContext context) =>
+      maybePlatformBrightnessOf(context) ?? Brightness.light;
 
-  static Brightness? maybePlatformBrightnessOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.platformBrightness)?.platformBrightness;
+  static Brightness? maybePlatformBrightnessOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.platformBrightness)
+          ?.platformBrightness;
 
-  static EdgeInsets paddingOf(BuildContext context) => _of(context, _MediaQueryAspect.padding).padding;
+  static EdgeInsets paddingOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.padding).padding;
 
-  static EdgeInsets? maybePaddingOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.padding)?.padding;
+  static EdgeInsets? maybePaddingOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.padding)?.padding;
 
-  static EdgeInsets viewInsetsOf(BuildContext context) => _of(context, _MediaQueryAspect.viewInsets).viewInsets;
+  static EdgeInsets viewInsetsOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.viewInsets).viewInsets;
 
-  static EdgeInsets? maybeViewInsetsOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.viewInsets)?.viewInsets;
+  static EdgeInsets? maybeViewInsetsOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.viewInsets)?.viewInsets;
 
-  static EdgeInsets systemGestureInsetsOf(BuildContext context) => _of(context, _MediaQueryAspect.systemGestureInsets).systemGestureInsets;
+  static EdgeInsets systemGestureInsetsOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.systemGestureInsets).systemGestureInsets;
 
-  static EdgeInsets? maybeSystemGestureInsetsOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.systemGestureInsets)?.systemGestureInsets;
+  static EdgeInsets? maybeSystemGestureInsetsOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.systemGestureInsets)
+          ?.systemGestureInsets;
 
-  static EdgeInsets viewPaddingOf(BuildContext context) => _of(context, _MediaQueryAspect.viewPadding).viewPadding;
+  static EdgeInsets viewPaddingOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.viewPadding).viewPadding;
 
-  static EdgeInsets? maybeViewPaddingOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.viewPadding)?.viewPadding;
+  static EdgeInsets? maybeViewPaddingOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.viewPadding)?.viewPadding;
 
-  static bool alwaysUse24HourFormatOf(BuildContext context) => _of(context, _MediaQueryAspect.alwaysUse24HourFormat).alwaysUse24HourFormat;
+  static bool alwaysUse24HourFormatOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.alwaysUse24HourFormat)
+          .alwaysUse24HourFormat;
 
-  static bool? maybeAlwaysUse24HourFormatOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.alwaysUse24HourFormat)?.alwaysUse24HourFormat;
+  static bool? maybeAlwaysUse24HourFormatOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.alwaysUse24HourFormat)
+          ?.alwaysUse24HourFormat;
 
-  static bool accessibleNavigationOf(BuildContext context) => _of(context, _MediaQueryAspect.accessibleNavigation).accessibleNavigation;
+  static bool accessibleNavigationOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.accessibleNavigation).accessibleNavigation;
 
-  static bool? maybeAccessibleNavigationOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.accessibleNavigation)?.accessibleNavigation;
+  static bool? maybeAccessibleNavigationOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.accessibleNavigation)
+          ?.accessibleNavigation;
 
-  static bool invertColorsOf(BuildContext context) => _of(context, _MediaQueryAspect.invertColors).invertColors;
+  static bool invertColorsOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.invertColors).invertColors;
 
-  static bool? maybeInvertColorsOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.invertColors)?.invertColors;
+  static bool? maybeInvertColorsOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.invertColors)?.invertColors;
 
-  static bool highContrastOf(BuildContext context) => maybeHighContrastOf(context) ?? false;
+  static bool highContrastOf(BuildContext context) =>
+      maybeHighContrastOf(context) ?? false;
 
-  static bool? maybeHighContrastOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.highContrast)?.highContrast;
+  static bool? maybeHighContrastOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.highContrast)?.highContrast;
 
-  static bool onOffSwitchLabelsOf(BuildContext context) => maybeOnOffSwitchLabelsOf(context) ?? false;
+  static bool onOffSwitchLabelsOf(BuildContext context) =>
+      maybeOnOffSwitchLabelsOf(context) ?? false;
 
-  static bool? maybeOnOffSwitchLabelsOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.onOffSwitchLabels)?.onOffSwitchLabels;
+  static bool? maybeOnOffSwitchLabelsOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.onOffSwitchLabels)?.onOffSwitchLabels;
 
-  static bool disableAnimationsOf(BuildContext context) => _of(context, _MediaQueryAspect.disableAnimations).disableAnimations;
+  static bool disableAnimationsOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.disableAnimations).disableAnimations;
 
-  static bool? maybeDisableAnimationsOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.disableAnimations)?.disableAnimations;
+  static bool? maybeDisableAnimationsOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.disableAnimations)?.disableAnimations;
 
+  static bool boldTextOf(BuildContext context) =>
+      maybeBoldTextOf(context) ?? false;
 
-  static bool boldTextOf(BuildContext context) => maybeBoldTextOf(context) ?? false;
-
-  @Deprecated(
-    'Migrate to boldTextOf. '
-    'This feature was deprecated after v3.5.0-9.0.pre.'
-  )
+  @Deprecated('Migrate to boldTextOf. '
+      'This feature was deprecated after v3.5.0-9.0.pre.')
   static bool boldTextOverride(BuildContext context) => boldTextOf(context);
 
-  static bool? maybeBoldTextOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.boldText)?.boldText;
+  static bool? maybeBoldTextOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.boldText)?.boldText;
 
-  static NavigationMode navigationModeOf(BuildContext context) => _of(context, _MediaQueryAspect.navigationMode).navigationMode;
+  static NavigationMode navigationModeOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.navigationMode).navigationMode;
 
-  static NavigationMode? maybeNavigationModeOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.navigationMode)?.navigationMode;
+  static NavigationMode? maybeNavigationModeOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.navigationMode)?.navigationMode;
 
-  static DeviceGestureSettings gestureSettingsOf(BuildContext context) => _of(context, _MediaQueryAspect.gestureSettings).gestureSettings;
+  static DeviceGestureSettings gestureSettingsOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.gestureSettings).gestureSettings;
 
-  static DeviceGestureSettings? maybeGestureSettingsOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.gestureSettings)?.gestureSettings;
+  static DeviceGestureSettings? maybeGestureSettingsOf(BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.gestureSettings)?.gestureSettings;
 
-  static List<ui.DisplayFeature> displayFeaturesOf(BuildContext context) => _of(context, _MediaQueryAspect.displayFeatures).displayFeatures;
+  static List<ui.DisplayFeature> displayFeaturesOf(BuildContext context) =>
+      _of(context, _MediaQueryAspect.displayFeatures).displayFeatures;
 
-  static List<ui.DisplayFeature>? maybeDisplayFeaturesOf(BuildContext context) => _maybeOf(context, _MediaQueryAspect.displayFeatures)?.displayFeatures;
+  static List<ui.DisplayFeature>? maybeDisplayFeaturesOf(
+          BuildContext context) =>
+      _maybeOf(context, _MediaQueryAspect.displayFeatures)?.displayFeatures;
 
   @override
   bool updateShouldNotify(MediaQuery oldWidget) => data != oldWidget.data;
@@ -668,11 +750,13 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<MediaQueryData>('data', data, showName: false));
+    properties.add(
+        DiagnosticsProperty<MediaQueryData>('data', data, showName: false));
   }
 
   @override
-  bool updateShouldNotifyDependent(MediaQuery oldWidget, Set<Object> dependencies) {
+  bool updateShouldNotifyDependent(
+      MediaQuery oldWidget, Set<Object> dependencies) {
     for (final Object dependency in dependencies) {
       if (dependency is _MediaQueryAspect) {
         switch (dependency) {
@@ -709,7 +793,8 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
               return true;
             }
           case _MediaQueryAspect.systemGestureInsets:
-            if (data.systemGestureInsets != oldWidget.data.systemGestureInsets) {
+            if (data.systemGestureInsets !=
+                oldWidget.data.systemGestureInsets) {
               return true;
             }
           case _MediaQueryAspect.viewPadding:
@@ -717,11 +802,13 @@ class MediaQuery extends InheritedModel<_MediaQueryAspect> {
               return true;
             }
           case _MediaQueryAspect.alwaysUse24HourFormat:
-            if (data.alwaysUse24HourFormat != oldWidget.data.alwaysUse24HourFormat) {
+            if (data.alwaysUse24HourFormat !=
+                oldWidget.data.alwaysUse24HourFormat) {
               return true;
             }
           case _MediaQueryAspect.accessibleNavigation:
-            if (data.accessibleNavigation != oldWidget.data.accessibleNavigation) {
+            if (data.accessibleNavigation !=
+                oldWidget.data.accessibleNavigation) {
               return true;
             }
           case _MediaQueryAspect.invertColors:
@@ -785,7 +872,8 @@ class _MediaQueryFromView extends StatefulWidget {
   State<_MediaQueryFromView> createState() => _MediaQueryFromViewState();
 }
 
-class _MediaQueryFromViewState extends State<_MediaQueryFromView> with WidgetsBindingObserver {
+class _MediaQueryFromViewState extends State<_MediaQueryFromView>
+    with WidgetsBindingObserver {
   MediaQueryData? _parentData;
   MediaQueryData? _data;
 
@@ -817,11 +905,13 @@ class _MediaQueryFromViewState extends State<_MediaQueryFromView> with WidgetsBi
 
   void _updateParentData() {
     _parentData = widget.ignoreParentData ? null : MediaQuery.maybeOf(context);
-    _data = null; // _updateData must be called again after changing parent data.
+    _data =
+        null; // _updateData must be called again after changing parent data.
   }
 
   void _updateData() {
-    final MediaQueryData newData = MediaQueryData.fromView(widget.view, platformData: _parentData);
+    final MediaQueryData newData =
+        MediaQueryData.fromView(widget.view, platformData: _parentData);
     if (newData != _data) {
       setState(() {
         _data = newData;
@@ -878,8 +968,11 @@ class _MediaQueryFromViewState extends State<_MediaQueryFromView> with WidgetsBi
     MediaQueryData effectiveData = _data!;
     // If we get our platformBrightness from the PlatformDispatcher (i.e. we have no parentData) replace it
     // with the debugBrightnessOverride in non-release mode.
-    if (!kReleaseMode && _parentData == null && effectiveData.platformBrightness != debugBrightnessOverride) {
-      effectiveData = effectiveData.copyWith(platformBrightness: debugBrightnessOverride);
+    if (!kReleaseMode &&
+        _parentData == null &&
+        effectiveData.platformBrightness != debugBrightnessOverride) {
+      effectiveData =
+          effectiveData.copyWith(platformBrightness: debugBrightnessOverride);
     }
     return MediaQuery(
       data: effectiveData,
@@ -889,13 +982,17 @@ class _MediaQueryFromViewState extends State<_MediaQueryFromView> with WidgetsBi
 }
 
 const TextScaler _kUnspecifiedTextScaler = _UnspecifiedTextScaler();
+
 // TODO(LongCatIsLooong): Remove once `MediaQueryData.textScaleFactor` is
 // removed: https://github.com/flutter/flutter/issues/128825.
 class _UnspecifiedTextScaler implements TextScaler {
   const _UnspecifiedTextScaler();
 
   @override
-  TextScaler clamp({double minScaleFactor = 0, double maxScaleFactor = double.infinity}) => throw UnimplementedError();
+  TextScaler clamp(
+          {double minScaleFactor = 0,
+          double maxScaleFactor = double.infinity}) =>
+      throw UnimplementedError();
 
   @override
   double scale(double fontSize) => throw UnimplementedError();

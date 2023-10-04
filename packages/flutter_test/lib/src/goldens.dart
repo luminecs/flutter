@@ -19,7 +19,8 @@ abstract class GoldenFileComparator {
     return Uri.parse('${keyString.split(extension).join()}.$version$extension');
   }
 
-  static Future<ComparisonResult> compareLists(List<int> test, List<int> master) {
+  static Future<ComparisonResult> compareLists(
+      List<int> test, List<int> master) {
     return goldens.compareLists(test, master);
   }
 }
@@ -46,7 +47,8 @@ abstract class WebGoldenComparator {
 }
 
 WebGoldenComparator get webGoldenComparator => _webGoldenComparator;
-WebGoldenComparator _webGoldenComparator = const _TrivialWebGoldenComparator._();
+WebGoldenComparator _webGoldenComparator =
+    const _TrivialWebGoldenComparator._();
 set webGoldenComparator(WebGoldenComparator value) {
   _webGoldenComparator = value;
 }

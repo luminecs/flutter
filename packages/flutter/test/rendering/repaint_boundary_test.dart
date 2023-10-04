@@ -29,7 +29,9 @@ void main() {
     pumpFrame(phase: EnginePhase.flushSemantics);
   });
 
-  test('Repaint boundary can get new parent after markNeedsCompositingBitsUpdate', () {
+  test(
+      'Repaint boundary can get new parent after markNeedsCompositingBitsUpdate',
+      () {
     // Regression test for https://github.com/flutter/flutter/issues/24029.
 
     final RenderRepaintBoundary repaintBoundary = RenderRepaintBoundary();
@@ -55,7 +57,8 @@ void main() {
     expect(repaintBoundary.debugLayer, isA<OffsetLayer>());
   });
 
-  test('Framework does not create an OffsetLayer for a non-repaint boundary', () {
+  test('Framework does not create an OffsetLayer for a non-repaint boundary',
+      () {
     final _TestNonCompositedBox nonCompositedBox = _TestNonCompositedBox();
     final RenderOpacity opacity = RenderOpacity(
       child: nonCompositedBox,
@@ -74,7 +77,8 @@ void main() {
   });
 
   test('Framework ensures repaint boundary layer is not overwritten', () {
-    final _TestRepaintBoundaryThatOverwritesItsLayer faultyRenderObject = _TestRepaintBoundaryThatOverwritesItsLayer();
+    final _TestRepaintBoundaryThatOverwritesItsLayer faultyRenderObject =
+        _TestRepaintBoundaryThatOverwritesItsLayer();
     final RenderOpacity opacity = RenderOpacity(
       child: faultyRenderObject,
     );
@@ -83,7 +87,10 @@ void main() {
     layout(opacity, phase: EnginePhase.flushSemantics, onErrors: () {
       error = TestRenderingFlutterBinding.instance.takeFlutterErrorDetails()!;
     });
-    expect('${error.exception}', contains('Attempted to set a layer to a repaint boundary render object.'));
+    expect(
+        '${error.exception}',
+        contains(
+            'Attempted to set a layer to a repaint boundary render object.'));
   });
 }
 

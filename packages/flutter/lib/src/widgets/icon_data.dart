@@ -25,12 +25,12 @@ class IconData {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is IconData
-        && other.codePoint == codePoint
-        && other.fontFamily == fontFamily
-        && other.fontPackage == fontPackage
-        && other.matchTextDirection == matchTextDirection
-        && listEquals(other.fontFamilyFallback, fontFamilyFallback);
+    return other is IconData &&
+        other.codePoint == codePoint &&
+        other.fontFamily == fontFamily &&
+        other.fontPackage == fontPackage &&
+        other.matchTextDirection == matchTextDirection &&
+        listEquals(other.fontFamilyFallback, fontFamilyFallback);
   }
 
   @override
@@ -45,7 +45,8 @@ class IconData {
   }
 
   @override
-  String toString() => 'IconData(U+${codePoint.toRadixString(16).toUpperCase().padLeft(5, '0')})';
+  String toString() =>
+      'IconData(U+${codePoint.toRadixString(16).toUpperCase().padLeft(5, '0')})';
 }
 
 class IconDataProperty extends DiagnosticsProperty<IconData> {

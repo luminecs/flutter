@@ -9,70 +9,58 @@ import 'platform.dart';
 import 'utils.dart';
 
 class Config {
-  factory Config(
-    String name, {
-    required FileSystem fileSystem,
-    required Logger logger,
-    required Platform platform
-  }) {
-    return Config._common(
-      name,
-      fileSystem: fileSystem,
-      logger: logger,
-      platform: platform
-    );
+  factory Config(String name,
+      {required FileSystem fileSystem,
+      required Logger logger,
+      required Platform platform}) {
+    return Config._common(name,
+        fileSystem: fileSystem, logger: logger, platform: platform);
   }
 
-  factory Config.managed(
-    String name, {
-    required FileSystem fileSystem,
-    required Logger logger,
-    required Platform platform
-  }) {
-    return Config._common(
-      name,
-      fileSystem: fileSystem,
-      logger: logger,
-      platform: platform,
-      managed: true
-    );
+  factory Config.managed(String name,
+      {required FileSystem fileSystem,
+      required Logger logger,
+      required Platform platform}) {
+    return Config._common(name,
+        fileSystem: fileSystem,
+        logger: logger,
+        platform: platform,
+        managed: true);
   }
 
-  factory Config._common(
-    String name, {
-    required FileSystem fileSystem,
-    required Logger logger,
-    required Platform platform,
-    bool managed = false
-  }) {
+  factory Config._common(String name,
+      {required FileSystem fileSystem,
+      required Logger logger,
+      required Platform platform,
+      bool managed = false}) {
     final String filePath = _configPath(platform, fileSystem, name);
     final File file = fileSystem.file(filePath);
     file.parent.createSync(recursive: true);
     return Config.createForTesting(file, logger, managed: managed);
   }
 
-  factory Config.test({
-    String name = 'test',
-    Directory? directory,
-    Logger? logger,
-    bool managed = false
-  }) {
+  factory Config.test(
+      {String name = 'test',
+      Directory? directory,
+      Logger? logger,
+      bool managed = false}) {
     directory ??= MemoryFileSystem.test().directory('/');
-    return Config.createForTesting(
-      directory.childFile('.${kConfigDir}_$name'),
-      logger ?? BufferLogger.test(),
-      managed: managed
-    );
+    return Config.createForTesting(directory.childFile('.${kConfigDir}_$name'),
+        logger ?? BufferLogger.test(),
+        managed: managed);
   }
 
   @visibleForTesting
-  Config.createForTesting(File file, Logger logger, {bool managed = false}) : _file = file, _logger = logger {
+  Config.createForTesting(File file, Logger logger, {bool managed = false})
+      : _file = file,
+        _logger = logger {
     if (!_file.existsSync()) {
       return;
     }
     try {
       ErrorHandlingFileSystem.noExitOnFailure(() {
-        _values = castStringKeyedMap(json.decode(_file.readAsStringSync())) ?? <String, Object>{};
+        _values = castStringKeyedMap(json.decode(_file.readAsStringSync())) ??
+            <String, Object>{};
       });
     } on FormatException {
       _logger
@@ -104,7 +92,6 @@ class Config {
       }
     }
   }
-
 
   static const String kConfigDir = 'flutter';
 

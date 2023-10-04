@@ -188,7 +188,7 @@ class FakeArgs implements ArgResults {
   }
 
   @override
-  Object? operator[](String name) {
+  Object? operator [](String name) {
     return results[name];
   }
 }

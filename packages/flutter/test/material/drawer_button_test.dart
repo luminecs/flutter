@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 void main() {
-  testWidgetsWithLeakTracking('DrawerButton control test', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('DrawerButton control test',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -25,15 +26,16 @@ void main() {
     expect(find.byType(Drawer), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('DrawerButton onPressed overrides default end drawer open behaviour',
+  testWidgetsWithLeakTracking(
+      'DrawerButton onPressed overrides default end drawer open behaviour',
       (WidgetTester tester) async {
     bool customCallbackWasCalled = false;
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: Center(
-            child: DrawerButton(
-                onPressed: () => customCallbackWasCalled = true),
+            child:
+                DrawerButton(onPressed: () => customCallbackWasCalled = true),
           ),
           drawer: const Drawer(),
         ),
@@ -108,7 +110,8 @@ void main() {
     expect(windowsIcon.icon == androidIcon.icon, isTrue);
   });
 
-  testWidgetsWithLeakTracking('DrawerButton color', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('DrawerButton color',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(useMaterial3: true),
@@ -129,7 +132,8 @@ void main() {
     expect(iconText.text.style!.color, Colors.red);
   });
 
-  testWidgetsWithLeakTracking('DrawerButton semantics', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('DrawerButton semantics',
+      (WidgetTester tester) async {
     final SemanticsHandle handle = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
@@ -154,19 +158,22 @@ void main() {
       case TargetPlatform.windows:
         expectedLabel = null;
     }
-    expect(tester.getSemantics(find.byType(DrawerButton)), matchesSemantics(
-      tooltip: 'Open navigation menu',
-      label: expectedLabel,
-      isButton: true,
-      hasEnabledState: true,
-      isEnabled: true,
-      hasTapAction: true,
-      isFocusable: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(DrawerButton)),
+        matchesSemantics(
+          tooltip: 'Open navigation menu',
+          label: expectedLabel,
+          isButton: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          hasTapAction: true,
+          isFocusable: true,
+        ));
     handle.dispose();
   }, variant: TargetPlatformVariant.all());
 
-  testWidgetsWithLeakTracking('EndDrawerButton control test', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('EndDrawerButton control test',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -187,7 +194,8 @@ void main() {
     expect(find.byType(Drawer), findsOneWidget);
   });
 
-  testWidgetsWithLeakTracking('EndDrawerButton semantics', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('EndDrawerButton semantics',
+      (WidgetTester tester) async {
     final SemanticsHandle handle = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
@@ -211,19 +219,22 @@ void main() {
       case TargetPlatform.windows:
         expectedLabel = null;
     }
-    expect(tester.getSemantics(find.byType(EndDrawerButton)), matchesSemantics(
-      tooltip: 'Open navigation menu',
-      label: expectedLabel,
-      isButton: true,
-      hasEnabledState: true,
-      isEnabled: true,
-      hasTapAction: true,
-      isFocusable: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(EndDrawerButton)),
+        matchesSemantics(
+          tooltip: 'Open navigation menu',
+          label: expectedLabel,
+          isButton: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          hasTapAction: true,
+          isFocusable: true,
+        ));
     handle.dispose();
   }, variant: TargetPlatformVariant.all());
 
-  testWidgetsWithLeakTracking('EndDrawerButton color', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('EndDrawerButton color',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(useMaterial3: true),
@@ -244,14 +255,16 @@ void main() {
     expect(iconText.text.style!.color, Colors.red);
   });
 
-  testWidgetsWithLeakTracking('EndDrawerButton onPressed overrides default end drawer open behaviour',
+  testWidgetsWithLeakTracking(
+      'EndDrawerButton onPressed overrides default end drawer open behaviour',
       (WidgetTester tester) async {
     bool customCallbackWasCalled = false;
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: Center(
-            child: EndDrawerButton(onPressed: () => customCallbackWasCalled = true),
+            child: EndDrawerButton(
+                onPressed: () => customCallbackWasCalled = true),
           ),
           endDrawer: const Drawer(),
         ),

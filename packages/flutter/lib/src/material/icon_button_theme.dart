@@ -9,11 +9,12 @@ import 'theme.dart';
 
 @immutable
 class IconButtonThemeData with Diagnosticable {
-  const IconButtonThemeData({ this.style });
+  const IconButtonThemeData({this.style});
 
   final ButtonStyle? style;
 
-  static IconButtonThemeData? lerp(IconButtonThemeData? a, IconButtonThemeData? b, double t) {
+  static IconButtonThemeData? lerp(
+      IconButtonThemeData? a, IconButtonThemeData? b, double t) {
     if (identical(a, b)) {
       return a;
     }
@@ -39,7 +40,8 @@ class IconButtonThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null));
   }
 }
 
@@ -53,7 +55,8 @@ class IconButtonTheme extends InheritedTheme {
   final IconButtonThemeData data;
 
   static IconButtonThemeData of(BuildContext context) {
-    final IconButtonTheme? buttonTheme = context.dependOnInheritedWidgetOfExactType<IconButtonTheme>();
+    final IconButtonTheme? buttonTheme =
+        context.dependOnInheritedWidgetOfExactType<IconButtonTheme>();
     return buttonTheme?.data ?? Theme.of(context).iconButtonTheme;
   }
 

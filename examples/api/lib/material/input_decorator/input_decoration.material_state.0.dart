@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const MaterialStateExampleApp());
 
 class MaterialStateExampleApp extends StatelessWidget {
@@ -27,7 +26,8 @@ class MaterialStateExample extends StatelessWidget {
       initialValue: 'abc',
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.person),
-        prefixIconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+        prefixIconColor:
+            MaterialStateColor.resolveWith((Set<MaterialState> states) {
           if (states.contains(MaterialState.focused)) {
             return Colors.green;
           }

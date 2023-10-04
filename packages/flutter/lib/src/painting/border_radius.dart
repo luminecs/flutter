@@ -51,7 +51,8 @@ abstract class BorderRadiusGeometry {
 
   BorderRadiusGeometry operator %(double other);
 
-  static BorderRadiusGeometry? lerp(BorderRadiusGeometry? a, BorderRadiusGeometry? b, double t) {
+  static BorderRadiusGeometry? lerp(
+      BorderRadiusGeometry? a, BorderRadiusGeometry? b, double t) {
     if (identical(a, b)) {
       return a;
     }
@@ -112,7 +113,8 @@ abstract class BorderRadiusGeometry {
         _bottomEnd == _bottomStart) {
       if (_topStart != Radius.zero) {
         if (_topStart.x == _topStart.y) {
-          logical = 'BorderRadiusDirectional.circular(${_topStart.x.toStringAsFixed(1)})';
+          logical =
+              'BorderRadiusDirectional.circular(${_topStart.x.toStringAsFixed(1)})';
         } else {
           logical = 'BorderRadiusDirectional.all($_topStart)';
         }
@@ -169,61 +171,63 @@ abstract class BorderRadiusGeometry {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is BorderRadiusGeometry
-        && other._topLeft == _topLeft
-        && other._topRight == _topRight
-        && other._bottomLeft == _bottomLeft
-        && other._bottomRight == _bottomRight
-        && other._topStart == _topStart
-        && other._topEnd == _topEnd
-        && other._bottomStart == _bottomStart
-        && other._bottomEnd == _bottomEnd;
+    return other is BorderRadiusGeometry &&
+        other._topLeft == _topLeft &&
+        other._topRight == _topRight &&
+        other._bottomLeft == _bottomLeft &&
+        other._bottomRight == _bottomRight &&
+        other._topStart == _topStart &&
+        other._topEnd == _topEnd &&
+        other._bottomStart == _bottomStart &&
+        other._bottomEnd == _bottomEnd;
   }
 
   @override
   int get hashCode => Object.hash(
-    _topLeft,
-    _topRight,
-    _bottomLeft,
-    _bottomRight,
-    _topStart,
-    _topEnd,
-    _bottomStart,
-    _bottomEnd,
-  );
+        _topLeft,
+        _topRight,
+        _bottomLeft,
+        _bottomRight,
+        _topStart,
+        _topEnd,
+        _bottomStart,
+        _bottomEnd,
+      );
 }
 
 class BorderRadius extends BorderRadiusGeometry {
-  const BorderRadius.all(Radius radius) : this.only(
-    topLeft: radius,
-    topRight: radius,
-    bottomLeft: radius,
-    bottomRight: radius,
-  );
+  const BorderRadius.all(Radius radius)
+      : this.only(
+          topLeft: radius,
+          topRight: radius,
+          bottomLeft: radius,
+          bottomRight: radius,
+        );
 
-  BorderRadius.circular(double radius) : this.all(
-    Radius.circular(radius),
-  );
+  BorderRadius.circular(double radius)
+      : this.all(
+          Radius.circular(radius),
+        );
 
   const BorderRadius.vertical({
     Radius top = Radius.zero,
     Radius bottom = Radius.zero,
   }) : this.only(
-    topLeft: top,
-    topRight: top,
-    bottomLeft: bottom,
-    bottomRight: bottom,
-  );
+          topLeft: top,
+          topRight: top,
+          bottomLeft: bottom,
+          bottomRight: bottom,
+        );
 
   const BorderRadius.horizontal({
     Radius left = Radius.zero,
     Radius right = Radius.zero,
   }) : this.only(
-    topLeft: left,
-    topRight: right,
-    bottomLeft: left,
-    bottomRight: right,
-  );
+          topLeft: left,
+          topRight: right,
+          bottomLeft: left,
+          bottomRight: right,
+        );
 
   const BorderRadius.only({
     this.topLeft = Radius.zero,
@@ -287,9 +291,12 @@ class BorderRadius extends BorderRadiusGeometry {
     return RRect.fromRectAndCorners(
       rect,
       topLeft: topLeft.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
-      topRight: topRight.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
-      bottomLeft: bottomLeft.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
-      bottomRight: bottomRight.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
+      topRight:
+          topRight.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
+      bottomLeft:
+          bottomLeft.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
+      bottomRight:
+          bottomRight.clamp(minimum: Radius.zero), // ignore_clamp_double_lint
     );
   }
 
@@ -400,36 +407,38 @@ class BorderRadius extends BorderRadiusGeometry {
 }
 
 class BorderRadiusDirectional extends BorderRadiusGeometry {
-  const BorderRadiusDirectional.all(Radius radius) : this.only(
-    topStart: radius,
-    topEnd: radius,
-    bottomStart: radius,
-    bottomEnd: radius,
-  );
+  const BorderRadiusDirectional.all(Radius radius)
+      : this.only(
+          topStart: radius,
+          topEnd: radius,
+          bottomStart: radius,
+          bottomEnd: radius,
+        );
 
-  BorderRadiusDirectional.circular(double radius) : this.all(
-    Radius.circular(radius),
-  );
+  BorderRadiusDirectional.circular(double radius)
+      : this.all(
+          Radius.circular(radius),
+        );
 
   const BorderRadiusDirectional.vertical({
     Radius top = Radius.zero,
     Radius bottom = Radius.zero,
   }) : this.only(
-    topStart: top,
-    topEnd: top,
-    bottomStart: bottom,
-    bottomEnd: bottom,
-  );
+          topStart: top,
+          topEnd: top,
+          bottomStart: bottom,
+          bottomEnd: bottom,
+        );
 
   const BorderRadiusDirectional.horizontal({
     Radius start = Radius.zero,
     Radius end = Radius.zero,
   }) : this.only(
-    topStart: start,
-    topEnd: end,
-    bottomStart: start,
-    bottomEnd: end,
-  );
+          topStart: start,
+          topEnd: end,
+          bottomStart: start,
+          bottomEnd: end,
+        );
 
   const BorderRadiusDirectional.only({
     this.topStart = Radius.zero,
@@ -438,7 +447,8 @@ class BorderRadiusDirectional extends BorderRadiusGeometry {
     this.bottomEnd = Radius.zero,
   });
 
-  static const BorderRadiusDirectional zero = BorderRadiusDirectional.all(Radius.zero);
+  static const BorderRadiusDirectional zero =
+      BorderRadiusDirectional.all(Radius.zero);
 
   final Radius topStart;
 
@@ -556,7 +566,8 @@ class BorderRadiusDirectional extends BorderRadiusGeometry {
     );
   }
 
-  static BorderRadiusDirectional? lerp(BorderRadiusDirectional? a, BorderRadiusDirectional? b, double t) {
+  static BorderRadiusDirectional? lerp(
+      BorderRadiusDirectional? a, BorderRadiusDirectional? b, double t) {
     if (identical(a, b)) {
       return a;
     }

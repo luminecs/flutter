@@ -11,7 +11,8 @@ import 'scroll_position.dart';
 // void _listener(ScrollNotification notification) { }
 // late BuildContext context;
 
-typedef ScrollNotificationCallback = void Function(ScrollNotification notification);
+typedef ScrollNotificationCallback = void Function(
+    ScrollNotification notification);
 
 class _ScrollNotificationObserverScope extends InheritedWidget {
   const _ScrollNotificationObserverScope({
@@ -19,10 +20,11 @@ class _ScrollNotificationObserverScope extends InheritedWidget {
     required ScrollNotificationObserverState scrollNotificationObserverState,
   }) : _scrollNotificationObserverState = scrollNotificationObserverState;
 
-  final ScrollNotificationObserverState  _scrollNotificationObserverState;
+  final ScrollNotificationObserverState _scrollNotificationObserverState;
 
   @override
-  bool updateShouldNotify(_ScrollNotificationObserverScope old) => _scrollNotificationObserverState != old._scrollNotificationObserverState;
+  bool updateShouldNotify(_ScrollNotificationObserverScope old) =>
+      _scrollNotificationObserverState != old._scrollNotificationObserverState;
 }
 
 final class _ListenerEntry extends LinkedListEntry<_ListenerEntry> {
@@ -39,7 +41,9 @@ class ScrollNotificationObserver extends StatefulWidget {
   final Widget child;
 
   static ScrollNotificationObserverState? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<_ScrollNotificationObserverScope>()?._scrollNotificationObserverState;
+    return context
+        .dependOnInheritedWidgetOfExactType<_ScrollNotificationObserverScope>()
+        ?._scrollNotificationObserverState;
   }
 
   static ScrollNotificationObserverState of(BuildContext context) {
@@ -63,10 +67,12 @@ class ScrollNotificationObserver extends StatefulWidget {
   }
 
   @override
-  ScrollNotificationObserverState createState() => ScrollNotificationObserverState();
+  ScrollNotificationObserverState createState() =>
+      ScrollNotificationObserverState();
 }
 
-class ScrollNotificationObserverState extends State<ScrollNotificationObserver> {
+class ScrollNotificationObserverState
+    extends State<ScrollNotificationObserver> {
   LinkedList<_ListenerEntry>? _listeners = LinkedList<_ListenerEntry>();
 
   bool _debugAssertNotDisposed() {
@@ -103,7 +109,8 @@ class ScrollNotificationObserverState extends State<ScrollNotificationObserver> 
       return;
     }
 
-    final List<_ListenerEntry> localListeners = List<_ListenerEntry>.of(_listeners!);
+    final List<_ListenerEntry> localListeners =
+        List<_ListenerEntry>.of(_listeners!);
     for (final _ListenerEntry entry in localListeners) {
       try {
         if (entry.list != null) {
@@ -114,7 +121,8 @@ class ScrollNotificationObserverState extends State<ScrollNotificationObserver> 
           exception: exception,
           stack: stack,
           library: 'widget library',
-          context: ErrorDescription('while dispatching notifications for $runtimeType'),
+          context: ErrorDescription(
+              'while dispatching notifications for $runtimeType'),
           informationCollector: () => <DiagnosticsNode>[
             DiagnosticsProperty<ScrollNotificationObserverState>(
               'The $runtimeType sending notification was',

@@ -59,7 +59,8 @@ void main() {
     expect(log, isEmpty);
   });
 
-  testWidgets('Radio can be toggled when toggleable is set', (WidgetTester tester) async {
+  testWidgets('Radio can be toggled when toggleable is set',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
     final List<int?> log = <int?>[];
 
@@ -114,7 +115,8 @@ void main() {
     expect(log, equals(<int>[1]));
   });
 
-  testWidgets('Radio selected semantics - platform adaptive', (WidgetTester tester) async {
+  testWidgets('Radio selected semantics - platform adaptive',
+      (WidgetTester tester) async {
     final SemanticsTester semantics = SemanticsTester(tester);
 
     await tester.pumpWidget(CupertinoApp(
@@ -122,7 +124,7 @@ void main() {
         child: CupertinoRadio<int>(
           value: 1,
           groupValue: 1,
-          onChanged: (int? i) { },
+          onChanged: (int? i) {},
         ),
       ),
     ));
@@ -157,39 +159,43 @@ void main() {
         child: CupertinoRadio<int>(
           value: 1,
           groupValue: 2,
-          onChanged: (int? i) { },
+          onChanged: (int? i) {},
         ),
       ),
     ));
 
-    expect(tester.getSemantics(find.byType(Focus).last), matchesSemantics(
-      hasCheckedState: true,
-      hasEnabledState: true,
-      isEnabled: true,
-      hasTapAction: true,
-      isFocusable: true,
-      isInMutuallyExclusiveGroup: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(Focus).last),
+        matchesSemantics(
+          hasCheckedState: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          hasTapAction: true,
+          isFocusable: true,
+          isInMutuallyExclusiveGroup: true,
+        ));
 
     await tester.pumpWidget(CupertinoApp(
       home: Center(
         child: CupertinoRadio<int>(
           value: 2,
           groupValue: 2,
-          onChanged: (int? i) { },
+          onChanged: (int? i) {},
         ),
       ),
     ));
 
-    expect(tester.getSemantics(find.byType(Focus).last), matchesSemantics(
-      hasCheckedState: true,
-      hasEnabledState: true,
-      isEnabled: true,
-      hasTapAction: true,
-      isFocusable: true,
-      isInMutuallyExclusiveGroup: true,
-      isChecked: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(Focus).last),
+        matchesSemantics(
+          hasCheckedState: true,
+          hasEnabledState: true,
+          isEnabled: true,
+          hasTapAction: true,
+          isFocusable: true,
+          isInMutuallyExclusiveGroup: true,
+          isChecked: true,
+        ));
 
     await tester.pumpWidget(const CupertinoApp(
       home: Center(
@@ -201,21 +207,25 @@ void main() {
       ),
     ));
 
-    expect(tester.getSemantics(find.byType(Focus).last), matchesSemantics(
-      hasCheckedState: true,
-      hasEnabledState: true,
-      isFocusable: true,
-      isInMutuallyExclusiveGroup: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(Focus).last),
+        matchesSemantics(
+          hasCheckedState: true,
+          hasEnabledState: true,
+          isFocusable: true,
+          isInMutuallyExclusiveGroup: true,
+        ));
 
     await tester.pump();
 
     // Now the isFocusable should be gone.
-    expect(tester.getSemantics(find.byType(Focus).last), matchesSemantics(
-      hasCheckedState: true,
-      hasEnabledState: true,
-      isInMutuallyExclusiveGroup: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(Focus).last),
+        matchesSemantics(
+          hasCheckedState: true,
+          hasEnabledState: true,
+          isInMutuallyExclusiveGroup: true,
+        ));
 
     await tester.pumpWidget(const CupertinoApp(
       home: Center(
@@ -227,12 +237,14 @@ void main() {
       ),
     ));
 
-    expect(tester.getSemantics(find.byType(Focus).last), matchesSemantics(
-      hasCheckedState: true,
-      hasEnabledState: true,
-      isChecked: true,
-      isInMutuallyExclusiveGroup: true,
-    ));
+    expect(
+        tester.getSemantics(find.byType(Focus).last),
+        matchesSemantics(
+          hasCheckedState: true,
+          hasEnabledState: true,
+          isChecked: true,
+          isInMutuallyExclusiveGroup: true,
+        ));
 
     semantics.dispose();
   });
@@ -242,7 +254,8 @@ void main() {
     final Key key = UniqueKey();
     dynamic semanticEvent;
     int? radioValue = 2;
-    tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler<dynamic>(SystemChannels.accessibility, (dynamic message) async {
+    tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler<dynamic>(
+        SystemChannels.accessibility, (dynamic message) async {
       semanticEvent = message;
     });
 
@@ -268,14 +281,21 @@ void main() {
       'nodeId': object.debugSemantics!.id,
       'data': <String, dynamic>{},
     });
-    expect(object.debugSemantics!.getSemanticsData().hasAction(SemanticsAction.tap), true);
+    expect(
+        object.debugSemantics!
+            .getSemanticsData()
+            .hasAction(SemanticsAction.tap),
+        true);
 
     semantics.dispose();
-    tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler<dynamic>(SystemChannels.accessibility, null);
+    tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler<dynamic>(
+        SystemChannels.accessibility, null);
   });
 
-  testWidgets('Radio can be controlled by keyboard shortcuts', (WidgetTester tester) async {
-    tester.binding.focusManager.highlightStrategy = FocusHighlightStrategy.alwaysTraditional;
+  testWidgets('Radio can be controlled by keyboard shortcuts',
+      (WidgetTester tester) async {
+    tester.binding.focusManager.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
     int? groupValue = 1;
     const Key radioKey0 = Key('radio0');
     const Key radioKey1 = Key('radio1');
@@ -284,7 +304,8 @@ void main() {
     Widget buildApp({bool enabled = true}) {
       return CupertinoApp(
         home: Center(
-          child: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
             return SizedBox(
               width: 200,
               height: 100,
@@ -293,32 +314,38 @@ void main() {
                   CupertinoRadio<int>(
                     key: radioKey0,
                     value: 0,
-                    onChanged: enabled ? (int? newValue) {
-                      setState(() {
-                        groupValue = newValue;
-                      });
-                    } : null,
+                    onChanged: enabled
+                        ? (int? newValue) {
+                            setState(() {
+                              groupValue = newValue;
+                            });
+                          }
+                        : null,
                     groupValue: groupValue,
                     autofocus: true,
                   ),
                   CupertinoRadio<int>(
                     key: radioKey1,
                     value: 1,
-                    onChanged: enabled ? (int? newValue) {
-                      setState(() {
-                        groupValue = newValue;
-                      });
-                    } : null,
+                    onChanged: enabled
+                        ? (int? newValue) {
+                            setState(() {
+                              groupValue = newValue;
+                            });
+                          }
+                        : null,
                     groupValue: groupValue,
                   ),
                   CupertinoRadio<int>(
                     key: radioKey2,
                     value: 2,
-                    onChanged: enabled ? (int? newValue) {
-                      setState(() {
-                        groupValue = newValue;
-                      });
-                    } : null,
+                    onChanged: enabled
+                        ? (int? newValue) {
+                            setState(() {
+                              groupValue = newValue;
+                            });
+                          }
+                        : null,
                     groupValue: groupValue,
                     focusNode: focusNode2,
                   ),
@@ -346,13 +373,14 @@ void main() {
     expect(groupValue, equals(2));
   });
 
-  testWidgets('Show a checkmark when useCheckmarkStyle is true', (WidgetTester tester) async {
+  testWidgets('Show a checkmark when useCheckmarkStyle is true',
+      (WidgetTester tester) async {
     await tester.pumpWidget(CupertinoApp(
       home: Center(
         child: CupertinoRadio<int>(
           value: 1,
           groupValue: 1,
-          onChanged: (int? i) { },
+          onChanged: (int? i) {},
         ),
       ),
     ));
@@ -360,9 +388,8 @@ void main() {
 
     // Has no checkmark when useCheckmarkStyle is false
     expect(
-      tester.firstRenderObject<RenderBox>(find.byType(CupertinoRadio<int>)),
-      isNot(paints..path())
-    );
+        tester.firstRenderObject<RenderBox>(find.byType(CupertinoRadio<int>)),
+        isNot(paints..path()));
 
     await tester.pumpWidget(CupertinoApp(
       home: Center(
@@ -370,7 +397,7 @@ void main() {
           value: 1,
           groupValue: 2,
           useCheckmarkStyle: true,
-          onChanged: (int? i) { },
+          onChanged: (int? i) {},
         ),
       ),
     ));
@@ -378,9 +405,8 @@ void main() {
 
     // Has no checkmark when group value doesn't match the value
     expect(
-      tester.firstRenderObject<RenderBox>(find.byType(CupertinoRadio<int>)),
-      isNot(paints..path())
-    );
+        tester.firstRenderObject<RenderBox>(find.byType(CupertinoRadio<int>)),
+        isNot(paints..path()));
 
     await tester.pumpWidget(CupertinoApp(
       home: Center(
@@ -388,7 +414,7 @@ void main() {
           value: 1,
           groupValue: 1,
           useCheckmarkStyle: true,
-          onChanged: (int? i) { },
+          onChanged: (int? i) {},
         ),
       ),
     ));
@@ -396,18 +422,21 @@ void main() {
 
     // Draws a path to show the checkmark when toggled on
     expect(
-      tester.firstRenderObject<RenderBox>(find.byType(CupertinoRadio<int>)),
-      paints..path()
-    );
+        tester.firstRenderObject<RenderBox>(find.byType(CupertinoRadio<int>)),
+        paints..path());
   });
 
-  testWidgets('Do not crash when widget disappears while pointer is down', (WidgetTester tester) async {
+  testWidgets('Do not crash when widget disappears while pointer is down',
+      (WidgetTester tester) async {
     final Key key = UniqueKey();
 
     Widget buildRadio(bool show) {
       return CupertinoApp(
         home: Center(
-          child: show ? CupertinoRadio<bool>(key: key, value: true, groupValue: false, onChanged: (_) { }) : Container(),
+          child: show
+              ? CupertinoRadio<bool>(
+                  key: key, value: true, groupValue: false, onChanged: (_) {})
+              : Container(),
         ),
       );
     }

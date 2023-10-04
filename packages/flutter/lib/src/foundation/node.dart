@@ -21,7 +21,7 @@ class AbstractNode {
     }
   }
 
-  void redepthChildren() { }
+  void redepthChildren() {}
 
   Object? get owner => _owner;
   Object? _owner;

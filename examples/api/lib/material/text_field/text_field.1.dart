@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const TextFieldExampleApp());
 
 class TextFieldExampleApp extends StatelessWidget {
@@ -48,7 +47,8 @@ class _TextFieldExampleState extends State<TextFieldExample> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Thanks!'),
-                  content: Text('You typed "$value", which has length ${value.characters.length}.'),
+                  content: Text(
+                      'You typed "$value", which has length ${value.characters.length}.'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {

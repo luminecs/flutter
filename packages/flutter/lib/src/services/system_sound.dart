@@ -1,4 +1,3 @@
-
 import 'system_channels.dart';
 
 enum SystemSoundType {

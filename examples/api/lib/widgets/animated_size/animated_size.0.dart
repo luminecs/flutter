@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AnimatedSizeExampleApp());
 
 class AnimatedSizeExampleApp extends StatelessWidget {

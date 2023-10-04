@@ -5,7 +5,6 @@ import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 
 import '../painting/mocks_for_image_cache.dart';
 
-
 void main() {
   late ImageProvider image;
 
@@ -17,7 +16,8 @@ void main() {
     );
   });
 
-  testWidgetsWithLeakTracking('ImageIcon sizing - no theme, default size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ImageIcon sizing - no theme, default size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       Center(
         child: ImageIcon(image),
@@ -42,7 +42,8 @@ void main() {
     expect(tester.widget<Image>(find.byType(Image)).color!.alpha, equals(128));
   });
 
-  testWidgetsWithLeakTracking('ImageIcon sizing - no theme, explicit size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ImageIcon sizing - no theme, explicit size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: ImageIcon(
@@ -56,7 +57,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(96.0)));
   });
 
-  testWidgetsWithLeakTracking('ImageIcon sizing - sized theme', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ImageIcon sizing - sized theme',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: IconTheme(
@@ -70,7 +72,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(36.0)));
   });
 
-  testWidgetsWithLeakTracking('ImageIcon sizing - sized theme, explicit size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ImageIcon sizing - sized theme, explicit size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: IconTheme(
@@ -87,7 +90,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(48.0)));
   });
 
-  testWidgetsWithLeakTracking('ImageIcon sizing - sizeless theme, default size', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ImageIcon sizing - sizeless theme, default size',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const Center(
         child: IconTheme(
@@ -101,7 +105,8 @@ void main() {
     expect(renderObject.size, equals(const Size.square(24.0)));
   });
 
-  testWidgetsWithLeakTracking('ImageIcon has semantics data', (WidgetTester tester) async {
+  testWidgetsWithLeakTracking('ImageIcon has semantics data',
+      (WidgetTester tester) async {
     final SemanticsHandle handle = tester.ensureSemantics();
     await tester.pumpWidget(
       const Directionality(
@@ -115,11 +120,12 @@ void main() {
       ),
     );
 
-    expect(tester.getSemantics(find.byType(ImageIcon)), matchesSemantics(
-      label: 'test',
-      textDirection: TextDirection.ltr,
-    ));
+    expect(
+        tester.getSemantics(find.byType(ImageIcon)),
+        matchesSemantics(
+          label: 'test',
+          textDirection: TextDirection.ltr,
+        ));
     handle.dispose();
   });
-
 }

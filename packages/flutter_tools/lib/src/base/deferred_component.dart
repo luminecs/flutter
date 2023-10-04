@@ -35,7 +35,8 @@ class DeferredComponent {
 
   @override
   String toString() {
-    final StringBuffer out = StringBuffer('\nDeferredComponent: $name\n  Libraries:');
+    final StringBuffer out =
+        StringBuffer('\nDeferredComponent: $name\n  Libraries:');
     for (final String lib in libraries) {
       out.write('\n    - $lib');
     }
@@ -79,7 +80,9 @@ class LoadingUnit {
     return other.id == id && other.libraries.toSet().containsAll(libraries);
   }
 
-  static List<LoadingUnit> parseGeneratedLoadingUnits(Directory outputDir, Logger logger, {List<String>? abis}) {
+  static List<LoadingUnit> parseGeneratedLoadingUnits(
+      Directory outputDir, Logger logger,
+      {List<String>? abis}) {
     final List<LoadingUnit> loadingUnits = <LoadingUnit>[];
     final List<FileSystemEntity> files = outputDir.listSync(recursive: true);
     for (final FileSystemEntity fileEntity in files) {
@@ -104,7 +107,8 @@ class LoadingUnit {
     return loadingUnits;
   }
 
-  static List<LoadingUnit> parseLoadingUnitManifest(File manifestFile, Logger logger) {
+  static List<LoadingUnit> parseLoadingUnitManifest(
+      File manifestFile, Logger logger) {
     if (!manifestFile.existsSync()) {
       return <LoadingUnit>[];
     }
@@ -114,20 +118,25 @@ class LoadingUnit {
     try {
       manifest = jsonDecode(fileString) as Map<String, dynamic>;
     } on FormatException catch (e) {
-      logger.printError('Loading unit manifest at `${manifestFile.path}` was invalid JSON:\n$e');
+      logger.printError(
+          'Loading unit manifest at `${manifestFile.path}` was invalid JSON:\n$e');
     }
     final List<LoadingUnit> loadingUnits = <LoadingUnit>[];
     // Setup android source directory
     if (manifest != null) {
-      for (final dynamic loadingUnitMetadata in manifest['loadingUnits'] as List<dynamic>) {
-        final Map<String, dynamic> loadingUnitMap = loadingUnitMetadata as Map<String, dynamic>;
+      for (final dynamic loadingUnitMetadata
+          in manifest['loadingUnits'] as List<dynamic>) {
+        final Map<String, dynamic> loadingUnitMap =
+            loadingUnitMetadata as Map<String, dynamic>;
         if (loadingUnitMap['id'] == 1) {
           continue; // Skip base unit
         }
-        loadingUnits.add(LoadingUnit(
-          id: loadingUnitMap['id'] as int,
-          path: loadingUnitMap['path'] as String,
-          libraries: List<String>.from(loadingUnitMap['libraries'] as List<dynamic>)),
+        loadingUnits.add(
+          LoadingUnit(
+              id: loadingUnitMap['id'] as int,
+              path: loadingUnitMap['path'] as String,
+              libraries: List<String>.from(
+                  loadingUnitMap['libraries'] as List<dynamic>)),
         );
       }
     }

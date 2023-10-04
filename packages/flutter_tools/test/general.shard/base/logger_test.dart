@@ -27,58 +27,74 @@ void main() {
       outputPreferences: OutputPreferences.test(),
     );
 
-    expect(loggerFactory.createLogger(
-      verbose: false,
-      prefixedErrors: false,
-      machine: false,
-      daemon: false,
-      windows: false,
-    ), isA<StdoutLogger>());
-    expect(loggerFactory.createLogger(
-      verbose: false,
-      prefixedErrors: false,
-      machine: false,
-      daemon: false,
-      windows: true,
-    ), isA<WindowsStdoutLogger>());
-    expect(loggerFactory.createLogger(
-      verbose: true,
-      prefixedErrors: false,
-      machine: false,
-      daemon: false,
-      windows: true,
-    ), isA<VerboseLogger>());
-    expect(loggerFactory.createLogger(
-      verbose: true,
-      prefixedErrors: false,
-      machine: false,
-      daemon: false,
-      windows: false,
-    ), isA<VerboseLogger>());
-    expect(loggerFactory.createLogger(
-      verbose: false,
-      prefixedErrors: true,
-      machine: false,
-      daemon: false,
-      windows: false,
-    ), isA<PrefixedErrorLogger>());
-    expect(loggerFactory.createLogger(
-      verbose: false,
-      prefixedErrors: false,
-      machine: false,
-      daemon: true,
-      windows: false,
-    ), isA<NotifyingLogger>());
-    expect(loggerFactory.createLogger(
-      verbose: false,
-      prefixedErrors: false,
-      machine: true,
-      daemon: false,
-      windows: false,
-    ), isA<AppRunLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: false,
+          prefixedErrors: false,
+          machine: false,
+          daemon: false,
+          windows: false,
+        ),
+        isA<StdoutLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: false,
+          prefixedErrors: false,
+          machine: false,
+          daemon: false,
+          windows: true,
+        ),
+        isA<WindowsStdoutLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: true,
+          prefixedErrors: false,
+          machine: false,
+          daemon: false,
+          windows: true,
+        ),
+        isA<VerboseLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: true,
+          prefixedErrors: false,
+          machine: false,
+          daemon: false,
+          windows: false,
+        ),
+        isA<VerboseLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: false,
+          prefixedErrors: true,
+          machine: false,
+          daemon: false,
+          windows: false,
+        ),
+        isA<PrefixedErrorLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: false,
+          prefixedErrors: false,
+          machine: false,
+          daemon: true,
+          windows: false,
+        ),
+        isA<NotifyingLogger>());
+    expect(
+        loggerFactory.createLogger(
+          verbose: false,
+          prefixedErrors: false,
+          machine: true,
+          daemon: false,
+          windows: false,
+        ),
+        isA<AppRunLogger>());
   });
 
-  testWithoutContext('WindowsStdoutLogger rewrites emojis when terminal does not support emoji', () {
+  testWithoutContext(
+      'WindowsStdoutLogger rewrites emojis when terminal does not support emoji',
+      () {
     final FakeStdio stdio = FakeStdio();
     final WindowsStdoutLogger logger = WindowsStdoutLogger(
       outputPreferences: OutputPreferences.test(),
@@ -91,7 +107,9 @@ void main() {
     expect(stdio.writtenToStdout, <String>['X√\n']);
   });
 
-  testWithoutContext('WindowsStdoutLogger does not rewrite emojis when terminal does support emoji', () {
+  testWithoutContext(
+      'WindowsStdoutLogger does not rewrite emojis when terminal does support emoji',
+      () {
     final FakeStdio stdio = FakeStdio();
     final WindowsStdoutLogger logger = WindowsStdoutLogger(
       outputPreferences: OutputPreferences.test(),
@@ -137,7 +155,8 @@ void main() {
     const bool wrap = true;
     const bool newline = true;
     expect(
-      () => delegatingLogger.printError(message,
+      () => delegatingLogger.printError(
+        message,
         stackTrace: stackTrace,
         emphasis: emphasis,
         color: color,
@@ -145,18 +164,20 @@ void main() {
         hangingIndent: hangingIndent,
         wrap: wrap,
       ),
-      _throwsInvocationFor(() => fakeLogger.printError(message,
-        stackTrace: stackTrace,
-        emphasis: emphasis,
-        color: color,
-        indent: indent,
-        hangingIndent: hangingIndent,
-        wrap: wrap,
-      )),
+      _throwsInvocationFor(() => fakeLogger.printError(
+            message,
+            stackTrace: stackTrace,
+            emphasis: emphasis,
+            color: color,
+            indent: indent,
+            hangingIndent: hangingIndent,
+            wrap: wrap,
+          )),
     );
 
     expect(
-      () => delegatingLogger.printStatus(message,
+      () => delegatingLogger.printStatus(
+        message,
         emphasis: emphasis,
         color: color,
         newline: newline,
@@ -164,14 +185,15 @@ void main() {
         hangingIndent: hangingIndent,
         wrap: wrap,
       ),
-      _throwsInvocationFor(() => fakeLogger.printStatus(message,
-        emphasis: emphasis,
-        color: color,
-        newline: newline,
-        indent: indent,
-        hangingIndent: hangingIndent,
-        wrap: wrap,
-      )),
+      _throwsInvocationFor(() => fakeLogger.printStatus(
+            message,
+            emphasis: emphasis,
+            color: color,
+            newline: newline,
+            indent: indent,
+            hangingIndent: hangingIndent,
+            wrap: wrap,
+          )),
     );
 
     expect(
@@ -182,20 +204,22 @@ void main() {
     final Map<String, dynamic> eventArgs = <String, dynamic>{};
     expect(
       () => delegatingLogger.sendEvent(message, eventArgs),
-    _throwsInvocationFor(() => fakeLogger.sendEvent(message, eventArgs)),
+      _throwsInvocationFor(() => fakeLogger.sendEvent(message, eventArgs)),
     );
 
     const String progressId = 'progressId';
     const int progressIndicatorPadding = kDefaultStatusPadding * 2;
     expect(
-      () => delegatingLogger.startProgress(message,
+      () => delegatingLogger.startProgress(
+        message,
         progressId: progressId,
         progressIndicatorPadding: progressIndicatorPadding,
       ),
-      _throwsInvocationFor(() => fakeLogger.startProgress(message,
-          progressId: progressId,
-          progressIndicatorPadding: progressIndicatorPadding,
-      )),
+      _throwsInvocationFor(() => fakeLogger.startProgress(
+            message,
+            progressId: progressId,
+            progressIndicatorPadding: progressIndicatorPadding,
+          )),
     );
 
     expect(
@@ -246,24 +270,29 @@ void main() {
       final StackTrace stackTrace = StackTrace.current;
       verboseLogger.printError('Helpless!', stackTrace: stackTrace);
 
-      expect(mockLogger.statusText, matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Hey Hey Hey Hey\n'
-                                             r'\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Oooh, I do I do I do\n$'));
+      expect(
+          mockLogger.statusText,
+          matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Hey Hey Hey Hey\n'
+              r'\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Oooh, I do I do I do\n$'));
       expect(mockLogger.traceText, '');
-      expect(mockLogger.errorText, matches( r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Helpless!\n'));
-      final String lastLine = LineSplitter.split(stackTrace.toString()).toList().last;
+      expect(mockLogger.errorText,
+          matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Helpless!\n'));
+      final String lastLine =
+          LineSplitter.split(stackTrace.toString()).toList().last;
       expect(mockLogger.errorText, endsWith('$lastLine\n\n'));
     });
 
     testWithoutContext('ANSI colored errors', () async {
       final BufferLogger mockLogger = BufferLogger(
         terminal: AnsiTerminal(
-          stdio:  FakeStdio(),
+          stdio: FakeStdio(),
           platform: FakePlatform(stdoutSupportsAnsi: true),
         ),
         outputPreferences: OutputPreferences.test(showColor: true),
       );
       final VerboseLogger verboseLogger = VerboseLogger(
-        mockLogger, stopwatchFactory: FakeStopwatchFactory(stopwatch: fakeStopWatch),
+        mockLogger,
+        stopwatchFactory: FakeStopwatchFactory(stopwatch: fakeStopWatch),
       );
 
       verboseLogger.printStatus('Hey Hey Hey Hey');
@@ -272,24 +301,29 @@ void main() {
 
       expect(
           mockLogger.statusText,
-          matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] ' '${bold}Hey Hey Hey Hey$resetBold'
-                  r'\n\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Oooh, I do I do I do\n$'));
+          matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] '
+              '${bold}Hey Hey Hey Hey$resetBold'
+              r'\n\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] Oooh, I do I do I do\n$'));
       expect(mockLogger.traceText, '');
       expect(
           mockLogger.errorText,
-          matches('^$red' r'\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] ' '${bold}Helpless!$resetBold$resetColor' r'\n$'));
+          matches('^$red'
+              r'\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] '
+              '${bold}Helpless!$resetBold$resetColor'
+              r'\n$'));
     });
 
     testWithoutContext('printBox', () {
       final BufferLogger mockLogger = BufferLogger(
         terminal: AnsiTerminal(
-          stdio:  FakeStdio(),
+          stdio: FakeStdio(),
           platform: FakePlatform(stdoutSupportsAnsi: true),
         ),
         outputPreferences: OutputPreferences.test(showColor: true),
       );
       final VerboseLogger verboseLogger = VerboseLogger(
-        mockLogger, stopwatchFactory: FakeStopwatchFactory(stopwatch: fakeStopWatch),
+        mockLogger,
+        stopwatchFactory: FakeStopwatchFactory(stopwatch: fakeStopWatch),
       );
 
       verboseLogger.printBox('This is the box message', title: 'Sample title');
@@ -300,13 +334,13 @@ void main() {
             '\x1B[1m           ┌─ Sample title ──────────┐\x1B[22m\n'
             '\x1B[1m           │ This is the box message │\x1B[22m\n'
             '\x1B[1m           └─────────────────────────┘\x1B[22m\n'
-            '\x1B[1m           \x1B[22m\n'
-        ),
+            '\x1B[1m           \x1B[22m\n'),
       );
     });
   });
 
-  testWithoutContext('Logger does not throw when stdio write throws synchronously', () async {
+  testWithoutContext(
+      'Logger does not throw when stdio write throws synchronously', () async {
     final FakeStdout stdout = FakeStdout(syncError: true);
     final FakeStdout stderr = FakeStdout(syncError: true);
     final Stdio stdio = Stdio.test(stdout: stdout, stderr: stderr);
@@ -323,7 +357,8 @@ void main() {
     logger.printError('error message');
   });
 
-  testWithoutContext('Logger does not throw when stdio write throws asynchronously', () async {
+  testWithoutContext(
+      'Logger does not throw when stdio write throws asynchronously', () async {
     final FakeStdout stdout = FakeStdout(syncError: false);
     final FakeStdout stderr = FakeStdout(syncError: false);
     final Stdio stdio = Stdio.test(stdout: stdout, stderr: stderr);
@@ -342,9 +377,13 @@ void main() {
     await stderr.done;
   });
 
-  testWithoutContext('Logger does not throw when stdio completes done with an error', () async {
-    final FakeStdout stdout = FakeStdout(syncError: false, completeWithError: true);
-    final FakeStdout stderr = FakeStdout(syncError: false, completeWithError: true);
+  testWithoutContext(
+      'Logger does not throw when stdio completes done with an error',
+      () async {
+    final FakeStdout stdout =
+        FakeStdout(syncError: false, completeWithError: true);
+    final FakeStdout stderr =
+        FakeStdout(syncError: false, completeWithError: true);
     final Stdio stdio = Stdio.test(stdout: stdout, stderr: stderr);
     final Logger logger = StdoutLogger(
       terminal: AnsiTerminal(
@@ -453,11 +492,11 @@ void main() {
             )..start();
             doWhileAsync(time, () => spinner.ticks < 10);
             List<String> lines = outputStdout();
-            expect(lines[0], startsWith(
-              terminal.supportsEmoji
-                ? '⣽\b⣻\b⢿\b⡿\b⣟\b⣯\b⣷\b⣾\b⣽\b⣻'
-                : '\\\b|\b/\b-\b\\\b|\b/\b-'
-              ),
+            expect(
+              lines[0],
+              startsWith(terminal.supportsEmoji
+                  ? '⣽\b⣻\b⢿\b⡿\b⣟\b⣯\b⣷\b⣾\b⣽\b⣻'
+                  : '\\\b|\b/\b-\b\\\b|\b/\b-'),
             );
             expect(lines[0].endsWith('\n'), isFalse);
             expect(lines.length, equals(1));
@@ -476,7 +515,9 @@ void main() {
           expect(done, isTrue);
         });
 
-        testWithoutContext('AnonymousSpinnerStatus logs warning after timeout without color support', () async {
+        testWithoutContext(
+            'AnonymousSpinnerStatus logs warning after timeout without color support',
+            () async {
           mockStopwatch = FakeStopwatch();
           const String warningMessage = 'a warning message.';
           final bool done = FakeAsync().run<bool>((FakeAsync time) {
@@ -504,7 +545,9 @@ void main() {
           expect(done, isTrue);
         });
 
-        testWithoutContext('AnonymousSpinnerStatus logs warning after timeout with color support', () async {
+        testWithoutContext(
+            'AnonymousSpinnerStatus logs warning after timeout with color support',
+            () async {
           mockStopwatch = FakeStopwatch();
           const String warningMessage = 'a warning message.';
           final bool done = FakeAsync().run<bool>((FakeAsync time) {
@@ -523,7 +566,8 @@ void main() {
 
             List<String> lines = outputStdout();
             expect(lines.join().contains(RegExp(red)), isTrue);
-            expect(lines.join(), '⣽\b${AnsiTerminal.red}a warning message.${AnsiTerminal.resetColor}⣻');
+            expect(lines.join(),
+                '⣽\b${AnsiTerminal.red}a warning message.${AnsiTerminal.resetColor}⣻');
             expect(lines.join(), matches('$red$warningMessage$resetColor'));
 
             spinner.stop();
@@ -533,7 +577,8 @@ void main() {
           expect(done, isTrue);
         });
 
-        testWithoutContext('Stdout startProgress on colored terminal', () async {
+        testWithoutContext('Stdout startProgress on colored terminal',
+            () async {
           final Logger logger = StdoutLogger(
             terminal: coloredTerminal,
             stdio: mockStdio,
@@ -542,7 +587,8 @@ void main() {
           );
           final Status status = logger.startProgress(
             'Hello',
-            progressIndicatorPadding: 20, // this minus the "Hello" equals the 15 below.
+            progressIndicatorPadding:
+                20, // this minus the "Hello" equals the 15 below.
           );
           expect(outputStderr().length, equals(1));
           expect(outputStderr().first, isEmpty);
@@ -551,8 +597,8 @@ void main() {
           expect(
             outputStdout().join('\n'),
             matches(terminal.supportsEmoji
-              ? r'^Hello {15} {4} {8}⣽$'
-              : r'^Hello {15} {4} {8}\\$'),
+                ? r'^Hello {15} {4} {8}⣽$'
+                : r'^Hello {15} {4} {8}\\$'),
           );
           mockStopwatch.elapsed = const Duration(seconds: 4, milliseconds: 100);
           status.stop();
@@ -560,13 +606,14 @@ void main() {
             outputStdout().join('\n'),
             matches(
               terminal.supportsEmoji
-              ? r'^Hello {15} {4} {8}⣽[\b] [\b]{8}[\d, ]{4}[\d]\.[\d]s[\n]$'
-              : r'^Hello {15} {4} {8}\\[\b] [\b]{8}[\d, ]{4}[\d]\.[\d]s[\n]$',
+                  ? r'^Hello {15} {4} {8}⣽[\b] [\b]{8}[\d, ]{4}[\d]\.[\d]s[\n]$'
+                  : r'^Hello {15} {4} {8}\\[\b] [\b]{8}[\d, ]{4}[\d]\.[\d]s[\n]$',
             ),
           );
         });
 
-        testWithoutContext('Stdout startProgress on colored terminal pauses', () async {
+        testWithoutContext('Stdout startProgress on colored terminal pauses',
+            () async {
           bool done = false;
           FakeAsync().run((FakeAsync time) {
             mockStopwatch.elapsed = const Duration(seconds: 5);
@@ -606,7 +653,8 @@ void main() {
           expect(done, isTrue);
         });
 
-        testWithoutContext('Stdout startProgress on non-colored terminal pauses', () async {
+        testWithoutContext(
+            'Stdout startProgress on non-colored terminal pauses', () async {
           bool done = false;
           FakeAsync().run((FakeAsync time) {
             mockStopwatch.elapsed = const Duration(seconds: 5);
@@ -624,13 +672,13 @@ void main() {
             logger.printStatus('Rude Interrupting Cow');
             status.stop();
             expect(
-              outputStdout().join('\n'),
-              '$message' // initial message
-              '     ' // margin
-              '\n' // clearing the line
-              'Rude Interrupting Cow\n' // message
-              '$message         5.0s\n' // message restoration
-            );
+                outputStdout().join('\n'),
+                '$message' // initial message
+                '     ' // margin
+                '\n' // clearing the line
+                'Rude Interrupting Cow\n' // message
+                '$message         5.0s\n' // message restoration
+                );
             done = true;
           });
           expect(done, isTrue);
@@ -644,18 +692,19 @@ void main() {
             doWhileAsync(time, () => spinnerStatus.ticks < 10);
             List<String> lines = outputStdout();
 
-            expect(lines[0], startsWith(
-              terminal.supportsEmoji
-              ? 'Hello world                     ⣽\b⣻\b⢿\b⡿\b⣟\b⣯\b⣷\b⣾\b⣽\b⣻'
-              : 'Hello world                     \\\b|\b/\b-\b\\\b|\b/\b-\b\\\b|'
-            ));
+            expect(
+                lines[0],
+                startsWith(terminal.supportsEmoji
+                    ? 'Hello world                     ⣽\b⣻\b⢿\b⡿\b⣟\b⣯\b⣷\b⣾\b⣽\b⣻'
+                    : 'Hello world                     \\\b|\b/\b-\b\\\b|\b/\b-\b\\\b|'));
             expect(lines.length, equals(1));
             expect(lines[0].endsWith('\n'), isFalse);
 
             // Verify a cancel does _not_ print the time and prints a newline.
             spinnerStatus.cancel();
             lines = outputStdout();
-            final List<Match> matches = secondDigits.allMatches(lines[0]).toList();
+            final List<Match> matches =
+                secondDigits.allMatches(lines[0]).toList();
             expect(matches, isEmpty);
             final String leading = terminal.supportsEmoji ? '⣻' : '|';
 
@@ -682,23 +731,23 @@ void main() {
 
             expect(lines, hasLength(1));
             expect(
-              lines[0],
-              terminal.supportsEmoji
-                ? 'Hello world                     ⣽\b⣻\b⢿\b⡿\b⣟\b⣯\b⣷\b⣾\b⣽\b⣻'
-                : 'Hello world                     \\\b|\b/\b-\b\\\b|\b/\b-\b\\\b|'
-            );
+                lines[0],
+                terminal.supportsEmoji
+                    ? 'Hello world                     ⣽\b⣻\b⢿\b⡿\b⣟\b⣯\b⣷\b⣾\b⣽\b⣻'
+                    : 'Hello world                     \\\b|\b/\b-\b\\\b|\b/\b-\b\\\b|');
 
             // Verify a stop prints the time.
             spinnerStatus.stop();
             lines = outputStdout();
             expect(lines, hasLength(2));
-            expect(lines[0], matches(
-              terminal.supportsEmoji
-                ? r'Hello world                     ⣽[\b]⣻[\b]⢿[\b]⡿[\b]⣟[\b]⣯[\b]⣷[\b]⣾[\b]⣽[\b]⣻[\b] [\b]{8}[\d., ]{5}[\d]ms$'
-                : r'Hello world                     \\[\b]|[\b]/[\b]-[\b]\\[\b]|[\b]/[\b]-[\b]\\[\b]|[\b] [\b]{8}[\d., ]{5}[\d]ms$'
-            ));
+            expect(
+                lines[0],
+                matches(terminal.supportsEmoji
+                    ? r'Hello world                     ⣽[\b]⣻[\b]⢿[\b]⡿[\b]⣟[\b]⣯[\b]⣷[\b]⣾[\b]⣽[\b]⣻[\b] [\b]{8}[\d., ]{5}[\d]ms$'
+                    : r'Hello world                     \\[\b]|[\b]/[\b]-[\b]\\[\b]|[\b]/[\b]-[\b]\\[\b]|[\b] [\b]{8}[\d., ]{5}[\d]ms$'));
             expect(lines[1], isEmpty);
-            final List<Match> times = secondDigits.allMatches(lines[0]).toList();
+            final List<Match> times =
+                secondDigits.allMatches(lines[0]).toList();
             expect(times, isNotNull);
             expect(times, hasLength(1));
             final Match match = times.single;
@@ -746,7 +795,8 @@ void main() {
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printError('0123456789' * 15);
       final List<String> lines = outputStderr();
@@ -759,7 +809,9 @@ void main() {
       expect(lines[3], equals('0123456789' * 3));
     });
 
-    testWithoutContext('AppRunLogger writes plain text statuses when no app is active', () async {
+    testWithoutContext(
+        'AppRunLogger writes plain text statuses when no app is active',
+        () async {
       final BufferLogger buffer = BufferLogger.test();
       final AppRunLogger logger = AppRunLogger(parent: buffer);
 
@@ -775,7 +827,8 @@ void main() {
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printError('0123456789' * 15, indent: 5);
       final List<String> lines = outputStderr();
@@ -791,14 +844,16 @@ void main() {
       expect(lines[5], isEmpty);
     });
 
-    testWithoutContext('Error logs are wrapped and can have hanging indent.', () async {
+    testWithoutContext('Error logs are wrapped and can have hanging indent.',
+        () async {
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printError('0123456789' * 15, hangingIndent: 5);
       final List<String> lines = outputStderr();
@@ -814,14 +869,17 @@ void main() {
       expect(lines[5], isEmpty);
     });
 
-    testWithoutContext('Error logs are wrapped, indented, and can have hanging indent.', () async {
+    testWithoutContext(
+        'Error logs are wrapped, indented, and can have hanging indent.',
+        () async {
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printError('0123456789' * 15, indent: 4, hangingIndent: 5);
       final List<String> lines = outputStderr();
@@ -844,7 +902,8 @@ void main() {
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printStatus('0123456789' * 15);
       final List<String> lines = outputStdout();
@@ -857,14 +916,16 @@ void main() {
       expect(lines[3], equals('0123456789' * 3));
     });
 
-    testWithoutContext('Stdout logs are wrapped and can be indented.', () async {
+    testWithoutContext('Stdout logs are wrapped and can be indented.',
+        () async {
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printStatus('0123456789' * 15, indent: 5);
       final List<String> lines = outputStdout();
@@ -880,15 +941,16 @@ void main() {
       expect(lines[5], isEmpty);
     });
 
-    testWithoutContext('Stdout logs are wrapped and can have hanging indent.', () async {
+    testWithoutContext('Stdout logs are wrapped and can have hanging indent.',
+        () async {
       final Logger logger = StdoutLogger(
-        terminal: AnsiTerminal(
+          terminal: AnsiTerminal(
+            stdio: fakeStdio,
+            platform: _kNoAnsiPlatform,
+          ),
           stdio: fakeStdio,
-          platform: _kNoAnsiPlatform,
-        ),
-        stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40)
-      );
+          outputPreferences:
+              OutputPreferences.test(wrapText: true, wrapColumn: 40));
       logger.printStatus('0123456789' * 15, hangingIndent: 5);
       final List<String> lines = outputStdout();
 
@@ -903,14 +965,17 @@ void main() {
       expect(lines[5], isEmpty);
     });
 
-    testWithoutContext('Stdout logs are wrapped, indented, and can have hanging indent.', () async {
+    testWithoutContext(
+        'Stdout logs are wrapped, indented, and can have hanging indent.',
+        () async {
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
           platform: _kNoAnsiPlatform,
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.printStatus('0123456789' * 15, indent: 4, hangingIndent: 5);
       final List<String> lines = outputStdout();
@@ -940,7 +1005,10 @@ void main() {
 
       expect(outputStdout().length, equals(1));
       expect(outputStdout().first, isEmpty);
-      expect(lines[0], equals('${AnsiTerminal.red}Pants on fire!${AnsiTerminal.resetColor}'));
+      expect(
+          lines[0],
+          equals(
+              '${AnsiTerminal.red}Pants on fire!${AnsiTerminal.resetColor}'));
     });
 
     testWithoutContext('Stdout logs are not colored', () async {
@@ -950,7 +1018,7 @@ void main() {
           platform: FakePlatform(),
         ),
         stdio: fakeStdio,
-        outputPreferences:  OutputPreferences.test(showColor: true),
+        outputPreferences: OutputPreferences.test(showColor: true),
       );
       logger.printStatus('All good.');
 
@@ -971,13 +1039,12 @@ void main() {
       );
       logger.printBox('Hello world', title: 'Test title');
       final String stdout = fakeStdio.writtenToStdout.join();
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─ Test title ┐\n'
-          '│ Hello world │\n'
-          '└─────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─ Test title ┐\n'
+            '│ Hello world │\n'
+            '└─────────────┘\n'),
       );
     });
 
@@ -992,13 +1059,12 @@ void main() {
       );
       logger.printBox('Hello world');
       final String stdout = fakeStdio.writtenToStdout.join();
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─────────────┐\n'
-          '│ Hello world │\n'
-          '└─────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─────────────┐\n'
+            '│ Hello world │\n'
+            '└─────────────┘\n'),
       );
     });
 
@@ -1013,18 +1079,18 @@ void main() {
       );
       logger.printBox('Hello world\nThis is a new line', title: 'Test title');
       final String stdout = fakeStdio.writtenToStdout.join();
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─ Test title ───────┐\n'
-          '│ Hello world        │\n'
-          '│ This is a new line │\n'
-          '└────────────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─ Test title ───────┐\n'
+            '│ Hello world        │\n'
+            '│ This is a new line │\n'
+            '└────────────────────┘\n'),
       );
     });
 
-    testWithoutContext('Stdout printBox handles content with ANSI escape characters', () {
+    testWithoutContext(
+        'Stdout printBox handles content with ANSI escape characters', () {
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
@@ -1037,13 +1103,12 @@ void main() {
       const String clear = '\u001B[2J\u001B[H';
       logger.printBox('${bold}Hello world$clear', title: 'Test title');
       final String stdout = fakeStdio.writtenToStdout.join();
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─ Test title ┐\n'
-          '│ ${bold}Hello world$clear │\n'
-          '└─────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─ Test title ┐\n'
+            '│ ${bold}Hello world$clear │\n'
+            '└─────────────┘\n'),
       );
     });
 
@@ -1055,28 +1120,30 @@ void main() {
           platform: FakePlatform(),
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(showColor: true, wrapColumn: columnLimit),
+        outputPreferences:
+            OutputPreferences.test(showColor: true, wrapColumn: columnLimit),
       );
-      logger.printBox('This line is longer than $columnLimit characters', title: 'Test');
+      logger.printBox('This line is longer than $columnLimit characters',
+          title: 'Test');
       final String stdout = fakeStdio.writtenToStdout.join();
       final List<String> stdoutLines = stdout.split('\n');
 
       expect(stdoutLines.length, greaterThan(1));
       expect(stdoutLines[1].length, equals(columnLimit));
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─ Test ─────┐\n'
-          '│ This line  │\n'
-          '│ is longer  │\n'
-          '│ than 14    │\n'
-          '│ characters │\n'
-          '└────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─ Test ─────┐\n'
+            '│ This line  │\n'
+            '│ is longer  │\n'
+            '│ than 14    │\n'
+            '│ characters │\n'
+            '└────────────┘\n'),
       );
     });
 
-    testWithoutContext('Stdout printBox handles column limit and respects new lines', () {
+    testWithoutContext(
+        'Stdout printBox handles column limit and respects new lines', () {
       const int columnLimit = 14;
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
@@ -1084,31 +1151,33 @@ void main() {
           platform: FakePlatform(),
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(showColor: true, wrapColumn: columnLimit),
+        outputPreferences:
+            OutputPreferences.test(showColor: true, wrapColumn: columnLimit),
       );
-      logger.printBox('This\nline is longer than\n\n$columnLimit characters', title: 'Test');
+      logger.printBox('This\nline is longer than\n\n$columnLimit characters',
+          title: 'Test');
       final String stdout = fakeStdio.writtenToStdout.join();
       final List<String> stdoutLines = stdout.split('\n');
 
       expect(stdoutLines.length, greaterThan(1));
       expect(stdoutLines[1].length, equals(columnLimit));
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─ Test ─────┐\n'
-          '│ This       │\n'
-          '│ line is    │\n'
-          '│ longer     │\n'
-          '│ than       │\n'
-          '│            │\n'
-          '│ 14         │\n'
-          '│ characters │\n'
-          '└────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─ Test ─────┐\n'
+            '│ This       │\n'
+            '│ line is    │\n'
+            '│ longer     │\n'
+            '│ than       │\n'
+            '│            │\n'
+            '│ 14         │\n'
+            '│ characters │\n'
+            '└────────────┘\n'),
       );
     });
 
-    testWithoutContext('Stdout printBox breaks long words that exceed the column limit', () {
+    testWithoutContext(
+        'Stdout printBox breaks long words that exceed the column limit', () {
       const int columnLimit = 14;
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
@@ -1116,27 +1185,27 @@ void main() {
           platform: FakePlatform(),
         ),
         stdio: fakeStdio,
-        outputPreferences: OutputPreferences.test(showColor: true, wrapColumn: columnLimit),
+        outputPreferences:
+            OutputPreferences.test(showColor: true, wrapColumn: columnLimit),
       );
-      logger.printBox('Thiswordislongerthan${columnLimit}characters', title: 'Test');
+      logger.printBox('Thiswordislongerthan${columnLimit}characters',
+          title: 'Test');
       final String stdout = fakeStdio.writtenToStdout.join();
       final List<String> stdoutLines = stdout.split('\n');
 
       expect(stdoutLines.length, greaterThan(1));
       expect(stdoutLines[1].length, equals(columnLimit));
-      expect(stdout,
-        contains(
-          '\n'
-          '┌─ Test ─────┐\n'
-          '│ Thiswordis │\n'
-          '│ longerthan │\n'
-          '│ 14characte │\n'
-          '│ rs         │\n'
-          '└────────────┘\n'
-        ),
+      expect(
+        stdout,
+        contains('\n'
+            '┌─ Test ─────┐\n'
+            '│ Thiswordis │\n'
+            '│ longerthan │\n'
+            '│ 14characte │\n'
+            '│ rs         │\n'
+            '└────────────┘\n'),
       );
     });
-
 
     testWithoutContext('Stdout startProgress on non-color terminal', () async {
       final FakeStopwatch fakeStopwatch = FakeStopwatch();
@@ -1151,7 +1220,8 @@ void main() {
       );
       final Status status = logger.startProgress(
         'Hello',
-        progressIndicatorPadding: 20, // this minus the "Hello" equals the 15 below.
+        progressIndicatorPadding:
+            20, // this minus the "Hello" equals the 15 below.
       );
       expect(outputStderr().length, equals(1));
       expect(outputStderr().first, isEmpty);
@@ -1208,7 +1278,8 @@ void main() {
       expect(summaryStatus.cancel, throwsAssertionError);
     });
 
-    testWithoutContext('sequential startProgress calls with StdoutLogger', () async {
+    testWithoutContext('sequential startProgress calls with StdoutLogger',
+        () async {
       final Logger logger = StdoutLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
@@ -1230,7 +1301,9 @@ void main() {
       expect(output[1], matches(RegExp(r'BBB[ ]{61}[\d, ]{5}[\d]ms')));
     });
 
-    testWithoutContext('sequential startProgress calls with VerboseLogger and StdoutLogger', () async {
+    testWithoutContext(
+        'sequential startProgress calls with VerboseLogger and StdoutLogger',
+        () async {
       final Logger logger = VerboseLogger(
         StdoutLogger(
           terminal: AnsiTerminal(
@@ -1247,14 +1320,17 @@ void main() {
 
       expect(outputStdout(), <Matcher>[
         matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] AAA$'),
-        matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] AAA \(completed.*\)$'),
+        matches(
+            r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] AAA \(completed.*\)$'),
         matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] BBB$'),
-        matches(r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] BBB \(completed.*\)$'),
+        matches(
+            r'^\[ (?: {0,2}\+[0-9]{1,4} ms|       )\] BBB \(completed.*\)$'),
         matches(r'^$'),
       ]);
     });
 
-    testWithoutContext('sequential startProgress calls with BufferLogger', () async {
+    testWithoutContext('sequential startProgress calls with BufferLogger',
+        () async {
       final BufferLogger logger = BufferLogger(
         terminal: AnsiTerminal(
           stdio: fakeStdio,
@@ -1292,13 +1368,14 @@ void main() {
         ),
         stdio: fakeStdio,
         stopwatchFactory: FakeStopwatchFactory(stopwatch: FakeStopwatch()),
-        outputPreferences: OutputPreferences.test(wrapText: true, wrapColumn: 40),
+        outputPreferences:
+            OutputPreferences.test(wrapText: true, wrapColumn: 40),
       );
       logger.startProgress('po').stop();
       expect(outputStderr(), <String>['']);
       expect(outputStdout(), <String>[
-          'po                                                                   0ms',
-          '',
+        'po                                                                   0ms',
+        '',
       ]);
       logger.startProgress('ta')
         ..pause()
@@ -1306,10 +1383,10 @@ void main() {
         ..stop();
       expect(outputStderr(), <String>['']);
       expect(outputStdout(), <String>[
-          'po                                                                   0ms',
-          'ta                                                              ',
-          'ta                                                                   0ms',
-          '',
+        'po                                                                   0ms',
+        'ta                                                              ',
+        'ta                                                                   0ms',
+        '',
       ]);
       logger.startSpinner()
         ..pause()
@@ -1317,10 +1394,10 @@ void main() {
         ..stop();
       expect(outputStderr(), <String>['']);
       expect(outputStdout(), <String>[
-          'po                                                                   0ms',
-          'ta                                                              ',
-          'ta                                                                   0ms',
-          '',
+        'po                                                                   0ms',
+        'ta                                                              ',
+        'ta                                                                   0ms',
+        '',
       ]);
     });
   });
@@ -1328,7 +1405,8 @@ void main() {
 
 class FakeLogger implements Logger {
   @override
-  dynamic noSuchMethod(Invocation invocation) => throw invocation; // ignore: only_throw_errors
+  dynamic noSuchMethod(Invocation invocation) =>
+      throw invocation; // ignore: only_throw_errors
 }
 
 Invocation _invocationFor(dynamic Function() fakeCall) {
@@ -1338,23 +1416,30 @@ Invocation _invocationFor(dynamic Function() fakeCall) {
     return invocation;
   }
   throw UnsupportedError('_invocationFor can be used only with Fake objects '
-    'that throw Invocations');
+      'that throw Invocations');
 }
 
 Matcher _matchesInvocation(Invocation expected) {
   return const TypeMatcher<Invocation>()
-    // Compare Symbol strings instead of comparing Symbols directly for a nicer failure message.
-    .having((Invocation actual) => actual.memberName.toString(), 'memberName', expected.memberName.toString())
-    .having((Invocation actual) => actual.isGetter, 'isGetter', expected.isGetter)
-    .having((Invocation actual) => actual.isSetter, 'isSetter', expected.isSetter)
-    .having((Invocation actual) => actual.isMethod, 'isMethod', expected.isMethod)
-    .having((Invocation actual) => actual.typeArguments, 'typeArguments', expected.typeArguments)
-    .having((Invocation actual) => actual.positionalArguments, 'positionalArguments', expected.positionalArguments)
-    .having((Invocation actual) => actual.namedArguments, 'namedArguments', expected.namedArguments);
+      // Compare Symbol strings instead of comparing Symbols directly for a nicer failure message.
+      .having((Invocation actual) => actual.memberName.toString(), 'memberName',
+          expected.memberName.toString())
+      .having(
+          (Invocation actual) => actual.isGetter, 'isGetter', expected.isGetter)
+      .having(
+          (Invocation actual) => actual.isSetter, 'isSetter', expected.isSetter)
+      .having(
+          (Invocation actual) => actual.isMethod, 'isMethod', expected.isMethod)
+      .having((Invocation actual) => actual.typeArguments, 'typeArguments',
+          expected.typeArguments)
+      .having((Invocation actual) => actual.positionalArguments,
+          'positionalArguments', expected.positionalArguments)
+      .having((Invocation actual) => actual.namedArguments, 'namedArguments',
+          expected.namedArguments);
 }
 
 Matcher _throwsInvocationFor(dynamic Function() fakeCall) =>
-  throwsA(_matchesInvocation(_invocationFor(fakeCall)));
+    throwsA(_matchesInvocation(_invocationFor(fakeCall)));
 
 class FakeStdout extends Fake implements Stdout {
   FakeStdout({required this.syncError, this.completeWithError = false});

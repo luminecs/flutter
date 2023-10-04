@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const ElevatedButtonExampleApp());
 
 class ElevatedButtonExampleApp extends StatelessWidget {
@@ -27,7 +26,8 @@ class ElevatedButtonExample extends StatefulWidget {
 class _ElevatedButtonExampleState extends State<ElevatedButtonExample> {
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
     return Center(
       child: Column(

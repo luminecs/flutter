@@ -23,14 +23,14 @@ class ComponentDemoTabData {
   final String? documentationUrl;
 
   @override
-  bool operator==(Object other) {
+  bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is ComponentDemoTabData
-        && other.tabName == tabName
-        && other.description == description
-        && other.documentationUrl == documentationUrl;
+    return other is ComponentDemoTabData &&
+        other.tabName == tabName &&
+        other.description == description &&
+        other.documentationUrl == documentationUrl;
   }
 
   @override
@@ -54,21 +54,27 @@ class TabbedComponentDemoScaffold extends StatefulWidget {
   final bool showExampleCodeAction;
 
   @override
-  State<TabbedComponentDemoScaffold> createState() => _TabbedComponentDemoScaffoldState();
+  State<TabbedComponentDemoScaffold> createState() =>
+      _TabbedComponentDemoScaffoldState();
 }
 
-class _TabbedComponentDemoScaffoldState extends State<TabbedComponentDemoScaffold> {
+class _TabbedComponentDemoScaffoldState
+    extends State<TabbedComponentDemoScaffold> {
   void _showExampleCode(BuildContext context) {
-    final String? tag = widget.demos![DefaultTabController.of(context).index].exampleCodeTag;
+    final String? tag =
+        widget.demos![DefaultTabController.of(context).index].exampleCodeTag;
     if (tag != null) {
-      Navigator.push(context, MaterialPageRoute<FullScreenCodeDialog>(
-        builder: (BuildContext context) => FullScreenCodeDialog(exampleCodeTag: tag)
-      ));
+      Navigator.push(
+          context,
+          MaterialPageRoute<FullScreenCodeDialog>(
+              builder: (BuildContext context) =>
+                  FullScreenCodeDialog(exampleCodeTag: tag)));
     }
   }
 
   Future<void> _showApiDocumentation(BuildContext context) async {
-    final String? url = widget.demos![DefaultTabController.of(context).index].documentationUrl;
+    final String? url =
+        widget.demos![DefaultTabController.of(context).index].documentationUrl;
     if (url == null) {
       return;
     }
@@ -106,7 +112,8 @@ class _TabbedComponentDemoScaffoldState extends State<TabbedComponentDemoScaffol
             Builder(
               builder: (BuildContext context) {
                 return IconButton(
-                  icon: const Icon(Icons.library_books, semanticLabel: 'Show documentation'),
+                  icon: const Icon(Icons.library_books,
+                      semanticLabel: 'Show documentation'),
                   onPressed: () => _showApiDocumentation(context),
                 );
               },
@@ -124,7 +131,10 @@ class _TabbedComponentDemoScaffoldState extends State<TabbedComponentDemoScaffol
           ],
           bottom: TabBar(
             isScrollable: widget.isScrollable,
-            tabs: widget.demos!.map<Widget>((ComponentDemoTabData data) => Tab(text: data.tabName)).toList(),
+            tabs: widget.demos!
+                .map<Widget>(
+                    (ComponentDemoTabData data) => Tab(text: data.tabName))
+                .toList(),
           ),
         ),
         body: TabBarView(
@@ -136,7 +146,8 @@ class _TabbedComponentDemoScaffoldState extends State<TabbedComponentDemoScaffol
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(demo.description!,
+                    child: Text(
+                      demo.description!,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -152,7 +163,7 @@ class _TabbedComponentDemoScaffoldState extends State<TabbedComponentDemoScaffol
 }
 
 class FullScreenCodeDialog extends StatefulWidget {
-  const FullScreenCodeDialog({ super.key, this.exampleCodeTag });
+  const FullScreenCodeDialog({super.key, this.exampleCodeTag});
 
   final String? exampleCodeTag;
 
@@ -161,12 +172,12 @@ class FullScreenCodeDialog extends StatefulWidget {
 }
 
 class FullScreenCodeDialogState extends State<FullScreenCodeDialog> {
-
   String? _exampleCode;
 
   @override
   void didChangeDependencies() {
-    getExampleCode(widget.exampleCodeTag, DefaultAssetBundle.of(context)).then((String? code) {
+    getExampleCode(widget.exampleCodeTag, DefaultAssetBundle.of(context))
+        .then((String? code) {
       if (mounted) {
         setState(() {
           _exampleCode = code ?? 'Example code not found';
@@ -178,9 +189,10 @@ class FullScreenCodeDialogState extends State<FullScreenCodeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final SyntaxHighlighterStyle style = Theme.of(context).brightness == Brightness.dark
-      ? SyntaxHighlighterStyle.darkThemeStyle()
-      : SyntaxHighlighterStyle.lightThemeStyle();
+    final SyntaxHighlighterStyle style =
+        Theme.of(context).brightness == Brightness.dark
+            ? SyntaxHighlighterStyle.darkThemeStyle()
+            : SyntaxHighlighterStyle.lightThemeStyle();
 
     Widget body;
     if (_exampleCode == null) {
@@ -210,7 +222,9 @@ class FullScreenCodeDialogState extends State<FullScreenCodeDialog> {
             Icons.clear,
             semanticLabel: 'Close',
           ),
-          onPressed: () { Navigator.pop(context); },
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: const Text('Example code'),
       ),
@@ -220,12 +234,12 @@ class FullScreenCodeDialogState extends State<FullScreenCodeDialog> {
 }
 
 class MaterialDemoDocumentationButton extends StatelessWidget {
-  MaterialDemoDocumentationButton(String routeName, { super.key })
-    : documentationUrl = kDemoDocumentationUrl[routeName],
-      assert(
-        kDemoDocumentationUrl[routeName] != null,
-        'A documentation URL was not specified for demo route $routeName in kAllGalleryDemos',
-      );
+  MaterialDemoDocumentationButton(String routeName, {super.key})
+      : documentationUrl = kDemoDocumentationUrl[routeName],
+        assert(
+          kDemoDocumentationUrl[routeName] != null,
+          'A documentation URL was not specified for demo route $routeName in kAllGalleryDemos',
+        );
 
   final String? documentationUrl;
 
@@ -234,18 +248,19 @@ class MaterialDemoDocumentationButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.library_books),
       tooltip: 'API documentation',
-      onPressed: () => launchUrl(Uri.parse(documentationUrl!), mode: LaunchMode.inAppWebView),
+      onPressed: () => launchUrl(Uri.parse(documentationUrl!),
+          mode: LaunchMode.inAppWebView),
     );
   }
 }
 
 class CupertinoDemoDocumentationButton extends StatelessWidget {
-  CupertinoDemoDocumentationButton(String routeName, { super.key })
-    : documentationUrl = kDemoDocumentationUrl[routeName],
-      assert(
-        kDemoDocumentationUrl[routeName] != null,
-        'A documentation URL was not specified for demo route $routeName in kAllGalleryDemos',
-      );
+  CupertinoDemoDocumentationButton(String routeName, {super.key})
+      : documentationUrl = kDemoDocumentationUrl[routeName],
+        assert(
+          kDemoDocumentationUrl[routeName] != null,
+          'A documentation URL was not specified for demo route $routeName in kAllGalleryDemos',
+        );
 
   final String? documentationUrl;
 
@@ -257,7 +272,8 @@ class CupertinoDemoDocumentationButton extends StatelessWidget {
         label: 'API documentation',
         child: const Icon(CupertinoIcons.book),
       ),
-      onPressed: () => launchUrl(Uri.parse(documentationUrl!), mode: LaunchMode.inAppWebView),
+      onPressed: () => launchUrl(Uri.parse(documentationUrl!),
+          mode: LaunchMode.inAppWebView),
     );
   }
 }

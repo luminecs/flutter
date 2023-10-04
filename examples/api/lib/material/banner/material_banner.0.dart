@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const MaterialBannerExampleApp());
 
 class MaterialBannerExampleApp extends StatelessWidget {

@@ -23,9 +23,9 @@ class PrimaryScrollController extends InheritedWidget {
   const PrimaryScrollController.none({
     super.key,
     required super.child,
-  }) : automaticallyInheritForPlatforms = const <TargetPlatform>{},
-       scrollDirection = null,
-       controller = null;
+  })  : automaticallyInheritForPlatforms = const <TargetPlatform>{},
+        scrollDirection = null,
+        controller = null;
 
   final ScrollController? controller;
 
@@ -34,12 +34,14 @@ class PrimaryScrollController extends InheritedWidget {
   final Set<TargetPlatform> automaticallyInheritForPlatforms;
 
   static bool shouldInherit(BuildContext context, Axis scrollDirection) {
-    final PrimaryScrollController? result = context.findAncestorWidgetOfExactType<PrimaryScrollController>();
+    final PrimaryScrollController? result =
+        context.findAncestorWidgetOfExactType<PrimaryScrollController>();
     if (result == null) {
       return false;
     }
 
-    final TargetPlatform platform = ScrollConfiguration.of(context).getPlatform(context);
+    final TargetPlatform platform =
+        ScrollConfiguration.of(context).getPlatform(context);
     if (result.automaticallyInheritForPlatforms.contains(platform)) {
       return result.scrollDirection == scrollDirection;
     }
@@ -47,7 +49,8 @@ class PrimaryScrollController extends InheritedWidget {
   }
 
   static ScrollController? maybeOf(BuildContext context) {
-    final PrimaryScrollController? result = context.dependOnInheritedWidgetOfExactType<PrimaryScrollController>();
+    final PrimaryScrollController? result =
+        context.dependOnInheritedWidgetOfExactType<PrimaryScrollController>();
     return result?.controller;
   }
 
@@ -72,11 +75,14 @@ class PrimaryScrollController extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(PrimaryScrollController oldWidget) => controller != oldWidget.controller;
+  bool updateShouldNotify(PrimaryScrollController oldWidget) =>
+      controller != oldWidget.controller;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<ScrollController>('controller', controller, ifNull: 'no controller', showName: false));
+    properties.add(DiagnosticsProperty<ScrollController>(
+        'controller', controller,
+        ifNull: 'no controller', showName: false));
   }
 }

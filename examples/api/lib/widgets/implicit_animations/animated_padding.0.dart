@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() => runApp(const AnimatedPaddingExampleApp());
 
 class AnimatedPaddingExampleApp extends StatelessWidget {

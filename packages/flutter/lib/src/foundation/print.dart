@@ -5,22 +5,26 @@
 import 'dart:async';
 import 'dart:collection';
 
-typedef DebugPrintCallback = void Function(String? message, { int? wrapWidth });
+typedef DebugPrintCallback = void Function(String? message, {int? wrapWidth});
 
 DebugPrintCallback debugPrint = debugPrintThrottled;
 
-void debugPrintSynchronously(String? message, { int? wrapWidth }) {
+void debugPrintSynchronously(String? message, {int? wrapWidth}) {
   if (message != null && wrapWidth != null) {
-    print(message.split('\n').expand<String>((String line) => debugWordWrap(line, wrapWidth)).join('\n'));
+    print(message
+        .split('\n')
+        .expand<String>((String line) => debugWordWrap(line, wrapWidth))
+        .join('\n'));
   } else {
     print(message);
   }
 }
 
-void debugPrintThrottled(String? message, { int? wrapWidth }) {
+void debugPrintThrottled(String? message, {int? wrapWidth}) {
   final List<String> messageLines = message?.split('\n') ?? <String>['null'];
   if (wrapWidth != null) {
-    _debugPrintBuffer.addAll(messageLines.expand<String>((String line) => debugWordWrap(line, wrapWidth)));
+    _debugPrintBuffer.addAll(messageLines
+        .expand<String>((String line) => debugWordWrap(line, wrapWidth)));
   } else {
     _debugPrintBuffer.addAll(messageLines);
   }
@@ -28,6 +32,7 @@ void debugPrintThrottled(String? message, { int? wrapWidth }) {
     _debugPrintTask();
   }
 }
+
 int _debugPrintedCharacters = 0;
 const int _kDebugPrintCapacity = 12 * 1024;
 const Duration _kDebugPrintPauseTime = Duration(seconds: 1);
@@ -42,9 +47,11 @@ void _debugPrintTask() {
     _debugPrintStopwatch.reset();
     _debugPrintedCharacters = 0;
   }
-  while (_debugPrintedCharacters < _kDebugPrintCapacity && _debugPrintBuffer.isNotEmpty) {
+  while (_debugPrintedCharacters < _kDebugPrintCapacity &&
+      _debugPrintBuffer.isNotEmpty) {
     final String line = _debugPrintBuffer.removeFirst();
-    _debugPrintedCharacters += line.length; // TODO(ianh): Use the UTF-8 byte length instead
+    _debugPrintedCharacters +=
+        line.length; // TODO(ianh): Use the UTF-8 byte length instead
     print(line);
   }
   if (_debugPrintBuffer.isNotEmpty) {
@@ -59,12 +66,15 @@ void _debugPrintTask() {
   }
 }
 
-Future<void> get debugPrintDone => _debugPrintCompleter?.future ?? Future<void>.value();
+Future<void> get debugPrintDone =>
+    _debugPrintCompleter?.future ?? Future<void>.value();
 
 final RegExp _indentPattern = RegExp('^ *(?:[-+*] |[0-9]+[.):] )?');
+
 enum _WordWrapParseMode { inSpace, inWord, atBreak }
 
-Iterable<String> debugWordWrap(String message, int width, { String wrapIndent = '' }) {
+Iterable<String> debugWordWrap(String message, int width,
+    {String wrapIndent = ''}) {
   if (message.length < width || message.trimLeft()[0] == '#') {
     return <String>[message];
   }
@@ -80,7 +90,8 @@ Iterable<String> debugWordWrap(String message, int width, { String wrapIndent = 
   int? lastWordEnd;
   while (true) {
     switch (mode) {
-      case _WordWrapParseMode.inSpace: // at start of break point (or start of line); can't break until next break
+      case _WordWrapParseMode
+            .inSpace: // at start of break point (or start of line); can't break until next break
         while ((index < message.length) && (message[index] == ' ')) {
           index += 1;
         }
@@ -92,9 +103,11 @@ Iterable<String> debugWordWrap(String message, int width, { String wrapIndent = 
         }
         mode = _WordWrapParseMode.atBreak;
       case _WordWrapParseMode.atBreak: // at start of break point
-        if ((index - startForLengthCalculations > width) || (index == message.length)) {
+        if ((index - startForLengthCalculations > width) ||
+            (index == message.length)) {
           // we are over the width line, so break
-          if ((index - startForLengthCalculations <= width) || (lastWordEnd == null)) {
+          if ((index - startForLengthCalculations <= width) ||
+              (lastWordEnd == null)) {
             // we should use this point, because either it doesn't actually go over the
             // end (last line), or it does, but there was no earlier break point
             lastWordEnd = index;

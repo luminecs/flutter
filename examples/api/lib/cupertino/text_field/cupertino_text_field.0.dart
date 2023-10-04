@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 void main() => runApp(const CupertinoTextFieldApp());
 
 class CupertinoTextFieldApp extends StatelessWidget {
@@ -19,7 +18,8 @@ class CupertinoTextFieldExample extends StatefulWidget {
   const CupertinoTextFieldExample({super.key});
 
   @override
-  State<CupertinoTextFieldExample> createState() => _CupertinoTextFieldExampleState();
+  State<CupertinoTextFieldExample> createState() =>
+      _CupertinoTextFieldExampleState();
 }
 
 class _CupertinoTextFieldExampleState extends State<CupertinoTextFieldExample> {

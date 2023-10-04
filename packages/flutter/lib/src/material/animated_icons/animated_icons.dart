@@ -38,7 +38,8 @@ class AnimatedIcon extends StatelessWidget {
     final IconThemeData iconTheme = IconTheme.of(context);
     assert(iconTheme.isConcrete);
     final double iconSize = size ?? iconTheme.size!;
-    final TextDirection textDirection = this.textDirection ?? Directionality.of(context);
+    final TextDirection textDirection =
+        this.textDirection ?? Directionality.of(context);
     final double iconOpacity = iconTheme.opacity!;
     Color iconColor = color ?? iconTheme.color!;
     if (iconOpacity != 1.0) {
@@ -53,7 +54,8 @@ class AnimatedIcon extends StatelessWidget {
           progress: progress,
           color: iconColor,
           scale: iconSize / iconData.size.width,
-          shouldMirror: textDirection == TextDirection.rtl && iconData.matchTextDirection,
+          shouldMirror:
+              textDirection == TextDirection.rtl && iconData.matchTextDirection,
           uiPathFactory: _pathFactory,
         ),
       ),
@@ -98,16 +100,16 @@ class _AnimatedIconPainter extends CustomPainter {
     }
   }
 
-
   @override
   bool shouldRepaint(_AnimatedIconPainter oldDelegate) {
-    return oldDelegate.progress.value != progress.value
-        || oldDelegate.color != color
+    return oldDelegate.progress.value != progress.value ||
+        oldDelegate.color != color
         // We are comparing the paths list by reference, assuming the list is
         // treated as immutable to be more efficient.
-        || oldDelegate.paths != paths
-        || oldDelegate.scale != scale
-        || oldDelegate.uiPathFactory != uiPathFactory;
+        ||
+        oldDelegate.paths != paths ||
+        oldDelegate.scale != scale ||
+        oldDelegate.uiPathFactory != uiPathFactory;
   }
 
   @override
@@ -129,8 +131,10 @@ class _PathFrames {
   final List<_PathCommand> commands;
   final List<double> opacities;
 
-  void paint(ui.Canvas canvas, Color color, _UiPathFactory uiPathFactory, double progress) {
-    final double opacity = _interpolate<double?>(opacities, progress, ui.lerpDouble)!;
+  void paint(ui.Canvas canvas, Color color, _UiPathFactory uiPathFactory,
+      double progress) {
+    final double opacity =
+        _interpolate<double?>(opacities, progress, ui.lerpDouble)!;
     final ui.Paint paint = ui.Paint()
       ..style = PaintingStyle.fill
       ..color = color.withOpacity(color.opacity * opacity);
@@ -161,7 +165,8 @@ class _PathMoveTo extends _PathCommand {
 }
 
 class _PathCubicTo extends _PathCommand {
-  const _PathCubicTo(this.controlPoints1, this.controlPoints2, this.targetPoints);
+  const _PathCubicTo(
+      this.controlPoints1, this.controlPoints2, this.targetPoints);
 
   final List<Offset> controlPoints2;
   final List<Offset> controlPoints1;
@@ -169,13 +174,19 @@ class _PathCubicTo extends _PathCommand {
 
   @override
   void apply(Path path, double progress) {
-    final Offset controlPoint1 = _interpolate<Offset?>(controlPoints1, progress, Offset.lerp)!;
-    final Offset controlPoint2 = _interpolate<Offset?>(controlPoints2, progress, Offset.lerp)!;
-    final Offset targetPoint = _interpolate<Offset?>(targetPoints, progress, Offset.lerp)!;
+    final Offset controlPoint1 =
+        _interpolate<Offset?>(controlPoints1, progress, Offset.lerp)!;
+    final Offset controlPoint2 =
+        _interpolate<Offset?>(controlPoints2, progress, Offset.lerp)!;
+    final Offset targetPoint =
+        _interpolate<Offset?>(targetPoints, progress, Offset.lerp)!;
     path.cubicTo(
-      controlPoint1.dx, controlPoint1.dy,
-      controlPoint2.dx, controlPoint2.dy,
-      targetPoint.dx, targetPoint.dy,
+      controlPoint1.dx,
+      controlPoint1.dy,
+      controlPoint2.dx,
+      controlPoint2.dy,
+      targetPoint.dx,
+      targetPoint.dy,
     );
   }
 }
@@ -202,13 +213,14 @@ class _PathClose extends _PathCommand {
   }
 }
 
-T _interpolate<T>(List<T> values, double progress, _Interpolator<T> interpolator) {
+T _interpolate<T>(
+    List<T> values, double progress, _Interpolator<T> interpolator) {
   assert(progress <= 1.0);
   assert(progress >= 0.0);
   if (values.length == 1) {
     return values[0];
   }
-  final double targetIdx = ui.lerpDouble(0, values.length -1, progress)!;
+  final double targetIdx = ui.lerpDouble(0, values.length - 1, progress)!;
   final int lowIdx = targetIdx.floor();
   final int highIdx = targetIdx.ceil();
   final double t = targetIdx - lowIdx;
